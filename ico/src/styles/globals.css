@@ -1,0 +1,227 @@
+:root {
+    --main-color: #f6ba44;
+    --main-color-2: rgb(255, 213, 106);
+    --main-color-op: #f6bb44bb;
+    --text-color: #090a0d;
+    --text-color-2: #121319;
+    --text-color-3: #1b1d25;
+    --text-color-4: #4f5569;
+    --border-color: #bcc0cf;
+    --border-color-2: #d8dbe7;
+    --back-color: #f5f7ff;
+    --back-color-2: #e6e8f0;
+    --back-color-3: #d0d2dc;
+    --back-color-4: #bcc0cf;
+    --back-color-op: #d8dbe7ee;
+    --back-color-op-2: #d8dbe7bb;
+    --back-color-op-opp: #17171b55;
+    --alert-color: #ff1e1e;
+    --hover-color: contrast(30%);
+    --shadow-color: 0px 10px 10px #00000030;
+    --soft-grey: #f0f3ff;
+    --soft-grey-2: #e9edf9;
+  }
+  
+  [data-theme="dark"] {
+    --main-color: #f6ba44;
+    --main-color-2: rgb(255, 213, 106);
+    --main-color-op: #f6bb44bb;
+    --text-color: #fff;
+    --text-color-2: #e6e9f3;
+    --text-color-3: #d8dbe7;
+    --text-color-4: #8d909b;
+    --border-color: #2e313d;
+    --border-color-2: #1b1d25;
+    --back-color: #090a0d;
+    --back-color-2: #17171b;
+    --back-color-3: #242529;
+    --back-color-4: #43454f;
+    --back-color-op: #17171bee;
+    --back-color-op-2: #17171bbb;
+    --back-color-op-opp: #d8dbe755;
+    --alert-color: #ff1e1e;
+    --hover-color: contrast(50%);
+    --shadow-color: 0px 10px 10px #ffffff30;
+    --soft-grey: #101013;
+    --soft-grey-2: #0f0f12;
+  }
+  
+  html,
+  body,
+  div,
+  span,
+  applet,
+  object,
+  iframe,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  blockquote,
+  pre,
+  a,
+  abbr,
+  acronym,
+  address,
+  big,
+  cite,
+  code,
+  del,
+  dfn,
+  em,
+  img,
+  ins,
+  kbd,
+  q,
+  s,
+  samp,
+  small,
+  strike,
+  strong,
+  sub,
+  sup,
+  tt,
+  var,
+  b,
+  u,
+  i,
+  center,
+  dl,
+  dt,
+  dd,
+  ol,
+  ul,
+  li,
+  fieldset,
+  form,
+  label,
+  legend,
+  table,
+  caption,
+  tbody,
+  tfoot,
+  thead,
+  tr,
+  th,
+  td,
+  article,
+  aside,
+  canvas,
+  details,
+  embed,
+  figure,
+  figcaption,
+  footer,
+  header,
+  hgroup,
+  menu,
+  nav,
+  output,
+  ruby,
+  section,
+  summary,
+  time,
+  mark,
+  audio,
+  video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+  }
+  /* HTML5 display-role reset for older browsers */
+  article,
+  aside,
+  details,
+  figcaption,
+  figure,
+  footer,
+  header,
+  hgroup,
+  menu,
+  nav,
+  section {
+    display: block;
+  }
+  html {
+    background-color: var(--back-color);
+  }
+  body {
+    font-family: "SUIT";
+    line-height: 1;
+    overflow-x: hidden;
+  }
+  ol,
+  ul {
+    list-style: none;
+  }
+  blockquote,
+  q {
+    quotes: none;
+  }
+  blockquote:before,
+  blockquote:after,
+  q:before,
+  q:after {
+    content: "";
+    content: none;
+  }
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  a {
+    color: var(--text-color);
+    text-decoration: none;
+  }
+  button {
+    border: none;
+  }
+  h1 {
+    font-size: 36px;
+  }
+  h2 {
+    font-size: 22px;
+  }
+  h3 {
+    font-size: 18px;
+  }
+  * {
+    font-family: "SUIT";
+    box-sizing: border-box;
+  }
+  ::-webkit-scrollbar {
+    position: fixed !important;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background-color: rgba(0, 0, 0, 0) !important;
+    opacity: 0 !important;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--back-color-4);
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    position: fixed !important;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0) !important;
+    border-radius: 10px;
+    opacity: 0 !important;
+  }
+  div {
+    color: var(--text-color);
+  }
+  button {
+    color: var(--text-color);
+  }
+  /* g, path, svg {
+    stroke: var(--text-color);
+  
+  } */
+  
