@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { css } from "@emotion/react";
+import { useRouter } from 'next/router';
 import SideBarLeft from './SideBarLeft'
 import SideBarRight from './SideBarRight'
 import { MAIN_CLASS, MAIN_GOVERNMENT, MAIN_FINANCE, MAIN_STORE, SUB_CLASS_STUDENTS, SUB_CLASS_EXCHEQUER, SUB_CLASS_OPENING_JOB, SUB_CLASS_COUPON, SUB_GOVERNMENT_CREDIT, SUB_GOVERNMENT_EXCHEQUER, SUB_GOVERNMENT_JOB, SUB_GOVERNMENT_RULE, SUB_FINANCE_DEPOSIT, SUB_FINANCE_STOCK, SUB_STORE_STUDENT, SUB_STORE_TEACHER } from './SideBarIcons';
@@ -11,10 +12,12 @@ type SideBarProps = {
 function SideBar({children}: SideBarProps) {
   const [selectedMain, setSelectedMain] = useState<number>(0)
   const [selectedSub, setSelectedSub] = useState<number>(0)
+  const router = useRouter();
 
   const selectMainHandler = (value: number) => {
     setSelectedMain(() => value)
     setSelectedSub(() => 0)
+    router.push(SUB_ELEMENT[value][0].url)
   }
 
   const MAIN_LOGO = <img src={'/assets/icon_desktop.png'} />
