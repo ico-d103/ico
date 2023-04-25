@@ -7,18 +7,33 @@ import TableGenerator from "@/components/teacher/common/TableGenerator/TableGene
 import { css } from "@emotion/react"
 
 function index() {
+	const creditRating = [
+		["등급", "1등급", "2등급", "3등급", "4등급", "5등급", "6등급", "7등급", "8등급", "9등급", "10등급"],
+		["최저", "901", "801", "701", "601", "501", "401", "301", "201", "101", "0"],
+		["최고", "100", "900", "800", "700", "600", "500", "400", "300", "200", "100"],
+	]
+
 	return (
-		<div>
-			index
-			<Form
-				subInit={{ test: "", test2: "" }}
-				subInput={<Test />}
-				idx={3}
-				titlePlaceHolder={"제목을 입력해 주세요!"}
-				contentPlaceHolder={"내용을 입력해 주세요!"}
-				frontComp={<Test2 />}
-			/>
-		</div>
+		<React.Fragment>
+			<CollapseMenu title={"신용 등급"}>
+				신용등급의 등락폭을 수정할 수 있습니다.
+				<div css={tableWrapperCSS}>
+					<TableGenerator table={creditRating} perHeight={"48px"} />
+				</div>
+			</CollapseMenu>
+
+			<div css={contentWrapperCSS}>
+				<Form
+					mainInit={{ title: "zzzz", content: "hahaha" }}
+					subInit={{ test: "", test2: "" }}
+					subInput={<Test />}
+					idx={3}
+					titlePlaceHolder={"제목을 입력해 주세요!"}
+					contentPlaceHolder={"내용을 입력해 주세요!"}
+					frontComp={<Test2 />}
+				/>
+			</div>
+		</React.Fragment>
 	)
 }
 
