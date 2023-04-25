@@ -61,7 +61,7 @@ function SideBar({ children }: SideBarProps) {
 			{ name: "view_coupon", label: "쿠폰", content: SUB_CLASS_COUPON, url: "/teacher/class/coupons" },
 		],
 		1: [
-			{ name: "set_class_rule", label: "학급 규칙", content: SUB_GOVERNMENT_RULE, url: "/teacher/test" },
+			{ name: "set_class_rule", label: "학급 규칙", content: SUB_GOVERNMENT_RULE, url: "/teacher/rule" },
 			{ name: "set_exchequer_rule", label: "세금 관리", content: SUB_GOVERNMENT_EXCHEQUER, url: "/teacher/test2" },
 			{ name: "set_job", label: "직업 관리", content: SUB_GOVERNMENT_JOB, url: "/teacher/test" },
 			{ name: "set_credit_rating", label: "신용 등급", content: SUB_GOVERNMENT_CREDIT, url: "/teacher/test2" },

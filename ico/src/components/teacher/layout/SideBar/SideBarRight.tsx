@@ -92,6 +92,7 @@ const elementWrapperCSS = ({target, selected}: {target: number, selected: number
     display: flex;
     align-items: center;
     
+    
     &:hover {
       background-color: ${target !== selected && '#38735A'};
     }
