@@ -29,6 +29,7 @@ function SideBar({children}: SideBarProps) {
     3: {name: 'store', label: '상점', content: MAIN_STORE},
   }
 
+
   const SUB_ELEMENT: {
     [prop: number]: {
       name: string, label: string, content: any, url: string
@@ -75,7 +76,7 @@ const layoutWrapperCSS = css`
   width: 100vw;
   height: 100vh;
   display: flex;
-
+  
 
 `
 
@@ -85,9 +86,11 @@ const sideBarWrapperCSS = css`
   background-color: red;
   display: flex;
   box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.5);
+  position: fixed;
 `
 
 const contentWrapperCSS = css`
+  margin-left: 360px;
   flex: 1;
 `
 

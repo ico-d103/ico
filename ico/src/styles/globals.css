@@ -1,50 +1,22 @@
 :root {
-    --main-color: #f6ba44;
-    --main-color-2: rgb(255, 213, 106);
-    --main-color-op: #f6bb44bb;
-    --text-color: #090a0d;
-    --text-color-2: #121319;
-    --text-color-3: #1b1d25;
-    --text-color-4: #4f5569;
-    --border-color: #bcc0cf;
-    --border-color-2: #d8dbe7;
-    --back-color: #f5f7ff;
-    --back-color-2: #e6e8f0;
-    --back-color-3: #d0d2dc;
-    --back-color-4: #bcc0cf;
-    --back-color-op: #d8dbe7ee;
-    --back-color-op-2: #d8dbe7bb;
-    --back-color-op-opp: #17171b55;
-    --alert-color: #ff1e1e;
-    --hover-color: contrast(30%);
-    --shadow-color: 0px 10px 10px #00000030;
-    --soft-grey: #f0f3ff;
-    --soft-grey-2: #e9edf9;
+    --common-back-color: #F0F3F8;
+    --teacher-main-color: #06603B;
+    --teacher-main-color-2: #38735A;
+    --teacher-main-color-3: #064F32;
+    --teacher-main-color-op: #ECFDF3;
+    --teacher-highlight-color: #FFA800;
+    --teacher-warning-color: #D94A4A;
+    --teacher-h1: 2.5rem;
+    --teacher-h2: 1.6rem;
+    --teacher-h3: 1.3rem;
+    --teacher-h4: 1.1rem;
+    --teacher-h5: 0.95rem;
+    --teacher-h6: 0.75rem;
   }
-  
-  [data-theme="dark"] {
-    --main-color: #f6ba44;
-    --main-color-2: rgb(255, 213, 106);
-    --main-color-op: #f6bb44bb;
-    --text-color: #fff;
-    --text-color-2: #e6e9f3;
-    --text-color-3: #d8dbe7;
-    --text-color-4: #8d909b;
-    --border-color: #2e313d;
-    --border-color-2: #1b1d25;
-    --back-color: #090a0d;
-    --back-color-2: #17171b;
-    --back-color-3: #242529;
-    --back-color-4: #43454f;
-    --back-color-op: #17171bee;
-    --back-color-op-2: #17171bbb;
-    --back-color-op-opp: #d8dbe755;
-    --alert-color: #ff1e1e;
-    --hover-color: contrast(50%);
-    --shadow-color: 0px 10px 10px #ffffff30;
-    --soft-grey: #101013;
-    --soft-grey-2: #0f0f12;
-  }
+
+  /* [data-theme="dark"] {
+
+  } */
   
   html,
   body,
@@ -149,7 +121,7 @@
     display: block;
   }
   html {
-    background-color: var(--back-color);
+    background-color: var(--common-back-color);
   }
   body {
     font-family: "SUIT";
@@ -176,7 +148,7 @@
     border-spacing: 0;
   }
   a {
-    color: var(--text-color);
+    /* color: var(--text-color); */
     text-decoration: none;
   }
   button {
@@ -196,29 +168,24 @@
     box-sizing: border-box;
   }
   ::-webkit-scrollbar {
-    position: fixed !important;
-    right: 0;
-    width: 10px;
+    width: 4px;
     height: 10px;
-    background-color: rgba(0, 0, 0, 0) !important;
-    opacity: 0 !important;
   }
+
   ::-webkit-scrollbar-thumb {
-    background-color: var(--back-color-4);
+    background-color: rgba(0, 0, 0, 0.3);
     border-radius: 10px;
   }
+
   ::-webkit-scrollbar-track {
-    position: fixed !important;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0) !important;
+    background-color: initial;
     border-radius: 10px;
-    opacity: 0 !important;
   }
   div {
-    color: var(--text-color);
+    /* color: var(--text-color); */
   }
   button {
-    color: var(--text-color);
+    /* color: var(--text-color); */
   }
   /* g, path, svg {
     stroke: var(--text-color);
