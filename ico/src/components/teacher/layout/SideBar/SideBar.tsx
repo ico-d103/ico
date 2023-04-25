@@ -46,32 +46,35 @@ function SideBar({ children }: SideBarProps) {
 		3: { name: "store", label: "상점", content: MAIN_STORE },
 	}
 
-  const SUB_ELEMENT: {
-    [prop: number]: {
-      name: string, label: string, content: any, url: string
-    }[]
-  } = {
-    0: [
-      {name: 'view_students', label: '학생 정보', content: SUB_CLASS_STUDENTS, url: '/teacher/test'},
-      {name: 'view_exchequer', label: '국고', content: SUB_CLASS_EXCHEQUER, url: '/teacher/test2'},
-      {name: 'view_job_opening', label: '구인 구직', content: SUB_CLASS_OPENING_JOB, url: '/teacher/test'},
-      {name: 'view_coupon', label: '쿠폰', content: SUB_CLASS_COUPON, url: '/teacher/test2'},
-    ],
-    1: [
-      {name: 'set_class_rule', label: '학급 규칙', content: SUB_GOVERNMENT_RULE, url: '/teacher/test'},
-      {name: 'set_exchequer_rule', label: '세금 관리', content: SUB_GOVERNMENT_EXCHEQUER, url: '/teacher/test2'},
-      {name: 'set_job', label: '직업 관리', content: SUB_GOVERNMENT_JOB, url: '/teacher/test'},
-      {name: 'set_credit_rating', label: '신용 등급', content: SUB_GOVERNMENT_CREDIT, url: '/teacher/test2'},
-    ],
-    2: [
-      {name: 'set_deposit', label: '예금', content: SUB_FINANCE_DEPOSIT, url: '/teacher/finance/deposit'},
-      {name: 'set_stock', label: '투자', content: SUB_FINANCE_STOCK, url: '/teacher/finance/invest'},
-    ],
-    3: [
-      {name: 'teacher_products', label: '교사 상품', content: SUB_STORE_TEACHER, url: '/teacher/shop/teacher'},
-      {name: 'student_products', label: '학생 상품', content: SUB_STORE_STUDENT, url: '/teacher/shop/student'},
-    ],
-  }
+	const SUB_ELEMENT: {
+		[prop: number]: {
+			name: string
+			label: string
+			content: any
+			url: string
+		}[]
+	} = {
+		0: [
+			{ name: "view_students", label: "학생 정보", content: SUB_CLASS_STUDENTS, url: "/teacher/class/students" },
+			{ name: "view_exchequer", label: "국고", content: SUB_CLASS_EXCHEQUER, url: "/teacher/class/property" },
+			{ name: "view_job_opening", label: "구인 구직", content: SUB_CLASS_OPENING_JOB, url: "/teacher/class/jobsearch" },
+			{ name: "view_coupon", label: "쿠폰", content: SUB_CLASS_COUPON, url: "/teacher/class/coupons" },
+		],
+		1: [
+			{ name: "set_class_rule", label: "학급 규칙", content: SUB_GOVERNMENT_RULE, url: "/teacher/test" },
+			{ name: "set_exchequer_rule", label: "세금 관리", content: SUB_GOVERNMENT_EXCHEQUER, url: "/teacher/test2" },
+			{ name: "set_job", label: "직업 관리", content: SUB_GOVERNMENT_JOB, url: "/teacher/test" },
+			{ name: "set_credit_rating", label: "신용 등급", content: SUB_GOVERNMENT_CREDIT, url: "/teacher/test2" },
+		],
+		2: [
+			{ name: "set_deposit", label: "예금", content: SUB_FINANCE_DEPOSIT, url: "/teacher/finance/deposit" },
+			{ name: "set_stock", label: "투자", content: SUB_FINANCE_STOCK, url: "/teacher/finance/invest" },
+		],
+		3: [
+			{ name: "teacher_products", label: "교사 상품", content: SUB_STORE_TEACHER, url: "/teacher/shop/teacher" },
+			{ name: "student_products", label: "학생 상품", content: SUB_STORE_STUDENT, url: "/teacher/shop/student" },
+		],
+	}
 
 	const indicatorRender = (
 		<div css={indicatorMainWrapperCSS}>
