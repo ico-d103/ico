@@ -126,7 +126,10 @@ function SideBar({ children }: SideBarProps) {
 			</div>
 			<div css={contentOuterWrapperCSS}>
 				{indicatorRender}
-				<div css={contentInnerWrapperCSS}>{children}</div>
+				<div css={contentInnerWrapperCSS}>
+					{children}
+					<div css={bottomMarginCSS} />
+				</div>
 			</div>
 		</React.Fragment>
 	)
@@ -160,12 +163,14 @@ const contentOuterWrapperCSS = css`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	padding: 25px 50px 50px 50px;
+	padding: 25px 50px 0px 50px;
 `
 
 const contentInnerWrapperCSS = css`
 	width: 100%;
 	height: 100%;
+	display: flex;
+	flex-direction: column;
 `
 
 const indicatorMainWrapperCSS = css`
@@ -207,6 +212,10 @@ const sideBarSpaceCSS = css`
 	width: 20vw;
 	min-width: 280px;
 	max-width: 360px;
+`
+
+const bottomMarginCSS = css`
+	min-height: 50px;
 `
 
 export default SideBar

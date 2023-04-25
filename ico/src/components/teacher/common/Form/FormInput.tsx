@@ -2,6 +2,7 @@ import React, { useRef } from "react"
 import { css } from "@emotion/react"
 
 type FormInputProps = {
+	inputState: any
 	children: any
 	titleChangeHandler: React.ChangeEventHandler
 	contentChangeHandler: React.ChangeEventHandler
@@ -16,6 +17,7 @@ function FormInput({
 	titlePlaceHolder,
 	contentPlaceHolder,
 	noTitle,
+	inputState,
 }: FormInputProps) {
 	const contentRef = useRef<HTMLTextAreaElement>(null)
 
@@ -28,7 +30,7 @@ function FormInput({
 
 	const titleInput = (
 		<React.Fragment>
-			<input css={inputCSS} onChange={titleChangeHandler} placeholder={titlePlaceHolder} />
+			<input css={inputCSS} value={inputState.title} onChange={titleChangeHandler} placeholder={titlePlaceHolder} />
 			<div css={lineCSS} />
 		</React.Fragment>
 	)
@@ -37,6 +39,7 @@ function FormInput({
 		<textarea
 			ref={contentRef}
 			css={inputCSS}
+			value={inputState.content}
 			onChange={(event) => {
 				contentChangeHandler(event)
 				resizeHeightHandler()
