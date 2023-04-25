@@ -1,9 +1,10 @@
 :root {
     --common-back-color: #F0F3F8;
+    --common-back-color-2: #ffffff;
     --teacher-main-color: #06603B;
     --teacher-main-color-2: #38735A;
     --teacher-main-color-3: #064F32;
-    --teacher-main-color-op: #ECFDF3;
+    --teacher-main-color-op: #caf1d8;
     --teacher-highlight-color: #FFA800;
     --teacher-warning-color: #D94A4A;
     --teacher-h1: 2.5rem;
@@ -13,6 +14,16 @@
     --teacher-h5: 0.95rem;
     --teacher-h6: 0.75rem;
   }
+
+
+/*  
+h1 : 2.5rem -> 40px;
+h2 : 1.6rem -> 25.6px;
+h3 : 1.3rem -> 20.8px;
+h4 : 1.1rem -> 17.6px;
+h5 : 0.95rem -> 15.2px;
+h6 : 0.75rem -> 12px;
+*/
 
   /* [data-theme="dark"] {
 

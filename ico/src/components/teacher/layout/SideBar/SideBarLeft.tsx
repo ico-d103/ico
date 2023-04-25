@@ -13,7 +13,7 @@ function SideBarLeft({element, logo, selectHandler, selected}: SideBarLeftProps)
 
   const renderElement = Object.keys(element).map((el: any, idx) => {
     return (
-      <div css={elementWrapperCSS({target:el, selected})} onClick={() => {selectHandler(el)}}>
+      <div key={`${element[el].name}-${idx}`} css={elementWrapperCSS({target:el, selected})} onClick={() => {selectHandler(el)}}>
         {element[el].content}
       </div>
     )

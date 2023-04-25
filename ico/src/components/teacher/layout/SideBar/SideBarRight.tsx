@@ -28,7 +28,7 @@ function SideBarRight({element, selectHandler, selected, title}: SideBarRightPro
 
   const renderElement = element.map((el, idx) => {
     return (
-      <div css={elementWrapperCSS({target:idx, selected})} onClick={() => {routingHandler(el.url); selectHandler(() => idx)}}>
+      <div key={`${el.name}-${idx}`} css={elementWrapperCSS({target:idx, selected})} onClick={() => {routingHandler(el.url); selectHandler(() => idx)}}>
         <div css={contentWrapperCSS}>
           {el.content}
         </div>
