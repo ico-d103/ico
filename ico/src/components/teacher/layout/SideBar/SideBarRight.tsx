@@ -22,9 +22,9 @@ function SideBarRight({element, selectHandler, selected, title}: SideBarRightPro
     router.push(value)
   }
 
-  const signoutHandler = () => {
-    // 로그아웃 로직 작성
-  }
+  // const signoutHandler = () => {
+  //   // 로그아웃 로직 작성
+  // }
 
   const renderElement = element.map((el, idx) => {
     return (
@@ -52,9 +52,7 @@ function SideBarRight({element, selectHandler, selected, title}: SideBarRightPro
           <div css={userNameCSS}>김철수 교사님</div>
           <div css={userEmailCSS}>example@google.com</div>
         </div>
-        <div css={footerElementWrapperCSS({target:-1, selected})} onClick={() => {signoutHandler();}}>
-        {MAIN_SIGNOUT}
-        </div>
+        
       </div>
 
     </div>
@@ -69,18 +67,18 @@ const sideBarRightWrapperCSS = css`
   flex-direction: column;
   justify-content: space-between;
   user-select: none;
-  padding: 40px 16px 36px 16px;
+  padding: 12% 16px 36px 16px;
 `
 
 const titleWrapperCSS = css`
   color: rgb(255,255,255);
   font-size: 1.6rem;
-  margin-bottom: 48px;
+  margin-bottom: 46px;
 `
 
 const elementWrapperCSS = ({target, selected}: {target: number, selected: number}) => {
   return css`
-    padding: 10px 16px 10px 16px;
+    padding: 11px 16px 11px 16px;
     margin: 8px 4px 8px 4px;
     transition-property: background-color opacity;
     transition-duration: 0.3s;
@@ -89,7 +87,8 @@ const elementWrapperCSS = ({target, selected}: {target: number, selected: number
     cursor: pointer;
     color: rgba(255,255,255, 1);
     opacity: ${target === selected ? '100%' : '60%'};
-    font-size: 1.2rem;
+    font-size: var(--teacher-h5);
+    font-weight: 400;
     display: flex;
     align-items: center;
     
@@ -100,23 +99,26 @@ const elementWrapperCSS = ({target, selected}: {target: number, selected: number
 }
 
 
-const footerElementWrapperCSS = ({target, selected}: {target: number, selected: number}) => {
-  return css`
-    padding: 12px;
-    transition-property: background-color opacity;
-    transition-duration: 0.3s;
-    border-radius: 10px;
-    background-color: ${Number(target) === Number(selected) && '#38735A'};
-    opacity: ${target === selected ? '100%' : '60%'};
-    cursor: pointer;
+// const footerElementWrapperCSS = ({target, selected}: {target: number, selected: number}) => {
+//   return css`
+//     width: 42px;;
+//     height: 42px;
+//     padding: 12px;
+//     transition-property: background-color opacity;
+//     transition-duration: 0.3s;
+//     border-radius: 10px;
+//     background-color: ${Number(target) === Number(selected) && '#38735A'};
+//     opacity: ${target === selected ? '100%' : '60%'};
+//     cursor: pointer;
     
-    &:hover {
-      background-color: ${Number(target) !== Number(selected) && '#38735A'};
-    }
-  `
-}
+//     &:hover {
+//       background-color: ${Number(target) !== Number(selected) && '#38735A'};
+//     }
+//   `
+// }
 
 const contentWrapperCSS = css`
+  width : 15%;
   margin-right: 12px;
 `
 
@@ -129,10 +131,14 @@ const footerWrapperCSS = css`
 const userNameCSS = css`
   color: rgb(255,255,255);
   margin-bottom: 8px;
+  /* font-size: var(--teacher-h5); */
+  font-weight: 400;
 `
 
 const userEmailCSS = css`
   color: rgba(255,255,255,0.5);
+  /* font-size: var(--teacher-h5); */
+  font-weight: 400;
 `
 
 

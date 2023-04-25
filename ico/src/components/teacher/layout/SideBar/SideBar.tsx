@@ -37,7 +37,7 @@ function SideBar({ children }: SideBarProps) {
 		router.push(SUB_ELEMENT[value][0].url)
 	}
 
-	const MAIN_LOGO = <img src={"/assets/icon_desktop.png"} />
+	const MAIN_LOGO = <img css={logoCSS} src={"/assets/icon_desktop.png"} />
 
 	const MAIN_ELEMENT: { [prop: number]: { name: string; label: string; content: any } } = {
 		0: { name: "class", label: "우리 반", content: MAIN_CLASS },
@@ -89,6 +89,7 @@ function SideBar({ children }: SideBarProps) {
 
 	return (
 		<div css={layoutWrapperCSS}>
+			<div css={sideBarSpaceCSS} />
 			<div css={sideBarWrapperCSS}>
 				<SideBarLeft
 					element={MAIN_ELEMENT}
@@ -119,7 +120,9 @@ const layoutWrapperCSS = css`
 
 const sideBarWrapperCSS = css`
 	height: 100%;
-	width: 360px;
+	width: 20vw;
+	min-width: 280px;
+	max-width: 360px;
 	background-color: red;
 	display: flex;
 	box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.5);
@@ -127,7 +130,7 @@ const sideBarWrapperCSS = css`
 `
 
 const contentOuterWrapperCSS = css`
-	margin-left: 360px;
+	/* margin-left: 20vw; */
 	flex: 1;
 	display: flex;
 	flex-direction: column;
@@ -152,6 +155,8 @@ const indicatorMainIconWrapperCSS = css`
 	& path {
 		stroke: black;
 	}
+	width: 32px;
+	height: 32px;
 	margin-right: 12px;
 `
 
@@ -165,6 +170,17 @@ const indicatorSubWrapperCSS = css`
 	color: var(--teacher-main-color-3);
 	border-radius: 10px;
 	padding: 8px;
+`
+
+const logoCSS = css`
+	width: 100%;
+`
+
+const sideBarSpaceCSS = css`
+	height: 100%;
+	width: 20vw;
+	min-width: 280px;
+	max-width: 360px;
 `
 
 export default SideBar
