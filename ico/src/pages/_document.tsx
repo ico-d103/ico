@@ -5,6 +5,10 @@ export default function Document() {
 		<Html lang="en">
 			<Head />
 			<body>
+				<link
+				href="https://webfontworld.github.io/sunn/SUIT.css"
+				rel="stylesheet"
+				></link>
 				<Main />
 				<NextScript />
 			</body>
