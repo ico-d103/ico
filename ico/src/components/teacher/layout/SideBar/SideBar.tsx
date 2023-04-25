@@ -126,12 +126,10 @@ function SideBar({ children }: SideBarProps) {
 			</div>
 			<div css={contentOuterWrapperCSS}>
 				{indicatorRender}
-				<div css={contentInnerWrapperCSS}>{children}
-				<div css={bottomMarginCSS}/>
-					
-      			
+				<div css={contentInnerWrapperCSS}>
+					{children}
+					<div css={bottomMarginCSS} />
 				</div>
-				
 			</div>
 		</React.Fragment>
 	)
@@ -139,7 +137,6 @@ function SideBar({ children }: SideBarProps) {
 		<div css={layoutWrapperCSS}>
 			<div css={sideBarSpaceCSS} />
 			{selectedMain !== -1 && selectedSub !== -1 && sideBarRender}
-			
 		</div>
 	)
 }
