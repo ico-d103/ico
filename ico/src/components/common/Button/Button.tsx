@@ -67,9 +67,9 @@ const buttonCSS = ({
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		transition: all 0.2s;
 
 		:hover {
-			transition: all 0.2s;
 			filter: brightness(120%);
 		}
 	`

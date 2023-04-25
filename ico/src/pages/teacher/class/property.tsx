@@ -1,6 +1,6 @@
 import React from "react"
 import { css } from "@emotion/react"
-import Button from "@/components/common/Button"
+import Button from "@/components/common/Button/Button"
 import { CLASS_PROPERTY } from "@/components/teacher/class/ClassIcons"
 import PropertyList from "@/components/teacher/class/PropertyList"
 
