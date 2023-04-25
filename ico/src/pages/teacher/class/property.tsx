@@ -1,12 +1,13 @@
 import React from "react"
 import { css } from "@emotion/react"
+import Button from "@/components/common/Button"
 
 function property() {
 	return (
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
 				<h1>국고</h1>
-				<button>국고 사용</button>
+				<Button text={"국고 사용"} fontSize={`var(--teacher-h5)`} width={"128px"} theme={"normal"} />
 			</div>
 		</div>
 	)
