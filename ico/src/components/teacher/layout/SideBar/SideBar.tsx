@@ -55,10 +55,10 @@ function SideBar({ children }: SideBarProps) {
 		}[]
 	} = {
 		0: [
-			{ name: "view_students", label: "학생 정보", content: SUB_CLASS_STUDENTS, url: "/teacher/test" },
-			{ name: "view_exchequer", label: "국고", content: SUB_CLASS_EXCHEQUER, url: "/teacher/test2" },
-			{ name: "view_job_opening", label: "구인 구직", content: SUB_CLASS_OPENING_JOB, url: "/teacher/test" },
-			{ name: "view_coupon", label: "쿠폰", content: SUB_CLASS_COUPON, url: "/teacher/test2" },
+			{ name: "view_students", label: "학생 정보", content: SUB_CLASS_STUDENTS, url: "/teacher/class/students" },
+			{ name: "view_exchequer", label: "국고", content: SUB_CLASS_EXCHEQUER, url: "/teacher/class/property" },
+			{ name: "view_job_opening", label: "구인 구직", content: SUB_CLASS_OPENING_JOB, url: "/teacher/class/jobsearch" },
+			{ name: "view_coupon", label: "쿠폰", content: SUB_CLASS_COUPON, url: "/teacher/class/coupons" },
 		],
 		1: [
 			{ name: "set_class_rule", label: "학급 규칙", content: SUB_GOVERNMENT_RULE, url: "/teacher/test" },
