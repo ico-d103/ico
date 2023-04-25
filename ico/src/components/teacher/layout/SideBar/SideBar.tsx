@@ -80,9 +80,7 @@ function SideBar({ children }: SideBarProps) {
 		<div css={indicatorMainWrapperCSS}>
 			<div css={indicatorMainIconWrapperCSS}>{MAIN_ELEMENT[selectedMain].content}</div>
 			{MAIN_ELEMENT[selectedMain].label}
-
 			<div css={bracketCSS}>&gt;</div>
-
 			<div css={indicatorSubWrapperCSS}>{SUB_ELEMENT[selectedMain][selectedSub].label}</div>
 		</div>
 	)
