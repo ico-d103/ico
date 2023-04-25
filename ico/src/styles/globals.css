@@ -15,19 +15,6 @@
 	--teacher-h6: 0.75rem;
 }
 
-/*  
-h1 : 2.5rem -> 40px;
-h2 : 1.6rem -> 25.6px;
-h3 : 1.3rem -> 20.8px;
-h4 : 1.1rem -> 17.6px;
-h5 : 0.95rem -> 15.2px;
-h6 : 0.75rem -> 12px;
-*/
-
-/* [data-theme="dark"] {
-
-  } */
-
 html,
 body,
 div,
@@ -116,7 +103,7 @@ video {
 	font: inherit;
 	vertical-align: baseline;
 }
-/* HTML5 display-role reset for older browsers */
+
 article,
 aside,
 details,
@@ -130,26 +117,27 @@ nav,
 section {
 	display: block;
 }
+
 html {
 	background-color: var(--common-back-color);
-  -webkit-text-size-adjust : none;  /* 크롬, 사파리, 오페라 신버전 */
-  -ms-text-size-adjust : none;  /* IE */
-  -moz-text-size-adjust : none;  /* 파이어폭스 */
-  -o-text-size-adjust : none;  /* 오페라 구버전 */
 }
+
 body {
 	font-family: "SUIT";
 	line-height: 1;
 	overflow-x: hidden;
 }
+
 ol,
 ul {
 	list-style: none;
 }
+
 blockquote,
 q {
 	quotes: none;
 }
+
 blockquote:before,
 blockquote:after,
 q:before,
@@ -157,30 +145,26 @@ q:after {
 	content: "";
 	content: none;
 }
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
 a {
-	/* color: var(--text-color); */
 	text-decoration: none;
 }
+
 button {
 	border: none;
+	cursor: pointer;
 }
-h1 {
-	font-size: 36px;
-}
-h2 {
-	font-size: 22px;
-}
-h3 {
-	font-size: 18px;
-}
+
 * {
 	font-family: "SUIT";
 	box-sizing: border-box;
 }
+
 ::-webkit-scrollbar {
 	width: 4px;
 	height: 10px;
@@ -195,13 +179,3 @@ h3 {
 	background-color: initial;
 	border-radius: 10px;
 }
-div {
-	/* color: var(--text-color); */
-}
-button {
-	/* color: var(--text-color); */
-}
-/* g, path, svg {
-    stroke: var(--text-color);
-  
-  } */
