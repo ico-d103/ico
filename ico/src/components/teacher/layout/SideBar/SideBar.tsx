@@ -32,9 +32,9 @@ function SideBar({ children }: SideBarProps) {
 	const router = useRouter()
 
 	useEffect(() => {
-		const loadMain = Number(sessionStorage.getItem('selected_main'))
-		const loadSub = Number(sessionStorage.getItem('selected_sub'))
-		if (typeof loadMain === 'number' && typeof loadSub === 'number') {
+		const loadMain = Number(sessionStorage.getItem("selected_main"))
+		const loadSub = Number(sessionStorage.getItem("selected_sub"))
+		if (typeof loadMain === "number" && typeof loadSub === "number") {
 			setSelectedMain(() => loadMain)
 			setSelectedSub(() => loadSub)
 		} else {
@@ -46,15 +46,15 @@ function SideBar({ children }: SideBarProps) {
 	const selectMainHandler = (value: number) => {
 		setSelectedMain(() => value)
 		setSelectedSub(() => 0)
-		sessionStorage.setItem('selected_main', String(value))
-		sessionStorage.setItem('selected_sub', String(0))
+		sessionStorage.setItem("selected_main", String(value))
+		sessionStorage.setItem("selected_sub", String(0))
 		router.push(SUB_ELEMENT[value][0].url)
 	}
 
 	const selectSubHandler = (value: number) => {
 		setSelectedSub(() => value)
-		sessionStorage.setItem('selected_main', String(selectedMain))
-		sessionStorage.setItem('selected_sub', String(value))
+		sessionStorage.setItem("selected_main", String(selectedMain))
+		sessionStorage.setItem("selected_sub", String(value))
 		router.push(SUB_ELEMENT[selectedMain][value].url)
 	}
 
@@ -129,7 +129,6 @@ function SideBar({ children }: SideBarProps) {
 				<div css={contentInnerWrapperCSS}>{children}</div>
 			</div>
 		</React.Fragment>
-		
 	)
 	return (
 		<div css={layoutWrapperCSS}>

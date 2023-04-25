@@ -9,6 +9,7 @@ type FormProps = {
 	contentPlaceHolder?: string
 	idx?: number
 	frontComp?: any
+	noTitle?: boolean
 }
 
 const inputReducer = (state: any, action: any) => {
@@ -25,7 +26,7 @@ const inputReducer = (state: any, action: any) => {
 
 
 
-function Form({subInput, subInit, titlePlaceHolder, contentPlaceHolder, idx, frontComp}: FormProps) {
+function Form({subInput, subInit, titlePlaceHolder, contentPlaceHolder, idx, frontComp, noTitle}: FormProps) {
 	const [inputState, dispatchInput] = useReducer(inputReducer, { title: "", content: "", sub: subInit ? subInit : {} })
 
 	const titleChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +64,7 @@ function Form({subInput, subInit, titlePlaceHolder, contentPlaceHolder, idx, fro
 		<div css={formWrapperCSS}>
 			{frontCompRender ? frontCompRender : idxRender}
 			
-			<FormInput titleChangeHandler={titleChangeHandler} contentChangeHandler={contentChangeHandler} titlePlaceHolder={titlePlaceHolder} contentPlaceHolder={contentPlaceHolder}>
+			<FormInput titleChangeHandler={titleChangeHandler} contentChangeHandler={contentChangeHandler} titlePlaceHolder={titlePlaceHolder} contentPlaceHolder={contentPlaceHolder} noTitle={noTitle}>
 				<div css={subInputWrapperCSS}>
 					{subInputRender}
 				</div>
