@@ -1,6 +1,6 @@
 import React from 'react'
 import { css } from "@emotion/react";
-import { MAIN_SETTING } from './SideBarIcons';
+import { MAIN_SETTING, MAIN_SIGNOUT } from './SideBarIcons';
 
 type SideBarLeftProps = {
   element: {[prop: number]: {name: string, label:string, content: any}},
@@ -11,10 +11,17 @@ type SideBarLeftProps = {
 
 function SideBarLeft({element, logo, selectHandler, selected}: SideBarLeftProps) {
 
+  const signoutHandler = () => {
+    // 로그아웃 로직 작성
+  }
+
   const renderElement = Object.keys(element).map((el: any, idx) => {
     return (
       <div key={`${element[el].name}-${idx}`} css={elementWrapperCSS({target:el, selected})} onClick={() => {selectHandler(el)}}>
-        {element[el].content}
+        <div css={elementContentCSS}>
+          {element[el].content}
+        </div>
+        
       </div>
     )
   })
@@ -28,8 +35,17 @@ function SideBarLeft({element, logo, selectHandler, selected}: SideBarLeftProps)
         {renderElement}
       </div>
       <div css={bottomWrapperCSS}>
+        <div css={elementWrapperCSS({target:-1, selected})} onClick={() => {signoutHandler();}}>
+          <div css={elementContentCSS}>
+            {MAIN_SIGNOUT}
+          </div>
+          
+        </div>
         <div css={elementWrapperCSS({target:-1, selected})}>
-          {MAIN_SETTING}
+          <div css={elementContentCSS}>
+            {MAIN_SETTING}
+          </div>
+          
         </div>
         <div css={bottomLineCSS} />
         <img css={userImgCSS} src={'/assets/account.png'} alt="" />
@@ -39,7 +55,7 @@ function SideBarLeft({element, logo, selectHandler, selected}: SideBarLeftProps)
 }
 
 const sideBarLeftWrapperCSS = css`
-  width: 90px;
+  width: 25%;
   height: 100%;
   background-color: #064F32;
   display: flex;
@@ -63,12 +79,17 @@ const bottomWrapperCSS = css`
 `
 
 const logoWrapperCSS = css`
+width: 40%;
   margin-bottom: 36px;
 `
 
 const elementWrapperCSS = ({target, selected}: {target: number, selected: number}) => {
   return css`
-    padding: 16px;
+    width: 60%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    /* padding: 16px; */
     margin: 4px;
     transition-property: background-color opacity;
     transition-duration: 0.3s;
@@ -76,6 +97,12 @@ const elementWrapperCSS = ({target, selected}: {target: number, selected: number
     background-color: ${Number(target) === Number(selected) && '#38735A'};
     opacity: ${Number(target) === Number(selected) ? '100%' : '60%'};
     cursor: pointer;
+
+    &:after {
+      content: "";
+      display: block;
+      padding-bottom: 100%;
+    }
     
     &:hover {
       background-color: ${Number(target) !== Number(selected) && '#38735A'};
@@ -84,14 +111,19 @@ const elementWrapperCSS = ({target, selected}: {target: number, selected: number
 }
 
 const userImgCSS = css`
+  width: 50%;
   cursor: pointer;
 `
 
 const bottomLineCSS = css`
-  width: 100%;
+  width: 70%;
   height: 1px;
   border-bottom: 2px solid rgba(255,255,255,0.2);
   margin: 8px 0px 28px 0px;
+`
+
+const elementContentCSS = css`
+  width: 50%;
 `
 
 export default SideBarLeft
