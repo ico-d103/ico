@@ -48,12 +48,12 @@ function SideBar({children}: SideBarProps) {
       {name: 'set_credit_rating', label: '신용 등급', content: SUB_GOVERNMENT_CREDIT, url: '/teacher/test2'},
     ],
     2: [
-      {name: 'set_deposit', label: '예금', content: SUB_FINANCE_DEPOSIT, url: '/teacher/test'},
-      {name: 'set_stock', label: '투자', content: SUB_FINANCE_STOCK, url: '/teacher/test2'},
+      {name: 'set_deposit', label: '예금', content: SUB_FINANCE_DEPOSIT, url: '/teacher/finance/deposit'},
+      {name: 'set_stock', label: '투자', content: SUB_FINANCE_STOCK, url: '/teacher/finance/invest'},
     ],
     3: [
-      {name: 'teacher_products', label: '교사 상품', content: SUB_STORE_TEACHER, url: '/teacher/test'},
-      {name: 'student_products', label: '학생 상품', content: SUB_STORE_STUDENT, url: '/teacher/test2'},
+      {name: 'teacher_products', label: '교사 상품', content: SUB_STORE_TEACHER, url: '/teacher/shop/teacher'},
+      {name: 'student_products', label: '학생 상품', content: SUB_STORE_STUDENT, url: '/teacher/shop/student'},
     ],
   }
 
