@@ -8,8 +8,15 @@ logging:
 
 spring:
   profiles:
+    active: dev
+    group:
+      dev:
+        - db-dev
+      local:
+        - db-local
     include:
       - db
+
   batch:
     job:
       names: ${job.name:NONE}
