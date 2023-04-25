@@ -1,6 +1,5 @@
 import React from 'react'
 import { css } from "@emotion/react";
-import { useRouter } from 'next/router';
 import { MAIN_SIGNOUT } from './SideBarIcons';
 
 type SideBarRightProps = {
@@ -16,11 +15,6 @@ type SideBarRightProps = {
 }
 
 function SideBarRight({element, selectHandler, selected, title}: SideBarRightProps) {
-  const router = useRouter();
-
-  const routingHandler = (value: string) => {
-    router.push(value)
-  }
 
   // const signoutHandler = () => {
   //   // 로그아웃 로직 작성
@@ -28,7 +22,7 @@ function SideBarRight({element, selectHandler, selected, title}: SideBarRightPro
 
   const renderElement = element.map((el, idx) => {
     return (
-      <div key={`${el.name}-${idx}`} css={elementWrapperCSS({target:idx, selected})} onClick={() => {routingHandler(el.url); selectHandler(() => idx)}}>
+      <div key={`${el.name}-${idx}`} css={elementWrapperCSS({target:idx, selected})} onClick={() => {selectHandler(idx)}}>
         <div css={contentWrapperCSS}>
           {el.content}
         </div>

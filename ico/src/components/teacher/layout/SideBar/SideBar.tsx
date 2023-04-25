@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { css } from "@emotion/react"
 import { useRouter } from "next/router"
 import SideBarLeft from "./SideBarLeft"
@@ -27,14 +27,35 @@ type SideBarProps = {
 }
 
 function SideBar({ children }: SideBarProps) {
-	const [selectedMain, setSelectedMain] = useState<number>(0)
-	const [selectedSub, setSelectedSub] = useState<number>(0)
+	const [selectedMain, setSelectedMain] = useState<number>(-1)
+	const [selectedSub, setSelectedSub] = useState<number>(-1)
 	const router = useRouter()
+
+	useEffect(() => {
+		const loadMain = Number(sessionStorage.getItem('selected_main'))
+		const loadSub = Number(sessionStorage.getItem('selected_sub'))
+		if (typeof loadMain === 'number' && typeof loadSub === 'number') {
+			setSelectedMain(() => loadMain)
+			setSelectedSub(() => loadSub)
+		} else {
+			setSelectedMain(() => 0)
+			setSelectedSub(() => 0)
+		}
+	}, [])
 
 	const selectMainHandler = (value: number) => {
 		setSelectedMain(() => value)
 		setSelectedSub(() => 0)
+		sessionStorage.setItem('selected_main', String(value))
+		sessionStorage.setItem('selected_sub', String(0))
 		router.push(SUB_ELEMENT[value][0].url)
+	}
+
+	const selectSubHandler = (value: number) => {
+		setSelectedSub(() => value)
+		sessionStorage.setItem('selected_main', String(selectedMain))
+		sessionStorage.setItem('selected_sub', String(value))
+		router.push(SUB_ELEMENT[selectedMain][value].url)
 	}
 
 	const MAIN_LOGO = <img css={logoCSS} src={"/assets/icon_desktop.png"} />
@@ -76,20 +97,19 @@ function SideBar({ children }: SideBarProps) {
 		],
 	}
 
-	const indicatorRender = (
+	const indicatorRender = selectedMain !== -1 && selectedSub !== -1 && (
 		<div css={indicatorMainWrapperCSS}>
-			<div css={indicatorMainIconWrapperCSS}>{MAIN_ELEMENT[selectedMain].content}</div>
-			{MAIN_ELEMENT[selectedMain].label}
+			<div css={indicatorMainIconWrapperCSS}>{MAIN_ELEMENT[selectedMain]?.content}</div>
+			{MAIN_ELEMENT[selectedMain]?.label}
 
 			<div css={bracketCSS}>&gt;</div>
 
-			<div css={indicatorSubWrapperCSS}>{SUB_ELEMENT[selectedMain][selectedSub].label}</div>
+			<div css={indicatorSubWrapperCSS}>{SUB_ELEMENT[selectedMain][selectedSub]?.label}</div>
 		</div>
 	)
 
-	return (
-		<div css={layoutWrapperCSS}>
-			<div css={sideBarSpaceCSS} />
+	const sideBarRender = (
+		<React.Fragment>
 			<div css={sideBarWrapperCSS}>
 				<SideBarLeft
 					element={MAIN_ELEMENT}
@@ -99,15 +119,22 @@ function SideBar({ children }: SideBarProps) {
 				/>
 				<SideBarRight
 					element={SUB_ELEMENT[selectedMain]}
-					selectHandler={setSelectedSub}
+					selectHandler={selectSubHandler}
 					selected={selectedSub}
-					title={MAIN_ELEMENT[selectedMain].label}
+					title={MAIN_ELEMENT[selectedMain]?.label}
 				/>
 			</div>
 			<div css={contentOuterWrapperCSS}>
 				{indicatorRender}
 				<div css={contentInnerWrapperCSS}>{children}</div>
 			</div>
+		</React.Fragment>
+		
+	)
+	return (
+		<div css={layoutWrapperCSS}>
+			<div css={sideBarSpaceCSS} />
+			{selectedMain !== -1 && selectedSub !== -1 && sideBarRender}
 		</div>
 	)
 }

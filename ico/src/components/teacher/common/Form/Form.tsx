@@ -2,6 +2,15 @@ import React, { useReducer } from "react"
 import FormInput from "./FormInput"
 import { css } from "@emotion/react"
 
+type FormProps = {
+	subInput?: any
+	subInit?: any
+	titlePlaceHolder?: string
+	contentPlaceHolder?: string
+	idx?: number
+	frontComp?: any
+}
+
 const inputReducer = (state: any, action: any) => {
 	if (action.type === "CHANGE_TITLE") {
 		return { ...state, title: action.value }
@@ -9,26 +18,55 @@ const inputReducer = (state: any, action: any) => {
 	if (action.type === "CHANGE_CONTENT") {
 		return { ...state, content: action.value }
 	}
-	if (action.type === "CHANGE_ADDITIONAL") {
-		return { ...state, additional: action.value }
+	if (action.type === "CHANGE_SUB") {
+		return { ...state, sub: {...state.sub, [action.value.key]: action.value.value } }
 	}
 }
 
-function Form() {
-	const [inputState, dispatchInput] = useReducer(inputReducer, { title: "", content: "", additional: {} })
+
+
+function Form({subInput, subInit, titlePlaceHolder, contentPlaceHolder, idx, frontComp}: FormProps) {
+	const [inputState, dispatchInput] = useReducer(inputReducer, { title: "", content: "", sub: subInit ? subInit : {} })
 
 	const titleChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-		dispatchInput({ type: "CHANGE_DATA1", value: event.target.value })
+		dispatchInput({ type: "CHANGE_TITLE", value: event.target.value })
 	}
 
 	const contentChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-		dispatchInput({ type: "CHANGE_DATA2", value: event.target.value })
+		dispatchInput({ type: "CHANGE_CONTENT", value: event.target.value })
 	}
+
+	const subInputChangeHandler = ({key, value, event}: {key: any, value?: any, event?: React.ChangeEvent<HTMLInputElement>}) => {
+		if (event) {
+			dispatchInput({ type: "CHANGE_SUB", value: {key, value: event.target.value} })
+		} else {
+			dispatchInput({ type: "CHANGE_SUB", value: {key, value} })
+		}
+	}
+
+	const subInputRender = subInput && React.cloneElement(subInput, {
+		subInputChangeHandler
+	});
+
+	const frontCompRender = frontComp && React.cloneElement(frontComp, {
+		inputState
+	});
+
+
+	const idxRender = (
+		<div css={showIdxCSS}>
+			{idx && `# ${String(idx).padStart(2,'0')}`}
+		</div>
+	)
 
 	return (
 		<div css={formWrapperCSS}>
-			<FormInput titleChangeHandler={titleChangeHandler} contentChangeHandler={contentChangeHandler}>
-				dsa
+			{frontCompRender ? frontCompRender : idxRender}
+			
+			<FormInput titleChangeHandler={titleChangeHandler} contentChangeHandler={contentChangeHandler} titlePlaceHolder={titlePlaceHolder} contentPlaceHolder={contentPlaceHolder}>
+				<div css={subInputWrapperCSS}>
+					{subInputRender}
+				</div>
 			</FormInput>
 		</div>
 	)
@@ -39,6 +77,20 @@ const formWrapperCSS = css`
 	padding: 24px;
 	border-radius: 10px;
 	display: flex;
+	
+`
+
+const subInputWrapperCSS = css`
+	background-color:rgba(0, 50, 30, 0.1);
+`
+
+const showIdxCSS = css`
+	width: 64px;
+	padding-top: 14px;
+	color: rgb(255,255,255);
+	font-size: var(--teacher-h4);
+	font-weight: 500;
+
 `
 
 export default Form
