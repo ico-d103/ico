@@ -1,0 +1,205 @@
+:root {
+    --common-back-color: #F0F3F8;
+    --common-back-color-2: #ffffff;
+    --teacher-main-color: #06603B;
+    --teacher-main-color-2: #38735A;
+    --teacher-main-color-3: #064F32;
+    --teacher-main-color-op: #caf1d8;
+    --teacher-highlight-color: #FFA800;
+    --teacher-warning-color: #D94A4A;
+    --teacher-h1: 2.5rem;
+    --teacher-h2: 1.6rem;
+    --teacher-h3: 1.3rem;
+    --teacher-h4: 1.1rem;
+    --teacher-h5: 0.95rem;
+    --teacher-h6: 0.75rem;
+  }
+
+
+/*  
+h1 : 2.5rem -> 40px;
+h2 : 1.6rem -> 25.6px;
+h3 : 1.3rem -> 20.8px;
+h4 : 1.1rem -> 17.6px;
+h5 : 0.95rem -> 15.2px;
+h6 : 0.75rem -> 12px;
+*/
+
+  /* [data-theme="dark"] {
+
+  } */
+  
+  html,
+  body,
+  div,
+  span,
+  applet,
+  object,
+  iframe,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  blockquote,
+  pre,
+  a,
+  abbr,
+  acronym,
+  address,
+  big,
+  cite,
+  code,
+  del,
+  dfn,
+  em,
+  img,
+  ins,
+  kbd,
+  q,
+  s,
+  samp,
+  small,
+  strike,
+  strong,
+  sub,
+  sup,
+  tt,
+  var,
+  b,
+  u,
+  i,
+  center,
+  dl,
+  dt,
+  dd,
+  ol,
+  ul,
+  li,
+  fieldset,
+  form,
+  label,
+  legend,
+  table,
+  caption,
+  tbody,
+  tfoot,
+  thead,
+  tr,
+  th,
+  td,
+  article,
+  aside,
+  canvas,
+  details,
+  embed,
+  figure,
+  figcaption,
+  footer,
+  header,
+  hgroup,
+  menu,
+  nav,
+  output,
+  ruby,
+  section,
+  summary,
+  time,
+  mark,
+  audio,
+  video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+  }
+  /* HTML5 display-role reset for older browsers */
+  article,
+  aside,
+  details,
+  figcaption,
+  figure,
+  footer,
+  header,
+  hgroup,
+  menu,
+  nav,
+  section {
+    display: block;
+  }
+  html {
+    background-color: var(--common-back-color);
+  }
+  body {
+    font-family: "SUIT";
+    line-height: 1;
+    overflow-x: hidden;
+  }
+  ol,
+  ul {
+    list-style: none;
+  }
+  blockquote,
+  q {
+    quotes: none;
+  }
+  blockquote:before,
+  blockquote:after,
+  q:before,
+  q:after {
+    content: "";
+    content: none;
+  }
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  a {
+    /* color: var(--text-color); */
+    text-decoration: none;
+  }
+  button {
+    border: none;
+  }
+  h1 {
+    font-size: 36px;
+  }
+  h2 {
+    font-size: 22px;
+  }
+  h3 {
+    font-size: 18px;
+  }
+  * {
+    font-family: "SUIT";
+    box-sizing: border-box;
+  }
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: initial;
+    border-radius: 10px;
+  }
+  div {
+    /* color: var(--text-color); */
+  }
+  button {
+    /* color: var(--text-color); */
+  }
+  /* g, path, svg {
+    stroke: var(--text-color);
+  
+  } */
+  
