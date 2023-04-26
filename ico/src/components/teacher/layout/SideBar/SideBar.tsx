@@ -97,7 +97,7 @@ function SideBar({ children }: SideBarProps) {
 
 			<div css={bracketCSS}>&gt;</div>
 
-			<div css={indicatorSubWrapperCSS}>{SUB_ELEMENT[selectedMain][selectedSub]?.label}</div>
+			<div css={indicatorSubWrapperCSS}>{SUB_ELEMENT[selectedMain][router.pathname]?.label}</div>
 		</div>
 	)
 
