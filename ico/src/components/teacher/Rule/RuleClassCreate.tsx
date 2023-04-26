@@ -1,6 +1,6 @@
 import React from 'react'
 import Form from '../common/Form/Form'
-import Button from '@/components/common/Button'
+import Button from '@/components/common/Button/Button'
 import { css } from "@emotion/react"
 
 type RuleClassCreateProps = {
@@ -11,8 +11,8 @@ function RuleClassCreate({idx, mainInit}: RuleClassCreateProps) {
 
     const submitRender = (
         <div css={submitWrapperCSS}>
-            <Button text={'취소'} fontSize={'var(--teacher-h5)'} width={'110px'} height={'35px'} theme={'cancelLight'} margin={'0px 8px 0px 0px'}/>
-            <Button text={'작성'} fontSize={'var(--teacher-h5)'} width={'110px'} height={'35px'} theme={'highlighted'} />
+            <Button text={'취소'} fontSize={'var(--teacher-h5)'} width={'110px'} height={'35px'} theme={'cancelLight'} margin={'0px 8px 0px 0px'} onClick={() => {}}/>
+            <Button text={'작성'} fontSize={'var(--teacher-h5)'} width={'110px'} height={'35px'} theme={'highlighted'} onClick={() => {}} />
         </div>
         
     )
