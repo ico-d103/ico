@@ -22,7 +22,7 @@ function RuleClassDetail({title, content, date}: RuleClassDetail) {
                 <div css={titleCSS}>
                     {title}
                 </div>
-                <div>
+                <div css={contentCSS}>
                     {content}
                 </div>
             </div>
@@ -58,6 +58,10 @@ const dateCSS = css`
     color: rgba(0,0,0,0.6);
 
     margin: 4px 16px 0px 16px;
+`
+
+const contentCSS = css`
+    line-height: 130%;
 `
 
 export default RuleClassDetail

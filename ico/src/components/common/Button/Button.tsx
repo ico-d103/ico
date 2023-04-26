@@ -53,7 +53,7 @@ function Button({ text, fontSize, width, height, theme, margin, onClick }: Butto
 		},
 	}
 
-	return <button css={buttonCSS({ fontSize, width, height, themes, theme, margin })}>{text}</button>
+	return <button css={buttonCSS({ fontSize, width, height, themes, theme, margin })} onClick={onClick}>{text}</button>
 }
 
 const buttonCSS = ({
