@@ -28,7 +28,14 @@ const wrapperCSS = css`
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
-	margin-bottom: 15px;
+	padding: 15px;
+	border-radius: 10px;
+	transition: all 0.1s;
+	cursor: pointer;
+
+	:hover {
+		background-color: rgba(0, 0, 0, 0.1);
+	}
 
 	h3 {
 		font-size: var(--teacher-h3);
