@@ -1,71 +1,18 @@
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button"
-import { ResponsiveLine } from "@nivo/line"
+import InvestChart from "@/components/teacher/Invest/InvestChart"
+import InvestForm from "@/components/teacher/Invest/InvestForm"
 
 function invest() {
-	const data = [
-		{
-			id: "japan",
-			color: "hsl(266, 70%, 50%)",
-			data: [
-				{ x: "plane", y: 107 },
-				{ x: "helicopter", y: 239 },
-				{ x: "boat", y: 184 },
-				{ x: "train", y: 68 },
-				{ x: "subway", y: 175 },
-				{ x: "bus", y: 41 },
-			],
-		},
-	]
-
 	return (
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
 				<div css={titleCSS}>투자</div>
 				<Button text={"투자 종목 삭제"} fontSize={`var(--teacher-h5)`} width={"128px"} theme={"normal"} />
 			</div>
-			<div>
-				<div css={subTitleCSS}>투자 종목 설정을 설정하고 이슈를 등록해 투자 상품을 관리할 수 있습니다.</div>
-			</div>
-			<ResponsiveLine
-				data={data}
-				margin={{ top: 50, right: 50, bottom: 50, left: 50 }}
-				xScale={{ type: "point" }}
-				yScale={{
-					type: "linear",
-					min: "auto",
-					max: "auto",
-					stacked: true,
-					reverse: false,
-				}}
-				yFormat=" >-.2f"
-				axisTop={null}
-				axisRight={null}
-				axisBottom={{
-					orient: "bottom",
-					tickSize: 5,
-					tickPadding: 5,
-					tickRotation: 0,
-					legend: "transportation",
-					legendOffset: 36,
-					legendPosition: "middle",
-				}}
-				axisLeft={{
-					orient: "left",
-					tickSize: 5,
-					tickPadding: 5,
-					tickRotation: 0,
-					legend: "count",
-					legendOffset: -40,
-					legendPosition: "middle",
-				}}
-				pointSize={10}
-				pointColor={{ theme: "background" }}
-				pointBorderWidth={2}
-				pointBorderColor={{ from: "serieColor" }}
-				pointLabelYOffset={-12}
-				useMesh={true}
-			/>
+			<div css={subTitleCSS}>투자 종목 설정을 설정하고 이슈를 등록해 투자 상품을 관리할 수 있습니다.</div>
+			<InvestChart />
+			<InvestForm />
 		</div>
 	)
 }

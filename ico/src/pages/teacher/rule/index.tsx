@@ -14,7 +14,7 @@ function index() {
 	]
 
 	return (
-		<React.Fragment>
+			<React.Fragment>
 			<CollapseMenu title={"신용 등급"}>
 				신용등급의 등락폭을 수정할 수 있습니다.
 				<div css={tableWrapperCSS}>
