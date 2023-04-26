@@ -7,6 +7,7 @@ import RuleClassDetail from "./RuleClassDetail"
 import RuleClassCreate from "./RuleClassCreate"
 import Button from "@/components/common/Button/Button"
 import useCompHandler from "@/hooks/useCompHandler"
+import AnimatedRenderer from "@/components/common/AnimatedRenderer/AnimatedRenderer"
 
 function RuleClass() {
 	const { openComp, closeComp, compState } = useCompHandler()
@@ -41,7 +42,7 @@ function RuleClass() {
 		<div css={contentWrapperCSS}>
 			<div css={titleCSS}>
 				학급 규칙
-				<Button text={"추가"} fontSize={"var(--teacher-h5)"} width={"110px"} height={"35px"} theme={"normal"} onClick={()=>{}} />
+				{!compState && <Button text={"추가"} fontSize={"var(--teacher-h5)"} width={"110px"} height={"35px"} theme={"normal"} onClick={() => {openComp()}} />}
 			</div>
 			<div css={descCSS}>학급의 규칙을 작성하거나 수정할 수 있습니다.</div>
 
@@ -53,8 +54,7 @@ function RuleClass() {
 				titlePlaceHolder={"제목을 입력해 주세요!"}
 				contentPlaceHolder={"내용을 입력해 주세요!"}
 			/> */}
-
-			<RuleClassCreate idx={0} />
+			<AnimatedRenderer compState={compState}><RuleClassCreate idx={0} closeComp={closeComp} /></AnimatedRenderer>
 			<RuleClassDetail title={"학급 규칙 제목 1"} content={rule} date={"2023년 04월 26일"} />
 			<RuleClassDetail
 				title={"학급 규칙 제목 2"}
@@ -78,6 +78,7 @@ const titleCSS = css`
 	margin-bottom: 6px;
 	display: flex;
 	justify-content: space-between;
+    height: 35px;
 `
 
 const descCSS = css`
