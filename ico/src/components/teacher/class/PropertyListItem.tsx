@@ -3,18 +3,20 @@ import { css } from "@emotion/react"
 
 type PropertyListItemPropsType = {
 	mock: {
+		id: number
 		date: string
 		money: string
 		content: string
 		name: string
 	}
+	showDate: boolean
 }
 
-function PropertyListItem({ mock }: PropertyListItemPropsType) {
+function PropertyListItem({ mock, showDate }: PropertyListItemPropsType) {
 	return (
 		<div css={wrapperCSS}>
 			<div css={leftCSS}>
-				<h4>{mock.date}</h4>
+				{showDate ? <h4>{mock.date}</h4> : <h4 css={hiddenDateCSS}>{mock.date}</h4>}
 				<h3>{mock.money}</h3>
 				<h3>{mock.content}</h3>
 			</div>
@@ -60,6 +62,10 @@ const leftCSS = css`
 		font-weight: bold;
 		color: var(--teacher-blue-color);
 	}
+`
+
+const hiddenDateCSS = css`
+	visibility: hidden;
 `
 
 export default PropertyListItem
