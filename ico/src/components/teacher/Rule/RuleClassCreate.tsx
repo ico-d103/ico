@@ -6,12 +6,13 @@ import { css } from "@emotion/react"
 type RuleClassCreateProps = {
     idx: number
     mainInit?: { title: string, content: string }
+    closeComp: Function
 }
-function RuleClassCreate({idx, mainInit}: RuleClassCreateProps) {
+function RuleClassCreate({idx, mainInit, closeComp}: RuleClassCreateProps) {
 
     const submitRender = (
         <div css={submitWrapperCSS}>
-            <Button text={'취소'} fontSize={'var(--teacher-h5)'} width={'110px'} height={'35px'} theme={'cancelLight'} margin={'0px 8px 0px 0px'} onClick={() => {}}/>
+            <Button text={'취소'} fontSize={'var(--teacher-h5)'} width={'110px'} height={'35px'} theme={'cancelLight'} margin={'0px 8px 0px 0px'} onClick={() => {closeComp()}}/>
             <Button text={'작성'} fontSize={'var(--teacher-h5)'} width={'110px'} height={'35px'} theme={'highlighted'} onClick={() => {}} />
         </div>
         
