@@ -45,7 +45,7 @@ const headerCSS = css`
 `
 
 const titleCSS = css`
-	font-size: 2rem;
+	font-size: 40px	;
 	font-weight: bold;
 `
 
