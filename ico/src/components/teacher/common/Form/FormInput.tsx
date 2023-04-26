@@ -75,6 +75,7 @@ const inputCSS = css`
 	color: white;
 	padding: 16px;
 	font-weight: 500;
+	resize: none;
 	&::placeholder {
 		color: rgba(255, 255, 255, 0.6);
 	}
