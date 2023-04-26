@@ -10,7 +10,7 @@ function property() {
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
 				<h1>국고</h1>
-				<Button text={"국고 사용"} fontSize={`var(--teacher-h5)`} width={"128px"} theme={"normal"} />
+				<Button text={"국고 사용"} fontSize={`var(--teacher-h4)`} width={"128px"} theme={"normal"} />
 			</div>
 			<div css={titleCSS}>
 				<div>{CLASS_PROPERTY}</div>

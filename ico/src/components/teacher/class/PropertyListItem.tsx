@@ -17,7 +17,11 @@ function PropertyListItem({ mock, showDate }: PropertyListItemPropsType) {
 		<div css={wrapperCSS}>
 			<div css={leftCSS}>
 				{showDate ? <h4>{mock.date}</h4> : <h4 css={hiddenDateCSS}>{mock.date}</h4>}
-				<h3>{mock.money}</h3>
+				{mock.money.includes("+") ? (
+					<h3 css={plusMoneyCSS}>{mock.money}</h3>
+				) : (
+					<h3 css={minusMoneyCSS}>{mock.money}</h3>
+				)}
 				<h3>{mock.content}</h3>
 			</div>
 			<h3>{mock.name}</h3>
@@ -60,12 +64,19 @@ const leftCSS = css`
 	> h3:nth-of-type(1) {
 		margin: 0 20px;
 		font-weight: bold;
-		color: var(--teacher-blue-color);
 	}
 `
 
 const hiddenDateCSS = css`
 	visibility: hidden;
+`
+
+const plusMoneyCSS = css`
+	color: var(--teacher-blue-color);
+`
+
+const minusMoneyCSS = css`
+	color: var(--teacher-warning-color);
 `
 
 export default PropertyListItem
