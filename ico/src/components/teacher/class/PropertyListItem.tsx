@@ -56,14 +56,18 @@ const wrapperCSS = css`
 `
 
 const dateCSS = css`
-	flex: 1.2;
+	width: 100px;
+
 	> h4 {
 		color: var(--teacher-gray-color);
 	}
 `
 
 const moneyCSS = css`
-	flex: 1.5;
+	width: 150px;
+	text-align: right;
+	margin-right: 50px;
+
 	> h3 {
 		font-weight: bold;
 	}
@@ -71,10 +75,11 @@ const moneyCSS = css`
 
 const contentCSS = css`
 	flex: 5;
+	min-width: 150px;
 `
 
 const nameCSS = css`
-	flex: 1;
+	width: 150px;
 	text-align: right;
 `
 
