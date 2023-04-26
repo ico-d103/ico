@@ -93,10 +93,10 @@ const contentCSS = css`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
+	margin-top: 40px;
 `
 
 const contentTitleCSS = css`
-	margin-top: 40px;
 	font-size: var(--teacher-h2);
 	font-weight: bold;
 	color: var(--teacher-main-color);
