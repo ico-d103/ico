@@ -1,16 +1,29 @@
-import React from "react"
+import React, { useState } from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 import { CLASS_PROPERTY } from "@/components/teacher/class/ClassIcons"
 import PropertyList from "@/components/teacher/class/PropertyList"
 import Pagination from "@/components/teacher/common/Pagination/Pagination"
+import Portal from "@/components/common/Portal/Portal"
 
 function property() {
+	const [openModal, setOpenModal] = useState<boolean>(false)
+
+	const openModalHandler = () => {
+		setOpenModal(true)
+	}
+
 	return (
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
 				<h1>국고</h1>
-				<Button text={"국고 사용"} fontSize={`var(--teacher-h4)`} width={"128px"} theme={"normal"} />
+				<Button
+					text={"국고 사용"}
+					fontSize={`var(--teacher-h4)`}
+					width={"128px"}
+					theme={"normal"}
+					onClick={openModalHandler}
+				/>
 			</div>
 			<div css={titleCSS}>
 				<div>{CLASS_PROPERTY}</div>
@@ -23,6 +36,11 @@ function property() {
 				<PropertyList />
 			</div>
 			<Pagination />
+			{openModal && (
+				<Portal>
+					<></>
+				</Portal>
+			)}
 		</div>
 	)
 }
