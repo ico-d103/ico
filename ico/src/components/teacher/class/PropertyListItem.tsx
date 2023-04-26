@@ -14,18 +14,22 @@ type PropertyListItemPropsType = {
 
 function PropertyListItem({ mock, showDate }: PropertyListItemPropsType) {
 	return (
-		<div css={wrapperCSS}>
-			<div css={leftCSS}>
-				{showDate ? <h4>{mock.date}</h4> : <h4 css={hiddenDateCSS}>{mock.date}</h4>}
+		<tr css={wrapperCSS}>
+			<td css={dateCSS}>{showDate ? <h4>{mock.date}</h4> : <h4 css={hiddenDateCSS}>{mock.date}</h4>}</td>
+			<td css={moneyCSS}>
 				{mock.money.includes("+") ? (
 					<h3 css={plusMoneyCSS}>{mock.money}</h3>
 				) : (
 					<h3 css={minusMoneyCSS}>{mock.money}</h3>
 				)}
+			</td>
+			<td css={contentCSS}>
 				<h3>{mock.content}</h3>
-			</div>
-			<h3>{mock.name}</h3>
-		</div>
+			</td>
+			<td css={nameCSS}>
+				<h3>{mock.name}</h3>
+			</td>
+		</tr>
 	)
 }
 
@@ -33,7 +37,6 @@ const wrapperCSS = css`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	justify-content: space-between;
 	padding: 15px;
 	border-radius: 10px;
 	transition: all 0.1s;
@@ -52,19 +55,27 @@ const wrapperCSS = css`
 	}
 `
 
-const leftCSS = css`
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-
+const dateCSS = css`
+	flex: 1.2;
 	> h4 {
 		color: var(--teacher-gray-color);
 	}
+`
 
-	> h3:nth-of-type(1) {
-		margin: 0 20px;
+const moneyCSS = css`
+	flex: 1.5;
+	> h3 {
 		font-weight: bold;
 	}
+`
+
+const contentCSS = css`
+	flex: 5;
+`
+
+const nameCSS = css`
+	flex: 1;
+	text-align: right;
 `
 
 const hiddenDateCSS = css`

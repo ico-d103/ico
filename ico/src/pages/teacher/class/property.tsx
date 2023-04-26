@@ -19,7 +19,7 @@ function property() {
 				</div>
 			</div>
 			<div css={contentCSS}>
-				<div css={contentTitleCSS}>국고 사용 내역</div>
+				<div css={contentTitleCSS}>국고 입출금 내역</div>
 				<PropertyList />
 			</div>
 			<Pagination />

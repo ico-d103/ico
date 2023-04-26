@@ -5,7 +5,7 @@ import PropertyListItem from "./PropertyListItem"
 function PropertyList() {
 	let prevDate: string | null = null
 	const mockList = [
-		{ id: 0, date: "2023.04.18", money: "+ 3500 미소", content: "정기 세금", name: "국민들" },
+		{ id: 0, date: "2023.12.31", money: "+ 3500 미소", content: "정기 세금", name: "4번 사공지은" },
 		{ id: 1, date: "2023.04.18", money: "- 4500 미소", content: "쓰레기봉투", name: "공동 구매" },
 		{ id: 2, date: "2023.04.17", money: "- 3000 미소", content: "전기세", name: "국민들" },
 		{ id: 3, date: "2023.04.18", money: "+ 3500 미소", content: "정기 세금", name: "국민들" },
@@ -24,14 +24,16 @@ function PropertyList() {
 	]
 
 	return (
-		<div css={wrapperCSS}>
-			{mockList.map((mock) => {
-				const showDate = mock.date !== prevDate
-				prevDate = mock.date
+		<table css={wrapperCSS}>
+			<tbody>
+				{mockList.map((mock) => {
+					const showDate = mock.date !== prevDate
+					prevDate = mock.date
 
-				return <PropertyListItem key={mock.id} mock={mock} showDate={showDate} />
-			})}
-		</div>
+					return <PropertyListItem key={mock.id} mock={mock} showDate={showDate} />
+				})}
+			</tbody>
+		</table>
 	)
 }
 
