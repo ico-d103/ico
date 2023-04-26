@@ -7,6 +7,7 @@ type ButtonPropsType = {
 	width: string // 버튼 너비
 	height?: string // 버튼 높이
 	theme: string // 버튼 테마
+	onClick: () => void // 버튼의 onClick 메서드
 }
 
 type themeType = {
@@ -16,7 +17,7 @@ type themeType = {
 	backgroundColor: string // 테마의 background-color
 }
 
-function Button({ text, fontSize, width, height, theme }: ButtonPropsType) {
+function Button({ text, fontSize, width, height, theme, onClick }: ButtonPropsType) {
 	// 원하는 버튼 테마 추가
 	const themes: { [prop: string]: themeType } = {
 		normal: {
@@ -39,7 +40,11 @@ function Button({ text, fontSize, width, height, theme }: ButtonPropsType) {
 		},
 	}
 
-	return <button css={buttonCSS({ fontSize, width, height, themes, theme })}>{text}</button>
+	return (
+		<button css={buttonCSS({ fontSize, width, height, themes, theme })} onClick={onClick}>
+			{text}
+		</button>
+	)
 }
 
 const buttonCSS = ({

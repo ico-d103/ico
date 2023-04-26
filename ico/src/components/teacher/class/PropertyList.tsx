@@ -6,12 +6,12 @@ function PropertyList() {
 	let prevDate: string | null = null
 	const mockList = [
 		{ id: 0, date: "2023.12.31", money: "+ 3500 미소", content: "정기 세금", name: "4번 사공지은" },
-		{ id: 1, date: "2023.04.18", money: "- 4500 미소", content: "쓰레기봉투", name: "공동 구매" },
+		{ id: 1, date: "2023.04.18", money: "- 100 미소", content: "쓰레기봉투", name: "공동 구매" },
 		{ id: 2, date: "2023.04.17", money: "- 3000 미소", content: "전기세", name: "국민들" },
 		{ id: 3, date: "2023.04.18", money: "+ 3500 미소", content: "정기 세금", name: "국민들" },
-		{ id: 4, date: "2023.04.18", money: "- 4500 미소", content: "쓰레기봉투", name: "공동 구매" },
+		{ id: 4, date: "2023.04.18", money: "- 44500 미소", content: "쓰레기봉투", name: "공동 구매" },
 		{ id: 5, date: "2023.04.17", money: "- 3000 미소", content: "전기세", name: "국민들" },
-		{ id: 6, date: "2023.04.18", money: "+ 3500 미소", content: "정기 세금", name: "국민들" },
+		{ id: 6, date: "2023.04.18", money: "+ 123500 미소", content: "정기 세금", name: "국민들" },
 		{ id: 7, date: "2023.04.18", money: "- 4500 미소", content: "쓰레기봉투", name: "공동 구매" },
 		{ id: 8, date: "2023.04.17", money: "- 3000 미소", content: "전기세", name: "국민들" },
 		{ id: 9, date: "2023.04.18", money: "- 4500 미소", content: "쓰레기봉투", name: "공동 구매" },
