@@ -4,7 +4,6 @@ function InvestChart() {
 	const data = [
 		{
 			id: "japan",
-			color: "hsl(266, 70%, 50%)",
 			data: [
 				{ x: "plane", y: 107 },
 				{ x: "helicopter", y: 239 },
@@ -17,11 +16,10 @@ function InvestChart() {
 	]
 
 	return (
-		<>
+		<div style={{ width: "100%", height: "50vh", padding: "10px" }}>
 			<ResponsiveLine
 				data={data}
-				height={200}
-				margin={{ top: 50, right: 50, bottom: 50, left: 50 }}
+				margin={{ top: 50, right: 10, bottom: 50, left: 50 }}
 				xScale={{ type: "point" }}
 				yScale={{
 					type: "linear",
@@ -58,7 +56,7 @@ function InvestChart() {
 				pointLabelYOffset={-12}
 				useMesh={true}
 			/>
-		</>
+		</div>
 	)
 }
 

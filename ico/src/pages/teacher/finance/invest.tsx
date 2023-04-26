@@ -1,39 +1,47 @@
 import { css } from "@emotion/react"
-import Button from "@/components/common/Button"
+import Button from "@/components/common/Button/Button"
 import InvestChart from "@/components/teacher/Invest/InvestChart"
-import InvestForm from "@/components/teacher/Invest/InvestForm"
+import InvestIssueForm from "@/components/teacher/Invest/InvestIssueForm"
+import InvestStartForm from "@/components/teacher/Invest/InvestStartForm"
 
 function invest() {
+	const deleteInvest = () => {
+		console.log("deleteInvest")
+	}
+
 	return (
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
 				<div css={titleCSS}>투자</div>
-				<Button text={"투자 종목 삭제"} fontSize={`var(--teacher-h5)`} width={"128px"} theme={"normal"} />
+				<Button
+					text={"투자 종목 삭제"}
+					fontSize={`var(--teacher-h4)`}
+					width={"190px"}
+					theme={"normal"}
+					onClick={deleteInvest}
+				/>
 			</div>
 			<div css={subTitleCSS}>투자 종목 설정을 설정하고 이슈를 등록해 투자 상품을 관리할 수 있습니다.</div>
-			<InvestChart />
-			<InvestForm />
+
+			<InvestStartForm />
+			{/* <InvestChart /> */}
+			{/* <InvestIssueForm /> */}
 		</div>
 	)
 }
 
 const wrapperCSS = css`
-	width: 100%;
-	height: 100%;
+	display: flex;
+	flex-direction: column;
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
 	padding: 30px;
 `
-
 const headerCSS = css`
 	display: flex;
 	flex-direction: row;
+	align-items: center;
 	justify-content: space-between;
-
-	> h1 {
-		font-size: var(--teacher-h1);
-		font-weight: bold;
-	}
 `
 
 const titleCSS = css`
@@ -42,7 +50,7 @@ const titleCSS = css`
 `
 
 const subTitleCSS = css`
-	font-size: 0.9rem;
+	font-size: 0.95rem;
 `
 
 export default invest

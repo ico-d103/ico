@@ -1,12 +1,12 @@
 import Form from "@/components/teacher/common/Form/Form"
 import Test from "@/components/teacher/common/Form/Test"
 
-function InvestForm() {
+function InvestIssueForm() {
 	return (
 		<>
 			<Form
 				mainInit={{ title: "zzzz", content: "hahaha" }}
-				subInit={{ test: "", test2: "" }}
+				subInit={{ test: "asdf", test2: "" }}
 				subInput={<Test />}
 				idx={3}
 				titlePlaceHolder={"제목을 입력해 주세요!"}
@@ -17,4 +17,4 @@ function InvestForm() {
 	)
 }
 
-export default InvestForm
+export default InvestIssueForm
