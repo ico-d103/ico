@@ -8,6 +8,7 @@ type ButtonPropsType = {
 	height?: string // 버튼 높이
 	theme: string // 버튼 테마
 	margin?: string
+	onClick: () => void // 버튼의 onClick 메서드
 }
 
 type themeType = {
@@ -17,7 +18,7 @@ type themeType = {
 	backgroundColor: string // 테마의 background-color
 }
 
-function Button({ text, fontSize, width, height, theme, margin }: ButtonPropsType) {
+function Button({ text, fontSize, width, height, theme, margin, onClick }: ButtonPropsType) {
 	// 원하는 버튼 테마 추가
 	const themes: { [prop: string]: themeType } = {
 		normal: {
@@ -61,7 +62,7 @@ const buttonCSS = ({
 	height,
 	themes,
 	theme,
-	margin
+	margin,
 }: {
 	fontSize: string
 	width: string
@@ -82,9 +83,9 @@ const buttonCSS = ({
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		transition: all 0.2s;
 
 		:hover {
-			transition: all 0.2s;
 			filter: brightness(120%);
 		}
 	`
