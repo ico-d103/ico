@@ -1,11 +1,15 @@
 import { css } from "@emotion/react"
+import DepositTable from "@/components/teacher/Deposit/DepositTable"
 
 function deposit() {
 	return (
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
-				<h1>예금</h1>
+				<div css={titleCSS}>예금</div>
 			</div>
+			<div css={subTitleCSS}>신용등급에 따른 예금 이자율을 설정할 수 있습니다.</div>
+
+			<DepositTable />
 		</div>
 	)
 }
@@ -22,11 +26,13 @@ const headerCSS = css`
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-
-	> h1 {
-		font-size: var(--teacher-h1);
-		font-weight: bold;
-	}
+`
+const titleCSS = css`
+	font-size: 40px;
+	font-weight: bold;
+`
+const subTitleCSS = css`
+	font-size: 0.95rem;
 `
 
 export default deposit
