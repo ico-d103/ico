@@ -78,7 +78,7 @@ function Form({
 			inputState,
 		})
 
-	const idxRender = <div css={showIdxCSS}>{idx && `# ${String(idx).padStart(2, "0")}`}</div>
+	const idxRender = <div css={showIdxCSS}>{typeof idx === 'number' && `# ${String(idx).padStart(2, "0")}`}</div>
 
 	return (
 		<div css={formWrapperCSS}>
@@ -100,7 +100,7 @@ function Form({
 
 const formWrapperCSS = css`
 	background-color: var(--teacher-main-color-2);
-	padding: 24px;
+	padding: 16px 16px 16px 20px;
 	border-radius: 10px;
 	display: flex;
 `

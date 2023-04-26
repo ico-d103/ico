@@ -4,32 +4,29 @@ import { MAIN_SIGNOUT } from "./SideBarIcons"
 
 type SideBarRightProps = {
 	element: {
-		name: string
-		label: string
-		content: any
-		url: string
-	}[]
+		[prop: string]: {
+			name: string
+			label: string
+			content: any
+		}
+	}
 	selectHandler: Function
 	selected: number
 	title: string
 }
 
 function SideBarRight({ element, selectHandler, selected, title }: SideBarRightProps) {
-	// const signoutHandler = () => {
-	//   // 로그아웃 로직 작성
-	// }
-
-	const renderElement = element.map((el, idx) => {
+	const renderElement = Object.keys(element).map((el, idx) => {
 		return (
 			<div
-				key={`${el.name}-${idx}`}
+				key={`${element[el].name}-${idx}`}
 				css={elementWrapperCSS({ target: idx, selected })}
 				onClick={() => {
 					selectHandler(idx)
 				}}
 			>
-				<div css={contentWrapperCSS}>{el.content}</div>
-				{el.label}
+				<div css={contentWrapperCSS}>{element[el].content}</div>
+				{element[el].label}
 			</div>
 		)
 	})
@@ -43,7 +40,7 @@ function SideBarRight({ element, selectHandler, selected, title }: SideBarRightP
 
 			<div css={footerWrapperCSS}>
 				<div>
-					<div css={userNameCSS}>김철수 교사님</div>
+					<div css={userNameCSS}>김철수 선생님</div>
 					<div css={userEmailCSS}>example@google.com</div>
 				</div>
 			</div>
@@ -89,24 +86,6 @@ const elementWrapperCSS = ({ target, selected }: { target: number; selected: num
 		}
 	`
 }
-
-// const footerElementWrapperCSS = ({target, selected}: {target: number, selected: number}) => {
-//   return css`
-//     width: 42px;;
-//     height: 42px;
-//     padding: 12px;
-//     transition-property: background-color opacity;
-//     transition-duration: 0.3s;
-//     border-radius: 10px;
-//     background-color: ${Number(target) === Number(selected) && '#38735A'};
-//     opacity: ${target === selected ? '100%' : '60%'};
-//     cursor: pointer;
-
-//     &:hover {
-//       background-color: ${Number(target) !== Number(selected) && '#38735A'};
-//     }
-//   `
-// }
 
 const contentWrapperCSS = css`
 	width: 15%;

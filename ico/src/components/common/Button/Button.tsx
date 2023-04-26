@@ -7,6 +7,8 @@ type ButtonPropsType = {
 	width: string // 버튼 너비
 	height?: string // 버튼 높이
 	theme: string // 버튼 테마
+	margin?: string
+	onClick: () => void // 버튼의 onClick 메서드
 }
 
 type themeType = {
@@ -16,7 +18,7 @@ type themeType = {
 	backgroundColor: string // 테마의 background-color
 }
 
-function Button({ text, fontSize, width, height, theme }: ButtonPropsType) {
+function Button({ text, fontSize, width, height, theme, margin, onClick }: ButtonPropsType) {
 	// 원하는 버튼 테마 추가
 	const themes: { [prop: string]: themeType } = {
 		normal: {
@@ -25,21 +27,33 @@ function Button({ text, fontSize, width, height, theme }: ButtonPropsType) {
 			fontColor: `var(--common-back-color-2)`,
 			backgroundColor: `var(--teacher-main-color)`,
 		},
-		cancel: {
-			border: "1px solid black",
+		highlighted: {
+			border: "none",
 			borderRadius: "10px",
 			fontColor: `var(--common-back-color-2)`,
-			backgroundColor: `var(--teacher-warning-color)`,
+			backgroundColor: `var(--teacher-highlight-color)`,
+		},
+		cancelLight: {
+			border: "1px solid rgba(255, 255, 255, 0.15)",
+			borderRadius: "10px",
+			fontColor: `var(--common-back-color-2)`,
+			backgroundColor: `rgba(255, 255, 255, 0.1)`,
+		},
+		cancelDark: {
+			border: "1px solid rgba(0, 0, 0, 0.15)",
+			borderRadius: "10px",
+			fontColor: `var(--common-back-color-2)`,
+			backgroundColor: `rgba(0, 0, 0, 0.1)`,
 		},
 		warning: {
 			border: "1px solid black",
 			borderRadius: "10px",
 			fontColor: `var(--common-back-color-2)`,
-			backgroundColor: `var(--teacher-highlight-color)`,
+			backgroundColor: `#D94A4A`,
 		},
 	}
 
-	return <button css={buttonCSS({ fontSize, width, height, themes, theme })}>{text}</button>
+	return <button css={buttonCSS({ fontSize, width, height, themes, theme, margin })}>{text}</button>
 }
 
 const buttonCSS = ({
@@ -48,12 +62,14 @@ const buttonCSS = ({
 	height,
 	themes,
 	theme,
+	margin,
 }: {
 	fontSize: string
 	width: string
 	height: string | undefined
 	themes: { [prop: string]: themeType }
 	theme: string
+	margin?: string
 }) => {
 	return css`
 		font-size: ${fontSize};
@@ -63,13 +79,13 @@ const buttonCSS = ({
 		border-radius: ${themes[theme].borderRadius};
 		color: ${themes[theme].fontColor};
 		background-color: ${themes[theme].backgroundColor};
-
+		margin: ${margin};
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		transition: all 0.2s;
 
 		:hover {
-			transition: all 0.2s;
 			filter: brightness(120%);
 		}
 	`
