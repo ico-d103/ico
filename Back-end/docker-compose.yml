@@ -4,7 +4,7 @@ services:
     build: ./api-module
     image: back/api-module
     ports:
-      - "8081:80"
+      - "80:8081"
   batch-module:
     build: ./batch-module
     image: back/batch-module
