@@ -7,7 +7,7 @@ logging:
     org.hibernate.type.descriptor.sql: trace
 
 server:
-  port: 80
+  port: 8081
 #  domain: http://127.0.0.1
   servlet:
     session:
