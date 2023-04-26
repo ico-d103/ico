@@ -40,7 +40,7 @@ function SideBarRight({ element, selectHandler, selected, title }: SideBarRightP
 
 			<div css={footerWrapperCSS}>
 				<div>
-					<div css={userNameCSS}>김철수 교사님</div>
+					<div css={userNameCSS}>김철수 선생님</div>
 					<div css={userEmailCSS}>example@google.com</div>
 				</div>
 			</div>
