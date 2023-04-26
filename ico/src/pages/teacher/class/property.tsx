@@ -3,6 +3,7 @@ import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 import { CLASS_PROPERTY } from "@/components/teacher/class/ClassIcons"
 import PropertyList from "@/components/teacher/class/PropertyList"
+import Pagination from "@/components/teacher/common/Pagination/Pagination"
 
 function property() {
 	return (
@@ -17,15 +18,19 @@ function property() {
 					현재 <b>123,456 미소</b>가 국고에 있어요.
 				</div>
 			</div>
-			<div css={contentTitleCSS}>국고 사용 내역</div>
-			<PropertyList />
+			<div css={contentCSS}>
+				<div css={contentTitleCSS}>국고 사용 내역</div>
+				<PropertyList />
+			</div>
+			<Pagination />
 		</div>
 	)
 }
 
 const wrapperCSS = css`
-	width: 100%;
-	height: 100%;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
 	padding: 30px;
@@ -64,6 +69,12 @@ const titleCSS = css`
 			color: var(--teacher-main-color);
 		}
 	}
+`
+
+const contentCSS = css`
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 `
 
 const contentTitleCSS = css`
