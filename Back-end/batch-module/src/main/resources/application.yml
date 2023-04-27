@@ -16,7 +16,7 @@ server:
 
 spring:
   profiles:
-    active: local
+    active: dev
     group:
       dev:
         - db-dev
