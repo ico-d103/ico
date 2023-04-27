@@ -1,7 +1,7 @@
 import React from "react"
 import { css } from "@emotion/react"
-import { CLASS_COUPON } from "@/components/teacher/class/ClassIcons"
-import CouponList from "@/components/teacher/class/CouponList"
+import { CLASS_COUPON } from "@/components/teacher/Class/ClassIcons"
+import CouponList from "@/components/teacher/Class/Coupon/ClassCouponList"
 
 function coupons() {
 	return (

@@ -46,14 +46,24 @@ function Button({ text, fontSize, width, height, theme, margin, onClick }: Butto
 			backgroundColor: `rgba(0, 0, 0, 0.1)`,
 		},
 		warning: {
-			border: "1px solid black",
+			border: "none",
 			borderRadius: "10px",
 			fontColor: `var(--common-back-color-2)`,
 			backgroundColor: `#D94A4A`,
 		},
+		positive: {
+			border: "none",
+			borderRadius: "10px",
+			fontColor: `var(--common-back-color-2)`,
+			backgroundColor: `var(--teacher-blue-color)`,
+		},
 	}
 
-	return <button css={buttonCSS({ fontSize, width, height, themes, theme, margin })} onClick={onClick}>{text}</button>
+	return (
+		<button css={buttonCSS({ fontSize, width, height, themes, theme, margin })} onClick={onClick}>
+			{text}
+		</button>
+	)
 }
 
 const buttonCSS = ({
