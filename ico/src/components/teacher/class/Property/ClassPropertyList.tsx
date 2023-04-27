@@ -1,6 +1,6 @@
 import React from "react"
 import { css } from "@emotion/react"
-import PropertyListItem from "./PropertyListItem"
+import PropertyListItem from "./ClassPropertyListItem"
 
 function PropertyList() {
 	let prevDate: string | null = null

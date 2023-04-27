@@ -1,6 +1,6 @@
 import React from "react"
 import { css } from "@emotion/react"
-import CouponListItem from "./CouponListItem"
+import CouponListItem from "./ClassCouponListItem"
 
 function CouponList() {
 	const mockList = [

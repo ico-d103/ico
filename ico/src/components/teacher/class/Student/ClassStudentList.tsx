@@ -1,8 +1,8 @@
 import React from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
-import StudentEnteredList from "./StudentEnteredList"
-import StudentWaitingList from "./StudentWaitingList"
+import StudentEnteredList from "./ClassStudentEnteredList"
+import StudentWaitingList from "./ClassStudentWaitingList"
 
 function StudentList() {
 	return (

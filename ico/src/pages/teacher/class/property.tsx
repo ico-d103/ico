@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 import { CLASS_PROPERTY } from "@/components/teacher/Class/ClassIcons"
-import PropertyList from "@/components/teacher/Class/Property/PropertyList"
+import PropertyList from "@/components/teacher/Class/Property/ClassPropertyList"
 import Pagination from "@/components/teacher/common/Pagination/Pagination"
 import Portal from "@/components/common/Portal/Portal"
 
