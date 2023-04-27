@@ -12,12 +12,22 @@ function StudentWaitingList() {
 	]
 
 	return (
-		<div>
+		<div css={wrapperCSS}>
+			<h5>대기중인 학생을 승인 또는 반려해주세요.</h5>
 			{mockWaitList.map((mock) => (
 				<StudentWaitingListItem key={mock.id} mock={mock} />
 			))}
 		</div>
 	)
 }
+
+const wrapperCSS = css`
+	flex: 1;
+
+	> h5 {
+		font-size: var(--teacher-h5);
+		margin-bottom: 15px;
+	}
+`
 
 export default StudentWaitingList

@@ -17,8 +17,11 @@ function StudentList() {
 					onClick={() => {}}
 				/>
 			</div>
-			<StudentEnteredList />
-			<StudentWaitingList />
+			<div css={listWrapperCSS}>
+				<StudentWaitingList />
+				<div css={divideLineCSS}></div>
+				<StudentEnteredList />
+			</div>
 		</div>
 	)
 }
@@ -28,11 +31,22 @@ const headerCSS = css`
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
+	margin-bottom: 20px;
 
 	> h1 {
 		font-size: var(--teacher-h1);
 		font-weight: bold;
 	}
+`
+
+const listWrapperCSS = css`
+	display: flex;
+	flex-direction: column;
+`
+
+const divideLineCSS = css`
+	border: 1px solid rgba(0, 0, 0, 0.05);
+	margin: 20px 0;
 `
 
 export default StudentList

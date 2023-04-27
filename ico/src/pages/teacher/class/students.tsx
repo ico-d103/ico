@@ -21,7 +21,6 @@ const wrapperCSS = css`
 	display: flex;
 	flex-direction: row;
 	gap: 30px;
-	height: 100%;
 `
 
 const leftWrapperCSS = css`
