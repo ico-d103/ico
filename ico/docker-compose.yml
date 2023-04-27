@@ -8,3 +8,8 @@ services:
     ports:
       - '3000:3000'
     command: 'npm run dev'
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "udp://logs2.papertrailapp.com:31537"
+        tag: front
