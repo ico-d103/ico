@@ -13,23 +13,19 @@ import javax.persistence.*;
 public class Student {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     @OneToOne(fetch = FetchType.LAZY)
     private Nation nation;
-
     @OneToOne(fetch = FetchType.LAZY)
     private Job job;
-
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String identity;
-
+    @Column(nullable = false)
     private String password;
-
     private String name;
     private int account;
     private boolean is_frozen;
-
     private byte credit_score;
     private byte number;
     private String role;
