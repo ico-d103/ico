@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { css } from "@emotion/react"
 
 
@@ -13,13 +13,20 @@ type DropdownProps = {
 
 function Dropdown({compState, closeComp, element, height, width, align}: DropdownProps) {
     const [dropState, setDropState] = useState<boolean>(false)
+    const dropdownWrapperRef = useRef<HTMLDivElement>(null)
     
+
+
     useEffect(() => {
         if (compState) {
             setDropState(() => compState)
+            
         } else {
+
+            
             setTimeout(() => {
                 setDropState(() => compState)
+                
                 closeComp()
             }, 300)
         }
@@ -53,21 +60,11 @@ function Dropdown({compState, closeComp, element, height, width, align}: Dropdow
     })
 
     return (
-        <div onClick={(event) => {event.stopPropagation()}} css={dropdownWrapperCSS({compState, dropState, width, height, listCount: element.length, align})}>
-            {dropState && renderDropdown}
+        <div ref={dropdownWrapperRef} onClick={(event) => {event.stopPropagation()}} css={dropdownWrapperCSS({compState, dropState, width, height, listCount: element.length, align})}>
+            {renderDropdown}
         </div>
     )
-    // if (dropState) {
-    //     return (
-    //         <div css={dropdownWrapperCSS({dropState, perHeight, listCount: element.length})}>
-    //             fswfewfsfesfseadfvfasd
-    //         </div>
-    //       )
-    // } else {
-    //     return (
-    //         <React.Fragment/>
-    //     )
-    // }
+
   
 }
 
@@ -75,7 +72,8 @@ const dropdownWrapperCSS = ({compState, dropState, width, height, listCount, ali
 
     return css`
         width: ${width};
-        height: ${compState ? `calc(${height} * ${listCount})` : '0px'};
+        height: 0px;
+        height: ${compState ? (dropState ? `calc(${height} * ${listCount})` : "0px") : "0px"};
         transition-property: height;
         transition-duration: 0.3s;
         box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.15);
@@ -92,12 +90,13 @@ const dropdownIndividualCSS = ({height}: {height: string}) => {
     return css`
         height: ${height};
         display: flex;
-        padding-left: 24px;
+        padding-left: 20px;
         align-items: center;
         cursor: pointer;
         transition-property: background-color;
         transition-duration: 0.3s;
         font-weight: 500;
+        color: rgba(0, 0, 0, 0,8);
         &:hover {
             background-color: rgba(0,0,0,0.05);
         }

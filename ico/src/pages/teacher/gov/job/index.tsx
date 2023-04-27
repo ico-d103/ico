@@ -1,9 +1,56 @@
-import React from 'react'
+import React from "react"
+import Modal from "@/components/common/Modal/Modal"
+import useCompHandler from "@/hooks/useCompHandler"
+import Button from "@/components/common/Button/Button"
+import AnimatedRenderer from "@/components/common/AnimatedRenderer/AnimatedRenderer"
+import { css } from "@emotion/react"
+
+import FormCreator from "@/components/teacher/common/Form/FormCreator"
 
 function index() {
-  return (
-    <div>index</div>
-  )
+	const [openComp, closeComp, compState] = useCompHandler()
+	return (
+		<div css={contentWrapperCSS}>
+			<div css={titleCSS}>
+				직업 관리
+				{!compState && (
+					<Button
+						text={"추가"}
+						fontSize={"var(--teacher-h5)"}
+						width={"110px"}
+						theme={"normal"}
+						onClick={() => {
+							openComp()
+						}}
+					/>
+				)}
+			</div>
+			<div css={descCSS}>학급의 직업 목록을 관리할 수 있습니다.</div>
+
+
+		</div>
+	)
 }
+
+const contentWrapperCSS = css`
+	flex: 1;
+	background-color: var(--common-back-color-2);
+	border-radius: 10px;
+	padding: 30px;
+`
+
+const titleCSS = css`
+	font-size: var(--teacher-h1);
+	font-weight: 700;
+	margin-bottom: 12px;
+	display: flex;
+	justify-content: space-between;
+	height: 35px;
+`
+
+const descCSS = css`
+	margin-bottom: 36px;
+	font-size: var(--teacher-h5);
+`
 
 export default index

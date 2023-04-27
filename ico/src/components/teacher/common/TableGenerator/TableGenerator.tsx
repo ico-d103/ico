@@ -14,13 +14,13 @@ function RenderTable({ table, maxWidth, perHeight }: RenderTableProps) {
 			.map((el, idx) => {
 				const isTitle = columnIdx === 0 || idx === 0
 				if (idx < columnContent.length) {
-					return <div css={elementWrapperCSS({ isTitle, perHeight })}>{columnContent[idx]}</div>
+					return <div key={`${columnContent[idx]}-${idx}`} css={elementWrapperCSS({ isTitle, perHeight })}>{columnContent[idx]}</div>
 				} else {
-					return <div css={elementWrapperCSS({ isTitle, perHeight })} />
+					return <div key={`empty-${idx}`} css={elementWrapperCSS({ isTitle, perHeight })} />
 				}
 			})
 
-		return <div css={columnWrapperCSS}>{renderColumn}</div>
+		return <div key={`${columnContent[0]}-${columnIdx}`} css={columnWrapperCSS}>{renderColumn}</div>
 	})
 
 	return <div css={tableWrapperCSS}>{renderTable}</div>

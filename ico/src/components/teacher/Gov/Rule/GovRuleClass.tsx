@@ -1,16 +1,17 @@
 import React from "react"
 import { css } from "@emotion/react"
-import Form from "../common/Form/Form"
-import Test from "../common/Form/Test"
-import Test2 from "../common/Form/Test2"
-import RuleClassDetail from "./RuleClassDetail"
-import RuleClassCreate from "./RuleClassCreate"
+import Form from "../../common/Form/Form"
+
+import GovRuleClassDetail from "./GovRuleClassDetail"
+
 import Button from "@/components/common/Button/Button"
 import useCompHandler from "@/hooks/useCompHandler"
 import AnimatedRenderer from "@/components/common/AnimatedRenderer/AnimatedRenderer"
+import FormCreator from "../../common/Form/FormCreator"
+import GoveRuleClassCreate from "./GovRuleClassCreate"
 
-function RuleClass() {
-	const { openComp, closeComp, compState } = useCompHandler()
+function GovRuleClass() {
+	const [openComp, closeComp, compState] = useCompHandler()
 
 	const rule = `
     학급 규칙 내용입니다. 입섬 로렘...
@@ -38,11 +39,23 @@ function RuleClass() {
     학급 규칙 내용입니다. 입섬 로렘...
     `
 
+	
+
 	return (
 		<div css={contentWrapperCSS}>
 			<div css={titleCSS}>
 				학급 규칙
-				{!compState && <Button text={"추가"} fontSize={"var(--teacher-h5)"} width={"110px"} height={"35px"} theme={"normal"} onClick={() => {openComp()}} />}
+				{!compState && (
+					<Button
+						text={"추가"}
+						fontSize={"var(--teacher-h5)"}
+						width={"110px"}
+						theme={"normal"}
+						onClick={() => {
+							openComp()
+						}}
+					/>
+				)}
 			</div>
 			<div css={descCSS}>학급의 규칙을 작성하거나 수정할 수 있습니다.</div>
 
@@ -54,9 +67,13 @@ function RuleClass() {
 				titlePlaceHolder={"제목을 입력해 주세요!"}
 				contentPlaceHolder={"내용을 입력해 주세요!"}
 			/> */}
-			<AnimatedRenderer compState={compState}><RuleClassCreate idx={0} closeComp={closeComp} /></AnimatedRenderer>
-			<RuleClassDetail title={"학급 규칙 제목 1"} content={rule} date={"2023년 04월 26일"} />
-			<RuleClassDetail
+
+			<FormCreator subComp={<GoveRuleClassCreate />} idx={0} compState={compState} closeComp={closeComp} />
+			{/* <FormCreator subComp={<CreateRule />} idx={0} compState={compState} /> */}
+
+			<GovRuleClassDetail idx={0} title={"학급 규칙 제목 1"} content={rule} date={"2023년 04월 26일"} />
+			<GovRuleClassDetail
+				idx={1}
 				title={"학급 규칙 제목 2"}
 				content={"학급 규칙 내용입니다. 입섬 로렘..."}
 				date={"2023년 04월 26일"}
@@ -64,6 +81,12 @@ function RuleClass() {
 		</div>
 	)
 }
+
+
+
+
+
+
 
 const contentWrapperCSS = css`
 	flex: 1;
@@ -73,15 +96,15 @@ const contentWrapperCSS = css`
 `
 
 const titleCSS = css`
-	font-size: var(--teacher-h2);
+	font-size: var(--teacher-h1);
 	font-weight: 700;
-	margin-bottom: 6px;
+	margin-bottom: 12px;
 	display: flex;
 	justify-content: space-between;
-    height: 35px;
+	height: 35px;
 `
 
 const descCSS = css`
 	margin-bottom: 36px;
 `
-export default RuleClass
+export default GovRuleClass
