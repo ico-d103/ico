@@ -1,6 +1,6 @@
 import { ResponsiveLine } from "@nivo/line"
 
-function InvestChart() {
+function FinanceInvestChart() {
 	const data = [
 		{
 			id: "japan",
@@ -60,4 +60,4 @@ function InvestChart() {
 	)
 }
 
-export default InvestChart
+export default FinanceInvestChart
