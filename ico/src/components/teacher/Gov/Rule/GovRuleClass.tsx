@@ -3,11 +3,12 @@ import { css } from "@emotion/react"
 import Form from "../../common/Form/Form"
 
 import GovRuleClassDetail from "./GovRuleClassDetail"
-import GovRuleClassCreate from "./GovRuleClassCreate"
+
 import Button from "@/components/common/Button/Button"
 import useCompHandler from "@/hooks/useCompHandler"
 import AnimatedRenderer from "@/components/common/AnimatedRenderer/AnimatedRenderer"
 import FormCreator from "../../common/Form/FormCreator"
+import GoveRuleClassCreate from "./GovRuleClassCreate"
 
 function GovRuleClass() {
 	const [openComp, closeComp, compState] = useCompHandler()
@@ -67,7 +68,8 @@ function GovRuleClass() {
 				contentPlaceHolder={"내용을 입력해 주세요!"}
 			/> */}
 
-			<FormCreator subComp={<CreateRule />} idx={0} compState={compState} closeCompHandler={closeComp} />
+			<FormCreator subComp={<GoveRuleClassCreate />} idx={0} compState={compState} closeComp={closeComp} />
+			{/* <FormCreator subComp={<CreateRule />} idx={0} compState={compState} /> */}
 
 			<GovRuleClassDetail idx={0} title={"학급 규칙 제목 1"} content={rule} date={"2023년 04월 26일"} />
 			<GovRuleClassDetail
@@ -81,27 +83,7 @@ function GovRuleClass() {
 }
 
 
-const CreateRule = ({
-	updateContents,
-	contents,
-	buttons,
-}: {
-	updateContents?: any
-	contents?: any
-	buttons?: any
-}) => {
-	const submit = () => {
-		// 제출
-	}
-	return (
-		<React.Fragment>
-			<div>
 
-			</div>
-			{buttons(submit)}
-		</React.Fragment>
-	)
-}
 
 
 

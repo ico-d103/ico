@@ -1,11 +1,11 @@
-import React, {useState} from "react"
+import React, {useState, useRef} from "react"
 import { css } from "@emotion/react"
 import CommonListElement from "../../common/CommonListElement/CommonListElement"
+import FormCreator from "../../common/Form/FormCreator"
 import GovExchequerCreate from "./GovExchequerCreate"
 import useCompHandler from "@/hooks/useCompHandler"
-import AnimatedRenderer from "@/components/common/AnimatedRenderer/AnimatedRenderer"
 
-type GovExchequerDetailProps = {
+type GovRuleClassDetailProps = {
 	title: string
 	content: string
 	taxAspect: 0 | 1
@@ -13,17 +13,24 @@ type GovExchequerDetailProps = {
 	idx: number
 }
 
-function GovExchequerDetail({ title, content, taxAspect, taxValue, idx }: GovExchequerDetailProps) {
+function GovExchequerDetail({ title, content, taxAspect, taxValue, idx }: GovRuleClassDetailProps) {
+	const [openComp, closeComp, compState] = useCompHandler()
 	const [isEdit, setIsEdit] = useState<boolean>(false)
-
-	const closeEdit = () => {
-		setIsEdit(() => false)
-	}
-
+	const wrapperRef = useRef<HTMLDivElement>(null)
 	const dropdownList = [
-		{ name: "edit", content: null, label: "수정", function: () => {setIsEdit(() => true);} },
+		{ name: "edit", content: null, label: "수정", function: () => {openEditHandler()} },
 		{ name: "delete", content: null, label: "삭제", function: () => {} },
 	]
+
+	const openEditHandler = () => {
+		setIsEdit(() => true)
+		openComp()
+	}
+
+	const closeEditHandler = () => {
+		closeComp()
+		setIsEdit(() => false)
+	}
 
 	const taxPercent = (
 		<div css={taxDescWrapperCSS}>
@@ -54,27 +61,39 @@ function GovExchequerDetail({ title, content, taxAspect, taxValue, idx }: GovExc
 			학생 월급에서 <span css={valueTextCSS}>&nbsp;{taxValue}미소</span>를 세금으로 부과합니다.
 		</div>
 	)
-	if (isEdit === false) {
-		return (
-			<CommonListElement idx={0} dropdownList={dropdownList}>
-				<div css={detailWrapperCSS}>
-					<div css={taxInfoWrapperCSS}>
-						<div css={titleCSS}>{title}</div>
-						<div css={separatorCSS} />
-						<div css={contentCSS}>{content}</div>
+
+	return (
+		<div ref={wrapperRef} >
+			<FormCreator subComp={<GovExchequerCreate />} idx={idx} compState={compState} closeComp={closeEditHandler} mainInit={{title, content}} subInit={{taxation: taxAspect, value: taxValue}} initHeight={`${wrapperRef.current && wrapperRef.current.clientHeight}px`} />
+			<div css={WrapperCSS({isEdit, compState})}>
+				<CommonListElement idx={idx} dropdownList={dropdownList}>
+					<div css={detailWrapperCSS}>
+						<div css={taxInfoWrapperCSS}>
+							<div css={titleCSS}>{title}</div>
+							<div css={separatorCSS} />
+							<div css={contentCSS}>{content}</div>
+						</div>
+						<div>{taxAspect === 0 ? taxPercent : taxAbsolute}</div>
 					</div>
-					<div>{taxAspect === 0 ? taxPercent : taxAbsolute}</div>
-				</div>
-				
-			</CommonListElement>
-		)
-	} else {
-		return (
-			<GovExchequerCreate idx={idx} compState={isEdit} closeComp={closeEdit} mainInit={{title, content}} subInit={{taxation: taxAspect, value: taxValue}} />
-		)
+				</CommonListElement>
+			</div>
+			
+		</div>
 		
-	}
+	)
+
 	
+
+}
+
+
+const WrapperCSS = ({isEdit, compState}: {isEdit: boolean, compState: boolean}) => {
+	return css`
+		transition-duration: ${isEdit ? '0s' : '0.3s'};
+		transition-property: opacity;
+		opacity: ${isEdit ? '0%' : '100%'};
+		position: ${isEdit ? 'absolute;' : 'static'};
+	`
 }
 
 const detailWrapperCSS = css`
@@ -129,5 +148,6 @@ const taxDescWrapperCSS = css`
 	align-items: center;
 	color: var(--teacher-main-color-3);
 `
+
 
 export default GovExchequerDetail

@@ -2,7 +2,7 @@ import React, {useState, useRef} from "react"
 import { css } from "@emotion/react"
 import CommonListElement from "../../common/CommonListElement/CommonListElement"
 import FormCreator from "../../common/Form/FormCreator"
-import GovRuleClassCreate from "./GovRuleClassCreate"
+import GovJobCreate from "./GovJobCreate"
 import useCompHandler from "@/hooks/useCompHandler"
 
 type GovRuleClassDetailProps = {
@@ -12,7 +12,7 @@ type GovRuleClassDetailProps = {
 	idx: number
 }
 
-function GovRuleClassDetail({ title, content, date, idx }: GovRuleClassDetailProps) {
+function GovJobDetail({ title, content, date, idx }: GovRuleClassDetailProps) {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const wrapperRef = useRef<HTMLDivElement>(null)
@@ -34,17 +34,10 @@ function GovRuleClassDetail({ title, content, date, idx }: GovRuleClassDetailPro
 
 	return (
 		<div ref={wrapperRef} >
-			<FormCreator subComp={<GovRuleClassCreate />} idx={idx} compState={compState} closeComp={closeEditHandler} mainInit={{title, content}} initHeight={`${wrapperRef.current && wrapperRef.current.clientHeight}px`} />
+			<FormCreator subComp={<GovJobCreate />} idx={idx} compState={compState} closeComp={closeEditHandler} mainInit={{title, content}} initHeight={`${wrapperRef.current && wrapperRef.current.clientHeight}px`} />
 			<div css={WrapperCSS({isEdit})}>
-				<CommonListElement idx={idx} dropdownList={dropdownList}>
-					<div css={detailWrapperCSS}>
-						<div>
-							<div css={titleCSS}>{title}</div>
-							<div css={contentCSS}>{content}</div>
-						</div>
-						<div css={dateCSS}>{date}</div>
-					</div>
-				</CommonListElement>
+				
+				
 			</div>
 			
 		</div>
@@ -92,4 +85,4 @@ const contentCSS = css`
 	line-height: 130%;
 `
 
-export default GovRuleClassDetail
+export default GovJobDetail

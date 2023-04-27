@@ -10,29 +10,31 @@ type FormCreatorProps = {
 	subComp: any
 	frontComp?: any
 	compState?: boolean
-	closeCompHandler?: Function
-	
+	closeComp?: Function
 	isNoTitle?: boolean
 	titlePlaceHolder?: string
 	contentPlaceHolder?: string
 	submitLabel?: string
 	mainInit?: { title: string; content: string }
-	subInit?: { 추가항목: string }
+	subInit?: any
+
+	initHeight?: string;
 }
 
-function FormCreator({ subComp, frontComp, idx, mainInit, subInit, closeCompHandler,  titlePlaceHolder, contentPlaceHolder, submitLabel, isNoTitle = false, compState = true }: FormCreatorProps) {
-	if (compState || !closeCompHandler) {
+function FormCreator({ subComp, frontComp, idx, mainInit, subInit, closeComp, titlePlaceHolder, contentPlaceHolder, submitLabel, initHeight, isNoTitle = false, compState = true}: FormCreatorProps) {
+	if (compState || !closeComp) {
 		return (
 			<Form
 				mainInit={mainInit ? mainInit : { title: "", content: "" }}
 				subInit={subInit ? subInit : { 추가항목: "" }}
-				subInput={<SubmitRender subComp={subComp} submitLabel={submitLabel} />}
+				subInput={<SubmitRender subComp={subComp} submitLabel={submitLabel} isNoCancel={closeComp ? false : true} />}
 				idx={idx}
 				titlePlaceHolder={titlePlaceHolder ? titlePlaceHolder : '제목을 입력해 주세요.'}
 				contentPlaceHolder={contentPlaceHolder ? contentPlaceHolder : '내용을 입력해 주세요.'}
-				closeComp={closeCompHandler}
+				closeComp={closeComp}
 				noTitle={isNoTitle}
 				frontComp={frontComp}
+				initHeight={initHeight}
 			/>
 		)
 	} else {
@@ -57,9 +59,10 @@ type SubmitRenderProps = {
 	}
 	closeHandler?: Function
 	submitLabel?: string
+	isNoCancel?: boolean
 }
 
-const SubmitRender = ({subComp, subInputChangeHandler, inputState, closeHandler, submitLabel }: SubmitRenderProps) => {
+const SubmitRender = ({subComp, subInputChangeHandler, inputState, closeHandler, submitLabel, isNoCancel = false }: SubmitRenderProps) => {
 	// 추가적인 입력 창, 정보를 띄우는 부분입니다.
 
 	// subInputChangeHandler 함수
@@ -73,9 +76,9 @@ const SubmitRender = ({subComp, subInputChangeHandler, inputState, closeHandler,
 	// 취소 버튼에 사용됩니다. 취소 버튼이 없다면 사용하지 않아도 됩니다.
 
 	const renderContent = subComp && React.cloneElement(subComp, {
-		setContents: subInputChangeHandler,
-		contents: inputState,
-		buttons: Buttons.bind(null, submitLabel, closeHandler)//<Buttons closeHandler={closeHandler} noCancel={noCancel} submit={subComp} />
+		subInputChangeHandler,
+		inputState,
+		buttons: Buttons.bind(null, submitLabel, closeHandler, isNoCancel)//<Buttons closeHandler={closeHandler} noCancel={noCancel} submit={subComp} />
 	})
 
 	return (
@@ -87,10 +90,10 @@ const SubmitRender = ({subComp, subInputChangeHandler, inputState, closeHandler,
 
 
 
-const Buttons = (submitLabel = '작성', closeHandler: any, submit: any) => {
+const Buttons = (submitLabel = '작성', closeHandler: any, isNoCancel = false, submit: any) => {
 	return (
 		<div css={buttonWrapperCSS}>
-					{closeHandler &&
+					{!isNoCancel &&
 					
 
 					<Button

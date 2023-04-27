@@ -4,9 +4,10 @@ import { css } from "@emotion/react"
 type AnimatedRendererProps = {
 	compState: boolean
 	children: any
+	initHeight?: string
 }
 
-function AnimatedRenderer({ compState, children }: AnimatedRendererProps) {
+function AnimatedRenderer({ compState, children, initHeight }: AnimatedRendererProps) {
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
 	const [sectionState, setSectionState] = useState<boolean>(false)
 
@@ -23,18 +24,20 @@ function AnimatedRenderer({ compState, children }: AnimatedRendererProps) {
 	}, [compState])
 	
 	return (
-		<div css={contentWrapperCSS({ sectionState, compState, contentWrapperRef: contentWrapperRef })}>
+		<div css={contentWrapperCSS({ initHeight, sectionState, compState, contentWrapperRef: contentWrapperRef })}>
 			<div ref={contentWrapperRef}>{children}</div>
 		</div>
 	)
 }
 
-const contentWrapperCSS = ({ sectionState, compState, contentWrapperRef }: { sectionState: boolean; compState: boolean; contentWrapperRef: any }) => {
+const contentWrapperCSS = ({ initHeight, sectionState, compState, contentWrapperRef }: { initHeight?: string; sectionState: boolean; compState: boolean; contentWrapperRef: any }) => {
 	return css`
-		transition-property: max-height;
+		margin-top: 16px;
+		transition-property: max-height opacity;
 		transition-duration: 0.3s;
-		max-height: ${compState ? `${contentWrapperRef.current && contentWrapperRef.current.clientHeight}px` : "0px"};
+		max-height: ${compState ? `${contentWrapperRef.current && contentWrapperRef.current.clientHeight}px` : `${initHeight ? initHeight : '0px'}`};
 		overflow: ${compState ? (sectionState ? "visible" : "hidden") : "hidden"};
+		opacity: ${compState ? '100%' : "0%"};
 	`
 }
 

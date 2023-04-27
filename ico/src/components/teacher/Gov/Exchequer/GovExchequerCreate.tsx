@@ -1,52 +1,23 @@
-import React from "react"
-import Form from "../../common/Form/Form"
-import Button from "@/components/common/Button/Button"
+import React from 'react'
+import useCompHandler from '@/hooks/useCompHandler'
 import { css } from "@emotion/react"
-import Dropdown from "@/components/common/Dropdown/Dropdown"
-import useCompHandler from "@/hooks/useCompHandler"
+import Dropdown from '@/components/common/Dropdown/Dropdown'
 
-type GovExchequerCreateProps = {
-	idx: number
-	mainInit?: { title: string; content: string }
-	subInit?: { taxation: 0 | 1; value: number }
-	closeComp: Function
-    compState: boolean
-}
+function GovExchequerCreate({
+	subInputChangeHandler,
+	inputState,
+	buttons,
+}: {
+	subInputChangeHandler?: any
+	inputState?: any
+	buttons?: any
+}) {
 
-function GovExchequerCreate({ idx, mainInit, subInit, closeComp, compState }: GovExchequerCreateProps) {
-    if (compState) {
-        return (
-            <Form
-                mainInit={mainInit ? mainInit : { title: "", content: "" }}
-                subInit={subInit ? subInit : { taxation: 0, value: 0 }}
-                subInput={<SubmitRender/>}
-                idx={idx}
-                titlePlaceHolder={"세금 명을 입력해 주세요!"}
-                contentPlaceHolder={"내용을 입력해 주세요!"}
-                closeComp={closeComp}
-            />
-        )
-    } else {
-        return <React.Fragment />
-    }
-	
-}
+    const [openDropdown, closeDropdown, dropdownState] = useCompHandler()
 
-type SubmitRenderProps = {
-	subInputChangeHandler?: Function
-	inputState?: {
-		title: string
-		content: string
-		sub: {
-			taxation: 0 | 1
-			value: number
-		}
+	const submitHandler = () => {
+		// 제출 함수
 	}
-    closeHandler?: Function
-}
-
-const SubmitRender = ({ subInputChangeHandler, inputState, closeHandler }: SubmitRenderProps) => {
-	const [openDropdown, closeDropdown, dropdownState] = useCompHandler()
 
 	const taxPercentIcon = (
 		<svg css={iconCSS} width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -73,6 +44,7 @@ const SubmitRender = ({ subInputChangeHandler, inputState, closeHandler }: Submi
 	)
 
 	const setTaxPercent = () => {
+
 		subInputChangeHandler && subInputChangeHandler({ key: "taxation", value: 0 })
 		subInputChangeHandler && subInputChangeHandler({ key: "value", value: 1 })
 	}
@@ -121,7 +93,8 @@ const SubmitRender = ({ subInputChangeHandler, inputState, closeHandler }: Submi
 	)
 
 	return (
-		<div css={footerWrapperCSS}>
+		<React.Fragment>
+			<div css={footerWrapperCSS}>
 			<div css={addInfoWrapperCSS}>
 				<div css={taxationSelectWrapperCSS} onClick={openDropdown}>
 					<Dropdown
@@ -148,27 +121,20 @@ const SubmitRender = ({ subInputChangeHandler, inputState, closeHandler }: Submi
 					{inputState?.sub.taxation === 0 ? "%" : "미소"}
 				</div>
 			</div>
-			<div css={submitWrapperCSS}>
-				<Button
-					text={"취소"}
-					fontSize={"var(--teacher-h5)"}
-					width={"110px"}
-					theme={"cancelLight"}
-					margin={"0px 8px 0px 0px"}
-					onClick={() => {
-						closeHandler && closeHandler()
-					}}
-				/>
-				<Button text={"작성"} fontSize={"var(--teacher-h5)"} width={"110px"} theme={"highlighted"} onClick={() => {}} />
-			</div>
+	
+			
 		</div>
+		{buttons(submitHandler)}
+		</React.Fragment>
+		
 	)
 }
+
 
 const footerWrapperCSS = css`
 	display: flex;
 	justify-content: space-between;
-	padding: 8px;
+	/* padding: 8px; */
 `
 
 const submitWrapperCSS = css`

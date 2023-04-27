@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useRef, useEffect } from "react"
 import { css } from "@emotion/react"
 
 type FormInputProps = {
@@ -27,6 +27,10 @@ function FormInput({
 			contentRef.current.style.height = contentRef.current.scrollHeight + "px"
 		}
 	}
+
+	useEffect(() => {
+		resizeHeightHandler()
+	}, [])
 
 	const titleInput = (
 		<React.Fragment>

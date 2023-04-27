@@ -1,6 +1,6 @@
 import React from 'react'
 
-function GovRuleClassCreate({
+function GovJobCreate({
 	subInputChangeHandler,
 	inputState,
 	buttons,
@@ -22,4 +22,4 @@ function GovRuleClassCreate({
 	)
 }
 
-export default GovRuleClassCreate
+export default GovJobCreate

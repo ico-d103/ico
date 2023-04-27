@@ -13,6 +13,7 @@ type FormProps = {
 	frontComp?: any
 	noTitle?: boolean
 	closeComp?: Function
+	initHeight?: string
 }
 
 const inputReducer = (state: any, action: any) => {
@@ -36,7 +37,8 @@ function Form({
 	idx,
 	frontComp,
 	noTitle,
-	closeComp
+	closeComp,
+	initHeight
 }: FormProps) {
 	const [isOpened, setIsOpened] = useState<boolean>(false)
 
@@ -99,7 +101,7 @@ function Form({
 	const idxRender = <div css={showIdxCSS}>{typeof idx === 'number' && `# ${String(idx).padStart(2, "0")}`}</div>
 
 	return (
-		<AnimatedRenderer compState={isOpened}>
+		<AnimatedRenderer compState={isOpened} initHeight={initHeight}>
 			<div css={formWrapperCSS}>
 				{frontCompRender ? frontCompRender : idxRender}
 
@@ -122,6 +124,7 @@ function Form({
 const formWrapperCSS = css`
 	background-color: var(--teacher-main-color-2);
 	padding: 16px 16px 16px 20px;
+	
 	border-radius: 10px;
 	display: flex;
 `
