@@ -40,9 +40,10 @@ function Button({ text, fontSize, width, height, theme, margin, onClick }: Butto
 			backgroundColor: `rgba(255, 255, 255, 0.1)`,
 		},
 		cancelDark: {
-			border: "1px solid rgba(0, 0, 0, 0.15)",
+			border: "none",
 			borderRadius: "10px",
-			fontColor: `var(--common-back-color-2)`,
+			// fontColor: `var(--common-back-color-2)`,
+			fontColor: "black",
 			backgroundColor: `rgba(0, 0, 0, 0.1)`,
 		},
 		warning: {
