@@ -22,7 +22,7 @@ const wrapperCSS = css`
 	justify-content: center;
 	align-items: center;
 	gap: 20px;
-	margin-top: 20px;
+	margin-top: 30px;
 `
 
 export default Pagination
