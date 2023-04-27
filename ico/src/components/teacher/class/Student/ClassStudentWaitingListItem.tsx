@@ -1,7 +1,16 @@
 import React from "react"
+import { css } from "@emotion/react"
 
-function StudentWaitingListItem() {
-	return <div>StudentWaitingListItem</div>
+type StudentWaitingListItemPropsType = {
+	mock: {
+		id: number
+		number: number
+		name: string
+	}
+}
+
+function StudentWaitingListItem({ mock }: StudentWaitingListItemPropsType) {
+	return <div></div>
 }
 
 export default StudentWaitingListItem

@@ -17,9 +17,6 @@ function StudentList() {
 					onClick={() => {}}
 				/>
 			</div>
-			<div css={contentTitleCSS}>
-				학생들 <small>(20명)</small>
-			</div>
 			<StudentEnteredList />
 			<StudentWaitingList />
 		</div>
@@ -35,20 +32,6 @@ const headerCSS = css`
 	> h1 {
 		font-size: var(--teacher-h1);
 		font-weight: bold;
-	}
-`
-
-const contentTitleCSS = css`
-	font-size: var(--teacher-h3);
-	font-weight: bold;
-	color: var(--teacher-main-color);
-	padding: 10px;
-	border-bottom: 2px solid #064f32;
-	display: inline-block;
-	margin-top: 20px;
-
-	> small {
-		font-size: var(--teacher-h4);
 	}
 `
 
