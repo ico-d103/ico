@@ -1,8 +1,8 @@
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
-import InvestChart from "@/components/teacher/Invest/InvestChart"
-import InvestIssueForm from "@/components/teacher/Invest/InvestIssueForm"
-import InvestStartForm from "@/components/teacher/Invest/InvestStartForm"
+import FinanceInvestChart from "@/components/teacher/Finance/Invest/FinanceInvestChart"
+import FinanceInvestIssueForm from "@/components/teacher/Finance/Invest/FinanceInvestIssueForm"
+import FinanceInvestStartForm from "@/components/teacher/Finance/Invest/FinanceInvestStartForm"
 
 function invest() {
 	const deleteInvest = () => {
@@ -23,9 +23,9 @@ function invest() {
 			</div>
 			<div css={subTitleCSS}>투자 종목 설정을 설정하고 이슈를 등록해 투자 상품을 관리할 수 있습니다.</div>
 
-			<InvestStartForm />
-			{/* <InvestChart /> */}
-			{/* <InvestIssueForm /> */}
+			<FinanceInvestStartForm />
+			{/* <FinanceInvestChart /> */}
+			{/* <FinanceInvestIssueForm /> */}
 		</div>
 	)
 }
@@ -45,12 +45,13 @@ const headerCSS = css`
 `
 
 const titleCSS = css`
-	font-size: 40px	;
+	font-size: var(--teacher-h1);
 	font-weight: bold;
 `
 
 const subTitleCSS = css`
 	font-size: 0.95rem;
+	margin-top: 12px;
 `
 
 export default invest

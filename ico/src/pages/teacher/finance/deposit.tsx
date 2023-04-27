@@ -1,5 +1,5 @@
 import { css } from "@emotion/react"
-import DepositTable from "@/components/teacher/Deposit/DepositTable"
+import FinanceDepositTable from "@/components/teacher/Finance/Deposit/FinanceDepositTable"
 
 function deposit() {
 	return (
@@ -9,12 +9,14 @@ function deposit() {
 			</div>
 			<div css={subTitleCSS}>신용등급에 따른 예금 이자율을 설정할 수 있습니다.</div>
 
-			<DepositTable />
+			<FinanceDepositTable />
 		</div>
 	)
 }
 
 const wrapperCSS = css`
+	display: flex;
+	flex-direction: column;
 	width: 100%;
 	height: 100%;
 	background-color: var(--common-back-color-2);

@@ -1,7 +1,7 @@
 import Form from "@/components/teacher/common/Form/Form"
 import Test from "@/components/teacher/common/Form/Test"
 
-function InvestIssueForm() {
+function FinanceInvestIssueForm() {
 	return (
 		<>
 			<Form
@@ -17,4 +17,4 @@ function InvestIssueForm() {
 	)
 }
 
-export default InvestIssueForm
+export default FinanceInvestIssueForm
