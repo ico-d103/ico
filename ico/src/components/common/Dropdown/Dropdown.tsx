@@ -83,6 +83,7 @@ const dropdownWrapperCSS = ({compState, dropState, width, height, listCount, ali
         background-color: var(--common-back-color-2);
         ${align ? align : 'left'}: 0;
         top: 0;
+        z-index: 99999;
     `
 }
 
