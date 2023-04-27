@@ -42,7 +42,7 @@ function FormInput({
 	const contentInput = (
 		<textarea
 			ref={contentRef}
-			css={inputCSS}
+			css={textareaCSS}
 			value={inputState.content}
 			onChange={(event) => {
 				contentChangeHandler(event)
@@ -55,8 +55,11 @@ function FormInput({
 	return (
 		<div css={wrapperCSS}>
 			{noTitle !== true && titleInput}
-			{contentInput}
-			{children}
+			<div css={contentWrapperCSS}>
+				{contentInput}
+				{children}
+			</div>
+			
 		</div>
 	)
 }
@@ -69,6 +72,8 @@ const wrapperCSS = css`
 	/* padding: 4px 16px 4px 16px; */
 	background-color: rgba(255, 255, 255, 0.1);
 	/* overflow: hidden; */
+	display: flex;
+	flex-direction: column;
 `
 
 const inputCSS = css`
@@ -78,17 +83,40 @@ const inputCSS = css`
 	background-color: rgba(255, 255, 255, 0);
 	color: white;
 	padding: 16px;
+	font-size: var(--teacher-h5);
+	font-weight: 500;
+	&::placeholder {
+		color: rgba(255, 255, 255, 0.6);
+	}
+`
+
+const textareaCSS = css`
+	width: 100%;
+	outline: none;
+	border: none;
+	background-color: rgba(255, 255, 255, 0);
+	color: white;
+	padding: 16px;
+	font-size: var(--teacher-h5);
 	font-weight: 500;
 	resize: none;
 	&::placeholder {
 		color: rgba(255, 255, 255, 0.6);
 	}
+	/* flex: 1; */
 `
 
 const lineCSS = css`
 	width: 100%;
 	height: 1px;
 	border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+`
+
+const contentWrapperCSS = css`
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 `
 
 export default FormInput
