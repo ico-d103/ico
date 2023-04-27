@@ -3,7 +3,7 @@ import Form from "@/components/teacher/common/Form/Form"
 import Test from "@/components/teacher/common/Form/Test"
 import Button from "@/components/common/Button/Button"
 
-function InvestStartForm() {
+function FinanceInvestStartForm() {
 	const investStartTime = () => {
 		console.log("investStartTime")
 	}
@@ -66,4 +66,4 @@ const buttonsCSS = css`
 	gap: 5px;
 `
 
-export default InvestStartForm
+export default FinanceInvestStartForm
