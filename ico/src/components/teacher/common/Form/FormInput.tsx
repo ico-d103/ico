@@ -64,7 +64,7 @@ const wrapperCSS = css`
 	border-radius: 10px;
 	/* padding: 4px 16px 4px 16px; */
 	background-color: rgba(255, 255, 255, 0.1);
-	overflow: hidden;
+	/* overflow: hidden; */
 `
 
 const inputCSS = css`

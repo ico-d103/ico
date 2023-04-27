@@ -1,17 +1,59 @@
-import React from 'react'
-import Modal from '@/components/common/Modal/Modal'
-import useCompHandler from '@/hooks/useCompHandler'
+import React from "react"
+import Modal from "@/components/common/Modal/Modal"
+import useCompHandler from "@/hooks/useCompHandler"
+import Button from "@/components/common/Button/Button"
+import AnimatedRenderer from "@/components/common/AnimatedRenderer/AnimatedRenderer"
 import { css } from "@emotion/react"
+import GovExchequerCreate from "@/components/teacher/Gov/Exchequer/GovExchequerCreate"
+import GovExchequerDetail from "@/components/teacher/Gov/Exchequer/GovExchequerDetail"
 
 function index() {
-  const {openComp, closeComp, compState} = useCompHandler()
-  return (
-    <div>
-      index
-      <button onClick={openComp}>열기</button>
-      <Modal compState={compState} closeComp={closeComp} transition={'scale'} content={<div css={css`width: 300px; height: 300px; background-color: white; border-radius: 10px; box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.1);`}>dwqdqgsegrrsegrse \n fweafregre</div>}/>
-    </div>
-  )
+	const [openComp, closeComp, compState] = useCompHandler()
+	return (
+		<div css={contentWrapperCSS}>
+			<div css={titleCSS}>
+				세금 관리
+				{!compState && (
+					<Button
+						text={"추가"}
+						fontSize={"var(--teacher-h5)"}
+						width={"110px"}
+						theme={"normal"}
+						onClick={() => {
+							openComp()
+						}}
+					/>
+				)}
+			</div>
+			<div css={descCSS}>학급의 세금 납부 목록을 관리할 수 있습니다.</div>
+
+
+			<GovExchequerCreate idx={0} closeComp={closeComp} compState={compState} />
+
+			<GovExchequerDetail idx={0} title={"세금 제목 1"} content={"세금 내용입니다. 입섬 로렘..."} taxAspect={0} taxValue={11} />
+		</div>
+	)
 }
+
+const contentWrapperCSS = css`
+	flex: 1;
+	background-color: var(--common-back-color-2);
+	border-radius: 10px;
+	padding: 30px;
+`
+
+const titleCSS = css`
+	font-size: var(--teacher-h1);
+	font-weight: 700;
+	margin-bottom: 12px;
+	display: flex;
+	justify-content: space-between;
+	height: 35px;
+`
+
+const descCSS = css`
+	margin-bottom: 36px;
+	font-size: var(--teacher-h5);
+`
 
 export default index
