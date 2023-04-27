@@ -6,7 +6,9 @@ import PropertyList from "@/components/teacher/Class/Property/ClassPropertyList"
 import Pagination from "@/components/teacher/common/Pagination/Pagination"
 import Modal from "@/components/common/Modal/Modal"
 import useCompHandler from "@/hooks/useCompHandler"
-import ClassPropertyUseModal from "@/components/teacher/Class/Property/ClassPropertyUseModal"
+import ClassPropertyUseModalContent from "@/components/teacher/Class/Property/ClassPropertyUseModalContent"
+import ModalContent from "@/components/common/Modal/ModalContent"
+import { CLASS_BIG_PROPERTY } from "@/components/teacher/Class/ClassIcons"
 
 function property() {
 	const { openComp, closeComp, compState } = useCompHandler()
@@ -30,7 +32,19 @@ function property() {
 				<PropertyList />
 			</div>
 			<Pagination />
-			<Modal compState={compState} closeComp={closeComp} transition={"scale"} content={<ClassPropertyUseModal />} />
+			<Modal
+				compState={compState}
+				closeComp={closeComp}
+				transition={"scale"}
+				content={
+					<ModalContent
+						width={"500px"}
+						icon={CLASS_BIG_PROPERTY}
+						title={"국고 사용하기"}
+						content={ClassPropertyUseModalContent()}
+					/>
+				}
+			/>
 		</div>
 	)
 }
