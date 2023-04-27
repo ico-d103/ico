@@ -11,7 +11,7 @@ import ModalContent from "@/components/common/Modal/ModalContent"
 import { CLASS_BIG_PROPERTY } from "@/components/teacher/Class/ClassIcons"
 
 function property() {
-	const { openComp, closeComp, compState } = useCompHandler()
+	const [openComp, closeComp, compState] = useCompHandler()
 
 	return (
 		<div css={wrapperCSS}>
