@@ -1,6 +1,7 @@
 import React from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
+import CollapseMenu from "../../common/CollapseMenu/CollapseMenu"
 
 function StudentDetail() {
 	return (
@@ -20,7 +21,11 @@ function StudentDetail() {
 				</div>
 				<div>계좌 정지</div>
 			</div>
-			<div css={contentWrapperCSS}></div>
+			<div css={contentWrapperCSS}>
+				<CollapseMenu title={"미소 지급 및 차감"}>
+					<></>
+				</CollapseMenu>
+			</div>
 		</>
 	)
 }
