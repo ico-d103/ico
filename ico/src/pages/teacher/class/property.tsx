@@ -4,26 +4,18 @@ import Button from "@/components/common/Button/Button"
 import { CLASS_PROPERTY } from "@/components/teacher/Class/ClassIcons"
 import PropertyList from "@/components/teacher/Class/Property/ClassPropertyList"
 import Pagination from "@/components/teacher/common/Pagination/Pagination"
-import Portal from "@/components/common/Portal/Portal"
+import Modal from "@/components/common/Modal/Modal"
+import useCompHandler from "@/hooks/useCompHandler"
+import ClassPropertyUseModal from "@/components/teacher/Class/Property/ClassPropertyUseModal"
 
 function property() {
-	const [openModal, setOpenModal] = useState<boolean>(false)
-
-	const openModalHandler = () => {
-		setOpenModal(true)
-	}
+	const { openComp, closeComp, compState } = useCompHandler()
 
 	return (
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
 				<h1>국고</h1>
-				<Button
-					text={"국고 사용"}
-					fontSize={`var(--teacher-h4)`}
-					width={"128px"}
-					theme={"normal"}
-					onClick={openModalHandler}
-				/>
+				<Button text={"국고 사용"} fontSize={`var(--teacher-h4)`} width={"128px"} theme={"normal"} onClick={openComp} />
 			</div>
 			<div css={titleCSS}>
 				<div>{CLASS_PROPERTY}</div>
@@ -38,11 +30,7 @@ function property() {
 				<PropertyList />
 			</div>
 			<Pagination />
-			{openModal && (
-				<Portal>
-					<></>
-				</Portal>
-			)}
+			<Modal compState={compState} closeComp={closeComp} transition={"scale"} content={<ClassPropertyUseModal />} />
 		</div>
 	)
 }

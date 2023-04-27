@@ -10,13 +10,11 @@ type ModalProps = {
 	compState: boolean
 	closeComp: () => void
 	transition: string
-	content: any
+	content: JSX.Element
 }
 
 function Modal({ compState, closeComp, transition, content }: ModalProps) {
 	const [modalState, setModalState] = useState<boolean>(false)
-   
-
 
 	useEffect(() => {
 		if (compState) {
@@ -40,7 +38,7 @@ function Modal({ compState, closeComp, transition, content }: ModalProps) {
 				<div css={modalWrapperCSS}>
 					<div css={backdropCSS({ compState, modalState })} onClick={closeComp} />
 					<div css={transitions({ compState, modalState })[transition]}>
-						<div className={"inner-wrapper"} css={innerWrapperCSS} >
+						<div className={"inner-wrapper"} css={innerWrapperCSS}>
 							{renderContent}
 						</div>
 					</div>
@@ -76,20 +74,19 @@ const modalWrapperCSS = css`
 
 const transitions = ({ compState, modalState }: { compState: boolean; modalState: boolean }) => {
 	const data: { [prop: string]: any } = {
-        
 		fadeIn: css`
 			position: relative;
 			transition-duration: 0.3s;
 			transition-property: opacity;
 			opacity: ${compState ? (modalState ? "100%" : "0%") : "0%"};
 		`,
-        scale: css`
-            position: relative;
+		scale: css`
+			position: relative;
 			transition-duration: 0.3s;
 			transition-property: opacity transform;
 			opacity: ${compState ? (modalState ? "100%" : "0%") : "0%"};
-            transform: ${compState ? (modalState ? "scale(1)" : "scale(1.1)") : "scale(1.1)"};
-        `,
+			transform: ${compState ? (modalState ? "scale(1)" : "scale(1.1)") : "scale(1.1)"};
+		`,
 		rightToLeft: css`
 			position: relative;
 			transition-duration: 0.3s;
