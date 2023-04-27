@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
-import { CLASS_PROPERTY } from "@/components/teacher/class/ClassIcons"
-import PropertyList from "@/components/teacher/class/PropertyList"
+import { CLASS_PROPERTY } from "@/components/teacher/Class/ClassIcons"
+import PropertyList from "@/components/teacher/Class/Property/ClassPropertyList"
 import Pagination from "@/components/teacher/common/Pagination/Pagination"
 import Portal from "@/components/common/Portal/Portal"
 
@@ -32,7 +32,9 @@ function property() {
 				</div>
 			</div>
 			<div css={contentCSS}>
-				<div css={contentTitleCSS}>국고 입출금 내역</div>
+				<div>
+					<h3 css={contentTitleCSS}>국고 입출금 내역</h3>
+				</div>
 				<PropertyList />
 			</div>
 			<Pagination />
@@ -93,16 +95,16 @@ const contentCSS = css`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	margin-top: 40px;
 `
 
 const contentTitleCSS = css`
-	font-size: var(--teacher-h2);
+	margin-top: 30px;
+	padding: 10px;
+	display: inline-block;
+	border-bottom: 2px solid #064f32;
+	font-size: var(--teacher-h3);
 	font-weight: bold;
 	color: var(--teacher-main-color);
-	padding: 10px;
-	border-bottom: 2px solid #064f32;
-	display: inline-block;
 `
 
 export default property
