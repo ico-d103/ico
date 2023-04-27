@@ -41,7 +41,7 @@ const ancWrapperCSS = css`
 `
 
 const trgWrapperCSS = css`
-	font-size: var(--teacher-h2);
+	font-size: var(--teacher-h1);
 	font-weight: 700;
 	user-select: none;
 	cursor: pointer;

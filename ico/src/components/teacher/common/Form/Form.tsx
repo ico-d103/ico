@@ -1,6 +1,7 @@
-import React, { useReducer } from "react"
+import React, { useReducer, useState, useEffect } from "react"
 import FormInput from "./FormInput"
 import { css } from "@emotion/react"
+import AnimatedRenderer from "@/components/common/AnimatedRenderer/AnimatedRenderer"
 
 type FormProps = {
 	mainInit?: { title: string; content: string }
@@ -11,6 +12,8 @@ type FormProps = {
 	idx?: number
 	frontComp?: any
 	noTitle?: boolean
+	closeComp?: Function
+	initHeight?: string
 }
 
 const inputReducer = (state: any, action: any) => {
@@ -34,7 +37,16 @@ function Form({
 	idx,
 	frontComp,
 	noTitle,
+	closeComp,
+	initHeight
 }: FormProps) {
+	const [isOpened, setIsOpened] = useState<boolean>(false)
+
+
+	useEffect(() => {
+		setIsOpened(() => true)
+	}, [])
+
 	const [inputState, dispatchInput] = useReducer(inputReducer, {
 		title: mainInit ? mainInit.title : "",
 		content: mainInit ? mainInit.content : "",
@@ -65,11 +77,19 @@ function Form({
 		}
 	}
 
+	const closeHandler = () => {
+		setIsOpened(() => false)
+		setTimeout(() => {
+			closeComp && closeComp()
+		}, 300)
+	}
+
 	const subInputRender =
 		subInput &&
 		React.cloneElement(subInput, {
 			subInputChangeHandler,
 			inputState,
+			closeHandler
 		})
 
 	const frontCompRender =
@@ -81,32 +101,37 @@ function Form({
 	const idxRender = <div css={showIdxCSS}>{typeof idx === 'number' && `# ${String(idx).padStart(2, "0")}`}</div>
 
 	return (
-		<div css={formWrapperCSS}>
-			{frontCompRender ? frontCompRender : idxRender}
+		<AnimatedRenderer compState={isOpened} initHeight={initHeight}>
+			<div css={formWrapperCSS}>
+				{frontCompRender ? frontCompRender : idxRender}
 
-			<FormInput
-				inputState={inputState}
-				titleChangeHandler={titleChangeHandler}
-				contentChangeHandler={contentChangeHandler}
-				titlePlaceHolder={titlePlaceHolder}
-				contentPlaceHolder={contentPlaceHolder}
-				noTitle={noTitle}
-			>
-				<div css={subInputWrapperCSS}>{subInputRender}</div>
-			</FormInput>
-		</div>
+				<FormInput
+					inputState={inputState}
+					titleChangeHandler={titleChangeHandler}
+					contentChangeHandler={contentChangeHandler}
+					titlePlaceHolder={titlePlaceHolder}
+					contentPlaceHolder={contentPlaceHolder}
+					noTitle={noTitle}
+				>
+					<div css={subInputWrapperCSS}>{subInputRender}</div>
+				</FormInput>
+			</div>
+		</AnimatedRenderer>
+		
 	)
 }
 
 const formWrapperCSS = css`
 	background-color: var(--teacher-main-color-2);
 	padding: 16px 16px 16px 20px;
+	
 	border-radius: 10px;
 	display: flex;
 `
 
 const subInputWrapperCSS = css`
 	background-color: rgba(0, 50, 30, 0.1);
+	border-radius: 0px 0px 10px 10px;
 `
 
 const showIdxCSS = css`
