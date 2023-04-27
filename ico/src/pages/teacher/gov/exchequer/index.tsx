@@ -28,10 +28,21 @@ function index() {
 			</div>
 			<div css={descCSS}>학급의 세금 납부 목록을 관리할 수 있습니다.</div>
 
-			<FormCreator subComp={<GovExchequerCreate />} subInit={{taxation: 0, value: 1}} idx={0} compState={compState} closeComp={closeComp} />
+			<FormCreator
+				subComp={<GovExchequerCreate />}
+				subInit={{ taxation: 0, value: 1 }}
+				idx={0}
+				compState={compState}
+				closeComp={closeComp}
+			/>
 
-
-			<GovExchequerDetail idx={0} title={"세금 제목 1"} content={"세금 내용입니다. 입섬 로렘..."} taxAspect={0} taxValue={11} />
+			<GovExchequerDetail
+				idx={0}
+				title={"세금 제목 1"}
+				content={"세금 내용입니다. 입섬 로렘..."}
+				taxAspect={0}
+				taxValue={11}
+			/>
 		</div>
 	)
 }
