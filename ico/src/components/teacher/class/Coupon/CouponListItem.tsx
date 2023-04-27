@@ -1,6 +1,6 @@
 import React from "react"
 import { css } from "@emotion/react"
-import { CLASS_ACCEPT, CLASS_DENY } from "./ClassIcons"
+import { CLASS_ACCEPT, CLASS_DENY } from "../ClassIcons"
 
 type CouponListItemPropsType = {
 	mock: {
