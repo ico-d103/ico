@@ -16,9 +16,8 @@ function deposit() {
 
 const wrapperCSS = css`
 	display: flex;
+	flex: 1;
 	flex-direction: column;
-	width: 100%;
-	height: 100%;
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
 	padding: 30px;
@@ -27,14 +26,16 @@ const wrapperCSS = css`
 const headerCSS = css`
 	display: flex;
 	flex-direction: row;
+	align-items: center;
 	justify-content: space-between;
 `
 const titleCSS = css`
-	font-size: 40px;
+	font-size: var(--teacher-h1);
 	font-weight: bold;
 `
 const subTitleCSS = css`
 	font-size: 0.95rem;
+	margin-top: 12px;
 `
 
 export default deposit
