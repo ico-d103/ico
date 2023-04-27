@@ -6,7 +6,7 @@ import StudentWaitingList from "./ClassStudentWaitingList"
 
 function StudentList() {
 	return (
-		<div>
+		<>
 			<div css={headerCSS}>
 				<h1>학생 정보</h1>
 				<Button
@@ -22,7 +22,7 @@ function StudentList() {
 				<div css={divideLineCSS}></div>
 				<StudentEnteredList />
 			</div>
-		</div>
+		</>
 	)
 }
 
