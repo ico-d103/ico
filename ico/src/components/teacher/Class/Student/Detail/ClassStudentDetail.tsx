@@ -1,7 +1,7 @@
 import React from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
-import CollapseMenu from "../../common/CollapseMenu/CollapseMenu"
+import CollapseMenu from "../../../common/CollapseMenu/CollapseMenu"
 
 function StudentDetail() {
 	return (
