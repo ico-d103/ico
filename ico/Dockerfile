@@ -6,7 +6,7 @@ FROM node:18.16.0-alpine
 WORKDIR /app
 
 # 의존성 파일 복사
-COPY package.json ./
+COPY package.json package-lock.json ./
 
 # 의존성 설치
 RUN npm i
