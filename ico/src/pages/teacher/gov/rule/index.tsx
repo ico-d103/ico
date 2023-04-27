@@ -1,24 +1,17 @@
 import React from "react"
 import { css } from "@emotion/react"
-import RuleCredit from "@/components/teacher/Rule/RuleCredit"
-import RuleClass from "@/components/teacher/Rule/RuleClass"
+import GovRuleCredit from "@/components/teacher/Gov/Rule/GovRuleCredit"
+import GovRuleClass from "@/components/teacher/Gov/Rule/GovRuleClass"
 
 function index() {
-	
-
 	return (
 		<React.Fragment>
-			<RuleCredit />
+			<GovRuleCredit />
 
-			
-			<RuleClass/>
-			
+			<GovRuleClass />
+	
 		</React.Fragment>
 	)
 }
-
-
-
-
 
 export default index
