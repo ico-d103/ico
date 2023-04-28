@@ -2,6 +2,7 @@ import React from "react"
 import { css } from "@emotion/react"
 import ClassStudentDetailHead from "./ClassStudentDetailHead"
 import ClassStudentDetailMoney from "./ClassStudentDetailMoney"
+import ClassStudentDetailGrade from "./ClassStudentDetailGrade"
 
 function StudentDetail() {
 	return (
@@ -9,6 +10,7 @@ function StudentDetail() {
 			<h1 css={headerCSS}>학생 정보 상세보기</h1>
 			<ClassStudentDetailHead />
 			<ClassStudentDetailMoney />
+			<ClassStudentDetailGrade />
 		</>
 	)
 }
