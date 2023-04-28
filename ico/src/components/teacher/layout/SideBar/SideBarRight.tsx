@@ -5,9 +5,11 @@ import { MAIN_SIGNOUT } from "./SideBarIcons"
 type SideBarRightProps = {
 	element: {
 		[prop: string]: {
-			name: string
-			label: string
-			content: any
+			name?: string
+			label?: string
+			content?: any
+			menuIndex?: number
+			for?: number
 		}
 	}
 	selectHandler: Function
@@ -17,18 +19,20 @@ type SideBarRightProps = {
 
 function SideBarRight({ element, selectHandler, selected, title }: SideBarRightProps) {
 	const renderElement = Object.keys(element).map((el, idx) => {
-		return (
-			<div
-				key={`${element[el].name}-${idx}`}
-				css={elementWrapperCSS({ target: idx, selected })}
-				onClick={() => {
-					selectHandler(idx)
-				}}
-			>
-				<div css={contentWrapperCSS}>{element[el].content}</div>
-				{element[el].label}
-			</div>
-		)
+		if (typeof element[el].for !== "number") {
+			return (
+				<div
+					key={`${element[el].name}-${idx}`}
+					css={elementWrapperCSS({ target: idx, selected })}
+					onClick={() => {
+						selectHandler(idx)
+					}}
+				>
+					<div css={contentWrapperCSS}>{element[el].content}</div>
+					{element[el].label}
+				</div>
+			)
+		}
 	})
 
 	return (

@@ -123,6 +123,7 @@ const submitWrapperCSS = css`
 
 const buttonWrapperCSS = css`
 	display: flex;
+	align-items:end;
 `
 
 
