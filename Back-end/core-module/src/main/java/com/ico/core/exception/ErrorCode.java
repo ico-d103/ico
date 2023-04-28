@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
  */
 @Getter
 @AllArgsConstructor
-public enum ErrorCode {
+public enum ErrorCode{
 
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "ACCOUNT-001", "사용자를 찾을 수 없습니다."),
 
@@ -24,7 +24,7 @@ public enum ErrorCode {
 
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "ACCOUNT-002", "비밀번호가 일치하지 않습니다."),
 
-    HAS_USER(HttpStatus.BAD_REQUEST, "ACCOUNT-003", "이미 등록된 회원입니다.")
+    HAS_USER(HttpStatus.BAD_REQUEST, "ACCOUNT-003", "이미 등록된 회원입니다."),
     ;
 
     private final HttpStatus httpStatus;
