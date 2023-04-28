@@ -41,7 +41,7 @@ const buttonWrapperCSS = css`
 
 	> div {
 		cursor: pointer;
-		transition: all 0.1s;
+		transition: all 0.2s;
 
 		:hover {
 			transform: scale(1.1);
