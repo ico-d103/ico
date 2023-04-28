@@ -175,9 +175,10 @@ function SideBar({ children }: SideBarProps) {
 	)
 
 	return (
-		<OverlayScrollbarsComponent defer>
-			<div css={layoutWrapperCSS}>{selectedMain !== -1 && selectedSub !== -1 ? sideBarRender : children}</div>
-		</OverlayScrollbarsComponent>
+
+		<div css={layoutWrapperCSS}>{selectedMain !== -1 && selectedSub !== -1 ? sideBarRender : children}</div>
+
+	
 	)
 }
 

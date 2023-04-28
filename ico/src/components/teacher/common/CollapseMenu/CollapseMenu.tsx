@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { css } from "@emotion/react"
 
 type CollapseMenuProps = {
@@ -10,7 +10,15 @@ type CollapseMenuProps = {
 
 function CollapseMenu({ children, title, fontSize, bracketSize }: CollapseMenuProps) {
 	const [isOpened, setIsOpened] = useState<boolean>(false)
+	const [refresh, setRefresh] = useState<boolean>(false)
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
+
+	useEffect(() => {
+		setTimeout(() => {
+			setRefresh((prev) => !prev)
+		}, 400)
+	}, [isOpened])
+	
 
 	return (
 		<div css={ancWrapperCSS}>
@@ -28,6 +36,7 @@ function CollapseMenu({ children, title, fontSize, bracketSize }: CollapseMenuPr
 				<div ref={contentWrapperRef}>
 					<div css={spaceCSS} />
 					{children}
+					{refresh && <div/>}
 				</div>
 			</div>
 		</div>
@@ -40,6 +49,8 @@ const ancWrapperCSS = css`
 	box-sizing: border-box;
 	padding: 30px;
 	margin-bottom: 24px;
+	
+	
 `
 
 const trgWrapperCSS = ({ fontSize }: { fontSize: string }) => {
@@ -77,6 +88,7 @@ const contentWrapperCSS = ({ isOpened, contentWrapperRef }: { isOpened: boolean;
 		overflow: hidden;
 		/* height: ${isOpened ? "auto" : "0px"}; */
 		max-height: ${isOpened ? `${contentWrapperRef.current && contentWrapperRef.current.clientHeight + 1}px` : "0px"};
+		
 	`
 }
 
