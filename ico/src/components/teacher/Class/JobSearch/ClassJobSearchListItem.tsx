@@ -1,6 +1,7 @@
-import React from "react"
+import React, { useState } from "react"
 import { css } from "@emotion/react"
-import Image from "next/image"
+import ClassJobSearchListItemFront from "./ClassJobSearchListItemFront"
+import ClassJobSearchListItemBack from "./ClassJobSearchListItemBack"
 
 type ClassJobSearchListItemPropsType = {
 	mock: {
@@ -14,16 +15,11 @@ type ClassJobSearchListItemPropsType = {
 }
 
 function ClassJobSearchListItem({ mock }: ClassJobSearchListItemPropsType) {
+	const [isReverse, setIsReverse] = useState<boolean>(false)
+
 	return (
-		<div css={wrapperCSS}>
-			<div css={imageWrapperCSS}></div>
-			<div css={contentWrapperCSS}>
-				<div css={firstContentCSS}>직업 이름과 모집 인원 수</div>
-				<div css={secondContentCSS}>
-					<h4>신용 등급</h4>
-					<h4>월급</h4>
-				</div>
-			</div>
+		<div css={wrapperCSS} onClick={() => setIsReverse(!isReverse)}>
+			{!isReverse ? <ClassJobSearchListItemFront mock={mock} /> : <ClassJobSearchListItemBack mock={mock} />}
 		</div>
 	)
 }
@@ -42,30 +38,6 @@ const wrapperCSS = css`
 	:hover {
 		transform: scale(1.1);
 	}
-`
-
-const imageWrapperCSS = css`
-	height: 240px;
-	background-color: #007bc0;
-`
-
-const contentWrapperCSS = css`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-`
-
-const firstContentCSS = css`
-	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-	padding: 10px;
-`
-
-const secondContentCSS = css`
-	padding: 10px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	gap: 10px;
 `
 
 export default ClassJobSearchListItem
