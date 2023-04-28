@@ -57,7 +57,7 @@ function CommonListElement({ children, dropdownList, idx }: CommonListElement) {
 	)
 
 	return (
-		<div>
+		<div css={wrapperCSS}>
 			<div css={lineCSS} />
 			<div css={contentWrapperCSS}>
 				<div css={outerContentWrapperCSS}>
@@ -69,6 +69,10 @@ function CommonListElement({ children, dropdownList, idx }: CommonListElement) {
 		</div>
 	)
 }
+
+const wrapperCSS = css`
+	min-width: 640px;
+`
 
 const lineCSS = css`
 	width: 100%;
