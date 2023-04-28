@@ -86,7 +86,6 @@ project(":core-module") {
 		implementation fileTree(dir: 'libs', include: ['*.jar'])
 
 		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-		implementation 'org.springframework.boot:spring-boot-starter-validation'
 		implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 		runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	}
@@ -101,6 +100,7 @@ project(":api-module") {
 	}
 
 	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
 		implementation project(':core-module')
 	}
 }
@@ -116,6 +116,7 @@ project(":batch-module") {
 	dependencies {
 		implementation 'org.springframework.boot:spring-boot-starter-batch'
 		testImplementation 'org.springframework.batch:spring-batch-test'
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
 		implementation project(':core-module')
 	}
 }
