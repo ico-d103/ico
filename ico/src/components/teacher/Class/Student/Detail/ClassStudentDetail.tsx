@@ -22,7 +22,12 @@ function StudentDetail() {
 				<div>계좌 정지</div>
 			</div>
 			<div css={contentWrapperCSS}>
-				<CollapseMenu title={"미소 지급 및 차감"}>
+				<CollapseMenu
+					title={"미소 지급 및 차감"}
+					fontSize={`var(--teacher-h4)`}
+					bracketSize={`10px`}
+					border={`1px solid #dde3ea`}
+				>
 					<></>
 				</CollapseMenu>
 			</div>
@@ -59,6 +64,8 @@ const studentNameCSS = css`
 	display: inline-block;
 `
 
-const contentWrapperCSS = css``
+const contentWrapperCSS = css`
+	margin-top: 30px;
+`
 
 export default StudentDetail
