@@ -4,22 +4,24 @@ import { css } from "@emotion/react"
 type CollapseMenuProps = {
 	children: any
 	title: string
+	fontSize: string
+	bracketSize: string
 }
 
-function CollapseMenu({ children, title }: CollapseMenuProps) {
+function CollapseMenu({ children, title, fontSize, bracketSize }: CollapseMenuProps) {
 	const [isOpened, setIsOpened] = useState<boolean>(false)
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
 
 	return (
 		<div css={ancWrapperCSS}>
 			<div
-				css={trgWrapperCSS}
+				css={trgWrapperCSS({ fontSize })}
 				onClick={() => {
 					setIsOpened((prev) => !prev)
 				}}
 			>
 				{title}
-				<img css={bracketImgCSS({ isOpened })} src={"/assets/bracket.png"} />
+				<img css={bracketImgCSS({ isOpened, bracketSize })} src={"/assets/bracket.png"} />
 			</div>
 
 			<div css={contentWrapperCSS({ isOpened, contentWrapperRef })}>
@@ -40,22 +42,26 @@ const ancWrapperCSS = css`
 	margin-bottom: 24px;
 `
 
-const trgWrapperCSS = css`
-	font-size: var(--teacher-h1);
-	font-weight: 700;
-	user-select: none;
-	cursor: pointer;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-`
+const trgWrapperCSS = ({ fontSize }: { fontSize: string }) => {
+	return css`
+		/* font-size: var(--teacher-h1); */
+		font-size: ${fontSize};
+		font-weight: 700;
+		user-select: none;
+		cursor: pointer;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	`
+}
 
-const bracketImgCSS = ({ isOpened }: { isOpened: boolean }) => {
+const bracketImgCSS = ({ isOpened, bracketSize }: { isOpened: boolean; bracketSize: string }) => {
 	return css`
 		transition-property: transform;
 		transition-duration: 0.4s;
 		width: auto;
-		height: 18px;
+		/* height: 18px; */
+		height: ${bracketSize};
 		transform: ${isOpened && "rotate( 180deg )"};
 	`
 }
