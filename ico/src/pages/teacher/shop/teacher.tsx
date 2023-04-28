@@ -16,6 +16,7 @@ function teacher() {
 			price: 4000,
 			writer: "서재건",
 			date: "2023년 4월 27일",
+			approved: false,
 		},
 		{
 			id: 2,
@@ -25,6 +26,7 @@ function teacher() {
 			price: 2000,
 			writer: "서재건",
 			date: "2023년 4월 27일",
+			approved: false,
 		},
 		{
 			id: 3,
@@ -34,6 +36,7 @@ function teacher() {
 			price: 1000,
 			writer: "서재건",
 			date: "2023년 4월 27일",
+			approved: false,
 		},
 		{
 			id: 4,
@@ -43,6 +46,7 @@ function teacher() {
 			price: 4000,
 			writer: "서재건",
 			date: "2023년 4월 27일",
+			approved: false,
 		},
 		{
 			id: 5,
@@ -52,6 +56,7 @@ function teacher() {
 			price: 4000,
 			writer: "서재건",
 			date: "2023년 4월 27일",
+			approved: true,
 		},
 		{
 			id: 6,
@@ -61,6 +66,7 @@ function teacher() {
 			price: 4000,
 			writer: "서재건",
 			date: "2023년 4월 27일",
+			approved: true,
 		},
 	]
 
@@ -87,6 +93,7 @@ function teacher() {
 						number={card.number}
 						writer={card.writer}
 						date={card.date}
+						approved={card.approved}
 					/>
 				))}
 			</div>
