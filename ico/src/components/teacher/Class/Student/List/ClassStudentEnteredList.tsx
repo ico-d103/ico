@@ -1,6 +1,7 @@
 import React from "react"
 import { css } from "@emotion/react"
 import StudentEnteredListItem from "./ClassStudentEnteredListItem"
+import KebabMenu from "@/components/teacher/common/KebabMenu/KebabMenu"
 
 function StudentEnteredList() {
 	const mockList = [
@@ -15,10 +16,26 @@ function StudentEnteredList() {
 		{ id: 8, number: 9, name: "오민준", job: "한국 전력", grade: 3, money: 230 },
 	]
 
+	const resetStudentsJob = () => {
+		alert("직업 초기화!")
+	}
+
+	const dropdownList = [
+		{
+			name: "reset",
+			content: null,
+			label: "직업 초기화",
+			function: resetStudentsJob,
+		},
+	]
+
 	return (
 		<div css={wrapperCSS}>
 			<div css={contentTitleCSS}>
-				학생들 <small>({mockList.length})</small>
+				<div css={titleCSS}>
+					학생들 <small>({mockList.length})</small>
+				</div>
+				<KebabMenu dropdownList={dropdownList} />
 			</div>
 			<div css={contentCSS}>
 				{mockList.map((mock) => (
@@ -34,6 +51,13 @@ const wrapperCSS = css`
 `
 
 const contentTitleCSS = css`
+	display: flex;
+	flex-direction: row;
+	/* align-items: center; */
+	justify-content: space-between;
+`
+
+const titleCSS = css`
 	font-size: var(--teacher-h3);
 	font-weight: bold;
 	color: var(--teacher-main-color);

@@ -2,13 +2,14 @@ import React, { useState, useRef, useEffect } from "react"
 import { css } from "@emotion/react"
 
 type CollapseMenuProps = {
-	children: any
+	children: JSX.Element
 	title: string
 	fontSize: string
 	bracketSize: string
+	border?: string
 }
 
-function CollapseMenu({ children, title, fontSize, bracketSize }: CollapseMenuProps) {
+function CollapseMenu({ children, title, fontSize, bracketSize, border }: CollapseMenuProps) {
 	const [isOpened, setIsOpened] = useState<boolean>(false)
 	const [refresh, setRefresh] = useState<boolean>(false)
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
@@ -18,10 +19,9 @@ function CollapseMenu({ children, title, fontSize, bracketSize }: CollapseMenuPr
 			setRefresh((prev) => !prev)
 		}, 400)
 	}, [isOpened])
-	
 
 	return (
-		<div css={ancWrapperCSS}>
+		<div css={ancWrapperCSS({ border })}>
 			<div
 				css={trgWrapperCSS({ fontSize })}
 				onClick={() => {
@@ -36,22 +36,23 @@ function CollapseMenu({ children, title, fontSize, bracketSize }: CollapseMenuPr
 				<div ref={contentWrapperRef}>
 					<div css={spaceCSS} />
 					{children}
-					{refresh && <div/>}
+					{refresh && <div />}
 				</div>
 			</div>
 		</div>
 	)
 }
 
-const ancWrapperCSS = css`
-	background-color: var(--common-back-color-2);
-	border-radius: 10px;
-	box-sizing: border-box;
-	padding: 30px;
-	margin-bottom: 24px;
-	
-	
-`
+const ancWrapperCSS = ({ border }: { border: string | undefined }) => {
+	return css`
+		background-color: var(--common-back-color-2);
+		border-radius: 10px;
+		box-sizing: border-box;
+		padding: 30px;
+		margin-bottom: 24px;
+		border: ${border ? border : "none"};
+	`
+}
 
 const trgWrapperCSS = ({ fontSize }: { fontSize: string }) => {
 	return css`
@@ -88,7 +89,6 @@ const contentWrapperCSS = ({ isOpened, contentWrapperRef }: { isOpened: boolean;
 		overflow: hidden;
 		/* height: ${isOpened ? "auto" : "0px"}; */
 		max-height: ${isOpened ? `${contentWrapperRef.current && contentWrapperRef.current.clientHeight + 1}px` : "0px"};
-		
 	`
 }
 
