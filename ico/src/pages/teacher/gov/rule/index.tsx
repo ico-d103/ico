@@ -7,9 +7,7 @@ function index() {
 	return (
 		<React.Fragment>
 			<GovRuleCredit />
-
 			<GovRuleClass />
-	
 		</React.Fragment>
 	)
 }
