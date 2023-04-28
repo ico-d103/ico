@@ -121,6 +121,7 @@ function GovJobDetail({ job, description, wage, backgroundColor, imgUrl, credit 
 
 const outerWrapperCSS = css`
 	margin: 36px 0px 36px 0px;
+	min-width: 800px;
 `
 
 const WrapperCSS = ({isEdit, backgroundColor}: {isEdit: boolean, backgroundColor: string}) => {

@@ -21,6 +21,9 @@ import {
 	SUB_STORE_STUDENT,
 	SUB_STORE_TEACHER,
 } from "./SideBarIcons"
+import { OverlayScrollbarsComponent } from "overlayscrollbars-react"
+import "overlayscrollbars/overlayscrollbars.css"
+import { number } from "prop-types"
 
 type SideBarProps = {
 	children: any
@@ -31,23 +34,37 @@ function SideBar({ children }: SideBarProps) {
 	const [selectedSub, setSelectedSub] = useState<number>(-1)
 	const router = useRouter()
 
+	const findIncludedRoute = (element: string) => {
+		// alert('check')
+		if (router.pathname.includes(element)) {
+			return true
+		}
+	}
+
 	useEffect(() => {
 		Object.keys(SUB_ELEMENT).forEach((el: string, idx: number) => {
 			if (SUB_ELEMENT[Number(el)][router.pathname]) {
 				setSelectedMain(() => Number(el))
-				setSelectedSub(() => Object.keys(SUB_ELEMENT[Number(el)]).indexOf(router.pathname))
+				const curRoute = SUB_ELEMENT[Number(el)][router.pathname]
+				if (typeof curRoute.menuIndex === "number") {
+					const temp = curRoute.menuIndex
+					setSelectedSub(() => temp)
+				} else if (typeof curRoute.for === "number") {
+					const temp = curRoute.for
+					setSelectedSub(() => temp)
+				}
 			}
 		})
-	}, [])
+	}, [router.pathname])
 
 	const selectMainHandler = (value: number) => {
-		setSelectedMain(() => value)
-		setSelectedSub(() => 0)
+		// setSelectedMain(() => value)
+		// setSelectedSub(() => 0)
 		router.push(Object.keys(SUB_ELEMENT[value])[0])
 	}
 
 	const selectSubHandler = (value: number) => {
-		setSelectedSub(() => value)
+		// setSelectedSub(() => value)
 		router.push(Object.keys(SUB_ELEMENT[selectedMain])[value])
 	}
 
@@ -63,46 +80,75 @@ function SideBar({ children }: SideBarProps) {
 	const SUB_ELEMENT: {
 		[prop: number]: {
 			[prop: string]: {
-				name: string
-				label: string
-				content: any
+				name?: string
+				label?: string
+				content?: any
+				menuIndex?: number
+				for?: number
 			}
 		}
 	} = {
 		0: {
-			"/teacher/class/students": { name: "view_students", label: "학생 정보", content: SUB_CLASS_STUDENTS },
-			"/teacher/class/property": { name: "view_exchequer", label: "국고", content: SUB_CLASS_EXCHEQUER },
-			"/teacher/class/jobsearch": { name: "view_job_opening", label: "구인 구직", content: SUB_CLASS_OPENING_JOB },
-			"/teacher/class/coupons": { name: "view_coupon", label: "쿠폰", content: SUB_CLASS_COUPON },
+			"/teacher/class/students": {
+				name: "view_students",
+				label: "학생 정보",
+				content: SUB_CLASS_STUDENTS,
+				menuIndex: 0,
+			},
+			"/teacher/class/property": { name: "view_exchequer", label: "국고", content: SUB_CLASS_EXCHEQUER, menuIndex: 1 },
+			"/teacher/class/jobsearch": {
+				name: "view_job_opening",
+				label: "구인 구직",
+				content: SUB_CLASS_OPENING_JOB,
+				menuIndex: 2,
+			},
+			"/teacher/class/coupons": { name: "view_coupon", label: "쿠폰", content: SUB_CLASS_COUPON, menuIndex: 3 },
 		},
 		1: {
-			"/teacher/gov/rule": { name: "set_class_rule", label: "학급 규칙", content: SUB_GOVERNMENT_RULE },
-			"/teacher/gov/exchequer": { name: "set_exchequer_rule", label: "세금 관리", content: SUB_GOVERNMENT_EXCHEQUER },
-			"/teacher/gov/job": { name: "set_job", label: "직업 관리", content: SUB_GOVERNMENT_JOB },
+			"/teacher/gov/rule": { name: "set_class_rule", label: "학급 규칙", content: SUB_GOVERNMENT_RULE, menuIndex: 0 },
+			"/teacher/gov/exchequer": {
+				name: "set_exchequer_rule",
+				label: "세금 관리",
+				content: SUB_GOVERNMENT_EXCHEQUER,
+				menuIndex: 1,
+			},
+			"/teacher/gov/job": { name: "set_job", label: "직업 관리", content: SUB_GOVERNMENT_JOB, menuIndex: 2 },
 		},
 		2: {
-			"/teacher/finance/deposit": { name: "set_deposit", label: "예금", content: SUB_FINANCE_DEPOSIT },
-			"/teacher/finance/invest": { name: "set_stock", label: "투자", content: SUB_FINANCE_STOCK },
+			"/teacher/finance/deposit": { name: "set_deposit", label: "예금", content: SUB_FINANCE_DEPOSIT, menuIndex: 0 },
+			"/teacher/finance/invest": { name: "set_stock", label: "투자", content: SUB_FINANCE_STOCK, menuIndex: 1 },
 		},
 		3: {
-			"/teacher/shop/teacher": { name: "teacher_products", label: "교사 상품", content: SUB_STORE_TEACHER },
-			"/teacher/shop/student": { name: "student_products", label: "학생 상품", content: SUB_STORE_STUDENT },
+			"/teacher/shop/teacher": {
+				name: "teacher_products",
+				label: "교사 상품",
+				content: SUB_STORE_TEACHER,
+				menuIndex: 0,
+			},
+			"/teacher/shop/student": {
+				name: "student_products",
+				label: "학생 상품",
+				content: SUB_STORE_STUDENT,
+				menuIndex: 1,
+			},
+			"/teacher/shop/create": { for: 0, label: "교사 상품" },
 		},
 	}
+
+	const generateIndicator = () => {}
 
 	const indicatorRender = selectedMain !== -1 && selectedSub !== -1 && (
 		<div css={indicatorMainWrapperCSS}>
 			<div css={indicatorMainIconWrapperCSS}>{MAIN_ELEMENT[selectedMain]?.content}</div>
 			{MAIN_ELEMENT[selectedMain]?.label}
-
 			<div css={bracketCSS}>&gt;</div>
-
 			<div css={indicatorSubWrapperCSS}>{SUB_ELEMENT[selectedMain][router.pathname]?.label}</div>
 		</div>
 	)
 
 	const sideBarRender = (
 		<React.Fragment>
+			<div css={sideBarSpaceCSS} />
 			<div css={sideBarWrapperCSS}>
 				<SideBarLeft
 					element={MAIN_ELEMENT}
@@ -117,6 +163,7 @@ function SideBar({ children }: SideBarProps) {
 					title={MAIN_ELEMENT[selectedMain]?.label}
 				/>
 			</div>
+
 			<div css={contentOuterWrapperCSS}>
 				{indicatorRender}
 				<div css={contentInnerWrapperCSS}>
@@ -128,10 +175,9 @@ function SideBar({ children }: SideBarProps) {
 	)
 
 	return (
-		<div css={layoutWrapperCSS}>
-			<div css={sideBarSpaceCSS} />
-			{selectedMain !== -1 && selectedSub !== -1 && sideBarRender}
-		</div>
+		<OverlayScrollbarsComponent defer>
+			<div css={layoutWrapperCSS}>{selectedMain !== -1 && selectedSub !== -1 ? sideBarRender : children}</div>
+		</OverlayScrollbarsComponent>
 	)
 }
 
@@ -150,6 +196,7 @@ const sideBarWrapperCSS = css`
 	display: flex;
 	box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.5);
 	position: fixed;
+	z-index: 9999;
 `
 
 const contentOuterWrapperCSS = css`
@@ -174,6 +221,7 @@ const indicatorMainWrapperCSS = css`
 	font-weight: 600;
 	opacity: 70%;
 	margin-bottom: 24px;
+	/* z-index: 0; */
 `
 
 const indicatorMainIconWrapperCSS = css`
