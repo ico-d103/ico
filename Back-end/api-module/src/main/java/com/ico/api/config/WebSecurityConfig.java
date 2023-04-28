@@ -1,8 +1,11 @@
 package com.ico.api.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -12,11 +15,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/teacher/**").access("hasRole('Teacher') and principal.teacher.role == 'Teacher'")    // UserDetails 객체를 생성할 때, Teacher 엔티티 정보를 포함시켜야 한다.
+                .antMatchers("/teacher/**").hasRole("Teacher")
                 .antMatchers("student/**").hasRole("Student")
                 .antMatchers("admin/**").hasRole("iCoAdmin")
                 .anyRequest().permitAll()
                 .and()
                 .csrf().disable();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

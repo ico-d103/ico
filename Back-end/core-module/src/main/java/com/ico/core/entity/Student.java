@@ -1,8 +1,10 @@
 package com.ico.core.entity;
 
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Builder
@@ -13,7 +15,7 @@ import javax.persistence.*;
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne(fetch = FetchType.LAZY)
     private Nation nation;
@@ -28,7 +30,12 @@ public class Student {
     private boolean is_frozen;
     private byte credit_score;
     private byte number;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
     private byte count;
+
+    public void encodeStudentPassword(PasswordEncoder passwordEncoder){
+        this.password = passwordEncoder.encode(password);
+    }
 
 }
