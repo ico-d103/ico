@@ -1,6 +1,7 @@
 import React from "react"
 import Image from "next/image"
 import { css } from "@emotion/react"
+import LoadImage from "@/components/common/LoadImage/LoadImage"
 
 type GovJobCardProps = {
 	job: string
@@ -17,14 +18,15 @@ function GovJobCard({ job, wage, backgroundColor, imgUrl }: GovJobCardProps) {
 			<div css={cardWrapperCSS({ backgroundColor })}>
 				<div css={jobImgSpaceCSS} />
 				<div css={jobImgWrapperCSS}>
-					<Image
-						css={imgCSS}
+					<LoadImage
+						wrapperCss={imgCSS}
 						src={imgUrl}
 						alt={"job_image"}
-						priority={true}
-						layout="fill"
-						objectFit="contain"
-						objectPosition="left"
+            // useSkeleton={true}
+						// priority={true}
+						// layout="fill"
+						// objectFit="contain"
+						// objectPosition="left"
 					/>
 				</div>
         <div css={contentWrapperCSS}>
@@ -92,12 +94,13 @@ const jobImgWrapperCSS = css`
 	left: 10px;
 	width: 150px;
 	height: 220px;
-
 	/* background-color: gray; */
 `
 
 const imgCSS = css`
 	width: 100%;
+  height: 100%;
+  
   filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.2)) ;
 `
 
