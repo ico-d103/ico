@@ -1,7 +1,7 @@
 import React from "react"
 import { css } from "@emotion/react"
-import StudentList from "@/components/teacher/Class/Student/ClassStudentList"
-import StudentDetail from "@/components/teacher/Class/Student/ClassStudentDetail"
+import StudentList from "@/components/teacher/Class/Student/List/ClassStudentList"
+import StudentDetail from "@/components/teacher/Class/Student/Detail/ClassStudentDetail"
 
 function students() {
 	return (

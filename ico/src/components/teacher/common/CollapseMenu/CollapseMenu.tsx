@@ -2,18 +2,19 @@ import React, { useState, useRef } from "react"
 import { css } from "@emotion/react"
 
 type CollapseMenuProps = {
-	children: any
+	children: JSX.Element
 	title: string
 	fontSize: string
 	bracketSize: string
+	border?: string
 }
 
-function CollapseMenu({ children, title, fontSize, bracketSize }: CollapseMenuProps) {
+function CollapseMenu({ children, title, fontSize, bracketSize, border }: CollapseMenuProps) {
 	const [isOpened, setIsOpened] = useState<boolean>(false)
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
 
 	return (
-		<div css={ancWrapperCSS}>
+		<div css={ancWrapperCSS({ border })}>
 			<div
 				css={trgWrapperCSS({ fontSize })}
 				onClick={() => {
@@ -34,13 +35,16 @@ function CollapseMenu({ children, title, fontSize, bracketSize }: CollapseMenuPr
 	)
 }
 
-const ancWrapperCSS = css`
-	background-color: var(--common-back-color-2);
-	border-radius: 10px;
-	box-sizing: border-box;
-	padding: 30px;
-	margin-bottom: 24px;
-`
+const ancWrapperCSS = ({ border }: { border: string | undefined }) => {
+	return css`
+		background-color: var(--common-back-color-2);
+		border-radius: 10px;
+		box-sizing: border-box;
+		padding: 30px;
+		margin-bottom: 24px;
+		border: ${border ? border : "none"};
+	`
+}
 
 const trgWrapperCSS = ({ fontSize }: { fontSize: string }) => {
 	return css`
