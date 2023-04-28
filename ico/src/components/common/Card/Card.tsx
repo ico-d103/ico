@@ -1,6 +1,9 @@
 import { css } from "@emotion/react"
 import Image from "next/image"
 
+// 상품 갯수가 0개면 sold out
+// 승인 대기중인 상품은 boolean으로 관리한다.
+
 type CardProps = {
 	image: string
 	name: string
@@ -8,12 +11,20 @@ type CardProps = {
 	number: number
 	writer: string
 	date: string
+	approved: boolean
 }
 
-function Card({ image, name, number, price, writer, date }: CardProps) {
+function Card({ image, name, number, price, writer, date, approved }: CardProps) {
 	return (
 		<div css={cardCSS}>
-			<Image src={image} alt={name} width={250} height={250} />
+			<div css={cardImageWrapperCSS}>
+				<Image src={image} alt={name} width={250} height={250} />
+				{number === 0 ? (
+					<div css={cardSoldOutTextCSS}>Sold out</div>
+				) : (
+					<div css={approved ? cardRequestTextCSS : cardImageTextCSS}>{approved ? "승인중" : "텍스트"}</div>
+				)}
+			</div>
 			<div css={cardFirstContentCSS}>
 				<div>{name}</div>
 				<div>
@@ -32,6 +43,8 @@ function Card({ image, name, number, price, writer, date }: CardProps) {
 }
 
 const cardCSS = css`
+	position: relative; // 부모 요소를 relative로 설정합니다.
+
 	border-radius: 10px;
 	overflow: hidden;
 
@@ -44,6 +57,47 @@ const cardCSS = css`
 	}
 
 	cursor: pointer;
+`
+
+const cardImageWrapperCSS = css`
+	position: relative;
+	display: inline-block;
+`
+
+const cardImageTextCSS = css`
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	padding: 5px;
+	background-color: rgba(0, 0, 0, 0.5);
+	color: #fff;
+	font-size: 12px;
+	font-weight: bold;
+	border-radius: 5px;
+`
+
+const cardSoldOutTextCSS = css`
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	padding: 5px;
+	background-color: var(--teacher-warning-color);
+	color: #fff;
+	font-size: 12px;
+	font-weight: bold;
+	border-radius: 5px;
+`
+
+const cardRequestTextCSS = css`
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	padding: 5px;
+	background-color: blue;
+	color: #fff;
+	font-size: 12px;
+	font-weight: bold;
+	border-radius: 5px;
 `
 
 const cardFirstContentCSS = css`
