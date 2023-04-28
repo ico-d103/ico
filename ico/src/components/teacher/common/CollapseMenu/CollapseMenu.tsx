@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { css } from "@emotion/react"
 
 type CollapseMenuProps = {
@@ -11,7 +11,14 @@ type CollapseMenuProps = {
 
 function CollapseMenu({ children, title, fontSize, bracketSize, border }: CollapseMenuProps) {
 	const [isOpened, setIsOpened] = useState<boolean>(false)
+	const [refresh, setRefresh] = useState<boolean>(false)
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
+
+	useEffect(() => {
+		setTimeout(() => {
+			setRefresh((prev) => !prev)
+		}, 400)
+	}, [isOpened])
 
 	return (
 		<div css={ancWrapperCSS({ border })}>
@@ -29,6 +36,7 @@ function CollapseMenu({ children, title, fontSize, bracketSize, border }: Collap
 				<div ref={contentWrapperRef}>
 					<div css={spaceCSS} />
 					{children}
+					{refresh && <div />}
 				</div>
 			</div>
 		</div>
