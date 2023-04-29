@@ -136,7 +136,7 @@ const rightWrapperCSS = css`
 		transition: all 0.2s linear;
 
 		:hover {
-			transform: scale(1.1);
+			transform: scale(1.2);
 		}
 	}
 `
