@@ -21,6 +21,9 @@ function ClassJobSearchListItemBack({ mock }: ClassJobSearchListItemBackPropsTyp
 		{ id: 3, number: 4, name: "사공지은", grade: 4 },
 		{ id: 4, number: 5, name: "서재건", grade: 5 },
 		{ id: 5, number: 6, name: "오민준", grade: 6 },
+		{ id: 6, number: 7, name: "사공지은", grade: 4 },
+		{ id: 7, number: 8, name: "서재건", grade: 5 },
+		{ id: 8, number: 9, name: "오민준", grade: 6 },
 	]
 
 	return (
@@ -52,6 +55,7 @@ const headerCSS = css`
 const listWrapperCSS = css`
 	width: 100%;
 	margin-top: 10px;
+	overflow: scroll;
 `
 
 export default ClassJobSearchListItemBack

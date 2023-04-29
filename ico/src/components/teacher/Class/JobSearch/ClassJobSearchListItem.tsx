@@ -32,7 +32,7 @@ const wrapperCSS = css`
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 	border-radius: 10px;
 	transition: all 0.2s;
-	overflow: hidden;
+	overflow: scroll;
 	cursor: pointer;
 
 	:hover {
