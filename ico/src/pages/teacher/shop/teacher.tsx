@@ -1,10 +1,13 @@
 import { css } from "@emotion/react"
 import Card from "@/components/common/Card/Card"
 import Button from "@/components/common/Button/Button"
+import { useRouter } from "next/router"
 
 function teacher() {
+	const router = useRouter()
+
 	const registProduct = () => {
-		console.log("registProduct")
+		router.push("/teacher/shop/create")
 	}
 
 	const cardData = [
