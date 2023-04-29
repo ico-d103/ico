@@ -79,6 +79,7 @@ const nameCSS = css`
 
 const buttonWrapperCSS = css`
 	gap: 10px;
+	margin-right: 3px;
 
 	> div {
 		transition: all 0.2s;

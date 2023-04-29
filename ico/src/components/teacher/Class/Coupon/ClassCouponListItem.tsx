@@ -38,7 +38,7 @@ function CouponListItem({ mock }: CouponListItemPropsType) {
 }
 
 const wrapperCSS = css`
-	width: 350px;
+	width: 300px;
 	height: 200px;
 	background: var(--common-back-color-2);
 	border: 1px solid rgba(0, 0, 0, 0.1);
@@ -124,7 +124,7 @@ const rightWrapperCSS = css`
 		height: 38px;
 		border-radius: 100%;
 		background-color: var(--common-back-color-2);
-		right: 60px;
+		right: 50px;
 	}
 
 	> button {
