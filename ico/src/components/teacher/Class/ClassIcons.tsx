@@ -66,7 +66,7 @@ export const CLASS_DENY = (
 )
 
 export const CLASS_GRADE_UP = (
-	<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg width="23" height="23" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 		<rect width="20" height="20" rx="10" fill="#0057FF" />
 		<path
 			fill-rule="evenodd"
@@ -84,7 +84,7 @@ export const CLASS_GRADE_UP = (
 )
 
 export const CLASS_GRADE_DOWN = (
-	<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg width="23" height="23" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 		<rect width="20" height="20" rx="10" fill="#E32F2F" />
 		<path
 			fill-rule="evenodd"
@@ -104,6 +104,36 @@ export const CLASS_JOB_SEARCH = (
 			stroke-width="2"
 			stroke-linecap="round"
 			stroke-linejoin="round"
+		/>
+	</svg>
+)
+
+export const CLASS_APPLY_APPROVE = (
+	<svg width="23" height="23" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<circle cx="10" cy="10" r="9.5" fill="white" stroke="#D9D9D9" />
+		<path
+			fill-rule="evenodd"
+			clip-rule="evenodd"
+			d="M13.8293 6.38403C14.0371 6.58102 14.0581 6.92323 13.8763 7.14836L9.5013 12.565C9.32013 12.7893 9.00572 12.8129 8.79773 12.6178L6.17273 10.1557C5.96396 9.95991 5.94125 9.61783 6.122 9.39167C6.30275 9.1655 6.61852 9.1409 6.82729 9.33671L9.07625 11.4461L13.1237 6.43498C13.3056 6.20985 13.6214 6.18703 13.8293 6.38403Z"
+			fill="#0057FF"
+		/>
+	</svg>
+)
+
+export const CLASS_APPLY_DENY = (
+	<svg width="23" height="23" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<circle cx="10" cy="10" r="9.5" fill="white" stroke="#D9D9D9" />
+		<path
+			fill-rule="evenodd"
+			clip-rule="evenodd"
+			d="M6.64645 6.64645C6.84171 6.45118 7.15829 6.45118 7.35355 6.64645L13.3536 12.6464C13.5488 12.8417 13.5488 13.1583 13.3536 13.3536C13.1583 13.5488 12.8417 13.5488 12.6464 13.3536L6.64645 7.35355C6.45118 7.15829 6.45118 6.84171 6.64645 6.64645Z"
+			fill="#FF0000"
+		/>
+		<path
+			fill-rule="evenodd"
+			clip-rule="evenodd"
+			d="M13.3536 6.64645C13.1583 6.45118 12.8417 6.45118 12.6464 6.64645L6.64645 12.6464C6.45118 12.8417 6.45118 13.1583 6.64645 13.3536C6.84171 13.5488 7.15829 13.5488 7.35355 13.3536L13.3536 7.35355C13.5488 7.15829 13.5488 6.84171 13.3536 6.64645Z"
+			fill="#FF0000"
 		/>
 	</svg>
 )

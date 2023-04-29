@@ -25,7 +25,7 @@ const wrapperCSS = css`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	padding: 15px;
+	padding: 10px;
 	border-radius: 10px;
 	transition: all 0.1s;
 	cursor: pointer;
