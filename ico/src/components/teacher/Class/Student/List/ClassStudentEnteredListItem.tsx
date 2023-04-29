@@ -61,6 +61,10 @@ const leftWrapperCSS = css`
 	> h4:nth-of-type(1) {
 		font-weight: bold;
 	}
+
+	> h4:nth-of-type(2) {
+		min-width: 70px;
+	}
 `
 
 const rightWrapperCSS = css`

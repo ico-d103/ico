@@ -79,11 +79,13 @@ const nameCSS = css`
 
 const buttonWrapperCSS = css`
 	gap: 10px;
-	transition: all 0.2s;
+	margin-right: 3px;
 
 	> div {
+		transition: all 0.2s;
+
 		:hover {
-			transform: scale(1.1);
+			transform: scale(1.3);
 		}
 	}
 `
