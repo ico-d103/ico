@@ -34,12 +34,7 @@ function SideBar({ children }: SideBarProps) {
 	const [selectedSub, setSelectedSub] = useState<number>(-1)
 	const router = useRouter()
 
-	const findIncludedRoute = (element: string) => {
-		// alert('check')
-		if (router.pathname.includes(element)) {
-			return true
-		}
-	}
+
 
 	useEffect(() => {
 		Object.keys(SUB_ELEMENT).forEach((el: string, idx: number) => {
@@ -55,6 +50,14 @@ function SideBar({ children }: SideBarProps) {
 				}
 			}
 		})
+
+		return () => {
+			if (selectedMain == -1 && selectedSub == -1) {
+				setSelectedMain(() => -2)
+				setSelectedSub(() => -2)
+			}
+		}
+		
 	}, [router.pathname])
 
 	const selectMainHandler = (value: number) => {
@@ -137,7 +140,7 @@ function SideBar({ children }: SideBarProps) {
 
 	const generateIndicator = () => {}
 
-	const indicatorRender = selectedMain !== -1 && selectedSub !== -1 && (
+	const indicatorRender = selectedMain >= 0 && selectedSub >= 0 && (
 		<div css={indicatorMainWrapperCSS}>
 			<div css={indicatorMainIconWrapperCSS}>{MAIN_ELEMENT[selectedMain]?.content}</div>
 			{MAIN_ELEMENT[selectedMain]?.label}
@@ -176,7 +179,7 @@ function SideBar({ children }: SideBarProps) {
 
 	return (
 
-		<div css={layoutWrapperCSS}>{selectedMain !== -1 && selectedSub !== -1 ? sideBarRender : children}</div>
+		<div css={layoutWrapperCSS}>{selectedMain >= 0 && selectedSub >= 0 ? sideBarRender : (selectedMain === -2 && selectedSub === -2 && children)}</div>
 
 	
 	)
