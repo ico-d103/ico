@@ -13,19 +13,21 @@ function GovRuleCredit() {
 
 	return (
 		<CollapseMenu title={"신용 등급"} fontSize={'var(--teacher-h1)'} bracketSize={'18px'}>
-			신용등급의 등락폭을 수정할 수 있습니다.
-			<div css={tableWrapperCSS}>
-				<TableGenerator table={creditRating} perHeight={"48px"} />
-			</div>
-			<div css={footerCSS}>
-				<Button
-					text={"등락폭 수정"}
-					fontSize={"var(--teacher-h5)"}
-					theme={"normal"}
-					width={"110px"}
-					onClick={() => {}}
-				/>
-			</div>
+			<React.Fragment>
+				신용등급의 등락폭을 수정할 수 있습니다.
+				<div css={tableWrapperCSS}>
+					<TableGenerator table={creditRating} perHeight={"48px"} />
+				</div>
+				<div css={footerCSS}>
+					<Button
+						text={"등락폭 수정"}
+						fontSize={"var(--teacher-h5)"}
+						theme={"normal"}
+						width={"110px"}
+						onClick={() => {}}
+					/>
+				</div>
+			</React.Fragment>
 		</CollapseMenu>
 	)
 }
