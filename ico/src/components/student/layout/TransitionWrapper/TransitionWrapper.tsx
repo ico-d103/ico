@@ -19,9 +19,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
 	const router = useRouter()
 
-
-
-
 	const isIos = () => {
 		let isIos = false
 		const userPlatform = navigator.userAgent
@@ -47,15 +44,16 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			// }
 			// return true
 			if (isIos() !== true) {
-				
 				setNavToAtom(() => {
 					return { url: url, transition: "leftToRight" }
 				})
 				return false
 			} else {
-				return true
+				setNavToAtom(() => {
+					return { url: url, transition: "none" }
+				})
+				return false
 			}
-			
 		})
 		return () => {
 			router.beforePopState(() => true)
@@ -84,6 +82,9 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			setIsTransitioning(() => true)
 			setTimeout(() => {
 				setIsTransitioning(() => false)
+				setNavToAtom(() => {
+					return { url: "", transition: "" }
+				})
 			}, 300)
 		}
 	}, [screenshot])
@@ -149,6 +150,9 @@ const contentInnerWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 
 const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 	const data: { [prop: string]: any } = {
+		none: css`
+			
+		`,
 		rightToLeft: css`
 			& .transitioning {
 				animation: rightToLeft 0.3s ease forwards;
