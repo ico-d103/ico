@@ -1,10 +1,13 @@
 import { css } from "@emotion/react"
 import Card from "@/components/common/Card/Card"
 import Button from "@/components/common/Button/Button"
+import { useRouter } from "next/router"
 
 function teacher() {
-	const registProduct = () => {
-		console.log("registProduct")
+	const router = useRouter()
+
+	const createProduct = () => {
+		router.push("/teacher/shop/create")
 	}
 
 	const cardData = [
@@ -79,7 +82,7 @@ function teacher() {
 					fontSize={`var(--teacher-h4)`}
 					width={"120px"}
 					theme={"normal"}
-					onClick={registProduct}
+					onClick={createProduct}
 				/>
 			</div>
 			<div css={subTitleCSS}>교사가 등록한 상품을 조회하고 등록, 수정 삭제할 수 있습니다.</div>
