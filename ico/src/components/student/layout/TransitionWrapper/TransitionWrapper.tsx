@@ -19,6 +19,25 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
 	const router = useRouter()
 
+
+
+
+	const isIos = () => {
+		let isIos = false
+		const userPlatform = navigator.userAgent
+		if (
+			userPlatform !== undefined &&
+			userPlatform?.length > 0 &&
+			(userPlatform.indexOf("iPhone") !== -1 ||
+				userPlatform.indexOf("iPad") !== -1 ||
+				userPlatform.indexOf("iPod") !== -1)
+		) {
+			isIos = true
+		}
+		console.log(userPlatform, isIos)
+		return isIos
+	}
+
 	useEffect(() => {
 		router.beforePopState(({ url, as, options }) => {
 			// if (as !== router.asPath) {
@@ -27,10 +46,16 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			// 	return false
 			// }
 			// return true
-			setNavToAtom(() => {
-				return { url: url, transition: "leftToRight" }
-			})
-			return false
+			if (isIos() !== true) {
+				
+				setNavToAtom(() => {
+					return { url: url, transition: "leftToRight" }
+				})
+				return false
+			} else {
+				return true
+			}
+			
 		})
 		return () => {
 			router.beforePopState(() => true)
