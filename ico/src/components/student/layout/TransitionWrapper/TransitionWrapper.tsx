@@ -59,7 +59,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			setIsTransitioning(() => true)
 			setTimeout(() => {
 				setIsTransitioning(() => false)
-			}, 500)
+			}, 300)
 		}
 	}, [screenshot])
 
@@ -126,7 +126,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 	const data: { [prop: string]: any } = {
 		rightToLeft: css`
 			& .transitioning {
-				animation: rightToLeft 0.5s ease forwards;
+				animation: rightToLeft 0.3s ease forwards;
 			}
 			@keyframes rightToLeft {
 				from {
@@ -141,7 +141,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		leftToRight: css`
 			& .transitioning {
-				animation: leftToRight 0.5s ease forwards;
+				animation: leftToRight 0.3s ease forwards;
 			}
 			@keyframes leftToRight {
 				from {
@@ -156,7 +156,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		bottomToTop: css`
 			& .transitioning {
-				animation: bottomToTop 0.5s ease forwards;
+				animation: bottomToTop 0.3s ease forwards;
 			}
 			@keyframes bottomToTop {
 				from {
@@ -171,7 +171,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		scale: css`
 			& .transitioning {
-				animation: scale 0.5s ease forwards;
+				animation: scale 0.3s ease forwards;
 			}
 			@keyframes scale {
 				from {
@@ -188,7 +188,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		scaleReverse: css`
 			& .transitioning {
-				animation: scaleReverse 0.5s ease forwards;
+				animation: scaleReverse 0.3s ease forwards;
 			}
 			@keyframes scaleReverse {
 				from {
