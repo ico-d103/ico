@@ -92,22 +92,31 @@ function FinanceDepositTable() {
 	return (
 		<>
 			<TableGenerator table={creditRating} perHeight={"48px"} />
-			<Button
-				text={isEditing ? "저장하기" : "수정하기"}
-				fontSize={`var(--teacher-h4)`}
-				width={"190px"}
-				theme={"normal"}
-				onClick={isEditing ? saveDepositTable : editDepositTable}
-			/>
+			<div css={buttonCSS}>
+				<Button
+					text={isEditing ? "저장하기" : "수정하기"}
+					fontSize={`var(--teacher-h4)`}
+					width={"190px"}
+					theme={"normal"}
+					onClick={isEditing ? saveDepositTable : editDepositTable}
+				/>
+			</div>
 		</>
 	)
 }
 
 const inputCSS = css`
-	width: 90%;
+	width: 95%;
+	height: 95%;
 	border: none;
 	font-size: 1rem;
 	text-align: center;
 `
 
+const buttonCSS = css`
+	display: flex;
+	justify-content: end;
+
+	margin-top: 20px;
+`
 export default FinanceDepositTable

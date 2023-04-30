@@ -9,7 +9,7 @@ function deposit() {
 			</div>
 			<div css={subTitleCSS}>신용등급에 따른 예금 이자율을 설정할 수 있습니다.</div>
 
-			<FinanceDepositTable />
+			<FinanceDepositTable	 />
 		</div>
 	)
 }
@@ -36,6 +36,9 @@ const titleCSS = css`
 const subTitleCSS = css`
 	font-size: 0.95rem;
 	margin-top: 12px;
+	margin-bottom: 20px;
 `
-
+const depositTableCSS = css`
+	margin-top: 20px;
+`
 export default deposit
