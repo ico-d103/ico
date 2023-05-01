@@ -24,6 +24,7 @@ spring:
         - db-local
     include:
       - db
+      - login
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
