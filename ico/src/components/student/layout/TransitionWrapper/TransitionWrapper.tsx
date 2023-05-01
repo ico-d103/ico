@@ -44,15 +44,14 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			// return true
 			if (isIos() === true) {
 				setNavToAtom(() => {
-					return { url: url, transition: "none" }
+					return { url: "", transition: "" }
 				})
-				return false
+				return true
 			} else {
 				setNavToAtom(() => {
 					return { url: url, transition: "leftToRight" }
 				})
 				return false
-				
 			}
 		})
 		return () => {
@@ -90,6 +89,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				setNavToAtom(() => {
 					return { url: "", transition: "" }
 				})
+				setScreenshot(() => "")
 			}, 300)
 		}
 	}, [router.pathname])
@@ -110,7 +110,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				<div
 					css={contentInnerWrapperCSS({ isTransitioning })}
 					className={`content-wrapper ${isTransitioning ? "transitioning" : ""}`}
-
 				>
 					{children}
 				</div>
@@ -156,9 +155,7 @@ const contentInnerWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 
 const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 	const data: { [prop: string]: any } = {
-		none: css`
-			
-		`,
+		none: css``,
 		rightToLeft: css`
 			& .transitioning {
 				animation: rightToLeft 0.3s ease forwards;
