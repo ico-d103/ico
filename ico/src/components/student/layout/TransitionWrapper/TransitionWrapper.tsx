@@ -31,7 +31,8 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		) {
 			isIos = true
 		}
-		console.log(userPlatform, isIos)
+		alert(userPlatform)
+		alert(isIos)
 		return isIos
 	}
 
@@ -43,16 +44,17 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			// 	return false
 			// }
 			// return true
-			if (isIos() !== true) {
-				setNavToAtom(() => {
-					return { url: url, transition: "leftToRight" }
-				})
-				return false
-			} else {
+			if (isIos() === true) {
 				setNavToAtom(() => {
 					return { url: url, transition: "none" }
 				})
 				return false
+			} else {
+				setNavToAtom(() => {
+					return { url: url, transition: "leftToRight" }
+				})
+				return false
+				
 			}
 		})
 		return () => {
