@@ -12,7 +12,7 @@ type LoadImageProps = {
 }
 
 function LoadImage({ src, alt, wrapperCss, imageCss, useSkeleton, skeletonCss }: LoadImageProps) {
-    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 	return (
         <div className={'image-wrapper'} css={[wrapperCss, imageWrapperCSS({isLoading})]}>
                 {useSkeleton &&
@@ -26,6 +26,7 @@ function LoadImage({ src, alt, wrapperCss, imageCss, useSkeleton, skeletonCss }:
                     layout="fill"
                     objectFit="contain"
                     objectPosition="center"
+                    onLoadStart={() => {setIsLoading(() => true)}}
                     onLoad={() => {setIsLoading(() => false)}}
                 />
    
