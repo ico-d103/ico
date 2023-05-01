@@ -132,7 +132,7 @@ body {
 	font-family: "SUIT";
 	line-height: 1;
 	/* overflow-x: hidden; */
-	overflow: hidden;
+	/* overflow: hidden; */
 }
 
 ol,
@@ -173,8 +173,8 @@ button {
 }
 
 ::-webkit-scrollbar {
-	width: 0px;
-	height: 0px;
+	width: 6px;
+	height: 6px;
 }
 
 ::-webkit-scrollbar-thumb {

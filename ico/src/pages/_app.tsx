@@ -9,9 +9,9 @@ import mainStore from "@/store/store"
 
 
 export default function App({ Component, pageProps }: AppProps) {
-	useEffect(() => {
-		const osInstance = OverlayScrollbars(document.querySelector("body") as HTMLBodyElement, {})
-	}, [])
+	// useEffect(() => {
+	// 	const osInstance = OverlayScrollbars(document.querySelector("body") as HTMLBodyElement, {})
+	// }, [])
 	return (
 		<Provider store={mainStore}>
 			<Layout>

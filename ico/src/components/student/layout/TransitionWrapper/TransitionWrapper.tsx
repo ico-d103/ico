@@ -17,6 +17,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	const [isTransitioning, setIsTransitioning] = useState<boolean>(false)
 	const [isImageLoading, setIsImageLoading] = useState<boolean>(false)
 	const [scrollTop, setScrollTop] = useState<number>(0)
+	const imageRef = useRef<HTMLImageElement>(null)
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
 	const contentInnerWrapperRef = useRef<HTMLDivElement>(null)
 	const router = useRouter()
@@ -63,9 +64,21 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 	const handleScreenshot = () => {
 		if (contentWrapperRef.current) {
-			html2canvas(contentWrapperRef.current).then((canvas) => {
+			html2canvas(
+				document.body,
+				{
+					scrollX: -window.scrollX,
+					scrollY: -window.scrollY,
+					windowWidth: document.documentElement.clientWidth,
+  					windowHeight: document.documentElement.clientHeight
+					// width: 100,
+  					// height: 100
+				}
+				
+			).then((canvas) => {
 				const screenshot = canvas.toDataURL()
 				setScreenshot(screenshot)
+				
 			})
 		}
 	}
@@ -76,6 +89,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			setScrollTop(() => window.scrollY)
 			handleScreenshot()
 		}
+		
 	}, [navToAtom.url])
 
 	useEffect(() => {
@@ -111,6 +125,8 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			<div className={"before-wrapper"} css={imgWrapperCSS}>
 				{screenshot && (
 					<img
+						
+						ref={imageRef}
 						css={imgCSS({ scrollTop })}
 						src={screenshot}
 						alt="screenshot"
@@ -124,6 +140,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			<div
 				ref={contentWrapperRef}
 				className={"content-outer-wrapper"}
+				
 				css={[
 					contentOuterWrapperCSS({ isTransitioning }),
 					isTransitioning ? transitionsCSS({ isTransitioning })[navToAtom.transition] : null,
@@ -144,7 +161,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 const imgWrapperCSS = css`
 	width: 100vw;
 	height: 100vh;
-	position: absolute;
+	position: Fixed;
 	z-index: -1;
 	overflow: hidden;
 `
@@ -153,15 +170,19 @@ const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 	return css`
 		/* width: 100vw;
         height: 100vh; */
-		width: 100%;
+		width: 100vw;
 		height: auto;
-		transform: translate(0, -${scrollTop}px);
+
+
+
+		/* transform: translate(0, -${scrollTop}px); */
 	`
 }
 
 const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 	return css`
 		/* position: ${isTransitioning && "absolute"}; */
+		
 		overflow: ${isTransitioning ? "hidden" : "scroll"};
 		/* z-index: 9999; */
 		
@@ -170,6 +191,7 @@ const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 
 const contentInnerWrapperCSS = ({ isTransitioning, beforeTransition }: { isTransitioning: boolean, beforeTransition: boolean }) => {
 	return css`
+	
 		background-color: var(--common-back-color);
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
 		width: ${isTransitioning && "100vw"};
