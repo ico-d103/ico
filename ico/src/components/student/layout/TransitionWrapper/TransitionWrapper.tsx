@@ -182,7 +182,7 @@ const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 	return css`
 		/* position: ${isTransitioning && "absolute"}; */
-		
+		min-height: 100vh;
 		overflow: ${isTransitioning ? "hidden" : "scroll"};
 		/* z-index: 9999; */
 		
@@ -191,7 +191,7 @@ const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 
 const contentInnerWrapperCSS = ({ isTransitioning, beforeTransition }: { isTransitioning: boolean, beforeTransition: boolean }) => {
 	return css`
-	
+		min-height: 100vh;
 		background-color: var(--common-back-color);
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
 		width: ${isTransitioning && "100vw"};
