@@ -15,13 +15,20 @@ import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Random;
 
+/**
+ * Teacher ServiceImpl
+ *
+ * @author 강교철
+ */
 @Service
 @RequiredArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
     private final PasswordEncoder passwordEncoder;
-    private final CertificationRepository certificationRepository;
+
+//      TODO : S3를 이용한 이미지업로드 할때 사용할 것
+//    private final CertificationRepository certificationRepository;
 
     @Transactional
     @Override
@@ -33,11 +40,11 @@ public class TeacherServiceImpl implements TeacherService {
                 .is_assigned(false)
                 .role(Role.TEACHER)
                 .build();
-
-        Certification certification = Certification.builder()
-                .teacher(teacher)
-                .image(requestDto.getImage())   // s3로 바꿔야함
-                .build();
+//      TODO : S3를 이용한 이미지업로드 할때 사용할 것
+//        Certification certification = Certification.builder()
+//                .teacher(teacher)
+//                .image(requestDto.getImage())   // s3로 바꿔야함
+//                .build();
 
         if (teacherRepository.findTeacherByIdentity(requestDto.getIdentity()).isPresent()) {
             throw new Exception("이미 존재하는 아이디 입니다.");
@@ -49,13 +56,15 @@ public class TeacherServiceImpl implements TeacherService {
 
         teacher.encodeTeacherPassword(passwordEncoder);
         teacherRepository.save(teacher);
-        certificationRepository.save(certification);
+//      TODO : S3를 이용한 이미지업로드 할때 사용할 것
+//        certificationRepository.save(certification);
 
         return teacher.getId();
     }
 
     @Override
     public void certifiedPhoneNum(String phoneNum) {
+//        TODO : PhoneNum 인증할 때 사용할 것
 //        String api_key = "NCSCQN2HADECWPGN";
 //        String api_secret = "XWRCSV8OFGHBAUQ8NOGUTF2VXKYB8ZCV";
 //        Message coolsms = new Message(api_key, api_secret);       // 여기 오류

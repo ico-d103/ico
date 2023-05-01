@@ -6,6 +6,12 @@ import com.ico.core.entity.Teacher;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+/**
+ * 교사 회원가입시 입력받을 것
+ *
+ * @author 강교철
+ */
 @Data
 @NoArgsConstructor
 public class TeacherSignUpRequestDto {
@@ -15,7 +21,6 @@ public class TeacherSignUpRequestDto {
     private String checkedPassword;
     private String name;
     private Role role;
-    private String image;
 
     public TeacherSignUpRequestDto(Teacher teacher) {
         this.identity = teacher.getIdentity();

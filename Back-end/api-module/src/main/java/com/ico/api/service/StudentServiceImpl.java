@@ -10,6 +10,11 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+/**
+ * Student ServiceImpl
+ *
+ * @author 강교철
+ */
 @Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService{
@@ -41,7 +46,6 @@ public class StudentServiceImpl implements StudentService{
         }
 
         student.encodeStudentPassword(passwordEncoder);
-//        student.addUserAuthority();
         studentRepository.save(student);
 
         return student.getId();

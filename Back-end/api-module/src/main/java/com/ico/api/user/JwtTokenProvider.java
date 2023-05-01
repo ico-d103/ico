@@ -19,7 +19,13 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Value;
 
+/**
+ * Jwt Provider
+ *
+ * @author 강교철
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -27,17 +33,33 @@ public class JwtTokenProvider {
 
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
+    private final CustomUserDetailService userDetailService;
 
-    private String securityKey = "as09df8h0e8fhs0d8fhs08fh0sd8fhse08fhs0ef8hse08fhse08fhse0f8hq08f";
+    /**
+     * securityKey 를 application-login 에 넣어두고 @Value 로 꺼내오기
+     */
+    @Value("${spring.security.securityKey}")
+    private String securityKey;
 
+    /**
+     * 토큰 유효기간 1달로 설정
+     */
     private long tokenValidTime = 1000 * 60 * 60 * 24 * 30L;
 
-    private final CustomUserDetailService userDetailService;
+    /**
+     * 객체 초기화
+     */
     @PostConstruct
     private void init() {
         securityKey = Base64.getEncoder().encodeToString(securityKey.getBytes());
     }
 
+    /**
+     * Token 생성
+     *
+     * @param member
+     * @return token
+     */
     public String generateJwtToken(LoginDto member) {
         Date now = new Date();
         log.info("[generate token]time={}", LocalDateTime.now(ZoneId.of("Asia/Seoul")));
@@ -50,6 +72,11 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    /**
+     * Header 생성
+     *
+     * @return header
+     */
     private Map<String, Object> createHeader() {
         Map<String, Object> header = new HashMap<>();
         header.put("typ", "JWT");
@@ -58,6 +85,12 @@ public class JwtTokenProvider {
         return header;
     }
 
+    /**
+     * 정보 추가
+     *
+     * @param member
+     * @return
+     */
     private Map<String, Object> createClaims(LoginDto member) {
         Map<String, Object> claims = new HashMap<>();
 
@@ -65,7 +98,6 @@ public class JwtTokenProvider {
             Teacher teacher = teacherRepository.findTeacherByIdentity(member.getIdentity()).orElse(null);
             claims.put("id", teacher.getId());
             claims.put("identity", member.getIdentity());
-            claims.put("name", teacher.getName());
             claims.put("role", teacher.getRole());
             claims.put("nation", teacher.getNation());
 
@@ -74,7 +106,6 @@ public class JwtTokenProvider {
             Student student = studentRepository.findStudentByIdentity(member.getIdentity()).orElse(null);
             claims.put("id", student.getId());
             claims.put("identity", member.getIdentity());
-            claims.put("name", student.getName());
             claims.put("role", student.getRole());
             claims.put("nation", student.getNation());
         }
@@ -82,12 +113,17 @@ public class JwtTokenProvider {
         return claims;
     }
 
+    /**
+     * 정보 저장
+     *
+     * @param token
+     * @return
+     */
     private Map<String, Object> createClaims(String token){
         Map<String, Object> claims = new HashMap<>();
 
             claims.put("id", getId(token));
             claims.put("identity", getIdentity(token));
-            claims.put("name", getName(token));
             claims.put("role", getRole(token));
             claims.put("nation", getNation(token));
 
@@ -99,30 +135,62 @@ public class JwtTokenProvider {
         return claims;
     }
 
+    /**
+     * 정보 추출
+     *
+     * @param token
+     * @return
+     */
     public Claims getClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(securityKey).build().parseClaimsJws(token).getBody();
     }
 
+    /**
+     * Token 에서 id 값 추출
+     *
+     * @param token
+     * @return id
+     */
     private Object getId(String token) {
         return getClaims(token).get("id");
     }
 
+    /**
+     * Token 에서 identity 값 추출
+     *
+     * @param token
+     * @return identity
+     */
     private Object getIdentity(String token) {
         return getClaims(token).get("identity");
     }
 
-    private Object getName(String token) {
-        return getClaims(token).get("name");
-    }
-
+    /**
+     * Token 에서 role 값 추출
+     *
+     * @param token
+     * @return role
+     */
     private Object getRole(String token) {
         return getClaims(token).get("role");
     }
 
+    /**
+     * Token 에서 nation 값 추출
+     *
+     * @param token
+     * @return nation
+     */
     private Object getNation(String token) {
         return getClaims(token).get("nation");
     }
 
+    /**
+     * 토큰 확인
+     *
+     * @param token
+     * @return
+     */
     public Boolean isValidate(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(securityKey).build().parseClaimsJws(token).getBody();
@@ -139,9 +207,16 @@ public class JwtTokenProvider {
         return false;
     }
 
+    /**
+     * JWT 추출
+     *
+     * @param request
+     * @return
+     */
     public String parseJwt(HttpServletRequest request){
-        String headerAuth=null;
+        String headerAuth=null;     // 1. 변수 초기화
 
+        // 2. 쿠키에서 JWT 추출
         Cookie[] cookies = request.getCookies();
         if(cookies!=null){
             for (Cookie cookie : cookies) {
@@ -151,11 +226,13 @@ public class JwtTokenProvider {
                 }
             }
 
+            // 3. 쿠키에서 JWT를 추출할 수 있었다면 해당 값 반환
             if(headerAuth!=null){
                 return headerAuth;
             }
         }
 
+        // 4. 쿠키에서 JWT를 추출할 수 없으면 HTTP 헤더에서 추출
         headerAuth = request.getHeader("Authentication");
         return headerAuth;
     }
