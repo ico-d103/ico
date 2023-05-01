@@ -131,6 +131,8 @@ body {
 	background-color: var(--common-back-color);
 	font-family: "SUIT";
 	line-height: 1;
+
+	min-height: 100vh;
 	/* overflow-x: hidden; */
 	/* overflow: hidden; */
 }
