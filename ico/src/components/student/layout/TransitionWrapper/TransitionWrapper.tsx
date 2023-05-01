@@ -174,6 +174,7 @@ const contentInnerWrapperCSS = ({ isTransitioning, beforeTransition }: { isTrans
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
 		width: ${isTransitioning && "100vw"};
 		height: ${isTransitioning && "100vh"};
+		overflow: ${isTransitioning && "hidden"};
 		visibility: ${beforeTransition && 'hidden'};
 	`
 }
