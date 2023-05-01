@@ -62,8 +62,6 @@ subprojects {
 		// CollSMS
 		implementation 'net.nurigo:sdk:4.2.7'
 
-		// AWS
-		implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	}
 
 	test {
@@ -85,12 +83,14 @@ project(":core-module") {
 project(":api-module") {
 
 	bootJar {
-		archiveBaseName = 'ico'
-		archiveFileName = "ico-api-module-0.0.1.jar"
-		archiveVersion = "0.0.1"
+		archiveBaseName.set('ico')
+		archiveFileName.set("ico-api-module-0.0.1.jar")
+		archiveVersion.set("0.0.1")
 	}
 
 	dependencies {
+		// AWS
+		implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 		implementation 'org.springframework.boot:spring-boot-starter-validation'
 		implementation project(':core-module')
 	}
@@ -99,9 +99,9 @@ project(":api-module") {
 project(":batch-module") {
 
 	bootJar {
-		archiveBaseName = 'ico'
-		archiveFileName = "ico-batch-module-0.0.1.jar"
-		archiveVersion = "0.0.1"
+		archiveBaseName.set('ico')
+		archiveFileName.set("ico-batch-module-0.0.1.jar")
+		archiveVersion.set("0.0.1")
 	}
 
 	dependencies {
