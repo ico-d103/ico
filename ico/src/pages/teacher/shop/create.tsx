@@ -5,7 +5,7 @@ import ToggleButton from "@/components/teacher/Shop/Create/ToggleButton"
 
 function create() {
 	const regist = () => {
-		console.log("regist")
+		alert("리빙포인트 : 배가 고플 땐 밥을 먹으면 좋다.")
 	}
 
 	const [isChecked, setIsChecked] = useState(false)
@@ -80,14 +80,17 @@ const titleCSS = css`
 `
 
 const contentCSS = css`
-	font-size: 1.1rem;
-	margin-top: 20px;
+	margin-top: 15px;
+	margin-bottom: 5px;
+
+	font-size: var(--teacher-h5);
+	color: var(--teacher-gray-color);
 `
 
 const inputCSS = css`
 	width: 100%;
 	border: none;
-	background-color: var(--teacher-gray2-color);
+	background-color: var(--common-back-color);
 	height: 45px;
 	border-radius: 10px;
 `
@@ -103,7 +106,7 @@ const imageCSS = css`
 	border: none;
 	border-radius: 10px;
 
-	background-color: var(--teacher-gray2-color);
+	background-color: var(--common-back-color);
 	width: 100%;
 	height: 350px;
 
@@ -113,7 +116,7 @@ const imageCSS = css`
 	justify-content: center;
 	align-items: center;
 
-	& div {
+	& svg {
 		cursor: pointer;
 	}
 `
