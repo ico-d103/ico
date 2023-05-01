@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { css } from "@emotion/react"
-import TableGenerator from "../../common/TableGenerator/TableGenerator"
+import TableGenerator from "../../../common/TableGenerator/TableGenerator"
 import Button from "@/components/common/Button/Button"
 
 function FinanceDepositTable() {
