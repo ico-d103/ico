@@ -78,7 +78,9 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 	useEffect(() => {
 		if (screenshot !== "") {
-			setIsTransitioning(() => true)
+			// 여기에 클래스 이름 바꾸는 메서드 드가야됨
+			
+			
 			router.push(navToAtom.url)
 		}
 	}, [isImageLoading])
@@ -87,7 +89,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		
 		
 		if (screenshot !== "") {
-			
+			setIsTransitioning(() => true)
 			setTimeout(() => {
 				setIsTransitioning(() => false)
 				setNavToAtom(() => {
@@ -117,7 +119,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				<div
 					ref={contentInnerWrapperRef}
 					css={contentInnerWrapperCSS({ isTransitioning })}
-					className={`content-wrapper ${navToAtom.url || screenshot || isTransitioning ? "transitioning" : ""}`}
+					className={`content-wrapper ${navToAtom.url === router.pathname || screenshot || isTransitioning ? "transitioning" : ""}`}
 				>
 					{children}
 				</div>
@@ -159,7 +161,6 @@ const contentInnerWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
 		width: ${isTransitioning && "100vw"};
 		height: ${isTransitioning && "100vh"};
-		
 	`
 }
 
@@ -167,7 +168,6 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 	const data: { [prop: string]: any } = {
 		none: css``,
 		rightToLeft: css`
-
 			& .transitioning {
 				animation: rightToLeft 0.3s ease forwards;
 			}
@@ -185,7 +185,6 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			}
 		`,
 		leftToRight: css`
-
 			& .transitioning {
 				animation: leftToRight 0.3s ease forwards;
 			}
@@ -203,7 +202,6 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			}
 		`,
 		bottomToTop: css`
-
 			& .transitioning {
 				animation: bottomToTop 0.3s ease forwards;
 			}
@@ -221,7 +219,6 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			}
 		`,
 		scale: css`
-
 			& .transitioning {
 				animation: scale 0.3s ease forwards;
 			}
@@ -239,7 +236,6 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			}
 		`,
 		scaleReverse: css`
-
 			& .transitioning {
 				
 				animation: scaleReverse 0.3s ease forwards;
