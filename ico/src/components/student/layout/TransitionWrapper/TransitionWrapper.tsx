@@ -79,6 +79,11 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	useEffect(() => {
 		if (screenshot !== "") {
 			router.push(navToAtom.url)
+		}
+	}, [screenshot])
+
+	useEffect(() => {
+		if (screenshot !== "") {
 			setIsTransitioning(() => true)
 			setTimeout(() => {
 				setIsTransitioning(() => false)
@@ -87,7 +92,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				})
 			}, 300)
 		}
-	}, [screenshot])
+	}, [router.pathname])
 
 	return (
 		<div>
@@ -105,6 +110,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				<div
 					css={contentInnerWrapperCSS({ isTransitioning })}
 					className={`content-wrapper ${isTransitioning ? "transitioning" : ""}`}
+
 				>
 					{children}
 				</div>
