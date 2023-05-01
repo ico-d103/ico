@@ -24,19 +24,20 @@ function test2() {
 }
 
 const illustCSS = css`
-	width: 60vw;
-	height: 60vw;
+	width: 100%;
+	height: 100%;
 `
 
 const imgWrapperCSS = css`
 	width: 20vw;
-	height: 20vw;
+	height: 13vw;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	border-radius: 10px;
 	overflow: hidden;
 	margin-bottom: 36px;
+
 `
 
 export default test2
