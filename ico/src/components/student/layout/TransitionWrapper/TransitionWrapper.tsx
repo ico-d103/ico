@@ -31,8 +31,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		) {
 			isIos = true
 		}
-		alert(userPlatform)
-		alert(isIos)
 		return isIos
 	}
 
