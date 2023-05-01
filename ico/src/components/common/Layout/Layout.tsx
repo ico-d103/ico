@@ -2,7 +2,7 @@ import React from "react"
 import SideBar from "@/components/teacher/layout/SideBar/SideBar"
 import { useRouter } from "next/router"
 import { css } from "@emotion/react"
-import { OverlayScrollbarsComponent } from "overlayscrollbars-react"
+import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 import TransitionWrapper from "@/components/student/layout/TransitionWrapper/TransitionWrapper"
 
 type LayoutProps = {
@@ -18,11 +18,11 @@ function Layout({ children }: LayoutProps) {
 
 
 	if (separator === "teacher") {
-		return <SideBar>{children}</SideBar>
+		return <OverlayScrollbarsComponent defer><SideBar>{children}</SideBar></OverlayScrollbarsComponent>
 	} else if (separator === "student") {
 		return <TransitionWrapper>{children}</TransitionWrapper>
 	} else {
-		return <div>{children}</div>
+		return <OverlayScrollbarsComponent defer><div>{children}</div></OverlayScrollbarsComponent>
 	}
 }
 
