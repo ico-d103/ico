@@ -78,11 +78,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	useEffect(() => {
 		if (screenshot !== "") {
 			router.push(navToAtom.url)
-		}
-	}, [screenshot])
-
-	useEffect(() => {
-		if (screenshot !== "") {
 			setIsTransitioning(() => true)
 			setTimeout(() => {
 				setIsTransitioning(() => false)
@@ -92,7 +87,20 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				setScreenshot(() => "")
 			}, 300)
 		}
-	}, [router.pathname])
+	}, [screenshot])
+
+	// useEffect(() => {
+	// 	if (screenshot !== "") {
+	// 		setIsTransitioning(() => true)
+	// 		setTimeout(() => {
+	// 			setIsTransitioning(() => false)
+	// 			setNavToAtom(() => {
+	// 				return { url: "", transition: "" }
+	// 			})
+	// 			setScreenshot(() => "")
+	// 		}, 300)
+	// 	}
+	// }, [router.pathname])
 
 	return (
 		<div>
@@ -150,6 +158,7 @@ const contentInnerWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
 		width: ${isTransitioning && "100vw"};
 		height: ${isTransitioning && "100vh"};
+
 	`
 }
 
@@ -162,11 +171,13 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			}
 			@keyframes rightToLeft {
 				from {
+					opacity: 0%;
 					transform: translateX(100%);
 					visibility: visible;
 				}
 
 				to {
+					opacity: 100%;
 					transform: translateX(0%);
 				}
 			}
@@ -177,11 +188,13 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			}
 			@keyframes leftToRight {
 				from {
+					opacity: 0%;
 					transform: translateX(-100%);
 					visibility: visible;
 				}
 
 				to {
+					opacity: 100%;
 					transform: translateX(0%);
 				}
 			}
@@ -192,11 +205,13 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			}
 			@keyframes bottomToTop {
 				from {
+					opacity: 0%;
 					transform: translateY(100%);
 					visibility: visible;
 				}
 
 				to {
+					opacity: 100%;
 					transform: translateY(0%);
 				}
 			}
