@@ -17,8 +17,8 @@ function test3() {
 }
 
 const illustCSS = css`
-	width: 60vw;
-	height: 60vw;
+	width: 100%;
+	height: 100%;
 `
 
 const imgWrapperCSS = css`
@@ -30,6 +30,7 @@ const imgWrapperCSS = css`
 	border-radius: 10px;
 	overflow: hidden;
 	margin-bottom: 36px;
+
 `
 
 export default test3
