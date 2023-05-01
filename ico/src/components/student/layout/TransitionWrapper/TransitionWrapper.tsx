@@ -13,6 +13,7 @@ type TransitionWrapperProps = {
 function TransitionWrapper({ children }: TransitionWrapperProps) {
 	const [screenshot, setScreenshot] = useState("")
 	const [navToAtom, setNavToAtom] = useAtom(navTo)
+	const [beforeTransition, setBeforeTransition] = useState<boolean>(false)
 	const [isTransitioning, setIsTransitioning] = useState<boolean>(false)
 	const [isImageLoading, setIsImageLoading] = useState<boolean>(false)
 	const [scrollTop, setScrollTop] = useState<number>(0)
@@ -71,6 +72,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 	useEffect(() => {
 		if (navToAtom.url !== "") {
+			
 			setScrollTop(() => window.scrollY)
 			handleScreenshot()
 		}
@@ -79,16 +81,19 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	useEffect(() => {
 		if (screenshot !== "") {
 			// 여기에 클래스 이름 바꾸는 메서드 드가야됨
-			
-			
-			router.push(navToAtom.url)
+			setBeforeTransition(() => true)
 		}
 	}, [isImageLoading])
 
 	useEffect(() => {
-		
-		
+		if (beforeTransition) {
+			router.push(navToAtom.url)
+		}
+	}, [beforeTransition])
+
+	useEffect(() => {
 		if (screenshot !== "") {
+			setBeforeTransition(() => false)
 			setIsTransitioning(() => true)
 			setTimeout(() => {
 				setIsTransitioning(() => false)
@@ -97,8 +102,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				})
 				setScreenshot(() => "")
 				setIsImageLoading(() => false)
-	
-				
 			}, 300)
 		}
 	}, [router.pathname])
@@ -106,8 +109,18 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	return (
 		<div>
 			<div className={"before-wrapper"} css={imgWrapperCSS}>
-				{screenshot && <img css={imgCSS({ scrollTop })} src={screenshot} alt="screenshot" onLoad={() => {setIsImageLoading(() => true)}} />}
+				{screenshot && (
+					<img
+						css={imgCSS({ scrollTop })}
+						src={screenshot}
+						alt="screenshot"
+						onLoad={() => {
+							setIsImageLoading(() => true)
+						}}
+					/>
+				)}
 			</div>
+
 			<div
 				ref={contentWrapperRef}
 				className={"content-outer-wrapper"}
@@ -118,7 +131,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			>
 				<div
 					ref={contentInnerWrapperRef}
-					css={contentInnerWrapperCSS({ isTransitioning })}
+					css={contentInnerWrapperCSS({ isTransitioning, beforeTransition })}
 					className={`content-wrapper ${navToAtom.url === router.pathname || screenshot || isTransitioning ? "transitioning" : ""}`}
 				>
 					{children}
@@ -155,12 +168,13 @@ const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 	`
 }
 
-const contentInnerWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
+const contentInnerWrapperCSS = ({ isTransitioning, beforeTransition }: { isTransitioning: boolean, beforeTransition: boolean }) => {
 	return css`
 		background-color: var(--common-back-color);
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
 		width: ${isTransitioning && "100vw"};
 		height: ${isTransitioning && "100vh"};
+		visibility: ${beforeTransition && 'hidden'};
 	`
 }
 
