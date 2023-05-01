@@ -61,19 +61,15 @@ subprojects {
 		runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 		// CollSMS
 		implementation 'net.nurigo:sdk:4.2.7'
+
+		// AWS
+		implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	}
 
 	test {
 		useJUnitPlatform()
 	}
 }
-
-
-//dependencies {
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
-//	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-//	testImplementation 'org.springframework.security:spring-security-test'
-//}
 
 project(":core-module") {
 	bootJar.enabled = false
