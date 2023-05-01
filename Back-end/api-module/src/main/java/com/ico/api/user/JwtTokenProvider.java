@@ -9,10 +9,13 @@ import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Base64;
@@ -42,7 +45,7 @@ public class JwtTokenProvider {
         Date now = new Date();
         log.info("[generate token]time={}", LocalDateTime.now(ZoneId.of("Asia/Seoul")));
         return Jwts.builder()
-                .setSubject(member.getIdentity()) // 보통 username
+                .setSubject(member.getIdentity())
                 .setHeader(createHeader())
                 .setClaims(createClaims(member)) // 클레임, 토큰에 포함될 정보
                 .setExpiration(new Date(now.getTime() + tokenValidTime)) // 만료일
@@ -98,28 +101,27 @@ public class JwtTokenProvider {
         Map<String, Object> claims = new HashMap<>();
         return claims;
     }
-
     public Claims getClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(securityKey).build().parseClaimsJws(token).getBody();
     }
 
-    private Object getId(String token) {
+    public Object getId(String token) {
         return getClaims(token).get("id");
     }
 
-    private Object getIdentity(String token) {
+    public Object getIdentity(String token) {
         return getClaims(token).get("identity");
     }
 
-    private Object getName(String token) {
+    public Object getName(String token) {
         return getClaims(token).get("name");
     }
 
-    private Object getRole(String token) {
+    public Object getRole(String token) {
         return getClaims(token).get("role");
     }
 
-    private Object getNation(String token) {
+    public Object getNation(String token) {
         return getClaims(token).get("nation");
     }
 
@@ -139,7 +141,7 @@ public class JwtTokenProvider {
         return false;
     }
 
-    public String parseJwt(HttpServletRequest request){
+    public String parseJwt(HttpServletRequest request) {
         String headerAuth=null;
 
         Cookie[] cookies = request.getCookies();
@@ -158,6 +160,49 @@ public class JwtTokenProvider {
 
         headerAuth = request.getHeader("Authentication");
         return headerAuth;
+    }
+
+    /**
+     * 학생의 반 입장, 교사의 반 생성시 마다 호출되어야 하는 TokenUpdate 메서드
+     *
+     * @param identity
+     */
+    public void updateTokenCookie(String identity) {
+        String oldToken = null;
+
+        // 현재 쿠키에서 기존 토큰을 찾습니다.
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("Authentication")) {
+                    oldToken = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        // 기존 토큰이 있다면 새로운 토큰으로 교체합니다.
+        if (oldToken != null) {
+            // 기존 토큰의 유효성을 검사합니다.
+            if (isValidate(oldToken)) {
+                // 토큰의 클레임 정보를 가져옵니다.
+                Map<String, Object> claims = createClaims(oldToken);
+                if (claims.get("identity").equals(identity)) {
+                    // 새로운 토큰을 생성합니다.
+                    LoginDto member = new LoginDto();
+                    member.setIdentity(identity);
+                    String newToken = generateJwtToken(member);
+
+                    // 새로운 토큰으로 쿠키를 갱신합니다.
+                    HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+                    Cookie cookie = new Cookie("Authentication", newToken);
+                    cookie.setPath("/");
+                    cookie.setMaxAge((int) tokenValidTime / 1000);
+                    response.addCookie(cookie);
+                }
+            }
+        }
     }
 
 }
