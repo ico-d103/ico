@@ -37,6 +37,9 @@ public class S3UploadService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    @Value("${cloud.aws.cloud-front.domain}")
+    private String domain;
+
     /**
      * 파일 업로드
      *
@@ -57,6 +60,16 @@ public class S3UploadService {
         }
 
         return newFileName;
+    }
+
+    /**
+     * 파일 URL 반환
+     *
+     * @param fileName
+     * @return 파일 URL
+     */
+    public String getFileURL(String fileName) {
+        return String.format("https://%s/%s", domain, fileName);
     }
 
     /**
