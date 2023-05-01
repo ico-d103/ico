@@ -1,7 +1,7 @@
 import React from "react"
 import { css } from "@emotion/react"
 import CollapseMenu from "../../common/CollapseMenu/CollapseMenu"
-import TableGenerator from "../../common/TableGenerator/TableGenerator"
+import TableGenerator from "../../../common/TableGenerator/TableGenerator"
 import Button from "@/components/common/Button/Button"
 
 function GovRuleCredit() {
@@ -12,7 +12,7 @@ function GovRuleCredit() {
 	]
 
 	return (
-		<CollapseMenu title={"신용 등급"} fontSize={'var(--teacher-h1)'} bracketSize={'18px'}>
+		<CollapseMenu title={"신용 등급"} fontSize={"var(--teacher-h1)"} bracketSize={"18px"}>
 			<React.Fragment>
 				신용등급의 등락폭을 수정할 수 있습니다.
 				<div css={tableWrapperCSS}>
