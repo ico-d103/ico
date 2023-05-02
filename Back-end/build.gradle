@@ -1,0 +1,117 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.11'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+repositories {
+	mavenCentral()
+}
+
+bootJar.enabled = false
+
+subprojects {
+	group = 'com.ico'
+	version = '0.0.1-SNAPSHOT'
+	sourceCompatibility = '11'
+	compileJava.options.encoding = 'UTF-8'
+
+	apply plugin: 'java'
+	// build.gradle에서 api() 를 사용하려면 java-library 사용
+	apply plugin: 'java-library'
+	apply plugin: 'org.springframework.boot'
+	// spring boot dependency를 사용하여 사용중인 부트 버전에서 자동으로 의존성을 가져온다.
+	apply plugin: 'io.spring.dependency-management'
+
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
+
+	repositories {
+		mavenCentral()
+
+		flatDir {
+			dirs 'libs'
+		}
+	}
+
+	// 관리하는 모듈에 공통 dependencies
+	dependencies {
+		implementation fileTree(dir: 'libs', include: ['*.jar'])
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+		compileOnly 'org.projectlombok:lombok'
+		developmentOnly 'org.springframework.boot:spring-boot-devtools'
+		runtimeOnly 'com.h2database:h2'
+		annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+		annotationProcessor 'org.projectlombok:lombok'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation 'junit:junit:4.13.1'
+		testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+		testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+		implementation 'mysql:mysql-connector-java:8.0.29'
+		// Spring Security
+		implementation 'org.springframework.boot:spring-boot-starter-security'
+		// JWT
+		implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+		runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+		runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+		// CollSMS
+		implementation 'net.nurigo:sdk:4.2.7'
+	}
+
+	test {
+		useJUnitPlatform()
+	}
+}
+
+
+//dependencies {
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+//	testImplementation 'org.springframework.security:spring-security-test'
+//}
+
+project(":core-module") {
+	bootJar.enabled = false
+	jar.enabled = true
+
+	dependencies {
+		implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+		runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	}
+}
+
+project(":api-module") {
+
+	bootJar {
+		archiveBaseName = 'ico'
+		archiveFileName = "ico-api-module-0.0.1.jar"
+		archiveVersion = "0.0.1"
+	}
+
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
+		implementation project(':core-module')
+	}
+}
+
+project(":batch-module") {
+
+	bootJar {
+		archiveBaseName = 'ico'
+		archiveFileName = "ico-batch-module-0.0.1.jar"
+		archiveVersion = "0.0.1"
+	}
+
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-batch'
+		testImplementation 'org.springframework.batch:spring-batch-test'
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
+		implementation project(':core-module')
+	}
+}

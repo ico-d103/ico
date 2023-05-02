@@ -1,0 +1,22 @@
+version: '3'
+services:
+  api-module:
+    build: ./api-module
+    image: back/api-module
+    ports:
+      - "8081:8081"
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "udp://logs2.papertrailapp.com:31537"
+        tag: back
+  batch-module:
+    build: ./batch-module
+    image: back/batch-module
+    ports:
+      - "8082:8082"
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "udp://logs2.papertrailapp.com:31537"
+        tag: batch
