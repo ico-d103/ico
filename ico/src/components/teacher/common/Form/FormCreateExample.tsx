@@ -2,7 +2,6 @@ import React from "react"
 import FormCreator from "./FormCreator"
 import useCompHandler from "@/hooks/useCompHandler"
 
-
 function FormCreateExample() {
 	const [openComp, closeComp, compState] = useCompHandler()
 
@@ -11,7 +10,7 @@ function FormCreateExample() {
 			<button onClick={openComp}>폼 열기</button>
 			<FormCreator subComp={<CreateSubForm />} idx={0} compState={compState} closeComp={closeComp} />
 		</div>
-	)
+	)	
 }
 
 const CreateSubForm = ({
@@ -25,7 +24,7 @@ const CreateSubForm = ({
 }) => {
 	// subInputChangeHandler({key: 키값, value: 내용})
 	// subInputChangeHandler({key: 키값, event: input 태그의 onChange에 사용할 경우})
-	// inputState : 저장된 내용
+	// inputState : 저장된 내용 {title, content, sub: { 추가 내용 }}
 	// 취소, 제출 버튼
 
 	const submit = () => {

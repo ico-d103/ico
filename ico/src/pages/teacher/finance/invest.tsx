@@ -1,12 +1,13 @@
+import React, { useState } from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
+import FinanceInvestStartForm from "@/components/teacher/Finance/Invest/FinanceInvestStartForm"
 import FinanceInvestChart from "@/components/teacher/Finance/Invest/FinanceInvestChart"
 import FinanceInvestIssueForm from "@/components/teacher/Finance/Invest/FinanceInvestIssueForm"
-import FinanceInvestStartForm from "@/components/teacher/Finance/Invest/FinanceInvestStartForm"
 
 function invest() {
 	const deleteInvest = () => {
-		console.log("deleteInvest")
+		alert("투자 종목 삭제!!!")
 	}
 
 	return (
