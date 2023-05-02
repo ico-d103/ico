@@ -15,6 +15,8 @@ public enum ErrorCode{
 
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "ACCOUNT-001", "사용자를 찾을 수 없습니다."),
 
+    NATION_NOT_FOUND(HttpStatus.NOT_FOUND, "14", "해당하는 국가가 없습니다."),
+
     // TODO: security 필터 에러 처리 알아보고 다시 정의
     INTER_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERROR-001", "서버에서 오류가 발생했습니다."),
 

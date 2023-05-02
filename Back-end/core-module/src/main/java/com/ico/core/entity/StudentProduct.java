@@ -1,8 +1,12 @@
 package com.ico.core.entity;
 
 import lombok.*;
-
 import javax.persistence.*;
+
+/**
+ * 학생 상품 Entity
+ * @author 변윤경
+ */
 
 @Entity
 @Getter
