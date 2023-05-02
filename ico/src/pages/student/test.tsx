@@ -11,6 +11,8 @@ function test() {
 				<LoadImage src={"/assets/guide/deco_1.jpg"} alt={"guide_deco"} useSkeleton={true} wrapperCss={illustCSS} />
 		</div>	
         <button onClick={() => {navigate('/student/test2', 'rightToLeft')}}>이동!</button>
+		<br/><br/><br/><br/><br/><br/><br/><br/>fdsafsdafsd<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
 
     </div>
   )
