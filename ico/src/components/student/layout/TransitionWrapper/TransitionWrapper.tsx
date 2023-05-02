@@ -160,7 +160,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 const imgWrapperCSS = css`
 	width: 100vw;
-	height: 100vh;
+	height: calc(100vh - 64px);
 	position: Fixed;
 	z-index: -1;
 	overflow: hidden;
@@ -182,8 +182,9 @@ const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 	return css`
 		/* position: ${isTransitioning && "absolute"}; */
-		min-height: 100vh;
-		overflow: ${isTransitioning ? "hidden" : "scroll"};
+		min-height: calc(100vh - 64px);
+		/* overflow: ${isTransitioning ? "hidden" : "scroll"}; */
+		overflow: hidden;
 		/* z-index: 9999; */
 		
 	`
@@ -191,11 +192,11 @@ const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 
 const contentInnerWrapperCSS = ({ isTransitioning, beforeTransition }: { isTransitioning: boolean, beforeTransition: boolean }) => {
 	return css`
-		min-height: 100vh;
+		min-height: calc(100vh - 64px);
 		background-color: var(--common-back-color);
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
 		width: ${isTransitioning && "100vw"};
-		height: ${isTransitioning && "100vh"};
+		height: ${isTransitioning && "calc(100vh - 64px)"};
 		overflow: ${isTransitioning && "hidden"};
 		visibility: ${beforeTransition && 'hidden'};
 	`
