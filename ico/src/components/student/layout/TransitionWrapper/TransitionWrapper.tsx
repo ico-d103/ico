@@ -160,7 +160,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 const imgWrapperCSS = css`
 	width: 100vw;
-	height: calc(100vh - 64px);
+	height: 100vh;
 	position: Fixed;
 	z-index: -1;
 	overflow: hidden;
