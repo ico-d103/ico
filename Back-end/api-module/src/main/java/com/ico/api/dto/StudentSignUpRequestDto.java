@@ -5,6 +5,11 @@ import com.ico.core.entity.Student;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 학생 회원가입시 입력받을 것
+ *
+ * @author 강교철
+ */
 @Data
 @NoArgsConstructor
 public class StudentSignUpRequestDto {
