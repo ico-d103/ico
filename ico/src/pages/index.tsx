@@ -4,8 +4,8 @@ import LoadImage from "@/components/common/LoadImage/LoadImage"
 export default function Home() {
 	return (
 		<div css={guideWrapperCSS}>
-			<div css={shadowWrapperCSS}>
-				<div css={shadowLeftCSS}></div>
+			<div css={scene1CSS}>
+
 			</div>
 			
 		</div>
@@ -17,19 +17,16 @@ const guideWrapperCSS = css`
 	flex-direction: column;
 	/* justify-content: center; */
 	align-items: center;
-	padding: 48px;
+	margin-top: -500px;
 `
 
-const shadowWrapperCSS = css`
-	width: 100px;
-	height: 100px;
+const scene1CSS = css`
+	padding:48px;
+	background-image: url('/assets/guide/background3.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+    width: 100%;
+    height: 0;
+    padding-top: 100%;
 `
 
-const shadowLeftCSS = css`
-	width: 100%;
-	height: 100%;
-	border-left: 100% solid red;
-	border-top: 50% solid transparent;
-	border-bottom: 50% solid transparent;
-	filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5)) ;
-`
