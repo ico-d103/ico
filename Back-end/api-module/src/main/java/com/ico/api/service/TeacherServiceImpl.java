@@ -1,10 +1,8 @@
 package com.ico.api.service;
 
 import com.ico.api.dto.TeacherSignUpRequestDto;
-import com.ico.core.entity.Certification;
 import com.ico.core.entity.Role;
 import com.ico.core.entity.Teacher;
-import com.ico.core.repository.CertificationRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 //import net.nurigo.sdk.message.model.Message;
@@ -12,8 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashMap;
-import java.util.Random;
 
 /**
  * Teacher ServiceImpl
@@ -46,7 +42,7 @@ public class TeacherServiceImpl implements TeacherService {
 //                .image(requestDto.getImage())   // s3로 바꿔야함
 //                .build();
 
-        if (teacherRepository.findTeacherByIdentity(requestDto.getIdentity()).isPresent()) {
+        if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
             throw new Exception("이미 존재하는 아이디 입니다.");
         }
 

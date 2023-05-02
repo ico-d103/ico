@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * LoginSuccessHandler
+ * 로그인이 성공했을 때
  *
  * @author 강교철
  */
@@ -54,7 +54,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         cookie.setMaxAge(60 * 60 * 24 * 30);
         response.addCookie(cookie);
 
-        // 4. 서버 이름 확인 및 리다이렉트 처리
+        // 4. 서버 이름 확인 및 리다이렉트 처리(학생과 교사의 반 내용이 있을 때와 없을 때의 리다이렉트 주소 설정하기)
         String serverName = request.getRemoteHost();
         if (serverName != null && (serverName.equals("k8d103.p.ssafy.io"))) {
             // 4-1. 서버 이름이 'k8d103.p.ssafy.io'일 경우, 해당 URL로 리다이렉트

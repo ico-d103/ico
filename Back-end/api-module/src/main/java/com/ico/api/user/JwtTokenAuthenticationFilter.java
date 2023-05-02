@@ -17,6 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * JWT Provider 를 사용
+ *
+ * @author 강교철
+ */
 @RequiredArgsConstructor
 @Component
 @Slf4j

@@ -36,7 +36,6 @@ public class JwtTokenProvider {
 
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
-    private final CustomUserDetailService userDetailService;
 
     /**
      * securityKey 를 application-login 에 넣어두고 @Value 로 꺼내오기
@@ -47,7 +46,7 @@ public class JwtTokenProvider {
     /**
      * 토큰 유효기간 1달로 설정
      */
-    private long tokenValidTime = 1000 * 60 * 60 * 24 * 30L;
+    private final long tokenValidTime = 1000 * 60 * 60 * 24 * 30L;
 
     /**
      * 객체 초기화
@@ -97,8 +96,8 @@ public class JwtTokenProvider {
     private Map<String, Object> createClaims(LoginDto member) {
         Map<String, Object> claims = new HashMap<>();
 
-        if (teacherRepository.findTeacherByIdentity(member.getIdentity()).isPresent()) {        // 안돼면 .isEmpty 사용하기
-            Teacher teacher = teacherRepository.findTeacherByIdentity(member.getIdentity()).orElse(null);
+        if (teacherRepository.findByIdentity(member.getIdentity()).isPresent()) {        // 안돼면 .isEmpty 사용하기
+            Teacher teacher = teacherRepository.findByIdentity(member.getIdentity()).orElse(null);
             claims.put("id", teacher.getId());
             claims.put("identity", member.getIdentity());
             claims.put("name", teacher.getName());
@@ -107,14 +106,13 @@ public class JwtTokenProvider {
 
         }
         else {
-            Student student = studentRepository.findStudentByIdentity(member.getIdentity()).orElse(null);
+            Student student = studentRepository.findByIdentity(member.getIdentity()).orElse(null);
             claims.put("id", student.getId());
             claims.put("identity", member.getIdentity());
             claims.put("name", student.getName());
             claims.put("role", student.getRole());
             claims.put("nation", student.getNation());
         }
-
         return claims;
     }
 
