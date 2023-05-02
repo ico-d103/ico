@@ -27,7 +27,7 @@ import java.io.IOException;
 @Slf4j
 public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
-    private final CustomUserDetailService principalOAuth2UserService;
+    private final CustomUserDetailService customUserDetailService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -43,7 +43,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
             if (token != null) {
                 String identity = (String) jwtTokenProvider.getIdentity(token);
                 log.info("identity: {}", identity);
-                UserDetails userDetails = principalOAuth2UserService.loadUserByUsername(identity);
+                CustomUserDetails userDetails = customUserDetailService.loadUserByUsername(identity);
                 log.info("userDetail.getAuthorities: {}", userDetails.getAuthorities());
 
                 // 가져온 사용자 정보를 사용하여 UsernamePasswordAuthenticationToken 객체를 생성하고, SecurityContext에 이를 설정

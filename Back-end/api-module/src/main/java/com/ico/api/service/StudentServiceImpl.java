@@ -4,6 +4,7 @@ import com.ico.api.dto.StudentSignUpRequestDto;
 import com.ico.core.entity.Role;
 import com.ico.core.entity.Student;
 import com.ico.core.repository.StudentRepository;
+import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import javax.transaction.Transactional;
 public class StudentServiceImpl implements StudentService{
 
     private final StudentRepository studentRepository;
+    private final TeacherRepository teacherRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -37,7 +39,8 @@ public class StudentServiceImpl implements StudentService{
                 .count((byte) 0)
                 .build();
 
-        if (studentRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
+        if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()
+                && studentRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
             throw new Exception("이미 존재하는 아이디 입니다.");
         }
 

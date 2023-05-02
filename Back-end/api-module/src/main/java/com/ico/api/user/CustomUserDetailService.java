@@ -29,16 +29,16 @@ public class CustomUserDetailService implements UserDetailsService {
      * @throws UsernameNotFoundException
      */
     @Override
-    public UserDetails loadUserByUsername(String identity) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String identity) throws UsernameNotFoundException {
 
         if (teacherRepository.findByIdentity(identity).isPresent()) {
-            return (UserDetails) teacherRepository.findByIdentity(identity)
-                    .orElseThrow(() -> new UsernameNotFoundException("교사를 찾을 수 없습니다."));
+            return new CustomUserDetails(teacherRepository.findByIdentity(identity)
+                    .orElseThrow(() -> new UsernameNotFoundException("교사를 찾을 수 없습니다.")));
+        } else if (studentRepository.findByIdentity(identity).isPresent()) {
+            return new CustomUserDetails(studentRepository.findByIdentity(identity)
+                    .orElseThrow(() -> new UsernameNotFoundException("학생을 찾을 수 없습니다.")));
+        } else {
+            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
         }
-        else {
-            return (UserDetails) studentRepository.findByIdentity(identity)
-                    .orElseThrow(() -> new UsernameNotFoundException("학생을 찾을 수 없습니다."));
-        }
-
     }
 }

@@ -3,6 +3,7 @@ package com.ico.api.service;
 import com.ico.api.dto.TeacherSignUpRequestDto;
 import com.ico.core.entity.Role;
 import com.ico.core.entity.Teacher;
+import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 //import net.nurigo.sdk.message.model.Message;
@@ -21,6 +22,7 @@ import javax.transaction.Transactional;
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
+    private final StudentRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
 
 //      TODO : S3를 이용한 이미지업로드 할때 사용할 것
@@ -42,7 +44,8 @@ public class TeacherServiceImpl implements TeacherService {
 //                .image(requestDto.getImage())   // s3로 바꿔야함
 //                .build();
 
-        if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
+        if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()
+                && studentRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
             throw new Exception("이미 존재하는 아이디 입니다.");
         }
 

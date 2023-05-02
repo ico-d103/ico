@@ -91,7 +91,7 @@ public class JwtTokenProvider {
      * 정보 추가
      *
      * @param member
-     * @return
+     * @return claims
      */
     private Map<String, Object> createClaims(LoginDto member) {
         Map<String, Object> claims = new HashMap<>();
@@ -100,7 +100,6 @@ public class JwtTokenProvider {
             Teacher teacher = teacherRepository.findByIdentity(member.getIdentity()).orElse(null);
             claims.put("id", teacher.getId());
             claims.put("identity", member.getIdentity());
-            claims.put("name", teacher.getName());
             claims.put("role", teacher.getRole());
             claims.put("nation", teacher.getNation());
 
@@ -109,7 +108,6 @@ public class JwtTokenProvider {
             Student student = studentRepository.findByIdentity(member.getIdentity()).orElse(null);
             claims.put("id", student.getId());
             claims.put("identity", member.getIdentity());
-            claims.put("name", student.getName());
             claims.put("role", student.getRole());
             claims.put("nation", student.getNation());
         }
@@ -127,7 +125,6 @@ public class JwtTokenProvider {
 
             claims.put("id", getId(token));
             claims.put("identity", getIdentity(token));
-            claims.put("name", getName(token));
             claims.put("role", getRole(token));
             claims.put("nation", getNation(token));
 
@@ -169,15 +166,6 @@ public class JwtTokenProvider {
         return getClaims(token).get("identity");
     }
 
-    /**
-     * Token 에서 name 값 추출
-     *
-     * @param token
-     * @return name
-     */
-    public Object getName(String token) {
-        return getClaims(token).get("name");
-    }
 
     /**
      * Token 에서 role 값 추출
