@@ -199,6 +199,7 @@ const contentInnerWrapperCSS = ({ isTransitioning, beforeTransition }: { isTrans
 		height: ${isTransitioning && "calc(100vh - 64px)"};
 		overflow: ${isTransitioning && "hidden"};
 		visibility: ${beforeTransition && 'hidden'};
+		will-change: transform, opacity;
 	`
 }
 
