@@ -63,17 +63,17 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	}, [])
 
 	const handleScreenshot = () => {
-		if (contentWrapperRef.current) {
+		if (contentInnerWrapperRef.current) {
 			html2canvas(
-				document.body,
-				{
-					scrollX: -window.scrollX,
-					scrollY: -window.scrollY,
-					windowWidth: document.documentElement.clientWidth,
-  					windowHeight: document.documentElement.clientHeight
-					// width: 100,
-  					// height: 100
-				}
+				contentInnerWrapperRef.current,
+				// {
+				// 	scrollX: -window.scrollX,
+				// 	scrollY: -window.scrollY,
+				// 	windowWidth: document.documentElement.clientWidth,
+  				// 	windowHeight: document.documentElement.clientHeight
+				// 	// width: 100,
+  				// 	// height: 100
+				// }
 				
 			).then((canvas) => {
 				const screenshot = canvas.toDataURL()
@@ -175,7 +175,7 @@ const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 
 
 
-		/* transform: translate(0, -${scrollTop}px); */
+		transform: translate(0, -${scrollTop}px);
 	`
 }
 
