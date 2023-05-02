@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
-import ToggleButton from "@/components/teacher/Shop/Create/ToggleButton"
+import ShopCreateToggleButton from "@/components/teacher/Shop/Create/ShopCreateToggleButton"
 
 function create() {
 	const regist = () => {
@@ -34,7 +34,7 @@ function create() {
 				</div>
 				<div>
 					<div css={contentCSS}>상품 유형</div>
-					<ToggleButton leftLabel="판매" rightLabel="대여" />
+					<ShopCreateToggleButton leftLabel="판매" rightLabel="대여" />
 				</div>
 			</div>
 

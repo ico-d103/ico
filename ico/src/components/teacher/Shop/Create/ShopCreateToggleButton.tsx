@@ -1,12 +1,12 @@
 import React, { useState } from "react"
-import { css } from "@emotion/css"
+import { css } from "@emotion/react"
 
 type ToggleButtonProps = {
 	leftLabel: string
 	rightLabel: string
 }
 
-const ToggleButton = ({ leftLabel, rightLabel }: ToggleButtonProps) => {
+const ShopCreateToggleButton = ({ leftLabel, rightLabel }: ToggleButtonProps) => {
 	const [toggle, setToggle] = useState(false)
 
 	const toggleState = () => {
@@ -14,7 +14,7 @@ const ToggleButton = ({ leftLabel, rightLabel }: ToggleButtonProps) => {
 	}
 
 	return (
-		<form className={switchFieldCSS}>
+		<form css={switchFieldCSS}>
 			<input
 				type="radio"
 				id="switch_left"
@@ -55,8 +55,10 @@ const switchFieldCSS = css`
 		align-items: center;
 		height: 45px;
 		width: 50%;
-		background-color: #d9d9d9;
-		transition: all 0.3s ease-in-out;
+		background-color: var(--common-back-color);
+		transition: all 0.25s ease-in-out;
+
+		font-size: 1.1rem;
 
 		border: none;
 
@@ -79,4 +81,4 @@ const switchFieldCSS = css`
 	}
 `
 
-export default ToggleButton
+export default ShopCreateToggleButton
