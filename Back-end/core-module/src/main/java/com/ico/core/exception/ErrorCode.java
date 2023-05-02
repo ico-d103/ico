@@ -25,6 +25,8 @@ public enum ErrorCode{
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "ACCOUNT-002", "비밀번호가 일치하지 않습니다."),
 
     HAS_USER(HttpStatus.BAD_REQUEST, "ACCOUNT-003", "이미 등록된 회원입니다."),
+
+    INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST, "001", "파일 변환 중 에러가 발생 했습니다"),
     ;
 
     private final HttpStatus httpStatus;
