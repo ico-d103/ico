@@ -105,14 +105,14 @@ const cardFirstContentCSS = css`
 	padding: 10px 10px 0px;
 
 	div {
-		&:nth-child(1) {
+		&:nth-of-type(1) {
 			margin-bottom: 5px;
 		}
-		&:nth-child(2) {
+		&:nth-of-type(2) {
 			display: flex;
 
 			div {
-				&:nth-child(1) {
+				&:nth-of-type(1) {
 					font-weight: bold;
 				}
 			}
@@ -123,16 +123,16 @@ const cardSecondContentCSS = css`
 	padding: 5px 10px 10px;
 
 	div {
-		&:nth-child(1) {
+		&:nth-of-type(1) {
 			font-size: 12px;
 			display: flex;
 			justify-content: space-between;
 
 			div {
-				&:nth-child(1) {
+				&:nth-of-type(1) {
 					font-weight: bold;
 				}
-				&:nth-child(2) {
+				&:nth-of-type(2) {
 					color: rgba(0, 0, 0, 0.5);
 				}
 			}

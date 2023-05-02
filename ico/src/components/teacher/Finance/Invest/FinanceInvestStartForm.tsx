@@ -1,15 +1,28 @@
+import React from "react"
 import { css } from "@emotion/react"
 import Form from "@/components/teacher/common/Form/Form"
 import Test from "@/components/teacher/common/Form/Test"
 import Button from "@/components/common/Button/Button"
 
+import Modal from "@/components/common/Modal/Modal"
+import ModalContent from "@/components/common/Modal/ModalContent"
+import useCompHandler from "@/hooks/useCompHandler"
+
+import { CLASS_BIG_PROPERTY } from "@/components/teacher/Class/ClassIcons"
+import FinanceInvestUseModalContent from "@/components/teacher/Finance/Invest/FinanceInvestUseModalContent"
+
+import FormCreator from "../../common/Form/FormCreator"
+import FinanceInvestCreate from "./FinanceInvestCreate"
+
 function FinanceInvestStartForm() {
+	const [openComp, closeComp, compState] = useCompHandler()
+
 	const investStartTime = () => {
-		console.log("investStartTime")
+		alert("투자 시작 시간 설정")
 	}
 
 	const investEndTime = () => {
-		console.log("investEndTime")
+		alert("투자 종료 시간 설정")
 	}
 
 	return (
@@ -24,25 +37,37 @@ function FinanceInvestStartForm() {
 					fontSize={`var(--teacher-h4)`}
 					width={"190px"}
 					theme={"normal"}
-					onClick={investStartTime}
+					onClick={openComp}
 				/>
 				<Button
 					text={"종료 시간 선택"}
 					fontSize={`var(--teacher-h4)`}
 					width={"190px"}
 					theme={"normal"}
-					onClick={investEndTime}
+					onClick={openComp}
 				/>
 			</div>
 
-			<Form
-				mainInit={{ title: "zzzz", content: "hahaha" }}
-				subInit={{ test: "asdf", test2: "" }}
-				subInput={<Test />}
-				idx={3}
-				titlePlaceHolder={"제목을 입력해 주세요!"}
-				contentPlaceHolder={"내용을 입력해 주세요!"}
-				frontComp={<Test />}
+			<FormCreator
+				subComp={<FinanceInvestCreate />}
+				idx={0}
+				subInit={{ taxation: 0, value: 100 }}
+				compState={compState}
+				isNoTitle={true}
+			/>
+
+			<Modal
+				compState={compState}
+				closeComp={closeComp}
+				transition={"scale"}
+				content={
+					<ModalContent
+						width={"500px"}
+						icon={CLASS_BIG_PROPERTY}
+						title={"국고 사용하기"}
+						content={FinanceInvestUseModalContent()}
+					/>
+				}
 			/>
 		</>
 	)
@@ -55,7 +80,7 @@ const contentCSS = css`
 
 const inputCSS = css`
 	border: none;
-	background-color: gray;
+	background-color: var(--common-back-color);
 	height: 45px;
 	border-radius: 10px;
 `
