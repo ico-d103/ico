@@ -19,7 +19,7 @@ public class StudentProductController {
     private final StudentProductService studentProductService;
 
     @PostMapping("/student/proposal")
-    public ResponseEntity<?> uploadProposal(@RequestParam String identity, @RequestParam Long nationId, @RequestParam String title, @RequestParam int amount, @RequestParam String image, @RequestParam String detail, @RequestParam int count){
+    public ResponseEntity<?> uploadProposal(@RequestParam String identity, @RequestParam Long nationId, @RequestParam String title, @RequestParam int amount, @RequestParam String image, @RequestParam String detail, @RequestParam byte count){
         studentProductService.createProduct(identity, nationId, title, amount, image, detail, count);
         return new ResponseEntity<>(HttpStatus.OK);
     }
