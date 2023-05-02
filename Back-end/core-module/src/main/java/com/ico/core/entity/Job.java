@@ -1,6 +1,12 @@
 package com.ico.core.entity;
 
-import lombok.*;
+import com.ico.core.dto.JobDto;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.Column;
@@ -11,7 +17,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 /**
  * 직업 Entity
@@ -22,7 +27,7 @@ import javax.persistence.OneToOne;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)  // 외부에서 인스턴스 생성하는 것 방지
 @AllArgsConstructor
 public class Job {
 
@@ -53,4 +58,16 @@ public class Job {
 
     private String color;
 
+    /**
+     * 직업 수정 시 처리하는 method
+     *
+     * @param dto
+     */
+    public void updateJob(JobDto dto) {
+        this.title = dto.getTitle();
+        this.detail = dto.getDetail();
+        this.total = (byte) dto.getTotal();
+        this.wage = dto.getWage();
+        this.color = dto.getColor();
+    }
 }
