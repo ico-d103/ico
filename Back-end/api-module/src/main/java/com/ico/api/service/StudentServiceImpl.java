@@ -10,6 +10,11 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+/**
+ * Student ServiceImpl
+ *
+ * @author 강교철
+ */
 @Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService{
@@ -32,7 +37,7 @@ public class StudentServiceImpl implements StudentService{
                 .count((byte) 0)
                 .build();
 
-        if (studentRepository.findStudentByIdentity(requestDto.getIdentity()).isPresent()) {
+        if (studentRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
             throw new Exception("이미 존재하는 아이디 입니다.");
         }
 
@@ -41,7 +46,6 @@ public class StudentServiceImpl implements StudentService{
         }
 
         student.encodeStudentPassword(passwordEncoder);
-//        student.addUserAuthority();
         studentRepository.save(student);
 
         return student.getId();

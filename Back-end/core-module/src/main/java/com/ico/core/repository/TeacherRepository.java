@@ -9,7 +9,12 @@ import java.util.Optional;
 
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 
-    @Query("select t from Teacher t where t.identity=:identity")
-    Optional<Teacher> findTeacherByIdentity(@Param("identity") String identity);
+    /**
+     * Teacher table 에서 아이디로 교사 정보 가져오기
+     *
+     * @param identity
+     * @return Teacher
+     */
+    Optional<Teacher> findByIdentity(String identity);
 
 }

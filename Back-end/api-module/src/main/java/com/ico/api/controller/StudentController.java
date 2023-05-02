@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Student Controller
+ *
+ * @author 강교철
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -17,6 +22,13 @@ public class StudentController {
 
     private final StudentService studentService;
 
+    /**
+     * 학생 회원가입
+     *
+     * @param requestDto
+     * @return id
+     * @throws Exception
+     */
     @PostMapping("/student")
     public ResponseEntity<?> studentSignUp(@RequestBody StudentSignUpRequestDto requestDto) throws Exception {
 
