@@ -3,7 +3,9 @@ import { Html, Head, Main, NextScript } from "next/document"
 export default function Document() {
 	return (
 		<Html lang="en">
-			<Head />
+			<Head>
+				<link rel="shortcut icon" href="/favicon.ico" />
+			</Head>
 			<link rel="manifest" href="/manifest.json" />
 			<meta name="theme-color" content="#000000" />
 			<link rel="apple-touch-icon" sizes="57x57" href="apple-touch-icon-57x57.png" />
