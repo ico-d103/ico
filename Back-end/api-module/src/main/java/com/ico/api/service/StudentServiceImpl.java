@@ -40,7 +40,7 @@ public class StudentServiceImpl implements StudentService{
                 .build();
 
         if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()
-                && studentRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
+                || studentRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
             throw new Exception("이미 존재하는 아이디 입니다.");
         }
 

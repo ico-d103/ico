@@ -137,10 +137,10 @@ public class JwtTokenProvider {
     }
 
     /**
-     * 정보 추출
-     *
+     * Token 정보 추출
+     * ex) String nation = (String) jwtTokenProvider.getClaimsData(token).get("nation");
      * @param token
-     * @return
+     * @return id, nation, identity, role
      */
     public Claims getClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(securityKey).build().parseClaimsJws(token).getBody();

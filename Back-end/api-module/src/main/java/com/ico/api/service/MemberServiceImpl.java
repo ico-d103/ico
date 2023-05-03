@@ -36,15 +36,13 @@ public class MemberServiceImpl implements MemberService {
             if (!passwordEncoder.matches(members.getPassword(), teacher.getPassword())) {       // DB의 인코딩 비밀번호를 복호화해서 비교함
                 throw new IllegalArgumentException(teacher.getPassword() + members.getPassword() + "잘못된 비밀번호입니다.");
             }
-        }
-        else {
+        } else if (studentRepository.findByIdentity(members.getIdentity()).isPresent()) {
             Student student = studentRepository.findByIdentity(members.getIdentity())
                     .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다."));
             if (!passwordEncoder.matches(members.getPassword(), student.getPassword())) {
                 throw new IllegalArgumentException(student.getPassword() + members.getPassword() + "잘못된 비밀번호입니다.");
             }
         }
-
         return jwtTokenProvider.generateJwtToken(members);
     }
 

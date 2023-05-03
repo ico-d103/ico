@@ -3,6 +3,8 @@ package com.ico.api.user;
 import com.ico.core.entity.Role;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
+import com.ico.core.exception.CustomException;
+import com.ico.core.exception.ErrorCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -49,17 +51,20 @@ public class CustomUserDetails implements UserDetails {
     public String getPassword() {
         return ((User) user).getPassword();
     }
+
     /**
      * 사용자의 아이디 반환
      * @return id
      */
     @Override
     public String getUsername() {
-        if (((User) user).getAuthorities().equals("TEACHER")) {
-            return ((Teacher) user).getIdentity();
-        }
-        else {
+        // return ((User) user).getUsername();
+        if (user instanceof Student) {
             return ((Student) user).getIdentity();
+        } else if (user instanceof Teacher) {
+            return ((Teacher) user).getIdentity();
+        } else{
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
     }
 
@@ -81,7 +86,10 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
-
+    /**
+     * 사용자의 자격증명(암호)이 만료되었는지 여부 반환
+     * @return true
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
