@@ -1,25 +1,45 @@
-import React, { useState } from "react"
+import { useState, useReducer } from "react"
 import { css } from "@emotion/react"
 
-function login() {
-	const [id, setId] = useState<string>("")
-	const [password, setPassword] = useState<string>("")
+const initialState = { id: "", password: "" }
 
-	// 함수 반환 타입 Promise<void> 로 추후 변경
-	const loginHandler = (): void => {
-		if (id === "" || password === "") {
-			alert("빈 칸을 모두 입력해주세요.") // 멘트 변경 가능
+const inputReducer = (state: { id: string; password: string }, action: { type: string; value: string }) => {
+	switch (action.type) {
+		case "CHANGE_ID":
+			return { ...state, id: action.value }
+		case "CHANGE_PW":
+			return { ...state, password: action.value }
+		default:
+			return state
+	}
+}
+
+function login() {
+	const [alarm, setAlarm] = useState<string>("")
+	const [inputState, dispatchInput] = useReducer(inputReducer, initialState)
+
+	const loginHandler = async () => {
+		if (inputState.id === "" || inputState.password === "") {
+			setAlarm("빈 칸을 모두 입력해주세요.") // 멘트 변경 가능
 			return
 		}
-		// 로그인 api 요청
 
-		alert("로그인 요청")
+		// 로그인 요청
 	}
 
 	return (
 		<div css={wrapperCSS}>
-			<input type="text" placeholder="아이디" onChange={(e) => setId(e.target.value)} />
-			<input type="password" placeholder="비밀번호" onChange={(e) => setPassword(e.target.value)} />
+			<span>{alarm}</span>
+			<input
+				type="text"
+				placeholder="아이디"
+				onChange={(e) => dispatchInput({ type: "CHANGE_ID", value: e.target.value })}
+			/>
+			<input
+				type="password"
+				placeholder="비밀번호"
+				onChange={(e) => dispatchInput({ type: "CHANGE_PW", value: e.target.value })}
+			/>
 			<button onClick={loginHandler}>로그인</button>
 		</div>
 	)

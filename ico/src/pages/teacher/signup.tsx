@@ -40,7 +40,8 @@ function signup() {
 
 	const signUpHandler = async () => {
 		if (inputState.name === "" || inputState.id === "" || inputState.password === "") {
-			setAlarm("빈 칸을 모두 채워주세요")
+			setAlarm("빈 칸을 모두 입력해주세요.")
+			return
 		}
 
 		// 회원가입 요청
