@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
-
+/**
+ * @author 변윤경
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -22,7 +24,10 @@ public class StudentProductServiceImpl implements StudentProductService{
     private final NationRepository nationRepo;
     private final StudentProductRepository studentProductRepo;
 
-
+    /**
+     * 학생의 상품 판매 제안서를 학생 상품 테이블에 추가합니다.
+     * @param proposal 판매제안서 양식
+     */
     @Override
     public void createProduct(StudentProductProposalDto proposal) {
         Student student = studentRepo.findByIdentity(proposal.getIdentity())
@@ -30,22 +35,16 @@ public class StudentProductServiceImpl implements StudentProductService{
         Nation nation = nationRepo.findById(proposal.getNationId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
-        StudentProduct product = new StudentProduct();
-        product.setStudent(student);
-        product.setNation(nation);
-        product.setTitle(proposal.getTitle());
-        product.setAmount(proposal.getAmount());
-        product.setImage(proposal.getImage());
-        product.setDetail(proposal.getDetail());
-        product.setCount(proposal.getCount());
-        product.set_assigned(false);
-
-//        Optional<Nation> nation = nationRepo.findById(proposal.getNationId());
-//        product.setNation(nation.get());
-//        Optional<Student> student = studentRepo.findByIdentity(proposal.getIdentity());
-//        product.setStudent(student.get());
-
+        StudentProduct product = StudentProduct.builder()
+                .student(student)
+                .nation(nation)
+                .title(proposal.getTitle())
+                .amount(proposal.getAmount())
+                .image(proposal.getImage())
+                .detail(proposal.getDetail())
+                .count(proposal.getCount())
+                .is_assigned(false)
+                .build();
         studentProductRepo.save(product);
     }
-
 }

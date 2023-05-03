@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author 변윤경
  */
-
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/student-product")

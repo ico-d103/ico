@@ -1,6 +1,7 @@
 package com.ico.api.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,9 +10,9 @@ import lombok.Setter;
  *
  * @author 변윤경
  */
-
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 public class StudentProductProposalDto {
     String identity;
