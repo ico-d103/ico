@@ -54,7 +54,7 @@ subprojects {
 		testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
 		testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 		implementation 'mysql:mysql-connector-java:8.0.29'
-		// Spring Security
+		// Spring Security v-5.6.4
 		implementation 'org.springframework.boot:spring-boot-starter-security'
 		// JWT
 		implementation 'io.jsonwebtoken:jjwt-api:0.11.2'

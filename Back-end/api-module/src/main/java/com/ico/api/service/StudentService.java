@@ -2,8 +2,20 @@ package com.ico.api.service;
 
 import com.ico.api.dto.StudentSignUpRequestDto;
 
+/**
+ * Student Service
+ *
+ * @author 강교철
+ */
 public interface StudentService {
 
+    /**
+     * StudentSignUpRequestDto 를 받아 학생 회원가입
+     *
+     * @param requestDto
+     * @return student.getId()
+     * @throws Exception
+     */
     public Long signUp(StudentSignUpRequestDto requestDto) throws Exception;
 
 }
