@@ -20,9 +20,9 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class StudentProductServiceImpl implements StudentProductService{
-    private final StudentRepository studentRepo;
-    private final NationRepository nationRepo;
-    private final StudentProductRepository studentProductRepo;
+    private final StudentRepository studentRepository;
+    private final NationRepository nationRepository;
+    private final StudentProductRepository studentProductRepository;
 
     /**
      * 학생의 상품 판매 제안서를 학생 상품 테이블에 추가합니다.
@@ -30,9 +30,9 @@ public class StudentProductServiceImpl implements StudentProductService{
      */
     @Override
     public void createProduct(StudentProductProposalDto proposal) {
-        Student student = studentRepo.findByIdentity(proposal.getIdentity())
+        Student student = studentRepository.findByIdentity(proposal.getIdentity())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        Nation nation = nationRepo.findById(proposal.getNationId())
+        Nation nation = nationRepository.findById(proposal.getNationId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
         StudentProduct product = StudentProduct.builder()
@@ -45,6 +45,6 @@ public class StudentProductServiceImpl implements StudentProductService{
                 .count(proposal.getCount())
                 .is_assigned(false)
                 .build();
-        studentProductRepo.save(product);
+        studentProductRepository.save(product);
     }
 }
