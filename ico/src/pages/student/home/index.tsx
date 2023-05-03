@@ -6,7 +6,7 @@ import PageHeader from '@/components/student/layout/PageHeader/PageHeader'
 function index() {
   return (
     <div>
-        {/* <PageHeader /> */}
+        <PageHeader title={'아이코'} />
         gsergsergr
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
         dsa'\

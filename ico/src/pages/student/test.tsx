@@ -3,12 +3,13 @@ import useNavigate from '@/hooks/useNavigate'
 import { css } from "@emotion/react"
 import LoadImage from '@/components/common/LoadImage/LoadImage'
 import ContentWrapper from '@/components/student/common/ContentWrapper/ContentWrapper'
-
+import PageHeader from '@/components/student/layout/PageHeader/PageHeader'
 
 function test() {
 	const navigate = useNavigate()
   return (
     <div>
+		<PageHeader title={'아이코'} />
         test
         <div css={imgWrapperCSS}>
 				<LoadImage src={"/assets/guide/deco_1.jpg"} alt={"guide_deco"} useSkeleton={true} wrapperCss={illustCSS} />
