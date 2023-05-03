@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class CustomUserDetails implements UserDetails {
 
-    private Object user;
+    private final Object user;
 
     public CustomUserDetails(Object user) {
         this.user = user;

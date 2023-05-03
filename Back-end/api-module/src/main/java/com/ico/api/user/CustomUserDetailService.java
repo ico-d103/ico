@@ -1,5 +1,7 @@
 package com.ico.api.user;
 
+import com.ico.core.entity.Student;
+import com.ico.core.entity.Teacher;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * Filter 에서 아래의 메소드를 호출함
@@ -30,12 +34,14 @@ public class CustomUserDetailService implements UserDetailsService {
      */
     @Override
     public CustomUserDetails loadUserByUsername(String identity) throws UsernameNotFoundException {
+        Optional<Teacher> teacher = teacherRepository.findByIdentity(identity);
+        Optional<Student> student = studentRepository.findByIdentity(identity);
 
-        if (teacherRepository.findByIdentity(identity).isPresent()) {
-            return new CustomUserDetails(teacherRepository.findByIdentity(identity)
+        if (teacher.isPresent()) {
+            return new CustomUserDetails(teacher
                     .orElseThrow(() -> new UsernameNotFoundException("교사를 찾을 수 없습니다.")));
-        } else if (studentRepository.findByIdentity(identity).isPresent()) {
-            return new CustomUserDetails(studentRepository.findByIdentity(identity)
+        } else if (student.isPresent()) {
+            return new CustomUserDetails(student
                     .orElseThrow(() -> new UsernameNotFoundException("학생을 찾을 수 없습니다.")));
         } else {
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
