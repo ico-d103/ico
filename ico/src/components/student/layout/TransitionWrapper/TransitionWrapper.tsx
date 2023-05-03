@@ -69,23 +69,23 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		if (contentInnerWrapperRef.current) {
 
 
-			// html2canvas(
-			// 	contentInnerWrapperRef.current,
+			html2canvas(
+				contentInnerWrapperRef.current,
+			
+				// {
+				// 	scrollX: -window.scrollX,
+				// 	scrollY: -window.scrollY,
+				// 	windowWidth: document.documentElement.clientWidth,
+  				// 	windowHeight: document.documentElement.clientHeight
+				// 	// width: 100,
+  				// 	// height: 100
+				// }
 				
-			// 	// {
-			// 	// 	scrollX: -window.scrollX,
-			// 	// 	scrollY: -window.scrollY,
-			// 	// 	windowWidth: document.documentElement.clientWidth,
-  			// 	// 	windowHeight: document.documentElement.clientHeight
-			// 	// 	// width: 100,
-  			// 	// 	// height: 100
-			// 	// }
+			).then((canvas) => {
+				const screenshot = canvas.toDataURL()
+				setScreenshot(screenshot)
 				
-			// ).then((canvas) => {
-			// 	const screenshot = canvas.toDataURL()
-			// 	setScreenshot(screenshot)
-				
-			// })
+			})
 
 			// DomToImage.toPng(document.body, { quality: 1 }).then((dataUrl) => {
 			// 	const screenshot = dataUrl
@@ -93,11 +93,11 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			//   })
 
 
-			htmlToImage.toPng(contentInnerWrapperRef.current)
-			.then(function (dataUrl) {
-				const screenshot = dataUrl
-				setScreenshot(screenshot)
-			})
+			// htmlToImage.toPng(contentInnerWrapperRef.current)
+			// .then(function (dataUrl) {
+			// 	const screenshot = dataUrl
+			// 	setScreenshot(screenshot)
+			// })
 
 
 		}
@@ -303,14 +303,14 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			}
 			@keyframes scaleReverse {
 				from {
-					opacity: 100%;
-
+					opacity: 0%;
+					transform: scale(80%);
 					visibility: visible;
 				}
 
 				to {
 					opacity: 100%;
-
+					transform: scale(100%);
 				}
 			}
 		`,
@@ -319,9 +319,9 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		beforeScale: css`
 			& .transitioning {
 				
-				animation: scaleReverse 0.3s ease forwards;
+				animation: beforeScale1 0.3s ease forwards;
 			}
-			@keyframes scaleReverse {
+			@keyframes beforeScale1 {
 				from {
 					opacity: 0%;
 					transform: scale(50%);
@@ -357,10 +357,10 @@ const beforeTransitionsCSS = ({ isTransitioning }: { isTransitioning: boolean })
 
 		beforeScale: css`
 			& .before-transitioning {
-				position:absolute;
-				animation: beforeScale 0.3s ease forwards;
+				position:fixed;
+				animation: beforeScale2 0.3s ease forwards;
 			}
-			@keyframes beforeScale {
+			@keyframes beforeScale2 {
 				from {
 					z-index: 9999;
 					opacity: 100%;
