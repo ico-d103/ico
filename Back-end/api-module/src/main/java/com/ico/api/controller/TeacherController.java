@@ -31,7 +31,7 @@ public class TeacherController {
      */
     @PostMapping("/teacher")
     public ResponseEntity<?> teacherSignUp(@RequestBody TeacherSignUpRequestDto requestDto) throws Exception {
-
-        return new ResponseEntity<>(teacherService.signUp(requestDto), HttpStatus.OK);
+        teacherService.signUp(requestDto);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }
