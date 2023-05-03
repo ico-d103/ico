@@ -22,6 +22,10 @@ public enum ErrorCode{
     JOB_NOT_FOUND(HttpStatus.NOT_FOUND, "15", "해당하는 직업이 없습니다."),
 
     ALREADY_ASSIGNED(HttpStatus.BAD_REQUEST, "409", "이미 배정된 직업입니다."),
+
+    DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
+
+    PASSWORD_WRONG(HttpStatus.BAD_REQUEST, "105", "비밀번호가 틀렸습니다."),
     ;
 
     private final HttpStatus httpStatus;
