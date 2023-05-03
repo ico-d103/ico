@@ -102,6 +102,7 @@ const navBarWrapperCSS = css`
 	bottom: 0;
 	display: flex;
 	flex-direction: column;
+	z-index: 9999999;
 `
 
 const indicatorWrapperCSS = css`
