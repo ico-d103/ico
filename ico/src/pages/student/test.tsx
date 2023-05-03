@@ -24,7 +24,7 @@ function test() {
 		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
 		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
 		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
-		<button onClick={() => {navigate('/student/test2', 'leftToRight')}}>이동!</button>
+		<button onClick={() => {navigate('/student/test2', 'bottomToTop')}}>이동!</button>
     </div>
   )
 }

@@ -140,11 +140,11 @@ const navBarIndivContentCSS = ({ targetIdx, curIdx }: { targetIdx: number; curId
 		align-items: center;
 		& path {
 			transition-property: stroke;
-			transition-duration: 0.3s;
+			transition-duration: 0.2s;
 			stroke: ${targetIdx === curIdx ? "rgba(0, 0, 0, 1)" : "rgba(0, 0, 0, 0.7)"};
 		}
 		transition-property: color;
-		transition-duration: 0.3s;
+		transition-duration: 0.2s;
 		color: ${targetIdx === curIdx ? "rgba(0, 0, 0, 1)" : "rgba(0, 0, 0, 0.7)"};
 		font-size: 12px;
 	`
