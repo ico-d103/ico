@@ -146,9 +146,6 @@ section {
 	display: block;
 }
 
-html {
-}
-
 body {
 	background-color: var(--common-back-color);
 	font-family: "SUIT";
