@@ -2,7 +2,6 @@ package com.ico.core.entity;
 
 import com.ico.core.dto.JobDto;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,9 +25,7 @@ import javax.persistence.ManyToOne;
 @Entity
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)  // 외부에서 인스턴스 생성하는 것 방지
-@AllArgsConstructor
 public class Job {
 
     @Id
@@ -57,6 +54,20 @@ public class Job {
     private byte total;
 
     private String color;
+
+    @Builder
+    public Job(Long id, Nation nation, String title, String detail, String image, int wage, byte creditRating, byte count, byte total, String color) {
+        this.id = id;
+        this.nation = nation;
+        this.title = title;
+        this.detail = detail;
+        this.image = image;
+        this.wage = wage;
+        this.creditRating = creditRating;
+        this.count = count;
+        this.total = total;
+        this.color = color;
+    }
 
     /**
      * 직업 수정 시 처리하는 method
