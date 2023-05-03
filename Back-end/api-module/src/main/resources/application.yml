@@ -5,9 +5,13 @@ logging:
     com.ico: info
     com.ico.api: info
     org.hibernate.type.descriptor.sql: trace
+    # 로컬 실행 시 aws 환경이 아니라 에러 로그 출력된다.
+    # 배포하여 aws 환경에서는 문제가 없기 때문에 실행 시 로그를 감춘다.
+    com.amazonaws.util.EC2MetadataUtils: error
 
 server:
   port: 8081
+#  domain 설정 시 로컬로 실행하여 같은 네트워크에서 해당 주소로 접근할 수 있다.
 #  domain: http://127.0.0.1
   servlet:
     session:
@@ -24,6 +28,8 @@ spring:
         - db-local
     include:
       - db
+      - login
+      - aws
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect

@@ -1,7 +1,7 @@
 package com.ico.api.service;
 
 import com.ico.api.dto.StudentSignUpRequestDto;
-import com.ico.core.entity.Role;
+import com.ico.core.code.Role;
 import com.ico.core.entity.Student;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
