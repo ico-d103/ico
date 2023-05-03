@@ -11,6 +11,6 @@ module.exports = withPWA({
 		emotion: true,
 	},
 	images: {
-		domains: ["placehold.it"],
+		domains: ["placehold.it", "placeimg.com"],
 	},
 })
