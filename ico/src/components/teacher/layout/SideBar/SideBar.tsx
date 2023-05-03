@@ -34,8 +34,6 @@ function SideBar({ children }: SideBarProps) {
 	const [selectedSub, setSelectedSub] = useState<number>(-1)
 	const router = useRouter()
 
-
-
 	useEffect(() => {
 		Object.keys(SUB_ELEMENT).forEach((el: string, idx: number) => {
 			if (SUB_ELEMENT[Number(el)][router.pathname]) {
@@ -57,7 +55,6 @@ function SideBar({ children }: SideBarProps) {
 				setSelectedSub(() => -2)
 			}
 		}
-		
 	}, [router.pathname])
 
 	const selectMainHandler = (value: number) => {
@@ -122,7 +119,7 @@ function SideBar({ children }: SideBarProps) {
 			"/teacher/finance/invest": { name: "set_stock", label: "투자", content: SUB_FINANCE_STOCK, menuIndex: 1 },
 		},
 		3: {
-			"/teacher/shop/teacher": {
+			"/teacher/shop/my": {
 				name: "teacher_products",
 				label: "교사 상품",
 				content: SUB_STORE_TEACHER,
@@ -135,6 +132,8 @@ function SideBar({ children }: SideBarProps) {
 				menuIndex: 1,
 			},
 			"/teacher/shop/create": { for: 0, label: "교사 상품" },
+			"/teacher/shop/my/[pid]": { for: 0, label: "교사 상품" },
+			"/teacher/shop/student/[pid]": { for: 1, label: "학생 상품" },
 		},
 	}
 
@@ -178,10 +177,9 @@ function SideBar({ children }: SideBarProps) {
 	)
 
 	return (
-
-		<div css={layoutWrapperCSS}>{selectedMain >= 0 && selectedSub >= 0 ? sideBarRender : (selectedMain === -2 && selectedSub === -2 && children)}</div>
-
-	
+		<div css={layoutWrapperCSS}>
+			{selectedMain >= 0 && selectedSub >= 0 ? sideBarRender : selectedMain === -2 && selectedSub === -2 && children}
+		</div>
 	)
 }
 
@@ -216,6 +214,8 @@ const contentInnerWrapperCSS = css`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+
+
 `
 
 const indicatorMainWrapperCSS = css`
