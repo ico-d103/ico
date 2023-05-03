@@ -144,6 +144,7 @@ const navBarIndivContentCSS = ({ targetIdx, curIdx }: { targetIdx: number; curId
         transition-property: color;
         transition-duration: 0.3s;
         color: ${targetIdx === curIdx ? 'rgba(0, 0, 0, 1)' : 'rgba(0, 0, 0, 0.7)'};
+        font-size: 12px;
 	`
 }
 
