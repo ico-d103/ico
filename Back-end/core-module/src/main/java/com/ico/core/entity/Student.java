@@ -1,5 +1,6 @@
 package com.ico.core.entity;
 
+import com.ico.core.code.Role;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

@@ -2,7 +2,7 @@ package com.ico.api.service;
 
 import com.ico.api.dto.TeacherSignUpRequestDto;
 import com.ico.core.entity.Certification;
-import com.ico.core.entity.Role;
+import com.ico.core.code.Role;
 import com.ico.core.entity.Teacher;
 import com.ico.core.repository.CertificationRepository;
 import com.ico.core.repository.TeacherRepository;
@@ -12,8 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashMap;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
