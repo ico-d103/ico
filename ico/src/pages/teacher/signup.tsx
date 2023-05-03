@@ -84,6 +84,7 @@ function signup() {
 	return (
 		<div css={wrapperCSS}>
 			<span>{alarm}</span>
+			{/* placeholder 멘트도 더 좋은게 있다면 수정해주세요 */}
 			<input
 				type="text"
 				placeholder="이름 (한글만 입력해주세요)"

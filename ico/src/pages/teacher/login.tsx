@@ -24,6 +24,8 @@ function login() {
 			return
 		}
 
+		setAlarm("")
+
 		// 로그인 요청
 	}
 
@@ -32,12 +34,12 @@ function login() {
 			<span>{alarm}</span>
 			<input
 				type="text"
-				placeholder="아이디"
+				placeholder="아이디를 입력해주세요."
 				onChange={(e) => dispatchInput({ type: "CHANGE_ID", value: e.target.value })}
 			/>
 			<input
 				type="password"
-				placeholder="비밀번호"
+				placeholder="비밀번호를 입력해주세요."
 				onChange={(e) => dispatchInput({ type: "CHANGE_PW", value: e.target.value })}
 			/>
 			<button onClick={loginHandler}>로그인</button>
