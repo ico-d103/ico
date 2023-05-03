@@ -29,7 +29,6 @@ public class JobDto {
     @NotNull(message = "413")
     private int wage;
 
-    // TODO: 색깔 어떤 식으로 줄지 프론트와 상의 필요
     @NotNull(message = "414")
     private String color;
 
