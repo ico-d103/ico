@@ -5,6 +5,8 @@ import { useAtom } from "jotai"
 import { css } from "@emotion/react"
 import { useRouter } from "next/router"
 import Image from "next/image"
+import DomToImage from "dom-to-image"
+
 
 type TransitionWrapperProps = {
 	children: any
@@ -64,22 +66,32 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 	const handleScreenshot = () => {
 		if (contentInnerWrapperRef.current) {
-			html2canvas(
-				contentInnerWrapperRef.current,
-				// {
-				// 	scrollX: -window.scrollX,
-				// 	scrollY: -window.scrollY,
-				// 	windowWidth: document.documentElement.clientWidth,
-  				// 	windowHeight: document.documentElement.clientHeight
-				// 	// width: 100,
-  				// 	// height: 100
-				// }
+
+
+			// html2canvas(
+			// 	contentInnerWrapperRef.current,
 				
-			).then((canvas) => {
-				const screenshot = canvas.toDataURL()
+			// 	// {
+			// 	// 	scrollX: -window.scrollX,
+			// 	// 	scrollY: -window.scrollY,
+			// 	// 	windowWidth: document.documentElement.clientWidth,
+  			// 	// 	windowHeight: document.documentElement.clientHeight
+			// 	// 	// width: 100,
+  			// 	// 	// height: 100
+			// 	// }
+				
+			// ).then((canvas) => {
+			// 	const screenshot = canvas.toDataURL()
+			// 	setScreenshot(screenshot)
+				
+			// })
+
+			DomToImage.toPng(document.body).then((dataUrl) => {
+				const screenshot = dataUrl
 				setScreenshot(screenshot)
-				
-			})
+			  })
+
+
 		}
 	}
 
@@ -200,7 +212,8 @@ const contentInnerWrapperCSS = ({ isTransitioning, beforeTransition }: { isTrans
 		height: ${isTransitioning && "calc(100vh - 64px)"};
 		overflow: ${isTransitioning && "hidden"};
 		visibility: ${beforeTransition && 'hidden'};
-		will-change: transform, opacity;
+		will-change: ${beforeTransition && 'transform, opacity'};
+
 	`
 }
 
