@@ -1,6 +1,7 @@
 package com.ico.api.service;
 
 import com.ico.api.dto.JobAllResDto;
+import com.ico.api.dto.JobAvailableResDto;
 import com.ico.core.dto.JobDto;
 import com.ico.core.entity.Job;
 import com.ico.core.exception.CustomException;
@@ -52,6 +53,24 @@ public class JobServiceImpl implements JobService{
         List<JobAllResDto> resJobList = new ArrayList<>();
         for (Job job : jobList) {
             resJobList.add(new JobAllResDto().of(job));
+        }
+        return resJobList;
+    }
+
+    @Override
+    public List<JobAvailableResDto> findAllShortFallJob() {
+        // TODO: 토큰에서 nation id 값 받아오기 필요
+        long nationId = 1;
+        if (!nationRepository.existsById(nationId))
+            throw new CustomException(ErrorCode.NATION_NOT_FOUND);
+
+        List<Job> jobList = jobRepository.findAllByNationId(nationId);
+        List<JobAvailableResDto> resJobList = new ArrayList<>();
+        for (Job job : jobList) {
+            if (job.getCount() == job.getTotal())   continue;
+
+            // 정원이 채워지지 않은 직업을 목록에 추가
+            resJobList.add(new JobAvailableResDto().of(job));
         }
         return resJobList;
     }

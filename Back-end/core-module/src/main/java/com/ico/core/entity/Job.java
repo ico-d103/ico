@@ -1,5 +1,6 @@
 package com.ico.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ico.core.dto.JobDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -74,6 +75,7 @@ public class Job {
      *
      * @param dto
      */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public void updateJob(JobDto dto) {
         this.title = dto.getTitle();
         this.detail = dto.getDetail();

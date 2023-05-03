@@ -1,6 +1,7 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.JobAllResDto;
+import com.ico.api.dto.JobAvailableResDto;
 import com.ico.core.dto.JobDto;
 import com.ico.api.service.JobService;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,17 @@ public class JobController {
     public ResponseEntity<HttpStatus> updateJob(@PathVariable Long jobId, @Valid @RequestBody JobDto dto) {
         jobService.updateJob(jobId, dto);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 학생이 학급 잔여 직업 조회
+     *
+     * @return
+     */
+    @GetMapping("/student")
+    public ResponseEntity<List<JobAvailableResDto>> findAllShortFallJob() {
+        List<JobAvailableResDto> jobList = jobService.findAllShortFallJob();
+        return ResponseEntity.ok(jobList);
     }
 
     /**

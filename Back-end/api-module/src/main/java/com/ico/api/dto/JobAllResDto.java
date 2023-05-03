@@ -6,6 +6,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 교사가 전체 직업 조회할 때 사용하는 Dto
+ *
+ * @author 서재건
+ */
 @Getter
 @NoArgsConstructor()
 public class JobAllResDto {
@@ -32,6 +37,12 @@ public class JobAllResDto {
         this.color = color;
     }
 
+    /**
+     * repository에서 불러온 Job을 JobAllResDto로 생성
+     *
+     * @param job
+     * @return JobAllResDto
+     */
     public JobAllResDto of(Job job) {
         return JobAllResDto.builder()
                 .id(job.getId())
