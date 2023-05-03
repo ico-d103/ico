@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * @author 변윤경
  */
@@ -29,7 +31,7 @@ public class StudentProductController {
      * @return 상태 반환
      */
     @PostMapping("/student/proposal")
-    public ResponseEntity<?> uploadProposal(@RequestBody StudentProductProposalDto proposal){
+    public ResponseEntity<?> uploadProposal(@Valid @RequestBody StudentProductProposalDto proposal){
         studentProductService.createProduct(proposal);
         return new ResponseEntity<>(HttpStatus.OK);
     }
