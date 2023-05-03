@@ -7,35 +7,40 @@ const images = [
 	"https://placeimg.com/640/480/any",
 	"https://placeimg.com/640/480/animals",
 	"https://placeimg.com/640/480/arch",
-	"https://placeimg.com/640/480/nature",
-	"https://placeimg.com/640/480/people",
+	// "https://placeimg.com/640/480/nature",
+	// "https://placeimg.com/640/480/people",
 ]
 
 function ShopCarousel() {
 	const [currentIndex, setCurrentIndex] = useState(0)
 
 	const handlePrev = () => {
-		setCurrentIndex(currentIndex === 0 ? images.length - 1 : currentIndex - 1)
+		if (currentIndex === 0) {
+			setCurrentIndex(images.length - 1)
+		} else {
+			setCurrentIndex(currentIndex - 1)
+		}
 	}
 
 	const handleNext = () => {
-		setCurrentIndex(currentIndex === images.length - 1 ? 0 : currentIndex + 1)
+		if (currentIndex === images.length - 1) {
+			setCurrentIndex(0)
+		} else {
+			setCurrentIndex(currentIndex + 1)
+		}
 	}
 
 	const getSlides = () => {
-		const slides = []
-
-		for (let i = -2; i <= 2; i++) {
-			const index = currentIndex + i
-			const imageIndex = (index + images.length) % images.length
-			slides.push(
-				<div key={index}>
-					<Image src={images[imageIndex]} alt="carousel image" width={440} height={330} />
-				</div>,
+		const visibleIndexes = [-1, 0, 1]
+		const startIndex = (currentIndex - 2 + images.length) % images.length
+		return visibleIndexes.map((offset) => {
+			const imageIndex = (startIndex + offset + images.length) % images.length
+			return (
+				<div key={imageIndex}>
+					<Image src={images[imageIndex]} alt="carousel image" width={440} height={330} css={ImageWrapperCSS} />
+				</div>
 			)
-		}
-
-		return slides
+		})
 	}
 
 	return (
