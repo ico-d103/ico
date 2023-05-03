@@ -6,7 +6,7 @@ import com.ico.core.dto.JobDto;
 import com.ico.core.entity.Job;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
-import com.ico.core.repository.JobRepository;
+import com.ico.core.repository.Job.JobRepository;
 import com.ico.core.repository.NationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,7 +61,7 @@ public class JobServiceImpl implements JobService{
     public List<JobAvailableResDto> findAllShortFallJob() {
         // TODO: 토큰에서 nation id 값 받아오기 필요
         long nationId = 1;
-        if (!nationRepository.existsById(nationId))
+        if (nationRepository.findById(nationId).isEmpty())
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
 
         List<Job> jobList = jobRepository.findAllByNationId(nationId);
