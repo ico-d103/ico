@@ -16,14 +16,15 @@ function NavBar({ children }: NavBarProps) {
     const navigate = useNavigate()
 
 	const routes: { [prop: string]: number } = {
-		"/student/test": 0,
+		"/student/home": 0,
         "/student/test2": 1,
         "/student/test3": 2,
+        "/student/test": 3,
 	}
 
 	const navBarData: { [prop: number]: { url: string; name: string; label: string; content: any; function: Function } } =
 		{
-			0: { url: "/student/test", name: "home", label: "홈", content: NAVBAR_HOME, function: () => {} },
+			0: { url: "/student/home", name: "home", label: "홈", content: NAVBAR_HOME, function: () => {} },
 			1: { url: "/student/test2", name: "class", label: "우리반", content: NAVBAR_CLASS, function: () => {} },
 			2: { url: "/student/test3", name: "gov", label: "정부", content: NAVBAR_GOVERNMENT, function: () => {} },
 			3: { url: "/student/test", name: "store", label: "상점", content: NAVBAR_STORE, function: () => {} },
