@@ -50,7 +50,11 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			window.scrollTo(0, scrollTop)
 		  })
 
+		  const handlePopState = (event: any) => {
+			window.scrollTo(0, scrollTop)
+		  };
 
+		  window.addEventListener('popstate', handlePopState);
 		router.beforePopState(({ url, as, options })  =>  {
 			setScrollTop(() => window.scrollY)
 			// alert(options.scroll)
@@ -83,7 +87,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 
 		return () => {
-			
+			window.removeEventListener('popstate', handlePopState);
 			router.beforePopState(() => true)
 		}
 	}, [])
