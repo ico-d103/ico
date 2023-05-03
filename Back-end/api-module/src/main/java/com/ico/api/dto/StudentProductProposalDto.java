@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -20,14 +21,14 @@ import javax.validation.constraints.NotNull;
 public class StudentProductProposalDto {
     String identity;
     Long nationId;
-    @NotNull(message = "605")
+    @NotBlank(message = "605")
     String title;
     @NotNull(message = "606")
     @Min(value = 1, message = "607")
     int amount;
     @NotNull(message = "608")
     String image;
-    @NotNull(message = "609")
+    @NotBlank(message = "609")
     String detail;
     @NotNull(message = "610")
     @Min(value = 1, message = "611")
