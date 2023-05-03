@@ -8,7 +8,7 @@ import Modal from "@/components/common/Modal/Modal"
 import ModalContent from "@/components/common/Modal/ModalContent"
 import useCompHandler from "@/hooks/useCompHandler"
 
-import { CLASS_BIG_PROPERTY } from "@/components/teacher/Class/ClassIcons"
+import { FinanceInvestChartIcon } from "./FinanceInvestIcons"
 import FinanceInvestUseModalContent from "@/components/teacher/Finance/Invest/FinanceInvestUseModalContent"
 
 import FormCreator from "../../common/Form/FormCreator"
@@ -17,20 +17,14 @@ import FinanceInvestCreate from "./FinanceInvestCreate"
 function FinanceInvestStartForm() {
 	const [openComp, closeComp, compState] = useCompHandler()
 
-	const investStartTime = () => {
-		alert("투자 시작 시간 설정")
-	}
-
-	const investEndTime = () => {
-		alert("투자 종료 시간 설정")
-	}
-
 	return (
 		<>
 			<div css={contentCSS}>투자 종목 주제</div>
 			<input css={inputCSS} />
 
-			<div css={contentCSS}>거래 가능 시간</div>
+			<div css={contentCSS} style={{ marginBottom: "5px" }}>
+				거래 가능 시간
+			</div>
 			<div css={buttonsCSS}>
 				<Button
 					text={"시작 시간 선택"}
@@ -63,8 +57,8 @@ function FinanceInvestStartForm() {
 				content={
 					<ModalContent
 						width={"500px"}
-						icon={CLASS_BIG_PROPERTY}
-						title={"국고 사용하기"}
+						icon={FinanceInvestChartIcon}
+						title={"시간 설정하기"}
 						content={FinanceInvestUseModalContent()}
 					/>
 				}

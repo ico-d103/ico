@@ -105,9 +105,7 @@ function teacher() {
 }
 
 const wrapperCSS = css`
-	display: flex;
 	flex: 1;
-	flex-direction: column;
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
 	padding: 30px;
