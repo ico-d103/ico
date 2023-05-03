@@ -3,6 +3,8 @@ package com.ico.core.repository;
 import com.ico.core.entity.TeacherProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface TeacherProductRepository extends JpaRepository<TeacherProduct, Long> {
-    boolean existsByNationIdAndTitle(Long nationId, String title);
+    Optional<TeacherProduct> findByNationIdAndTitle(Long nationId, String title);
 }

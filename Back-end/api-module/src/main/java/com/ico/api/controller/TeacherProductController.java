@@ -25,10 +25,10 @@ public class TeacherProductController {
      *
      * @param proposal 상품 양식
      *                제품이름, 가격, 사진 , 상세정보, 개수, 유형(쿠폰, 대여)
-     * @return
+     * @return status
      */
     @PostMapping("/teacher")
-    public ResponseEntity<?> uploadProposal(@Valid @RequestBody TeacherProduct proposal){
+    public ResponseEntity<HttpStatus> uploadProposal(@Valid @RequestBody TeacherProduct proposal){
         teacherProductService.createProduct(proposal);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -32,7 +32,7 @@ public class TeacherProductServiceImpl implements TeacherProductService{
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
         // 같은 국가에 같은 선생님 상품 이름이 있는지 확인
-        if(teacherProductRepository.existsByNationIdAndTitle(1L, proposal.getTitle())){
+        if(teacherProductRepository.findByNationIdAndTitle(1L, proposal.getTitle()).isPresent()){
             throw new CustomException(ErrorCode.ALREADY_EXIST_TITLE);
         }
 
