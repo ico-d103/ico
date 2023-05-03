@@ -3,6 +3,8 @@ package com.ico.api.user;
 import com.ico.api.dto.LoginDto;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
+import com.ico.core.exception.CustomException;
+import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import io.jsonwebtoken.*;
@@ -104,12 +106,15 @@ public class JwtTokenProvider {
             claims.put("nation", teacher.getNation());
 
         }
-        else {
+        else if (studentRepository.findByIdentity(member.getIdentity()).isPresent()) {
             Student student = studentRepository.findByIdentity(member.getIdentity()).orElseThrow(null);
             claims.put("id", student.getId());
             claims.put("identity", member.getIdentity());
             claims.put("role", student.getRole());
             claims.put("nation", student.getNation());
+        }
+        else {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
         return claims;
     }

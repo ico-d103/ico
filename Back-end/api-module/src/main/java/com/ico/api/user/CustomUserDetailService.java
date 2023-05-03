@@ -2,6 +2,8 @@ package com.ico.api.user;
 
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
+import com.ico.core.exception.CustomException;
+import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,13 +40,11 @@ public class CustomUserDetailService implements UserDetailsService {
         Optional<Student> student = studentRepository.findByIdentity(identity);
 
         if (teacher.isPresent()) {
-            return new CustomUserDetails(teacher
-                    .orElseThrow(() -> new UsernameNotFoundException("교사를 찾을 수 없습니다.")));
+            return new CustomUserDetails(teacher);
         } else if (student.isPresent()) {
-            return new CustomUserDetails(student
-                    .orElseThrow(() -> new UsernameNotFoundException("학생을 찾을 수 없습니다.")));
+            return new CustomUserDetails(student);
         } else {
-            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
     }
 }
