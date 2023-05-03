@@ -310,7 +310,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			@keyframes beforeScale1 {
 				from {
 					opacity: 0%;
-					transform: scale(50%);
+					transform: scale(150%);
 					visibility: visible;
 				}
 
