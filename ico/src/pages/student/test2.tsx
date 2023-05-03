@@ -1,9 +1,10 @@
 import React from 'react'
-import navigate from '@/util/navigate'
+import useNavigate from '@/hooks/useNavigate'
 import { css } from "@emotion/react"
 import LoadImage from '@/components/common/LoadImage/LoadImage'
 
 function test2() {
+  const navigate = useNavigate()
   return (
     <div>
         test2test2test2test2test2test2test2test2test2test2test2test2test2test2test2
