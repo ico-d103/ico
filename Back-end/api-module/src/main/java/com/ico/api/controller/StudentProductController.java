@@ -44,7 +44,7 @@ public class StudentProductController {
      *
      * @return 학생상품목록
      */
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<StudentProductAllResDto>> findAllProduct(){
         return new ResponseEntity<>(studentProductService.findAllProduct(), HttpStatus.OK);
     }
