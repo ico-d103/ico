@@ -28,6 +28,7 @@ const outerCardWrapperCSS = css`
 	/* margin-right: 16px; */
 	border-radius: 10px;
 	margin-right: 16px;
+    overflow: hidden;
 `
 
 const shadowMakerCSS = css`
