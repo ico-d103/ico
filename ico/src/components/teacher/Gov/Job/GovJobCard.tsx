@@ -139,7 +139,7 @@ const creditIndicatorCSS = css`
 const secondaryInfoWrapperCSS = css`
   flex: 1;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   justify-content: space-between;
 `
 

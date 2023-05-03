@@ -9,6 +9,7 @@ export const mainStore = createStore()
 // })
 
 const navTo = atom({url: '', transition: ''})
+const navBeforeScroll = atom(0)
 // const countAtom = atomWithStore<number>(
 //     (get) => get(store).count,
 //     (get, set, update) => {
@@ -21,5 +22,6 @@ const navTo = atom({url: '', transition: ''})
 export default mainStore;
 
 export {
-    navTo
+    navTo,
+    navBeforeScroll
 };

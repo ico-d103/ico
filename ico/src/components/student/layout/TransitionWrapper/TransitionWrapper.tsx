@@ -5,6 +5,7 @@ import { useAtom } from "jotai"
 import { css } from "@emotion/react"
 import { useRouter } from "next/router"
 import Image from "next/image"
+import DomToImage from "dom-to-image"
 
 type TransitionWrapperProps = {
 	children: any
@@ -38,63 +39,64 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	}
 
 	useEffect(() => {
+		// window.history.scrollRestoration = "auto";
+		window.history.scrollRestoration = "manual"
+
 		router.beforePopState(({ url, as, options }) => {
-			// if (as !== router.asPath) {
-			// 	router.push(router.asPath)
-			// 	setNavToAtom(() => url)
-			// 	return false
-			// }
-			// return true
 			if (isIos() === true) {
 				setNavToAtom(() => {
 					return { url: "", transition: "" }
 				})
+
 				return true
 			} else {
 				setNavToAtom(() => {
-					return { url: url, transition: "leftToRight" }
+					return { url: url, transition: "beforeScale" }
 				})
+
 				return false
 			}
 		})
+
 		return () => {
 			router.beforePopState(() => true)
 		}
 	}, [])
 
 	const handleScreenshot = () => {
-		if (contentWrapperRef.current) {
+		if (contentInnerWrapperRef.current) {
 			html2canvas(
-				document.body,
+				contentInnerWrapperRef.current,
 				{
-					scrollX: -window.scrollX,
-					scrollY: -window.scrollY,
-					windowWidth: document.documentElement.clientWidth,
-  					windowHeight: document.documentElement.clientHeight
-					// width: 100,
-  					// height: 100
+					scale: 0.5
 				}
-				
+				// {
+				// 	scrollX: -window.scrollX,
+				// 	scrollY: -window.scrollY,
+				// 	windowWidth: document.documentElement.clientWidth,
+				// 	windowHeight: document.documentElement.clientHeight
+				// 	// width: 100,
+				// 	// height: 100
+				// }
 			).then((canvas) => {
+
 				const screenshot = canvas.toDataURL()
 				setScreenshot(screenshot)
-				
 			})
 		}
 	}
 
 	useEffect(() => {
 		if (navToAtom.url !== "") {
-			
 			setScrollTop(() => window.scrollY)
+
 			handleScreenshot()
+			// setScrollTop(() => window.scrollY)
 		}
-		
 	}, [navToAtom.url])
 
 	useEffect(() => {
 		if (screenshot !== "") {
-			// 여기에 클래스 이름 바꾸는 메서드 드가야됨
 			setBeforeTransition(() => true)
 		}
 	}, [isImageLoading])
@@ -116,16 +118,23 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				})
 				setScreenshot(() => "")
 				setIsImageLoading(() => false)
-			}, 300)
+			}, 200)
 		}
 	}, [router.pathname])
 
 	return (
 		<div>
-			<div className={"before-wrapper"} css={imgWrapperCSS}>
+			<div
+				className={`before-wrapper ${
+					navToAtom.url === router.pathname || screenshot || isTransitioning ? "before-transitioning" : ""
+				}`}
+				css={[imgWrapperCSS, beforeTransitionsCSS({ isTransitioning })[navToAtom.transition]]}
+			>
 				{screenshot && (
 					<img
-						
+						// className={`${
+						// 	navToAtom.url === router.pathname || screenshot || isTransitioning ? "before-transitioning" : ""
+						// }`}
 						ref={imageRef}
 						css={imgCSS({ scrollTop })}
 						src={screenshot}
@@ -140,7 +149,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			<div
 				ref={contentWrapperRef}
 				className={"content-outer-wrapper"}
-				
 				css={[
 					contentOuterWrapperCSS({ isTransitioning }),
 					isTransitioning ? transitionsCSS({ isTransitioning })[navToAtom.transition] : null,
@@ -149,7 +157,9 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				<div
 					ref={contentInnerWrapperRef}
 					css={contentInnerWrapperCSS({ isTransitioning, beforeTransition })}
-					className={`content-wrapper ${navToAtom.url === router.pathname || screenshot || isTransitioning ? "transitioning" : ""}`}
+					className={`content-wrapper ${
+						navToAtom.url === router.pathname || screenshot || isTransitioning ? "transitioning" : ""
+					}`}
 				>
 					{children}
 				</div>
@@ -173,31 +183,39 @@ const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 		width: 100vw;
 		height: auto;
 
+		transform: translate(0, -${scrollTop}px);
 
 
-		/* transform: translate(0, -${scrollTop}px); */
+		
 	`
 }
 
 const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 	return css`
 		/* position: ${isTransitioning && "absolute"}; */
-		min-height: 100vh;
-		overflow: ${isTransitioning ? "hidden" : "scroll"};
+		min-height: calc(100vh - 64px);
+		/* overflow: ${isTransitioning ? "hidden" : "scroll"}; */
+		overflow: hidden;
 		/* z-index: 9999; */
-		
 	`
 }
 
-const contentInnerWrapperCSS = ({ isTransitioning, beforeTransition }: { isTransitioning: boolean, beforeTransition: boolean }) => {
+const contentInnerWrapperCSS = ({
+	isTransitioning,
+	beforeTransition,
+}: {
+	isTransitioning: boolean
+	beforeTransition: boolean
+}) => {
 	return css`
-		min-height: 100vh;
+		min-height: calc(100vh - 64px);
 		background-color: var(--common-back-color);
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
 		width: ${isTransitioning && "100vw"};
-		height: ${isTransitioning && "100vh"};
+		height: ${isTransitioning && "calc(100vh - 64px)"};
 		overflow: ${isTransitioning && "hidden"};
-		visibility: ${beforeTransition && 'hidden'};
+		visibility: ${beforeTransition && "hidden"};
+		will-change: ${beforeTransition && "transform, opacity"};
 	`
 }
 
@@ -206,7 +224,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		none: css``,
 		rightToLeft: css`
 			& .transitioning {
-				animation: rightToLeft 0.3s ease forwards;
+				animation: rightToLeft 0.2s ease-out forwards;
 			}
 			@keyframes rightToLeft {
 				from {
@@ -223,7 +241,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		leftToRight: css`
 			& .transitioning {
-				animation: leftToRight 0.3s ease forwards;
+				animation: leftToRight 0.2s ease-out forwards;
 			}
 			@keyframes leftToRight {
 				from {
@@ -240,7 +258,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		bottomToTop: css`
 			& .transitioning {
-				animation: bottomToTop 0.3s ease forwards;
+				animation: bottomToTop 0.2s ease-out forwards;
 			}
 			@keyframes bottomToTop {
 				from {
@@ -257,12 +275,12 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		scale: css`
 			& .transitioning {
-				animation: scale 0.3s ease forwards;
+				animation: scale 0.2s ease-out forwards;
 			}
 			@keyframes scale {
 				from {
 					opacity: 0%;
-					transform: scale(200%);
+					transform: scale(150%);
 					visibility: visible;
 				}
 
@@ -274,8 +292,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		scaleReverse: css`
 			& .transitioning {
-				
-				animation: scaleReverse 0.3s ease forwards;
+				animation: scaleReverse 0.2s ease-out forwards;
 			}
 			@keyframes scaleReverse {
 				from {
@@ -287,6 +304,57 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 				to {
 					opacity: 100%;
 					transform: scale(100%);
+				}
+			}
+		`,
+
+		beforeScale: css`
+			& .transitioning {
+				animation: beforeScale1 0.2s ease-out forwards;
+			}
+			@keyframes beforeScale1 {
+				from {
+					opacity: 0%;
+					transform: scale(150%);
+					visibility: visible;
+				}
+
+				to {
+					opacity: 100%;
+					transform: scale(100%);
+				}
+			}
+		`,
+	}
+
+	return data
+}
+
+const beforeTransitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
+	const data: { [prop: string]: any } = {
+		none: css``,
+		rightToLeft: css``,
+		bottomToTop: css``,
+		scaleReverse: css``,
+
+		beforeScale: css`
+
+				/* position: fixed; */
+				animation: ${isTransitioning && 'beforeScale2 0.2s ease-out forwards'};
+				/* width: 100vw;
+				height: 100vh; */
+			
+			@keyframes beforeScale2 {
+				from {
+					z-index: 9999;
+					opacity: 100%;
+					transform: scale(100%);
+					visibility: visible;
+				}
+
+				to {
+					opacity: 0%;
+					transform: scale(50%);
 				}
 			}
 		`,

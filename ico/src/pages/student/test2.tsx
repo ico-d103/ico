@@ -1,16 +1,19 @@
 import React from 'react'
-import navigate from '@/util/navigate'
+import useNavigate from '@/hooks/useNavigate'
 import { css } from "@emotion/react"
 import LoadImage from '@/components/common/LoadImage/LoadImage'
 
 function test2() {
+  const navigate = useNavigate()
   return (
     <div>
         test2test2test2test2test2test2test2test2test2test2test2test2test2test2test2
         <div css={imgWrapperCSS}>
 				<LoadImage src={"/assets/guide/deco_3.jpg"} alt={"guide_deco"} useSkeleton={true} wrapperCss={illustCSS} />
 		</div>	
-        
+    <br/><br/><br/><br/><br/><br/><br/><br/>fdsafsdafsd<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
         <br/>
         <br/>
         <br/>
