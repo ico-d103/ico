@@ -6,7 +6,7 @@ import com.ico.core.dto.JobDto;
 import com.ico.core.entity.Job;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
-import com.ico.core.repository.Job.JobRepository;
+import com.ico.core.repository.JobRepository;
 import com.ico.core.repository.NationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.ico.core.repository.Job;
+package com.ico.core.repository;
 
 import com.ico.core.entity.Resume;
 import org.springframework.data.mongodb.repository.MongoRepository;
