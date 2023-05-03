@@ -63,17 +63,17 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	}, [])
 
 	const handleScreenshot = () => {
-		if (contentWrapperRef.current) {
+		if (contentInnerWrapperRef.current) {
 			html2canvas(
-				document.body,
-				{
-					scrollX: -window.scrollX,
-					scrollY: -window.scrollY,
-					windowWidth: document.documentElement.clientWidth,
-  					windowHeight: document.documentElement.clientHeight
-					// width: 100,
-  					// height: 100
-				}
+				contentInnerWrapperRef.current,
+				// {
+				// 	scrollX: -window.scrollX,
+				// 	scrollY: -window.scrollY,
+				// 	windowWidth: document.documentElement.clientWidth,
+  				// 	windowHeight: document.documentElement.clientHeight
+				// 	// width: 100,
+  				// 	// height: 100
+				// }
 				
 			).then((canvas) => {
 				const screenshot = canvas.toDataURL()
@@ -175,15 +175,16 @@ const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 
 
 
-		/* transform: translate(0, -${scrollTop}px); */
+		transform: translate(0, -${scrollTop}px);
 	`
 }
 
 const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 	return css`
 		/* position: ${isTransitioning && "absolute"}; */
-		min-height: 100vh;
-		overflow: ${isTransitioning ? "hidden" : "scroll"};
+		min-height: calc(100vh - 64px);
+		/* overflow: ${isTransitioning ? "hidden" : "scroll"}; */
+		overflow: hidden;
 		/* z-index: 9999; */
 		
 	`
@@ -191,13 +192,14 @@ const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 
 const contentInnerWrapperCSS = ({ isTransitioning, beforeTransition }: { isTransitioning: boolean, beforeTransition: boolean }) => {
 	return css`
-		min-height: 100vh;
+		min-height: calc(100vh - 64px);
 		background-color: var(--common-back-color);
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
 		width: ${isTransitioning && "100vw"};
-		height: ${isTransitioning && "100vh"};
+		height: ${isTransitioning && "calc(100vh - 64px)"};
 		overflow: ${isTransitioning && "hidden"};
 		visibility: ${beforeTransition && 'hidden'};
+		will-change: transform, opacity;
 	`
 }
 
