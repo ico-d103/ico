@@ -8,7 +8,7 @@ export const mainStore = createStore()
 //   console.log('countAtom value is changed to', myStore.get(countAtom))
 // })
 
-const navTo = atom({url: '', transition: '', isGoBack: false})
+const navTo = atom({url: '', transition: ''})
 const navBeforeScroll = atom(0)
 // const countAtom = atomWithStore<number>(
 //     (get) => get(store).count,

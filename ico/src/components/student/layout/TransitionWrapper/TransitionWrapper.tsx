@@ -7,8 +7,6 @@ import { useRouter } from "next/router"
 import Image from "next/image"
 import DomToImage from "dom-to-image"
 
-
-
 type TransitionWrapperProps = {
 	children: any
 }
@@ -42,133 +40,79 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 	useEffect(() => {
 		// window.history.scrollRestoration = "auto";
-		window.history.scrollRestoration = 'auto'
-		
-		router.events.on('routeChangeStart', () => {
-			// alert(`111-${window.scrollY}`)
-			// alert(`222-${scrollTop}`)
-			window.scrollTo(0, scrollTop)
-		  })
+		window.history.scrollRestoration = "manual"
 
-		  const handlePopState = (event: any) => {
-			alert('few')
-			window.scrollTo(0, scrollTop)
-		  };
-
-		  window.addEventListener('popstate', handlePopState);
-		router.beforePopState(({ url, as, options })  =>  {
-			setScrollTop(() => window.scrollY)
-			// alert(options.scroll)
-			// if (as !== router.asPath) {
-				
-			// 	router.push(router.asPath)
-			// 	setNavToAtom(() => url)
-			// 	return false
-			// }
-			// return true
-			
+		router.beforePopState(({ url, as, options }) => {
 			if (isIos() === true) {
-				
 				setNavToAtom(() => {
-					return { url: "", transition: "", isGoBack: true }
+					return { url: "", transition: "" }
 				})
-				
+
 				return true
 			} else {
 				setNavToAtom(() => {
-					return { url: url, transition: "beforeScale", isGoBack: true }
+					return { url: url, transition: "beforeScale" }
 				})
-				
-				
+
 				return false
 			}
 		})
 
-		
-
-
 		return () => {
-			window.removeEventListener('popstate', handlePopState);
 			router.beforePopState(() => true)
 		}
 	}, [])
 
 	const handleScreenshot = () => {
 		if (contentInnerWrapperRef.current) {
-
-			
 			html2canvas(
 				contentInnerWrapperRef.current,
-			
+
 				// {
 				// 	scrollX: -window.scrollX,
 				// 	scrollY: -window.scrollY,
 				// 	windowWidth: document.documentElement.clientWidth,
-  				// 	windowHeight: document.documentElement.clientHeight
+				// 	windowHeight: document.documentElement.clientHeight
 				// 	// width: 100,
-  				// 	// height: 100
+				// 	// height: 100
 				// }
-				
 			).then((canvas) => {
-				
-				if (navToAtom.isGoBack === true) {
-					window.scrollTo(0, scrollTop)
-				}
 
-				
 				const screenshot = canvas.toDataURL()
 				setScreenshot(screenshot)
-				
 			})
-
 		}
 	}
 
 	useEffect(() => {
 		if (navToAtom.url !== "") {
-			if (navToAtom.isGoBack !== true) {
-				setScrollTop(() => window.scrollY)
-				
-			}
+			setScrollTop(() => window.scrollY)
+
 			handleScreenshot()
 			// setScrollTop(() => window.scrollY)
-			
-			
-			
 		}
-		
 	}, [navToAtom.url])
 
 	useEffect(() => {
 		if (screenshot !== "") {
-			// 여기에 클래스 이름 바꾸는 메서드 드가야됨
 			setBeforeTransition(() => true)
-			
 		}
 	}, [isImageLoading])
 
 	useEffect(() => {
 		if (beforeTransition) {
-
 			router.push(navToAtom.url)
-			// router.push({
-			// 	pathname: navToAtom.url,
-			// 	query: {},
-			//   }, undefined, { scroll: false })
-			
 		}
 	}, [beforeTransition])
 
 	useEffect(() => {
-		
 		if (screenshot !== "") {
-			// alert(scrollTop)
 			setBeforeTransition(() => false)
 			setIsTransitioning(() => true)
 			setTimeout(() => {
 				setIsTransitioning(() => false)
 				setNavToAtom(() => {
-					return { url: "", transition: "", isGoBack: false }
+					return { url: "", transition: "" }
 				})
 				setScreenshot(() => "")
 				setIsImageLoading(() => false)
@@ -178,10 +122,17 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 	return (
 		<div>
-			<div className={`before-wrapper`} css={[imgWrapperCSS, beforeTransitionsCSS({ isTransitioning })[navToAtom.transition]]}>
+			<div
+				className={`before-wrapper ${
+					navToAtom.url === router.pathname || screenshot || isTransitioning ? "before-transitioning" : ""
+				}`}
+				css={[imgWrapperCSS, beforeTransitionsCSS({ isTransitioning })[navToAtom.transition]]}
+			>
 				{screenshot && (
 					<img
-						className={`${navToAtom.url === router.pathname || screenshot || isTransitioning ? "before-transitioning" : ""}`}
+						// className={`${
+						// 	navToAtom.url === router.pathname || screenshot || isTransitioning ? "before-transitioning" : ""
+						// }`}
 						ref={imageRef}
 						css={imgCSS({ scrollTop })}
 						src={screenshot}
@@ -196,7 +147,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			<div
 				ref={contentWrapperRef}
 				className={"content-outer-wrapper"}
-				
 				css={[
 					contentOuterWrapperCSS({ isTransitioning }),
 					isTransitioning ? transitionsCSS({ isTransitioning })[navToAtom.transition] : null,
@@ -205,9 +155,10 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				<div
 					ref={contentInnerWrapperRef}
 					css={contentInnerWrapperCSS({ isTransitioning, beforeTransition })}
-					className={`content-wrapper ${navToAtom.url === router.pathname || screenshot || isTransitioning ? "transitioning" : ""}`}
+					className={`content-wrapper ${
+						navToAtom.url === router.pathname || screenshot || isTransitioning ? "transitioning" : ""
+					}`}
 				>
-					
 					{children}
 				</div>
 			</div>
@@ -230,8 +181,6 @@ const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 		width: 100vw;
 		height: auto;
 
-
-
 		transform: translate(0, -${scrollTop}px);
 	`
 }
@@ -243,11 +192,16 @@ const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 		/* overflow: ${isTransitioning ? "hidden" : "scroll"}; */
 		overflow: hidden;
 		/* z-index: 9999; */
-		
 	`
 }
 
-const contentInnerWrapperCSS = ({ isTransitioning, beforeTransition }: { isTransitioning: boolean, beforeTransition: boolean }) => {
+const contentInnerWrapperCSS = ({
+	isTransitioning,
+	beforeTransition,
+}: {
+	isTransitioning: boolean
+	beforeTransition: boolean
+}) => {
 	return css`
 		min-height: calc(100vh - 64px);
 		background-color: var(--common-back-color);
@@ -255,9 +209,8 @@ const contentInnerWrapperCSS = ({ isTransitioning, beforeTransition }: { isTrans
 		width: ${isTransitioning && "100vw"};
 		height: ${isTransitioning && "calc(100vh - 64px)"};
 		overflow: ${isTransitioning && "hidden"};
-		visibility: ${beforeTransition && 'hidden'};
-		will-change: ${beforeTransition && 'transform, opacity'};
-
+		visibility: ${beforeTransition && "hidden"};
+		will-change: ${beforeTransition && "transform, opacity"};
 	`
 }
 
@@ -334,7 +287,6 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		scaleReverse: css`
 			& .transitioning {
-				
 				animation: scaleReverse 0.3s ease forwards;
 			}
 			@keyframes scaleReverse {
@@ -351,10 +303,8 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			}
 		`,
 
-
 		beforeScale: css`
 			& .transitioning {
-				
 				animation: beforeScale1 0.3s ease forwards;
 			}
 			@keyframes beforeScale1 {
@@ -375,29 +325,20 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 	return data
 }
 
-
-
 const beforeTransitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 	const data: { [prop: string]: any } = {
 		none: css``,
-		rightToLeft: css`
-			
-		`,
-		bottomToTop: css`
-			
-		`,
-		scaleReverse: css`
-			
-		`,
-
+		rightToLeft: css``,
+		bottomToTop: css``,
+		scaleReverse: css``,
 
 		beforeScale: css`
-			& .before-transitioning {
-				position:fixed;
-				animation: beforeScale2 0.3s ease forwards;
-				width: 100vw;
-				height: 100vh;
-			}
+
+				/* position: fixed; */
+				animation: ${isTransitioning && 'beforeScale2 0.3s ease forwards'};
+				/* width: 100vw;
+				height: 100vh; */
+			
 			@keyframes beforeScale2 {
 				from {
 					z-index: 9999;
@@ -416,6 +357,5 @@ const beforeTransitionsCSS = ({ isTransitioning }: { isTransitioning: boolean })
 
 	return data
 }
-
 
 export default TransitionWrapper
