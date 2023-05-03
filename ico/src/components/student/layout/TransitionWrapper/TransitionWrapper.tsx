@@ -52,7 +52,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				return true
 			} else {
 				setNavToAtom(() => {
-					return { url: url, transition: "leftToRight" }
+					return { url: url, transition: "beforeScale" }
 				})
 				return false
 			}
@@ -123,10 +123,10 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 	return (
 		<div>
-			<div className={"before-wrapper"} css={imgWrapperCSS}>
+			<div className={`before-wrapper`} css={[imgWrapperCSS, beforeTransitionsCSS({ isTransitioning })[navToAtom.transition]]}>
 				{screenshot && (
 					<img
-						
+						className={`${navToAtom.url === router.pathname || screenshot || isTransitioning ? "before-transitioning" : ""}`}
 						ref={imageRef}
 						css={imgCSS({ scrollTop })}
 						src={screenshot}
@@ -282,8 +282,28 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			}
 			@keyframes scaleReverse {
 				from {
+					opacity: 100%;
+
+					visibility: visible;
+				}
+
+				to {
+					opacity: 100%;
+
+				}
+			}
+		`,
+
+
+		beforeScale: css`
+			& .transitioning {
+				
+				animation: scaleReverse 0.3s ease forwards;
+			}
+			@keyframes scaleReverse {
+				from {
 					opacity: 0%;
-					transform: scale(80%);
+					transform: scale(50%);
 					visibility: visible;
 				}
 
@@ -297,5 +317,46 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 
 	return data
 }
+
+
+
+const beforeTransitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
+	const data: { [prop: string]: any } = {
+		none: css``,
+		rightToLeft: css`
+			
+		`,
+		bottomToTop: css`
+			
+		`,
+		scaleReverse: css`
+			
+		`,
+
+
+		beforeScale: css`
+			& .before-transitioning {
+				position:absolute;
+				animation: beforeScale 0.3s ease forwards;
+			}
+			@keyframes beforeScale {
+				from {
+					z-index: 9999;
+					opacity: 100%;
+					transform: scale(100%);
+					visibility: visible;
+				}
+
+				to {
+					opacity: 0%;
+					transform: scale(50%);
+				}
+			}
+		`,
+	}
+
+	return data
+}
+
 
 export default TransitionWrapper
