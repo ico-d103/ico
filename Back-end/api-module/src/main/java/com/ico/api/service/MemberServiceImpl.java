@@ -33,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
             }
         }
         else {
-            Student student = studentRepository.findStudentByIdentity(members.getIdentity())
+            Student student = studentRepository.findByIdentity(members.getIdentity())
                     .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다."));
 //            if (!student.getPassword().equals(password)) {
             if (!passwordEncoder.matches(members.getPassword(), student.getPassword())) {

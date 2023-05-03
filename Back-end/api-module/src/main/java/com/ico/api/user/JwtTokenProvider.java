@@ -71,7 +71,7 @@ public class JwtTokenProvider {
 
         }
         else {
-            Student student = studentRepository.findStudentByIdentity(member.getIdentity()).orElse(null);
+            Student student = studentRepository.findByIdentity(member.getIdentity()).orElse(null);
             claims.put("id", student.getId());
             claims.put("identity", member.getIdentity());
             claims.put("name", student.getName());
