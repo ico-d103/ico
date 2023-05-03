@@ -6,7 +6,7 @@ import PageHeader from '@/components/student/layout/PageHeader/PageHeader'
 function index() {
   return (
     <div>
-        <PageHeader />
+        {/* <PageHeader /> */}
         gsergsergr
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
         dsa'\
