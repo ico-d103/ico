@@ -118,7 +118,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				})
 				setScreenshot(() => "")
 				setIsImageLoading(() => false)
-			}, 300)
+			}, 200)
 		}
 	}, [router.pathname])
 
@@ -224,7 +224,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		none: css``,
 		rightToLeft: css`
 			& .transitioning {
-				animation: rightToLeft 0.3s ease forwards;
+				animation: rightToLeft 0.2s ease-out forwards;
 			}
 			@keyframes rightToLeft {
 				from {
@@ -241,7 +241,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		leftToRight: css`
 			& .transitioning {
-				animation: leftToRight 0.3s ease forwards;
+				animation: leftToRight 0.2s ease-out forwards;
 			}
 			@keyframes leftToRight {
 				from {
@@ -258,7 +258,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		bottomToTop: css`
 			& .transitioning {
-				animation: bottomToTop 0.3s ease forwards;
+				animation: bottomToTop 0.2s ease-out forwards;
 			}
 			@keyframes bottomToTop {
 				from {
@@ -275,12 +275,12 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		scale: css`
 			& .transitioning {
-				animation: scale 0.3s ease forwards;
+				animation: scale 0.2s ease-out forwards;
 			}
 			@keyframes scale {
 				from {
 					opacity: 0%;
-					transform: scale(200%);
+					transform: scale(150%);
 					visibility: visible;
 				}
 
@@ -292,7 +292,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		scaleReverse: css`
 			& .transitioning {
-				animation: scaleReverse 0.3s ease forwards;
+				animation: scaleReverse 0.2s ease-out forwards;
 			}
 			@keyframes scaleReverse {
 				from {
@@ -310,7 +310,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 
 		beforeScale: css`
 			& .transitioning {
-				animation: beforeScale1 0.3s ease forwards;
+				animation: beforeScale1 0.2s ease-out forwards;
 			}
 			@keyframes beforeScale1 {
 				from {
@@ -340,7 +340,7 @@ const beforeTransitionsCSS = ({ isTransitioning }: { isTransitioning: boolean })
 		beforeScale: css`
 
 				/* position: fixed; */
-				animation: ${isTransitioning && 'beforeScale2 0.3s ease forwards'};
+				animation: ${isTransitioning && 'beforeScale2 0.2s ease-out forwards'};
 				/* width: 100vw;
 				height: 100vh; */
 			
