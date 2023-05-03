@@ -53,6 +53,8 @@ subprojects {
 		testImplementation 'junit:junit:4.13.1'
 		testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
 		testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+		// 테스트형 내장형 몽고DB 의존성
+		testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
 		implementation 'mysql:mysql-connector-java:8.0.29'
 		// Spring Security
 		implementation 'org.springframework.boot:spring-boot-starter-security'
