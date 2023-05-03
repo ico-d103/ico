@@ -1,6 +1,7 @@
 :root {
 	--common-back-color: #f0f3f8;
 	--common-back-color-2: #ffffff;
+
 	--teacher-main-color: #06603b;
 	--teacher-main-color-2: #38735a;
 	--teacher-main-color-3: #064f32;
@@ -12,12 +13,34 @@
 	--teacher-gray2-color: #d9d9d9;
 	--teacher-blue-color: #4b7cc6;
 	--teacher-coupon-color: #ef5b5b;
+
 	--teacher-h1: 2rem;
 	--teacher-h2: 1.6rem;
 	--teacher-h3: 1.3rem;
 	--teacher-h4: 1.1rem;
 	--teacher-h5: 0.95rem;
 	--teacher-h6: 0.75rem;
+
+	--student-back-color: #f6f8fa;
+	--student-main-color: #0066ff;
+	--student-main-color-2: #0066ff1a;
+	--student-main-color-3: #0066ff80;
+	--student-gray-color: #00000099;
+	--student-gray-color-2: #000000b3;
+	--student-input-gray-color: #e3e8ef80;
+	--student-input-gray-color-2: #e3e8ef;
+	--student-blur-color: #4d4d4d80;
+	--student-warning-color: #d94a4a;
+	--student-warning-color-2: #d94a4a33;
+	--student-red-color: #cb1400;
+	--student-blue-color: #7396f0;
+	--student-highlight-color: #ffa800;
+
+	--student-h1: 1.6rem;
+	--student-h2: 1.25rem;
+	--student-h3: 0.95rem;
+	--student-h4: 0.75rem;
+	--student-h5: 0.6rem;
 }
 
 html,
@@ -124,17 +147,14 @@ section {
 }
 
 html {
-	
 }
 
 body {
 	background-color: var(--common-back-color);
 	font-family: "SUIT";
-	
-    
+
 	line-height: 1;
 
-	
 	/* overflow-x: hidden; */
 	/* overflow: hidden; */
 }
