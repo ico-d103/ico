@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
  */
 @Getter
 @NoArgsConstructor
-public class JobShortFallResDto {
+public class JobAvailableResDto {
 
     private String title;
 
@@ -27,7 +27,7 @@ public class JobShortFallResDto {
     private String color;
 
     @Builder
-    public JobShortFallResDto(String title, int creditRating, int count, int total, String image, String color) {
+    public JobAvailableResDto(String title, int creditRating, int count, int total, String image, String color) {
         this.title = title;
         this.creditRating = creditRating;
         this.count = count;
@@ -36,8 +36,14 @@ public class JobShortFallResDto {
         this.color = color;
     }
 
-    public JobShortFallResDto of(Job job) {
-        return JobShortFallResDto.builder()
+    /**
+     * repository에서 불러온 Job을 JobAvailableResDto로 생성
+     *
+     * @param job
+     * @return
+     */
+    public JobAvailableResDto of(Job job) {
+        return JobAvailableResDto.builder()
                 .title(job.getTitle())
                 .creditRating(job.getCreditRating())
                 .count(job.getCount())
