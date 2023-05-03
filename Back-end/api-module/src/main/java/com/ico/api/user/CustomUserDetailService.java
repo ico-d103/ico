@@ -24,7 +24,7 @@ public class CustomUserDetailService implements UserDetailsService {
                     .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
         }
         catch (Exception e) {
-            return (UserDetails) studentRepository.findStudentByIdentity(username)
+            return (UserDetails) studentRepository.findByIdentity(username)
                     .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
         }
 
