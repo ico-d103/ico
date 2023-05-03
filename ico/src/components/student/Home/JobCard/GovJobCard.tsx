@@ -4,13 +4,15 @@ import { css } from "@emotion/react"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 
 type GovJobCardProps = {
+  name: string
 	job: string
 	wage: number
+  credit: number
 	backgroundColor: string
 	imgUrl: string
 }
 
-function GovJobCard({ job, wage, backgroundColor, imgUrl }: GovJobCardProps) {
+function GovJobCard({name, job, wage, credit, backgroundColor, imgUrl }: GovJobCardProps) {
 	return (
 		<div css={outerCardWrapperCSS}>
       <div css={shadowMakerCSS}/>
@@ -30,11 +32,11 @@ function GovJobCard({ job, wage, backgroundColor, imgUrl }: GovJobCardProps) {
 					/>
 				</div>
         <div css={contentWrapperCSS}>
-          <div css={nameIndicatorCSS}>학생 이름</div>
+          <div css={nameIndicatorCSS}>{name}</div>
           <div css={jobTextCSS}>{job}</div>
           <div css={lineCSS}/>
           <div css={secondaryInfoWrapperCSS}>
-            <div css={creditIndicatorCSS}>현재 신용등급</div>
+            <div css={creditIndicatorCSS}>{credit}등급</div>
             <div css={wageTextCSS}>약 {wage * 30 / 10000}만</div>
           </div>
         </div>
@@ -115,7 +117,7 @@ const contentWrapperCSS = css`
 
 const nameIndicatorCSS = css`
   font-size: var(--teacher-h2);
-  color: rgba(255, 255, 255, 0.5);
+  /* color: rgba(255, 255, 255, 0.5); */
   font-weight: 500;
 `
 
@@ -133,7 +135,7 @@ const lineCSS = css`
 `
 
 const creditIndicatorCSS = css`
-  color: rgba(255, 255, 255, 0.6);
+  /* color: rgba(255, 255, 255, 0.6); */
 `
 
 const secondaryInfoWrapperCSS = css`
