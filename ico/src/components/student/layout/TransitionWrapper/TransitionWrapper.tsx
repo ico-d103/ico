@@ -101,6 +101,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 	useEffect(() => {
 		if (beforeTransition) {
+
 			router.push(navToAtom.url)
 		}
 	}, [beforeTransition])
