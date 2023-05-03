@@ -2,6 +2,8 @@ import React from 'react'
 import navigate from '@/util/navigate'
 import { css } from "@emotion/react"
 import LoadImage from '@/components/common/LoadImage/LoadImage'
+import ContentWrapper from '@/components/student/common/ContentWrapper/ContentWrapper'
+
 
 function test() {
   return (
@@ -10,6 +12,9 @@ function test() {
         <div css={imgWrapperCSS}>
 				<LoadImage src={"/assets/guide/deco_1.jpg"} alt={"guide_deco"} useSkeleton={true} wrapperCss={illustCSS} />
 		</div>	
+		<ContentWrapper wrapperCss={test1()}>
+			낄낄낄
+		</ContentWrapper>
         <button onClick={() => {navigate('/student/test2', 'rightToLeft')}}>이동!</button>
 		<br/><br/><br/><br/><br/><br/><br/><br/>fdsafsdafsd<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
@@ -34,5 +39,9 @@ const imgWrapperCSS = css`
 	margin-bottom: 36px;
 
 `
+
+const test1 = () => {
+	return css`width: 200px; height: 200px;`
+}
 
 export default test
