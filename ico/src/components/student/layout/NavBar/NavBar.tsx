@@ -16,11 +16,12 @@ function NavBar({ children }: NavBarProps) {
 	const navigate = useNavigate()
 
 	const routes: { [prop: string]: number } = {
-		"/student/test": 0,
+		"/student/home": 0,
 		"/student/test2": 1,
 		"/student/gov/rule": 2,
 		"/student/gov/exchequer": 2,
 		"/student/gov/job": 2,
+		"/student/test": 3,
 	}
 
 	const navBarData: { [prop: number]: { url: string; name: string; label: string; content: any; function: Function } } =
