@@ -51,6 +51,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		  })
 
 		  const handlePopState = (event: any) => {
+			alert('few')
 			window.scrollTo(0, scrollTop)
 		  };
 
