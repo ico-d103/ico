@@ -1,6 +1,9 @@
 package com.ico.api.service;
 
+import com.ico.api.dto.JobAllResDto;
 import com.ico.core.dto.JobDto;
+
+import java.util.List;
 
 /**
  * 직업 관련 Service interface
@@ -16,4 +19,11 @@ public interface JobService {
      * @param dto 직업 이름, 직업 설명, 총 인원, 임금, 색깔
      */
     void updateJob(Long jobId, JobDto dto);
+
+    /**
+     * 교사가 전체 직업 조회
+     *
+     * @return
+     */
+    List<JobAllResDto> findAllJob();
 }
