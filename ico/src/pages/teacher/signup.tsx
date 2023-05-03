@@ -5,8 +5,6 @@ import { useState } from "react"
 import { KOREAN_ONLY, ENG_NUM_ONLY } from "@/util/regex"
 import { lengthCheck } from "@/util/lengthCheck"
 
-const initialState = { name: "", id: "", password: "" }
-
 const inputReducer = (
 	state: { name: string; id: string; password: string },
 	action: { type: string; value: string },
@@ -23,21 +21,45 @@ const inputReducer = (
 	}
 }
 
+const validReducer = (state: { id: boolean; password: boolean }, action: { type: string; value: boolean }) => {
+	switch (action.type) {
+		case "VALID_ID":
+			return { ...state, id: action.value }
+		case "VALID_PW":
+			return { ...state, password: action.value }
+		default:
+			return state
+	}
+}
+
 function signup() {
 	const [alarm, setAlarm] = useState<string>("")
-	const [isValidID, setIsValidID] = useState<boolean>(false)
-	const [inputState, dispatchInput] = useReducer(inputReducer, initialState)
+	// const [isValidID, setIsValidID] = useState<boolean>(false)
+	const [validState, dispatchValid] = useReducer(validReducer, { id: false, password: false })
+	const [inputState, dispatchInput] = useReducer(inputReducer, { name: "", id: "", password: "" })
 
 	const checkValidIDHandler = async () => {
 		// 아이디 중복 검사 요청
 
 		// 사용 가능하면
-		setIsValidID(true)
+		dispatchValid({ type: "VALID_ID", value: true })
 		setAlarm("사용 가능한 ID입니다.")
 
 		// 불가능하면
-		// setIsValidID(false)
+		// dispatchValid({ type: "VALID_ID", value: false })
 		// setAlarm("이미 사용중인 ID입니다.")
+	}
+
+	const checkValidPWHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (inputState.password === "") return
+
+		if (e.target.value === inputState.password) {
+			dispatchValid({ type: "VALID_PW", value: true })
+			setAlarm("비밀번호가 일치합니다.")
+		} else {
+			dispatchValid({ type: "VALID_PW", value: false })
+			setAlarm("비밀번호가 일치하지 않습니다.")
+		}
 	}
 
 	const ceritfyHandler = () => {
@@ -65,8 +87,13 @@ function signup() {
 			return
 		}
 
-		if (!isValidID) {
+		if (!validState.id) {
 			setAlarm("아이디 중복 확인을 해주세요.")
+			return
+		}
+
+		if (!validState.password) {
+			setAlarm("비밀번호 재확인을 해주세요.")
 			return
 		}
 
@@ -94,7 +121,7 @@ function signup() {
 				type="text"
 				placeholder="아이디 (영어와 숫자를 조합해 4자~10자 입력해주세요)"
 				onChange={(e) => {
-					setIsValidID(false)
+					dispatchValid({ type: "VALID_ID", value: false })
 					dispatchInput({ type: "CHANGE_ID", value: e.target.value })
 				}}
 			/>
@@ -102,9 +129,13 @@ function signup() {
 			<input
 				type="password"
 				placeholder="비밀번호 (영어와 숫자를 조합해 8자~16자 입력해주세요)"
-				onChange={(e) => dispatchInput({ type: "CHANGE_PW", value: e.target.value })}
+				onChange={(e) => {
+					setAlarm("")
+					dispatchValid({ type: "VALID_PW", value: false })
+					dispatchInput({ type: "CHANGE_PW", value: e.target.value })
+				}}
 			/>
-			<input type="password" placeholder="비밀번호 확인" />
+			<input type="password" placeholder="비밀번호 확인" onChange={checkValidPWHandler} />
 			<button onClick={ceritfyHandler}>본인 인증하기</button>
 			<input type="file" placeholder="교사 인증서" />
 			<button onClick={signUpHandler}>회원 가입</button>
