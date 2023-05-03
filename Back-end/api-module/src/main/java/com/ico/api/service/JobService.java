@@ -1,6 +1,7 @@
 package com.ico.api.service;
 
 import com.ico.api.dto.JobAllResDto;
+import com.ico.api.dto.JobAvailableResDto;
 import com.ico.core.dto.JobDto;
 
 import java.util.List;
@@ -26,4 +27,11 @@ public interface JobService {
      * @return
      */
     List<JobAllResDto> findAllJob();
+
+    /**
+     * 학생이 인원 미달 직업을 조회
+     *
+     * @return
+     */
+    List<JobAvailableResDto> findAllShortFallJob();
 }
