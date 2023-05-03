@@ -1,11 +1,12 @@
 import React from 'react'
-import navigate from '@/util/navigate'
+import useNavigate from '@/hooks/useNavigate'
 import { css } from "@emotion/react"
 import LoadImage from '@/components/common/LoadImage/LoadImage'
 import ContentWrapper from '@/components/student/common/ContentWrapper/ContentWrapper'
 
 
 function test() {
+	const navigate = useNavigate()
   return (
     <div>
         test
