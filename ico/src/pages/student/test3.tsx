@@ -10,6 +10,9 @@ function test3() {
         <div css={imgWrapperCSS}>
 				<LoadImage src={"/assets/guide/deco_2.jpg"} alt={"guide_deco"} useSkeleton={true} wrapperCss={illustCSS} />
 		</div>	
+		<br/><br/><br/><br/><br/><br/><br/><br/>fdsafsdafsd<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
 		<button onClick={() => {navigate('/student/test', 'scaleReverse')}}>이동!</button>
 
     </div>

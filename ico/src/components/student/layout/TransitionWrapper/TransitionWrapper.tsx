@@ -6,7 +6,7 @@ import { css } from "@emotion/react"
 import { useRouter } from "next/router"
 import Image from "next/image"
 import DomToImage from "dom-to-image"
-import * as htmlToImage from 'html-to-image';
+
 
 
 type TransitionWrapperProps = {
@@ -41,26 +41,49 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	}
 
 	useEffect(() => {
-		router.beforePopState(({ url, as, options }) => {
+		// window.history.scrollRestoration = "auto";
+		window.history.scrollRestoration = 'auto'
+		
+		router.events.on('routeChangeStart', () => {
+			// alert(`111-${window.scrollY}`)
+			// alert(`222-${scrollTop}`)
+			window.scrollTo(0, scrollTop)
+		  })
+
+
+		router.beforePopState(({ url, as, options })  =>  {
+			setScrollTop(() => window.scrollY)
+			// alert(options.scroll)
 			// if (as !== router.asPath) {
+				
 			// 	router.push(router.asPath)
 			// 	setNavToAtom(() => url)
 			// 	return false
 			// }
 			// return true
+			
 			if (isIos() === true) {
+				
 				setNavToAtom(() => {
-					return { url: "", transition: "" }
+					return { url: "", transition: "", isGoBack: true }
 				})
+				
 				return true
 			} else {
 				setNavToAtom(() => {
-					return { url: url, transition: "beforeScale" }
+					return { url: url, transition: "beforeScale", isGoBack: true }
 				})
+				
+				
 				return false
 			}
 		})
+
+		
+
+
 		return () => {
+			
 			router.beforePopState(() => true)
 		}
 	}, [])
@@ -68,7 +91,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	const handleScreenshot = () => {
 		if (contentInnerWrapperRef.current) {
 
-
+			
 			html2canvas(
 				contentInnerWrapperRef.current,
 			
@@ -82,32 +105,31 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				// }
 				
 			).then((canvas) => {
+				
+				if (navToAtom.isGoBack === true) {
+					window.scrollTo(0, scrollTop)
+				}
+
+				
 				const screenshot = canvas.toDataURL()
 				setScreenshot(screenshot)
 				
 			})
-
-			// DomToImage.toPng(document.body, { quality: 1 }).then((dataUrl) => {
-			// 	const screenshot = dataUrl
-			// 	setScreenshot(screenshot)
-			//   })
-
-
-			// htmlToImage.toPng(contentInnerWrapperRef.current)
-			// .then(function (dataUrl) {
-			// 	const screenshot = dataUrl
-			// 	setScreenshot(screenshot)
-			// })
-
 
 		}
 	}
 
 	useEffect(() => {
 		if (navToAtom.url !== "") {
-			
-			setScrollTop(() => window.scrollY)
+			if (navToAtom.isGoBack !== true) {
+				setScrollTop(() => window.scrollY)
+				
+			}
 			handleScreenshot()
+			// setScrollTop(() => window.scrollY)
+			
+			
+			
 		}
 		
 	}, [navToAtom.url])
@@ -116,6 +138,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		if (screenshot !== "") {
 			// 여기에 클래스 이름 바꾸는 메서드 드가야됨
 			setBeforeTransition(() => true)
+			
 		}
 	}, [isImageLoading])
 
@@ -123,17 +146,24 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		if (beforeTransition) {
 
 			router.push(navToAtom.url)
+			// router.push({
+			// 	pathname: navToAtom.url,
+			// 	query: {},
+			//   }, undefined, { scroll: false })
+			
 		}
 	}, [beforeTransition])
 
 	useEffect(() => {
+		
 		if (screenshot !== "") {
+			// alert(scrollTop)
 			setBeforeTransition(() => false)
 			setIsTransitioning(() => true)
 			setTimeout(() => {
 				setIsTransitioning(() => false)
 				setNavToAtom(() => {
-					return { url: "", transition: "" }
+					return { url: "", transition: "", isGoBack: false }
 				})
 				setScreenshot(() => "")
 				setIsImageLoading(() => false)
@@ -172,6 +202,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 					css={contentInnerWrapperCSS({ isTransitioning, beforeTransition })}
 					className={`content-wrapper ${navToAtom.url === router.pathname || screenshot || isTransitioning ? "transitioning" : ""}`}
 				>
+					
 					{children}
 				</div>
 			</div>
@@ -359,6 +390,8 @@ const beforeTransitionsCSS = ({ isTransitioning }: { isTransitioning: boolean })
 			& .before-transitioning {
 				position:fixed;
 				animation: beforeScale2 0.3s ease forwards;
+				width: 100vw;
+				height: 100vh;
 			}
 			@keyframes beforeScale2 {
 				from {
