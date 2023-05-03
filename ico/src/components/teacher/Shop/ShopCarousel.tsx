@@ -23,26 +23,21 @@ function ShopCarousel() {
 	}
 
 	const getSlides = () => {
-		const slides = images.map((image, index) => {
-			const isActive = currentIndex === index
-			return (
-				<div
-					key={index}
-					css={[
-						imageWrapperCSS,
-						css`
-							opacity: ${isActive ? 1 : 0};
-							transition: opacity 0.5s ease-in-out;
-						`,
-					]}
-				>
-					<Image src={image} alt="carousel image" width={440} height={330} />
-				</div>
+		const slides = []
+
+		for (let i = -2; i <= 2; i++) {
+			const index = currentIndex + i
+			const imageIndex = (index + images.length) % images.length
+			slides.push(
+				<div key={index}>
+					<Image src={images[imageIndex]} alt="carousel image" width={440} height={330} />
+				</div>,
 			)
-		})
+		}
+
 		return slides
 	}
-	
+
 	return (
 		<div css={carouselWrapperCSS}>
 			<div css={imageCSS}>{getSlides()}</div>
@@ -57,9 +52,8 @@ function ShopCarousel() {
 	)
 }
 
-const imageWrapperCSS = css`
+const ImageWrapperCSS = css`
 	border-radius: 10px;
-	transition: transform 0.3s;
 `
 
 const carouselWrapperCSS = css`
