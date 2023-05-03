@@ -5,9 +5,13 @@ logging:
     com.ico: info
     com.ico.api: info
     org.hibernate.type.descriptor.sql: trace
+    # 로컬 실행 시 aws 환경이 아니라 에러 로그 출력된다.
+    # 배포하여 aws 환경에서는 문제가 없기 때문에 실행 시 로그를 감춘다.
+    com.amazonaws.util.EC2MetadataUtils: error
 
 server:
   port: 8081
+#  domain 설정 시 로컬로 실행하여 같은 네트워크에서 해당 주소로 접근할 수 있다.
 #  domain: http://127.0.0.1
   servlet:
     session:
@@ -25,6 +29,7 @@ spring:
     include:
       - db
       - login
+      - aws
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -44,3 +49,7 @@ spring:
       mode: always              # \uD56D\uC0C1 SQL \uCD08\uAE30\uD654
       continue-on-error: true   # SQL \uCD08\uAE30\uD654 \uC911 \uC624\uB958\uAC00 \uBC1C\uC0DD\uD574\uB3C4 \uACC4\uC18D \uC2E4\uD589
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB

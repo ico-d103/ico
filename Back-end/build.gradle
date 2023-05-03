@@ -43,6 +43,7 @@ subprojects {
 		implementation 'org.springframework.boot:spring-boot-starter-web'
 		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 		implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
 		compileOnly 'org.projectlombok:lombok'
 		developmentOnly 'org.springframework.boot:spring-boot-devtools'
 		runtimeOnly 'com.h2database:h2'
@@ -61,19 +62,13 @@ subprojects {
 		runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 		// CollSMS
 		implementation 'net.nurigo:sdk:4.2.7'
+
 	}
 
 	test {
 		useJUnitPlatform()
 	}
 }
-
-
-//dependencies {
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
-//	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-//	testImplementation 'org.springframework.security:spring-security-test'
-//}
 
 project(":core-module") {
 	bootJar.enabled = false
@@ -89,13 +84,14 @@ project(":core-module") {
 project(":api-module") {
 
 	bootJar {
-		archiveBaseName = 'ico'
-		archiveFileName = "ico-api-module-0.0.1.jar"
-		archiveVersion = "0.0.1"
+		archiveBaseName.set('ico')
+		archiveFileName.set("ico-api-module-0.0.1.jar")
+		archiveVersion.set("0.0.1")
 	}
 
 	dependencies {
-		implementation 'org.springframework.boot:spring-boot-starter-validation'
+		// AWS
+		implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 		implementation project(':core-module')
 	}
 }
@@ -103,15 +99,14 @@ project(":api-module") {
 project(":batch-module") {
 
 	bootJar {
-		archiveBaseName = 'ico'
-		archiveFileName = "ico-batch-module-0.0.1.jar"
-		archiveVersion = "0.0.1"
+		archiveBaseName.set('ico')
+		archiveFileName.set("ico-batch-module-0.0.1.jar")
+		archiveVersion.set("0.0.1")
 	}
 
 	dependencies {
 		implementation 'org.springframework.boot:spring-boot-starter-batch'
 		testImplementation 'org.springframework.batch:spring-batch-test'
-		implementation 'org.springframework.boot:spring-boot-starter-validation'
 		implementation project(':core-module')
 	}
 }

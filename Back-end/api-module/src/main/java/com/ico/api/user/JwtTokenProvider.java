@@ -171,7 +171,6 @@ public class JwtTokenProvider {
         return getClaims(token).get("identity");
     }
 
-
     /**
      * Token 에서 role 값 추출
      *
@@ -286,5 +285,4 @@ public class JwtTokenProvider {
             }
         }
     }
-
 }

@@ -1,7 +1,6 @@
 package com.ico.api.dto;
 
-import com.ico.core.entity.Certification;
-import com.ico.core.entity.Role;
+import com.ico.core.code.Role;
 import com.ico.core.entity.Teacher;
 import lombok.Data;
 import lombok.NoArgsConstructor;

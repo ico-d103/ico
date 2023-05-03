@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 public class ApiModuleApplication {
 
     public static void main(String[] args) {
-        System.setProperty("spring.config.name", "application,application-db,application-login");
+        System.setProperty("spring.config.name", "application,application-db,application-login,application-aws");
         SpringApplication.run(ApiModuleApplication.class, args);
     }
 

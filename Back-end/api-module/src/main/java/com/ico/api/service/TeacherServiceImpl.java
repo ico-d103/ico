@@ -1,12 +1,11 @@
 package com.ico.api.service;
 
 import com.ico.api.dto.TeacherSignUpRequestDto;
-import com.ico.core.entity.Role;
+import com.ico.core.code.Role;
 import com.ico.core.entity.Teacher;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
-//import net.nurigo.sdk.message.model.Message;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
