@@ -1,6 +1,7 @@
 import { css } from "@emotion/react"
 import Image from "next/image"
 import ShopCarousel from "@/components/teacher/Shop/ShopCarousel"
+import Button from "@/components/common/Button/Button"
 
 function product() {
 	const product = {
@@ -37,8 +38,28 @@ function product() {
 			</div>
 
 			<div css={footerCSS}>
-				<div>상품 상세 설명</div>
-				<div>{product.explanation}</div>
+				<div>
+					<div>상품 상세 설명</div>
+					<div>{product.explanation}</div>
+				</div>
+				<div>
+					<Button
+						text={"상품 승인하기"}
+						fontSize={`var(--teacher-h5)`}
+						width={"190px"}
+						height={"30px"}
+						theme={"positive"}
+						onClick={() => {}}
+					/>
+					<Button
+						text={"상품 반려하기"}
+						fontSize={`var(--teacher-h5)`}
+						width={"190px"}
+						height={"30px"}
+						theme={"warning"}
+						onClick={() => {}}
+					/>
+				</div>
 			</div>
 		</div>
 	)
@@ -51,6 +72,8 @@ const wrapperCSS = css`
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
 	padding: 30px;
+
+	grid-gap: 0;
 `
 
 const headerCSS = css`
@@ -114,5 +137,29 @@ const parentCSS = css`
 	}
 `
 
-const footerCSS = css``
+const footerCSS = css`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	overflow: hidden;
+
+	> div:nth-of-type(1) {
+		> div:nth-of-type(1) {
+			font-size: 1.6rem;
+		}
+		> div:nth-of-type(2) {
+			font-size: 0.95rem;
+			word-wrap: break-word;
+			/* max-height: 100px;
+			overflow-y: auto; */
+		}
+		width: 70%; /* 좌측 div에 고정된 크기 지정 */
+	}
+
+	> div:nth-of-type(2) {
+		display: flex;
+		width: 30%; /* 우측 div에 고정된 크기 지정 */
+	}
+`
+
 export default product
