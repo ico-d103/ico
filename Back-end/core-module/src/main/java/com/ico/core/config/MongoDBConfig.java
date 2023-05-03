@@ -1,5 +1,6 @@
 package com.ico.core.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
@@ -17,9 +18,8 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 @Configuration
 public class MongoDBConfig {
 
-//    TODO: 사용되지 않아서 내일 테스트 해보고 필요없으면 삭제할 예정
-//    @Autowired
-//    private MongoMappingContext mongoMappingContext;
+    @Autowired
+    private MongoMappingContext mongoMappingContext;
 
     @Bean
     public MappingMongoConverter mappingMongoConverter(
