@@ -49,3 +49,7 @@ spring:
       mode: always              # \uD56D\uC0C1 SQL \uCD08\uAE30\uD654
       continue-on-error: true   # SQL \uCD08\uAE30\uD654 \uC911 \uC624\uB958\uAC00 \uBC1C\uC0DD\uD574\uB3C4 \uACC4\uC18D \uC2E4\uD589
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
