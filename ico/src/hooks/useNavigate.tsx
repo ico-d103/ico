@@ -7,9 +7,9 @@ function useNavigate() {
     const router = useRouter()
     const [navToAtom, setNavToAtom] = useAtom(navTo)
 
-    function navigate(url: string, transition = 'rightToLeft', isGoBack = false) {
+    function navigate(url: string, transition = 'rightToLeft') {
         if (router.pathname !== url && navToAtom.url === "") {
-            setNavToAtom(() => {return {url, transition, isGoBack: isGoBack}})
+            setNavToAtom(() => {return {url, transition}})
         }
     }
 
