@@ -22,6 +22,9 @@ public enum ErrorCode{
     JOB_NOT_FOUND(HttpStatus.NOT_FOUND, "15", "해당하는 직업이 없습니다."),
 
     ALREADY_ASSIGNED(HttpStatus.BAD_REQUEST, "409", "이미 배정된 직업입니다."),
+
+    ALREADY_EXIST_TITLE(HttpStatus.CONFLICT, "613", "이미 존재하는 상품의 이름입니다.")
+
     ;
 
     private final HttpStatus httpStatus;
