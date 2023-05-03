@@ -43,6 +43,7 @@ subprojects {
 		implementation 'org.springframework.boot:spring-boot-starter-web'
 		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 		implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
 		compileOnly 'org.projectlombok:lombok'
 		developmentOnly 'org.springframework.boot:spring-boot-devtools'
 		runtimeOnly 'com.h2database:h2'
@@ -91,7 +92,6 @@ project(":api-module") {
 	dependencies {
 		// AWS
 		implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-		implementation 'org.springframework.boot:spring-boot-starter-validation'
 		implementation project(':core-module')
 	}
 }
@@ -107,7 +107,6 @@ project(":batch-module") {
 	dependencies {
 		implementation 'org.springframework.boot:spring-boot-starter-batch'
 		testImplementation 'org.springframework.batch:spring-batch-test'
-		implementation 'org.springframework.boot:spring-boot-starter-validation'
 		implementation project(':core-module')
 	}
 }
