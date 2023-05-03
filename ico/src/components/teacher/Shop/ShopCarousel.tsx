@@ -12,8 +12,6 @@ const images = [
 ]
 
 function ShopCarousel() {
-	const [currentImage, setCurrentImage] = useState(0)
-
 	const [currentIndex, setCurrentIndex] = useState(0)
 
 	const handlePrev = () => {
@@ -25,34 +23,76 @@ function ShopCarousel() {
 	}
 
 	const getSlides = () => {
-		const slides = []
-
-		for (let i = -2; i <= 2; i++) {
-			const index = currentIndex + i
-			const imageIndex = (index + images.length) % images.length
-			slides.push(
-				<div key={index}>
-					<img src={images[imageIndex]} alt="carousel image" />
-				</div>,
+		const slides = images.map((image, index) => {
+			const isActive = currentIndex === index
+			return (
+				<div
+					key={index}
+					css={[
+						imageWrapperCSS,
+						css`
+							opacity: ${isActive ? 1 : 0};
+							transition: opacity 0.5s ease-in-out;
+						`,
+					]}
+				>
+					<Image src={image} alt="carousel image" width={440} height={330} />
+				</div>
 			)
-		}
-
+		})
 		return slides
 	}
-
+	
 	return (
-		<React.Fragment>
+		<div css={carouselWrapperCSS}>
 			<div css={imageCSS}>{getSlides()}</div>
 
-			<button onClick={handlePrev}>Prev</button>
-			<button onClick={handleNext}>Next</button>
-		</React.Fragment>
+			<div css={prevButtonCSS} onClick={handlePrev}>
+				&lt;
+			</div>
+			<div css={nextButtonCSS} onClick={handleNext}>
+				&gt;
+			</div>
+		</div>
 	)
 }
+
+const imageWrapperCSS = css`
+	border-radius: 10px;
+	transition: transform 0.3s;
+`
+
+const carouselWrapperCSS = css`
+	position: relative;
+`
 
 const imageCSS = css`
 	display: flex;
 	align-items: center;
+`
+
+const prevButtonCSS = css`
+	position: absolute;
+	top: 50%;
+	left: 0;
+	transform: translateY(-50%);
+
+	font-size: 5rem;
+	color: white;
+
+	cursor: pointer;
+`
+
+const nextButtonCSS = css`
+	position: absolute;
+	top: 50%;
+	right: 0;
+	transform: translateY(-50%);
+
+	font-size: 5rem;
+	color: white;
+
+	cursor: pointer;
 `
 
 export default ShopCarousel
