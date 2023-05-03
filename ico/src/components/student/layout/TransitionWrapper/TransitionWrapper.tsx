@@ -67,7 +67,9 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		if (contentInnerWrapperRef.current) {
 			html2canvas(
 				contentInnerWrapperRef.current,
-
+				{
+					scale: 0.5
+				}
 				// {
 				// 	scrollX: -window.scrollX,
 				// 	scrollY: -window.scrollY,
@@ -182,6 +184,9 @@ const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 		height: auto;
 
 		transform: translate(0, -${scrollTop}px);
+
+
+		
 	`
 }
 
