@@ -43,4 +43,5 @@ public class StudentProduct {
     private String detail;
     private byte count;
     private boolean is_assigned;
+    private byte sold;
 }
