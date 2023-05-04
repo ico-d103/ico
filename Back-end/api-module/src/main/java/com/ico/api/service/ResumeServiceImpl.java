@@ -14,8 +14,8 @@ import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,7 +105,7 @@ public class ResumeServiceImpl implements ResumeService {
                     log.info("[assignResume] 직업 신청 내역에서 삭제");
                     throw new CustomException(ErrorCode.JOB_NOT_FOUND);
                 });
-        log.info("========================{}", resume.getNationId());
+
         Nation nation = nationRepository.findById(resume.getNationId()).orElseThrow(() -> {
             log.info("[assignResume] 신청한 나라가 없는 경우");
             resumeMongoRepository.delete(resume);
@@ -142,7 +142,7 @@ public class ResumeServiceImpl implements ResumeService {
         studentRepository.save(student);
         log.info("[assignResume] 학생 직업 배정");
 
-        resumeMongoRepository.delete(resume);
-        log.info("[assignResume] 직업 신청 내역에서 삭제");
+        resumeMongoRepository.deleteAllByStudentId(student.getId());
+        log.info("[assignResume] 해당 학생의 직업 승인 완료로 신청 내역 전부 삭제");
     }
 }
