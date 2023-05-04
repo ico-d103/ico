@@ -116,8 +116,6 @@ public class ResumeServiceImpl implements ResumeService {
 
         if (!nation.getId().equals(nationId)) {
             log.info("[assignResume] 신청 내역의 나라와 교사의 나라가 다른 경우");
-            resumeMongoRepository.delete(resume);
-            log.info("[assignResume] 직업 신청 내역에서 삭제");
             throw new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION);
         }
 
