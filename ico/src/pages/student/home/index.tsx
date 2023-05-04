@@ -3,6 +3,8 @@ import { css } from "@emotion/react"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWrapper"
 import HomeJobCard from "@/components/student/Home/JobCard/HomeJobCard"
+import HomeAsset from "@/components/student/Home/Asset/HomeAsset"
+
 
 function index() {
 	return (
@@ -19,6 +21,7 @@ function index() {
           <div css={contentTitleCSS}>
             자산
           </div>
+          <HomeAsset />
         </ContentWrapper>
 			</div>
 		</div>
