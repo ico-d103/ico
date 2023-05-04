@@ -12,7 +12,7 @@ function GovRuleCredit() {
 	]
 
 	return (
-		<CollapseMenu title={"신용 등급"} fontSize={"var(--teacher-h1)"} bracketSize={"18px"}>
+		<CollapseMenu title={<span>신용 등급</span>} fontSize={"var(--teacher-h1)"} bracketSize={"18px"}>
 			<React.Fragment>
 				신용등급의 등락폭을 수정할 수 있습니다.
 				<div css={tableWrapperCSS}>
