@@ -61,8 +61,9 @@ function Button({ text, fontSize, width, height, theme, margin, onClick }: Butto
 		mobileNormal: {
 			border: "none",
 			borderRadius: "20px",
-			fontColor: `var(--student-main-color)`,
-			backgroundColor: `var(--student-blue-color)`,
+			fontColor: `#3D2F21`,
+			backgroundColor: `#FFCD00`,
+
 		},
 	}
 
@@ -101,7 +102,7 @@ const buttonCSS = ({
 		justify-content: center;
 		align-items: center;
 		transition: all 0.2s;
-
+		
 		:hover {
 			filter: brightness(120%);
 		}

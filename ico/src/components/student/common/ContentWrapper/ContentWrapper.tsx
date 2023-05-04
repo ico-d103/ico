@@ -14,12 +14,11 @@ function ContentWrapper({children, cssProps}: ContentWrapperProps) {
     </div>
   )
 }
-
 const contentWrapperCSS = css`
     width: 95%;
     padding: 24px;
-    border-radius: 10px;
-    background-color: var(--common-back-color-2);
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.6);
     margin-bottom: 16px;
 `
 

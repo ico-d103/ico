@@ -1,6 +1,7 @@
 :root {
-	--common-back-color: #f0f3f8;
+	--common-back-color: #F6F8FA;
 	--common-back-color-2: #ffffff;
+
 
 	--teacher-main-color: #06603b;
 	--teacher-main-color-2: #38735a;
@@ -21,7 +22,8 @@
 	--teacher-h5: 0.95rem;
 	--teacher-h6: 0.75rem;
 
-	--student-back-color: #f6f8fa;
+	--student-back-color: #FFDB60;
+	/* --student-back-color: #F6F8FA; */
 	--student-main-color: #0066ff;
 	--student-main-color-2: #0066ff1a;
 	--student-main-color-3: #0066ff80;
@@ -35,6 +37,7 @@
 	--student-red-color: #cb1400;
 	--student-blue-color: #dce4f8;
 	--student-highlight-color: #ffa800;
+	--student-font-color: #3D2F21;
 
 	--student-h1: 1.6rem;
 	--student-h2: 1.25rem;
