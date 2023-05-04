@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 
 /**
  * Student ServiceImpl
@@ -31,7 +30,6 @@ public class StudentServiceImpl implements StudentService{
 
     private final TransactionService transactionService;
 
-    @Transactional
     @Override
     public Long signUp(StudentSignUpRequestDto requestDto) {
 

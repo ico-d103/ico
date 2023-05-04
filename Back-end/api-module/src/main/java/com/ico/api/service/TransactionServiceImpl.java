@@ -4,6 +4,7 @@ import com.ico.core.entity.Transaction;
 import com.ico.core.repository.TransactionMongoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -28,6 +29,7 @@ public class TransactionServiceImpl implements TransactionService{
      * @param amount 상품 금액
      * @param title 상품 이름
      */
+    @Transactional
     @Override
     public void addTransaction(Long to, Long from, int amount, String title) {
         Transaction buyer = Transaction.builder()
