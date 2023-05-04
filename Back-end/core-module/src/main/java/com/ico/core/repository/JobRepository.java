@@ -29,4 +29,13 @@ public interface JobRepository extends JpaRepository<Job, Long> {
      * @return
      */
     Optional<Job> findByIdAndNationId(Long id, Long nationId);
+
+    /**
+     * 학급 내에 중복된 직업 이름 검사
+     *
+     * @param title
+     * @param nationId
+     * @return
+     */
+    Optional<Job> findByTitleAndNationId(String title, Long nationId);
 }
