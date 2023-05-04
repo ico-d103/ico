@@ -35,7 +35,7 @@ class ResumeMongoRepositoryTest {
         mongoTemplate.insert(new Resume("1", 2L, 3L, 4L));
         Resume test = resumeMongoRepository.findById("1").orElseThrow(() -> new RuntimeException("empty"));
 
-        Assertions.assertEquals(test.getNation_id(), 4L);
+        Assertions.assertEquals(test.getNationId(), 4L);
 
     }
 
