@@ -27,7 +27,9 @@ public enum ErrorCode{
 
     PASSWORD_WRONG(HttpStatus.BAD_REQUEST, "105", "비밀번호가 틀렸습니다."),
 
-    ALREADY_EXIST_TITLE(HttpStatus.CONFLICT, "613", "이미 존재하는 상품의 이름입니다.")
+    ALREADY_EXIST_TITLE(HttpStatus.CONFLICT, "613", "이미 존재하는 상품의 이름입니다."),
+
+    LOW_BALANCE(HttpStatus.BAD_REQUEST, "11", "잔액이 부족합니다.")
 
     ;
 

@@ -58,13 +58,4 @@ public class Student {
         this.password = passwordEncoder.encode(password);
     }
 
-    /**
-     * 학생의 계좌 잔액 수정
-     *
-     * @param amount 금액
-     */
-    public void updateAccount(int amount){
-        this.account = this.getAccount() + amount;
-    }
-
 }
