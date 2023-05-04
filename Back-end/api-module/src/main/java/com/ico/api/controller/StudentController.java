@@ -47,8 +47,8 @@ public class StudentController {
      * @return status
      */
     @PostMapping("/teacher/{studentId}/account")
-    public ResponseEntity<HttpStatus> updateAccount(@PathVariable Long studentId, @Valid @RequestBody AccountDto accountDto){
-        studentService.updateAccount(studentId, accountDto);
+    public ResponseEntity<HttpStatus> teacherUpdateAccount(@PathVariable Long studentId, @Valid @RequestBody AccountDto accountDto){
+        studentService.teacherUpdateAccount(studentId, accountDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

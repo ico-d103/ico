@@ -71,12 +71,13 @@ public class StudentServiceImpl implements StudentService{
     }
 
     /**
+     * 선생님이 임의로 돈 지급/차감
      *
      * @param id 학생 아이디
      * @param accountDto 학생
      */
     @Override
-    public void updateAccount(Long id, AccountDto accountDto){
+    public void teacherUpdateAccount(Long id, AccountDto accountDto){
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         // 학생의 잔액 업데이트

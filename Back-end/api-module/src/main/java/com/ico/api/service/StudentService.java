@@ -18,5 +18,5 @@ public interface StudentService {
      */
     public Long signUp(StudentSignUpRequestDto requestDto);
 
-    public void updateAccount(Long id, AccountDto accountDto);
+    public void teacherUpdateAccount(Long id, AccountDto accountDto);
 }
