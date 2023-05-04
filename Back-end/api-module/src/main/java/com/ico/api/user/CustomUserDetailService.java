@@ -39,13 +39,9 @@ public class CustomUserDetailService implements UserDetailsService {
         Optional<Student> student = studentRepository.findByIdentity(identity);
 
         if (teacher.isPresent()) {
-            return new CustomUserDetails(teacher);
-//            Teacher teacherObj = teacher.get(); // Teacher 객체로 형 변환
-//            return new CustomUserDetails(teacherObj);
+            return new CustomUserDetails(teacher.get());
         } else if (student.isPresent()) {
-            return new CustomUserDetails(student);
-//            Student studentObj = student.get(); // Student 객체로 형 변환
-//            return new CustomUserDetails(studentObj);
+            return new CustomUserDetails(student.get());
         } else {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }

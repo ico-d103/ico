@@ -46,4 +46,11 @@ public class MemberServiceImpl implements MemberService {
         return jwtTokenProvider.generateJwtToken(members);
     }
 
+    @Override
+    public boolean duplicated(String identity) {
+        boolean teacher = teacherRepository.findByIdentity(identity).isPresent();
+        boolean student = studentRepository.findByIdentity(identity).isPresent();
+        return teacher || student;
+    }
 }
+

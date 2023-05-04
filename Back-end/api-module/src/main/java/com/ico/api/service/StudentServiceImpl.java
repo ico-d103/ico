@@ -35,10 +35,10 @@ public class StudentServiceImpl implements StudentService{
                 .password(requestDto.getPassword())
                 .name(requestDto.getName())
                 .account(0)
-                .is_frozen(false)
-                .credit_score((byte) 0)
+                .isFrozen(false)
+                .creditScore((byte) 0)
                 .role(Role.STUDENT)
-                .count((byte) 0)
+                .salary(0)
                 .build();
 
         if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()
