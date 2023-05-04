@@ -123,11 +123,11 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	}, [router.pathname])
 
 	return (
-		<div>
+		<div css={transitionWrapperCSS}>
 			<div
 				className={`before-wrapper ${
 					navToAtom.url === router.pathname || screenshot || isTransitioning ? "before-transitioning" : ""
-				}`}
+				} ${navToAtom.url ? 'enable-will-change' : 'disable-will-change' }`}
 				css={[imgWrapperCSS, beforeTransitionsCSS({ isTransitioning })[navToAtom.transition]]}
 			>
 				{screenshot && (
@@ -159,7 +159,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 					css={contentInnerWrapperCSS({ isTransitioning, beforeTransition })}
 					className={`content-wrapper ${
 						navToAtom.url === router.pathname || screenshot || isTransitioning ? "transitioning" : ""
-					}`}
+					}  ${navToAtom.url ? 'enable-will-change' : 'disable-will-change' }`}
 				>
 					{children}
 				</div>
@@ -167,6 +167,15 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		</div>
 	)
 }
+
+const transitionWrapperCSS = css`
+	.enable-will-change {
+			will-change: transform, opacity;
+	}
+	.disable-will-change {
+		will-change: auto;
+	}
+`
 
 const imgWrapperCSS = css`
 	width: 100vw;
@@ -192,6 +201,13 @@ const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 
 const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 	return css`
+
+		& .enable-will-change {
+			will-change: transform, opacity;
+		}
+		& .disable-will-change {
+			will-change: auto;
+		}
 		/* position: ${isTransitioning && "absolute"}; */
 		min-height: calc(100vh - 64px);
 		/* overflow: ${isTransitioning ? "hidden" : "scroll"}; */
@@ -215,7 +231,7 @@ const contentInnerWrapperCSS = ({
 		height: ${isTransitioning && "calc(100vh - 64px)"};
 		overflow: ${isTransitioning && "hidden"};
 		visibility: ${beforeTransition && "hidden"};
-		will-change: ${beforeTransition && "transform, opacity"};
+		
 	`
 }
 
@@ -340,9 +356,10 @@ const beforeTransitionsCSS = ({ isTransitioning }: { isTransitioning: boolean })
 		beforeScale: css`
 
 				/* position: fixed; */
-				animation: ${isTransitioning && 'beforeScale2 0.2s ease-out forwards'};
+		animation: ${isTransitioning && 'beforeScale2 0.2s ease-out forwards'};
 				/* width: 100vw;
 				height: 100vh; */
+		
 			
 			@keyframes beforeScale2 {
 				from {
