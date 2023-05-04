@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import { css } from "@emotion/react"
+import Button from '@/components/common/Button/Button'
 
 type HomeAssetItemProps = {
     icon: any
@@ -29,7 +30,8 @@ function HomeAssetItem({icon, title, money, moneyUnit, detailUrl }: HomeAssetIte
             </div>
         </div>
         <div>
-            자세히
+            <Button text={"자세히"} fontSize={`var(--teacher-h5)`} width={"72px"} height={'100%'} theme={"mobileNormal"} onClick={() => {}} />
+            
         </div>
     </div>
   )
@@ -48,14 +50,20 @@ const leftWrapperCSS = css`
 
 const imgWrapperCSS = css`
     border-radius: 9999px;
-    background-color: #D9D9D9;
-    width: 32px;
-    height: 32px;
-    margin-right: 8px;
+    background-color: #f7dd9d;
+    /* border: 0.5px solid #feb600; */
+    width: 36px;
+    height: 36px;
+    margin-right: 12px;
 
     display: flex;
     justify-content:center;
     align-items: center;
+
+    & path {
+        stroke: #9b6f00;
+        
+    }
 `
 
 const textContentWrapperCSS = css`
@@ -69,11 +77,11 @@ const textContentWrapperCSS = css`
 const titleWrapperCSS = css`
     font-size: var(--student-h4);
     color: rgba(0, 0, 0, 0.6);
-    font-weight: 700;
+    font-weight: 500;
 `
 
 const moneyWrapperCSS = css`
-    font-size: var(--student-h3);
+    font-size: 1.1rem;
     font-weight: 700;
 `
 

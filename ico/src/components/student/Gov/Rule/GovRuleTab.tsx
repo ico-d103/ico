@@ -15,7 +15,7 @@ const wrapperCSS = css`
 	height: 52px;
 	/* box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.25); */
 	/* box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25); */
-
+	/* background-color: rgba(255, 255, 255, 0.1); */
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -31,9 +31,10 @@ const wrapperCSS = css`
 `
 
 const selectedCSS = css`
-	background-color: var(--student-main-color-2);
+	/* background-color: var(--student-main-color-2); */
+	background-color: #ffffff62;
 	border-radius: 10px 10px 0px 0px;
-	border-bottom: 3px solid var(--student-main-color);
+	border-bottom: 3px solid #FF9F00;
 	font-weight: bold;
 `
 

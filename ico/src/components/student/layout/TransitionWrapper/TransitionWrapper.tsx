@@ -225,7 +225,8 @@ const contentInnerWrapperCSS = ({
 }) => {
 	return css`
 		min-height: calc(100vh - 64px);
-		background-color: var(--common-back-color);
+		/* background-color: var(--student-back-color); */
+		background: linear-gradient( to bottom, var(--student-back-color), #ffecc4 );
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
 		width: ${isTransitioning && "100vw"};
 		height: ${isTransitioning && "calc(100vh - 64px)"};
