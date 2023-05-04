@@ -1,6 +1,7 @@
 package com.ico.api.service;
 
 import com.ico.api.dto.StudentListResDto;
+import com.ico.api.dto.StudentResDto;
 import com.ico.api.dto.TeacherSignUpRequestDto;
 
 import java.util.List;
@@ -34,4 +35,11 @@ public interface TeacherService {
      * @return
      */
     List<StudentListResDto> findAllStudent();
+
+    /**
+     * 학생 상세보기 조회
+     *
+     * @return
+     */
+    StudentResDto findStudent(Long studentId);
 }

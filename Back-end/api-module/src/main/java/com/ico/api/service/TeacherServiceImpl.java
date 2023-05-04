@@ -1,15 +1,19 @@
 package com.ico.api.service;
 
 import com.ico.api.dto.StudentListResDto;
+import com.ico.api.dto.StudentResDto;
 import com.ico.api.dto.TeacherSignUpRequestDto;
 import com.ico.core.code.Role;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
+import com.ico.core.entity.Transaction;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
+import com.ico.core.repository.TransactionMongoRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,13 +27,18 @@ import java.util.List;
  * @author 강교철
  * @author 서재건
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
+
     private final StudentRepository studentRepository;
+
     private final PasswordEncoder passwordEncoder;
+
+    private final TransactionMongoRepository transactionMongoRepository;
 
 //      TODO : S3를 이용한 이미지업로드 할때 사용할 것
 //    private final CertificationRepository certificationRepository;
@@ -107,5 +116,16 @@ public class TeacherServiceImpl implements TeacherService {
             resList.add(new StudentListResDto().of(student));
         }
         return resList;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public StudentResDto findStudent(Long studentId) {
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> {
+            log.info("[findStudent] studentId[{}]에 해당하는 학생이 없습니다.", studentId);
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        });
+        List<Transaction> transactions = transactionMongoRepository.findAllByFromOrTo(String.valueOf(studentId), String.valueOf(studentId));
+        return new StudentResDto().of(student, transactions);
     }
 }
