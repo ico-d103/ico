@@ -93,6 +93,7 @@ const contentWrapperCSS = ({ isOpened, contentWrapperRef }: { isOpened: boolean;
 		overflow: hidden;
 		/* height: ${isOpened ? "auto" : "0px"}; */
 		max-height: ${isOpened ? `${contentWrapperRef.current && contentWrapperRef.current.clientHeight + 1}px` : "0px"};
+		line-height: 20px;
 	`
 }
 
