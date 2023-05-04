@@ -39,6 +39,13 @@ public class StudentController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    /**
+     * 교사의 학생의 계좌의 잔액 관리(지급/차감)
+     *
+     * @param studentId 학생 idx
+     * @param accountDto 금액, 사유
+     * @return status
+     */
     @PostMapping("/teacher/{studentId}/account")
     public ResponseEntity<HttpStatus> updateAccount(@PathVariable Long studentId, @Valid @RequestBody AccountDto accountDto){
         studentService.updateAccount(studentId, accountDto);
