@@ -10,14 +10,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 /**
  * Teacher Controller
  *
  * @author 강교철
+ * @author 변윤경
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/teacher")
 public class TeacherController {
 
     private final TeacherService teacherService;
@@ -27,10 +29,13 @@ public class TeacherController {
      *
      * @param requestDto
      * @return id
+     * @throws Exception
      */
-    @PostMapping("/teacher")
-    public ResponseEntity<?> teacherSignUp(@RequestBody TeacherSignUpRequestDto requestDto) {
+    @PostMapping
+    public ResponseEntity<?> teacherSignUp(@RequestBody TeacherSignUpRequestDto requestDto) throws Exception {
         teacherService.signUp(requestDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+
 }

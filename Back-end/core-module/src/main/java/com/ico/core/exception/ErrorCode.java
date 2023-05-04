@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode{
 
+    LOW_BALANCE(HttpStatus.BAD_REQUEST, "11", "잔액이 부족합니다."),
+
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "13", "해당하는 회원이 없습니다."),
 
     NATION_NOT_FOUND(HttpStatus.NOT_FOUND, "14", "해당하는 국가가 없습니다."),
@@ -27,7 +29,7 @@ public enum ErrorCode{
 
     PASSWORD_WRONG(HttpStatus.BAD_REQUEST, "105", "비밀번호가 틀렸습니다."),
 
-    ALREADY_EXIST_TITLE(HttpStatus.CONFLICT, "613", "이미 존재하는 상품의 이름입니다.")
+    ALREADY_EXIST_TITLE(HttpStatus.CONFLICT, "613", "이미 존재하는 상품의 이름입니다."),
 
     ;
 
