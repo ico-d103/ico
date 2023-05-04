@@ -3,6 +3,7 @@ package com.ico.core.repository;
 import com.ico.core.entity.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,5 +29,14 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
      * @return
      */
     Optional<Student> findById(Long id);
+
+    /**
+     * 나라의 학생 목록 조회
+     *
+     * @param nationId
+     * @return
+     */
+    List<Student> findAllByNationId(Long nationId);
+
 
 }
