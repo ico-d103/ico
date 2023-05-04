@@ -6,7 +6,7 @@ import CollapseMenu from "@/components/teacher/common/CollapseMenu/CollapseMenu"
 function index() {
 	return (
 		<>
-			<PageHeader title={"학급 규칙"} addComp={<GovRuleTab />} />
+			<PageHeader title={"학급 규칙"}  addComp={<GovRuleTab />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					<CollapseMenu
@@ -36,6 +36,10 @@ function index() {
 						bracketSize={"10px"}
 						children={<div>학급 규칙 내용</div>}
 					/>
+					<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
+					<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
+					<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
+					<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
 				</div>
 			</div>
 		</>
@@ -50,7 +54,7 @@ const wrapperCSS = css`
 `
 
 const contentCSS = css`
-	margin-top: 82px;
+	/* margin-top: 82px; */
 	width: 95%;
 `
 
