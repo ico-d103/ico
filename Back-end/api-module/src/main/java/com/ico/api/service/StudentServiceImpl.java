@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 
 /**
  * Student ServiceImpl
@@ -24,10 +23,13 @@ import javax.transaction.Transactional;
 public class StudentServiceImpl implements StudentService{
 
     private final StudentRepository studentRepository;
+
     private final TeacherRepository teacherRepository;
+
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
+    private final TransactionService transactionService;
+
     @Override
     public Long signUp(StudentSignUpRequestDto requestDto) {
 
@@ -80,8 +82,20 @@ public class StudentServiceImpl implements StudentService{
     public void teacherUpdateAccount(Long id, AccountDto accountDto){
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        // 학생의 잔액 업데이트
-        updateAccount(student, accountDto.getAmount());
+        int amount = accountDto.getAmount();
+
+        // 잔액이 수정된 학생 객체
+        updateAccount(student, amount);
+
+        // 거래 내역 등록
+        if(amount < 0){
+            transactionService.addTransactionWithdraw("선생님", id, amount, accountDto.getTitle());
+        }
+        else{
+            transactionService.addTransactionDeposit(id, "선생님", amount, accountDto.getTitle());
+        }
+
+        // 수정된 학생 객체 저장
         studentRepository.save(student);
     }
 
