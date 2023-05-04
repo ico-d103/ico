@@ -84,6 +84,48 @@ public class ResumeServiceImpl implements ResumeService {
         // TODO: 로그인한 유저 정보 불러오기
         Long nationId = 2L;
 
+        Resume resume = findAndValidateResume(resumeId, nationId);
+        Student student = findAndValidateStudent(resume);
+        Job job = findAndValidateJob(resume);
+
+        if (student.getJob() != null) {
+            log.info("[assignResume] 이미 해당 학생의 직업이 존재하는 경우");
+            deleteResume(resume);
+            throw new CustomException(ErrorCode.ALREADY_HAS_JOB);
+        }
+
+        if (job.getCount() == job.getTotal()) {
+            log.info("[assignResume] 직업 정원이 다 찬 경우");
+            deleteResume(resume);
+            throw new CustomException(ErrorCode.ALREADY_FULL_JOB);
+        }
+
+        assignJobToStudent(job, student);
+        deleteAllResumesByStudentId(student.getId());
+    }
+
+    @Transactional
+    @Override
+    public void rejectResumeResume(String resumeId) {
+        // TODO: 로그인한 유저 정보 불러오기
+        Long nationId = 2L;
+
+        Resume resume = findAndValidateResume(resumeId, nationId);
+        findAndValidateStudent(resume);
+        findAndValidateJob(resume);
+
+        deleteResume(resume);
+        log.info("[rejectResume] 직업 승인 신청 거절로 내역 삭제");
+    }
+
+    /**
+     * 유효한 이력서 조회
+     *
+     * @param resumeId
+     * @param nationId
+     * @return resume
+     */
+    private Resume findAndValidateResume(String resumeId, Long nationId) {
         Resume resume = resumeMongoRepository.findById(resumeId)
                 .orElseThrow(() -> {
                     log.info("[assignResume] 직업 신청 내역이 존재 하지 않는 경우");
@@ -91,26 +133,9 @@ public class ResumeServiceImpl implements ResumeService {
                 });
         log.info("[assignResume] 직업 신청 내역 존재");
 
-        Student student = studentRepository.findById(resume.getStudentId())
-                .orElseThrow(() -> {
-                    log.info("[assignResume] 신청한 학생이 존재하지 않는 경우");
-                    resumeMongoRepository.delete(resume);
-                    log.info("[assignResume] 직업 신청 내역에서 삭제");
-                    throw new CustomException(ErrorCode.USER_NOT_FOUND);
-                });
-
-        Job job = jobRepository.findById(resume.getJobId())
-                .orElseThrow(() -> {
-                    log.info("[assignResume] 신청한 직업이 존재하지 않는 경우");
-                    resumeMongoRepository.delete(resume);
-                    log.info("[assignResume] 직업 신청 내역에서 삭제");
-                    throw new CustomException(ErrorCode.JOB_NOT_FOUND);
-                });
-
         Nation nation = nationRepository.findById(resume.getNationId()).orElseThrow(() -> {
             log.info("[assignResume] 신청한 나라가 없는 경우");
-            resumeMongoRepository.delete(resume);
-            log.info("[assignResume] 직업 신청 내역에서 삭제");
+            deleteResume(resume);
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
         });
 
@@ -119,29 +144,71 @@ public class ResumeServiceImpl implements ResumeService {
             throw new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION);
         }
 
-        if (student.getJob() != null) {
-            log.info("[assignResume] 이미 해당 학생의 직업이 존재하는 경우");
-            resumeMongoRepository.delete(resume);
-            log.info("[assignResume] 직업 신청 내역에서 삭제");
-            throw new CustomException(ErrorCode.ALREADY_HAS_JOB);
-        }
+        return resume;
+    }
 
-        if (job.getCount() == job.getTotal()) {
-            log.info("[assignResume] 직업 정원이 다 찬 경우");
-            resumeMongoRepository.delete(resume);
-            log.info("[assignResume] 직업 신청 내역에서 삭제");
-            throw new CustomException(ErrorCode.ALREADY_FULL_JOB);
-        }
+    /**
+     * 유효한 학생 조회
+     *
+     * @param resume
+     * @return student
+     */
+    private Student findAndValidateStudent(Resume resume) {
+        return studentRepository.findById(resume.getStudentId())
+                .orElseThrow(() -> {
+                    log.info("[assignResume] 신청한 학생이 존재하지 않는 경우");
+                    deleteResume(resume);
+                    throw new CustomException(ErrorCode.USER_NOT_FOUND);
+                });
+    }
 
+    /**
+     * 유효한 직업 조회
+     *
+     * @param resume
+     * @return job
+     */
+    private Job findAndValidateJob(Resume resume) {
+        return jobRepository.findById(resume.getJobId())
+                .orElseThrow(() -> {
+                    log.info("[assignResume] 신청한 직업이 존재하지 않는 경우");
+                    deleteResume(resume);
+                    throw new CustomException(ErrorCode.JOB_NOT_FOUND);
+                });
+    }
+
+    /**
+     * 직업 신청 내역 삭제
+     *
+     * @param resume
+     */
+    private void deleteResume(Resume resume) {
+        resumeMongoRepository.delete(resume);
+        log.info("[assignResume] 직업 신청 내역에서 삭제");
+    }
+
+    /**
+     * 승인 완료 후 학생의 모든 신청 내역 삭제
+     *
+     * @param studentId
+     */
+    private void deleteAllResumesByStudentId(Long studentId) {
+        resumeMongoRepository.deleteAllByStudentId(studentId);
+        log.info("[assignResume] 해당 학생의 직업 승인 완료로 신청 내역 전부 삭제");
+    }
+
+    /**
+     * 학생에게 직업 배정
+     *
+     * @param job
+     * @param student
+     */
+    private void assignJobToStudent(Job job, Student student) {
         job.setCount((byte) (job.getCount() + 1));
         jobRepository.save(job);
         log.info("[assignResume] 직업 배정 인원 추가");
-
         student.setJob(job);
         studentRepository.save(student);
         log.info("[assignResume] 학생 직업 배정");
-
-        resumeMongoRepository.deleteAllByStudentId(student.getId());
-        log.info("[assignResume] 해당 학생의 직업 승인 완료로 신청 내역 전부 삭제");
     }
 }

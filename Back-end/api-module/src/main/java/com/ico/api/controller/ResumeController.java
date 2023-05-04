@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,6 +61,18 @@ public class ResumeController {
     @PostMapping("/teacher/{resumeId}")
     public ResponseEntity<HttpStatus> assignResume(@PathVariable String resumeId) {
         resumeService.assignResume(resumeId);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 교사가 직업 신청 반려
+     *
+     * @param resumeId
+     * @return OK
+     */
+    @DeleteMapping("/teacher/{resumeId}")
+    public ResponseEntity<HttpStatus> rejectResume(@PathVariable String resumeId) {
+        resumeService.rejectResumeResume(resumeId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
