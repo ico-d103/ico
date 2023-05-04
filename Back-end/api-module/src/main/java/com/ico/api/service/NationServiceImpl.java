@@ -51,12 +51,13 @@ public class NationServiceImpl implements NationService {
 
     @Override
     public String randomCode() {
-        Random random = new Random();
 
-        // 6자리의 난수 코드 생성
+        // 5자리의 난수 코드 생성
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder codeBuilder = new StringBuilder();
+        Random random = new Random();
         for (int i = 0; i < 6; i++) {
-            int digit = random.nextInt(10);
+            int digit = random.nextInt(characters.length());
             codeBuilder.append(digit);
         }
         String code = codeBuilder.toString();
