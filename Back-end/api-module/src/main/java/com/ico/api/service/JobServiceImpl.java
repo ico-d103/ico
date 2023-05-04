@@ -39,7 +39,7 @@ public class JobServiceImpl implements JobService{
         log.info("[updateJob] 해당 직업 존재");
 
         if (job.getCount() != 0) {
-            throw new CustomException(ErrorCode.ALREADY_ASSIGNED);
+            throw new CustomException(ErrorCode.ALREADY_ASSIGNED_JOB);
         }
         log.info("[updateJob] 아직 배정 받은 인원 없음");
 
