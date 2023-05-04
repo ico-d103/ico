@@ -6,7 +6,7 @@ import CollapseMenu from "@/components/teacher/common/CollapseMenu/CollapseMenu"
 function index() {
 	return (
 		<>
-			<PageHeader title={"학급 규칙"}  addComp={<GovRuleTab />} />
+			<PageHeader title={"학급 규칙"} addComp={<GovRuleTab />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					<CollapseMenu
@@ -17,7 +17,7 @@ function index() {
 						marginBottom={"20px"}
 					/>
 					<CollapseMenu
-						title={<span>신용 등급</span>}
+						title={<span>1. 대한민국의 주권은 국민에게 있고, 모든 권력은 국민으로부터 나온다.</span>}
 						fontSize={`var(--student-h3)`}
 						bracketSize={"10px"}
 						children={<div>학급 규칙 내용</div>}
@@ -36,10 +36,66 @@ function index() {
 						bracketSize={"10px"}
 						children={<div>학급 규칙 내용</div>}
 					/>
-					<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
-					<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
-					<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
-					<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>fdsfsdafdsdaf
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					fdsfsdafdsdaf
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					fdsfsdafdsdaf
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					fdsfsdafdsdaf
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					fdsfsdafdsdaf
 				</div>
 			</div>
 		</>
