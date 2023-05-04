@@ -65,6 +65,8 @@ const trgWrapperCSS = ({ fontSize }: { fontSize: string }) => {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		/* line-height: 200%; */
+		line-height: 20px;
 	`
 }
 
@@ -76,6 +78,7 @@ const bracketImgCSS = ({ isOpened, bracketSize }: { isOpened: boolean; bracketSi
 		/* height: 18px; */
 		height: ${bracketSize};
 		transform: ${isOpened && "rotate( 180deg )"};
+		margin-left: 10px;
 	`
 }
 
