@@ -51,4 +51,16 @@ public class ResumeController {
         return ResponseEntity.ok(resumeService.findResume(jobId));
     }
 
+    /**
+     * 교사가 직업 신청 승인
+     *
+     * @param resumeId mongo _id는 String
+     * @return OK
+     */
+    @PostMapping("/teacher/{resumeId}")
+    public ResponseEntity<HttpStatus> assignResume(@PathVariable String resumeId) {
+        resumeService.assignResume(resumeId);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
 }
