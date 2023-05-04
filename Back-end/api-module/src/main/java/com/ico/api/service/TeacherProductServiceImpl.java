@@ -61,8 +61,9 @@ public class TeacherProductServiceImpl implements TeacherProductService{
     public List<TeacherProductAllResDto> findAllProduct() {
         long nationId = 1L;
 
-        if (nationRepository.findById(nationId).isEmpty())
+        if (nationRepository.findById(nationId).isEmpty()){
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
+        }
 
         List<TeacherProduct> productList = teacherProductRepository.findAllByNationId(nationId);
         List<TeacherProductAllResDto> resProductList = new ArrayList<>();

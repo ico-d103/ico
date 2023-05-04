@@ -60,8 +60,9 @@ public class StudentProductServiceImpl implements StudentProductService{
     public List<StudentProductAllResDto> findAllProduct() {
         long nationId = 1L;
 
-        if (nationRepository.findById(nationId).isEmpty())
+        if (nationRepository.findById(nationId).isEmpty()){
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
+        }
 
         List<StudentProduct> productList = studentProductRepository.findAllByNationId(nationId);
         List<StudentProductAllResDto> resProductList = new ArrayList<>();
