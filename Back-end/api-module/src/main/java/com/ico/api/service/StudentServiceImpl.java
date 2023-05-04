@@ -1,5 +1,6 @@
 package com.ico.api.service;
 
+import com.ico.api.dto.AccountDto;
 import com.ico.api.dto.StudentSignUpRequestDto;
 import com.ico.core.entity.Student;
 import com.ico.core.code.Role;
@@ -55,4 +56,33 @@ public class StudentServiceImpl implements StudentService{
 
         return student.getId();
     }
+
+    /**
+     * 학생 계좌 잔액 수정
+     *
+     * @param student 학생 객체
+     * @param amount 지급/차감할 금액
+     */
+    private void updateAccount(Student student, int amount){
+        if(student.getAccount() + amount < 0){
+            throw new CustomException(ErrorCode.LOW_BALANCE);
+        }
+        student.setAccount(student.getAccount() + amount);
+    }
+
+    /**
+     * 선생님이 임의로 돈 지급/차감
+     *
+     * @param id 학생 아이디
+     * @param accountDto 학생
+     */
+    @Override
+    public void teacherUpdateAccount(Long id, AccountDto accountDto){
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        // 학생의 잔액 업데이트
+        updateAccount(student, accountDto.getAmount());
+        studentRepository.save(student);
+    }
+
 }

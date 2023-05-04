@@ -21,4 +21,12 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
      */
     Optional<Student> findByIdentity(String identity);
 
+    /**
+     * Student table 에서 index로 학생 정보 가져오기
+     *
+     * @param id must not be {@literal null}.
+     * @return
+     */
+    Optional<Student> findById(Long id);
+
 }

@@ -36,7 +36,7 @@ public class StudentProductController {
     @PostMapping("/student/proposal")
     public ResponseEntity<?> uploadProposal(@Valid @RequestBody StudentProductProposalDto proposal){
         studentProductService.createProduct(proposal);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     /**
@@ -46,7 +46,7 @@ public class StudentProductController {
      */
     @GetMapping
     public ResponseEntity<List<StudentProductAllResDto>> findAllProduct(){
-        return new ResponseEntity<>(studentProductService.findAllProduct(), HttpStatus.OK);
+        return ResponseEntity.ok(studentProductService.findAllProduct());
     }
 
 }
