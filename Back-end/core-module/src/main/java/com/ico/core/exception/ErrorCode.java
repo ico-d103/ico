@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode{
 
+    LOW_BALANCE(HttpStatus.BAD_REQUEST, "11", "잔액이 부족합니다."),
+
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "13", "해당하는 회원이 없습니다."),
 
     NATION_NOT_FOUND(HttpStatus.NOT_FOUND, "14", "해당하는 국가가 없습니다."),
