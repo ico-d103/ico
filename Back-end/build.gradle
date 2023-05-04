@@ -78,6 +78,8 @@ project(":core-module") {
 		implementation fileTree(dir: 'libs', include: ['*.jar'])
 
 		runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+		// 테스트형 내장형 몽고DB 의존성
+		testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
 	}
 }
 

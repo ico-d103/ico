@@ -23,7 +23,6 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
