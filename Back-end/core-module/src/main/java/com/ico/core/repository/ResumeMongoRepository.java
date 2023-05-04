@@ -14,4 +14,7 @@ import java.util.List;
 @Repository
 public interface ResumeMongoRepository extends MongoRepository<Resume, String> {
     List<Resume> findAllByJobIdAndNationId(Long jobId, Long nationId);
+
+    void deleteAllByStudentId(Long studentId);
+
 }
