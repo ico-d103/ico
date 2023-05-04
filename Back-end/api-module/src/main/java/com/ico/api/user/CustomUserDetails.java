@@ -102,12 +102,6 @@ public class CustomUserDetails implements UserDetails {
      */
     @Override
     public boolean isEnabled() {
-        // TODO : 모든 사용자의 로그인 시도 횟수를 제한하지 않는다면 return true 만 남기고 모두 지우기
-        if (user instanceof Student) {
-            return ((Student) user).getCount() < 100;     // 로그인 시도 횟수
-        } else if (user instanceof Teacher) {
-            return true;
-        }
         return true;
     }
 }
