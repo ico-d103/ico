@@ -1,5 +1,9 @@
 package com.ico.api.service;
 
+import com.ico.api.dto.ResumeResDto;
+
+import java.util.List;
+
 /**
  * 직업 신청 내역 Service
  *
@@ -13,4 +17,12 @@ public interface ResumeService {
      * @param jobId
      */
     void applyJob(Long jobId);
+
+    /**
+     * 하나의 직업에 신청자 목록 조회
+     *
+     * @param jobId
+     * @return
+     */
+    List<ResumeResDto> findResume(Long jobId);
 }
