@@ -49,7 +49,6 @@ const wrapperCSS = css`
 `
 
 const contentCSS = css`
-	/* margin-top: 82px; */
 	width: 95%;
 `
 
