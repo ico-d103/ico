@@ -3,13 +3,14 @@ import { css } from "@emotion/react"
 
 type CollapseMenuProps = {
 	children: JSX.Element
-	title: string
+	title: JSX.Element
 	fontSize: string
 	bracketSize: string
 	border?: string
+	marginBottom?: string
 }
 
-function CollapseMenu({ children, title, fontSize, bracketSize, border }: CollapseMenuProps) {
+function CollapseMenu({ children, title, fontSize, bracketSize, border, marginBottom }: CollapseMenuProps) {
 	const [isOpened, setIsOpened] = useState<boolean>(false)
 	const [refresh, setRefresh] = useState<boolean>(false)
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
@@ -21,7 +22,7 @@ function CollapseMenu({ children, title, fontSize, bracketSize, border }: Collap
 	}, [isOpened])
 
 	return (
-		<div css={ancWrapperCSS({ border })}>
+		<div css={ancWrapperCSS({ border, marginBottom })}>
 			<div
 				css={trgWrapperCSS({ fontSize })}
 				onClick={() => {
@@ -43,13 +44,13 @@ function CollapseMenu({ children, title, fontSize, bracketSize, border }: Collap
 	)
 }
 
-const ancWrapperCSS = ({ border }: { border: string | undefined }) => {
+const ancWrapperCSS = ({ border, marginBottom }: { border: string | undefined; marginBottom: string | undefined }) => {
 	return css`
 		background-color: var(--common-back-color-2);
 		border-radius: 10px;
 		box-sizing: border-box;
 		padding: 30px;
-		margin-bottom: 24px;
+		margin-bottom: ${marginBottom ? marginBottom : "24px"};
 		border: ${border ? border : "none"};
 	`
 }
@@ -64,6 +65,8 @@ const trgWrapperCSS = ({ fontSize }: { fontSize: string }) => {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		/* line-height: 200%; */
+		line-height: 20px;
 	`
 }
 
@@ -75,6 +78,7 @@ const bracketImgCSS = ({ isOpened, bracketSize }: { isOpened: boolean; bracketSi
 		/* height: 18px; */
 		height: ${bracketSize};
 		transform: ${isOpened && "rotate( 180deg )"};
+		margin-left: 10px;
 	`
 }
 

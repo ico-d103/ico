@@ -26,6 +26,7 @@ function PageHeader({ title, addComp }: PageHeaderProps) {
 	const headerRef = useRef<HTMLDivElement>(null)
 	const router = useRouter()
 	const [navToAtom, setNavToAtom] = useAtom(navTo)
+	const [compHeight, setCompHeight] = useState<number>(0)
 
 	const handleScroll = (event: any) => {
 		if (window.scrollY === 0) {
@@ -46,6 +47,13 @@ function PageHeader({ title, addComp }: PageHeaderProps) {
 		}
 	}, [])
 
+	useEffect(() => {
+		if (headerRef.current) {
+			const height = headerRef.current.clientHeight
+			setCompHeight(() => height)
+		}
+	}, [headerRef.current])
+
 	const renderBtn = (
 		<div onClick={goBackHandler} css={goBackCSS}>
 			{backBtn}
@@ -53,23 +61,24 @@ function PageHeader({ title, addComp }: PageHeaderProps) {
 	)
 
 	return (
-		<div ref={headerRef} css={headerOuterWrapperCSS({ headerRef })}>
+		<div css={headerOuterWrapperCSS({ compHeight })}>
 			<div css={headerWrapperCSS({ isScrolled, hasComp: addComp ? true : false })}>
 				<div css={headerContentWrapperCSS({ isScrolled, hasComp: addComp ? true : false })}>
 					{renderBtn}
-					<div css={titleCSS}>{title}</div>
+					<div css={titleCSS({ isScrolled })}>{title}</div>
 
 					<div css={whiteSpaceCSS}>{renderBtn}</div>
 				</div>
-				{addComp}
+				<div ref={headerRef}>{addComp}</div>
 			</div>
 		</div>
 	)
 }
 
-const headerOuterWrapperCSS = ({ headerRef }: { headerRef: any }) => {
+const headerOuterWrapperCSS = ({ compHeight }: { compHeight: number }) => {
 	return css`
-		height: ${headerRef.current ? `${headerRef.current.clientHeight}px` : "85px"};
+		height: ${compHeight + 70}px;
+		margin-bottom: 30px;
 	`
 }
 
@@ -78,8 +87,12 @@ const headerWrapperCSS = ({ isScrolled, hasComp }: { isScrolled: boolean; hasCom
 		z-index: 9999999;
 		position: fixed;
 		width: 100%;
-
-		${isScrolled && "box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2)"};
+		top: ${isScrolled && hasComp ? `-55px` : "0px"};
+		${isScrolled
+			? "box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2)"
+			: hasComp
+			? "box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2)"
+			: null};
 		/* filter: drop-shadow(0px 0px 10px 1px rgba(0, 0, 0, 0.2)); */
 		/* background-color: ${isScrolled ? "rgba(255, 255, 255, 0.5)" : "var(--common-back-color)"}; */
 		background-color: var(--common-back-color);
@@ -96,7 +109,8 @@ const headerContentWrapperCSS = ({ isScrolled, hasComp }: { isScrolled: boolean;
 		justify-content: space-between;
 		align-items: center;
 		padding: 24px;
-		height: ${isScrolled ? (hasComp ? `0px` : "55px") : "85px"};
+		height: ${isScrolled ? "55px" : "70px"};
+
 		transition-property: height;
 		transition-duration: 0.3s;
 	`
@@ -106,10 +120,14 @@ const goBackCSS = css`
 	cursor: pointer;
 `
 
-const titleCSS = css`
-	font-size: var(--student-h2);
-	font-weight: 700;
-`
+const titleCSS = ({ isScrolled }: { isScrolled: boolean }) => {
+	return css`
+		transition-property: font-size;
+		transition-duration: 0.3s;
+		font-size: ${isScrolled ? "var(--student-h2)" : "22px"};
+		font-weight: 700;
+	`
+}
 
 const whiteSpaceCSS = css`
 	visibility: hidden;

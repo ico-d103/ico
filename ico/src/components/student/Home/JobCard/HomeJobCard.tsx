@@ -3,16 +3,16 @@ import Image from "next/image"
 import { css } from "@emotion/react"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 
-type GovJobCardProps = {
+type HomeJobCardProps = {
   name: string
-	job: string
-	wage: number
+	job?: string
+	wage?: number
   credit: number
 	backgroundColor: string
 	imgUrl: string
 }
 
-function GovJobCard({name, job, wage, credit, backgroundColor, imgUrl }: GovJobCardProps) {
+function HomeJobCard({name, job, wage, credit, backgroundColor, imgUrl }: HomeJobCardProps) {
 	return (
 		<div css={outerCardWrapperCSS}>
       <div css={shadowMakerCSS}/>
@@ -33,11 +33,11 @@ function GovJobCard({name, job, wage, credit, backgroundColor, imgUrl }: GovJobC
 				</div>
         <div css={contentWrapperCSS}>
           <div css={nameIndicatorCSS}>{name}</div>
-          <div css={jobTextCSS}>{job}</div>
+          <div css={jobTextCSS}>{job ? job : '직업이 없어요.'}</div>
           <div css={lineCSS}/>
           <div css={secondaryInfoWrapperCSS}>
             <div css={creditIndicatorCSS}>{credit}등급</div>
-            <div css={wageTextCSS}>약 {wage * 30 / 10000}만</div>
+            <div css={wageTextCSS}>{wage ? `약 ${wage * 30 / 10000}만`: ''}</div>
           </div>
         </div>
 			</div>
@@ -46,9 +46,9 @@ function GovJobCard({name, job, wage, credit, backgroundColor, imgUrl }: GovJobC
 }
 
 const outerCardWrapperCSS = css`
-  width: 390px;
-  min-width: 390px;
-	height: 240px;
+  width: 100%;
+  /* min-width: 390px; */
+	height: 180px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -57,6 +57,7 @@ const outerCardWrapperCSS = css`
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.1);
   margin-right: 16px;
+  margin-top: 52px;
 `
 
 const shadowMakerCSS = css`
@@ -65,7 +66,7 @@ const shadowMakerCSS = css`
   /* background-color: black; */
   width: 80%;
   height: 10%;
-  bottom: 20px;
+  bottom: 0px;
   border-radius: 100% / 100% 100% 100% 100%;
   box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.5); 
 `
@@ -76,8 +77,8 @@ const cardWrapperCSS = ({ backgroundColor }: { backgroundColor: string }) => {
     transition-duration: 0.3s;
 		background-color: ${backgroundColor};
 		position: absolute;
-		width: 350px;
-		height: 200px;
+		width: 100%;
+		height: 180px;
 		border-radius: 10px;
     display: flex;
     
@@ -85,17 +86,17 @@ const cardWrapperCSS = ({ backgroundColor }: { backgroundColor: string }) => {
 }
 
 const jobImgSpaceCSS = css`
-	width: 130px;
+	width: 110px;
 	height: 100%;
   
 `
 
 const jobImgWrapperCSS = css`
 	position: absolute;
-	top: -30px;
-	left: 10px;
-	width: 150px;
-	height: 220px;
+	top: -45px;
+	left: 15px;
+	width: 120px;
+	height: 210px;
 	/* background-color: gray; */
 `
 
@@ -107,7 +108,7 @@ const imgCSS = css`
 `
 
 const contentWrapperCSS = css`
-  margin-top: 40px;
+  margin-top: 30px;
   padding-right: 24px;
   flex: 1;
 
@@ -119,11 +120,12 @@ const nameIndicatorCSS = css`
   font-size: var(--teacher-h2);
   /* color: rgba(255, 255, 255, 0.5); */
   font-weight: 500;
+  color: rgba(255, 255, 255, 1);
 `
 
 const jobTextCSS = css`
-  color: rgba(255, 255, 255, 1);
-  margin-top: 5px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 8px;
 
 `
 
@@ -135,7 +137,8 @@ const lineCSS = css`
 `
 
 const creditIndicatorCSS = css`
-  /* color: rgba(255, 255, 255, 0.6); */
+  color: rgba(255, 255, 255, 0.6);
+  
 `
 
 const secondaryInfoWrapperCSS = css`
@@ -150,4 +153,4 @@ const wageTextCSS = css`
   margin-bottom: 16px;
 `
 
-export default GovJobCard
+export default HomeJobCard
