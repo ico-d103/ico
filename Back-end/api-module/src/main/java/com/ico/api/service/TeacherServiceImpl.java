@@ -3,6 +3,8 @@ package com.ico.api.service;
 import com.ico.api.dto.TeacherSignUpRequestDto;
 import com.ico.core.code.Role;
 import com.ico.core.entity.Teacher;
+import com.ico.core.exception.CustomException;
+import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Transactional
     @Override
-    public Long signUp(TeacherSignUpRequestDto requestDto) throws Exception {
+    public Long signUp(TeacherSignUpRequestDto requestDto) {
         Teacher teacher = Teacher.builder()
                 .identity(requestDto.getIdentity())
                 .password(requestDto.getPassword())
@@ -45,11 +47,11 @@ public class TeacherServiceImpl implements TeacherService {
 
         if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()
                 || studentRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
-            throw new Exception("이미 존재하는 아이디 입니다.");
+            throw new CustomException(ErrorCode.DUPLICATED_ID);
         }
 
         if (!requestDto.getPassword().equals(requestDto.getCheckedPassword())) {
-            throw new Exception("비밀번호가 일치하지 않습니다.");
+            throw new CustomException(ErrorCode.PASSWORD_WRONG);
         }
 
         teacher.encodeTeacherPassword(passwordEncoder);

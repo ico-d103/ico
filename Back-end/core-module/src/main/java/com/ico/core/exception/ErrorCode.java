@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
  * 에러 코드 Enum
  *
  * @author 서재건
+ * @author 변윤경
+ * @author 강교철
  */
 @Getter
 @AllArgsConstructor
@@ -26,6 +28,10 @@ public enum ErrorCode{
     ALREADY_EXIST_TITLE(HttpStatus.CONFLICT, "17", "이미 존재하는 이름입니다."),
 
     INVALID_CREDIT_RATING(HttpStatus.BAD_REQUEST, "500", "신용등급 요건에 적합하지 않습니다."),
+
+    DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
+
+    PASSWORD_WRONG(HttpStatus.BAD_REQUEST, "105", "비밀번호가 틀렸습니다."),
 
     ;
 

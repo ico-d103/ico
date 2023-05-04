@@ -43,8 +43,10 @@ public class TeacherProduct {
     @NotNull(message = "612")
     private String type;
 
+    private byte sold;
+
     @Builder
-    public TeacherProduct(Long id, Nation nation, String title, int amount, String image, String detail, byte count, String type) {
+    public TeacherProduct(Long id, Nation nation, String title, int amount, String image, String detail, byte count, String type, byte sold) {
         this.id = id;
         this.nation = nation;
         this.title = title;
@@ -53,6 +55,6 @@ public class TeacherProduct {
         this.detail = detail;
         this.count = count;
         this.type = type;
+        this.sold = sold;
     }
-
 }

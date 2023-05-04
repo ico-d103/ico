@@ -4,6 +4,8 @@ import com.ico.api.dto.LoginDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
+import com.ico.core.exception.CustomException;
+import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,14 +36,21 @@ public class MemberServiceImpl implements MemberService {
         if (teacher.isPresent()) {
             // 받은 비밀번호를 인코딩하면 다르게 인코딩(암호화)돼서 비교가 안됌
             if (!passwordEncoder.matches(members.getPassword(), teacher.get().getPassword())) {       // DB의 인코딩 비밀번호를 복호화해서 비교함
-                throw new IllegalArgumentException(teacher.get().getPassword() + members.getPassword() + "잘못된 비밀번호입니다.");
+                throw new CustomException(ErrorCode.PASSWORD_WRONG);
             }
         } else if (student.isPresent()) {
             if (!passwordEncoder.matches(members.getPassword(), student.get().getPassword())) {
-                throw new IllegalArgumentException(student.get().getPassword() + members.getPassword() + "잘못된 비밀번호입니다.");
+                throw new CustomException(ErrorCode.PASSWORD_WRONG);
             }
         }
         return jwtTokenProvider.generateJwtToken(members);
     }
 
+    @Override
+    public boolean duplicated(String identity) {
+        boolean teacher = teacherRepository.findByIdentity(identity).isPresent();
+        boolean student = studentRepository.findByIdentity(identity).isPresent();
+        return teacher || student;
+    }
 }
+

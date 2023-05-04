@@ -1,6 +1,7 @@
 package com.ico.api.service;
 
 import com.ico.api.dto.LoginDto;
+import com.ico.core.exception.CustomException;
 
 /**
  * Member Service
@@ -16,4 +17,11 @@ public interface MemberService {
      * @return generateJwtToken
      */
     public String login(LoginDto members);
+
+    /**
+     * 아이디 중복 체크
+     *
+     * @param identity
+     */
+    public boolean duplicated(String identity);
 }
