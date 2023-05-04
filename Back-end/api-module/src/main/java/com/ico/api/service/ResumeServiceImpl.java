@@ -59,6 +59,7 @@ public class ResumeServiceImpl implements ResumeService {
         resumeMongoRepository.insert(resume);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ResumeResDto> findResume(Long jobId) {
         // TODO: 로그인한 유저 정보 불러오기
