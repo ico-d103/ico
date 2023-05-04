@@ -217,7 +217,7 @@ public class JwtTokenProvider {
      * JWT 추출
      *
      * @param request
-     * @return
+     * @return token
      */
     public String parseJwt(HttpServletRequest request){
         String headerAuth=null;     // 1. 변수 초기화

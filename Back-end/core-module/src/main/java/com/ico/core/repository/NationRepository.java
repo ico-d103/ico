@@ -7,7 +7,10 @@ import java.util.Optional;
 
 /**
  * @author 변윤경
+ * @author 강교철
  */
 public interface NationRepository extends JpaRepository<Nation, Long> {
     Optional<Nation> findById(Long nationId);
+
+    Nation findByCode(String code);
 }

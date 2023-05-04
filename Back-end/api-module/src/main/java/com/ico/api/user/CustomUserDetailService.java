@@ -7,6 +7,7 @@ import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.Optional;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CustomUserDetailService implements UserDetailsService {
 
 
@@ -37,6 +39,7 @@ public class CustomUserDetailService implements UserDetailsService {
     public CustomUserDetails loadUserByUsername(String identity) throws UsernameNotFoundException {
         Optional<Teacher> teacher = teacherRepository.findByIdentity(identity);
         Optional<Student> student = studentRepository.findByIdentity(identity);
+        log.info("LoadUserByUserName" + teacher + "----" + student);
 
         if (teacher.isPresent()) {
             return new CustomUserDetails(teacher.get());
