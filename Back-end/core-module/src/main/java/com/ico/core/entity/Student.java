@@ -21,7 +21,10 @@ import javax.persistence.OneToOne;
 
 
 /**
+ * 학생 정보 Entity
+ *
  * @author 강교철
+ * @author 변윤경
  */
 @Entity
 @Builder
