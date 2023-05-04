@@ -13,4 +13,5 @@ module.exports = withPWA({
 	images: {
 		domains: ["placehold.it", "placeimg.com"],
 	},
+
 })

@@ -54,6 +54,7 @@ function NavBar({ children }: NavBarProps) {
 	const navBarRender = Object.keys(navBarData).map((el, idx) => {
 		return (
 			<div
+				key={`navbar-${navBarData[Number(el)].label}`}
 				onClick={() => {
 					selectHandler(Number(el))
 				}}
