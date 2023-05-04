@@ -1,6 +1,7 @@
 package com.ico.api.service;
 
 import com.ico.api.dto.ResumeResDto;
+import com.ico.core.entity.Job;
 import com.ico.core.entity.Resume;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * 직업 신청 내역 관련 Service 구현 로직
  *
  * @author 서재건
  */
@@ -37,8 +38,15 @@ public class ResumeServiceImpl implements ResumeService {
         Long studentId = 1L;
         Long nationId = 1L;
 
-        jobRepository.findById(jobId)
+        Job job = jobRepository.findByIdAndNationId(jobId, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        if (job.getCreditRating() < student.getCredit_score()) {
+            throw new CustomException(ErrorCode.INVALID_CREDIT_RATING);
+        }
+        log.info("자격요건 통과");
+
         Resume resume = Resume.builder()
                 .studentId(studentId)
                 .jobId(jobId)

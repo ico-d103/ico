@@ -5,6 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
+/**
+ * 학생 관련 Repository
+ *
+ * @author 강교철
+ * @author 서재건
+ */
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
     /**

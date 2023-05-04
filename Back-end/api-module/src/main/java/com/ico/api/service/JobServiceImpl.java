@@ -31,12 +31,22 @@ public class JobServiceImpl implements JobService{
 
     @Override
     public void updateJob(Long jobId, JobDto dto) {
+        // TODO: 토큰에서 nation id 값 받아오기 필요
+        long nationId = 1;
+
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
+        log.info("[updateJob] 해당 직업 존재");
+
         if (job.getCount() != 0) {
             throw new CustomException(ErrorCode.ALREADY_ASSIGNED);
         }
-        log.info("[updateJob] 아직 배정 받은 인원 없어서 수정 가능");
+        log.info("[updateJob] 아직 배정 받은 인원 없음");
+
+        jobRepository.findByTitleAndNationId(dto.getTitle(), nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ALREADY_EXIST_TITLE));
+        log.info("[updateJob] 중복된 이름 없음");
+
         job.updateJob(dto);
         jobRepository.save(job);
         log.info("[updateJob] 수정 완료");
