@@ -61,7 +61,7 @@ function PageHeader({ title, addComp }: PageHeaderProps) {
 	)
 
 	return (
-		<div css={headerOuterWrapperCSS({ compHeight })}>
+		<div css={headerOuterWrapperCSS({ compHeight, hasComp: addComp ? true : false  })}>
 			<div css={headerWrapperCSS({ isScrolled, hasComp: addComp ? true : false })}>
 				<div css={headerContentWrapperCSS({ isScrolled, hasComp: addComp ? true : false })}>
 					{renderBtn}
@@ -75,10 +75,11 @@ function PageHeader({ title, addComp }: PageHeaderProps) {
 	)
 }
 
-const headerOuterWrapperCSS = ({ compHeight }: { compHeight: number }) => {
+const headerOuterWrapperCSS = ({ compHeight, hasComp }: { compHeight: number, hasComp: boolean }) => {
 	return css`
 		height: ${compHeight + 70}px;
-		margin-bottom: 30px;
+		margin-bottom: ${hasComp && '30px'};
+		/* margin-bottom: 16px; */
 	`
 }
 
@@ -89,13 +90,14 @@ const headerWrapperCSS = ({ isScrolled, hasComp }: { isScrolled: boolean; hasCom
 		width: 100%;
 		top: ${isScrolled && hasComp ? `-55px` : "0px"};
 		${isScrolled
-			? "box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2)"
+			? "box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1)"
 			: hasComp
-			? "box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2)"
+			? "box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1)"
 			: null};
+		border-bottom: ${isScrolled && '2px solid #ff9d0058'};
 		/* filter: drop-shadow(0px 0px 10px 1px rgba(0, 0, 0, 0.2)); */
 		/* background-color: ${isScrolled ? "rgba(255, 255, 255, 0.5)" : "var(--common-back-color)"}; */
-		background-color: var(--common-back-color);
+		background-color: ${isScrolled ? '#ffebaa' : (hasComp ? '#ffebaa' : '#FFDB60')};
 		/* filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.2)); */
 		transition-property: box-shadow background-color;
 		transition-duration: 0.3s;

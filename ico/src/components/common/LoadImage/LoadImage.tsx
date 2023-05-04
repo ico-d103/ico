@@ -9,9 +9,10 @@ type LoadImageProps = {
     imageCss?: any
     skeletonCss?: any
     useSkeleton?: boolean;
+    dev?: boolean;
 }
 
-function LoadImage({ src, alt, wrapperCss, imageCss, useSkeleton, skeletonCss }: LoadImageProps) {
+function LoadImage({ src, alt, wrapperCss, imageCss, useSkeleton, skeletonCss, dev }: LoadImageProps) {
     const [isLoading, setIsLoading] = useState<boolean>(true)
 	return (
         <div className={'image-wrapper'} css={[wrapperCss, imageWrapperCSS({isLoading})]}>
@@ -19,7 +20,7 @@ function LoadImage({ src, alt, wrapperCss, imageCss, useSkeleton, skeletonCss }:
                     <div css={[skeletonCss, skeletonInitCSS({isLoading})]}/>
                 }
                 <Image
-                    css={[imageCss, imageCSS({isLoading})]}
+                    css={[imageCss, imageCSS({isLoading, dev})]}
                     src={src}
                     alt={alt}
                     priority={true}
@@ -55,11 +56,12 @@ const skeletonInitCSS = ({isLoading}: {isLoading: boolean}) => {
 }
 
 
-const imageCSS = ({isLoading}: {isLoading: boolean}) => {
+const imageCSS = ({isLoading, dev}: {isLoading: boolean, dev?: boolean}) => {
     return css`
         transition-property: opacity;
         transition-duration: 0.2s;
         opacity: ${isLoading ? '0%' : '100%'};
+        border: ${dev && '1px solid red'};
     `
 }
 

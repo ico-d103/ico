@@ -1,0 +1,32 @@
+import React from "react"
+import { css } from "@emotion/react"
+import ContentWrapper from "../../common/ContentWrapper/ContentWrapper"
+
+type HomeTipCardProps = {
+    mainLabel: string;
+    subLabel: string;
+    url: string;
+}
+
+function HomeTipCard({mainLabel, subLabel, url}: HomeTipCardProps) {
+	return (
+		<ContentWrapper>
+			<div css={lsizeFontCSS}>{mainLabel}</div>
+			<div css={msizeFontCSS}>{subLabel}</div>
+		</ContentWrapper>
+	)
+}
+
+const lsizeFontCSS = css`
+	font-size: 1.1rem;
+	font-weight: 700;
+	margin-bottom: 4px;
+`
+
+const msizeFontCSS = css`
+	font-size: var(--student-h4);
+	font-weight: 500;
+	margin-bottom: 4px;
+    color: rgba(0, 0, 0, 0.6);
+`
+export default HomeTipCard

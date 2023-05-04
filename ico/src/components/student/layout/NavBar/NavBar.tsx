@@ -98,8 +98,9 @@ const contentWrapperCSS = css`
 const navBarWrapperCSS = css`
 	height: 64px;
 	width: 100%;
-	background-color: white;
-	box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.1);
+	background-color: #fff9e6;
+	/* backdrop-filter: blur(30px); */
+	box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1);
 	position: fixed;
 	bottom: 0;
 	display: flex;
@@ -119,7 +120,7 @@ const indicatorCSS = ({ length, selected }: { length: number; selected: number }
 		width: calc(100% / ${length});
 		height: 100%;
 		transform: translate(calc(${selected} * 100%), 0px);
-		background-color: rgb(70, 101, 180);
+		background-color: #ff9d00a3;
 	`
 }
 
@@ -145,6 +146,7 @@ const navBarIndivContentCSS = ({ targetIdx, curIdx }: { targetIdx: number; curId
 			transition-duration: 0.2s;
 			stroke: ${targetIdx === curIdx ? "rgba(0, 0, 0, 1)" : "rgba(0, 0, 0, 0.7)"};
 		}
+
 		transition-property: color;
 		transition-duration: 0.2s;
 		color: ${targetIdx === curIdx ? "rgba(0, 0, 0, 1)" : "rgba(0, 0, 0, 0.7)"};
