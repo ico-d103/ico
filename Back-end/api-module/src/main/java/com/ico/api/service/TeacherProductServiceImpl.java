@@ -30,12 +30,13 @@ public class TeacherProductServiceImpl implements TeacherProductService{
      */
     @Override
     public void createProduct(TeacherProduct proposal) {
+        long nationId = 1L;
         // Todo : token 생성 이후 nation 바꾸기
-        Nation nation = nationRepository.findById(1L)
+        Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
         // 같은 국가에 같은 선생님 상품 이름이 있는지 확인
-        if(teacherProductRepository.findByNationIdAndTitle(1L, proposal.getTitle()).isPresent()){
+        if(teacherProductRepository.findByNationIdAndTitle(nationId, proposal.getTitle()).isPresent()){
             throw new CustomException(ErrorCode.ALREADY_EXIST_TITLE);
         }
 
@@ -58,7 +59,12 @@ public class TeacherProductServiceImpl implements TeacherProductService{
      */
     @Override
     public List<TeacherProductAllResDto> findAllProduct() {
-        List<TeacherProduct> productList = teacherProductRepository.findAllByNationId(1L);
+        long nationId = 1L;
+
+        if (nationRepository.findById(nationId).isEmpty())
+            throw new CustomException(ErrorCode.NATION_NOT_FOUND);
+
+        List<TeacherProduct> productList = teacherProductRepository.findAllByNationId(nationId);
         List<TeacherProductAllResDto> resProductList = new ArrayList<>();
         for (TeacherProduct product : productList){
             resProductList.add(new TeacherProductAllResDto().of(product));

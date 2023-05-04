@@ -58,7 +58,12 @@ public class StudentProductServiceImpl implements StudentProductService{
      */
     @Override
     public List<StudentProductAllResDto> findAllProduct() {
-        List<StudentProduct> productList = studentProductRepository.findAllByNationId(1L);
+        long nationId = 1L;
+
+        if (nationRepository.findById(nationId).isEmpty())
+            throw new CustomException(ErrorCode.NATION_NOT_FOUND);
+
+        List<StudentProduct> productList = studentProductRepository.findAllByNationId(nationId);
         List<StudentProductAllResDto> resProductList = new ArrayList<>();
         for (StudentProduct product : productList){
             resProductList.add(new StudentProductAllResDto().of(product));
