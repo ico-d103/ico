@@ -37,10 +37,18 @@ public class StudentProduct {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nation_id")
     private Nation nation;
+
     private String title;
+
     private int amount;
+
     private String image;
+
     private String detail;
+
     private byte count;
+
     private boolean is_assigned;
+
+    private byte sold;
 }
