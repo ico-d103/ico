@@ -33,4 +33,11 @@ public interface ResumeService {
      * @param resumeId
      */
     void assignResume(String resumeId);
+
+    /**
+     * 교사가 직업 신청 반려
+     *
+     * @param resumeId
+     */
+    void rejectResumeResume(String resumeId);
 }
