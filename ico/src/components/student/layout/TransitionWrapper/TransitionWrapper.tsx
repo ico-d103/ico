@@ -68,8 +68,8 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			html2canvas(
 				contentInnerWrapperRef.current,
 				{
-					scale: 0.5
-				}
+					scale: 0.5,
+				},
 				// {
 				// 	scrollX: -window.scrollX,
 				// 	scrollY: -window.scrollY,
@@ -79,7 +79,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				// 	// height: 100
 				// }
 			).then((canvas) => {
-
 				const screenshot = canvas.toDataURL()
 				setScreenshot(screenshot)
 			})
@@ -127,7 +126,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			<div
 				className={`before-wrapper ${
 					navToAtom.url === router.pathname || screenshot || isTransitioning ? "before-transitioning" : ""
-				} ${navToAtom.url ? 'enable-will-change' : 'disable-will-change' }`}
+				} ${navToAtom.url ? "enable-will-change" : "disable-will-change"}`}
 				css={[imgWrapperCSS, beforeTransitionsCSS({ isTransitioning })[navToAtom.transition]]}
 			>
 				{screenshot && (
@@ -159,7 +158,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 					css={contentInnerWrapperCSS({ isTransitioning, beforeTransition })}
 					className={`content-wrapper ${
 						navToAtom.url === router.pathname || screenshot || isTransitioning ? "transitioning" : ""
-					}  ${navToAtom.url ? 'enable-will-change' : 'disable-will-change' }`}
+					}  ${navToAtom.url ? "enable-will-change" : "disable-will-change"}`}
 				>
 					{children}
 				</div>
@@ -170,7 +169,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 const transitionWrapperCSS = css`
 	.enable-will-change {
-			will-change: transform, opacity;
+		will-change: transform, opacity;
 	}
 	.disable-will-change {
 		will-change: auto;
@@ -193,15 +192,11 @@ const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 		height: auto;
 
 		transform: translate(0, -${scrollTop}px);
-
-
-		
 	`
 }
 
 const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 	return css`
-
 		& .enable-will-change {
 			will-change: transform, opacity;
 		}
@@ -226,13 +221,12 @@ const contentInnerWrapperCSS = ({
 	return css`
 		min-height: calc(100vh - 64px);
 		/* background-color: var(--student-back-color); */
-		background: linear-gradient( to bottom, var(--student-back-color), #ffecc4 );
+		background: linear-gradient(to bottom, var(--student-main-color), #ffecc4);
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
 		width: ${isTransitioning && "100vw"};
 		height: ${isTransitioning && "calc(100vh - 64px)"};
 		overflow: ${isTransitioning && "hidden"};
 		visibility: ${beforeTransition && "hidden"};
-		
 	`
 }
 
@@ -355,13 +349,11 @@ const beforeTransitionsCSS = ({ isTransitioning }: { isTransitioning: boolean })
 		scaleReverse: css``,
 
 		beforeScale: css`
-
-				/* position: fixed; */
-		animation: ${isTransitioning && 'beforeScale2 0.2s ease-out forwards'};
-				/* width: 100vw;
+			/* position: fixed; */
+			animation: ${isTransitioning && "beforeScale2 0.2s ease-out forwards"};
+			/* width: 100vw;
 				height: 100vh; */
-		
-			
+
 			@keyframes beforeScale2 {
 				from {
 					z-index: 9999;
