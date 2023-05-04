@@ -61,7 +61,7 @@ public class JobServiceImpl implements JobService{
     public List<JobAvailableResDto> findAllShortFallJob() {
         // TODO: 토큰에서 nation id 값 받아오기 필요
         long nationId = 1;
-        if (!nationRepository.existsById(nationId))
+        if (nationRepository.findById(nationId).isEmpty())
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
 
         List<Job> jobList = jobRepository.findAllByNationId(nationId);
