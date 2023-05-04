@@ -58,6 +58,12 @@ function Button({ text, fontSize, width, height, theme, margin, onClick }: Butto
 			fontColor: `var(--common-back-color-2)`,
 			backgroundColor: `var(--teacher-blue-color)`,
 		},
+		mobileNormal: {
+			border: "none",
+			borderRadius: "20px",
+			fontColor: `var(--student-main-color)`,
+			backgroundColor: `var(--student-blue-color)`,
+		},
 	}
 
 	return (
