@@ -15,9 +15,8 @@ public interface TeacherService {
      *
      * @param requestDto
      * @return
-     * @throws Exception
      */
-    public Long signUp(TeacherSignUpRequestDto requestDto) throws Exception;
+    public Long signUp(TeacherSignUpRequestDto requestDto);
 
     /**
      * 휴대폰 인증

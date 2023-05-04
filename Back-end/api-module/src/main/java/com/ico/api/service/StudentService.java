@@ -15,9 +15,8 @@ public interface StudentService {
      *
      * @param requestDto
      * @return student.getId()
-     * @throws Exception
      */
-    public Long signUp(StudentSignUpRequestDto requestDto) throws Exception;
+    public Long signUp(StudentSignUpRequestDto requestDto);
 
     public void updateAccount(Long id, AccountDto accountDto);
 }

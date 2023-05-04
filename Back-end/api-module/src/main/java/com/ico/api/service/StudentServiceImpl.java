@@ -29,26 +29,26 @@ public class StudentServiceImpl implements StudentService{
 
     @Transactional
     @Override
-    public Long signUp(StudentSignUpRequestDto requestDto) throws Exception {
+    public Long signUp(StudentSignUpRequestDto requestDto) {
 
         Student student = Student.builder()
                 .identity(requestDto.getIdentity())
                 .password(requestDto.getPassword())
                 .name(requestDto.getName())
                 .account(0)
-                .is_frozen(false)
-                .credit_score((byte) 0)
+                .isFrozen(false)
+                .creditScore((byte) 0)
                 .role(Role.STUDENT)
-                .count((byte) 0)
+                .salary(0)
                 .build();
 
         if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()
                 || studentRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
-            throw new Exception("이미 존재하는 아이디 입니다.");
+            throw new CustomException(ErrorCode.DUPLICATED_ID);
         }
 
         if (!requestDto.getPassword().equals(requestDto.getCheckedPassword())) {
-            throw new Exception("비밀번호가 일치하지 않습니다.");
+            throw new CustomException(ErrorCode.PASSWORD_WRONG);
         }
 
         student.encodeStudentPassword(passwordEncoder);
