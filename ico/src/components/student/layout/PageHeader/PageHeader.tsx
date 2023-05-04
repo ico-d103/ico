@@ -41,8 +41,6 @@ function PageHeader({ title, addComp }: PageHeaderProps) {
 	}
 
 	useEffect(() => {
-
-
 		window.addEventListener("scroll", handleScroll, { capture: true }) // 스크롤 이벤트 등록
 		return () => {
 			window.removeEventListener("scroll", handleScroll) // 스크롤 이벤트 제거
@@ -54,7 +52,6 @@ function PageHeader({ title, addComp }: PageHeaderProps) {
 			const height = headerRef.current.clientHeight
 			setCompHeight(() => height)
 		}
-		
 	}, [headerRef.current])
 
 	const renderBtn = (
@@ -64,18 +61,15 @@ function PageHeader({ title, addComp }: PageHeaderProps) {
 	)
 
 	return (
-		<div  css={headerOuterWrapperCSS({ compHeight })}>
+		<div css={headerOuterWrapperCSS({ compHeight })}>
 			<div css={headerWrapperCSS({ isScrolled, hasComp: addComp ? true : false })}>
 				<div css={headerContentWrapperCSS({ isScrolled, hasComp: addComp ? true : false })}>
 					{renderBtn}
-					<div css={titleCSS}>{title}</div>
+					<div css={titleCSS({ isScrolled })}>{title}</div>
 
 					<div css={whiteSpaceCSS}>{renderBtn}</div>
 				</div>
-				<div ref={headerRef}>
-					{addComp}
-				</div>
-				
+				<div ref={headerRef}>{addComp}</div>
 			</div>
 		</div>
 	)
@@ -83,7 +77,7 @@ function PageHeader({ title, addComp }: PageHeaderProps) {
 
 const headerOuterWrapperCSS = ({ compHeight }: { compHeight: number }) => {
 	return css`
-		height: ${compHeight + 85}px;
+		height: ${compHeight + 70}px;
 		margin-bottom: 30px;
 	`
 }
@@ -94,7 +88,11 @@ const headerWrapperCSS = ({ isScrolled, hasComp }: { isScrolled: boolean; hasCom
 		position: fixed;
 		width: 100%;
 		top: ${isScrolled && hasComp ? `-55px` : "0px"};
-		${isScrolled ? "box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2)" : (hasComp ? "box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2)" : null)};
+		${isScrolled
+			? "box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2)"
+			: hasComp
+			? "box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2)"
+			: null};
 		/* filter: drop-shadow(0px 0px 10px 1px rgba(0, 0, 0, 0.2)); */
 		/* background-color: ${isScrolled ? "rgba(255, 255, 255, 0.5)" : "var(--common-back-color)"}; */
 		background-color: var(--common-back-color);
@@ -111,8 +109,8 @@ const headerContentWrapperCSS = ({ isScrolled, hasComp }: { isScrolled: boolean;
 		justify-content: space-between;
 		align-items: center;
 		padding: 24px;
-		height: ${isScrolled ? "55px" : "85px"};
-		
+		height: ${isScrolled ? "55px" : "70px"};
+
 		transition-property: height;
 		transition-duration: 0.3s;
 	`
@@ -122,10 +120,14 @@ const goBackCSS = css`
 	cursor: pointer;
 `
 
-const titleCSS = css`
-	font-size: var(--student-h2);
-	font-weight: 700;
-`
+const titleCSS = ({ isScrolled }: { isScrolled: boolean }) => {
+	return css`
+		transition-property: font-size;
+		transition-duration: 0.3s;
+		font-size: ${isScrolled ? "var(--student-h2)" : "22px"};
+		font-weight: 700;
+	`
+}
 
 const whiteSpaceCSS = css`
 	visibility: hidden;
