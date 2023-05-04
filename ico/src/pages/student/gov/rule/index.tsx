@@ -3,6 +3,7 @@ import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import GovRuleTab from "@/components/student/Gov/Rule/GovRuleTab"
 import CollapseMenu from "@/components/teacher/common/CollapseMenu/CollapseMenu"
 import ListNumbering from "@/components/student/Gov/ListNumbering"
+import GovRuleGrade from "@/components/student/Gov/Rule/GovRuleGrade"
 
 function index() {
 	const mockList = [
@@ -21,7 +22,7 @@ function index() {
 						title={<span>신용 등급</span>}
 						fontSize={`var(--student-h2)`}
 						bracketSize={"10px"}
-						children={<div>신용 등급 내용</div>}
+						children={<GovRuleGrade />}
 						marginBottom={"20px"}
 					/>
 					{mockList.map((mock) => (
