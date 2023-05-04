@@ -21,7 +21,8 @@ function NavBar({ children }: NavBarProps) {
 		"/student/gov/rule": 2,
 		"/student/gov/exchequer": 2,
 		"/student/gov/job": 2,
-		"/student/test": 3,
+		"/student/shop/teacher": 3,
+		"/student/shop/student": 3,
 	}
 
 	const navBarData: { [prop: number]: { url: string; name: string; label: string; content: any; function: Function } } =
@@ -29,7 +30,7 @@ function NavBar({ children }: NavBarProps) {
 			0: { url: "/student/home", name: "home", label: "홈", content: NAVBAR_HOME, function: () => {} },
 			1: { url: "/student/test2", name: "class", label: "우리반", content: NAVBAR_CLASS, function: () => {} },
 			2: { url: "/student/gov/rule", name: "gov", label: "정부", content: NAVBAR_GOVERNMENT, function: () => {} },
-			3: { url: "/student/test", name: "store", label: "상점", content: NAVBAR_STORE, function: () => {} },
+			3: { url: "/student/shop/teacher", name: "store", label: "상점", content: NAVBAR_STORE, function: () => {} },
 		}
 
 	useEffect(() => {
