@@ -1,8 +1,11 @@
 package com.ico.api.service;
 
+import com.ico.api.dto.AccountDto;
 import com.ico.api.dto.StudentSignUpRequestDto;
 import com.ico.core.entity.Student;
 import com.ico.core.code.Role;
+import com.ico.core.exception.CustomException;
+import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,4 +56,16 @@ public class StudentServiceImpl implements StudentService{
 
         return student.getId();
     }
+
+    @Override
+    public void updateAccount(Long id, AccountDto accountDto) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        // 학생의 잔액 업데이트
+        student.updateAccount(accountDto.getAmount());
+        studentRepository.save(student);
+
+        // todo : 계좌 내역에 추가
+    }
+
 }

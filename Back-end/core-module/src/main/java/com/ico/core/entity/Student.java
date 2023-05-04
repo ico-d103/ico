@@ -55,4 +55,8 @@ public class Student {
         this.password = passwordEncoder.encode(password);
     }
 
+    public void updateAccount(int amount){
+        this.account = this.getAccount() + amount;
+    }
+
 }

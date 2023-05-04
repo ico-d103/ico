@@ -1,8 +1,12 @@
 package com.ico.api.service;
 
+import com.ico.api.dto.AccountDto;
 import com.ico.api.dto.TeacherSignUpRequestDto;
 import com.ico.core.code.Role;
+import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
+import com.ico.core.exception.CustomException;
+import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 /**
  * Teacher ServiceImpl
