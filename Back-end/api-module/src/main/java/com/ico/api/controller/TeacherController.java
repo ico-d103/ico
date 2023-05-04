@@ -34,4 +34,5 @@ public class TeacherController {
         teacherService.signUp(requestDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
 }
