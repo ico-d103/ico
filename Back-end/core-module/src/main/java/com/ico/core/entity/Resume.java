@@ -20,17 +20,17 @@ public class Resume {
     @Id
     private String id;
 
-    private Long student_id;
+    private Long studentId;
 
-    private Long job_id;
+    private Long jobId;
 
-    private Long nation_id;
+    private Long nationId;
 
     @Builder
-    public Resume(String id, Long student_id, Long job_id, Long nation_id) {
+    public Resume(String id, Long studentId, Long jobId, Long nationId) {
         this.id = id;
-        this.student_id = student_id;
-        this.job_id = job_id;
-        this.nation_id = nation_id;
+        this.studentId = studentId;
+        this.jobId = jobId;
+        this.nationId = nationId;
     }
 }
