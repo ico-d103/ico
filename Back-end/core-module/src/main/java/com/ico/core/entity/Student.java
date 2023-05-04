@@ -44,12 +44,12 @@ public class Student {
     private String password;
     private String name;
     private int account;
-    private boolean is_frozen;
-    private byte credit_score;
+    private boolean isFrozen;
+    private byte creditScore;
     private byte number;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private byte count;
+    private int salary;
 
     public void encodeStudentPassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);

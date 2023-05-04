@@ -98,8 +98,8 @@ public class JwtTokenProvider {
     private Map<String, Object> createClaims(LoginDto member) {
         Map<String, Object> claims = new HashMap<>();
 
-        if (teacherRepository.findByIdentity(member.getIdentity()).isPresent()) {        // 안돼면 .isEmpty 사용하기
-            Teacher teacher = teacherRepository.findByIdentity(member.getIdentity()).orElseThrow(null);
+        if (teacherRepository.findByIdentity(member.getIdentity()).isPresent()) {
+            Teacher teacher = teacherRepository.findByIdentity(member.getIdentity()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
             claims.put("id", teacher.getId());
             claims.put("identity", member.getIdentity());
             claims.put("role", teacher.getRole());
@@ -107,7 +107,7 @@ public class JwtTokenProvider {
 
         }
         else if (studentRepository.findByIdentity(member.getIdentity()).isPresent()) {
-            Student student = studentRepository.findByIdentity(member.getIdentity()).orElseThrow(null);
+            Student student = studentRepository.findByIdentity(member.getIdentity()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
             claims.put("id", student.getId());
             claims.put("identity", member.getIdentity());
             claims.put("role", student.getRole());
