@@ -6,6 +6,7 @@ package com.ico.api.service;
  * @author 변윤경
  */
 public interface TransactionService {
+
     /**
      * 양방향으로 거래 내역 추가
      * from, to 바꿔서 한번 더 저장
