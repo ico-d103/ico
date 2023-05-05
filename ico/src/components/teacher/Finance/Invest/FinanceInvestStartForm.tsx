@@ -59,6 +59,7 @@ function FinanceInvestStartForm() {
 						width={"500px"}
 						icon={FinanceInvestChartIcon}
 						title={"시간 설정하기"}
+						titleSize={"var(--teacher-h2)"}
 						content={FinanceInvestUseModalContent()}
 					/>
 				}

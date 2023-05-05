@@ -41,6 +41,7 @@ function property() {
 						width={"500px"}
 						icon={CLASS_BIG_PROPERTY}
 						title={"국고 사용하기"}
+						titleSize={"var(--teacher-h2)"}
 						content={ClassPropertyUseModalContent()}
 					/>
 				}
