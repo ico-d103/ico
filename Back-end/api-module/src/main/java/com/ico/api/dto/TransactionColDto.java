@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 학생 상세보기에서 transaction column 에 담을 거래내역 dto
@@ -16,23 +16,17 @@ import java.util.Date;
 @NoArgsConstructor
 public class TransactionColDto {
 
-    private String from;
-
-    private String to;
+    private String title;
 
     private int amount;
 
-    private Date date;
-
-    private String title;
+    private LocalDateTime date;
 
     @Builder
-    public TransactionColDto(String from, String to, int amount, Date date, String title) {
-        this.from = from;
-        this.to = to;
+    public TransactionColDto(int amount, LocalDateTime date, String title) {
+        this.title = title;
         this.amount = amount;
         this.date = date;
-        this.title = title;
     }
 
     /**
@@ -44,11 +38,9 @@ public class TransactionColDto {
      */
     public TransactionColDto of(Transaction transaction, String userId) {
         return TransactionColDto.builder()
-                .from(transaction.getFrom())
-                .to(transaction.getTo())
+                .title(transaction.getTitle())
                 .amount(transaction.getFrom().equals(userId) ? -1 * transaction.getAmount() : transaction.getAmount())
                 .date(transaction.getDate())
-                .title(transaction.getTitle())
                 .build();
     }
 }
