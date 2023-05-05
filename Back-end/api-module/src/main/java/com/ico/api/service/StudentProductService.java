@@ -28,4 +28,11 @@ public interface StudentProductService {
      * @param id 학생 상품 id
      */
     void updateIsAssigned(Long id);
+
+    /**
+     * 학생 상품 삭제
+     *
+     * @param id 학생 상품 id
+     */
+    void deleteProduct(Long id);
 }

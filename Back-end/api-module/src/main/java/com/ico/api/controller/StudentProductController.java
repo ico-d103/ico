@@ -6,6 +6,7 @@ import com.ico.api.service.StudentProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,6 +61,18 @@ public class StudentProductController {
     @PostMapping("/teacher/{studentProductId}")
     public ResponseEntity<HttpStatus> approveProposal(@PathVariable Long studentProductId){
         studentProductService.updateIsAssigned(studentProductId);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 판매 제안서 거절, 학생 상품 삭제
+     *
+     * @param studentProductId 학생 상품 id
+     * @return httpstauts
+     */
+    @DeleteMapping("/teacher/{studentProductId}")
+    public ResponseEntity<HttpStatus> deleteProduct(@PathVariable Long studentProductId){
+        studentProductService.deleteProduct(studentProductId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

@@ -85,4 +85,16 @@ public class StudentProductServiceImpl implements StudentProductService{
         product.set_assigned(true);
         studentProductRepository.save(product);
     }
+
+    /**
+     * 학생 상품 삭제
+     *
+     * @param id 학생 상품 id
+     */
+    @Override
+    public void deleteProduct(Long id) {
+        long nationId = 1L;
+        StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId);
+        studentProductRepository.delete(product);
+    }
 }
