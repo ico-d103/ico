@@ -1,5 +1,9 @@
-import LoadImage from "@/components/common/LoadImage/LoadImage"
 import { css } from "@emotion/react"
+import LoadImage from "@/components/common/LoadImage/LoadImage"
+import Modal from "@/components/common/Modal/Modal"
+import useCompHandler from "@/hooks/useCompHandler"
+import ModalContent from "@/components/common/Modal/ModalContent"
+import { GOV_JOB } from "../GovIcons"
 
 type GovJobCardPropsType = {
 	mock: {
@@ -13,8 +17,10 @@ type GovJobCardPropsType = {
 }
 
 function GovJobCard({ mock }: GovJobCardPropsType) {
+	const [openComp, closeComp, compState] = useCompHandler()
+
 	return (
-		<div css={cardWrapperCSS}>
+		<div css={cardWrapperCSS} onClick={openComp}>
 			<div css={imageWrapperCSS}>
 				<LoadImage wrapperCss={imgCSS} src={"/assets/job/weather_caster.png"} alt={"job_image"} />
 			</div>
@@ -31,6 +37,20 @@ function GovJobCard({ mock }: GovJobCardPropsType) {
 					<h3>{mock.money} 미소</h3>
 				</div>
 			</div>
+			<Modal
+				compState={compState}
+				closeComp={closeComp}
+				transition={"scale"}
+				content={
+					<ModalContent
+						width={"320px"}
+						icon={GOV_JOB}
+						title={`${mock.name}의 업무`}
+						titleSize={"var(--student-h2)"}
+						content={<span>하이</span>}
+					/>
+				}
+			/>
 		</div>
 	)
 }
