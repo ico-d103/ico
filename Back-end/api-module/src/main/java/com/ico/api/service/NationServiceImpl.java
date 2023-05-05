@@ -36,10 +36,10 @@ public class NationServiceImpl implements NationService {
     @Transactional
     public void createNation(NationReqDto reqDto, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
-        Object role = jwtTokenProvider.getRole(token);
+        Role role = jwtTokenProvider.getRole(token);
 
         // 교사만 반 생성
-        if (role.equals("TEACHER")) {
+        if (role == Role.TEACHER) {
             Nation nation = Nation.builder()
                     .school(reqDto.getSchool())
                     .grade((byte) reqDto.getGrade())
@@ -99,7 +99,7 @@ public class NationServiceImpl implements NationService {
         // Long nationId = (Long) jwtTokenProvider.getNation(token);
         // Long nationId = ((Number) jwtTokenProvider.getNation(token)).longValue();
 
-        Long id = ((Number) jwtTokenProvider.getId(token)).longValue();
+        Long id = jwtTokenProvider.getId(token);
         try {
             Long nationId = teacherRepository.findById(id).get().getNation().getId();
             Nation nation = nationRepository.findById(nationId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
