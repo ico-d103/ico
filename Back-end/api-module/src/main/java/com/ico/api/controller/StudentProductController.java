@@ -1,8 +1,8 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.StudentProductAllResDto;
-import com.ico.api.dto.StudentProductProposalDto;
-import com.ico.api.service.StudentProductService;
+import com.ico.api.dto.student.StudentProductAllResDto;
+import com.ico.api.dto.student.StudentProductProposalDto;
+import com.ico.api.service.student.StudentProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
