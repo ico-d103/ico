@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 거래 내역 관련 Service
@@ -36,7 +36,7 @@ public class TransactionServiceImpl implements TransactionService{
                 .from(String.valueOf(from))
                 .to(String.valueOf(to))
                 .amount(Math.abs(amount))
-                .date(new Date())
+                .date(LocalDateTime.now())
                 .title(title + " 거래")
                 .build();
 
@@ -57,7 +57,7 @@ public class TransactionServiceImpl implements TransactionService{
                 .from(String.valueOf(from))
                 .to(to)
                 .amount(Math.abs(amount))
-                .date(new Date())
+                .date(LocalDateTime.now())
                 .title(title)
                 .build();
 
@@ -78,7 +78,7 @@ public class TransactionServiceImpl implements TransactionService{
                 .from(from)
                 .to(String.valueOf(to))
                 .amount(Math.abs(amount))
-                .date(new Date())
+                .date(LocalDateTime.now())
                 .title(title)
                 .build();
 
