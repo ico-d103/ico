@@ -32,25 +32,15 @@ public class TransactionServiceImpl implements TransactionService{
     @Transactional
     @Override
     public void addTransaction(Long to, Long from, int amount, String title) {
-        Transaction buyer = Transaction.builder()
+        Transaction transaction = Transaction.builder()
                 .from(String.valueOf(from))
                 .to(String.valueOf(to))
                 .amount(Math.abs(amount))
                 .date(new Date())
-                .title(title + " 구매")
+                .title(title + " 거래")
                 .build();
 
-        transactionMongoRepository.insert(buyer);
-
-        Transaction seller = Transaction.builder()
-                .from(String.valueOf(to))
-                .to(String.valueOf(from))
-                .amount(Math.abs(amount))
-                .date(new Date())
-                .title(title + " 판매")
-                .build();
-
-        transactionMongoRepository.insert(seller);
+        transactionMongoRepository.insert(transaction);
     }
 
     /**
