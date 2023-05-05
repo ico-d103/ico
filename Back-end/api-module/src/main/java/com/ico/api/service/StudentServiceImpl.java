@@ -1,16 +1,25 @@
 package com.ico.api.service;
 
 import com.ico.api.dto.AccountDto;
+import com.ico.api.dto.StudentListResDto;
+import com.ico.api.dto.StudentResDto;
 import com.ico.api.dto.StudentSignUpRequestDto;
 import com.ico.core.entity.Student;
 import com.ico.core.code.Role;
+import com.ico.core.entity.Transaction;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
+import com.ico.core.repository.TransactionMongoRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -18,6 +27,7 @@ import org.springframework.stereotype.Service;
  *
  * @author 강교철
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService{
@@ -29,6 +39,8 @@ public class StudentServiceImpl implements StudentService{
     private final PasswordEncoder passwordEncoder;
 
     private final TransactionService transactionService;
+
+    private final TransactionMongoRepository transactionMongoRepository;
 
     @Override
     public Long signUp(StudentSignUpRequestDto requestDto) {
@@ -97,6 +109,31 @@ public class StudentServiceImpl implements StudentService{
 
         // 수정된 학생 객체 저장
         studentRepository.save(student);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<StudentListResDto> findAllStudent() {
+        // TODO: 로그인한 유저 정보 조회 시 나라 id값 대입
+        Long nationId = 1L;
+
+        List<Student> studentList = studentRepository.findAllByNationId(nationId);
+        List<StudentListResDto> resList = new ArrayList<>();
+        for (Student student : studentList) {
+            resList.add(new StudentListResDto().of(student));
+        }
+        return resList;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public StudentResDto findStudent(Long studentId) {
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> {
+            log.info("[findStudent] studentId[{}]에 해당하는 학생이 없습니다.", studentId);
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        });
+        List<Transaction> transactions = transactionMongoRepository.findAllByFromOrTo(String.valueOf(studentId), String.valueOf(studentId));
+        return new StudentResDto().of(student, transactions);
     }
 
 }

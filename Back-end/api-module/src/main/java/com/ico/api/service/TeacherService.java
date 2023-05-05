@@ -1,16 +1,11 @@
 package com.ico.api.service;
 
-import com.ico.api.dto.StudentListResDto;
-import com.ico.api.dto.StudentResDto;
 import com.ico.api.dto.TeacherSignUpRequestDto;
-
-import java.util.List;
 
 /**
  * Teacher Service
  *
  * @author 강교철
- * @author 서재건
  */
 public interface TeacherService {
 
@@ -29,17 +24,4 @@ public interface TeacherService {
      */
     public void certifiedPhoneNum(String phoneNum);
 
-    /**
-     * 우리 반 학생 목록 조회
-     *
-     * @return
-     */
-    List<StudentListResDto> findAllStudent();
-
-    /**
-     * 학생 상세보기 조회
-     *
-     * @return
-     */
-    StudentResDto findStudent(Long studentId);
 }
