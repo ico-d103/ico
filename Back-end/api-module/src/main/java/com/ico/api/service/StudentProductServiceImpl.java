@@ -72,4 +72,17 @@ public class StudentProductServiceImpl implements StudentProductService{
 
         return resProductList;
     }
+
+    /**
+     * 판매 제안서 승인
+     *
+     * @param id 학생 상품 id
+     */
+    @Override
+    public void updateIsAssigned(Long id) {
+        long nationId = 1L;
+        StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId);
+        product.set_assigned(true);
+        studentProductRepository.save(product);
+    }
 }

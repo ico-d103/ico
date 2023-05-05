@@ -9,6 +9,8 @@ import java.util.List;
  * @author 변윤경
  */
 public interface StudentProductRepository extends JpaRepository<StudentProduct, Long> {
-    List<StudentProduct> findAllByNationId(Long id);
+    List<StudentProduct> findAllByNationId(Long nationId);
+
+    StudentProduct findByIdAndNationId(Long id, Long nationId);
 
 }
