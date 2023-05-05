@@ -1,5 +1,6 @@
 package com.ico.api.service;
 
+import com.ico.api.dto.AccountDto;
 import com.ico.api.dto.StudentSignUpRequestDto;
 
 /**
@@ -17,4 +18,5 @@ public interface StudentService {
      */
     public Long signUp(StudentSignUpRequestDto requestDto);
 
+    public void teacherUpdateAccount(Long id, AccountDto accountDto);
 }

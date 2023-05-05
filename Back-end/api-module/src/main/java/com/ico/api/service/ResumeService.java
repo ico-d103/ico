@@ -25,4 +25,19 @@ public interface ResumeService {
      * @return
      */
     List<ResumeResDto> findResume(Long jobId);
+
+
+    /**
+     * 교사가 직업 신청 승인
+     *
+     * @param resumeId
+     */
+    void assignResume(String resumeId);
+
+    /**
+     * 교사가 직업 신청 반려
+     *
+     * @param resumeId
+     */
+    void rejectResumeResume(String resumeId);
 }
