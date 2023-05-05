@@ -1,6 +1,7 @@
 package com.ico.api.user;
 
 import com.ico.api.dto.LoginDto;
+import com.ico.core.code.Role;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
@@ -157,8 +158,8 @@ public class JwtTokenProvider {
      * @param token
      * @return id
      */
-    public Object getId(String token) {
-        return getClaims(token).get("id");
+    public Long getId(String token) {
+        return ((Number) getClaims(token).get("id")).longValue();
     }
 
     /**
@@ -167,8 +168,8 @@ public class JwtTokenProvider {
      * @param token
      * @return identity
      */
-    public Object getIdentity(String token) {
-        return getClaims(token).get("identity");
+    public String getIdentity(String token) {
+        return (String) getClaims(token).get("identity");
     }
 
     /**
@@ -177,8 +178,9 @@ public class JwtTokenProvider {
      * @param token
      * @return role
      */
-    public Object getRole(String token) {
-        return getClaims(token).get("role");
+    public Role getRole(String token) {
+        String role = (String) getClaims(token).get("role");
+        return Role.valueOf(role);
     }
 
     /**
@@ -187,8 +189,8 @@ public class JwtTokenProvider {
      * @param token
      * @return nation
      */
-    public Object getNation(String token) {
-        return getClaims(token).get("nation");
+    public Long getNation(String token) {
+        return ((Number) getClaims(token).get("nation")).longValue();
     }
 
     /**
@@ -217,7 +219,7 @@ public class JwtTokenProvider {
      * JWT 추출
      *
      * @param request
-     * @return
+     * @return token
      */
     public String parseJwt(HttpServletRequest request){
         String headerAuth=null;     // 1. 변수 초기화
