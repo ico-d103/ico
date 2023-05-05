@@ -48,7 +48,7 @@ public class StudentProduct {
 
     private byte count;
 
-    private boolean is_assigned;
+    private boolean isAssigned;
 
     private byte sold;
 }

@@ -21,4 +21,18 @@ public interface StudentProductService {
      * @return 학생 상품 목록
      */
     List<StudentProductAllResDto> findAllProduct();
+
+    /**
+     * 학생의 판매 제안서 승인
+     *
+     * @param id 학생 상품 id
+     */
+    void updateIsAssigned(Long id);
+
+    /**
+     * 학생 상품 삭제
+     *
+     * @param id 학생 상품 id
+     */
+    void deleteProduct(Long id);
 }

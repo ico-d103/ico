@@ -12,7 +12,8 @@ import com.ico.core.repository.StudentProductRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class StudentProductServiceImpl implements StudentProductService{
                 .image(proposal.getImage())
                 .detail(proposal.getDetail())
                 .count(proposal.getCount())
-                .is_assigned(false)
+                .isAssigned(false)
                 .sold((byte) 0)
                 .build();
         studentProductRepository.save(product);
@@ -56,6 +57,7 @@ public class StudentProductServiceImpl implements StudentProductService{
      * 등록된 학생 상품 목록을 조회합니다.
      * @return 학생상품목록
      */
+    @Transactional(readOnly = true)
     @Override
     public List<StudentProductAllResDto> findAllProduct() {
         long nationId = 1L;
@@ -71,5 +73,35 @@ public class StudentProductServiceImpl implements StudentProductService{
         }
 
         return resProductList;
+    }
+
+    /**
+     * 판매 제안서 승인
+     *
+     * @param id 학생 상품 id
+     */
+    @Override
+    public void updateIsAssigned(Long id) {
+        // TODO : 교사의 국가 ID 가지고 오기
+        long nationId = 1L;
+        StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PROPOSAL_NOT_FOND));
+        product.setAssigned(true);
+        studentProductRepository.save(product);
+    }
+
+    /**
+     * 학생 상품 삭제
+     *
+     * @param id 학생 상품 id
+     */
+    @Override
+    public void deleteProduct(Long id) {
+        // TODO : 교사의 국가 ID 가지고 오기
+        long nationId = 1L;
+
+        StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PROPOSAL_NOT_FOND));
+        studentProductRepository.delete(product);
     }
 }

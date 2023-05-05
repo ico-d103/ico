@@ -16,18 +16,18 @@ public class StudentProductAllResDto {
     int amount;
     String image;
     byte count;
-    boolean is_assigned;
+    boolean isAssigned;
     byte sold;
     String name;
 
     @Builder
-    public StudentProductAllResDto(Long id, String title, int amount, String image, byte count, boolean is_assigned, byte sold, String name) {
+    public StudentProductAllResDto(Long id, String title, int amount, String image, byte count, boolean isAssigned, byte sold, String name) {
         this.id = id;
         this.title = title;
         this.amount = amount;
         this.image = image;
         this.count = count;
-        this.is_assigned = is_assigned;
+        this.isAssigned = isAssigned;
         this.sold = sold;
         this.name = name;
     }
@@ -45,7 +45,7 @@ public class StudentProductAllResDto {
                 .amount(product.getAmount())
                 .image(product.getImage())
                 .count(product.getCount())
-                .is_assigned(product.is_assigned())
+                .isAssigned(product.isAssigned())
                 .sold(product.getSold())
                 .name(product.getStudent().getName())
                 .build();
