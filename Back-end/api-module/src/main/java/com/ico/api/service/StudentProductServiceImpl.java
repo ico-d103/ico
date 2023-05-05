@@ -12,7 +12,8 @@ import com.ico.core.repository.StudentProductRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +57,7 @@ public class StudentProductServiceImpl implements StudentProductService{
      * 등록된 학생 상품 목록을 조회합니다.
      * @return 학생상품목록
      */
+    @Transactional(readOnly = true)
     @Override
     public List<StudentProductAllResDto> findAllProduct() {
         long nationId = 1L;
