@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface NationRepository extends JpaRepository<Nation, Long> {
     Optional<Nation> findById(Long nationId);
 
-    Nation findByCode(String code);
+    Optional<Nation> findByCode(String code);
 
 }

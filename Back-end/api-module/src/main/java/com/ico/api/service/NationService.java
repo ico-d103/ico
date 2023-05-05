@@ -17,11 +17,6 @@ public interface NationService {
      */
     public void createNation(NationReqDto reqDto, HttpServletRequest request);
 
-    /**
-     * 반 생성시 입장 코드 난수로 생성
-     * @return code
-     */
-    public String randomCode();
 
     /**
      * 교사의 나라 조회

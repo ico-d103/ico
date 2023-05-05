@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.Random;
 
@@ -33,6 +33,7 @@ public class NationServiceImpl implements NationService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
+    @Transactional
     public void createNation(NationReqDto reqDto, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Object role = jwtTokenProvider.getRole(token);
@@ -65,8 +66,11 @@ public class NationServiceImpl implements NationService {
         }
     }
 
-    @Override
-    public String randomCode() {
+    /**
+     * 반 생성시 입장 코드 난수로 생성
+     * @return code
+     */
+    private String randomCode() {
 
         // 5자리의 난수 코드 생성
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -79,8 +83,8 @@ public class NationServiceImpl implements NationService {
         String code = codeBuilder.toString();
 
         // 생성한 코드가 이미 Nation 테이블에 있는지 확인 
-        Nation nationCode = nationRepository.findByCode(code);
-        if (nationCode != null) {
+        Optional<Nation> nationCode = nationRepository.findByCode(code);
+        if (nationCode.isPresent()) {
             // 코드 다시 생성
             return randomCode();
         }
@@ -96,11 +100,14 @@ public class NationServiceImpl implements NationService {
         // Long nationId = ((Number) jwtTokenProvider.getNation(token)).longValue();
 
         Long id = ((Number) jwtTokenProvider.getId(token)).longValue();
-        Long nationId = teacherRepository.findById(id).get().getNation().getId();
+        try {
+            Long nationId = teacherRepository.findById(id).get().getNation().getId();
+            Nation nation = nationRepository.findById(nationId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
+            return nation;
+        } catch (CustomException e) {
+            throw new CustomException(ErrorCode.NOT_FOUND_NATION);
+        }
 
-        Nation nation = nationRepository.findById(nationId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
-
-        return nation;
     }
 
 
