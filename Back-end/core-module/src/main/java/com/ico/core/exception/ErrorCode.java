@@ -45,7 +45,7 @@ public enum ErrorCode{
 
     RESUME_NOT_FOUND(HttpStatus.NOT_FOUND, "503", "신청 내역이 존재하지 않습니다."),
 
-    NOT_BLANK(HttpStatus.BAD_REQUEST, "19", "해당 칸이 비었습니다.")
+    NOT_BLANK(HttpStatus.BAD_REQUEST, "19", "칸이 비었습니다.")
 
     ;
 
