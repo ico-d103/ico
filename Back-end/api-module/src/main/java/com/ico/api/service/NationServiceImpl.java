@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
 
@@ -104,7 +106,7 @@ public class NationServiceImpl implements NationService {
             Long nationId = teacherRepository.findById(id).get().getNation().getId();
             Nation nation = nationRepository.findById(nationId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
             return nation;
-        } catch (CustomException e) {
+        } catch (NoSuchElementException e) {
             throw new CustomException(ErrorCode.NOT_FOUND_NATION);
         }
 
