@@ -80,8 +80,11 @@ public class StudentProductServiceImpl implements StudentProductService{
      */
     @Override
     public void updateIsAssigned(Long id) {
+        // TODO : 교사의 국가 ID 가지고 오기
         long nationId = 1L;
-        StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId);
+        StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PROPOSAL_NOT_FOND));
+        checkAuthorization(nationId, product.getNation().getId());
         product.set_assigned(true);
         studentProductRepository.save(product);
     }
@@ -93,8 +96,24 @@ public class StudentProductServiceImpl implements StudentProductService{
      */
     @Override
     public void deleteProduct(Long id) {
+        // TODO : 교사의 국가 ID 가지고 오기
         long nationId = 1L;
-        StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId);
+
+        StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PROPOSAL_NOT_FOND));
+        checkAuthorization(nationId, product.getNation().getId());
         studentProductRepository.delete(product);
+    }
+
+    /**
+     * 해당 상품의 국가와 선생님의 국가 일치하는지 확인
+     *
+     * @param teacherNationId 현재 사용자 국가 아이디
+     * @param productNationId 상품이 속한 국가 아이디
+     */
+    private void checkAuthorization(Long teacherNationId, Long productNationId){
+        if (teacherNationId != productNationId){
+            throw new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION);
+        }
     }
 }

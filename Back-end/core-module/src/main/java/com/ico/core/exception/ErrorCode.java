@@ -43,6 +43,8 @@ public enum ErrorCode{
 
     RESUME_NOT_FOUND(HttpStatus.NOT_FOUND, "503", "신청 내역이 존재하지 않습니다."),
 
+    PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "삭제된 판매 제안서입니다.")
+
     ;
 
     private final HttpStatus httpStatus;
