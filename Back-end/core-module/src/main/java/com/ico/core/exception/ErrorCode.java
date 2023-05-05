@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
  * 에러 코드 Enum
  *
  * @author 서재건
+ * @author 변윤경
+ * @author 강교철
  */
 @Getter
 @AllArgsConstructor
