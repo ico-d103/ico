@@ -1,12 +1,13 @@
 package com.ico.api.service.student;
 
-import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.student.StudentListResDto;
 import com.ico.api.dto.student.StudentResDto;
+import com.ico.api.dto.transaction.TransactionColDto;
+import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.user.StudentSignUpRequestDto;
 import com.ico.api.service.transaction.TransactionService;
-import com.ico.core.entity.Student;
 import com.ico.core.code.Role;
+import com.ico.core.entity.Student;
 import com.ico.core.entity.Transaction;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
@@ -19,8 +20,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -136,7 +140,17 @@ public class StudentServiceImpl implements StudentService{
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
         List<Transaction> transactions = transactionMongoRepository.findAllByFromOrTo(String.valueOf(studentId), String.valueOf(studentId));
-        return new StudentResDto().of(student, transactions);
+
+        // 최신순 날짜 별로 묶어서 순서가 있는 Map 생성
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+        Map<String, List<TransactionColDto>> map = new LinkedHashMap<>();
+        for (int i = transactions.size() - 1; i > -1; i--) {
+            Transaction transaction = transactions.get(i);
+            String date = transaction.getDate().format(formatter);
+            map.putIfAbsent(date, new ArrayList<>());
+            map.get(date).add(new TransactionColDto().of(transaction, String.valueOf(studentId)));
+        }
+        return new StudentResDto().of(student, map);
     }
 
 }
