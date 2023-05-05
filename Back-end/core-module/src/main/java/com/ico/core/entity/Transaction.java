@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 거래 기록 내역 Document
@@ -27,12 +27,12 @@ public class Transaction {
 
     private int amount;
 
-    private Date date;
+    private LocalDateTime date;
 
     private String title;
 
     @Builder
-    public Transaction(String id, String from, String to, int amount, Date date, String title) {
+    public Transaction(String id, String from, String to, int amount, LocalDateTime date, String title) {
         this.id = id;
         this.from = from;
         this.to = to;
