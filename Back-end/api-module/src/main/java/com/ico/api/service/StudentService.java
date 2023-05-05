@@ -11,6 +11,8 @@ import java.util.List;
  * Student Service
  *
  * @author 강교철
+ * @author 변윤경
+ * @author 서재건
  */
 public interface StudentService {
 

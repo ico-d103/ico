@@ -26,6 +26,8 @@ import java.util.List;
  * Student ServiceImpl
  *
  * @author 강교철
+ * @author 변윤경
+ * @author 서재건
  */
 @Slf4j
 @Service
