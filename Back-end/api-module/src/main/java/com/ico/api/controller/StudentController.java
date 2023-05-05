@@ -1,10 +1,10 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.AccountDto;
-import com.ico.api.dto.StudentListResDto;
-import com.ico.api.dto.StudentResDto;
-import com.ico.api.dto.StudentSignUpRequestDto;
-import com.ico.api.service.StudentService;
+import com.ico.api.dto.user.AccountDto;
+import com.ico.api.dto.student.StudentListResDto;
+import com.ico.api.dto.student.StudentResDto;
+import com.ico.api.dto.user.StudentSignUpRequestDto;
+import com.ico.api.service.student.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

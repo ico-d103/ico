@@ -1,11 +1,8 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.LoginDto;
-import com.ico.api.service.MemberService;
-import com.ico.core.exception.CustomException;
-import com.ico.core.exception.ErrorCode;
+import com.ico.api.dto.user.LoginDto;
+import com.ico.api.service.user.MemberService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
