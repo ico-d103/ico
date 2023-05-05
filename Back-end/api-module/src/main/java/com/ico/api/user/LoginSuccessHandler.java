@@ -1,10 +1,8 @@
 package com.ico.api.user;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ico.api.dto.LoginDto;
+import com.ico.api.dto.user.LoginDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -15,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 로그인이 성공했을 때

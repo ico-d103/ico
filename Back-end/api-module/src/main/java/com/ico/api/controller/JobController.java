@@ -1,9 +1,9 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.JobAllResDto;
-import com.ico.api.dto.JobAvailableResDto;
+import com.ico.api.dto.job.JobAllResDto;
+import com.ico.api.dto.job.JobAvailableResDto;
 import com.ico.core.dto.JobDto;
-import com.ico.api.service.JobService;
+import com.ico.api.service.job.JobService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

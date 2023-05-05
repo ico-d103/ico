@@ -1,7 +1,7 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.TeacherSignUpRequestDto;
-import com.ico.api.service.TeacherService;
+import com.ico.api.dto.user.TeacherSignUpRequestDto;
+import com.ico.api.service.teacher.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
