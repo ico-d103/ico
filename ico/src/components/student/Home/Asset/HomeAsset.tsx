@@ -39,7 +39,7 @@ const STOCK_ICON = (
 
 function HomeAsset() {
 	const list = [
-		{ icon: WALLET_ICON, title: "일반 계좌", money: 25600, moneyUnit: "미소", detailUrl: "/student/test" },
+		{ icon: WALLET_ICON, title: "일반 계좌", money: 25600, moneyUnit: "미소", detailUrl: "/student/home/asset" },
 		{ icon: DEPOSIT_ICON, title: "정기 예금", money: 25600, moneyUnit: "미소", detailUrl: "/student/test" },
 		{ icon: STOCK_ICON, title: "투자", money: 25600, moneyUnit: "미소", detailUrl: "/student/test" },
 	]

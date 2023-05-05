@@ -18,7 +18,7 @@ const contentWrapperCSS = css`
     width: 95%;
     padding: 24px;
     border-radius: 20px;
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: var(--student-wrapper-color);
     margin-bottom: 16px;
 `
 
