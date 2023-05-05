@@ -47,7 +47,7 @@ public class StudentProductServiceImpl implements StudentProductService{
                 .image(proposal.getImage())
                 .detail(proposal.getDetail())
                 .count(proposal.getCount())
-                .is_assigned(false)
+                .isAssigned(false)
                 .sold((byte) 0)
                 .build();
         studentProductRepository.save(product);
@@ -86,8 +86,7 @@ public class StudentProductServiceImpl implements StudentProductService{
         long nationId = 1L;
         StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PROPOSAL_NOT_FOND));
-        checkAuthorization(nationId, product.getNation().getId());
-        product.set_assigned(true);
+        product.setAssigned(true);
         studentProductRepository.save(product);
     }
 
@@ -103,19 +102,6 @@ public class StudentProductServiceImpl implements StudentProductService{
 
         StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PROPOSAL_NOT_FOND));
-        checkAuthorization(nationId, product.getNation().getId());
         studentProductRepository.delete(product);
-    }
-
-    /**
-     * 해당 상품의 국가와 선생님의 국가 일치하는지 확인
-     *
-     * @param teacherNationId 현재 사용자 국가 아이디
-     * @param productNationId 상품이 속한 국가 아이디
-     */
-    private void checkAuthorization(Long teacherNationId, Long productNationId){
-        if (teacherNationId != productNationId){
-            throw new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION);
-        }
     }
 }
