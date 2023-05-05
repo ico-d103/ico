@@ -1,9 +1,7 @@
 package com.ico.api.service;
 
-import com.ico.api.dto.StudentListResDto;
 import com.ico.api.dto.TeacherSignUpRequestDto;
 import com.ico.core.code.Role;
-import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
@@ -12,10 +10,6 @@ import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Teacher ServiceImpl
@@ -28,8 +22,11 @@ import java.util.List;
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
+
     private final StudentRepository studentRepository;
+
     private final PasswordEncoder passwordEncoder;
+
 
 //      TODO : S3를 이용한 이미지업로드 할때 사용할 것
 //    private final CertificationRepository certificationRepository;
@@ -95,17 +92,4 @@ public class TeacherServiceImpl implements TeacherService {
 //        네이버로 다시 구현하기
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<StudentListResDto> findAllStudent() {
-        // TODO: 로그인한 유저 정보 조회 시 나라 id값 대입
-        Long nationId = 1L;
-
-        List<Student> studentList = studentRepository.findAllByNationId(nationId);
-        List<StudentListResDto> resList = new ArrayList<>();
-        for (Student student : studentList) {
-            resList.add(new StudentListResDto().of(student));
-        }
-        return resList;
-    }
 }
