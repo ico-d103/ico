@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
  * Teacher Controller
  *
  * @author 강교철
- * @author 변윤경
- * @author 서재건
  */
 @RestController
 @RequiredArgsConstructor
