@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 로그인시 입력할 것
  *
@@ -14,7 +16,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class LoginDto {
 
+    @NotBlank(message = "100")
     private String identity;
+    @NotBlank(message = "104")
     private String password;
 
 }
