@@ -1,8 +1,10 @@
 package com.ico.api.service;
 
 import com.ico.api.dto.NationReqDto;
+import com.ico.core.entity.Nation;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface NationService {
 
@@ -20,4 +22,11 @@ public interface NationService {
      * @return code
      */
     public String randomCode();
+
+    /**
+     * 교사의 나라 조회
+     * @param request
+     * @return Nation
+     */
+    public Nation getNation(HttpServletRequest request);
 }

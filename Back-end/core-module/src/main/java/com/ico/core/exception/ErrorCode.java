@@ -27,6 +27,8 @@ public enum ErrorCode{
 
     PASSWORD_WRONG(HttpStatus.BAD_REQUEST, "105", "비밀번호가 틀렸습니다."),
 
+    NOT_FOUND_NATION(HttpStatus.BAD_REQUEST, "202", "교사가 생성한 나라가 없습니다."),
+
     ALREADY_EXIST_TITLE(HttpStatus.CONFLICT, "613", "이미 존재하는 상품의 이름입니다.")
 
     ;

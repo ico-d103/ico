@@ -19,7 +19,7 @@ public class NationReqDto {
     int room;
     String title;
     String currency;
-//    LocalTime trading_start;
-//    LocalTime trading_end;
+    LocalTime trading_start;
+    LocalTime trading_end;
 
 }
