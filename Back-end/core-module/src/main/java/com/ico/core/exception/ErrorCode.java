@@ -33,6 +33,8 @@ public enum ErrorCode{
 
     PASSWORD_WRONG(HttpStatus.BAD_REQUEST, "105", "비밀번호가 틀렸습니다."),
 
+    NOT_FOUND_NATION(HttpStatus.BAD_REQUEST, "202", "교사가 생성한 나라가 없습니다."),
+
     ALREADY_ASSIGNED_JOB(HttpStatus.BAD_REQUEST, "409", "이미 배정된 직업입니다."),
 
     ALREADY_FULL_JOB(HttpStatus.CONFLICT, "421", "직업 정원이 다 찼습니다."),
@@ -42,6 +44,8 @@ public enum ErrorCode{
     INVALID_CREDIT_RATING(HttpStatus.BAD_REQUEST, "500", "신용등급 요건에 적합하지 않습니다."),
 
     RESUME_NOT_FOUND(HttpStatus.NOT_FOUND, "503", "신청 내역이 존재하지 않습니다."),
+
+    NOT_BLANK(HttpStatus.BAD_REQUEST, "19", "칸이 비었습니다.")
 
     ;
 
