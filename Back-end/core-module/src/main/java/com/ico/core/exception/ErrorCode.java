@@ -31,6 +31,8 @@ public enum ErrorCode{
 
     NOT_BLANK(HttpStatus.BAD_REQUEST, "19", "칸이 비었습니다."),
 
+    FAIL_SSE_SEND(HttpStatus.BAD_REQUEST, "21", "SSE 데이터 전송에 실패하였습니다."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     PASSWORD_WRONG(HttpStatus.BAD_REQUEST, "105", "비밀번호가 틀렸습니다."),

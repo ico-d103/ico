@@ -1,18 +1,32 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.immigration.ImmigrationReqDto;
-import com.ico.api.service.ImmigrationService;
+import com.ico.api.dto.student.StudentSseDto;
+import com.ico.api.service.immigration.ImmigrationService;
+import com.ico.api.sse.SseEmitters;
 import com.ico.core.entity.Immigration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.List;
 
 /**
+ * 입국심사 관련 Controller
+ *
  * @author 강교철
+ * @author 서재건
  */
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +34,8 @@ import javax.validation.Valid;
 public class ImmigrationController {
 
     private final ImmigrationService immigrationService;
+
+    private final SseEmitters sseEmitters;
 
     /**
      * 입국 심사 요청
@@ -52,5 +68,35 @@ public class ImmigrationController {
     public ResponseEntity<?> delImmigration(HttpServletRequest request) {
         immigrationService.deleteImmigration(request);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 입국요청 목록 조회
+     *
+     * @return
+     */
+    @GetMapping("/teacher")
+    public ResponseEntity<List<StudentSseDto>> findAllImmigrationStudent(HttpServletRequest request) {
+        return ResponseEntity.ok(immigrationService.findAllImmigrationStudent(request));
+    }
+
+    /**
+     * 입국 요청 목록 페이지에서 SSE 연결
+     * header 의 "X-Accel-Buffering: no" 설정으로 SSE 응답에 대해 Nginx 의 버퍼링 기능 비활성화
+     *
+     * @return SseEmitter 객체
+     */
+    @GetMapping(value = "/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public ResponseEntity<SseEmitter> connect() {
+        SseEmitter emitter = new SseEmitter(1000L * 60 * 10);    // 만료시간 10분
+        sseEmitters.add(emitter);
+        try {
+            emitter.send(SseEmitter.event()
+                    .name("connect")
+                    .data("connected!"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.ok().header("X-Accel-Buffering", "no").body(emitter);
     }
 }

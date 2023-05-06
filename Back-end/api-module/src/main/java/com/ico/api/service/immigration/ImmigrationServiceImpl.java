@@ -1,6 +1,8 @@
-package com.ico.api.service;
+package com.ico.api.service.immigration;
 
 import com.ico.api.dto.immigration.ImmigrationReqDto;
+import com.ico.api.dto.student.StudentSseDto;
+import com.ico.api.sse.SseEmitters;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Immigration;
 import com.ico.core.entity.Nation;
@@ -13,12 +15,17 @@ import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
+ * 입국심사 관련 Service 로직
+ *
  * @author 강교철
+ * @author 서재건
  */
 @Service
 @RequiredArgsConstructor
@@ -29,6 +36,8 @@ public class ImmigrationServiceImpl implements ImmigrationService{
     private final StudentRepository studentRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final ImmigrationRepository immigrationRepository;
+
+    private final SseEmitters sseEmitters;
 
     @Override
     @Transactional
@@ -54,6 +63,9 @@ public class ImmigrationServiceImpl implements ImmigrationService{
         else {
             throw new CustomException(ErrorCode.WRONG_CODE);
         }
+
+        // 입국심사 요청 시 SSE로 요청 목록 전송
+        sseEmitters.send(findStudentSseList(nation.getId()));
     }
 
     @Override
@@ -80,5 +92,31 @@ public class ImmigrationServiceImpl implements ImmigrationService{
         else {
             throw new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION);
         }
+
+        // 입국심사 요청 삭제 시 SSE로 요청 목록 전송
+        sseEmitters.send(findStudentSseList(jwtTokenProvider.getNation(token)));
+    }
+
+    @Override
+    public List<StudentSseDto> findAllImmigrationStudent(HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+
+        return findStudentSseList(nationId);
+    }
+
+    /**
+     * 나라의 입국 요청 목록 반환
+     *
+     * @param nationId
+     * @return 입국 요청 목록
+     */
+    private List<StudentSseDto> findStudentSseList(Long nationId) {
+        List<Immigration> immigrationList = immigrationRepository.findAllByNationId(nationId);
+        List<StudentSseDto> dtoList = new ArrayList<>();
+        for (Immigration immigration : immigrationList) {
+            dtoList.add(new StudentSseDto().of(immigration.getStudent()));
+        }
+        return dtoList;
     }
 }
