@@ -17,6 +17,7 @@ function NavBar({ children }: NavBarProps) {
 
 	const routes: { [prop: string]: number } = {
 		"/student/home": 0,
+		"/student/home/asset": 0,
 		"/student/test2": 1,
 		"/student/gov/rule": 2,
 		"/student/gov/exchequer": 2,
@@ -46,8 +47,10 @@ function NavBar({ children }: NavBarProps) {
 		// setSelectedSub(() => 0)
 		if (value > selected) {
 			navigate(navBarData[value].url, "rightToLeft")
-		} else {
+		} else if (value < selected) {
 			navigate(navBarData[value].url, "leftToRight")
+		} else {
+			navigate(navBarData[value].url, "beforeScale")
 		}
 	}
 
