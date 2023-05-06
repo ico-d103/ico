@@ -24,7 +24,7 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 public class Coupon {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

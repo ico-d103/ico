@@ -31,6 +31,8 @@ public class TeacherProductServiceImpl implements TeacherProductService{
     private final StudentRepository studentRepository;
     private final CouponRepository couponRepository;
 
+    private final TransactionService transactionService;
+
     /**
      * 교사 상품 등록
      * @param proposal 교사 상품
@@ -115,6 +117,9 @@ public class TeacherProductServiceImpl implements TeacherProductService{
 
         // 상품 가격 지불
         student.setAccount(account - amount);
+
+        // 거래 내역 추가
+        transactionService.addTransactionWithdraw("교사 상점", studentId, amount, product.getTitle());
 
         // 재고 개수 수정
         product.setSold((byte) (product.getSold() + 1));
