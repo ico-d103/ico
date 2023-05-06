@@ -1,7 +1,7 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.ResumeResDto;
-import com.ico.api.service.ResumeService;
+import com.ico.api.dto.resume.ResumeResDto;
+import com.ico.api.service.resume.ResumeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

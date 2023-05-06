@@ -1,6 +1,6 @@
 package com.ico.api.user;
 
-import com.ico.api.dto.LoginDto;
+import com.ico.api.dto.user.LoginDto;
 import com.ico.core.code.Role;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;

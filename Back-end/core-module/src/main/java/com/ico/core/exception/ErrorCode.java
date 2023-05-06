@@ -31,11 +31,19 @@ public enum ErrorCode{
 
     NOT_BLANK(HttpStatus.BAD_REQUEST, "19", "칸이 비었습니다."),
 
+    NOT_FOUND_CODE(HttpStatus.BAD_REQUEST, "20", "반 입장 코드를 입력해주세요."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     PASSWORD_WRONG(HttpStatus.BAD_REQUEST, "105", "비밀번호가 틀렸습니다."),
 
-    NOT_FOUND_NATION(HttpStatus.BAD_REQUEST, "202", "교사가 생성한 나라가 없습니다."),
+    WRONG_CODE(HttpStatus.BAD_REQUEST, "200", "일치하는 반 코드가 없습니다."),
+
+    WRONG_IMMIGRATION(HttpStatus.BAD_REQUEST, "201", "입국 심사를 기다리고 있는 나라가 있습니다."),
+
+    NOT_FOUND_NATION(HttpStatus.BAD_REQUEST, "202", "나라가 없습니다."),
+
+    NOT_FOUND_IMMIGRATION(HttpStatus.NOT_FOUND, "203", "입국 심사를 기다리고 있는 나라가 없습니다."),
 
     ALREADY_ASSIGNED_JOB(HttpStatus.BAD_REQUEST, "409", "이미 배정된 직업입니다."),
 
@@ -54,6 +62,7 @@ public enum ErrorCode{
     NOT_RENTAL(HttpStatus.BAD_REQUEST, "615", "해당 상품은 대여 상품이 아닙니다."),
 
     SOLD_OUT(HttpStatus.BAD_REQUEST, "616", "품절된 상품입니다."),
+
     ;
 
     private final HttpStatus httpStatus;
