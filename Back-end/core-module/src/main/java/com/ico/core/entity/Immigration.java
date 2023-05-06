@@ -4,6 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * @author 강교철
+ */
 @Entity
 @Getter
 @Setter
