@@ -87,6 +87,7 @@ public class TeacherProductServiceImpl implements TeacherProductService{
      * 쿠폰 유형의 교사 상품을 구매합니다.
      * @param id 상품 id
      */
+    @Transactional
     @Override
     public void buyCoupon(Long id) {
         // 해당 국가인지 확인
