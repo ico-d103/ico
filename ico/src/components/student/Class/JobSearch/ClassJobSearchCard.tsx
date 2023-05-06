@@ -1,5 +1,8 @@
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 import { css } from "@emotion/react"
+import Modal from "@/components/common/Modal/Modal"
+import useCompHandler from "@/hooks/useCompHandler"
+import ClassJobSearchModal from "./ClassJobSearchModal"
 
 type ClassJobSearchCardPropsType = {
 	mock: {
@@ -10,8 +13,10 @@ type ClassJobSearchCardPropsType = {
 }
 
 function ClassJobSearchCard({ mock }: ClassJobSearchCardPropsType) {
+	const [openComp, closeComp, compState] = useCompHandler()
+
 	return (
-		<div css={wrapperCSS}>
+		<div css={wrapperCSS} onClick={openComp}>
 			<div css={imageWrapperCSS}>
 				<LoadImage wrapperCss={imgCSS} src={"/assets/job/weather_caster.png"} alt={"job_image"} />
 			</div>
@@ -19,6 +24,12 @@ function ClassJobSearchCard({ mock }: ClassJobSearchCardPropsType) {
 				<span css={nameCSS}>{mock.name}</span>
 				<span css={needCSS}>{mock.need}</span>
 			</div>
+			<Modal
+				compState={compState}
+				closeComp={closeComp}
+				transition={"scale"}
+				content={<ClassJobSearchModal job={mock.name} />}
+			/>
 		</div>
 	)
 }
