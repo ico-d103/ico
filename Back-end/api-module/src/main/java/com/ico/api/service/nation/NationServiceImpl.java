@@ -59,7 +59,7 @@ public class NationServiceImpl implements NationService {
             nationRepository.save(nation);
 
             // 반을 생성했을 때 교사 테이블의 Nation 업데이트
-            String identity = (String) jwtTokenProvider.getIdentity(token);
+            String identity = jwtTokenProvider.getIdentity(token);
             Optional<Teacher> teacher = teacherRepository.findByIdentity(identity);
             teacher.ifPresent(t -> {
                 t.setNation(nation);
