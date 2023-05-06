@@ -22,9 +22,9 @@ public interface StudentService {
      * @param requestDto
      * @return student.getId()
      */
-    public Long signUp(StudentSignUpRequestDto requestDto);
+    Long signUp(StudentSignUpRequestDto requestDto);
 
-    public void teacherUpdateAccount(Long id, AccountDto accountDto);
+    void teacherUpdateAccount(Long id, AccountDto accountDto);
 
     /**
      * 우리 반 학생 목록 조회

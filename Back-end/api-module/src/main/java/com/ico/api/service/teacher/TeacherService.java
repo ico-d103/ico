@@ -15,13 +15,13 @@ public interface TeacherService {
      * @param requestDto
      * @return
      */
-    public Long signUp(TeacherSignUpRequestDto requestDto);
+    Long signUp(TeacherSignUpRequestDto requestDto);
 
     /**
      * 휴대폰 인증
      *
      * @param phoneNum
      */
-    public void certifiedPhoneNum(String phoneNum);
+    void certifiedPhoneNum(String phoneNum);
 
 }

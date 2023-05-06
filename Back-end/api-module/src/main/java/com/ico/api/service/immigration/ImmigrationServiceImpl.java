@@ -1,7 +1,8 @@
-package com.ico.api.service;
+package com.ico.api.service.immigration;
 
 import com.ico.api.dto.immigration.ImmigrationReqDto;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.core.code.Role;
 import com.ico.core.entity.Immigration;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 /**
  * @author 강교철
@@ -65,7 +68,7 @@ public class ImmigrationServiceImpl implements ImmigrationService{
             return immigration;
         }
         else {
-            throw new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION);
+            throw new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION_NATION);
         }
     }
 
@@ -78,7 +81,44 @@ public class ImmigrationServiceImpl implements ImmigrationService{
             immigrationRepository.delete(immigration);
         }
         else {
-            throw new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION);
+            throw new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION_NATION);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void approveImmigration(Long immigrationId, HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Role role = jwtTokenProvider.getRole(token);
+        if (role.equals(Role.TEACHER)) {
+            Optional<Immigration> immigration = immigrationRepository.findById(immigrationId);
+            if (immigration.isPresent()) {
+                Student student = immigration.get().getStudent();
+                if (student != null) {
+                    student.setNation(immigration.get().getNation());
+                    studentRepository.save(student);
+
+                    immigrationRepository.delete(immigration.get());
+                }
+                else {
+                    throw new CustomException(ErrorCode.USER_NOT_FOUND);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void companionImmigration(Long immigrationId, HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Role role = jwtTokenProvider.getRole(token);
+        if (role.equals(Role.TEACHER)) {
+            Optional<Immigration> immigration = immigrationRepository.findById(immigrationId);
+            if (immigration.isPresent()) {
+                immigrationRepository.delete(immigration.get());
+            }
+            else {
+                throw new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION_USER);
+            }
         }
     }
 }

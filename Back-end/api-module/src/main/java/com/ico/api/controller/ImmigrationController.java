@@ -1,7 +1,7 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.immigration.ImmigrationReqDto;
-import com.ico.api.service.ImmigrationService;
+import com.ico.api.service.immigration.ImmigrationService;
 import com.ico.core.entity.Immigration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -51,6 +51,30 @@ public class ImmigrationController {
     @DeleteMapping("/student")
     public ResponseEntity<?> delImmigration(HttpServletRequest request) {
         immigrationService.deleteImmigration(request);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 입국 심사 승인
+     * @param immigrationId
+     * @param request
+     * @return OK
+     */
+    @PutMapping("/teacher/{immigrationId}")
+    public ResponseEntity<?> approveImmigration(@PathVariable Long immigrationId, HttpServletRequest request) {
+        immigrationService.approveImmigration(immigrationId, request);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 입국 심사 반려
+     * @param immigrationId
+     * @param request
+     * @return OK
+     */
+    @DeleteMapping("/teacher/{immigrationId}")
+    public ResponseEntity<?> companionImmigration(@PathVariable Long immigrationId, HttpServletRequest request) {
+        immigrationService.companionImmigration(immigrationId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

@@ -15,12 +15,12 @@ public interface MemberService {
      * @param members
      * @return generateJwtToken
      */
-    public String login(LoginDto members);
+    String login(LoginDto members);
 
     /**
      * 아이디 중복 체크
      *
      * @param identity
      */
-    public boolean duplicated(String identity);
+    boolean duplicated(String identity);
 }
