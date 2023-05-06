@@ -1,6 +1,6 @@
 package com.ico.api.service.teacher;
 
-import com.ico.api.dto.teacher.TeacherProductAllResDto;
+import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.TeacherProduct;
 import com.ico.core.exception.CustomException;

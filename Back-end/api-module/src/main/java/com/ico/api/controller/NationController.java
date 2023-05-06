@@ -1,6 +1,7 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.nation.NationReqDto;
+import com.ico.api.dto.nation.StockUpdateDto;
 import com.ico.api.service.nation.NationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 
 /**
  * @author 강교철
+ * @author 변윤경
  */
 @RestController
 @RequestMapping("/api/nation")
@@ -43,4 +45,8 @@ public class NationController {
         return new ResponseEntity<>(nationService.getNation(request), HttpStatus.OK);
     }
 
+    @PostMapping("/teacher/stock")
+    public ResponseEntity<HttpStatus> createStock(@Valid @RequestBody StockUpdateDto stockUpdateDto){
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 }

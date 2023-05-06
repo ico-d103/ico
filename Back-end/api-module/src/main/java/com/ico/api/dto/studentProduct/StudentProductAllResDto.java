@@ -1,6 +1,6 @@
-package com.ico.api.dto.teacher;
+package com.ico.api.dto.studentProduct;
 
-import com.ico.core.entity.TeacherProduct;
+import com.ico.core.entity.StudentProduct;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,48 +10,44 @@ import lombok.NoArgsConstructor;
  */
 @Getter
 @NoArgsConstructor
-public class TeacherProductAllResDto {
-
+public class StudentProductAllResDto {
     Long id;
-
     String title;
-
     int amount;
-
     String image;
-
     byte count;
-
+    boolean isAssigned;
     byte sold;
-
-    String type;
+    String name;
 
     @Builder
-    public TeacherProductAllResDto(Long id, String title, int amount, String image, byte count, byte sold, String type) {
+    public StudentProductAllResDto(Long id, String title, int amount, String image, byte count, boolean isAssigned, byte sold, String name) {
         this.id = id;
         this.title = title;
         this.amount = amount;
         this.image = image;
         this.count = count;
+        this.isAssigned = isAssigned;
         this.sold = sold;
-        this.type = type;
+        this.name = name;
     }
 
     /**
-     * TeacherProduct TeacherProductAllResDto 생성
+     * StudentProduct를 StudentProductAllResDto로 생성
      *
-     * @param product 교사상품
-     * @return TeacherProductAllResDto
+     * @param product 학생상품
+     * @return StudentProductAllResDto
      */
-    public TeacherProductAllResDto of(TeacherProduct product){
-        return TeacherProductAllResDto.builder()
+    public StudentProductAllResDto of(StudentProduct product){
+        return StudentProductAllResDto.builder()
                 .id(product.getId())
                 .title(product.getTitle())
                 .amount(product.getAmount())
                 .image(product.getImage())
                 .count(product.getCount())
+                .isAssigned(product.isAssigned())
                 .sold(product.getSold())
-                .type(product.getType())
+                .name(product.getStudent().getName())
                 .build();
     }
 }
