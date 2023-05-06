@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import { css } from "@emotion/react"
 import Button from '@/components/common/Button/Button'
+import useNavigate from '@/hooks/useNavigate'
 
 type HomeAssetItemProps = {
     icon: any
@@ -14,6 +15,7 @@ type HomeAssetItemProps = {
 
 function HomeAssetItem({icon, title, money, moneyUnit, detailUrl }: HomeAssetItemProps) {
 
+    const navigate = useNavigate()
   return (
     <div css={contentWrapperCSS}>
         <div css={leftWrapperCSS}>
@@ -30,7 +32,7 @@ function HomeAssetItem({icon, title, money, moneyUnit, detailUrl }: HomeAssetIte
             </div>
         </div>
         <div>
-            <Button text={"자세히"} fontSize={`var(--teacher-h5)`} width={"72px"} height={'100%'} theme={"mobileNormal"} onClick={() => {}} />
+            <Button text={"자세히"} fontSize={`var(--teacher-h5)`} width={"72px"} height={'100%'} theme={"mobileNormal"} onClick={() => {navigate(detailUrl, 'bottomToTop')}} />
             
         </div>
     </div>

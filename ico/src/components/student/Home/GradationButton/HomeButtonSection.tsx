@@ -2,12 +2,15 @@ import React from 'react'
 import { css } from "@emotion/react"
 import HomeGradationButton from './HomeGradationButton'
 import LoadImage from '@/components/common/LoadImage/LoadImage'
+import useNavigate from '@/hooks/useNavigate'
 
 function HomeButtonSection() {
+    const navigate = useNavigate()
+    
   return (
     <div css={buttonSectionWrapperCSS}>
         <div css={columnCSS}>
-            <HomeGradationButton cssProps={css`width: 42%; height: 140px;`} backgroundColor={['#459BFF', '#001AFF']}>
+            <HomeGradationButton cssProps={css`width: 42%; height: 140px;`} backgroundColor={['#459BFF', '#001AFF']} onClick={() => {navigate('/student/home/coupon', 'bottomToTop')}}>
             
                 <div css={lsizeFontCSS}>
                     쿠폰을 써보아요.
@@ -19,7 +22,7 @@ function HomeButtonSection() {
 
                 
             </HomeGradationButton>
-            <HomeGradationButton cssProps={css`width: 54%; height: 140px;`} backgroundColor={['#91FF75', '#00A3FF']}>
+            <HomeGradationButton cssProps={css`width: 54%; height: 140px;`} backgroundColor={['#91FF75', '#00A3FF']} onClick={() => {navigate('/student/home/exchequer', 'bottomToTop')}}>
                 <div css={msizeFontCSS}>
                     우리나라의 국고에
                 </div>
@@ -35,7 +38,7 @@ function HomeButtonSection() {
             </HomeGradationButton>
         </div>
         <div css={columnCSS}>
-            <HomeGradationButton cssProps={css`width: 54%; height: 140px;`} backgroundColor={['#A175FF', '#5200FF']}>
+            <HomeGradationButton cssProps={css`width: 54%; height: 140px;`} backgroundColor={['#A175FF', '#5200FF']} onClick={() => {navigate('/student/finance/guide', 'rightToLeft')}}>
                 <div css={lsizeFontCSS}>
                     예금하러 가요!
                 </div>

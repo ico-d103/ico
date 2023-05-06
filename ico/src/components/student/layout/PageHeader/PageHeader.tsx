@@ -95,9 +95,10 @@ const headerWrapperCSS = ({ isScrolled, hasComp }: { isScrolled: boolean; hasCom
 			? "box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1)"
 			: null};
 		border-bottom: ${isScrolled && '2px solid #ff9d0058'};
+
 		/* filter: drop-shadow(0px 0px 10px 1px rgba(0, 0, 0, 0.2)); */
 		/* background-color: ${isScrolled ? "rgba(255, 255, 255, 0.5)" : "var(--common-back-color)"}; */
-		background-color: ${isScrolled ? '#ffebaa' : (hasComp ? '#ffebaa' : '#FFDB60')};
+		background-color: ${isScrolled ? '#ffebaa' : (hasComp ? '#ffebaa' : 'var(--student-main-color)')};
 		/* filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.2)); */
 		transition-property: box-shadow background-color;
 		transition-duration: 0.3s;
