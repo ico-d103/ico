@@ -39,7 +39,7 @@ public class TeacherProductServiceImpl implements TeacherProductService{
      */
     @Override
     public void createProduct(TeacherProduct proposal) {
-        long nationId = 1L;
+        long nationId = 99L;
         // Todo : token 생성 이후 nation 바꾸기
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
@@ -68,7 +68,7 @@ public class TeacherProductServiceImpl implements TeacherProductService{
      */
     @Override
     public List<TeacherProductAllResDto> findAllProduct() {
-        long nationId = 1L;
+        long nationId = 99L;
 
         if (nationRepository.findById(nationId).isEmpty()){
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
@@ -90,8 +90,8 @@ public class TeacherProductServiceImpl implements TeacherProductService{
     @Override
     public void buyCoupon(Long id) {
         // 해당 국가인지 확인
-        long nationId = 1L;
-        long studentId = 1L;
+        long nationId = 99L;
+        long studentId = 3L;
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
