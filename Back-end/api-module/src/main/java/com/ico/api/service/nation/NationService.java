@@ -5,6 +5,9 @@ import com.ico.core.entity.Nation;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * @author 강교철
+ */
 public interface NationService {
 
     /**
@@ -14,7 +17,7 @@ public interface NationService {
      * @param reqDto
      * @param request
      */
-    public void createNation(NationReqDto reqDto, HttpServletRequest request);
+    void createNation(NationReqDto reqDto, HttpServletRequest request);
 
 
     /**
@@ -22,5 +25,5 @@ public interface NationService {
      * @param request
      * @return Nation
      */
-    public Nation getNation(HttpServletRequest request);
+    Nation getNation(HttpServletRequest request);
 }
