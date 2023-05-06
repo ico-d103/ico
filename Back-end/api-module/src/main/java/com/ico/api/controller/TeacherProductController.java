@@ -48,6 +48,12 @@ public class TeacherProductController {
         return ResponseEntity.ok(teacherProductService.findAllProduct());
     }
 
+    /**
+     * 쿠폰유형 교사상품 구매
+     *
+     * @param teacherProductId 상품 ID
+     * @return Httpstatus
+     */
     @PostMapping("/student/{teacherProductId}/coupon")
     public ResponseEntity<HttpStatus> buyCoupon(@PathVariable Long teacherProductId){
         teacherProductService.buyCoupon(teacherProductId);

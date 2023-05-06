@@ -13,6 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+/**
+ * 학생들이 구매한 쿠폰 Entity
+ *
+ * @author 변윤경
+ */
 @Entity
 @Getter
 @Setter

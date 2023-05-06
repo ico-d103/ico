@@ -21,5 +21,9 @@ public interface TeacherProductService {
      */
     List<TeacherProductAllResDto> findAllProduct();
 
+    /**
+     * 쿠폰 유형의 교사 상품을 구매합니다.
+     * @param id 상품 id
+     */
     void buyCoupon(Long id);
 }
