@@ -117,7 +117,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				})
 				setScreenshot(() => "")
 				setIsImageLoading(() => false)
-			}, 200)
+			}, 300)
 		}
 	}, [router.pathname])
 
@@ -235,7 +235,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		none: css``,
 		rightToLeft: css`
 			& .transitioning {
-				animation: rightToLeft 0.2s ease-out forwards;
+				animation: rightToLeft 0.3s cubic-bezier(0.5, 0.2, 0.1, 0.8) forwards;
 			}
 			@keyframes rightToLeft {
 				from {
@@ -252,7 +252,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		leftToRight: css`
 			& .transitioning {
-				animation: leftToRight 0.2s ease-out forwards;
+				animation: leftToRight 0.3s cubic-bezier(0.5, 0.2, 0.1, 0.8) forwards;
 			}
 			@keyframes leftToRight {
 				from {
@@ -269,7 +269,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		bottomToTop: css`
 			& .transitioning {
-				animation: bottomToTop 0.2s ease-out forwards;
+				animation: bottomToTop 0.3s cubic-bezier(0.5, 0.2, 0.1, 0.8) forwards;
 			}
 			@keyframes bottomToTop {
 				from {
@@ -286,7 +286,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		scale: css`
 			& .transitioning {
-				animation: scale 0.2s ease-out forwards;
+				animation: scale 0.3s cubic-bezier(0.5, 0.2, 0.1, 0.8) forwards;
 			}
 			@keyframes scale {
 				from {
@@ -303,7 +303,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 		`,
 		scaleReverse: css`
 			& .transitioning {
-				animation: scaleReverse 0.2s ease-out forwards;
+				animation: scaleReverse 0.3s cubic-bezier(0.5, 0.2, 0.1, 0.8) forwards;
 			}
 			@keyframes scaleReverse {
 				from {
@@ -321,7 +321,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 
 		beforeScale: css`
 			& .transitioning {
-				animation: beforeScale1 0.2s ease-out forwards;
+				animation: beforeScale1 0.3s cubic-bezier(0.5, 0.2, 0.1, 0.8) forwards;
 			}
 			@keyframes beforeScale1 {
 				from {
@@ -350,7 +350,7 @@ const beforeTransitionsCSS = ({ isTransitioning }: { isTransitioning: boolean })
 
 		beforeScale: css`
 			/* position: fixed; */
-			animation: ${isTransitioning && "beforeScale2 0.2s ease-out forwards"};
+			animation: ${isTransitioning && "beforeScale2 0.3s cubic-bezier(0.5, 0.2, 0.1, 0.8) forwards"};
 			/* width: 100vw;
 				height: 100vh; */
 

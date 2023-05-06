@@ -68,11 +68,11 @@ const tradeHistory: any = {
 function asset() {
 	return (
 		<div>
-			<PageHeader title={"자산"} />
+			<PageHeader title={"국고"} />
 			<div css={assetWrapperCSS}>
 				<ContentWrapper>
                     <div css={sSizeFontCSS}>
-                        일반 계좌
+                        보유중인 국고
                     </div>
                     <div css={lSizeFontCSS}>
                         253,015 미소

@@ -3,7 +3,7 @@ import { css } from "@emotion/react"
 
 type HomeAssetDetailItemProps = {
 	title: string
-	source: string
+	source?: string
 	balance: number
 	amount: number
     unit: string
