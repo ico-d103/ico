@@ -10,6 +10,7 @@ import com.ico.core.repository.TransactionMongoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
@@ -107,6 +108,7 @@ public class TransactionServiceImpl implements TransactionService{
         transactionMongoRepository.insert(transaction);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Map<String, List<TransactionResDto>> findTransaction() {
         // TODO: 로그인한 유저 정보 조회 시 나라 id값 대입
