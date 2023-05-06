@@ -16,7 +16,6 @@ import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -122,8 +121,6 @@ public class TransactionServiceImpl implements TransactionService{
 
         // 순서가 있는 map 생성
         Map<String, List<TransactionResDto>> map = new LinkedHashMap<>();
-        // getSource()에서 Cache처럼 사용
-        Map<Long, String> studentCache = new HashMap<>();
 
         LocalDateTime now = LocalDateTime.now();
         String curDay = now.format(dayFormatter);
@@ -138,7 +135,7 @@ public class TransactionServiceImpl implements TransactionService{
             String[] dateTime = transaction.getDate().format(formatter).split("-");
 
             int amount = transaction.getFrom().equals(String.valueOf(studentId)) ? -1 * transaction.getAmount() : transaction.getAmount();
-            String source = getSource(String.valueOf(studentId), transaction, studentCache) + " · " + dateTime[1];
+            String source = getSource(String.valueOf(studentId), transaction) + " · " + dateTime[1];
             int balance = curAccount;
             curAccount += -1 * amount;
             String date = getDay(dateTime[0], curDay, yesterday);
@@ -176,22 +173,12 @@ public class TransactionServiceImpl implements TransactionService{
      *
      * @param studentId
      * @param transaction
-     * @param studentCache 학생 id에 대한 이름값 Cache
      * @return 거래 대상
      */
-    private String getSource(String studentId, Transaction transaction, Map<Long, String> studentCache) {
+    private String getSource(String studentId, Transaction transaction) {
         String source = transaction.getFrom().equals(String.valueOf(studentId)) ? transaction.getTo() : transaction.getFrom();
         if (isNumeric(source)) {
-            Long sourceId = Long.parseLong(source);
-            if (!studentCache.containsKey(sourceId)) {
-                studentCache.put(sourceId, studentRepository.findById(sourceId)
-                        .orElseThrow(() -> {
-                            log.info("[findTransaction] 거래 대상의 학생[{}]이 존재하지 않습니다.", source);
-                            throw new CustomException(ErrorCode.USER_NOT_FOUND);
-                        })
-                        .getName());
-            }
-            return studentCache.get(sourceId);
+            return "학생 상점";
         }
         return source;
     }
