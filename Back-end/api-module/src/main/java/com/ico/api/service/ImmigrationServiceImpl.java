@@ -62,9 +62,9 @@ public class ImmigrationServiceImpl implements ImmigrationService{
     public Immigration getImmigration(HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Long id = jwtTokenProvider.getId(token);
-
-        if (immigrationRepository.findByStudentId(id) != null){
-            return immigrationRepository.findByStudentId(id);
+        Immigration immigration = immigrationRepository.findByStudentId(id);
+        if (immigration != null){
+            return immigration;
         }
         else {
             throw new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION);
@@ -75,8 +75,8 @@ public class ImmigrationServiceImpl implements ImmigrationService{
     public void deleteImmigration(HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Long id = jwtTokenProvider.getId(token);
-
-        if (immigrationRepository.findByStudentId(id) != null){
+        Immigration immigration = immigrationRepository.findByStudentId(id);
+        if (immigration != null){
             immigrationRepository.delete(immigrationRepository.findByStudentId(id));
         }
         else {
