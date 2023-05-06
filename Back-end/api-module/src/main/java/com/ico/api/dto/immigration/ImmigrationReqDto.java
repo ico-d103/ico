@@ -13,8 +13,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class ImmigrationReqDto {
 
-    @NotNull(message = "19")
+    @NotNull(message = "202")
     Long nationId;
-    @NotBlank(message = "19")
+    @NotBlank(message = "20")
     String code;
 }

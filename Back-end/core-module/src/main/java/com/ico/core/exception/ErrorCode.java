@@ -55,6 +55,8 @@ public enum ErrorCode{
 
     PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "삭제된 판매 제안서입니다."),
 
+    NOT_FOUND_CODE(HttpStatus.BAD_REQUEST, "20", "반 입장 코드를 입력해주세요."),
+
     ;
 
     private final HttpStatus httpStatus;

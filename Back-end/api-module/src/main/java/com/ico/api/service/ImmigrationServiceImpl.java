@@ -75,7 +75,7 @@ public class ImmigrationServiceImpl implements ImmigrationService{
         Long id = jwtTokenProvider.getId(token);
         Immigration immigration = immigrationRepository.findByStudentId(id);
         if (immigration != null){
-            immigrationRepository.delete(immigrationRepository.findByStudentId(id));
+            immigrationRepository.delete(immigration);
         }
         else {
             throw new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION);
