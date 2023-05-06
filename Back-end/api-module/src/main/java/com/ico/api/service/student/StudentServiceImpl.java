@@ -20,10 +20,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -48,6 +51,8 @@ public class StudentServiceImpl implements StudentService{
     private final TransactionService transactionService;
 
     private final TransactionMongoRepository transactionMongoRepository;
+
+    private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
 
     @Override
     public Long signUp(StudentSignUpRequestDto requestDto) {
@@ -142,13 +147,22 @@ public class StudentServiceImpl implements StudentService{
         List<Transaction> transactions = transactionMongoRepository.findAllByFromOrTo(String.valueOf(studentId), String.valueOf(studentId));
 
         // 최신순 날짜 별로 묶어서 순서가 있는 Map 생성
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM.dd");
         Map<String, List<TransactionColDto>> map = new LinkedHashMap<>();
-        for (int i = transactions.size() - 1; i > -1; i--) {
-            Transaction transaction = transactions.get(i);
+
+        // 최신순으로 조회
+        ListIterator<Transaction> iterator = transactions.listIterator(transactions.size());
+        while (iterator.hasPrevious()) {
+            Transaction transaction = iterator.previous();
+
             String date = transaction.getDate().format(formatter);
+            int amount = transaction.getFrom().equals(String.valueOf(studentId)) ? -1 * transaction.getAmount() : transaction.getAmount();
+
             map.putIfAbsent(date, new ArrayList<>());
-            map.get(date).add(new TransactionColDto().of(transaction, String.valueOf(studentId)));
+            map.get(date).add(TransactionColDto.builder()
+                            .title(transaction.getTitle())
+                            .amount(numberFormat.format(amount))
+                    .build());
         }
         return new StudentResDto().of(student, map);
     }
