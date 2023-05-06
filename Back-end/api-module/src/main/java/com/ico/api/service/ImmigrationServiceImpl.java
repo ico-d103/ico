@@ -1,6 +1,6 @@
 package com.ico.api.service;
 
-import com.ico.api.dto.ImmigrationReqDto;
+import com.ico.api.dto.immigration.ImmigrationReqDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Immigration;
 import com.ico.core.entity.Nation;
@@ -16,8 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.NoSuchElementException;
 
 /**
  * @author 강교철

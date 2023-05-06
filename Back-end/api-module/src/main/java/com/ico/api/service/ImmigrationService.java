@@ -1,6 +1,6 @@
 package com.ico.api.service;
 
-import com.ico.api.dto.ImmigrationReqDto;
+import com.ico.api.dto.immigration.ImmigrationReqDto;
 import com.ico.core.entity.Immigration;
 
 import javax.servlet.http.HttpServletRequest;

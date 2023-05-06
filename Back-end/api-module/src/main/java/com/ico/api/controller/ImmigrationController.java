@@ -1,6 +1,6 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.ImmigrationReqDto;
+import com.ico.api.dto.immigration.ImmigrationReqDto;
 import com.ico.api.service.ImmigrationService;
 import com.ico.core.entity.Immigration;
 import lombok.RequiredArgsConstructor;

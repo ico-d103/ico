@@ -1,7 +1,7 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.NationReqDto;
-import com.ico.api.service.NationService;
+import com.ico.api.dto.nation.NationReqDto;
+import com.ico.api.service.nation.NationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
