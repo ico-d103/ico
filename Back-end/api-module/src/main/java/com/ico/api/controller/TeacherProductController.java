@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +46,12 @@ public class TeacherProductController {
     @GetMapping
     public ResponseEntity<List<TeacherProductAllResDto>> findAllProduct(){
         return ResponseEntity.ok(teacherProductService.findAllProduct());
+    }
+
+    @PostMapping("/student/{teacherProductId}/coupon")
+    public ResponseEntity<HttpStatus> buyCoupon(@PathVariable Long teacherProductId){
+        teacherProductService.buyCoupon(teacherProductId);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 

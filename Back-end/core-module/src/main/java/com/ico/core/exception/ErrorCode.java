@@ -27,7 +27,7 @@ public enum ErrorCode{
 
     ALREADY_EXIST_TITLE(HttpStatus.CONFLICT, "17", "이미 존재하는 이름입니다."),
 
-    NOT_AUTHORIZATION_NATION(HttpStatus.UNAUTHORIZED, "18", "해당 나라에 교사의 접근 권한이 없습니다."),
+    NOT_AUTHORIZATION_NATION(HttpStatus.UNAUTHORIZED, "18", "해당 나라에 접근 권한이 없습니다."),
 
     NOT_BLANK(HttpStatus.BAD_REQUEST, "19", "칸이 비었습니다."),
 
@@ -49,6 +49,11 @@ public enum ErrorCode{
 
     PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "삭제된 판매 제안서입니다."),
 
+    NOT_COUPON(HttpStatus.BAD_REQUEST, "614", "해당 상품은 쿠폰이 아닙니다."),
+
+    NOT_RENTAL(HttpStatus.BAD_REQUEST, "615", "해당 상품은 대여 상품이 아닙니다."),
+
+    SOLD_OUT(HttpStatus.BAD_REQUEST, "616", "품절된 상품입니다."),
     ;
 
     private final HttpStatus httpStatus;

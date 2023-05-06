@@ -20,4 +20,6 @@ public interface TeacherProductService {
      * @return 교사상품목록
      */
     List<TeacherProductAllResDto> findAllProduct();
+
+    void buyCoupon(Long id);
 }

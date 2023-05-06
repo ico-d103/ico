@@ -1,4 +1,4 @@
 package com.ico.core.entity;
 
-public class CouponHistory {
+public class CouponRequest {
 }

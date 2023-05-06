@@ -1,11 +1,15 @@
 package com.ico.api.service;
 
 import com.ico.api.dto.TeacherProductAllResDto;
+import com.ico.core.entity.Coupon;
 import com.ico.core.entity.Nation;
+import com.ico.core.entity.Student;
 import com.ico.core.entity.TeacherProduct;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.CouponRepository;
 import com.ico.core.repository.NationRepository;
+import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author 변윤경
@@ -23,6 +28,8 @@ import java.util.List;
 public class TeacherProductServiceImpl implements TeacherProductService{
     private final NationRepository nationRepository;
     private final TeacherProductRepository teacherProductRepository;
+    private final StudentRepository studentRepository;
+    private final CouponRepository couponRepository;
 
     /**
      * 교사 상품 등록
@@ -72,5 +79,58 @@ public class TeacherProductServiceImpl implements TeacherProductService{
         }
 
         return resProductList;
+    }
+
+    @Override
+    public void buyCoupon(Long id) {
+        // 해당 국가인지 확인
+        long nationId = 1L;
+        long studentId = 1L;
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 타입이 일치하는지 확인
+        TeacherProduct product =  teacherProductRepository.findByIdAndNationId(id, nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
+        if(!product.getType().equals("coupon")){
+            throw new CustomException(ErrorCode.NOT_COUPON);
+        }
+
+        // 재고 있는지 확인
+        if(product.getCount() == product.getSold()){
+            throw new CustomException(ErrorCode.SOLD_OUT);
+        }
+
+        // 잔고가 충분한지 확인
+        int amount = product.getAmount();
+        int account = student.getAccount();
+        if(amount > account){
+            throw new CustomException(ErrorCode.LOW_BALANCE);
+        }
+
+        // 상품 가격 지불
+        student.setAccount(account - amount);
+
+        // 재고 개수 수정
+        product.setSold((byte) (product.getSold() + 1));
+
+        // 인벤토리에 추가
+        Optional<Coupon> couponOptional = couponRepository.findByTeacherProductIdAndStudentId(id, studentId);
+        Coupon coupon;
+        if(couponOptional.isPresent()){
+            coupon = couponOptional.get();
+            coupon.setCount((byte) (coupon.getCount() + 1));
+        }
+        else{
+            coupon = Coupon.builder()
+                    .student(student)
+                    .teacherProduct(product)
+                    .title(product.getTitle())
+                    .count((byte) 1)
+                    .isAssigned(false)
+                    .build();
+        }
+        couponRepository.save(coupon);
     }
 }
