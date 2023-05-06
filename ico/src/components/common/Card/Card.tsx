@@ -1,5 +1,6 @@
 import { css } from "@emotion/react"
 import Image from "next/image"
+import useMediaQuery from "@/hooks/useMediaQuery"
 
 // 상품 갯수가 0개면 sold out
 // 승인 대기중인 상품은 boolean으로 관리한다.
@@ -15,15 +16,19 @@ type CardProps = {
 }
 
 function Card({ image, name, number, price, writer, date, approved }: CardProps) {
+	const isMobile = useMediaQuery("(min-width: 500px)")
+	const output = isMobile ? "a" : "b"
+
 	return (
 		<div css={cardCSS}>
 			<div css={cardImageWrapperCSS}>
-				<Image src={image} alt={name} width={250} height={250} />
-				{number === 0 ? (
+				{/* 카드 길이 수정 부분 */}
+				<Image src={image} alt={name} layout="fill" />
+				{/* {number === 0 ? (
 					<div css={cardSoldOutTextCSS}>Sold out</div>
 				) : (
 					<div css={approved ? cardRequestTextCSS : cardImageTextCSS}>{approved ? "승인중" : "텍스트"}</div>
-				)}
+				)} */}
 			</div>
 			<div css={cardFirstContentCSS}>
 				<div>{name}</div>
@@ -36,6 +41,7 @@ function Card({ image, name, number, price, writer, date, approved }: CardProps)
 				<div>
 					<div>{writer}</div>
 					<div>{date}</div>
+					{/* <div>{output}</div> */}
 				</div>
 			</div>
 		</div>
@@ -43,25 +49,27 @@ function Card({ image, name, number, price, writer, date, approved }: CardProps)
 }
 
 const cardCSS = css`
-	position: relative; // 부모 요소를 relative로 설정합니다.
-
+	position: relative;
 	border-radius: 10px;
 	overflow: hidden;
 
-	box-shadow: 0px 0px 10px 1px rgba(100, 100, 100, 0.2); /* 그림자 설정 */
+	box-shadow: 0px 0px 10px 1px rgba(100, 100, 100, 0.2);
 
 	hr {
 		height: 1px;
 		border: none;
 		border-top: 1px solid rgba(0, 0, 0, 0.2);
 	}
-
 	cursor: pointer;
 `
 
 const cardImageWrapperCSS = css`
+	/* 카드 길이 수정 부분 */
+	width: 250px;
+	height: 250px;
+
 	position: relative;
-	display: inline-block;
+	/* display: inline-block; */
 `
 
 const cardImageTextCSS = css`
@@ -76,29 +84,29 @@ const cardImageTextCSS = css`
 	border-radius: 5px;
 `
 
-const cardSoldOutTextCSS = css`
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	padding: 5px;
-	background-color: var(--teacher-warning-color);
-	color: #fff;
-	font-size: 12px;
-	font-weight: bold;
-	border-radius: 5px;
-`
+// const cardSoldOutTextCSS = css`
+// 	position: absolute;
+// 	top: 10px;
+// 	right: 10px;
+// 	padding: 5px;
+// 	background-color: var(--teacher-warning-color);
+// 	color: #fff;
+// 	font-size: 12px;
+// 	font-weight: bold;
+// 	border-radius: 5px;
+// `
 
-const cardRequestTextCSS = css`
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	padding: 5px;
-	background-color: blue;
-	color: #fff;
-	font-size: 12px;
-	font-weight: bold;
-	border-radius: 5px;
-`
+// const cardRequestTextCSS = css`
+// 	position: absolute;
+// 	top: 10px;
+// 	right: 10px;
+// 	padding: 5px;
+// 	background-color: blue;
+// 	color: #fff;
+// 	font-size: 12px;
+// 	font-weight: bold;
+// 	border-radius: 5px;
+// `
 
 const cardFirstContentCSS = css`
 	font-size: var(--teacher-h5);

@@ -5,8 +5,6 @@ import GovRuleTab from "@/components/student/Gov/Rule/GovRuleTab"
 import Button from "@/components/common/Button/Button"
 import Card from "@/components/common/Card/Card"
 
-import useMediaQuery from "@/hooks/useMediaQuery"
-
 function index() {
 	const cardData = [
 		{
@@ -55,7 +53,7 @@ function index() {
 		<>
 			<PageHeader title={"상점"} addComp={<GovRuleTab />} />
 			<div css={wrapperCSS}>
-				<div css={[contentWrapperCSS, spaceBetweenCSS]} style={{ marginTop: "82px" }}>
+				<div css={[contentWrapperCSS, spaceBetweenCSS]}>
 					<div>나도 내 상품을 팔고 싶어요!</div>
 					<Button
 						text={"버튼"}
