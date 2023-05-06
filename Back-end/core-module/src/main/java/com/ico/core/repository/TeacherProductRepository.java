@@ -13,4 +13,6 @@ public interface TeacherProductRepository extends JpaRepository<TeacherProduct, 
     Optional<TeacherProduct> findByNationIdAndTitle(Long nationId, String title);
 
     List<TeacherProduct> findAllByNationId(Long nationId);
+
+    Optional<TeacherProduct> findByIdAndNationId(Long id, Long nationId);
 }
