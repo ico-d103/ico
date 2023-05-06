@@ -1,5 +1,10 @@
 package com.ico.api.service.transaction;
 
+import com.ico.api.dto.transaction.TransactionResDto;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * 거래 내역 관련 Service
  *
@@ -39,5 +44,11 @@ public interface TransactionService {
      */
     void addTransactionDeposit(Long to, String from, int amount, String title);
 
+    /**
+     * 학생의 입출금 내역 조회
+     *
+     * @return 날짜별 입출금 내역
+     */
+    Map<String, List<TransactionResDto>> findTransaction();
 
 }

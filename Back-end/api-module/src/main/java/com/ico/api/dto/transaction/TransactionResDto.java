@@ -5,22 +5,28 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 학생 상세보기에서 transaction column 에 담을 거래내역 dto
+ * 학생 입출금 내역 조회 res dto
  *
  * @author 서재건
  */
 @Getter
 @NoArgsConstructor
-public class TransactionColDto {
+public class TransactionResDto {
 
     private String title;
 
     private String amount;
 
+    private String source;
+
+    private String balance;
+
     @Builder
-    public TransactionColDto(String title, String amount) {
+    public TransactionResDto(String title, String amount, String source, String balance) {
         this.title = title;
         this.amount = amount;
+        this.source = source;
+        this.balance = balance;
     }
 
 }
