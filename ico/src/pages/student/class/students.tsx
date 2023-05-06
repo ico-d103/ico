@@ -25,7 +25,7 @@ function students() {
 					<div css={contentWrapperCSS}>
 						<span>전체 {mockList.length}</span>
 						{mockList.map((mock) => (
-							<ClassStudentsListItem key={mock.id} />
+							<ClassStudentsListItem key={mock.id} mock={mock} />
 						))}
 					</div>
 				</div>
@@ -72,10 +72,13 @@ const contentWrapperCSS = css`
 	background-color: var(--student-wrapper-color);
 	padding: 30px;
 	border-radius: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
 
 	> span {
 		font-size: var(--student-h3);
-		margin-bottom: 30px;
+		color: var(--teacher-gray-color);
 	}
 `
 
