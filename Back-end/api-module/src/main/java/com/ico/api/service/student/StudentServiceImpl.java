@@ -1,12 +1,13 @@
 package com.ico.api.service.student;
 
-import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.student.StudentListResDto;
 import com.ico.api.dto.student.StudentResDto;
+import com.ico.api.dto.transaction.TransactionColDto;
+import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.user.StudentSignUpRequestDto;
 import com.ico.api.service.transaction.TransactionService;
-import com.ico.core.entity.Student;
 import com.ico.core.code.Role;
+import com.ico.core.entity.Student;
 import com.ico.core.entity.Transaction;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
@@ -19,8 +20,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.NumberFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Locale;
+import java.util.Map;
 
 
 /**
@@ -44,6 +51,8 @@ public class StudentServiceImpl implements StudentService{
     private final TransactionService transactionService;
 
     private final TransactionMongoRepository transactionMongoRepository;
+
+    private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
 
     @Override
     public Long signUp(StudentSignUpRequestDto requestDto) {
@@ -136,7 +145,26 @@ public class StudentServiceImpl implements StudentService{
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
         List<Transaction> transactions = transactionMongoRepository.findAllByFromOrTo(String.valueOf(studentId), String.valueOf(studentId));
-        return new StudentResDto().of(student, transactions);
+
+        // 최신순 날짜 별로 묶어서 순서가 있는 Map 생성
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM.dd");
+        Map<String, List<TransactionColDto>> map = new LinkedHashMap<>();
+
+        // 최신순으로 조회
+        ListIterator<Transaction> iterator = transactions.listIterator(transactions.size());
+        while (iterator.hasPrevious()) {
+            Transaction transaction = iterator.previous();
+
+            String date = transaction.getDate().format(formatter);
+            int amount = transaction.getFrom().equals(String.valueOf(studentId)) ? -1 * transaction.getAmount() : transaction.getAmount();
+
+            map.putIfAbsent(date, new ArrayList<>());
+            map.get(date).add(TransactionColDto.builder()
+                            .title(transaction.getTitle())
+                            .amount(numberFormat.format(amount))
+                    .build());
+        }
+        return new StudentResDto().of(student, map);
     }
 
 }

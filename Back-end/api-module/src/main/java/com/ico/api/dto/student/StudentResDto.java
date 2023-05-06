@@ -2,13 +2,12 @@ package com.ico.api.dto.student;
 
 import com.ico.api.dto.transaction.TransactionColDto;
 import com.ico.core.entity.Student;
-import com.ico.core.entity.Transaction;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 학생 상세보기 res dto
@@ -27,10 +26,10 @@ public class StudentResDto {
 
     private int creditScore;
 
-    private List<TransactionColDto> transactions;
+    private Map<String, List<TransactionColDto>> transactions;
 
     @Builder
-    public StudentResDto(Long studentId, String studentName, boolean isFrozen, int creditScore, List<TransactionColDto> transactions) {
+    public StudentResDto(Long studentId, String studentName, boolean isFrozen, int creditScore, Map<String, List<TransactionColDto>> transactions) {
         this.studentId = studentId;
         this.studentName = studentName;
         this.isFrozen = isFrozen;
@@ -42,21 +41,16 @@ public class StudentResDto {
      * 학생과 거래내역을 매핑하는 method
      *
      * @param student
-     * @param transactions
+     * @param map
      * @return
      */
-    public StudentResDto of(Student student, List<Transaction> transactions) {
-        List<TransactionColDto> dto = new ArrayList<>();
-        for (Transaction transaction : transactions) {
-            dto.add(new TransactionColDto().of(transaction, String.valueOf(student.getId())));
-        }
-
+    public StudentResDto of(Student student, Map<String, List<TransactionColDto>> map) {
         return StudentResDto.builder()
                 .studentId(student.getId())
                 .studentName(student.getName())
                 .isFrozen(student.isFrozen())
                 .creditScore(student.getCreditScore())
-                .transactions(dto)
+                .transactions(map)
                 .build();
     }
 }
