@@ -58,6 +58,12 @@ function Button({ text, fontSize, width, height, theme, margin, onClick }: Butto
 			fontColor: `var(--common-back-color-2)`,
 			backgroundColor: `var(--teacher-blue-color)`,
 		},
+		RadialPositive: {
+			border: "none",
+			borderRadius: "10px",
+			fontColor: `rgba(0, 20, 50, 1)`,
+			backgroundColor: `rgba(0, 20, 50, 0.05)`,
+		},
 		mobileNormal: {
 			border: "none",
 			borderRadius: "20px",
@@ -65,6 +71,14 @@ function Button({ text, fontSize, width, height, theme, margin, onClick }: Butto
 			backgroundColor: `#FFCD00`,
 
 		},
+		mobileSoft: {
+			border: "1px solid var(--student-main-color-5)",
+			borderRadius: "20px",
+			fontColor: `var(--student-main-color-5)`,
+			backgroundColor: `var(--student-main-color)`,
+
+		},
+
 	}
 
 	return (

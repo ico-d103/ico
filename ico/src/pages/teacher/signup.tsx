@@ -4,6 +4,10 @@ import { postTeacher } from "@/api/teacher/user/postTeacher"
 import { useState } from "react"
 import { KOREAN_ONLY, ENG_NUM_ONLY } from "@/util/regex"
 import { lengthCheck } from "@/util/lengthCheck"
+import LoadImage from "@/components/common/LoadImage/LoadImage"
+import Input from "@/components/common/Input/Input"
+import Button from "@/components/common/Button/Button"
+import { NAME_ICON, ID_ICON, PASSWORD_ICON, PASSWORD2_ICON } from "@/components/teacher/Signup/SignupIcons/SignupIcons"
 
 const inputReducer = (
 	state: { name: string; id: string; password: string },
@@ -110,35 +114,65 @@ function signup() {
 
 	return (
 		<div css={wrapperCSS}>
-			<span>{alarm}</span>
-			{/* placeholder 멘트도 더 좋은게 있다면 수정해주세요 */}
-			<input
-				type="text"
-				placeholder="이름 (한글만 입력해주세요)"
-				onChange={(e) => dispatchInput({ type: "CHANGE_NAME", value: e.target.value })}
-			/>
-			<input
-				type="text"
-				placeholder="아이디 (영어와 숫자를 조합해 4자~10자 입력해주세요)"
-				onChange={(e) => {
-					dispatchValid({ type: "VALID_ID", value: false })
-					dispatchInput({ type: "CHANGE_ID", value: e.target.value })
-				}}
-			/>
-			<button onClick={checkValidIDHandler}>중복 확인</button>
-			<input
-				type="password"
-				placeholder="비밀번호 (영어와 숫자를 조합해 8자~16자 입력해주세요)"
-				onChange={(e) => {
-					setAlarm("")
-					dispatchValid({ type: "VALID_PW", value: false })
-					dispatchInput({ type: "CHANGE_PW", value: e.target.value })
-				}}
-			/>
-			<input type="password" placeholder="비밀번호 확인" onChange={checkValidPWHandler} />
-			<button onClick={ceritfyHandler}>본인 인증하기</button>
-			<input type="file" placeholder="교사 인증서" />
-			<button onClick={signUpHandler}>회원 가입</button>
+			<div css={innerWrapperCSS}>
+				<LoadImage src={"/assets/signup/illust.png"} alt={"signup_illust"} wrapperCss={imageWrapperCSS} dev={false} />
+
+				<span>{alarm}</span>
+				{/* placeholder 멘트도 더 좋은게 있다면 수정해주세요 */}
+
+				<Input
+					leftContent={NAME_ICON}
+					theme={"default"}
+					placeholder="이름 (한글만 입력해주세요)"
+					onChange={(e) => dispatchInput({ type: "CHANGE_NAME", value: e.target.value })}
+					customCss={inputCSS}
+				/>
+				<Input
+					leftContent={ID_ICON}
+					rightContent={
+						<Button
+							theme={"RadialPositive"}
+							width={"120px"}
+							height={"42px"}
+							text={"중복 확인"}
+							fontSize={"var(--teacher-h5)"}
+							onClick={checkValidIDHandler}
+						></Button>
+					}
+					theme={"default"}
+					customCss={inputCSS}
+					type="text"
+					placeholder="아이디 (영어와 숫자를 조합해 4자~10자 입력해주세요)"
+					onChange={(e) => {
+						dispatchValid({ type: "VALID_ID", value: false })
+						dispatchInput({ type: "CHANGE_ID", value: e.target.value })
+					}}
+				/>
+
+				<Input
+					leftContent={PASSWORD_ICON}
+					theme={"default"}
+					customCss={inputCSS}
+					type="password"
+					placeholder="비밀번호 (영어와 숫자를 조합해 8자~16자 입력해주세요)"
+					onChange={(e) => {
+						setAlarm("")
+						dispatchValid({ type: "VALID_PW", value: false })
+						dispatchInput({ type: "CHANGE_PW", value: e.target.value })
+					}}
+				/>
+				<Input
+					leftContent={PASSWORD2_ICON}
+					theme={"default"}
+					customCss={inputCSS}
+					type="password"
+					placeholder="비밀번호 확인"
+					onChange={checkValidPWHandler}
+				/>
+				<button onClick={ceritfyHandler}>본인 인증하기</button>
+				<input type="file" placeholder="교사 인증서" />
+				<button onClick={signUpHandler}>회원 가입</button>
+			</div>
 		</div>
 	)
 }
@@ -147,7 +181,29 @@ function signup() {
 const wrapperCSS = css`
 	display: flex;
 	flex-direction: column;
-	width: 300px;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+`
+
+const innerWrapperCSS = css`
+	width: 40vw;
+	/* height: 40vh; */
+	/* background-color: red; */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`
+
+const imageWrapperCSS = css`
+	width: 100%;
+	height: 23.3vw;
+`
+
+const inputCSS = css`
+	width: 100%;
+	margin: 24px;
 `
 
 export default signup
