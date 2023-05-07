@@ -1,5 +1,4 @@
 import { css } from "@emotion/react"
-import GovRuleTab from "@/components/student/Gov/Rule/GovRuleTab"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import CollapseMenu from "@/components/teacher/common/CollapseMenu/CollapseMenu"
 import ListNumbering from "@/components/student/Gov/ListNumbering"

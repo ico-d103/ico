@@ -1,13 +1,20 @@
 import { css } from "@emotion/react"
 
+import { useRouter } from "next/router"
+
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
-import GovRuleTab from "@/components/student/Gov/Rule/GovRuleTab"
 import Button from "@/components/common/Button/Button"
 import Card from "@/components/common/Card/Card"
 
-import useMediaQuery from "@/hooks/useMediaQuery"
+import ShopTab from "@/components/student/Shop/ShopTab"
 
 function index() {
+	const router = useRouter()
+
+	const createProduct = () => {
+		router.push("/student/shop/create")
+	}
+
 	const cardData = [
 		{
 			id: 1,
@@ -53,33 +60,33 @@ function index() {
 
 	return (
 		<>
-			<PageHeader title={"상점"} addComp={<GovRuleTab />} />
+			<PageHeader title={"상점"} addComp={<ShopTab />} />
 			<div css={wrapperCSS}>
-				<div css={[contentWrapperCSS, spaceBetweenCSS]} style={{ marginTop: "82px" }}>
+				<div css={contentWrapperCSS}>
 					<div>나도 내 상품을 팔고 싶어요!</div>
 					<Button
-						text={"버튼"}
+						text={"판매 신청서 작성"}
 						fontSize={`var(--teacher-h5)`}
-						width={"80px"}
+						width={"125px"}
 						height={"30px"}
 						theme={"mobileNormal"}
-						onClick={() => {}}
+						onClick={createProduct}
 					/>
 				</div>
-				<div css={cardWrapperCSS}>
-					{cardData.map((card) => (
-						<Card
-							key={card.id}
-							image={card.image}
-							name={card.name}
-							price={card.price}
-							number={card.number}
-							writer={card?.writer}
-							date={card.date}
-							approved={card.approved}
-						/>
-					))}
-				</div>
+			</div>
+			<div css={cardWrapperCSS}>
+				{cardData.map((card) => (
+					<Card
+						key={card.id}
+						image={card.image}
+						name={card.name}
+						price={card.price}
+						number={card.number}
+						writer={card.writer}
+						date={card.date}
+						approved={card.approved}
+					/>
+				))}
 			</div>
 		</>
 	)
@@ -93,28 +100,30 @@ const wrapperCSS = css`
 `
 
 const contentWrapperCSS = css`
-	margin-bottom: 10px;
-
 	width: 95%;
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
 	box-sizing: border-box;
-	padding: 30px;
-`
-const spaceBetweenCSS = css`
-	display: flex;
+	padding: 25px 20px;
+
 	justify-content: space-between;
 	align-items: center;
+	display: flex;
+
+	> div {
+		font-size: 0.95rem;
+	}
 `
 
 const cardWrapperCSS = css`
-	margin-top: 30px;
+	margin-top: 15px;
 
 	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(45vw, 1fr));
+
 	place-items: center;
-	grid-template-columns: repeat(auto-fill, minmax(50%, 1fr));
-	grid-column-gap: 20px;
-	grid-row-gap: 30px;
+
+	grid-row-gap: 10px;
 `
 
 export default index
