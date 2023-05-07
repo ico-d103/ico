@@ -3,6 +3,8 @@ import GovRuleTab from "@/components/student/Gov/Rule/GovRuleTab"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import CollapseMenu from "@/components/teacher/common/CollapseMenu/CollapseMenu"
 import ListNumbering from "@/components/student/Gov/ListNumbering"
+import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
+import { GovTabMenus } from "@/components/student/Gov/GovTabMenus"
 
 function index() {
 	const mockList = [
@@ -12,9 +14,15 @@ function index() {
 		{ id: 3, title: "건강보험료", content: "국민의 월급에서 10%에 해당하는 미소를 세금으로 부과합니다." },
 	]
 
+	const menus = [
+		{ idx: 0, url: "/student/gov/rule", title: "학급 규칙" },
+		{ idx: 1, url: "/student/gov/exchequer", title: "세금 목록" },
+		{ idx: 2, url: "/student/gov/job", title: "직업 목록" },
+	]
+
 	return (
 		<>
-			<PageHeader title={"세금 목록"} addComp={<GovRuleTab selected={1} />} />
+			<PageHeader title={"세금 목록"} addComp={<TabMenu menus={GovTabMenus()} selected={1} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					{mockList.map((mock) => (
