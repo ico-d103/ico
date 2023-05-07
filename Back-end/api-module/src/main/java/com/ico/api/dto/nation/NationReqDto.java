@@ -27,9 +27,5 @@ public class NationReqDto {
     String title;
     @NotBlank(message = "19")
     String currency;
-    @NotNull(message = "19")
-    LocalTime trading_start;
-    @NotNull(message = "19")
-    LocalTime trading_end;
 
 }

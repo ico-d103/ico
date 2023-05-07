@@ -52,8 +52,6 @@ public class NationServiceImpl implements NationService {
                     .treasury(0)
                     .credit_up((byte) 20)
                     .credit_down((byte) 50)
-                    .trading_start(reqDto.getTrading_start())
-                    .trading_end(reqDto.getTrading_end())
                     .build();
 
             nationRepository.save(nation);
@@ -112,5 +110,27 @@ public class NationServiceImpl implements NationService {
 
     }
 
-
+//    @Override
+//    public Nation updateNation(NationReqDto reqDto, HttpServletRequest request) {
+        // TODO : 나라 수정 때 사용할 것
+//        String token = jwtTokenProvider.parseJwt(request);
+//        Long id = jwtTokenProvider.getId(token);
+//
+//        if (id != null) {
+//            Long nationId = teacherRepository.findById(id).get().getNation().getId();
+//            Nation nation = nationRepository.findById(nationId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
+//            nation.setSchool(reqDto.getSchool());
+//            nation.setGrade((byte) reqDto.getGrade());
+//            nation.setRoom((byte) reqDto.getRoom());
+//            nation.setTitle(reqDto.getTitle());
+//            nation.setCurrency(reqDto.getCurrency());
+//            nation.setTrading_start(reqDto.getTrading_start());
+//            nation.setTrading_end(reqDto.getTrading_end());
+//            nationRepository.save(nation);
+//            return nation;
+//        }
+//        else {
+//            throw new CustomException(ErrorCode.NOT_FOUND_NATION);
+//        }
+//    }
 }
