@@ -59,7 +59,7 @@ public class TransactionServiceImpl implements TransactionService{
                 .to(String.valueOf(to))
                 .amount(Math.abs(amount))
                 .date(LocalDateTime.now())
-                .title(title + " 거래")
+                .title(title)
                 .build();
 
         transactionMongoRepository.insert(transaction);

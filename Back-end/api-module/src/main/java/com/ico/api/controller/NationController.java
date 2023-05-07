@@ -1,7 +1,7 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.nation.NationReqDto;
-import com.ico.api.dto.nation.StockUpdateDto;
+import com.ico.core.dto.StockDto;
 import com.ico.api.service.nation.NationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,8 +45,15 @@ public class NationController {
         return new ResponseEntity<>(nationService.getNation(request), HttpStatus.OK);
     }
 
+    /**
+     * 투자 종목 등록
+     *
+     * @param stockDto 주식 이름, 시작가격, 첫번재 이슈, 거래 시간
+     * @return Httpstatus
+     */
     @PostMapping("/teacher/stock")
-    public ResponseEntity<HttpStatus> createStock(@Valid @RequestBody StockUpdateDto stockUpdateDto){
+    public ResponseEntity<HttpStatus> createStock(@Valid @RequestBody StockDto stockDto){
+        nationService.createStock(stockDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

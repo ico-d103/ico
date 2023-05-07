@@ -1,6 +1,7 @@
 package com.ico.api.service.nation;
 
 import com.ico.api.dto.nation.NationReqDto;
+import com.ico.core.dto.StockDto;
 import com.ico.core.entity.Nation;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,4 +24,10 @@ public interface NationService {
      * @return Nation
      */
     public Nation getNation(HttpServletRequest request);
+
+    /**
+     * 투자 종목 등록
+     * @param stockDto 종목 정보
+     */
+    public void createStock(StockDto stockDto);
 }

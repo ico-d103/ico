@@ -49,6 +49,14 @@ public enum ErrorCode{
 
     PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "삭제된 판매 제안서입니다."),
 
+    NOT_TRADING_TIME(HttpStatus.BAD_REQUEST, "701", "거래시간이 아닙니다."),
+
+    ALREADY_EXIST_STOCK(HttpStatus.BAD_REQUEST, "702", "종목 삭제 후 시도해주세요."),
+
+    NOT_FOUND_STOCK(HttpStatus.BAD_REQUEST, "703", "투자 종목이 없습니다."),
+
+    ALREADY_HAVE_STOCK(HttpStatus.BAD_REQUEST, "704", "매도만 가능합니다."),
+
     ;
 
     private final HttpStatus httpStatus;
