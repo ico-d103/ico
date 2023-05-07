@@ -1,8 +1,11 @@
-import React from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 
-function ClassPropertyUseModal() {
+type ClassPropertyUseModalPropsType = {
+	closeComp: () => void
+}
+
+function ClassPropertyUseModal({ closeComp }: ClassPropertyUseModalPropsType) {
 	return (
 		<>
 			<div css={contentCSS}>
@@ -11,7 +14,7 @@ function ClassPropertyUseModal() {
 			</div>
 			<div css={buttonWrapperCSS}>
 				<Button text={"사용"} fontSize={`var(--teacher-h5)`} width={"200px"} theme={"positive"} onClick={() => {}} />
-				<Button text={"취소"} fontSize={`var(--teacher-h5)`} width={"200px"} theme={"cancelDark"} onClick={() => {}} />
+				<Button text={"취소"} fontSize={`var(--teacher-h5)`} width={"200px"} theme={"cancelDark"} onClick={closeComp} />
 			</div>
 		</>
 	)
