@@ -21,21 +21,23 @@ function GovJobCard({ mock }: GovJobCardPropsType) {
 	const [openComp, closeComp, compState] = useCompHandler()
 
 	return (
-		<div css={cardWrapperCSS} onClick={openComp}>
-			<div css={imageWrapperCSS}>
-				<LoadImage wrapperCss={imgCSS} src={"/assets/job/weather_caster.png"} alt={"job_image"} />
-			</div>
-			<div css={contentWrapperCSS}>
-				<h3>{mock.student}</h3>
-				<h4>{mock.name}</h4>
-				<div css={divideCSS}></div>
-				<div css={conditionWrapperCSS}>
-					<h4>신용 등급</h4>
-					<h3>{mock.grade}등급 이상</h3>
+		<>
+			<div css={cardWrapperCSS} onClick={openComp}>
+				<div css={imageWrapperCSS}>
+					<LoadImage wrapperCss={imgCSS} src={"/assets/job/weather_caster.png"} alt={"job_image"} />
 				</div>
-				<div css={conditionWrapperCSS}>
-					<h4>월급</h4>
-					<h3>{mock.money} 미소</h3>
+				<div css={contentWrapperCSS}>
+					<h3>{mock.student}</h3>
+					<h4>{mock.name}</h4>
+					<div css={divideCSS}></div>
+					<div css={conditionWrapperCSS}>
+						<h4>신용 등급</h4>
+						<h3>{mock.grade}등급 이상</h3>
+					</div>
+					<div css={conditionWrapperCSS}>
+						<h4>월급</h4>
+						<h3>{mock.money} 미소</h3>
+					</div>
 				</div>
 			</div>
 			<Modal
@@ -48,11 +50,11 @@ function GovJobCard({ mock }: GovJobCardPropsType) {
 						icon={GOV_JOB}
 						title={`${mock.name}의 업무`}
 						titleSize={"var(--student-h2)"}
-						content={<GovJobCardModalContent content={mock.content} />}
+						content={<GovJobCardModalContent content={mock.content} closeComp={closeComp} />}
 					/>
 				}
 			/>
-		</div>
+		</>
 	)
 }
 

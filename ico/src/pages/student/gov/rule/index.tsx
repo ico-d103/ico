@@ -4,6 +4,8 @@ import GovRuleTab from "@/components/student/Gov/Rule/GovRuleTab"
 import CollapseMenu from "@/components/teacher/common/CollapseMenu/CollapseMenu"
 import ListNumbering from "@/components/student/Gov/ListNumbering"
 import GovRuleGrade from "@/components/student/Gov/Rule/GovRuleGrade"
+import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
+import { GovTabMenus } from "@/components/student/Gov/GovTabMenus"
 
 function index() {
 	const mockList = [
@@ -13,9 +15,15 @@ function index() {
 		{ id: 3, title: "국가는 법률이 정하는 바에 의하여 재외국민을 보호할 의무를 진다.", content: "학습 규칙 내용" },
 	]
 
+	const menus = [
+		{ idx: 0, url: "/student/gov/rule", title: "학급 규칙" },
+		{ idx: 1, url: "/student/gov/exchequer", title: "세금 목록" },
+		{ idx: 2, url: "/student/gov/job", title: "직업 목록" },
+	]
+
 	return (
 		<>
-			<PageHeader title={"학급 규칙"} addComp={<GovRuleTab />} />
+			<PageHeader title={"학급 규칙"} addComp={<TabMenu menus={GovTabMenus()} selected={0} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					<CollapseMenu

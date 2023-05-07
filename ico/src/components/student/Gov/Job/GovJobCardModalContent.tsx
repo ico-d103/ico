@@ -3,13 +3,14 @@ import { css } from "@emotion/react"
 
 type GovJobCardModalContentPropsType = {
 	content: string
+	closeComp: () => void
 }
 
-function GovJobCardModalContent({ content }: GovJobCardModalContentPropsType) {
+function GovJobCardModalContent({ content, closeComp }: GovJobCardModalContentPropsType) {
 	return (
 		<div css={wrapperCSS}>
 			<textarea readOnly value={content} />
-			<Button text={"확인"} fontSize={"var(--student-h3)"} width={"130px"} theme={"cancelDark"} onClick={() => {}} />
+			<Button text={"확인"} fontSize={"var(--student-h3)"} width={"130px"} theme={"cancelDark"} onClick={closeComp} />
 		</div>
 	)
 }
