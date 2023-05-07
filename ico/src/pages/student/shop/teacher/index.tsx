@@ -1,11 +1,20 @@
 import { css } from "@emotion/react"
 
+import { useRouter } from "next/router"
+
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
-import GovRuleTab from "@/components/student/Gov/Rule/GovRuleTab"
 import Button from "@/components/common/Button/Button"
 import Card from "@/components/common/Card/Card"
 
+import ShopTab from "@/components/student/Shop/ShopTab"
+
 function index() {
+	const router = useRouter()
+
+	const createProduct = () => {
+		router.push("/student/shop/create")
+	}
+
 	const cardData = [
 		{
 			id: 1,
@@ -51,7 +60,7 @@ function index() {
 
 	return (
 		<>
-			<PageHeader title={"상점"} addComp={<GovRuleTab />} />
+			<PageHeader title={"상점"} addComp={<ShopTab />} />
 			<div css={wrapperCSS}>
 				<div css={contentWrapperCSS}>
 					<div>나도 내 상품을 팔고 싶어요!</div>
@@ -61,7 +70,7 @@ function index() {
 						width={"125px"}
 						height={"30px"}
 						theme={"mobileNormal"}
-						onClick={() => {}}
+						onClick={createProduct}
 					/>
 				</div>
 			</div>

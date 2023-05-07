@@ -24,6 +24,7 @@ function NavBar({ children }: NavBarProps) {
 		"/student/gov/job": 2,
 		"/student/shop/teacher": 3,
 		"/student/shop/student": 3,
+		"/student/shop/create": 3,
 	}
 
 	const navBarData: { [prop: number]: { url: string; name: string; label: string; content: any; function: Function } } =

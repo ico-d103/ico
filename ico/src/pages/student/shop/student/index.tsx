@@ -1,7 +1,7 @@
 import { css } from "@emotion/react"
 
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
-import GovRuleTab from "@/components/student/Gov/Rule/GovRuleTab"
+import ShopTab from "@/components/student/Shop/ShopTab"
 import Card from "@/components/common/Card/Card"
 
 function index() {
@@ -50,7 +50,7 @@ function index() {
 
 	return (
 		<>
-			<PageHeader title={"상점"} addComp={<GovRuleTab />} />
+			<PageHeader title={"상점"} addComp={<ShopTab />} />
 			<div css={cardWrapperCSS}>
 				{cardData.map((card) => (
 					<Card
