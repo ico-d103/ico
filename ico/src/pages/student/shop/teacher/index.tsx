@@ -53,7 +53,7 @@ function index() {
 		<>
 			<PageHeader title={"상점"} addComp={<GovRuleTab />} />
 			<div css={wrapperCSS}>
-				<div css={[contentWrapperCSS, spaceBetweenCSS]}>
+				<div css={contentWrapperCSS}>
 					<div>나도 내 상품을 팔고 싶어요!</div>
 					<Button
 						text={"버튼"}
@@ -64,20 +64,20 @@ function index() {
 						onClick={() => {}}
 					/>
 				</div>
-				<div css={cardWrapperCSS}>
-					{cardData.map((card) => (
-						<Card
-							key={card.id}
-							image={card.image}
-							name={card.name}
-							price={card.price}
-							number={card.number}
-							writer={card?.writer}
-							date={card.date}
-							approved={card.approved}
-						/>
-					))}
-				</div>
+			</div>
+			<div css={cardWrapperCSS}>
+				{cardData.map((card) => (
+					<Card
+						key={card.id}
+						image={card.image}
+						name={card.name}
+						price={card.price}
+						number={card.number}
+						writer={card.writer}
+						date={card.date}
+						approved={card.approved}
+					/>
+				))}
 			</div>
 		</>
 	)
@@ -91,28 +91,26 @@ const wrapperCSS = css`
 `
 
 const contentWrapperCSS = css`
-	margin-bottom: 10px;
-
 	width: 95%;
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
 	box-sizing: border-box;
 	padding: 30px;
-`
-const spaceBetweenCSS = css`
-	display: flex;
+
 	justify-content: space-between;
 	align-items: center;
+	display: flex;
 `
 
 const cardWrapperCSS = css`
-	margin-top: 30px;
+	margin-top: 15px;
 
 	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(45vw, 1fr));
+
 	place-items: center;
-	grid-template-columns: repeat(auto-fill, minmax(50%, 1fr));
-	grid-column-gap: 20px;
-	grid-row-gap: 30px;
+
+	grid-row-gap: 10px;
 `
 
 export default index

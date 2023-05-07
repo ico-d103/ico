@@ -1,6 +1,5 @@
 import { css } from "@emotion/react"
 import Image from "next/image"
-import useMediaQuery from "@/hooks/useMediaQuery"
 
 // 상품 갯수가 0개면 sold out
 // 승인 대기중인 상품은 boolean으로 관리한다.
@@ -16,13 +15,9 @@ type CardProps = {
 }
 
 function Card({ image, name, number, price, writer, date, approved }: CardProps) {
-	const isMobile = useMediaQuery("(min-width: 500px)")
-	const output = isMobile ? "a" : "b"
-
 	return (
 		<div css={cardCSS}>
 			<div css={cardImageWrapperCSS}>
-				{/* 카드 길이 수정 부분 */}
 				<Image src={image} alt={name} layout="fill" />
 				{/* {number === 0 ? (
 					<div css={cardSoldOutTextCSS}>Sold out</div>
@@ -41,7 +36,6 @@ function Card({ image, name, number, price, writer, date, approved }: CardProps)
 				<div>
 					<div>{writer}</div>
 					<div>{date}</div>
-					{/* <div>{output}</div> */}
 				</div>
 			</div>
 		</div>
@@ -69,7 +63,11 @@ const cardImageWrapperCSS = css`
 	height: 250px;
 
 	position: relative;
-	/* display: inline-block; */
+
+	@media screen and (max-width: 500px) {
+		width: 45vw;
+		height: 45vw;
+	}
 `
 
 const cardImageTextCSS = css`
