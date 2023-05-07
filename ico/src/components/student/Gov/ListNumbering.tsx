@@ -27,7 +27,7 @@ const numberCSS = css`
 	max-height: 33px;
 	border-radius: 10px;
 	background-color: var(--student-main-color-2);
-	color: var(--student-main-color);
+	color: var(--student-font-color);
 	margin-right: 10px;
 
 	display: flex;

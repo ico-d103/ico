@@ -2,6 +2,8 @@ import { css } from "@emotion/react"
 import GovRuleTab from "@/components/student/Gov/Rule/GovRuleTab"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import GovJobCard from "@/components/student/Gov/Job/GovJobCard"
+import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
+import { GovTabMenus } from "@/components/student/Gov/GovTabMenus"
 
 function index() {
 	const mockList = [
@@ -31,9 +33,15 @@ function index() {
 		},
 	]
 
+	const menus = [
+		{ idx: 0, url: "/student/gov/rule", title: "학급 규칙" },
+		{ idx: 1, url: "/student/gov/exchequer", title: "세금 목록" },
+		{ idx: 2, url: "/student/gov/job", title: "직업 목록" },
+	]
+
 	return (
 		<>
-			<PageHeader title={"직업 목록"} addComp={<GovRuleTab />} />
+			<PageHeader title={"직업 목록"} addComp={<TabMenu menus={GovTabMenus()} selected={2} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					<span css={titleCSS}>
@@ -82,6 +90,7 @@ const jobListCSS = css`
 	border-radius: 10px;
 	display: flex;
 	flex-direction: column;
+	align-items: center;
 	gap: 30px;
 `
 

@@ -49,12 +49,12 @@ const thCSS = css`
 	padding: 10px 0;
 	/* background: var(--student-main-color-2); */
 	border-radius: 20px;
-	color: var(--student-main-color);
+	color: var(--student-main-color-5);
 	font-weight: bold;
 `
 
 const tdCSS = css`
-	color: var(--student-main-color);
+	color: var(--student-main-color-5);
 	font-weight: bold;
 `
 

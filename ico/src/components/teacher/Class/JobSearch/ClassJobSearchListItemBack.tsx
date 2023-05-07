@@ -33,7 +33,7 @@ function ClassJobSearchListItemBack({ mock }: ClassJobSearchListItemBackPropsTyp
 			</div>
 			<div css={listWrapperCSS}>
 				{mockApplyList.map((mock) => (
-					<ClassJobSearchListApplyListItem mockList={mock} />
+					<ClassJobSearchListApplyListItem key={mock.id} mockList={mock} />
 				))}
 			</div>
 		</div>
