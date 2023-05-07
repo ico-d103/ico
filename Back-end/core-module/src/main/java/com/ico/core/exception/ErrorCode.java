@@ -33,6 +33,8 @@ public enum ErrorCode{
 
     NOT_FOUND_CODE(HttpStatus.BAD_REQUEST, "20", "반 입장 코드를 입력해주세요."),
 
+    COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "22", "해당하는 쿠폰이 없습니다."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     PASSWORD_WRONG(HttpStatus.BAD_REQUEST, "105", "비밀번호가 틀렸습니다."),
@@ -53,7 +55,11 @@ public enum ErrorCode{
 
     INVALID_CREDIT_RATING(HttpStatus.BAD_REQUEST, "500", "신용등급 요건에 적합하지 않습니다."),
 
-    RESUME_NOT_FOUND(HttpStatus.NOT_FOUND, "503", "신청 내역이 존재하지 않습니다."),
+    REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "503", "신청 내역이 존재하지 않습니다."),
+
+    ZERO_COUPON(HttpStatus.BAD_REQUEST, "505", "사용할 수 있는 쿠폰 재고가 없습니다."),
+
+    INVALID_COUPON(HttpStatus.BAD_REQUEST, "506", "신청하지 않은 쿠폰입니다."),
 
     PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "삭제된 판매 제안서입니다."),
 
