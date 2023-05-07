@@ -25,4 +25,12 @@ public interface RuleService {
      * @param dto
      */
     void addRule(RuleReqDto dto);
+
+    /**
+     * 학급규칙 수정
+     *
+     * @param dto
+     * @param ruleId
+     */
+    void updateRule(RuleReqDto dto, Long ruleId);
 }

@@ -43,4 +43,15 @@ public class Rule {
         this.title = title;
         this.detail = detail;
     }
+
+    /**
+     * 학급규칙 수정
+     *
+     * @param title
+     * @param detail
+     */
+    public void updateRule(String title, String detail) {
+        this.title = title;
+        this.detail = detail;
+    }
 }

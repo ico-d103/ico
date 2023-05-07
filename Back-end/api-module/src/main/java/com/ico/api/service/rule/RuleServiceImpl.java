@@ -63,4 +63,22 @@ public class RuleServiceImpl implements RuleService {
 
         ruleRepository.save(rule);
     }
+
+    @Override
+    public void updateRule(RuleReqDto dto, Long ruleId) {
+        // TODO: 로그인 기능 구현 시 토큰에서 값 적용
+        Long nationId = 99L;
+
+        Rule rule = ruleRepository.findById(ruleId)
+                .orElseThrow(() -> new CustomException(ErrorCode.RULE_NOT_FOUND));
+
+        // 학급 규칙 제목 중복 체크
+        if (ruleRepository.findByNationIdAndTitle(nationId, dto.getTitle()).isPresent()) {
+            throw new CustomException(ErrorCode.ALREADY_EXIST_TITLE);
+        }
+
+        rule.updateRule(dto.getTitle(), dto.getDetail());
+
+        ruleRepository.save(rule);
+    }
 }
