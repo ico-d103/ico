@@ -4,6 +4,7 @@ import Modal from "@/components/common/Modal/Modal"
 import useCompHandler from "@/hooks/useCompHandler"
 import ModalContent from "@/components/common/Modal/ModalContent"
 import { GOV_JOB } from "../GovIcons"
+import GovJobCardModalContent from "./GovJobCardModalContent"
 
 type GovJobCardPropsType = {
 	mock: {
@@ -47,7 +48,7 @@ function GovJobCard({ mock }: GovJobCardPropsType) {
 						icon={GOV_JOB}
 						title={`${mock.name}의 업무`}
 						titleSize={"var(--student-h2)"}
-						content={<span>하이</span>}
+						content={<GovJobCardModalContent content={mock.content} />}
 					/>
 				}
 			/>
