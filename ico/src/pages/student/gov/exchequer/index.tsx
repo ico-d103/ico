@@ -14,7 +14,7 @@ function index() {
 
 	return (
 		<>
-			<PageHeader title={"세금 목록"} addComp={<GovRuleTab />} />
+			<PageHeader title={"세금 목록"} addComp={<GovRuleTab selected={1} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					{mockList.map((mock) => (

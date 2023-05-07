@@ -15,7 +15,7 @@ function index() {
 
 	return (
 		<>
-			<PageHeader title={"학급 규칙"} addComp={<GovRuleTab />} />
+			<PageHeader title={"학급 규칙"} addComp={<GovRuleTab selected={0} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					<CollapseMenu

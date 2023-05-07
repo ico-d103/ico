@@ -33,7 +33,7 @@ function index() {
 
 	return (
 		<>
-			<PageHeader title={"직업 목록"} addComp={<GovRuleTab />} />
+			<PageHeader title={"직업 목록"} addComp={<GovRuleTab selected={2} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					<span css={titleCSS}>
@@ -82,6 +82,7 @@ const jobListCSS = css`
 	border-radius: 10px;
 	display: flex;
 	flex-direction: column;
+	align-items: center;
 	gap: 30px;
 `
 
