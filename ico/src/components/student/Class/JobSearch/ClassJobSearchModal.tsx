@@ -2,16 +2,17 @@ import { css } from "@emotion/react"
 
 type ClassJobSearchModalPropsType = {
 	job: string
+	closeComp: () => void
 }
 
-function ClassJobSearchModal({ job }: ClassJobSearchModalPropsType) {
+function ClassJobSearchModal({ job, closeComp }: ClassJobSearchModalPropsType) {
 	return (
 		<div css={wrapperCSS}>
 			<span>
 				<b>{job}</b> (을/를) 선택했어요
 			</span>
 			<div css={buttonWrapperCSS}>
-				<button>취소</button>
+				<button onClick={closeComp}>취소</button>
 				<button>신청할래요 !</button>
 			</div>
 		</div>
