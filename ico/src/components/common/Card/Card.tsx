@@ -19,11 +19,11 @@ function Card({ image, name, number, price, writer, date, approved }: CardProps)
 		<div css={cardCSS}>
 			<div css={cardImageWrapperCSS}>
 				<Image src={image} alt={name} layout="fill" />
-				{/* {number === 0 ? (
-					<div css={cardSoldOutTextCSS}>Sold out</div>
+				{approved ? (
+					<div css={[testCSS, cardRequestTextCSS]}>승인 진행 중</div>
 				) : (
-					<div css={approved ? cardRequestTextCSS : cardImageTextCSS}>{approved ? "승인중" : "텍스트"}</div>
-				)} */}
+					number == 0 && <div css={[testCSS, cardSoldOutTextCSS]}>sold out</div>
+				)}
 			</div>
 			<div css={cardFirstContentCSS}>
 				<div>{name}</div>
@@ -82,29 +82,25 @@ const cardImageTextCSS = css`
 	border-radius: 5px;
 `
 
-// const cardSoldOutTextCSS = css`
-// 	position: absolute;
-// 	top: 10px;
-// 	right: 10px;
-// 	padding: 5px;
-// 	background-color: var(--teacher-warning-color);
-// 	color: #fff;
-// 	font-size: 12px;
-// 	font-weight: bold;
-// 	border-radius: 5px;
-// `
+const testCSS = css`
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	padding: 5px;
+	font-size: 12px;
+	font-weight: bold;
+	border-radius: 5px;
+`
 
-// const cardRequestTextCSS = css`
-// 	position: absolute;
-// 	top: 10px;
-// 	right: 10px;
-// 	padding: 5px;
-// 	background-color: blue;
-// 	color: #fff;
-// 	font-size: 12px;
-// 	font-weight: bold;
-// 	border-radius: 5px;
-// `
+const cardSoldOutTextCSS = css`
+	background-color: var(--teacher-warning-color);
+	color: #fff;
+`
+
+const cardRequestTextCSS = css`
+	background-color: blue;
+	color: #fff;
+`
 
 const cardFirstContentCSS = css`
 	font-size: var(--teacher-h5);
