@@ -16,21 +16,23 @@ function ClassJobSearchCard({ mock }: ClassJobSearchCardPropsType) {
 	const [openComp, closeComp, compState] = useCompHandler()
 
 	return (
-		<div css={wrapperCSS} onClick={openComp}>
-			<div css={imageWrapperCSS}>
-				<LoadImage wrapperCss={imgCSS} src={"/assets/job/weather_caster.png"} alt={"job_image"} />
-			</div>
-			<div css={contentWrapperCSS}>
-				<span css={nameCSS}>{mock.name}</span>
-				<span css={needCSS}>{mock.need}</span>
+		<>
+			<div css={wrapperCSS}>
+				<div css={imageWrapperCSS}>
+					<LoadImage wrapperCss={imgCSS} src={"/assets/job/weather_caster.png"} alt={"job_image"} />
+				</div>
+				<div css={contentWrapperCSS} onClick={openComp}>
+					<span css={nameCSS}>{mock.name}</span>
+					<span css={needCSS}>{mock.need}</span>
+				</div>
 			</div>
 			<Modal
 				compState={compState}
 				closeComp={closeComp}
 				transition={"scale"}
-				content={<ClassJobSearchModal job={mock.name} />}
+				content={<ClassJobSearchModal job={mock.name} closeComp={closeComp} />}
 			/>
-		</div>
+		</>
 	)
 }
 
