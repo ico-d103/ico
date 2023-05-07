@@ -15,6 +15,8 @@ import {
 	CLIP_ICON,
 	PHONE_ICON,
 } from "@/components/teacher/Signup/SignupIcons/SignupIcons"
+import { postDuplicationCheck } from "@/api/common/postDuplicationCheck"
+import { useQuery } from "@tanstack/react-query"
 
 const inputReducer = (
 	state: { name: string; id: string; password: string; password2: string; phone: string },
@@ -177,16 +179,23 @@ function signup() {
 		dispatchValid({ type: "VALID_ID", value: false })
 
 		if (checkVerify) {
-			// 아이디 중복 검사 요청 API
+			// 아이디 중복 검사 요청
+			/* 수정 필요 */
+			const { data } = useQuery(["postDuplicationCheck"], () => postDuplicationCheck({ id: inputState.id }), {
+				enabled: false,
+			})
+			console.log(data)
 
-			// 불가능하면
-			dispatchValidMessage({ type: "VALID_ID", value: "이미 중복된 아이디, 혹은 사용 불가능한 아이디입니다." })
-			dispatchValid({ type: "VALID_ID", value: false })
-			return
-
-			// 사용 가능하면
-			dispatchValidMessage({ type: "VALID_ID", value: "사용 가능한 ID입니다." })
-			dispatchValid({ type: "VALID_ID", value: true })
+			if (data) {
+				// 사용 가능하면
+				dispatchValidMessage({ type: "VALID_ID", value: "사용 가능한 ID입니다." })
+				dispatchValid({ type: "VALID_ID", value: true })
+			} else {
+				// 불가능하면
+				dispatchValidMessage({ type: "VALID_ID", value: "이미 중복된 아이디, 혹은 사용 불가능한 아이디입니다." })
+				dispatchValid({ type: "VALID_ID", value: false })
+				return
+			}
 		}
 	}
 
