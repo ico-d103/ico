@@ -18,6 +18,9 @@ function NavBar({ children }: NavBarProps) {
 	const routes: { [prop: string]: number } = {
 		"/student/home": 0,
 		"/student/home/asset": 0,
+		"/student/home/coupon": 0,
+		"/student/home/exchequer": 0,
+		"/student/finance/guide": 0,
 		"/student/test2": 1,
 		"/student/gov/rule": 2,
 		"/student/gov/exchequer": 2,
@@ -101,7 +104,8 @@ const contentWrapperCSS = css`
 const navBarWrapperCSS = css`
 	height: 64px;
 	width: 100%;
-	background-color: #fff9e6;
+	/* background-color: #fff9e6; */
+	background-color: var(--student-main-color);
 	/* backdrop-filter: blur(30px); */
 	box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1);
 	position: fixed;

@@ -15,7 +15,7 @@ type LoadImageProps = {
 function LoadImage({ src, alt, wrapperCss, imageCss, useSkeleton, skeletonCss, dev }: LoadImageProps) {
     const [isLoading, setIsLoading] = useState<boolean>(true)
 	return (
-        <div className={'image-wrapper'} css={[wrapperCss, imageWrapperCSS({isLoading})]}>
+        <div className={'image-wrapper'} css={[wrapperCss, imageWrapperCSS({isLoading, dev})]}>
                 {useSkeleton &&
                     <div css={[skeletonCss, skeletonInitCSS({isLoading})]}/>
                 }
@@ -37,10 +37,11 @@ function LoadImage({ src, alt, wrapperCss, imageCss, useSkeleton, skeletonCss, d
 	)
 }
 
-const imageWrapperCSS = ({isLoading}: {isLoading: boolean}) => {
+const imageWrapperCSS = ({isLoading, dev}: {isLoading: boolean, dev?: boolean}) => {
     return css`
         position: relative;
         overflow: hidden;
+        background-color: ${dev && 'blue'};
     `
 }
 

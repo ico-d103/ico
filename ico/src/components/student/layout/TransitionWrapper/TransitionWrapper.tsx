@@ -6,6 +6,7 @@ import { css } from "@emotion/react"
 import { useRouter } from "next/router"
 import Image from "next/image"
 import DomToImage from "dom-to-image"
+import * as htmlToImage from 'html-to-image';
 
 type TransitionWrapperProps = {
 	children: any
@@ -69,6 +70,8 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				contentInnerWrapperRef.current,
 				{
 					scale: 0.5,
+					useCORS: true,
+					
 				},
 				// {
 				// 	scrollX: -window.scrollX,
@@ -82,6 +85,23 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				const screenshot = canvas.toDataURL()
 				setScreenshot(screenshot)
 			})
+
+			// htmlToImage.toJpeg(contentInnerWrapperRef.current, { quality: 0,includeQueryParams:true  })
+			// .then(function (canvas) {
+			// 	const screenshot = canvas
+			// 	setScreenshot(screenshot)
+			// });
+
+			// DomToImage.toJpeg(contentInnerWrapperRef.current)
+			// .then(function (dataUrl) {
+			// 	const screenshot = dataUrl
+			// 	setScreenshot(screenshot)
+			// })
+
+
+
+
+
 		}
 	}
 

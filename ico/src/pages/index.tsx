@@ -1,14 +1,41 @@
 import { css } from "@emotion/react"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
+import Button from "@/components/common/Button/Button"
+import { useRouter } from "next/router"
 
 export default function Home() {
+
+	const router = useRouter()
+
+	
+
 	return (
 		<div css={guideWrapperCSS}>
 			<div css={scene1CSS}>
 				<div css={scene1InnerCSS}>
 					<div css={mainLabelCSS}>교실 속 작은 경제, 아이코</div>
 					<div css={subLabelCSS}>무슨 말을 할까~ 뿡빵아 도와줘~!</div>
-					<img src={'/assets/guide/14.jpg'} css={css`width: 200px; height: auto; position: absolute; top: 70%;`}/>
+					<div css={lineCSS}/>
+					<div css={buttonWrapperCSS}>	
+					<Button
+						theme={"cancelLight"}
+						width={"240px"}
+						height={"96px"}
+						text={"학생 로그인"}
+						fontSize={"var(--teacher-h2)"}
+						onClick={() => {}}
+					></Button>
+					<Button
+						theme={"highlighted"}
+						width={"240px"}
+						height={"96px"}
+						text={"교사 로그인"}
+						fontSize={"var(--teacher-h2)"}
+						onClick={() => {router.push('/teacher/login')}}
+					></Button>
+					</div>
+					
+					<img src={'/assets/guide/14.jpg'} css={css`width: 200px; height: auto; position: absolute; top: 70%; visibility: hidden;`}/>
 				</div>
 			</div>
 		</div>
@@ -96,4 +123,18 @@ const subLabelCSS = css`
 			transform: translate(0px, 0px);
 		}
 	}
+`
+
+const lineCSS = css`
+	margin-top: 48px;
+	margin-bottom: 48px;
+	width: 100%;
+	height: 1px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+`
+
+
+const buttonWrapperCSS = css`
+	display: flex;
+	gap: 16px;
 `
