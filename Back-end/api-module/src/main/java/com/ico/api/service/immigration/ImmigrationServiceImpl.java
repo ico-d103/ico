@@ -86,7 +86,12 @@ public class ImmigrationServiceImpl implements ImmigrationService{
         String token = jwtTokenProvider.parseJwt(request);
         Long id = jwtTokenProvider.getId(token);
         Immigration immigration = immigrationRepository.findByStudentId(id);
+
+        Long nationId;  // 해당 나라 id로 SSE 요청 시 변수 전달
         if (immigration != null){
+
+            nationId = immigration.getNation().getId();
+
             immigrationRepository.delete(immigration);
         }
         else {
@@ -94,7 +99,7 @@ public class ImmigrationServiceImpl implements ImmigrationService{
         }
 
         // 입국심사 요청 삭제 시 SSE로 요청 목록 전송
-        sseEmitters.send(findStudentSseList(jwtTokenProvider.getNation(token)));
+        sseEmitters.send(findStudentSseList(nationId));
     }
 
     @Override
