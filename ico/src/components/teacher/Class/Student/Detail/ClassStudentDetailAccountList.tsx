@@ -9,10 +9,10 @@ function ClassStudentDetailAccountList() {
 		{ id: 1, date: "2023.04.16", money: "+ 3500미소", content: "쓰레기봉투" },
 		{ id: 2, date: "2023.04.15", money: "- 3500미소", content: "지각비" },
 		{ id: 3, date: "2023.04.15", money: "+ 3500미소", content: "쓰레기봉투" },
-		{ id: 0, date: "2023.04.15", money: "+ 3500미소", content: "지각비" },
-		{ id: 1, date: "2023.04.14", money: "- 3500미소", content: "전기세" },
-		{ id: 2, date: "2023.04.12", money: "+ 3500미소", content: "전기세" },
-		{ id: 3, date: "2023.04.12", money: "- 3500미소", content: "지각비" },
+		{ id: 4, date: "2023.04.15", money: "+ 3500미소", content: "지각비" },
+		{ id: 5, date: "2023.04.14", money: "- 3500미소", content: "전기세" },
+		{ id: 6, date: "2023.04.12", money: "+ 3500미소", content: "전기세" },
+		{ id: 7, date: "2023.04.12", money: "- 3500미소", content: "지각비" },
 	]
 
 	return (
