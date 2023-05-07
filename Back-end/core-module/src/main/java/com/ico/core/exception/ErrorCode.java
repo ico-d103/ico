@@ -57,6 +57,8 @@ public enum ErrorCode{
 
     ALREADY_HAVE_STOCK(HttpStatus.BAD_REQUEST, "704", "매도만 가능합니다."),
 
+    NOT_FOUND_ISSUE(HttpStatus.NOT_FOUND, "705", "가장 최신 투자 이슈를 찾을 수 없습니다."),
+
     ;
 
     private final HttpStatus httpStatus;
