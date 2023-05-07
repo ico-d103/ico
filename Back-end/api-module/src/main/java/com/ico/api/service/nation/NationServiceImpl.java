@@ -42,27 +42,32 @@ public class NationServiceImpl implements NationService {
 
         // 교사만 반 생성
         if (role == Role.TEACHER) {
-            Nation nation = Nation.builder()
-                    .school(reqDto.getSchool())
-                    .grade((byte) reqDto.getGrade())
-                    .room((byte) reqDto.getRoom())
-                    .title(reqDto.getTitle())
-                    .code(randomCode())
-                    .currency(reqDto.getCurrency())
-                    .treasury(0)
-                    .credit_up((byte) 20)
-                    .credit_down((byte) 50)
-                    .build();
+            String title = reqDto.getTitle();
+            if (!nationRepository.findByTitle(title).isPresent()) {
+                Nation nation = Nation.builder()
+                        .school(reqDto.getSchool())
+                        .grade((byte) reqDto.getGrade())
+                        .room((byte) reqDto.getRoom())
+                        .title(title)
+                        .code(randomCode())
+                        .currency(reqDto.getCurrency())
+                        .treasury(0)
+                        .credit_up((byte) 20)
+                        .credit_down((byte) 50)
+                        .build();
+                nationRepository.save(nation);
 
-            nationRepository.save(nation);
-
-            // 반을 생성했을 때 교사 테이블의 Nation 업데이트
-            String identity = jwtTokenProvider.getIdentity(token);
-            Optional<Teacher> teacher = teacherRepository.findByIdentity(identity);
-            teacher.ifPresent(t -> {
-                t.setNation(nation);
-                teacherRepository.save(t);
-            });
+                // 반을 생성했을 때 교사 테이블의 Nation 업데이트
+                String identity = jwtTokenProvider.getIdentity(token);
+                Optional<Teacher> teacher = teacherRepository.findByIdentity(identity);
+                teacher.ifPresent(t -> {
+                    t.setNation(nation);
+                    teacherRepository.save(t);
+                });
+            }
+            else {
+                throw new CustomException(ErrorCode.DUPLICATED_NATION_NAME);
+            }
         }
     }
 
