@@ -6,12 +6,13 @@ type HomeGradationButtonProps = {
     children: any
     cssProps?: SerializedStyles
     backgroundColor: [string, string]
+    onClick?: () => void
 
 }
 
-function HomeGradationButton({children, cssProps, backgroundColor}: HomeGradationButtonProps) {
+function HomeGradationButton({children, cssProps, backgroundColor, onClick}: HomeGradationButtonProps) {
   return (
-    <div css={[contentWrapperCSS({backgroundColor}), cssProps]}>
+    <div css={[contentWrapperCSS({backgroundColor}), cssProps]} onClick={onClick}>
         {children}
     </div>
   )
