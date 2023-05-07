@@ -46,6 +46,8 @@ const cardCSS = css`
 	position: relative;
 	border-radius: 10px;
 	overflow: hidden;
+	/* 일단은 모바일에서도 카드 뒷부분은 하얀색으로 */
+	background-color: white;
 
 	box-shadow: 0px 0px 10px 1px rgba(100, 100, 100, 0.2);
 
@@ -68,18 +70,6 @@ const cardImageWrapperCSS = css`
 		width: 45vw;
 		height: 45vw;
 	}
-`
-
-const cardImageTextCSS = css`
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	padding: 5px;
-	background-color: rgba(0, 0, 0, 0.5);
-	color: #fff;
-	font-size: 12px;
-	font-weight: bold;
-	border-radius: 5px;
 `
 
 const testCSS = css`
