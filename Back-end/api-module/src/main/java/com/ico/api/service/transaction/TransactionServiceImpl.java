@@ -39,7 +39,7 @@ public class TransactionServiceImpl implements TransactionService{
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일-HH:mm");
 
-    private static final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("MM월 dd일");
+    public static final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("MM월 dd일");
 
     private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
 
