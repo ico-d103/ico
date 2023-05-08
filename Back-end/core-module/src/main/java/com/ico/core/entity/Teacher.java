@@ -30,7 +30,7 @@ public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)  // 교사의 토큰을 새로 업데이트하기 위해서 LAZY로 바꿀 수 없음
     private Nation nation;
     @Column(nullable = false, unique = true)
     private String identity;
