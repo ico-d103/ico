@@ -10,6 +10,7 @@ import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ import java.time.LocalTime;
 /**
  * @author 변윤경
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class InvestServiceImpl implements InvestService{
@@ -38,6 +40,7 @@ public class InvestServiceImpl implements InvestService{
         // 학생 유효 검사
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        log.info("확생 유효 검사 완료");
 
         // 거래 가능 시간 확인
         Nation nation = nationRepository.findById(student.getNation().getId())
@@ -46,16 +49,19 @@ public class InvestServiceImpl implements InvestService{
         if(currentTime.isAfter(nation.getTrading_end()) || currentTime.isBefore(nation.getTrading_start())){
             throw new CustomException(ErrorCode.NOT_TRADING_TIME);
         }
+        log.info("거래 가능 시간");
 
         // 매수 여부 확인
         investRepository.findByStudentId(student.getId()).ifPresent(i -> {
             throw new CustomException(ErrorCode.ALREADY_HAVE_STOCK);
         });
+        log.info("매수 여부 확인");
 
         // 잔액 확인
         if(amount > student.getAccount()){
             throw new CustomException(ErrorCode.LOW_BALANCE);
         }
+        log.info("구매 가능 잔고");
 
         // 금액 지불
         student.setAccount(student.getAccount() - amount);

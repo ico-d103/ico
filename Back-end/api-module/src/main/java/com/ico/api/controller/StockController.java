@@ -1,5 +1,6 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.stock.StockStudentResDto;
 import com.ico.api.dto.stock.StockTeacherResDto;
 import com.ico.api.service.stock.StockService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,11 @@ public class StockController {
     @GetMapping("/teacher")
     public ResponseEntity<StockTeacherResDto> stockIssueTeacher(){
         return ResponseEntity.ok(stockService.getIssueTeacher());
+    }
+
+    @GetMapping("/student")
+    public ResponseEntity<StockStudentResDto> stockIssueStudent(){
+        return ResponseEntity.ok(stockService.getIssueStudent());
     }
 
 }
