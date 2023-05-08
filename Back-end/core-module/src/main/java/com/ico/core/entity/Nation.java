@@ -1,7 +1,7 @@
 package com.ico.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ico.core.dto.StockDto;
+import com.ico.core.dto.StockReqDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -60,7 +60,7 @@ public class Nation {
      * @param dto 종목 정보
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public void updateStock(StockDto dto){
+    public void updateStock(StockReqDto dto){
         this.stock = dto.getStock();
         this.trading_start = dto.getTradingStart();
         this.trading_end = dto.getTradingEnd();

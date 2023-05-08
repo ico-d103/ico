@@ -1,6 +1,6 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.stock.StockResTeacherDto;
+import com.ico.api.dto.stock.StockTeacherResDto;
 import com.ico.api.service.stock.StockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class StockController {
      * @return 투자 이슈 정보, 투자 종목 정보(거래가능시간, 이름)
      */
     @GetMapping("/teacher")
-    public ResponseEntity<StockResTeacherDto> stockIssueTeacher(){
+    public ResponseEntity<StockTeacherResDto> stockIssueTeacher(){
         return ResponseEntity.ok(stockService.getIssueTeacher());
     }
 

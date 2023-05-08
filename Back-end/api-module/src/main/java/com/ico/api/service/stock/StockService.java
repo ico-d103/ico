@@ -1,6 +1,6 @@
 package com.ico.api.service.stock;
 
-import com.ico.api.dto.stock.StockResTeacherDto;
+import com.ico.api.dto.stock.StockTeacherResDto;
 
 /**
  * @author 변윤경
@@ -12,6 +12,6 @@ public interface StockService {
      *
      * @return 교사화면의 투자 이슈 정보
      */
-    StockResTeacherDto getIssueTeacher();
+    StockTeacherResDto getIssueTeacher();
 
 }

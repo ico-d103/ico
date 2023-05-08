@@ -1,7 +1,7 @@
 package com.ico.api.service.stock;
 
 import com.ico.api.dto.stock.StockColDto;
-import com.ico.api.dto.stock.StockResTeacherDto;
+import com.ico.api.dto.stock.StockTeacherResDto;
 import com.ico.api.service.transaction.TransactionServiceImpl;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Stock;
@@ -32,7 +32,7 @@ public class StockServiceImpl implements StockService{
      * @return 교사화면의 투자 이슈 정보
      */
     @Override
-    public StockResTeacherDto getIssueTeacher() {
+    public StockTeacherResDto getIssueTeacher() {
         long nationId = 99;
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
@@ -54,7 +54,7 @@ public class StockServiceImpl implements StockService{
         }
 
         // 반환값
-        StockResTeacherDto res = new StockResTeacherDto();
+        StockTeacherResDto res = new StockTeacherResDto();
         res.setStock(nation.getStock());
         res.setTradingStart(nation.getTrading_start());
         res.setTradingEnd(nation.getTrading_end());

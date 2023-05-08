@@ -2,7 +2,7 @@ package com.ico.api.controller;
 
 
 import com.ico.api.service.stock.InvestService;
-import com.ico.core.dto.InvestDto;
+import com.ico.core.dto.InvestReqDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * @author 변윤경
@@ -27,7 +29,7 @@ public class InvestController {
      * @return Httpstatus
      */
     @PostMapping("/student")
-    public ResponseEntity<HttpStatus> buyStock(@RequestBody InvestDto dto) {
+    public ResponseEntity<HttpStatus> buyStock(@Valid @RequestBody InvestReqDto dto) {
         investService.buyStock(dto.getPrice(), dto.getAmount());
         return ResponseEntity.ok(HttpStatus.OK);
     }

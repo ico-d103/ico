@@ -1,7 +1,7 @@
 package com.ico.api.service.nation;
 
 import com.ico.api.dto.nation.NationReqDto;
-import com.ico.core.dto.StockDto;
+import com.ico.core.dto.StockReqDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Role;
 import com.ico.core.entity.Nation;
@@ -120,10 +120,11 @@ public class NationServiceImpl implements NationService {
     /**
      * 투자 종목 등록
      *
-     * @param stockDto 종목 정보
+     * @param stockReqDto 종목 정보
      */
+    @Transactional
     @Override
-    public void createStock(StockDto stockDto) {
+    public void createStock(StockReqDto stockReqDto) {
         Long nationId = 99L;
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
@@ -131,14 +132,14 @@ public class NationServiceImpl implements NationService {
         // 이미 주식 존재 여부 확인
         if(nation.getStock() == null || nation.getStock().equals("")){
             // Nation에 주식 정보 업데이트
-            nation.updateStock(stockDto);
+            nation.updateStock(stockReqDto);
             nationRepository.save(nation);
 
             // 주식 가격, 이슈 등록
             Stock stock = Stock.builder()
                     .nation(nation)
-                    .amount(stockDto.getAmount())
-                    .content(stockDto.getContent())
+                    .amount(stockReqDto.getAmount())
+                    .content(stockReqDto.getContent())
                     .date(LocalDateTime.now())
                     .build();
             stockRepository.save(stock);
