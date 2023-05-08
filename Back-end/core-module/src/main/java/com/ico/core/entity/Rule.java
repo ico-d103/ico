@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,6 +24,7 @@ import javax.persistence.ManyToOne;
 public class Rule {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -37,6 +40,17 @@ public class Rule {
     public Rule(Long id, Nation nation, String title, String detail) {
         this.id = id;
         this.nation = nation;
+        this.title = title;
+        this.detail = detail;
+    }
+
+    /**
+     * 학급규칙 수정
+     *
+     * @param title
+     * @param detail
+     */
+    public void updateRule(String title, String detail) {
         this.title = title;
         this.detail = detail;
     }

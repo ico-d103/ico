@@ -61,6 +61,8 @@ public enum ErrorCode{
 
     ALREADY_HAS_JOB(HttpStatus.CONFLICT, "422", "해당 학생은 이미 직업이 존재합니다."),
 
+    RULE_NOT_FOUND(HttpStatus.NOT_FOUND, "423", "해당하는 규칙이 없습니다."),
+
     INVALID_CREDIT_RATING(HttpStatus.BAD_REQUEST, "500", "신용등급 요건에 적합하지 않습니다."),
 
     RESUME_NOT_FOUND(HttpStatus.NOT_FOUND, "503", "신청 내역이 존재하지 않습니다."),
