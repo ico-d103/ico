@@ -14,12 +14,12 @@ import lombok.Setter;
 public class StockColDto {
     private String date;
 
-    private int amount;
+    private double amount;
 
     private String content;
 
     @Builder
-    public StockColDto(String date, int amount, String content) {
+    public StockColDto(String date, double amount, String content) {
         this.date = date;
         this.amount = amount;
         this.content = content;

@@ -27,13 +27,13 @@ public class StockReqDto {
 
     @NotBlank(message = "711")
     @Min(value = 0, message = "712")
-    private int amount;
+    private double amount;
 
     @NotBlank(message = "713")
     private String content;
 
     @Builder
-    public StockReqDto(String stock, LocalTime tradingStart, LocalTime tradingEnd, int amount, String content) {
+    public StockReqDto(String stock, LocalTime tradingStart, LocalTime tradingEnd, double amount, String content) {
         this.stock = stock;
         this.tradingStart = tradingStart;
         this.tradingEnd = tradingEnd;
