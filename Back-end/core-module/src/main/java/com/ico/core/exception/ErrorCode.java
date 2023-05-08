@@ -33,6 +33,8 @@ public enum ErrorCode{
 
     NOT_FOUND_CODE(HttpStatus.BAD_REQUEST, "20", "반 입장 코드를 입력해주세요."),
 
+    FAIL_SSE_SEND(HttpStatus.BAD_REQUEST, "21", "SSE 데이터 전송에 실패하였습니다."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, "104", "비밀번호 입력 칸이 비었습니다."),
@@ -46,8 +48,6 @@ public enum ErrorCode{
     WRONG_IMMIGRATION(HttpStatus.BAD_REQUEST, "201", "입국 심사를 기다리고 있는 나라가 있습니다."),
 
     NOT_FOUND_NATION(HttpStatus.BAD_REQUEST, "202", "나라가 없습니다."),
-
-    NOT_FOUND_IMMIGRATION(HttpStatus.NOT_FOUND, "203", "입국 심사를 기다리고 있는 나라가 없습니다."),
 
     NOT_FOUND_IMMIGRATION_NATION(HttpStatus.NOT_FOUND, "203", "입국 심사를 기다리고 있는 나라가 없습니다."),
 
