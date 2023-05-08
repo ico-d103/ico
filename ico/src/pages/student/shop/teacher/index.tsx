@@ -1,19 +1,12 @@
 import { css } from "@emotion/react"
 
-import { useRouter } from "next/router"
-
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
-import Button from "@/components/common/Button/Button"
 import Card from "@/components/common/Card/Card"
 
-import ShopTab from "@/components/student/Shop/ShopTab"
+import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
+import { ShopTabMenus } from "@/components/student/Shop/ShopTabMenus"
 
 function index() {
-	const router = useRouter()
-
-	const createProduct = () => {
-		router.push("/student/shop/create")
-	}
 
 	const cardData = [
 		{
@@ -60,20 +53,7 @@ function index() {
 
 	return (
 		<>
-			<PageHeader title={"상점"} addComp={<ShopTab />} />
-			<div css={wrapperCSS}>
-				<div css={contentWrapperCSS}>
-					<div>나도 내 상품을 팔고 싶어요!</div>
-					<Button
-						text={"판매 신청서 작성"}
-						fontSize={`var(--teacher-h5)`}
-						width={"125px"}
-						height={"30px"}
-						theme={"mobileNormal"}
-						onClick={createProduct}
-					/>
-				</div>
-			</div>
+			<PageHeader title={"상점"} addComp={<TabMenu menus={ShopTabMenus()} selected={0} />} />
 			<div css={cardWrapperCSS}>
 				{cardData.map((card) => (
 					<Card
@@ -91,29 +71,6 @@ function index() {
 		</>
 	)
 }
-
-const wrapperCSS = css`
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-`
-
-const contentWrapperCSS = css`
-	width: 95%;
-	background-color: var(--common-back-color-2);
-	border-radius: 10px;
-	box-sizing: border-box;
-	padding: 25px 20px;
-
-	justify-content: space-between;
-	align-items: center;
-	display: flex;
-
-	> div {
-		font-size: 0.95rem;
-	}
-`
 
 const cardWrapperCSS = css`
 	margin-top: 15px;
