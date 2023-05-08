@@ -1,5 +1,6 @@
 package com.ico.api.service.tax;
 
+import com.ico.core.dto.TaxReqDto;
 import com.ico.api.dto.tax.TaxResDto;
 
 import java.util.List;
@@ -18,4 +19,11 @@ public interface TaxService {
      */
     List<TaxResDto> findAllTax();
 
+    /**
+     * 국세 정보 수정
+     *
+     * @param taxId
+     * @param dto
+     */
+    void updateTax(Long taxId, TaxReqDto dto);
 }

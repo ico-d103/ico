@@ -1,6 +1,8 @@
 package com.ico.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ico.core.code.TaxType;
+import com.ico.core.dto.TaxReqDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,4 +44,11 @@ public class Tax {
     @Enumerated(EnumType.ORDINAL)
     private TaxType type;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public void updateTax(TaxReqDto dto) {
+        this.title = dto.getTitle();
+        this.amount = dto.getAmount();
+        // validation 으로 반드시 0 또는 1만 받음
+        this.type = dto.getType() == 0 ? TaxType.PERCENT : TaxType.INT;
+    }
 }

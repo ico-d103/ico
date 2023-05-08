@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -23,11 +24,11 @@ public class JobReqDto {
     @NotNull(message = "411")
     private String detail;
 
-    @NotNull(message = "412")
-    private int total;
+    @NotBlank(message = "412")
+    private Integer total;
 
-    @NotNull(message = "413")
-    private int wage;
+    @NotBlank(message = "413")
+    private Integer wage;
 
     @NotNull(message = "414")
     private String color;

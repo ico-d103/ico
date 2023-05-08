@@ -1,7 +1,10 @@
 package com.ico.api.service.tax;
 
+import com.ico.core.dto.TaxReqDto;
 import com.ico.api.dto.tax.TaxResDto;
 import com.ico.core.entity.Tax;
+import com.ico.core.exception.CustomException;
+import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.TaxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +36,16 @@ public class TaxServiceImpl implements TaxService{
             dtoList.add(new TaxResDto().of(tax));
         }
         return dtoList;
+    }
+
+    @Override
+    public void updateTax(Long taxId, TaxReqDto dto) {
+        Tax tax = taxRepository.findById(taxId)
+                .orElseThrow(() -> new CustomException(ErrorCode.TAX_NOT_FOUND));
+
+        tax.updateTax(dto);
+
+        taxRepository.save(tax);
     }
 
 
