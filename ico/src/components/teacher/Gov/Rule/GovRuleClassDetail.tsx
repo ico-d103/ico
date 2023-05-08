@@ -9,10 +9,11 @@ type GovRuleClassDetailProps = {
 	title: string
 	content: string
 	date: string
-	idx: number
+	showIdx: number
+	actualIdx?: number
 }
 
-function GovRuleClassDetail({ title, content, date, idx }: GovRuleClassDetailProps) {
+function GovRuleClassDetail({ title, content, date, showIdx, actualIdx }: GovRuleClassDetailProps) {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const wrapperRef = useRef<HTMLDivElement>(null)
@@ -34,9 +35,9 @@ function GovRuleClassDetail({ title, content, date, idx }: GovRuleClassDetailPro
 
 	return (
 		<div ref={wrapperRef} >
-			<FormCreator subComp={<GovRuleClassCreate />} idx={idx} compState={compState} closeComp={closeEditHandler} mainInit={{title, content}} initHeight={`${wrapperRef.current && wrapperRef.current.clientHeight}px`} />
+			<FormCreator subComp={<GovRuleClassCreate idx={actualIdx} />} showIdx={showIdx} actualIdx={actualIdx} compState={compState} closeComp={closeEditHandler} mainInit={{title, content}} initHeight={`${wrapperRef.current && wrapperRef.current.clientHeight}px`} />
 			<div css={WrapperCSS({isEdit})}>
-				<CommonListElement idx={idx} dropdownList={dropdownList}>
+				<CommonListElement idx={showIdx} dropdownList={dropdownList}>
 					<div css={detailWrapperCSS}>
 						<div>
 							<div css={titleCSS}>{title}</div>

@@ -7,13 +7,14 @@ type InputProps = {
 	leftContent?: any
 	rightContent?: any
 	customCss?: SerializedStyles
+	textAlign?: 'left' | 'right' | 'center'
 	isFile?: boolean
 	css?: null
 } & React.InputHTMLAttributes<HTMLInputElement>
 
 const Input = React.forwardRef(
 	(
-		{ theme, customCss, css, leftContent, rightContent, isFile, ...props }: InputProps,
+		{ theme, customCss, css, textAlign, leftContent, rightContent, isFile, ...props }: InputProps,
 		ref: React.ForwardedRef<HTMLInputElement>,
 	) => {
 		const [isFocusing, setIsFocusing] = useState<boolean>(false)
@@ -23,7 +24,7 @@ const Input = React.forwardRef(
 					{leftContent && <div css={leftContentWrapperCSS}>{leftContent}</div>}
 
 					<input
-						css={initInputCSS({ isFile })}
+						css={initInputCSS({ isFile, textAlign })}
 						{...props}
 						onFocus={() => setIsFocusing(() => true)}
 						onBlur={() => setIsFocusing(() => false)}
@@ -37,7 +38,7 @@ const Input = React.forwardRef(
 	},
 )
 
-const initInputCSS = ({ isFile }: { isFile?: boolean }) => {
+const initInputCSS = ({ isFile, textAlign }: { isFile?: boolean, textAlign?: 'left' | 'right' | 'center'  }) => {
 	return css`
 		flex: 1;
 		/* width: 100%; */
@@ -48,6 +49,7 @@ const initInputCSS = ({ isFile }: { isFile?: boolean }) => {
 		&:focus {
 			outline: none;
 		}
+		text-align: ${textAlign};
 	`
 }
 
