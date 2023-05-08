@@ -33,9 +33,11 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     /**
      * 학급 내에 중복된 직업 이름 검사
      *
+     * @param id
      * @param title
      * @param nationId
      * @return
      */
-    Optional<Job> findByTitleAndNationId(String title, Long nationId);
+    Optional<Job> findByIdNotAndTitleAndNationId(Long id, String title, Long nationId);
+
 }
