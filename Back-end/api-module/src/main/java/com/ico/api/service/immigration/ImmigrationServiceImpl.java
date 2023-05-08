@@ -104,8 +104,7 @@ public class ImmigrationServiceImpl implements ImmigrationService{
 
     @Override
     public List<StudentSseDto> findAllImmigrationStudent(HttpServletRequest request) {
-        String token = jwtTokenProvider.parseJwt(request);
-        Long nationId = jwtTokenProvider.getNation(token);
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         return findStudentSseList(nationId);
     }
