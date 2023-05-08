@@ -92,7 +92,7 @@ public class TeacherProductServiceImpl implements TeacherProductService{
     public void buyCoupon(Long id) {
         // 해당 국가인지 확인
         long nationId = 99L;
-        long studentId = 3L;
+        long studentId = 1L;
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
