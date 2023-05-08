@@ -129,7 +129,7 @@ public class ResumeServiceImpl implements ResumeService {
         Resume resume = resumeMongoRepository.findById(resumeId)
                 .orElseThrow(() -> {
                     log.info("[assignResume] 직업 신청 내역이 존재 하지 않는 경우");
-                    throw new CustomException(ErrorCode.RESUME_NOT_FOUND);
+                    throw new CustomException(ErrorCode.REQUEST_NOT_FOUND);
                 });
         log.info("[assignResume] 직업 신청 내역 존재");
 
