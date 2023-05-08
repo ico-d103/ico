@@ -27,7 +27,7 @@ public class NationController {
      * @return OK
      */
     @PostMapping("/teacher")
-    public ResponseEntity<?> createNation(@Valid @RequestBody NationReqDto reqDto, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> createNation(@Valid @RequestBody NationReqDto reqDto, HttpServletRequest request) {
         nationService.createNation(reqDto, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
