@@ -53,6 +53,9 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContext context = SecurityContextHolder.getContext();
                 context.setAuthentication(authentication);
                 SecurityContextHolder.setContext(context);
+
+                // HTTP 요청을 필터링한 후 다음 필터로 체인을 전달
+                filterChain.doFilter(request, response);
             }
             else {
                 throw new CustomException(ErrorCode.NOT_FOUND_TOKEN);
@@ -60,7 +63,5 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         } catch (ExpiredJwtException e) {
             throw new CustomException(ErrorCode.NOT_FOUND_TOKEN);
         }
-        // HTTP 요청을 필터링한 후 다음 필터로 체인을 전달
-        filterChain.doFilter(request, response);
     }
 }
