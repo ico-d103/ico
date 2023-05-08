@@ -76,10 +76,10 @@ function NavBar({ children }: NavBarProps) {
 	})
 
 	return (
-		<div css={navBarParentCSS}>
-			<div css={contentWrapperCSS}>{children}</div>
+		<div css={navBarParentCSS()}>
+			<div css={contentWrapperCSS({ selected })}>{children}</div>
 
-			<div css={navBarWrapperCSS}>
+			<div css={navBarWrapperCSS({ selected })}>
 				<div css={indicatorWrapperCSS}>
 					<div css={indicatorCSS({ length: Object.keys(navBarData).length, selected })} />
 				</div>
@@ -89,32 +89,38 @@ function NavBar({ children }: NavBarProps) {
 	)
 }
 
-const navBarParentCSS = css`
-	width: 100%;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 64px;
-`
+const navBarParentCSS = () => {
+	return css`
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	`
+}
 
-const contentWrapperCSS = css`
-	/* max-height: calc(100vh - 64px); */
-	/* position: relative; */
-`
-
-const navBarWrapperCSS = css`
-	height: 64px;
-	width: 100%;
-	/* background-color: #fff9e6; */
-	background-color: var(--student-main-color);
-	/* backdrop-filter: blur(30px); */
-	box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1);
-	position: fixed;
-	bottom: 0;
-	display: flex;
-	flex-direction: column;
-	z-index: 9999999;
-`
+const contentWrapperCSS = ({ selected }: { selected: number }) => {
+	return css`
+		min-height: ${selected !== -2 && 'calc(100vh - 64px)'};
+		margin-bottom: ${selected !== -2 && '64px'};
+		/* position: relative; */
+	`
+}
+const navBarWrapperCSS = ({ selected }: { selected: number }) => {
+	return css`
+		height: 64px;
+		width: 100%;
+		/* background-color: #fff9e6; */
+		background-color: var(--student-main-color);
+		/* backdrop-filter: blur(30px); */
+		box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1);
+		position: fixed;
+		bottom: 0;
+		display: flex;
+		flex-direction: column;
+		z-index: 9999999;
+		display: ${selected === -2 && "none"};
+	`
+}
 
 const indicatorWrapperCSS = css`
 	width: 100%;

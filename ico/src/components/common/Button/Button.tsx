@@ -64,6 +64,12 @@ function Button({ text, fontSize, width, height, theme, margin, onClick }: Butto
 			fontColor: `rgba(0, 20, 50, 1)`,
 			backgroundColor: `rgba(0, 20, 50, 0.05)`,
 		},
+		RadialPositiveMobile: {
+			border: "none",
+			borderRadius: "10px",
+			fontColor: `#9b6f00`,
+			backgroundColor: `rgba(0, 20, 50, 0.05)`,
+		},
 		mobileNormal: {
 			border: "none",
 			borderRadius: "20px",
