@@ -1,11 +1,11 @@
 import { useState } from "react"
 
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
-import ShopTab from "@/components/student/Shop/ShopTab"
-
 import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWrapper"
-
 import { css } from "@emotion/react"
+
+import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
+import { ShopTabMenus } from "@/components/student/Shop/ShopTabMenus"
 
 function create() {
 	const [product, setProduct] = useState({
@@ -16,7 +16,7 @@ function create() {
 
 	return (
 		<div>
-			<PageHeader title={"상점"} addComp={<ShopTab />} />
+			<PageHeader title={"상점"} addComp={<TabMenu menus={ShopTabMenus()} selected={1} />} />
 			<div css={contentWrapperCSS}>
 				<ContentWrapper>
 					<div css={inputWrapperCSS}>
