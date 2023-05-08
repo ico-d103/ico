@@ -47,7 +47,7 @@ public class ImmigrationController {
      * @return OK
      */
     @PostMapping("/student")
-    public ResponseEntity<?> createImmigration(@Valid @RequestBody ImmigrationReqDto reqDto, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> createImmigration(@Valid @RequestBody ImmigrationReqDto reqDto, HttpServletRequest request) {
         immigrationService.createImmigration(reqDto, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -70,7 +70,7 @@ public class ImmigrationController {
      * @return OK
      */
     @DeleteMapping("/student")
-    public ResponseEntity<?> delImmigration(HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> delImmigration(HttpServletRequest request) {
         immigrationService.deleteImmigration(request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -83,7 +83,7 @@ public class ImmigrationController {
      * @return OK
      */
     @PutMapping("/teacher/{immigrationId}")
-    public ResponseEntity<?> approveImmigration(@PathVariable Long immigrationId, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> approveImmigration(@PathVariable Long immigrationId, HttpServletRequest request) {
         immigrationService.approveImmigration(immigrationId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -96,7 +96,7 @@ public class ImmigrationController {
      * @return OK
      */
     @DeleteMapping("/teacher/{immigrationId}")
-    public ResponseEntity<?> companionImmigration(@PathVariable Long immigrationId, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> companionImmigration(@PathVariable Long immigrationId, HttpServletRequest request) {
         immigrationService.companionImmigration(immigrationId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }

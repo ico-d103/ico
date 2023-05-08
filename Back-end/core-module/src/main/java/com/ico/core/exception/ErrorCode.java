@@ -53,6 +53,8 @@ public enum ErrorCode{
 
     NOT_FOUND_IMMIGRATION_USER(HttpStatus.NOT_FOUND, "204", "입국 심사를 기다리고 있는 학생이 없습니다."),
 
+    DUPLICATED_NATION_NAME(HttpStatus.NOT_FOUND, "205", "이미 존재하는 나라 이름입니다."),
+
     ALREADY_ASSIGNED_JOB(HttpStatus.BAD_REQUEST, "409", "이미 배정된 직업입니다."),
 
     ALREADY_FULL_JOB(HttpStatus.CONFLICT, "421", "직업 정원이 다 찼습니다."),
