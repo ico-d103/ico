@@ -190,7 +190,7 @@ public class JwtTokenProvider {
      * @return nation
      */
     public Long getNation(String token) {
-        return (Long) getClaims(token).get("nation");
+        return ((Number) getClaims(token).get("nation")).longValue();
     }
 
     /**
