@@ -1,6 +1,6 @@
 import { useReducer, useRef, useEffect } from "react"
 import { css } from "@emotion/react"
-import { postTeacher } from "@/api/teacher/user/postTeacher"
+import { postTeacher } from "@/api/teacher/user/postTeacherAPI"
 import { useState } from "react"
 import { KOREAN_ONLY, ENG_NUM_ONLY, PHONE_NUMBER_ONLY } from "@/util/regex"
 import { lengthCheck } from "@/util/lengthCheck"
@@ -20,7 +20,7 @@ import {
 import { useQuery } from "@tanstack/react-query"
 
 const inputReducer = (
-	state: { name: string; id: string; password: string; password2: string;},
+	state: { name: string; id: string; password: string; password2: string },
 	action: { type: string; value: string },
 ) => {
 	switch (action.type) {
@@ -38,7 +38,7 @@ const inputReducer = (
 }
 
 const validReducer = (
-	state: { name: boolean; id: boolean; password: boolean; password2: boolean;},
+	state: { name: boolean; id: boolean; password: boolean; password2: boolean },
 	action: { type: string; value: boolean },
 ) => {
 	switch (action.type) {
@@ -56,7 +56,7 @@ const validReducer = (
 }
 
 const validMessageReducer = (
-	state: { name: string; id: string; password: string; password2: string;},
+	state: { name: string; id: string; password: string; password2: string },
 	action: { type: string; value: string },
 ) => {
 	switch (action.type) {
@@ -79,21 +79,18 @@ function signup() {
 		id: false,
 		password: false,
 		password2: false,
-
 	})
 	const [validMessageState, dispatchValidMessage] = useReducer(validMessageReducer, {
 		name: "",
 		id: "",
 		password: "",
 		password2: "",
-
 	})
 	const [inputState, dispatchInput] = useReducer(inputReducer, {
 		name: "",
 		id: "",
 		password: "",
 		password2: "",
-
 	})
 
 	useEffect(() => {
@@ -108,7 +105,6 @@ function signup() {
 	useEffect(() => {
 		checkValidPW2Handler()
 	}, [inputState.password2])
-
 
 	const checkValidNameHandler = (forSumbit = false) => {
 		// 입력값이 없을 때
@@ -169,7 +165,6 @@ function signup() {
 			// 	enabled: false,
 			// })
 			// console.log(data)
-
 			// if (data) {
 			// 	// 사용 가능하면
 			// 	dispatchValidMessage({ type: "VALID_ID", value: "사용 가능한 ID입니다." })
@@ -225,9 +220,6 @@ function signup() {
 		dispatchValid({ type: "VALID_PW2", value: true })
 	}
 
-
-
-
 	const signUpHandler = async () => {
 		checkValidNameHandler(true)
 		checkValidIDHandler(true)
@@ -269,10 +261,6 @@ function signup() {
 		// 	checkedPassword: inputState.password,
 		// })
 	}
-
-
-
-
 
 	const messageGenerator = ({ message, isValid }: { message: string; isValid: boolean }) => {
 		return <div css={messageCSS({ isValid })}>{message}</div>
@@ -351,8 +339,6 @@ function signup() {
 					}}
 				/>
 				{messageGenerator({ message: validMessageState.password2, isValid: validState.password2 })}
-
-				
 
 				<div css={footerWrapperCSS}>
 					<Button
