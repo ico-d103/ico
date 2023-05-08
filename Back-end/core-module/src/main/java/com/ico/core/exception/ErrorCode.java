@@ -35,7 +35,11 @@ public enum ErrorCode{
 
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
+    NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, "104", "비밀번호 입력 칸이 비었습니다."),
+
     PASSWORD_WRONG(HttpStatus.BAD_REQUEST, "105", "비밀번호가 틀렸습니다."),
+
+    NOT_FOUND_NAME(HttpStatus.BAD_REQUEST, "112", "이름 입력 칸이 비었습니다."),
 
     WRONG_CODE(HttpStatus.BAD_REQUEST, "200", "일치하는 반 코드가 없습니다."),
 
@@ -44,6 +48,10 @@ public enum ErrorCode{
     NOT_FOUND_NATION(HttpStatus.BAD_REQUEST, "202", "나라가 없습니다."),
 
     NOT_FOUND_IMMIGRATION(HttpStatus.NOT_FOUND, "203", "입국 심사를 기다리고 있는 나라가 없습니다."),
+
+    NOT_FOUND_IMMIGRATION_NATION(HttpStatus.NOT_FOUND, "203", "입국 심사를 기다리고 있는 나라가 없습니다."),
+
+    NOT_FOUND_IMMIGRATION_USER(HttpStatus.NOT_FOUND, "204", "입국 심사를 기다리고 있는 학생이 없습니다."),
 
     ALREADY_ASSIGNED_JOB(HttpStatus.BAD_REQUEST, "409", "이미 배정된 직업입니다."),
 
