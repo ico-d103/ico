@@ -2,7 +2,7 @@ package com.ico.api.service.job;
 
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
-import com.ico.core.dto.JobDto;
+import com.ico.core.dto.JobReqDto;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface JobService {
      * @param jobId
      * @param dto 직업 이름, 직업 설명, 총 인원, 임금, 색깔
      */
-    void updateJob(Long jobId, JobDto dto);
+    void updateJob(Long jobId, JobReqDto dto);
 
     /**
      * 교사가 전체 직업 조회

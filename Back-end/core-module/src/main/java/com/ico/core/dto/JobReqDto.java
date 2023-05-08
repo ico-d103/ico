@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class JobDto {
+public class JobReqDto {
 
     @NotNull(message = "410")
     private String title;
@@ -33,7 +33,7 @@ public class JobDto {
     private String color;
 
     @Builder
-    public JobDto(String title, String detail, int total, int wage, String color) {
+    public JobReqDto(String title, String detail, int total, int wage, String color) {
         this.title = title;
         this.detail = detail;
         this.total = total;

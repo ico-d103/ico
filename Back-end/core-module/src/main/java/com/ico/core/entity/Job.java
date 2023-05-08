@@ -1,7 +1,7 @@
 package com.ico.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ico.core.dto.JobDto;
+import com.ico.core.dto.JobReqDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -76,7 +76,7 @@ public class Job {
      * @param dto
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public void updateJob(JobDto dto) {
+    public void updateJob(JobReqDto dto) {
         this.title = dto.getTitle();
         this.detail = dto.getDetail();
         this.total = (byte) dto.getTotal();
