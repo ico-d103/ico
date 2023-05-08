@@ -12,12 +12,12 @@ type responseType = {
 	data: postDuplicationCheckType
 }
 
-export const postDuplicationCheck = async ({ body }: bodyType) => {
+export const postDuplicationCheckAPI = async ({ body }: bodyType) => {
 	try {
 		const response: responseType = await defaultInstance.post("/duplicated-id", body)
 
 		return response.data
 	} catch (error) {
-		console.log(error)
+		throw error
 	}
 }
