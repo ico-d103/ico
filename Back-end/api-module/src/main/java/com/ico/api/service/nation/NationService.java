@@ -17,7 +17,7 @@ public interface NationService {
      * @param reqDto
      * @param request
      */
-    void createNation(NationReqDto reqDto, HttpServletRequest request);
+    String createNation(NationReqDto reqDto, HttpServletRequest request);
 
 
     /**

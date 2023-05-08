@@ -36,7 +36,7 @@ public class NationServiceImpl implements NationService {
 
     @Override
     @Transactional
-    public void createNation(NationReqDto reqDto, HttpServletRequest request) {
+    public String createNation(NationReqDto reqDto, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Role role = jwtTokenProvider.getRole(token);
 
@@ -64,10 +64,15 @@ public class NationServiceImpl implements NationService {
                     t.setNation(nation);
                     teacherRepository.save(t);
                 });
+
+                return jwtTokenProvider.updateTokenCookie(request);
             }
             else {
                 throw new CustomException(ErrorCode.DUPLICATED_NATION_NAME);
             }
+        }
+        else {
+            throw new CustomException(ErrorCode.WRONG_ROLE);
         }
     }
 
