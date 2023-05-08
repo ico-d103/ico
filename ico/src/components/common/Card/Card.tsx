@@ -18,11 +18,11 @@ function Card({ image, name, number, price, writer, date, approved }: CardProps)
 	return (
 		<div css={cardCSS}>
 			<div css={cardImageWrapperCSS}>
-				<Image src={image} alt={name} width={250} height={250} />
-				{number === 0 ? (
-					<div css={cardSoldOutTextCSS}>Sold out</div>
+				<Image src={image} alt={name} layout="fill" />
+				{approved ? (
+					<div css={[testCSS, cardRequestTextCSS]}>승인 진행 중</div>
 				) : (
-					<div css={approved ? cardRequestTextCSS : cardImageTextCSS}>{approved ? "승인중" : "텍스트"}</div>
+					number == 0 && <div css={[testCSS, cardSoldOutTextCSS]}>sold out</div>
 				)}
 			</div>
 			<div css={cardFirstContentCSS}>
@@ -43,61 +43,53 @@ function Card({ image, name, number, price, writer, date, approved }: CardProps)
 }
 
 const cardCSS = css`
-	position: relative; // 부모 요소를 relative로 설정합니다.
-
+	position: relative;
 	border-radius: 10px;
 	overflow: hidden;
+	/* 일단은 모바일에서도 카드 뒷부분은 하얀색으로 */
+	background-color: white;
 
-	box-shadow: 0px 0px 10px 1px rgba(100, 100, 100, 0.2); /* 그림자 설정 */
+	box-shadow: 0px 0px 10px 1px rgba(100, 100, 100, 0.2);
 
 	hr {
 		height: 1px;
 		border: none;
 		border-top: 1px solid rgba(0, 0, 0, 0.2);
 	}
-
 	cursor: pointer;
 `
 
 const cardImageWrapperCSS = css`
+	/* 카드 길이 수정 부분 */
+	width: 250px;
+	height: 250px;
+
 	position: relative;
-	display: inline-block;
+
+	@media screen and (max-width: 500px) {
+		width: 45vw;
+		height: 45vw;
+	}
 `
 
-const cardImageTextCSS = css`
+const testCSS = css`
 	position: absolute;
 	top: 10px;
 	right: 10px;
 	padding: 5px;
-	background-color: rgba(0, 0, 0, 0.5);
-	color: #fff;
 	font-size: 12px;
 	font-weight: bold;
 	border-radius: 5px;
 `
 
 const cardSoldOutTextCSS = css`
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	padding: 5px;
 	background-color: var(--teacher-warning-color);
 	color: #fff;
-	font-size: 12px;
-	font-weight: bold;
-	border-radius: 5px;
 `
 
 const cardRequestTextCSS = css`
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	padding: 5px;
 	background-color: blue;
 	color: #fff;
-	font-size: 12px;
-	font-weight: bold;
-	border-radius: 5px;
 `
 
 const cardFirstContentCSS = css`
