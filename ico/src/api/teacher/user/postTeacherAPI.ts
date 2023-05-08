@@ -14,7 +14,7 @@ type responseType = {
 	data: string
 }
 
-export const postTeacher = async ({ body }: paramsType) => {
+export const postTeacherAPI = async ({ body }: paramsType) => {
 	try {
 		const response: responseType = await defaultInstance.post("/teacher", body)
 

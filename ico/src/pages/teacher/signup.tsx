@@ -1,6 +1,6 @@
 import { useReducer, useRef, useEffect } from "react"
 import { css } from "@emotion/react"
-import { postTeacher } from "@/api/teacher/user/postTeacher"
+import { postTeacherAPI } from "@/api/teacher/user/postTeacherAPI"
 import { useState } from "react"
 import { KOREAN_ONLY, ENG_NUM_ONLY, PHONE_NUMBER_ONLY } from "@/util/regex"
 import { lengthCheck } from "@/util/lengthCheck"
@@ -15,7 +15,7 @@ import {
 	CLIP_ICON,
 	PHONE_ICON,
 } from "@/components/teacher/Signup/SignupIcons/SignupIcons"
-import { postDuplicationCheck } from "@/api/common/postDuplicationCheck"
+import { postDuplicationCheckAPI } from "@/api/common/postDuplicationCheckAPI"
 import { useRouter } from "next/router"
 
 const inputReducer = (
@@ -181,7 +181,7 @@ function signup() {
 
 		if (checkVerify) {
 			// 아이디 중복 검사 요청
-			const data = await postDuplicationCheck({ body: { identity: inputState.id } })
+			const data = await postDuplicationCheckAPI({ body: { identity: inputState.id } })
 
 			if (data?.isDuplicated === false) {
 				// 사용 가능하면
@@ -301,7 +301,7 @@ function signup() {
 		// 현재는 phone, file 임시로 제외
 		if (validState.name && validState.id && validState.password && validState.password2) {
 			// 회원가입 요청
-			const response = await postTeacher({
+			const response = await postTeacherAPI({
 				body: {
 					name: inputState.name,
 					identity: inputState.id,
