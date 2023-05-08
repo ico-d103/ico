@@ -5,6 +5,8 @@ import { ID_ICON, PASSWORD2_ICON } from "@/components/teacher/Signup/SignupIcons
 import Button from "@/components/common/Button/Button"
 import { useRouter } from "next/router"
 import { postLoginAPI } from "@/api/common/postLoginAPI"
+import { setCookie } from "@/api/cookie"
+import { getNationAPI } from "@/api/teacher/class/getNationAPI"
 
 const initialState = { id: "", password: "" }
 
@@ -37,14 +39,26 @@ function login() {
 			body: { identity: inputState.id, password: inputState.password },
 		})
 			.then((res) => {
-				console.log(res)
-				// accesstoken을 쿠키에 넣어주기?
-				// 반이 있으면 반으로 이동
-				// 없으면 반 생성
+				if (res) {
+					setCookie("accessToken", res)
 
-				// localstorage에 반 이름과 화폐 이름을 저장하는 분기
-				// 반이 있는 경우는 로그인 후에 반이 있으면
-				// 반이 없는 경우는 반 생성 페이지로 이동 후, 반을 생성할 때
+					// 교사가 생성한 나라 조회
+					getNationAPI()
+						// 반이 있으면 localStorage에 나라 이름, 화폐 이름 저장 후 반 페이지로 이동
+						.then((res) => {
+							// localStorage.setItem("나라이름", "나라이름")
+							// localStorage.setItem("화폐이름", "화폐이름")
+							// router.push("/teacher/class/students")
+						})
+						// 반이 없다면 반 생성 페이지로 이동 (나라 이름, 화폐 이름은 반 생성 후 localStorage에 저장)
+						.catch((error) => {
+							console.log("교사가 생성한 나라 조회 요청 error : ", error)
+							// 반이 없는 경우의 코드 넣기
+							// if (error.response.data.code === 0) {
+							// 	router.push("/teacher/create")
+							// }
+						})
+				}
 			})
 			.catch((error) => {
 				setAlarm(error.response.data.message)
