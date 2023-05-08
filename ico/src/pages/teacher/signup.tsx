@@ -16,7 +16,6 @@ import {
 	PHONE_ICON,
 } from "@/components/teacher/Signup/SignupIcons/SignupIcons"
 import { postDuplicationCheck } from "@/api/common/postDuplicationCheck"
-import { useQuery } from "@tanstack/react-query"
 
 const inputReducer = (
 	state: { name: string; id: string; password: string; password2: string; phone: string },
@@ -147,7 +146,7 @@ function signup() {
 		dispatchValid({ type: "VALID_NAME", value: true })
 	}
 
-	const checkValidIDHandler = (forSumbit = false, checkVerify = false) => {
+	const checkValidIDHandler = async (forSumbit = false, checkVerify = false) => {
 		// 입력값이 없을 때
 		if (inputState.id === "") {
 			// 제출버튼을 눌렀다면
@@ -180,13 +179,9 @@ function signup() {
 
 		if (checkVerify) {
 			// 아이디 중복 검사 요청
-			/* 수정 필요 */
-			const { data } = useQuery(["postDuplicationCheck"], () => postDuplicationCheck({ id: inputState.id }), {
-				enabled: false,
-			})
-			console.log(data)
+			const data = await postDuplicationCheck({ identity: inputState.id })
 
-			if (data) {
+			if (data?.isDuplicated === false) {
 				// 사용 가능하면
 				dispatchValidMessage({ type: "VALID_ID", value: "사용 가능한 ID입니다." })
 				dispatchValid({ type: "VALID_ID", value: true })
