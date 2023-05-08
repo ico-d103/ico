@@ -38,7 +38,7 @@ public class StudentController {
      * @throws Exception
      */
     @PostMapping
-    public ResponseEntity<?> studentSignUp(@Valid @RequestBody StudentSignUpRequestDto requestDto) {
+    public ResponseEntity<HttpStatus> studentSignUp(@Valid @RequestBody StudentSignUpRequestDto requestDto) {
         studentService.signUp(requestDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }

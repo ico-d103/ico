@@ -28,10 +28,9 @@ public class TeacherController {
      *
      * @param requestDto
      * @return id
-     * @throws Exception
      */
     @PostMapping
-    public ResponseEntity<?> teacherSignUp(@RequestBody TeacherSignUpRequestDto requestDto) throws Exception {
+    public ResponseEntity<HttpStatus> teacherSignUp(@RequestBody TeacherSignUpRequestDto requestDto) {
         teacherService.signUp(requestDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }

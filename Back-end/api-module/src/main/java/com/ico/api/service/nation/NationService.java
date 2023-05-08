@@ -26,4 +26,6 @@ public interface NationService {
      * @return Nation
      */
     Nation getNation(HttpServletRequest request);
+
+//    Nation updateNation(NationReqDto reqDto, HttpServletRequest request);
 }
