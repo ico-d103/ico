@@ -16,6 +16,7 @@ import {
 	PHONE_ICON,
 } from "@/components/teacher/Signup/SignupIcons/SignupIcons"
 import { postDuplicationCheck } from "@/api/common/postDuplicationCheck"
+import { useRouter } from "next/router"
 
 const inputReducer = (
 	state: { name: string; id: string; password: string; password2: string; phone: string },
@@ -108,6 +109,7 @@ function signup() {
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const [file, setFile] = useState<File | null>(null)
 	const [fileUrl, setFileUrl] = useState<string>("")
+	const router = useRouter()
 
 	useEffect(() => {
 		checkValidNameHandler()
@@ -179,7 +181,7 @@ function signup() {
 
 		if (checkVerify) {
 			// 아이디 중복 검사 요청
-			const data = await postDuplicationCheck({ identity: inputState.id })
+			const data = await postDuplicationCheck({ body: { identity: inputState.id } })
 
 			if (data?.isDuplicated === false) {
 				// 사용 가능하면
@@ -294,40 +296,25 @@ function signup() {
 		checkValidPW2Handler(true)
 		checkValidFileHandler(true)
 		checkValidPhoneHandler(true, true)
-		// if (inputState.name === "" || inputState.id === "" || inputState.password === "") {
-		// 	setAlarm("빈 칸을 모두 입력해주세요.")
-		// 	return
-		// }
 
-		// if (KOREAN_ONLY.test(inputState.name) === false) {
-		// 	setAlarm("이름은 한글만 입력 가능합니다.")
-		// 	return
-		// }
+		// 유효성 검사를 모두 완료하면
+		// 현재는 phone, file 임시로 제외
+		if (validState.name && validState.id && validState.password && validState.password2) {
+			// 회원가입 요청
+			const response = await postTeacher({
+				body: {
+					name: inputState.name,
+					identity: inputState.id,
+					password: inputState.password,
+					checkedPassword: inputState.password,
+				},
+			})
 
-		// if (ENG_NUM_ONLY.test(inputState.password) === false || lengthCheck(inputState.password, 8, 16) === false) {
-		// 	setAlarm("비밀번호는 영어, 숫자 조합으로 최소 8자부터 최대 16자까지 입력 가능합니다.")
-		// 	return
-		// }
-
-		// if (!validState.id) {
-		// 	setAlarm("아이디 중복 확인을 해주세요.")
-		// 	return
-		// }
-
-		// if (!validState.password) {
-		// 	setAlarm("비밀번호 재확인을 해주세요.")
-		// 	return
-		// }
-
-		// setAlarm("")
-
-		// 회원가입 요청
-		// const response = await postTeacher({
-		// 	name: inputState.name,
-		// 	identity: inputState.id,
-		// 	password: inputState.password,
-		// 	checkedPassword: inputState.password,
-		// })
+			// 회원가입 성공하면
+			if (response) {
+				router.push("/teacher/login")
+			}
+		}
 	}
 
 	const inputFileOnChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
