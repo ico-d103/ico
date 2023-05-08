@@ -2,6 +2,7 @@ package com.ico.api.service.job;
 
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
+import com.ico.api.dto.job.JobResDto;
 import com.ico.core.dto.JobReqDto;
 import com.ico.core.entity.Job;
 import com.ico.core.exception.CustomException;
@@ -42,6 +43,10 @@ public class JobServiceImpl implements JobService{
                 log.info("[updateJob] 중복된 이름 존재");
                 throw new CustomException(ErrorCode.ALREADY_EXIST_TITLE);
         }
+        if (job.getCount() > dto.getTotal()) {
+            log.info("[updateJob] 배정된 인원보다 수정하는 총 인원이 적은 경우");
+            throw new CustomException(ErrorCode.INVALID_JOB_TOTAL);
+        }
 
         job.updateJob(dto);
         jobRepository.save(job);
@@ -52,8 +57,9 @@ public class JobServiceImpl implements JobService{
     public List<JobAllResDto> findAllJob() {
         // TODO: 토큰에서 nation id 값 받아오기 필요
         long nationId = 1;
-        if (!nationRepository.existsById(nationId))
+        if (nationRepository.findById(nationId).isEmpty()) {
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
+        }
 
         List<Job> jobList = jobRepository.findAllByNationId(nationId);
         List<JobAllResDto> resJobList = new ArrayList<>();
@@ -79,5 +85,22 @@ public class JobServiceImpl implements JobService{
             resJobList.add(new JobAvailableResDto().of(job));
         }
         return resJobList;
+    }
+
+    @Override
+    public List<JobResDto> findJobList() {
+        // TODO: 토큰에서 nation id 값 받아오기 필요
+        long nationId = 1;
+        if (nationRepository.findById(nationId).isEmpty()) {
+            log.info("토큰의 nationId에 해당하는 나라가 존재하지 않는 경우");
+            throw new CustomException(ErrorCode.NATION_NOT_FOUND);
+        }
+
+        List<Job> jobList = jobRepository.findAllByNationId(nationId);
+        List<JobResDto> dtoList = new ArrayList<>();
+        for (Job job : jobList) {
+            dtoList.add(new JobResDto().of(job));
+        }
+        return dtoList;
     }
 }
