@@ -15,6 +15,8 @@ import {
 	CLIP_ICON,
 	PHONE_ICON,
 } from "@/components/teacher/Signup/SignupIcons/SignupIcons"
+import { postDuplicationCheck } from "@/api/common/postDuplicationCheck"
+import { useQuery } from "@tanstack/react-query"
 
 const inputReducer = (
 	state: { name: string; id: string; password: string; password2: string; phone: string },
@@ -81,8 +83,6 @@ const validMessageReducer = (
 }
 
 function signup() {
-	const [alarm, setAlarm] = useState<string>("")
-	// const [isValidID, setIsValidID] = useState<boolean>(false)
 	const [validState, dispatchValid] = useReducer(validReducer, {
 		name: false,
 		id: false,
@@ -99,11 +99,16 @@ function signup() {
 		phone: "",
 		file: "",
 	})
-	const [inputState, dispatchInput] = useReducer(inputReducer, { name: "", id: "", password: "", password2: "", phone: "" })
+	const [inputState, dispatchInput] = useReducer(inputReducer, {
+		name: "",
+		id: "",
+		password: "",
+		password2: "",
+		phone: "",
+	})
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const [file, setFile] = useState<File | null>(null)
 	const [fileUrl, setFileUrl] = useState<string>("")
-
 
 	useEffect(() => {
 		checkValidNameHandler()
@@ -121,37 +126,38 @@ function signup() {
 		checkValidPhoneHandler()
 	}, [inputState.phone])
 
-	const checkValidNameHandler = async (forSumbit = false) => {
-
+	const checkValidNameHandler = (forSumbit = false) => {
+		// 입력값이 없을 때
 		if (inputState.name === "") {
+			// 제출버튼을 눌렀다면
 			if (forSumbit) {
 				dispatchValidMessage({ type: "VALID_NAME", value: "이름을 입력해 주세요." })
 			}
 			dispatchValid({ type: "VALID_NAME", value: false })
 			return
 		}
+		// 유효하지 않을 때
 		if (KOREAN_ONLY.test(inputState.name) === false) {
 			dispatchValidMessage({ type: "VALID_NAME", value: "이름은 한글만 입력 가능합니다." })
 			dispatchValid({ type: "VALID_NAME", value: false })
 			return
 		}
-
+		// 사용가능하다면
 		dispatchValidMessage({ type: "VALID_NAME", value: "" })
 		dispatchValid({ type: "VALID_NAME", value: true })
 	}
 
-	const checkValidIDHandler = async (forSumbit = false, checkVerify = false) => {
+	const checkValidIDHandler = (forSumbit = false, checkVerify = false) => {
+		// 입력값이 없을 때
 		if (inputState.id === "") {
+			// 제출버튼을 눌렀다면
 			if (forSumbit) {
-				dispatchValidMessage({
-					type: "VALID_ID",
-					value: "아이디를 입력해 주세요.",
-				})
+				dispatchValidMessage({ type: "VALID_ID", value: "아이디를 입력해 주세요." })
 			}
 			dispatchValid({ type: "VALID_ID", value: false })
 			return
 		}
-
+		// 유효하지 않을 때
 		if (ENG_NUM_ONLY.test(inputState.id) === false || lengthCheck(inputState.id, 4, 10) === false) {
 			dispatchValid({ type: "VALID_ID", value: false })
 			dispatchValidMessage({
@@ -160,28 +166,38 @@ function signup() {
 			})
 			return
 		}
+		// 중복 확인을 하지 않았다면
+		if (forSumbit) {
+			if (!validState.id) {
+				dispatchValidMessage({ type: "VALID_ID", value: "아이디 중복 확인을 해주세요." })
+				dispatchValid({ type: "VALID_ID", value: false })
+				return
+			}
+		}
 
 		dispatchValidMessage({ type: "VALID_ID", value: "" })
 		dispatchValid({ type: "VALID_ID", value: false })
 
-
 		if (checkVerify) {
-			// 아이디 중복 검사 요청 API
-		
+			// 아이디 중복 검사 요청
+			/* 수정 필요 */
+			const { data } = useQuery(["postDuplicationCheck"], () => postDuplicationCheck({ id: inputState.id }), {
+				enabled: false,
+			})
+			console.log(data)
 
-			// 불가능하면
-			dispatchValidMessage({ type: "VALID_ID", value: "이미 중복된 아이디, 혹은 사용 불가능한 아이디입니다." })
-			dispatchValid({ type: "VALID_ID", value: false })
-			return
-
-			// 사용 가능하면
-			dispatchValidMessage({ type: "VALID_ID", value: "사용 가능한 ID입니다." })
-			dispatchValid({ type: "VALID_ID", value: true })
+			if (data) {
+				// 사용 가능하면
+				dispatchValidMessage({ type: "VALID_ID", value: "사용 가능한 ID입니다." })
+				dispatchValid({ type: "VALID_ID", value: true })
+			} else {
+				// 불가능하면
+				dispatchValidMessage({ type: "VALID_ID", value: "이미 중복된 아이디, 혹은 사용 불가능한 아이디입니다." })
+				dispatchValid({ type: "VALID_ID", value: false })
+				return
+			}
 		}
-		
-		
 	}
-
 
 	const checkValidPWHandler = (forSumbit = false) => {
 		if (inputState.password === "") {
@@ -226,16 +242,21 @@ function signup() {
 	}
 
 	const checkValidPhoneHandler = (forSumbit = false, checkVerify = false) => {
+		// 입력값이 없을 때
 		if (inputState.phone === "") {
+			// 제출버튼을 눌렀다면
 			if (forSumbit) {
 				dispatchValidMessage({ type: "VALID_PHONE", value: "휴대폰 번호를 입력해 주세요." })
 			}
 			dispatchValid({ type: "VALID_PHONE", value: false })
 			return
 		}
-
+		// 유효하지 않을 때
 		if (PHONE_NUMBER_ONLY.test(inputState.phone) === false) {
-			dispatchValidMessage({ type: "VALID_PHONE", value: "휴대폰 번호를 제대로 입력해 주세요." })
+			dispatchValidMessage({
+				type: "VALID_PHONE",
+				value: "유효하지 않은 휴대폰 번호입니다. 올바른 번호를 입력해 주세요.",
+			})
 			dispatchValid({ type: "VALID_PHONE", value: false })
 			return
 		}
@@ -254,12 +275,11 @@ function signup() {
 			// dispatchValidMessage({ type: "VALID_PHONE", value: "본인 인증되었습니다." })
 			// dispatchValid({ type: "VALID_PHONE", value: true })
 		}
-		
 	}
 
 	const checkValidFileHandler = (forSumbit = false) => {
 		if (file === null) {
-			dispatchValidMessage({ type: "VALID_FILE", value: "교사 인증서를 첨부해 주세요." })
+			dispatchValidMessage({ type: "VALID_FILE", value: "교사 인증서를 첨부해 주세요" })
 			dispatchValid({ type: "VALID_FILE", value: false })
 			return
 		}
@@ -339,7 +359,6 @@ function signup() {
 			<div css={innerWrapperCSS}>
 				<LoadImage src={"/assets/signup/illust.png"} alt={"signup_illust"} wrapperCss={imageWrapperCSS} dev={false} />
 
-		
 				{/* placeholder 멘트도 더 좋은게 있다면 수정해주세요 */}
 
 				<div css={inputTitleCSS}>이름</div>
@@ -349,7 +368,6 @@ function signup() {
 					placeholder="이름 (한글만 입력해주세요)"
 					onChange={(e) => {
 						dispatchInput({ type: "CHANGE_NAME", value: e.target.value })
-						
 					}}
 					customCss={inputCSS}
 				/>
@@ -365,16 +383,18 @@ function signup() {
 							height={"42px"}
 							text={"중복 확인"}
 							fontSize={"var(--teacher-h5)"}
-							onClick={() => {checkValidIDHandler(true, true)}}
+							onClick={() => {
+								checkValidIDHandler(false, true)
+							}}
 						></Button>
 					}
 					theme={"default"}
 					customCss={inputCSS}
 					type="text"
-					placeholder="영어와 숫자를 조합해 4자~10자 입력해주세요."
+					placeholder="영어와 숫자를 조합해 4자~10자 입력해주세요"
 					onChange={(e) => {
 						// dispatchValid({ type: "VALID_ID", value: false })
-						
+
 						dispatchInput({ type: "CHANGE_ID", value: e.target.value })
 					}}
 				/>
@@ -386,11 +406,10 @@ function signup() {
 					theme={"default"}
 					customCss={inputCSS}
 					type="password"
-					placeholder="영어와 숫자를 조합해 8자~16자 입력해주세요."
+					placeholder="영어와 숫자를 조합해 8자~16자 입력해주세요"
 					onChange={(e) => {
-						
 						// dispatchValid({ type: "VALID_PW", value: false })
-						
+
 						dispatchInput({ type: "CHANGE_PW", value: e.target.value })
 					}}
 				/>
@@ -402,10 +421,8 @@ function signup() {
 					theme={"default"}
 					customCss={inputCSS}
 					type="password"
-					placeholder="비밀번호를 다시 입력해 주세요."
+					placeholder="비밀번호를 다시 입력해 주세요"
 					onChange={(e) => {
-						
-						
 						dispatchInput({ type: "CHANGE_PW2", value: e.target.value })
 					}}
 				/>
@@ -450,10 +467,9 @@ function signup() {
 						></Button>
 					}
 					theme={"default"}
-					placeholder="휴대폰 번호를 입력해 주세요."
+					placeholder="휴대폰 번호를 입력해 주세요"
 					onChange={(e) => {
 						dispatchInput({ type: "CHANGE_PHONE", value: e.target.value })
-						
 					}}
 					customCss={inputCSS}
 				/>
