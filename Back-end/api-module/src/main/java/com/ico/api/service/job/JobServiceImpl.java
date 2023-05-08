@@ -38,11 +38,6 @@ public class JobServiceImpl implements JobService{
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
         log.info("[updateJob] 해당 직업 존재");
 
-        if (job.getCount() != 0) {
-            throw new CustomException(ErrorCode.ALREADY_ASSIGNED_JOB);
-        }
-        log.info("[updateJob] 아직 배정 받은 인원 없음");
-
         jobRepository.findByTitleAndNationId(dto.getTitle(), nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ALREADY_EXIST_TITLE));
         log.info("[updateJob] 중복된 이름 없음");
