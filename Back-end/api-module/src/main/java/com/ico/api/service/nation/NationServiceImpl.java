@@ -47,29 +47,32 @@ public class NationServiceImpl implements NationService {
 
         // 교사만 반 생성
         if (role == Role.TEACHER) {
-            Nation nation = Nation.builder()
-                    .school(reqDto.getSchool())
-                    .grade((byte) reqDto.getGrade())
-                    .room((byte) reqDto.getRoom())
-                    .title(reqDto.getTitle())
-                    .code(randomCode())
-                    .currency(reqDto.getCurrency())
-                    .treasury(0)
-                    .credit_up((byte) 20)
-                    .credit_down((byte) 50)
-                    .trading_start(reqDto.getTrading_start())
-                    .trading_end(reqDto.getTrading_end())
-                    .build();
+            String title = reqDto.getTitle();
+            if (!nationRepository.findByTitle(title).isPresent()) {
+                Nation nation = Nation.builder()
+                        .school(reqDto.getSchool())
+                        .grade((byte) reqDto.getGrade())
+                        .room((byte) reqDto.getRoom())
+                        .title(title)
+                        .code(randomCode())
+                        .currency(reqDto.getCurrency())
+                        .treasury(0)
+                        .credit_up((byte) 20)
+                        .credit_down((byte) 50)
+                        .build();
+                nationRepository.save(nation);
 
-            nationRepository.save(nation);
-
-            // 반을 생성했을 때 교사 테이블의 Nation 업데이트
-            String identity = (String) jwtTokenProvider.getIdentity(token);
-            Optional<Teacher> teacher = teacherRepository.findByIdentity(identity);
-            teacher.ifPresent(t -> {
-                t.setNation(nation);
-                teacherRepository.save(t);
-            });
+                // 반을 생성했을 때 교사 테이블의 Nation 업데이트
+                String identity = jwtTokenProvider.getIdentity(token);
+                Optional<Teacher> teacher = teacherRepository.findByIdentity(identity);
+                teacher.ifPresent(t -> {
+                    t.setNation(nation);
+                    teacherRepository.save(t);
+                });
+            }
+            else {
+                throw new CustomException(ErrorCode.DUPLICATED_NATION_NAME);
+            }
         }
     }
 
@@ -116,6 +119,31 @@ public class NationServiceImpl implements NationService {
         }
 
     }
+
+//    @Override
+//    public Nation updateNation(NationReqDto reqDto, HttpServletRequest request) {
+        // TODO : 나라 수정 때 사용할 것
+//        String token = jwtTokenProvider.parseJwt(request);
+//        Long id = jwtTokenProvider.getId(token);
+//
+//        if (id != null) {
+//            Long nationId = teacherRepository.findById(id).get().getNation().getId();
+//            Nation nation = nationRepository.findById(nationId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
+//            nation.setSchool(reqDto.getSchool());
+//            nation.setGrade((byte) reqDto.getGrade());
+//            nation.setRoom((byte) reqDto.getRoom());
+//            nation.setTitle(reqDto.getTitle());
+//            nation.setCurrency(reqDto.getCurrency());
+//            nation.setTrading_start(reqDto.getTrading_start());
+//            nation.setTrading_end(reqDto.getTrading_end());
+//            nationRepository.save(nation);
+//            return nation;
+//        }
+//        else {
+//            throw new CustomException(ErrorCode.NOT_FOUND_NATION);
+//        }
+//    }
+
 
     /**
      * 투자 종목 등록

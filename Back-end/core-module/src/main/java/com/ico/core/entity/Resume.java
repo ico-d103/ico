@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Column;
+
 /**
  * 직업 신청 내역 Document
  *
@@ -20,10 +22,13 @@ public class Resume {
     @Id
     private String id;
 
+    @Column(name = "student_id")
     private Long studentId;
 
+    @Column(name = "job_id")
     private Long jobId;
 
+    @Column(name = "nation_id")
     private Long nationId;
 
     @Builder

@@ -1,6 +1,6 @@
 package com.ico.core.repository;
 
-import com.ico.core.dto.JobDto;
+import com.ico.core.dto.JobReqDto;
 import com.ico.core.entity.Job;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -43,8 +43,8 @@ class JobRepositoryTest {
      *
      * @return
      */
-    private JobDto jobDtoSetting() {
-        return JobDto.builder()
+    private JobReqDto jobDtoSetting() {
+        return JobReqDto.builder()
                 .title("소방관")
                 .detail("나는야 소방관")
                 .total(4)
@@ -79,7 +79,7 @@ class JobRepositoryTest {
     void jobUpdate() {
         //given
         Job savedJob = jobSetting();
-        JobDto dto = jobDtoSetting();
+        JobReqDto dto = jobDtoSetting();
 
         //when
         savedJob.updateJob(dto);

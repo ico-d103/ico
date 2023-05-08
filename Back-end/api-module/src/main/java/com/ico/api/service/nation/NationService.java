@@ -6,6 +6,9 @@ import com.ico.core.entity.Nation;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * @author 강교철
+ */
 public interface NationService {
 
     /**
@@ -15,15 +18,16 @@ public interface NationService {
      * @param reqDto
      * @param request
      */
-    public void createNation(NationReqDto reqDto, HttpServletRequest request);
-
+    void createNation(NationReqDto reqDto, HttpServletRequest request);
 
     /**
      * 교사의 나라 조회
      * @param request
      * @return Nation
      */
-    public Nation getNation(HttpServletRequest request);
+    Nation getNation(HttpServletRequest request);
+
+//    Nation updateNation(NationReqDto reqDto, HttpServletRequest request);
 
     /**
      * 투자 종목 등록

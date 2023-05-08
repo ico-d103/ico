@@ -5,6 +5,8 @@ import com.ico.core.entity.Student;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 학생 회원가입시 입력받을 것
  *
@@ -14,9 +16,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StudentSignUpRequestDto {
 
+    @NotBlank(message = "100")
     private String identity;
+    @NotBlank(message = "104")
     private String password;
+    @NotBlank(message = "104")
     private String checkedPassword;
+    @NotBlank(message = "112")
     private String name;
     private Role role;
 

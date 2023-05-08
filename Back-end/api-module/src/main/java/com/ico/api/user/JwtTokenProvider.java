@@ -248,25 +248,15 @@ public class JwtTokenProvider {
     /**
      * 학생의 반 입장, 교사의 반 생성시 마다 호출되어야 하는 TokenUpdate 메서드
      *
-     * @param identity
+     * @param request
+     * return token
      */
-    public void updateTokenCookie(String identity) {
-        String oldToken = null;
-
-        // 현재 쿠키에서 기존 토큰을 찾습니다.
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("Authentication")) {
-                    oldToken = cookie.getValue();
-                    break;
-                }
-            }
-        }
+    public String updateTokenCookie(HttpServletRequest request) {
+        String oldToken = parseJwt(request);
 
         // 기존 토큰이 있다면 새로운 토큰으로 교체합니다.
         if (oldToken != null) {
+            String identity = getIdentity(oldToken);
             // 기존 토큰의 유효성을 검사합니다.
             if (isValidate(oldToken)) {
                 // 토큰의 클레임 정보를 가져옵니다.
@@ -283,8 +273,11 @@ public class JwtTokenProvider {
                     cookie.setPath("/");
                     cookie.setMaxAge((int) tokenValidTime / 1000);
                     response.addCookie(cookie);
+                    log.info("새로바뀐 토큰!!" + newToken);
+                    return newToken;
                 }
             }
         }
+        return  "예전 토큰!!" + oldToken;
     }
 }

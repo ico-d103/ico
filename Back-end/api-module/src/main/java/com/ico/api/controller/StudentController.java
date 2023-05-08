@@ -38,7 +38,7 @@ public class StudentController {
      * @throws Exception
      */
     @PostMapping
-    public ResponseEntity<?> studentSignUp(@RequestBody StudentSignUpRequestDto requestDto) throws Exception {
+    public ResponseEntity<HttpStatus> studentSignUp(@Valid @RequestBody StudentSignUpRequestDto requestDto) {
         studentService.signUp(requestDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -51,7 +51,7 @@ public class StudentController {
      * @return status
      */
     @PostMapping("/teacher/{studentId}/account")
-    public ResponseEntity<HttpStatus> teacherUpdateAccount(@PathVariable Long studentId, @Valid @RequestBody AccountDto accountDto){
+    public ResponseEntity<HttpStatus> teacherUpdateAccount(@PathVariable Long studentId, @Valid @RequestBody AccountDto accountDto) {
         studentService.teacherUpdateAccount(studentId, accountDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
