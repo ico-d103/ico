@@ -2,7 +2,9 @@ import { defaultInstance } from "@/api/instance"
 import { postDuplicationCheckType } from "@/types/common/apiReturnTypes"
 
 type bodyType = {
-	identity: string
+	body: {
+		identity: string
+	}
 }
 
 type responseType = {
@@ -10,7 +12,7 @@ type responseType = {
 	data: postDuplicationCheckType
 }
 
-export const postDuplicationCheck = async (body: bodyType) => {
+export const postDuplicationCheck = async ({ body }: bodyType) => {
 	try {
 		const response: responseType = await defaultInstance.post("/duplicated-id", body)
 
