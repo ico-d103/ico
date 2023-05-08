@@ -35,6 +35,8 @@ public enum ErrorCode{
 
     FAIL_SSE_SEND(HttpStatus.BAD_REQUEST, "21", "SSE 데이터 전송에 실패하였습니다."),
 
+    NOT_FOUND_TOKEN(HttpStatus.BAD_REQUEST, "22", "토큰이 없습니다."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, "104", "비밀번호 입력 칸이 비었습니다."),
