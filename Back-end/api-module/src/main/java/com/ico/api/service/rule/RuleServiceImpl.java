@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,8 @@ public class RuleServiceImpl implements RuleService {
 
     private final NationRepository nationRepository;
 
+    private static final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+
     @Override
     public List<RuleResDto> findAllRule() {
         // TODO: 로그인한 유저 정보
@@ -37,7 +40,8 @@ public class RuleServiceImpl implements RuleService {
         List<Rule> ruleList = ruleRepository.findAllByNationId(nationId);
         List<RuleResDto> resList = new ArrayList<>();
         for (Rule rule : ruleList) {
-            resList.add(new RuleResDto().of(rule));
+            String dateTime = rule.getDateTime().format(dayFormatter);
+            resList.add(new RuleResDto().of(rule, dateTime));
         }
         return resList;
     }
