@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { css } from "@emotion/react"
 import Form from "../../common/Form/Form"
 
@@ -9,9 +9,29 @@ import useCompHandler from "@/hooks/useCompHandler"
 import AnimatedRenderer from "@/components/common/AnimatedRenderer/AnimatedRenderer"
 import FormCreator from "../../common/Form/FormCreator"
 import GoveRuleClassCreate from "./GovRuleClassCreate"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { getGovRuleAPI } from "@/api/teacher/gov/getGovRuleAPI"
+import { getGovRuleType } from "@/types/teacher/apiReturnTypes"
+import { dateFormatter } from "@/util/dateFormatter"
 
 function GovRuleClass() {
 	const [openComp, closeComp, compState] = useCompHandler()
+
+	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getGovRuleType[]>(
+		["teacher", "govRule"],
+		getGovRuleAPI,
+		// { staleTime: 200000 },
+	)
+
+
+
+	const renderRule =
+		data &&
+		data.map((el, idx) => {
+			const date = dateFormatter(el.dateTime)
+
+			return <GovRuleClassDetail showIdx={idx} actualIdx={el.id} title={el.title} content={el.detail} date={date} />
+		})
 
 	const rule = `
     학급 규칙 내용입니다. 입섬 로렘...
@@ -38,8 +58,6 @@ function GovRuleClass() {
     학급 규칙 내용입니다. 입섬 로렘...
     학급 규칙 내용입니다. 입섬 로렘...
     `
-
-	
 
 	return (
 		<div css={contentWrapperCSS}>
@@ -68,25 +86,18 @@ function GovRuleClass() {
 				contentPlaceHolder={"내용을 입력해 주세요!"}
 			/> */}
 
-			<FormCreator subComp={<GoveRuleClassCreate />} idx={0} compState={compState} closeComp={closeComp} />
+			<FormCreator
+				subComp={<GoveRuleClassCreate />}
+				showIdx={dateFormatter.length}
+				compState={compState}
+				closeComp={closeComp}
+			/>
 			{/* <FormCreator subComp={<CreateRule />} idx={0} compState={compState} /> */}
 
-			<GovRuleClassDetail idx={0} title={"학급 규칙 제목 1"} content={rule} date={"2023년 04월 26일"} />
-			<GovRuleClassDetail
-				idx={1}
-				title={"학급 규칙 제목 2"}
-				content={"학급 규칙 내용입니다. 입섬 로렘..."}
-				date={"2023년 04월 26일"}
-			/>
+			{renderRule}
 		</div>
 	)
 }
-
-
-
-
-
-
 
 const contentWrapperCSS = css`
 	flex: 1;
