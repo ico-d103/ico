@@ -189,8 +189,8 @@ public class JwtTokenProvider {
      * @param token
      * @return nation
      */
-    public Object getNation(String token) {
-        return getClaims(token).get("nation");
+    public Long getNation(String token) {
+        return (Long) getClaims(token).get("nation");
     }
 
     /**
