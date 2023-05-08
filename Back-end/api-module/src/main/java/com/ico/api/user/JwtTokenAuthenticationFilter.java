@@ -1,5 +1,7 @@
 package com.ico.api.user;
 
+import com.ico.core.exception.CustomException;
+import com.ico.core.exception.ErrorCode;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,12 +38,12 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         try {
             // HttpServletRequest 객체에서 JWT 토큰을 추출
             token = jwtTokenProvider.parseJwt(request);
-            log.info("request: {}", request.getHeader("Authentication"));
-            log.info("=============== token: {}", token);
+            log.info("request: {}", request.getHeader("Authorization"));
+            log.info("token: {}", token);
 
             // 추출된 JWT 토큰이 null이 아닌 경우, 해당 토큰에서 identity 값을 가져오기
             if (token != null) {
-                String identity = (String) jwtTokenProvider.getIdentity(token);
+                String identity = jwtTokenProvider.getIdentity(token);
                 log.info("identity: {}", identity);
                 CustomUserDetails userDetails = customUserDetailService.loadUserByUsername(identity);
                 log.info("userDetail.getAuthorities: {}", userDetails.getAuthorities());
@@ -52,8 +54,11 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                 context.setAuthentication(authentication);
                 SecurityContextHolder.setContext(context);
             }
+            else {
+                throw new CustomException(ErrorCode.NOT_FOUND_TOKEN);
+            }
         } catch (ExpiredJwtException e) {
-            e.printStackTrace();
+            throw new CustomException(ErrorCode.NOT_FOUND_TOKEN);
         }
         // HTTP 요청을 필터링한 후 다음 필터로 체인을 전달
         filterChain.doFilter(request, response);
