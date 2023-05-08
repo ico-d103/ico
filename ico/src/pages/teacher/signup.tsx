@@ -148,7 +148,7 @@ function signup() {
 		dispatchValid({ type: "VALID_NAME", value: true })
 	}
 
-	const checkValidIDHandler = async (forSumbit = false, checkVerify = false) => {
+	const checkValidIDHandler = (forSumbit = false, checkVerify = false) => {
 		// 입력값이 없을 때
 		if (inputState.id === "") {
 			// 제출버튼을 눌렀다면
@@ -181,18 +181,18 @@ function signup() {
 
 		if (checkVerify) {
 			// 아이디 중복 검사 요청
-			const data = await postDuplicationCheckAPI({ body: { identity: inputState.id } })
-
-			if (data?.isDuplicated === false) {
-				// 사용 가능하면
-				dispatchValidMessage({ type: "VALID_ID", value: "사용 가능한 ID입니다." })
-				dispatchValid({ type: "VALID_ID", value: true })
-			} else {
-				// 불가능하면
-				dispatchValidMessage({ type: "VALID_ID", value: "이미 중복된 아이디, 혹은 사용 불가능한 아이디입니다." })
-				dispatchValid({ type: "VALID_ID", value: false })
-				return
-			}
+			postDuplicationCheckAPI({ body: { identity: inputState.id } }).then((res) => {
+				if (res?.isDuplicated === false) {
+					// 사용 가능하면
+					dispatchValidMessage({ type: "VALID_ID", value: "사용 가능한 ID입니다." })
+					dispatchValid({ type: "VALID_ID", value: true })
+				} else {
+					// 불가능하면
+					dispatchValidMessage({ type: "VALID_ID", value: "이미 중복된 아이디, 혹은 사용 불가능한 아이디입니다." })
+					dispatchValid({ type: "VALID_ID", value: false })
+					return
+				}
+			})
 		}
 	}
 
@@ -289,7 +289,7 @@ function signup() {
 		// 본인 인증 SMS
 	}
 
-	const signUpHandler = async () => {
+	const signUpHandler = () => {
 		checkValidNameHandler(true)
 		checkValidIDHandler(true)
 		checkValidPWHandler(true)
@@ -301,7 +301,7 @@ function signup() {
 		// 현재는 phone, file 임시로 제외
 		if (validState.name && validState.id && validState.password && validState.password2) {
 			// 회원가입 요청
-			const response = await postTeacherAPI({
+			postTeacherAPI({
 				body: {
 					name: inputState.name,
 					identity: inputState.id,
@@ -309,11 +309,13 @@ function signup() {
 					checkedPassword: inputState.password,
 				},
 			})
-
-			// 회원가입 성공하면
-			if (response) {
-				router.push("/teacher/login")
-			}
+				.then(() => {
+					router.push("/teacher/login")
+				})
+				.catch((error) => {
+					// 회원가입 관련해서 어떤 error 코드가 존재하는지 몰라서 일단
+					console.log(error)
+				})
 		}
 	}
 
