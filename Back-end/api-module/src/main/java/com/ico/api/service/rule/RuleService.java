@@ -1,5 +1,6 @@
 package com.ico.api.service.rule;
 
+import com.ico.api.dto.rule.RuleReqDto;
 import com.ico.api.dto.rule.RuleResDto;
 
 import java.util.List;
@@ -17,4 +18,19 @@ public interface RuleService {
      * @return
      */
     List<RuleResDto> findAllRule();
+
+    /**
+     * 학급규칙 추가
+     *
+     * @param dto
+     */
+    void addRule(RuleReqDto dto);
+
+    /**
+     * 학급규칙 수정
+     *
+     * @param dto
+     * @param ruleId
+     */
+    void updateRule(RuleReqDto dto, Long ruleId);
 }

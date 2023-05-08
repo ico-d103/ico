@@ -2,6 +2,7 @@ package com.ico.api.user;
 
 import com.ico.api.dto.user.LoginDto;
 import com.ico.core.code.Role;
+import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
@@ -190,7 +191,13 @@ public class JwtTokenProvider {
      * @return nation
      */
     public Long getNation(String token) {
-        return ((Number) getClaims(token).get("nation")).longValue();
+        Claims claims = getClaims(token);
+        Object nationObj = claims.get("nation");
+        if (nationObj instanceof Number) {
+            return ((Number) nationObj).longValue();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -228,7 +235,7 @@ public class JwtTokenProvider {
         Cookie[] cookies = request.getCookies();
         if(cookies!=null){
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("Authentication")) {
+                if (cookie.getName().equals("Authorization")) {
                     headerAuth = cookie.getValue();
                     break;
                 }
@@ -241,32 +248,22 @@ public class JwtTokenProvider {
         }
 
         // 4. 쿠키에서 JWT를 추출할 수 없으면 HTTP 헤더에서 추출
-        headerAuth = request.getHeader("Authentication");
+        headerAuth = request.getHeader("Authorization");
         return headerAuth;
     }
 
     /**
      * 학생의 반 입장, 교사의 반 생성시 마다 호출되어야 하는 TokenUpdate 메서드
      *
-     * @param identity
+     * @param request
+     * return token
      */
-    public void updateTokenCookie(String identity) {
-        String oldToken = null;
-
-        // 현재 쿠키에서 기존 토큰을 찾습니다.
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("Authentication")) {
-                    oldToken = cookie.getValue();
-                    break;
-                }
-            }
-        }
+    public String updateTokenCookie(HttpServletRequest request) {
+        String oldToken = parseJwt(request);
 
         // 기존 토큰이 있다면 새로운 토큰으로 교체합니다.
         if (oldToken != null) {
+            String identity = getIdentity(oldToken);
             // 기존 토큰의 유효성을 검사합니다.
             if (isValidate(oldToken)) {
                 // 토큰의 클레임 정보를 가져옵니다.
@@ -279,12 +276,15 @@ public class JwtTokenProvider {
 
                     // 새로운 토큰으로 쿠키를 갱신합니다.
                     HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-                    Cookie cookie = new Cookie("Authentication", newToken);
+                    Cookie cookie = new Cookie("Authorization", newToken);
                     cookie.setPath("/");
                     cookie.setMaxAge((int) tokenValidTime / 1000);
                     response.addCookie(cookie);
+                    log.info("새로바뀐 토큰!!" + newToken);
+                    return newToken;
                 }
             }
         }
+        return  "예전 토큰!!" + oldToken;
     }
 }

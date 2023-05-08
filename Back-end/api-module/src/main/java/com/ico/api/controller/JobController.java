@@ -2,7 +2,7 @@ package com.ico.api.controller;
 
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
-import com.ico.core.dto.JobDto;
+import com.ico.core.dto.JobReqDto;
 import com.ico.api.service.job.JobService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +39,7 @@ public class JobController {
      * @return OK
      */
     @PutMapping("/teacher/{jobId}")
-    public ResponseEntity<HttpStatus> updateJob(@PathVariable Long jobId, @Valid @RequestBody JobDto dto) {
+    public ResponseEntity<HttpStatus> updateJob(@PathVariable Long jobId, @Valid @RequestBody JobReqDto dto) {
         jobService.updateJob(jobId, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
