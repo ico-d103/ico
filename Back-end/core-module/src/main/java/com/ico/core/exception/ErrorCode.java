@@ -35,6 +35,8 @@ public enum ErrorCode{
 
     COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "22", "해당하는 쿠폰이 없습니다."),
 
+    FAIL_AUTHORIZATION(HttpStatus.BAD_REQUEST, "23", "신청할 수 있는 권한이 없습니다."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     PASSWORD_WRONG(HttpStatus.BAD_REQUEST, "105", "비밀번호가 틀렸습니다."),
@@ -46,6 +48,8 @@ public enum ErrorCode{
     NOT_FOUND_NATION(HttpStatus.BAD_REQUEST, "202", "나라가 없습니다."),
 
     NOT_FOUND_IMMIGRATION(HttpStatus.NOT_FOUND, "203", "입국 심사를 기다리고 있는 나라가 없습니다."),
+
+    ALREADY_ASSIGNED_COUPON(HttpStatus.BAD_REQUEST, "300", "승인 대기 중인 쿠폰입니다."),
 
     ALREADY_ASSIGNED_JOB(HttpStatus.BAD_REQUEST, "409", "이미 배정된 직업입니다."),
 

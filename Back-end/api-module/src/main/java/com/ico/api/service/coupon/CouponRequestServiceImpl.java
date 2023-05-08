@@ -32,7 +32,7 @@ public class CouponRequestServiceImpl implements CouponRequestService{
     @Override
     public List<CouponRequestResDto> findAllCouponRequest() {
         // TODO: 로그인 통한 토큰 정보 받아고기
-        Long nationId = 99L;
+        Long nationId = 1L;
 
         List<CouponRequest> couponRequestList = couponRequestMongoRepository.findAllByNationId(nationId);
         List<CouponRequestResDto> dtoList = new ArrayList<>();
@@ -85,6 +85,11 @@ public class CouponRequestServiceImpl implements CouponRequestService{
     public void deleteCouponRequest(String couponRequestId) {
         CouponRequest couponRequest = couponRequestMongoRepository.findById(couponRequestId)
                 .orElseThrow(() -> new CustomException(ErrorCode.REQUEST_NOT_FOUND));
+        Coupon coupon = couponRepository.findById(couponRequest.getCouponId())
+                        .orElseThrow(() -> new CustomException(ErrorCode.COUPON_NOT_FOUND));
+
+        coupon.setAssigned(false);
+        couponRepository.save(coupon);
 
         couponRequestMongoRepository.delete(couponRequest);
     }
