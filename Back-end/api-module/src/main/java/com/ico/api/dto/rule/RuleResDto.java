@@ -20,11 +20,14 @@ public class RuleResDto {
 
     private String detail;
 
+    private String dateTime;
+
     @Builder
-    public RuleResDto(Long id, String title, String detail) {
+    public RuleResDto(Long id, String title, String detail, String dateTime) {
         this.id = id;
         this.title = title;
         this.detail = detail;
+        this.dateTime = dateTime;
     }
 
     /**
@@ -32,11 +35,12 @@ public class RuleResDto {
      * @param rule
      * @return
      */
-    public RuleResDto of(Rule rule) {
+    public RuleResDto of(Rule rule, String dateTime) {
         return RuleResDto.builder()
                 .id(rule.getId())
                 .title(rule.getTitle())
                 .detail(rule.getDetail())
+                .dateTime(dateTime)
                 .build();
     }
 }
