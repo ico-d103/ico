@@ -6,7 +6,8 @@ import Dropdown from "@/components/common/Dropdown/Dropdown"
 import useCompHandler from "@/hooks/useCompHandler"
 
 type FormCreatorProps = {
-	idx: number
+	showIdx: number
+	actualIdx?: number
 	subComp: any
 	frontComp?: any
 	compState?: boolean
@@ -21,14 +22,14 @@ type FormCreatorProps = {
 	initHeight?: string;
 }
 
-function FormCreator({ subComp, frontComp, idx, mainInit, subInit, closeComp, titlePlaceHolder, contentPlaceHolder, submitLabel, initHeight, isNoTitle = false, compState = true}: FormCreatorProps) {
+function FormCreator({ subComp, frontComp, showIdx, mainInit, subInit, closeComp, titlePlaceHolder, contentPlaceHolder, submitLabel, initHeight, isNoTitle = false, compState = true}: FormCreatorProps) {
 	if (compState || !closeComp) {
 		return (
 			<Form
 				mainInit={mainInit ? mainInit : { title: "", content: "" }}
 				subInit={subInit ? subInit : { 추가항목: "" }}
 				subInput={<SubmitRender subComp={subComp} submitLabel={submitLabel} isNoCancel={closeComp ? false : true} />}
-				idx={idx}
+				idx={showIdx}
 				titlePlaceHolder={titlePlaceHolder ? titlePlaceHolder : '제목을 입력해 주세요.'}
 				contentPlaceHolder={contentPlaceHolder ? contentPlaceHolder : '내용을 입력해 주세요.'}
 				closeComp={closeComp}
@@ -78,7 +79,9 @@ const SubmitRender = ({subComp, subInputChangeHandler, inputState, closeHandler,
 	const renderContent = subComp && React.cloneElement(subComp, {
 		subInputChangeHandler,
 		inputState,
-		buttons: Buttons.bind(null, submitLabel, closeHandler, isNoCancel)//<Buttons closeHandler={closeHandler} noCancel={noCancel} submit={subComp} />
+		closeHandler,
+		buttons: Buttons.bind(null, submitLabel, closeHandler, isNoCancel),//<Buttons closeHandler={closeHandler} noCancel={noCancel} submit={subComp} />
+	
 	})
 
 	return (

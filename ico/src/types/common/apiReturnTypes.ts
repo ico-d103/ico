@@ -1,3 +1,11 @@
+export type successReturnType = "OK"
+
+export type errorReturnType = {
+    code: string
+    message: string
+}
+
 export type postDuplicationCheckType = {
-	duplication: boolean
+    message: string
+    isDuplicated: boolean
 }

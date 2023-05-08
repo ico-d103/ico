@@ -38,6 +38,7 @@ const contentWrapperCSS = ({ initHeight, sectionState, compState, contentWrapper
 		max-height: ${compState ? `${contentWrapperRef.current && contentWrapperRef.current.clientHeight}px` : `${initHeight ? initHeight : '0px'}`};
 		overflow: ${compState ? (sectionState ? "visible" : "hidden") : "hidden"};
 		opacity: ${compState ? '100%' : "0%"};
+		border-radius: 10px;
 	`
 }
 
