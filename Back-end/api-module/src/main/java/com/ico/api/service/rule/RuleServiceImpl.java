@@ -77,7 +77,7 @@ public class RuleServiceImpl implements RuleService {
                 .orElseThrow(() -> new CustomException(ErrorCode.RULE_NOT_FOUND));
 
         // 학급 규칙 제목 중복 체크
-        if (ruleRepository.findByNationIdAndTitle(nationId, dto.getTitle()).isPresent()) {
+        if (ruleRepository.findByIdNotAndNationIdAndTitle(ruleId, nationId, dto.getTitle()).isPresent()) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_TITLE);
         }
 
