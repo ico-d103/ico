@@ -39,6 +39,8 @@ public enum ErrorCode{
 
     FAIL_AUTHORIZATION(HttpStatus.BAD_REQUEST, "23", "신청할 수 있는 권한이 없습니다."),
 
+    TAX_NOT_FOUND(HttpStatus.NOT_FOUND, "24", "해당하는 국세가 없습니다."),
+
     NOT_FOUND_TOKEN(HttpStatus.BAD_REQUEST, "25", "토큰이 없습니다."),
 
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),

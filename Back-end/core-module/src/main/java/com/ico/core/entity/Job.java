@@ -79,7 +79,7 @@ public class Job {
     public void updateJob(JobReqDto dto) {
         this.title = dto.getTitle();
         this.detail = dto.getDetail();
-        this.total = (byte) dto.getTotal();
+        this.total = dto.getTotal().byteValue();
         this.wage = dto.getWage();
         this.color = dto.getColor();
     }
