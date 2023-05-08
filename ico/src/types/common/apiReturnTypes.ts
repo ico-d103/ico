@@ -1,3 +1,4 @@
 export type postDuplicationCheckType = {
-	duplication: boolean
+	message: string
+	isDuplicated: boolean
 }
