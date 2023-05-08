@@ -64,7 +64,7 @@ public class NationServiceImpl implements NationService {
                     t.setNation(nation);
                     teacherRepository.save(t);
                 });
-
+                // 반을 생성했을 때 교사의 토큰 업데이트 / 학생은 직접 확인 버튼을 눌러서 도메인/api/token 으로 직접 요청해야한다.
                 return jwtTokenProvider.updateTokenCookie(request);
             }
             else {
