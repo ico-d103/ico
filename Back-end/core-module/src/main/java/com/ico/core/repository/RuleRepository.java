@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 학급 규칙 관련 repository
@@ -15,4 +16,6 @@ import java.util.List;
 public interface RuleRepository extends JpaRepository<Rule, Long> {
 
     List<Rule> findAllByNationId(Long nationId);
+
+    Optional<Rule> findByNationIdAndTitle(Long nationId, String title);
 }
