@@ -15,11 +15,12 @@ import {
 	CLIP_ICON,
 	PHONE_ICON,
 } from "@/components/teacher/Signup/SignupIcons/SignupIcons"
-import { postDuplicationCheck } from "@/api/common/postDuplicationCheck"
+// import { postDuplicationCheck } from "@/api/common/postDuplicationCheck"
+
 import { useQuery } from "@tanstack/react-query"
 
 const inputReducer = (
-	state: { name: string; id: string; password: string; password2: string; phone: string },
+	state: { name: string; id: string; password: string; password2: string;},
 	action: { type: string; value: string },
 ) => {
 	switch (action.type) {
@@ -31,15 +32,13 @@ const inputReducer = (
 			return { ...state, password: action.value }
 		case "CHANGE_PW2":
 			return { ...state, password2: action.value }
-		case "CHANGE_PHONE":
-			return { ...state, phone: action.value }
 		default:
 			return state
 	}
 }
 
 const validReducer = (
-	state: { name: boolean; id: boolean; password: boolean; password2: boolean; phone: boolean; file: boolean },
+	state: { name: boolean; id: boolean; password: boolean; password2: boolean;},
 	action: { type: string; value: boolean },
 ) => {
 	switch (action.type) {
@@ -51,17 +50,13 @@ const validReducer = (
 			return { ...state, password: action.value }
 		case "VALID_PW2":
 			return { ...state, password2: action.value }
-		case "VALID_PHONE":
-			return { ...state, phone: action.value }
-		case "VALID_FILE":
-			return { ...state, file: action.value }
 		default:
 			return state
 	}
 }
 
 const validMessageReducer = (
-	state: { name: string; id: string; password: string; password2: string; phone: string; file: string },
+	state: { name: string; id: string; password: string; password2: string;},
 	action: { type: string; value: string },
 ) => {
 	switch (action.type) {
@@ -73,10 +68,6 @@ const validMessageReducer = (
 			return { ...state, password: action.value }
 		case "VALID_PW2":
 			return { ...state, password2: action.value }
-		case "VALID_PHONE":
-			return { ...state, phone: action.value }
-		case "VALID_FILE":
-			return { ...state, file: action.value }
 		default:
 			return state
 	}
@@ -88,27 +79,22 @@ function signup() {
 		id: false,
 		password: false,
 		password2: false,
-		phone: false,
-		file: false,
+
 	})
 	const [validMessageState, dispatchValidMessage] = useReducer(validMessageReducer, {
 		name: "",
 		id: "",
 		password: "",
 		password2: "",
-		phone: "",
-		file: "",
+
 	})
 	const [inputState, dispatchInput] = useReducer(inputReducer, {
 		name: "",
 		id: "",
 		password: "",
 		password2: "",
-		phone: "",
+
 	})
-	const fileInputRef = useRef<HTMLInputElement>(null)
-	const [file, setFile] = useState<File | null>(null)
-	const [fileUrl, setFileUrl] = useState<string>("")
 
 	useEffect(() => {
 		checkValidNameHandler()
@@ -122,9 +108,7 @@ function signup() {
 	useEffect(() => {
 		checkValidPW2Handler()
 	}, [inputState.password2])
-	useEffect(() => {
-		checkValidPhoneHandler()
-	}, [inputState.phone])
+
 
 	const checkValidNameHandler = (forSumbit = false) => {
 		// 입력값이 없을 때
@@ -181,21 +165,21 @@ function signup() {
 		if (checkVerify) {
 			// 아이디 중복 검사 요청
 			/* 수정 필요 */
-			const { data } = useQuery(["postDuplicationCheck"], () => postDuplicationCheck({ id: inputState.id }), {
-				enabled: false,
-			})
-			console.log(data)
+			// const { data } = useQuery(["postDuplicationCheck"], () => postDuplicationCheck({ id: inputState.id }), {
+			// 	enabled: false,
+			// })
+			// console.log(data)
 
-			if (data) {
-				// 사용 가능하면
-				dispatchValidMessage({ type: "VALID_ID", value: "사용 가능한 ID입니다." })
-				dispatchValid({ type: "VALID_ID", value: true })
-			} else {
-				// 불가능하면
-				dispatchValidMessage({ type: "VALID_ID", value: "이미 중복된 아이디, 혹은 사용 불가능한 아이디입니다." })
-				dispatchValid({ type: "VALID_ID", value: false })
-				return
-			}
+			// if (data) {
+			// 	// 사용 가능하면
+			// 	dispatchValidMessage({ type: "VALID_ID", value: "사용 가능한 ID입니다." })
+			// 	dispatchValid({ type: "VALID_ID", value: true })
+			// } else {
+			// 	// 불가능하면
+			// 	dispatchValidMessage({ type: "VALID_ID", value: "이미 중복된 아이디, 혹은 사용 불가능한 아이디입니다." })
+			// 	dispatchValid({ type: "VALID_ID", value: false })
+			// 	return
+			// }
 		}
 	}
 
@@ -241,64 +225,15 @@ function signup() {
 		dispatchValid({ type: "VALID_PW2", value: true })
 	}
 
-	const checkValidPhoneHandler = (forSumbit = false, checkVerify = false) => {
-		// 입력값이 없을 때
-		if (inputState.phone === "") {
-			// 제출버튼을 눌렀다면
-			if (forSumbit) {
-				dispatchValidMessage({ type: "VALID_PHONE", value: "휴대폰 번호를 입력해 주세요." })
-			}
-			dispatchValid({ type: "VALID_PHONE", value: false })
-			return
-		}
-		// 유효하지 않을 때
-		if (PHONE_NUMBER_ONLY.test(inputState.phone) === false) {
-			dispatchValidMessage({
-				type: "VALID_PHONE",
-				value: "유효하지 않은 휴대폰 번호입니다. 올바른 번호를 입력해 주세요.",
-			})
-			dispatchValid({ type: "VALID_PHONE", value: false })
-			return
-		}
 
-		dispatchValidMessage({ type: "VALID_PHONE", value: "" })
 
-		if (checkVerify) {
-			// 휴대폰 인증 확인
-
-			// 인증안했을 때 (if문 추가하기)
-			dispatchValidMessage({ type: "VALID_PHONE", value: "휴대폰 인증이 필요합니다." })
-			dispatchValid({ type: "VALID_PHONE", value: false })
-			return
-
-			// 인증 되었을때
-			// dispatchValidMessage({ type: "VALID_PHONE", value: "본인 인증되었습니다." })
-			// dispatchValid({ type: "VALID_PHONE", value: true })
-		}
-	}
-
-	const checkValidFileHandler = (forSumbit = false) => {
-		if (file === null) {
-			dispatchValidMessage({ type: "VALID_FILE", value: "교사 인증서를 첨부해 주세요" })
-			dispatchValid({ type: "VALID_FILE", value: false })
-			return
-		}
-
-		dispatchValidMessage({ type: "VALID_FILE", value: "" })
-		dispatchValid({ type: "VALID_PHONE", value: true })
-	}
-
-	const ceritfyHandler = () => {
-		// 본인 인증 SMS
-	}
 
 	const signUpHandler = async () => {
 		checkValidNameHandler(true)
 		checkValidIDHandler(true)
 		checkValidPWHandler(true)
 		checkValidPW2Handler(true)
-		checkValidFileHandler(true)
-		checkValidPhoneHandler(true, true)
+
 		// if (inputState.name === "" || inputState.id === "" || inputState.password === "") {
 		// 	setAlarm("빈 칸을 모두 입력해주세요.")
 		// 	return
@@ -335,20 +270,9 @@ function signup() {
 		// })
 	}
 
-	const inputFileOnChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files && e.target.files[0]) {
-			const file = e.target.files[0]
-			setFile(() => file)
-			setFileUrl(() => file.name)
-		}
-	}
 
-	const renderFileInputUrl = (
-		<div css={inputFileCSS({ fileUrl })}>
-			{CLIP_ICON}
-			{fileUrl ? fileUrl : "교사 인증서를 첨부해 주세요."}
-		</div>
-	)
+
+
 
 	const messageGenerator = ({ message, isValid }: { message: string; isValid: boolean }) => {
 		return <div css={messageCSS({ isValid })}>{message}</div>
@@ -364,7 +288,7 @@ function signup() {
 				<div css={inputTitleCSS}>이름</div>
 				<Input
 					leftContent={NAME_ICON}
-					theme={"default"}
+					theme={"mobileDefault"}
 					placeholder="이름 (한글만 입력해주세요)"
 					onChange={(e) => {
 						dispatchInput({ type: "CHANGE_NAME", value: e.target.value })
@@ -378,8 +302,8 @@ function signup() {
 					leftContent={ID_ICON}
 					rightContent={
 						<Button
-							theme={"RadialPositive"}
-							width={"120px"}
+							theme={"RadialPositiveMobile"}
+							width={"96px"}
 							height={"42px"}
 							text={"중복 확인"}
 							fontSize={"var(--teacher-h5)"}
@@ -388,10 +312,10 @@ function signup() {
 							}}
 						></Button>
 					}
-					theme={"default"}
+					theme={"mobileDefault"}
 					customCss={inputCSS}
 					type="text"
-					placeholder="영어와 숫자를 조합해 4자~10자 입력해주세요"
+					placeholder="영어, 숫자 4자~10자 입력해주세요"
 					onChange={(e) => {
 						// dispatchValid({ type: "VALID_ID", value: false })
 
@@ -403,7 +327,7 @@ function signup() {
 				<div css={inputTitleCSS}>비밀번호</div>
 				<Input
 					leftContent={PASSWORD_ICON}
-					theme={"default"}
+					theme={"mobileDefault"}
 					customCss={inputCSS}
 					type="password"
 					placeholder="영어와 숫자를 조합해 8자~16자 입력해주세요"
@@ -418,7 +342,7 @@ function signup() {
 				<div css={inputTitleCSS}>비밀번호 확인</div>
 				<Input
 					leftContent={PASSWORD2_ICON}
-					theme={"default"}
+					theme={"mobileDefault"}
 					customCss={inputCSS}
 					type="password"
 					placeholder="비밀번호를 다시 입력해 주세요"
@@ -428,52 +352,7 @@ function signup() {
 				/>
 				{messageGenerator({ message: validMessageState.password2, isValid: validState.password2 })}
 
-				<div css={inputTitleCSS}>교사 인증서</div>
-				<Input
-					leftContent={renderFileInputUrl}
-					rightContent={
-						<Button
-							theme={"RadialPositive"}
-							width={"120px"}
-							height={"42px"}
-							text={"파일 첨부"}
-							fontSize={"var(--teacher-h5)"}
-							onClick={() => {
-								fileInputRef?.current?.click()
-							}}
-						></Button>
-					}
-					onChange={inputFileOnChangeHandler}
-					theme={"default"}
-					customCss={inputCSS}
-					type="file"
-					placeholder="교사 인증서"
-					isFile={true}
-					ref={fileInputRef}
-				/>
-				{messageGenerator({ message: validMessageState.file, isValid: validState.file })}
-
-				<div css={inputTitleCSS}>휴대폰 번호</div>
-				<Input
-					leftContent={PHONE_ICON}
-					rightContent={
-						<Button
-							theme={"RadialPositive"}
-							width={"120px"}
-							height={"42px"}
-							text={"본인 인증"}
-							fontSize={"var(--teacher-h5)"}
-							onClick={() => {}}
-						></Button>
-					}
-					theme={"default"}
-					placeholder="휴대폰 번호를 입력해 주세요"
-					onChange={(e) => {
-						dispatchInput({ type: "CHANGE_PHONE", value: e.target.value })
-					}}
-					customCss={inputCSS}
-				/>
-				{messageGenerator({ message: validMessageState.phone, isValid: validState.phone })}
+				
 
 				<div css={footerWrapperCSS}>
 					<Button
@@ -502,7 +381,7 @@ const wrapperCSS = css`
 `
 
 const innerWrapperCSS = css`
-	width: 40vw;
+	width: 95vw;
 	/* height: 40vh; */
 	/* background-color: red; */
 	display: flex;
@@ -511,14 +390,14 @@ const innerWrapperCSS = css`
 `
 
 const inputTitleCSS = css`
-	color: rgba(0, 20, 50, 0.5);
+	color: #9b6f00;
 	margin-bottom: 10px;
 	font-weight: 700;
 `
 
 const imageWrapperCSS = css`
 	width: 100%;
-	height: 23.3vw;
+	height: 60vw;
 `
 
 const inputCSS = css`
@@ -543,7 +422,7 @@ const messageCSS = ({ isValid }: { isValid: boolean }) => {
 	return css`
 		font-size: var(--teacher-h6);
 		color: ${isValid ? "rgba(0, 20, 50, 1)" : "var(--teacher-warning-color)"};
-		margin: 8px 0px 28px 0px;
+		margin: 8px 0px 16px 0px;
 		height: 12px;
 	`
 }

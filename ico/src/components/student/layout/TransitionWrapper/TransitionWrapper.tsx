@@ -206,8 +206,7 @@ const imgWrapperCSS = css`
 
 const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 	return css`
-		/* width: 100vw;
-        height: 100vh; */
+
 		width: 100vw;
 		height: auto;
 
@@ -223,11 +222,11 @@ const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 		& .disable-will-change {
 			will-change: auto;
 		}
-		/* position: ${isTransitioning && "absolute"}; */
-		min-height: calc(100vh - 64px);
-		/* overflow: ${isTransitioning ? "hidden" : "scroll"}; */
+
+		/* min-height: calc(100vh - 64px); */
+		min-height: 100vh;
 		overflow: hidden;
-		/* z-index: 9999; */
+
 	`
 }
 
@@ -239,12 +238,14 @@ const contentInnerWrapperCSS = ({
 	beforeTransition: boolean
 }) => {
 	return css`
-		min-height: calc(100vh - 64px);
+		/* min-height: calc(100vh - 64px); */
+		min-height: 100vh;
 		/* background-color: var(--student-back-color); */
 		background: linear-gradient(to bottom, var(--student-main-color), #ffecc4);
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
 		width: ${isTransitioning && "100vw"};
-		height: ${isTransitioning && "calc(100vh - 64px)"};
+		/* height: ${isTransitioning && "calc(100vh - 64px)"}; */
+		height: ${isTransitioning && "100vh"};
 		overflow: ${isTransitioning && "hidden"};
 		visibility: ${beforeTransition && "hidden"};
 	`
