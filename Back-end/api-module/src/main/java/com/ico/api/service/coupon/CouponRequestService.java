@@ -24,4 +24,11 @@ public interface CouponRequestService {
      * @param couponRequestId
      */
     void assignCouponRequest(String couponRequestId);
+
+    /**
+     * 쿠폰 신청 반려
+     *
+     * @param couponRequestId
+     */
+    void deleteCouponRequest(String couponRequestId);
 }

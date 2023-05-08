@@ -55,13 +55,6 @@ public class CouponRequestServiceImpl implements CouponRequestService{
         Coupon coupon = couponRepository.findById(couponId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COUPON_NOT_FOUND));
 
-        // 학생 쿠폰 재고가 0인 경우
-        if (coupon.getCount() == 0) {
-            log.info("[assignCouponRequest] 학생 쿠폰 재고가 0인 경우");
-            throw new CustomException(ErrorCode.ZERO_COUPON);
-        }
-        coupon.setCount((byte) (coupon.getCount() - 1));
-
         // 쿠폰 신청을 하지 않은 경우
         if (!coupon.isAssigned()) {
             log.info("[assignCouponRequest] 학생 쿠폰 신청 여부가 false인 경우");
@@ -69,9 +62,30 @@ public class CouponRequestServiceImpl implements CouponRequestService{
         }
         coupon.setAssigned(false);
 
-        couponRepository.save(coupon);
+        // 학생 쿠폰 재고가 0인 경우
+        if (coupon.getCount() == 0) {
+            log.info("[assignCouponRequest] 학생 쿠폰 재고가 0인 경우");
+            throw new CustomException(ErrorCode.ZERO_COUPON);
+        }
+        // 학생 쿠폰 재고가 0이 되는 경우
+        else if (coupon.getCount() == 1) {
+            couponRepository.delete(coupon);
+        }
+        // 학생 쿠폰 재고가 1 이상인 경우
+        else {
+            coupon.setCount((byte) (coupon.getCount() - 1));
+            couponRepository.save(coupon);
+        }
 
         couponRequestMongoRepository.delete(couponRequest);
 
+    }
+
+    @Override
+    public void deleteCouponRequest(String couponRequestId) {
+        CouponRequest couponRequest = couponRequestMongoRepository.findById(couponRequestId)
+                .orElseThrow(() -> new CustomException(ErrorCode.REQUEST_NOT_FOUND));
+
+        couponRequestMongoRepository.delete(couponRequest);
     }
 }
