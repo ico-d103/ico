@@ -2,12 +2,18 @@ package com.ico.api.controller;
 
 import com.ico.api.dto.stock.StockStudentResDto;
 import com.ico.api.dto.stock.StockTeacherResDto;
+import com.ico.api.dto.stock.StockUploadReqDto;
 import com.ico.api.service.stock.StockService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  *
@@ -28,6 +34,21 @@ public class StockController {
         return ResponseEntity.ok(stockService.getIssueTeacher());
     }
 
+    /**
+     * 투자 이슈 등록
+     * @param dto 지수, 내일의 이슈
+     * @return Httpstatus
+     */
+    @PostMapping("/teacher/upload")
+    public ResponseEntity<HttpStatus> uploadIssue(@Valid @RequestBody StockUploadReqDto dto){
+        stockService.uploadIssue(dto);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 학생의 투자이슈 조회
+     * @return 투자 이슈
+     */
     @GetMapping("/student")
     public ResponseEntity<StockStudentResDto> stockIssueStudent(){
         return ResponseEntity.ok(stockService.getIssueStudent());

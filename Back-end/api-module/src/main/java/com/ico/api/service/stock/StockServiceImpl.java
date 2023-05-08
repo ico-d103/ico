@@ -4,6 +4,7 @@ import com.ico.api.dto.stock.MyStockResDto;
 import com.ico.api.dto.stock.StockColDto;
 import com.ico.api.dto.stock.StockStudentResDto;
 import com.ico.api.dto.stock.StockTeacherResDto;
+import com.ico.api.dto.stock.StockUploadReqDto;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Stock;
@@ -16,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +96,46 @@ public class StockServiceImpl implements StockService{
         res.setIssue(getIssues(nationId));
 
         return res;
+    }
+
+    /**
+     * 투자 이슈 등록
+     * @param dto 지수, 내일의 투자 이슈
+     */
+    @Override
+    public void uploadIssue(StockUploadReqDto dto) {
+        long nationId = 99;
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        if(nation.getStock() == null || nation.getStock().equals("")){
+            log.info("투자 종목이 생성되지 않았습니다.");
+            throw new CustomException(ErrorCode.NOT_FOUND_STOCK);
+        }
+
+        if(nation.getTrading_start().isAfter(LocalTime.now()) && nation.getTrading_end().isBefore(LocalTime.now())){
+            log.info("거래시간에는 투자 이슈 등록이 불가능합니다.");
+            throw new CustomException(ErrorCode.NOT_UPLOAD_TIME);
+        }
+
+        double value = dto.getPrice();
+        if(dto.getAmount() > 0){
+            value += dto.getAmount() / 100.0 * value;
+        }
+        else{
+            value -= Math.abs(dto.getAmount()) / 100.0 * value;
+        }
+
+        double res = Math.round(value * 100.0)/100.0;
+        // 투지 이슈 등록
+        Stock stock = Stock.builder()
+                .date(LocalDateTime.now())
+                .amount(res)
+                .content(dto.getContent())
+                .nation(nation)
+                .build();
+        stockRepository.save(stock);
+
     }
 
     /**

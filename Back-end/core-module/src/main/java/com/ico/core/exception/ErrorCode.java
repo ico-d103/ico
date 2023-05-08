@@ -85,6 +85,8 @@ public enum ErrorCode{
 
     NOT_FOUND_ISSUE(HttpStatus.NOT_FOUND, "705", "가장 최신 투자 이슈를 찾을 수 없습니다."),
 
+    NOT_UPLOAD_TIME(HttpStatus.NOT_FOUND, "712", "거래 시간에는 이슈 등록이 불가능합니다."),
+
     ;
 
     private final HttpStatus httpStatus;

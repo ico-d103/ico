@@ -30,14 +30,14 @@ public class Stock {
     @JoinColumn(name = "nation_id")
     private Nation nation;
 
-    private int amount;
+    private double amount;
 
     private String content;
 
     private LocalDateTime date;
 
     @Builder
-    public Stock(Long id, Nation nation, int amount, String content, LocalDateTime date) {
+    public Stock(Long id, Nation nation, double amount, String content, LocalDateTime date) {
         this.id = id;
         this.nation = nation;
         this.amount = amount;
