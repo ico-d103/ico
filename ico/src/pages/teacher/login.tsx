@@ -4,6 +4,7 @@ import Input from "@/components/common/Input/Input"
 import { ID_ICON, PASSWORD2_ICON } from "@/components/teacher/Signup/SignupIcons/SignupIcons"
 import Button from "@/components/common/Button/Button"
 import { useRouter } from "next/router"
+import { postLoginAPI } from "@/api/common/postLoginAPI"
 
 const initialState = { id: "", password: "" }
 
@@ -23,15 +24,31 @@ function login() {
 	const [inputState, dispatchInput] = useReducer(inputReducer, initialState)
 	const router = useRouter()
 
-	const loginHandler = async () => {
+	const loginHandler = () => {
 		if (inputState.id === "" || inputState.password === "") {
-			setAlarm("빈 칸을 모두 입력해주세요.") // 멘트 변경 가능
+			setAlarm("빈 칸을 모두 입력해주세요.")
 			return
 		}
 
 		setAlarm("")
 
 		// 로그인 요청
+		postLoginAPI({
+			body: { identity: inputState.id, password: inputState.password },
+		})
+			.then((res) => {
+				console.log(res)
+				// accesstoken을 쿠키에 넣어주기?
+				// 반이 있으면 반으로 이동
+				// 없으면 반 생성
+
+				// localstorage에 반 이름과 화폐 이름을 저장하는 분기
+				// 반이 있는 경우는 로그인 후에 반이 있으면
+				// 반이 없는 경우는 반 생성 페이지로 이동 후, 반을 생성할 때
+			})
+			.catch((error) => {
+				setAlarm(error.response.data.message)
+			})
 	}
 
 	const navToSignup = () => {
@@ -49,7 +66,7 @@ function login() {
 					<div css={headerLabelCSS}>환영합니다!</div>
 				</div>
 				<div css={loginFormCSS}>
-					<div>{alarm}</div>
+					<div css={alarmCSS}>{alarm}</div>
 					<Input
 						customCss={inputCSS}
 						leftContent={ID_ICON}
@@ -194,6 +211,11 @@ const signupCSS = css`
 	&:hover {
 		color: rgba(0, 20, 50, 0.7);
 	}
+`
+
+const alarmCSS = css`
+	font-size: var(--teacher-h5);
+	color: var(--teacher-warning-color);
 `
 
 export default login
