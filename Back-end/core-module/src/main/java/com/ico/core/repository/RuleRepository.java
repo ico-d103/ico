@@ -15,7 +15,30 @@ import java.util.Optional;
 @Repository
 public interface RuleRepository extends JpaRepository<Rule, Long> {
 
+    /**
+     * 학급 규칙 조회
+     *
+     * @param nationId
+     * @return
+     */
     List<Rule> findAllByNationId(Long nationId);
 
+    /**
+     * 학급 규칙 생성 시 제목 중복 체크
+     *
+     * @param nationId
+     * @param title
+     * @return
+     */
     Optional<Rule> findByNationIdAndTitle(Long nationId, String title);
+
+    /**
+     * 학급 규칙 수정 시 제목 중복 제크
+     *
+     * @param ruleId
+     * @param nationId
+     * @param title
+     * @return
+     */
+    Optional<Rule> findByIdNotAndNationIdAndTitle(Long ruleId, Long nationId, String title);
 }
