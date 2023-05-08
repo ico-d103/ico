@@ -2,7 +2,7 @@ package com.ico.api.service.job;
 
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
-import com.ico.core.dto.JobDto;
+import com.ico.core.dto.JobReqDto;
 import com.ico.core.entity.Job;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
@@ -30,7 +30,7 @@ public class JobServiceImpl implements JobService{
     private final NationRepository nationRepository;
 
     @Override
-    public void updateJob(Long jobId, JobDto dto) {
+    public void updateJob(Long jobId, JobReqDto dto) {
         // TODO: 토큰에서 nation id 값 받아오기 필요
         long nationId = 1;
 
