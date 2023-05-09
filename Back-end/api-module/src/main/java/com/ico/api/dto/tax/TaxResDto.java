@@ -1,6 +1,5 @@
 package com.ico.api.dto.tax;
 
-import com.ico.core.code.TaxType;
 import com.ico.core.entity.Tax;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,14 +18,17 @@ public class TaxResDto {
 
     private String title;
 
+    private String detail;
+
     private int amount;
 
-    private boolean type;
+    private int type;
 
     @Builder
-    public TaxResDto(Long id, String title, int amount, boolean type) {
+    public TaxResDto(Long id, String title, String detail, int amount, int type) {
         this.id = id;
         this.title = title;
+        this.detail = detail;
         this.amount = amount;
         this.type = type;
     }
@@ -41,8 +43,9 @@ public class TaxResDto {
         return TaxResDto.builder()
                 .id(tax.getId())
                 .title(tax.getTitle())
+                .detail(tax.getDetail())
                 .amount(tax.getAmount())
-                .type(tax.getType() == TaxType.PERCENT)
+                .type(tax.getType().ordinal())
                 .build();
     }
 }
