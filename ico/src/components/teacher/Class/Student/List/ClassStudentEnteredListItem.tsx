@@ -17,7 +17,9 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 			</div>
 			<div css={rightWrapperCSS}>
 				<div>{student.creditRating}등급</div>
-				<div>{student.amount} 미소</div>
+				<div>
+					{student.amount} {localStorage.getItem("currency")}
+				</div>
 			</div>
 		</div>
 	)

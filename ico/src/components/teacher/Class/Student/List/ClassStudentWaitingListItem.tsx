@@ -2,12 +2,26 @@ import React from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 import { getImmigrationListType } from "@/types/teacher/apiReturnTypes"
+import { putImmigrationAcceptAPI } from "@/api/teacher/class/putImmigrationAcceptAPI"
+import { deleteImmigrationDenyAPI } from "@/api/teacher/class/deleteImmigrationDenyAPI"
 
 type StudentWaitingListItemPropsType = {
 	student: getImmigrationListType
 }
 
 function StudentWaitingListItem({ student }: StudentWaitingListItemPropsType) {
+	const immigrationAcceptHandler = () => {
+		putImmigrationAcceptAPI({ id: 52 }).then((res) => {
+			// SPA처럼 해당 영역의 데이터만 변경
+		})
+	}
+
+	const immigrationDenyHandler = () => {
+		deleteImmigrationDenyAPI({ id: 52 }).then((res) => {
+			// SPA처럼 해당 영역의 데이터만 변경
+		})
+	}
+
 	return (
 		<div css={wrapperCSS(student.id)}>
 			<div css={leftWrapperCSS}>
@@ -21,7 +35,7 @@ function StudentWaitingListItem({ student }: StudentWaitingListItemPropsType) {
 					width={"80px"}
 					height={"30px"}
 					theme={"positive"}
-					onClick={() => {}}
+					onClick={immigrationAcceptHandler}
 				/>
 				<Button
 					text={"반려"}
@@ -29,7 +43,7 @@ function StudentWaitingListItem({ student }: StudentWaitingListItemPropsType) {
 					width={"80px"}
 					height={"30px"}
 					theme={"warning"}
-					onClick={() => {}}
+					onClick={immigrationDenyHandler}
 				/>
 			</div>
 		</div>
