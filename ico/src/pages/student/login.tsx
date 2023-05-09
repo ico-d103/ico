@@ -6,6 +6,7 @@ import { ID_ICON, PASSWORD2_ICON } from "@/components/teacher/Signup/SignupIcons
 import Button from "@/components/common/Button/Button"
 import { useRouter } from "next/router"
 import useNavigate from "@/hooks/useNavigate"
+import { setCookie } from "@/api/cookie"
 import { postLoginAPI } from "@/api/common/postLoginAPI"
 
 const initialState = { id: "", password: "" }
@@ -40,7 +41,7 @@ function login() {
 			body: { identity: inputState.id, password: inputState.password },
 		})
 			.then((res) => {
-				console.log(res)
+				setCookie("Authorization", res)
 				router.push("/student/home")
 			})
 
