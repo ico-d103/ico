@@ -39,13 +39,14 @@ public class CustomUserDetailService implements UserDetailsService {
     public CustomUserDetails loadUserByUsername(String identity) throws UsernameNotFoundException {
         Optional<Teacher> teacher = teacherRepository.findByIdentity(identity);
         Optional<Student> student = studentRepository.findByIdentity(identity);
-        log.info("LoadUserByUserName" + teacher + "----" + student);
+        log.info("LoadUserByUserName " + teacher + " ---- " + student);
 
         if (teacher.isPresent()) {
             return new CustomUserDetails(teacher.get());
         } else if (student.isPresent()) {
             return new CustomUserDetails(student.get());
         } else {
+            log.info("[loadUserByUsername] 교사, 학생 둘 다 없는 경우");
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
     }

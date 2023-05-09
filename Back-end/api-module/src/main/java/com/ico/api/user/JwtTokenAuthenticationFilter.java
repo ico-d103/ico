@@ -53,9 +53,10 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContext context = SecurityContextHolder.getContext();
                 context.setAuthentication(authentication);
                 SecurityContextHolder.setContext(context);
-
+                log.info("SecurityContextHolder 저장 완료");
             }
         } catch (ExpiredJwtException e){
+            log.info("[doFilterInternal]에서 발생 : {}", e.getMessage());
             e.printStackTrace();
         }
         // HTTP 요청을 필터링한 후 다음 필터로 체인을 전달
