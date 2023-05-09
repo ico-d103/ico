@@ -8,9 +8,9 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * @author 변윤경
- *
  * 장기, 단기 이자율 res dto
+ *
+ * @author 변윤경
  */
 @Setter
 @Getter

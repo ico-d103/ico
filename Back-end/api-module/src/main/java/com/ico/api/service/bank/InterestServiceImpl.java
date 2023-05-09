@@ -173,7 +173,6 @@ public class InterestServiceImpl implements InterestService {
         for (byte i = 1; i <= 10; i++) {
             if (!creditRatingSet.contains(i)) {
                 allCreditRatingExist = false;
-                log.info("false : " + i);
                 break;
             }
         }
