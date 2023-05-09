@@ -1,4 +1,5 @@
 import axios from "axios"
+import { getCookie } from "./cookie"
 
 /**
  * 인증이 필요 없는 기본 요청
@@ -11,25 +12,25 @@ export const defaultInstance = axios.create({
 /**
  * 인증이 필요한 요청
  */
-export const authInstance = axios.create({
+export const tokenInstance = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 })
 
 /* 인터셉터 처리 */
-authInstance.interceptors.request.use(
+tokenInstance.interceptors.request.use(
 	(config) => {
 		// 1. 쿠키 값에서 accesstoken 가져오기
-		const accessToken = ""
+		const accessToken = getCookie("Authorization")
 
 		// 2. accesstoken 있다면 쿠키 값 포함한 채로 http 요청
-		if (accessToken) config.withCredentials = true
+		if (accessToken) config.headers["Authorization"] = `${accessToken}`
 
 		return config
 	},
 	(error) => Promise.reject(error),
 )
 
-authInstance.interceptors.response.use(
+tokenInstance.interceptors.response.use(
 	(response) => response,
 	async (error) => {
 		// accesstoken 만료 시
@@ -42,7 +43,7 @@ authInstance.interceptors.response.use(
 				// 2-1. 자동으로 쿠키의 token 갱신
 
 				// 2-2. 원래 하려던 http 요청 수행
-				const originalResponse = await authInstance.request(error.config)
+				const originalResponse = await tokenInstance.request(error.config)
 				return originalResponse
 			}
 			// 3. refreshtoken도 만료됐다면
