@@ -40,12 +40,13 @@ function login() {
 		})
 			.then((res) => {
 				if (res) {
-					setCookie("accessToken", res)
+					setCookie("Authorization", res)
 
 					// 교사가 생성한 나라 조회
 					getNationAPI()
 						// 반이 있으면 localStorage에 나라 이름, 화폐 이름 저장 후 반 페이지로 이동
 						.then((res) => {
+							console.log("#####", res)
 							// localStorage.setItem("나라이름", "나라이름")
 							// localStorage.setItem("화폐이름", "화폐이름")
 							// router.push("/teacher/class/students")
@@ -61,6 +62,7 @@ function login() {
 				}
 			})
 			.catch((error) => {
+				console.log(error)
 				setAlarm(error.response.data.message)
 			})
 	}

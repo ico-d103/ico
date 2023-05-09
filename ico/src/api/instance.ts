@@ -20,7 +20,7 @@ export const tokenInstance = axios.create({
 tokenInstance.interceptors.request.use(
 	(config) => {
 		// 1. 쿠키 값에서 accesstoken 가져오기
-		const accessToken = getCookie("accessToken")
+		const accessToken = getCookie("Authorization")
 
 		// 2. accesstoken 있다면 쿠키 값 포함한 채로 http 요청
 		if (accessToken) config.headers["Authorization"] = `${accessToken}`
