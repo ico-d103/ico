@@ -29,23 +29,19 @@ import java.io.IOException;
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
-
     private final StudentRepository studentRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final CertificationRepository certificationRepository;
-
-    private S3Uploader s3Uploader;
+    private final S3Uploader s3Uploader;
 
     @Override
     @Transactional
-    public Long signUp(TeacherSignUpRequestDto requestDto, MultipartFile image) throws IOException {
+    public Long signUp(TeacherSignUpRequestDto requestDto, MultipartFile file) throws IOException {
         Teacher teacher = Teacher.builder()
                 .identity(requestDto.getIdentity())
                 .password(requestDto.getPassword())
                 .name(requestDto.getName())
-                .is_assigned(false)
+                .isAssigned(false)
                 .role(Role.TEACHER)
                 .build();
 
@@ -61,17 +57,17 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.encodeTeacherPassword(passwordEncoder);
         teacherRepository.save(teacher);
 
-        if (!image.isEmpty()) {
+        if (!file.isEmpty()) {
+            String image = s3Uploader.upload(file, "file");
             Certification certification = Certification.builder()
                     .teacher(teacher)
-                    .image(s3Uploader.upload(image))   // s3로 바꿔야함
+                    .image(image)
                     .build();
             certificationRepository.save(certification);
         }
         else {
             throw new CustomException(ErrorCode.NOT_FOUND_IMAGE);
         }
-
 
         return teacher.getId();
     }
@@ -104,5 +100,4 @@ public class TeacherServiceImpl implements TeacherService {
 //        }
 //        네이버로 다시 구현하기
     }
-
 }

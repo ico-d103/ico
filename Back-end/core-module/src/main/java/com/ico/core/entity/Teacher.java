@@ -37,7 +37,7 @@ public class Teacher {
     @Column(nullable = false)
     private String password;
     private String name;
-    private boolean is_assigned;
+    private boolean isAssigned;
     @Enumerated(EnumType.STRING)
     private Role role;
 

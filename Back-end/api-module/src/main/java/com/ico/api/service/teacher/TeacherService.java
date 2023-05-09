@@ -18,7 +18,7 @@ public interface TeacherService {
      * @param requestDto
      * @return
      */
-    Long signUp(TeacherSignUpRequestDto requestDto, MultipartFile image) throws IOException;
+    Long signUp(TeacherSignUpRequestDto requestDto, MultipartFile file) throws IOException;
 
     /**
      * 휴대폰 인증
