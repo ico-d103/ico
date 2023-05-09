@@ -5,10 +5,12 @@ function GovJobCreate({
 	subInputChangeHandler,
 	inputState,
 	buttons,
+	count
 }: {
 	subInputChangeHandler?: any
 	inputState?: any
 	buttons?: any
+	count: number
 }) {
 	const COLOR = [
 		"#FF165C",
@@ -39,6 +41,14 @@ function GovJobCreate({
 		}
 	}
 
+	const totalInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+		
+		if (Number(event.target.value) <= 100) {
+			subInputChangeHandler && subInputChangeHandler({ key: "total", event })
+		}
+	}
+
 	const colorPickHandler = (value: string) => {
 		subInputChangeHandler && subInputChangeHandler({ key: "backgroundColor", value })
 	}
@@ -64,7 +74,7 @@ function GovJobCreate({
 						}}
 						type={"number"}
 						min={1}
-						max={20}
+						max={10}
 						css={inputCSS}
 					/>
 					등급
@@ -86,6 +96,24 @@ function GovJobCreate({
 						미소
 					</div>
 				</div>
+
+
+				<div css={totalValueInputWrapperCSS}>
+					<div css={textCSS}>인원 {count} /</div>
+					<input
+						value={inputState?.sub.total}
+						onChange={(event) => {
+							totalInputHandler(event)
+						}}
+						type={"number"}
+						min={1}
+						max={100}
+						css={inputCSS}
+					/>
+					명
+				</div>
+
+
 				<div css={currentColorWrapperCSS}>
 					<div css={selectedColorElementCSS({ backgroundColor: inputState.sub.backgroundColor })}>
 						<div className={'color-picker'} css={colorPickerWrapperCSS}>{renderColorPicker}</div>
@@ -148,6 +176,28 @@ const wageValueInputWrapperCSS = css`
 	transition-property: background-color;
 	transition-duration: 0.3s;
 	margin-right: 8px;
+	white-space: nowrap;
+	&:hover {
+		background-color: rgba(255, 255, 255, 0.2);
+	}
+`
+
+
+const totalValueInputWrapperCSS = css`
+	height: 40px;
+	width: 120px;
+	color: var(--common-back-color-2);
+	display: flex;
+	box-sizing: border-box;
+	padding: 8px;
+	justify-content: space-between;
+	align-items: center;
+	position: relative;
+	/* background-color: rgba(255, 255, 255, 0.03); */
+	border-radius: 10px;
+	transition-property: background-color;
+	transition-duration: 0.3s;
+	margin-right: 24px;
 	white-space: nowrap;
 	&:hover {
 		background-color: rgba(255, 255, 255, 0.2);
