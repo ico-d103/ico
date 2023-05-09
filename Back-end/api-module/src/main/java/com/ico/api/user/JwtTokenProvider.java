@@ -109,7 +109,12 @@ public class JwtTokenProvider {
             claims.put("id", teacher.getId());
             claims.put("identity", member.getIdentity());
             claims.put("role", teacher.getRole());
-            claims.put("nation", teacher.getNation().getId());
+
+            if (teacher.getNation() != null) {
+                claims.put("nation", teacher.getNation().getId());
+            } else {
+                claims.put("nation", null);
+            }
 
         }
         else if (studentRepository.findByIdentity(member.getIdentity()).isPresent()) {
@@ -117,7 +122,12 @@ public class JwtTokenProvider {
             claims.put("id", student.getId());
             claims.put("identity", member.getIdentity());
             claims.put("role", student.getRole());
-            claims.put("nation", student.getNation().getId());
+
+            if (student.getNation() != null) {
+                claims.put("nation", student.getNation().getId());
+            } else {
+                claims.put("nation", null);
+            }
         }
         else {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
