@@ -3,69 +3,21 @@ import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWrapper"
 import HomeAssetDetail from "@/components/student/Home/AssetDetail/HomeAssetDetail"
 import { css } from "@emotion/react"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { getHomeTransactionHistoryAPI } from "@/api/student/home/getHomeTransactionHistoryAPI"
+import { getHomeTransactionHistoryType } from "@/types/student/apiReturnTypes"
 
-
-const tradeHistory: any = {
-	"05월 05일 · 오늘": [
-		{
-			title: "거래 내역 누락",
-			amount: 100,
-			balance: 25600,
-			source: "학생 상점",
-		},
-		{
-			title: "거래 내역 누락",
-			amount: 100,
-			balance: 25600,
-			source: "학생 상점",
-		},
-	],
-	"05월 04일 · 어제": [
-		{
-			title: "거래 내역 누락",
-			amount: 100,
-			balance: 25600,
-			source: "학생 상점",
-		},
-		{
-			title: "거래 내역 누락",
-			amount: 100,
-			balance: 25600,
-			source: "학생 상점",
-		},
-	],
-	"04월 25일": [
-		{
-			title: "거래 내역 누락",
-			amount: -25100,
-			balance: 25600,
-			source: "학생 상점",
-		},
-		{
-			title: "거래 내역 누락",
-			amount: 10000,
-			balance: 25600,
-			source: "학생 상점",
-		},
-	],
-	"04월 24일": [
-		{
-			title: "거래 내역 누락",
-			amount: 100,
-			balance: 25600,
-			source: "학생 상점",
-		},
-		{
-			title: "거래 내역 누락",
-			amount: 100,
-			balance: 25600,
-			source: "학생 상점",
-		},
-	],
-}
 
 
 function asset() {
+
+	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getHomeTransactionHistoryType>(
+		["student", "homeTransactionHistory"],
+		getHomeTransactionHistoryAPI,
+		// { staleTime: 200000 },
+	)
+
+
 	return (
 		<div>
 			<PageHeader title={"자산"} />
@@ -75,11 +27,11 @@ function asset() {
                         일반 계좌
                     </div>
                     <div css={lSizeFontCSS}>
-                        253,015 미소
+                        {data && data[Object.keys(data)[0]][0].balance} 단위연결!
                     </div>
                 </ContentWrapper>
 				<ContentWrapper>
-                    <HomeAssetDetail tradeHistory={tradeHistory} />
+                    {data && <HomeAssetDetail tradeHistory={data} />}
                 </ContentWrapper>
 			</div>
 		</div>

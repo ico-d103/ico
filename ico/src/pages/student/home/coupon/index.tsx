@@ -4,18 +4,28 @@ import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWr
 
 import { css } from "@emotion/react"
 import HomeCouponList from "@/components/student/Home/Coupon/HomeCouponList"
-
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { getHomeCouponAPI } from "@/api/student/home/getHomeCouponAPI"
+import { getHomeCouponType } from "@/types/student/apiReturnTypes"
 
 
 
 
 function coupon() {
+
+	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getHomeCouponType[]>(
+		["student", "homeCouponList"],
+		getHomeCouponAPI,
+		// { staleTime: 200000 },
+	)
+
+
 	return (
 		<div>
 			<PageHeader title={"쿠폰함"} />
 			<div css={couponWrapperCSS}>
 				<ContentWrapper>
-					<HomeCouponList/>
+					{data && <HomeCouponList couponList={data}/>}
 				</ContentWrapper>
 			</div>
 		</div>

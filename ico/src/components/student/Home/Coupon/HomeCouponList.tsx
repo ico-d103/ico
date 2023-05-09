@@ -1,11 +1,14 @@
 import React from "react"
 import HomeCouponListItem from "./HomeCouponListItem"
+import { getHomeCouponType } from "@/types/student/apiReturnTypes"
 
-const couponList = [
-	{ title: "급식충 진화", quantity: 3, hasSent: true },
-	{ title: "이빨 강화", quantity: 2, hasSent: false },
-]
-function HomeCouponList() {
+
+
+type HomeCouponListProps = {
+    couponList : getHomeCouponType[]
+}
+
+function HomeCouponList({couponList}: HomeCouponListProps) {
     const renderList = couponList.map((el) => {
         return <HomeCouponListItem {...el} />
     })
