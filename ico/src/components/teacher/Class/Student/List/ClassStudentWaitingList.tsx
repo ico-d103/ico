@@ -25,7 +25,7 @@ function StudentWaitingList({ waitingList }: StudentWaitingListPropsType) {
 			console.log("SSE 리스트 조회 테스트 : ", receivedListData)
 
 			// 리스트 자동 업데이트
-			// queryClient.invalidateQueries(["studentList"])
+			// return queryClient.invalidateQueries(["studentList"])
 		})
 	}
 
