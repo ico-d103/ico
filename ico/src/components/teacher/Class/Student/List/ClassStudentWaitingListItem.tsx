@@ -4,21 +4,30 @@ import Button from "@/components/common/Button/Button"
 import { getImmigrationListType } from "@/types/teacher/apiReturnTypes"
 import { putImmigrationAcceptAPI } from "@/api/teacher/class/putImmigrationAcceptAPI"
 import { deleteImmigrationDenyAPI } from "@/api/teacher/class/deleteImmigrationDenyAPI"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 type StudentWaitingListItemPropsType = {
 	student: getImmigrationListType
 }
 
 function StudentWaitingListItem({ student }: StudentWaitingListItemPropsType) {
+	const queryClient = useQueryClient()
+	const acceptMutation = useMutation((id: number) => putImmigrationAcceptAPI({ id: id }))
+	const denyMutation = useMutation((id: number) => deleteImmigrationDenyAPI({ id: id }))
+
 	const immigrationAcceptHandler = () => {
-		putImmigrationAcceptAPI({ id: 52 }).then((res) => {
-			// SPA처럼 해당 영역의 데이터만 변경
+		acceptMutation.mutate(52, {
+			onSuccess: () => {
+				return queryClient.invalidateQueries(["studentList", "studentImmigrationList"])
+			},
 		})
 	}
 
 	const immigrationDenyHandler = () => {
-		deleteImmigrationDenyAPI({ id: 52 }).then((res) => {
-			// SPA처럼 해당 영역의 데이터만 변경
+		denyMutation.mutate(52, {
+			onSuccess: () => {
+				return queryClient.invalidateQueries(["studentList", "studentImmigrationList"])
+			},
 		})
 	}
 
