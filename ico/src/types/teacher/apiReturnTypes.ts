@@ -38,3 +38,17 @@ export type getGovJobType = {
 	total: number
 	count: number
 }
+
+export type getStudentListType = {
+	name: string
+	number: number
+	amount: number
+	creditRating: number
+	job: null | string
+}
+
+export type getImmigrationListType = {
+	id: number
+	name: string
+	number: number
+}

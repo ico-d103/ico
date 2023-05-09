@@ -1,21 +1,17 @@
-import React from "react"
 import { css } from "@emotion/react"
 import StudentWaitingListItem from "./ClassStudentWaitingListItem"
+import { getImmigrationListType } from "@/types/teacher/apiReturnTypes"
 
-function StudentWaitingList() {
-	const mockWaitList = [
-		{ id: 0, number: 6, name: "김종혁" },
-		{ id: 1, number: 7, name: "김현영" },
-		{ id: 2, number: 8, name: "박선용" },
-		{ id: 3, number: 9, name: "박정은" },
-		{ id: 4, number: 10, name: "성광현" },
-	]
+type StudentWaitingListPropsType = {
+	waitingList: getImmigrationListType[]
+}
 
+function StudentWaitingList({ waitingList }: StudentWaitingListPropsType) {
 	return (
 		<div css={wrapperCSS}>
 			<h5>대기중인 학생을 승인 또는 반려해주세요.</h5>
-			{mockWaitList.map((mock) => (
-				<StudentWaitingListItem key={mock.id} mock={mock} />
+			{waitingList.map((student) => (
+				<StudentWaitingListItem key={student.id} student={student} />
 			))}
 		</div>
 	)
