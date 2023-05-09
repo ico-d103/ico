@@ -51,5 +51,7 @@ tokenInstance.interceptors.response.use(
 				// 3-1. 로그인 페이지로 이동
 			}
 		}
+
+		throw error
 	},
 )
