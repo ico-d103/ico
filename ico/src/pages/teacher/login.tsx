@@ -44,20 +44,19 @@ function login() {
 
 					// 교사가 생성한 나라 조회
 					getNationAPI()
-						// 반이 있으면 localStorage에 나라 이름, 화폐 이름 저장 후 반 페이지로 이동
 						.then((res) => {
-							console.log("#####", res)
-							// localStorage.setItem("나라이름", "나라이름")
-							// localStorage.setItem("화폐이름", "화폐이름")
-							// router.push("/teacher/class/students")
+							// 반이 있다면 반 페이지로 이동
+							localStorage.setItem("nation", res.title)
+							localStorage.setItem("currency", res.currency)
+							router.push("/teacher/class/students")
 						})
-						// 반이 없다면 반 생성 페이지로 이동 (나라 이름, 화폐 이름은 반 생성 후 localStorage에 저장)
 						.catch((error) => {
-							console.log("교사가 생성한 나라 조회 요청 error : ", error)
-							// 반이 없는 경우의 코드 넣기
-							// if (error.response.data.code === 0) {
-							// 	router.push("/teacher/create")
-							// }
+							console.log(error.response.data)
+							// 반이 없다면 반 생성 페이지로 이동
+							// (나라 이름, 화폐 이름은 반 생성 후 localStorage에 저장)
+							if (error.response.data.code === "202") {
+								router.push("/teacher/create")
+							}
 						})
 				}
 			})

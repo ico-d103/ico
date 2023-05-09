@@ -12,11 +12,11 @@ export type getNationType = {
 	room: number
 	title: string
 	code: string
-	currency: null
+	currency: string
 	treasury: number
-	stock: null
-	trading_start: string
-	trading_end: string
+	stock: string | null
+	trading_start: string | null
+	trading_end: string | null
 	credit_up: number
 	credit_down: number
 }
