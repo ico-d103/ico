@@ -39,26 +39,24 @@ function login() {
 			body: { identity: inputState.id, password: inputState.password },
 		})
 			.then((res) => {
-				if (res) {
-					setCookie("Authorization", res)
+				setCookie("Authorization", res)
 
-					// 교사가 생성한 나라 조회
-					getNationAPI()
-						.then((res) => {
-							// 반이 있다면 반 페이지로 이동
-							localStorage.setItem("nation", res.title)
-							localStorage.setItem("currency", res.currency)
-							router.push("/teacher/class/students")
-						})
-						.catch((error) => {
-							console.log(error.response.data)
-							// 반이 없다면 반 생성 페이지로 이동
-							// (나라 이름, 화폐 이름은 반 생성 후 localStorage에 저장)
-							if (error.response.data.code === "202") {
-								router.push("/teacher/create")
-							}
-						})
-				}
+				// 교사가 생성한 나라 조회
+				getNationAPI()
+					.then((res) => {
+						// 반이 있다면 반 페이지로 이동
+						localStorage.setItem("nation", res.title)
+						localStorage.setItem("currency", res.currency)
+						router.push("/teacher/class/students")
+					})
+					.catch((error) => {
+						console.log(error.response.data)
+						// 반이 없다면 반 생성 페이지로 이동
+						// (나라 이름, 화폐 이름은 반 생성 후 localStorage에 저장)
+						if (error.response.data.code === "202") {
+							router.push("/teacher/create")
+						}
+					})
 			})
 			.catch((error) => {
 				setAlarm(error.response.data.message)
@@ -68,6 +66,12 @@ function login() {
 	const navToSignup = () => {
 		router.push("/teacher/signup")
 	}
+
+	const handleKeyDown = (event: any) => {
+		if (event.key === 'Enter') {
+		  loginHandler()
+		}
+	  };
 
 	return (
 		<div css={wrapperCSS}>
@@ -98,6 +102,7 @@ function login() {
 						type="password"
 						placeholder="비밀번호를 입력해주세요."
 						onChange={(e) => dispatchInput({ type: "CHANGE_PW", value: e.target.value })}
+						onKeyDown={handleKeyDown}
 					/>
 
 					<div css={signupLabelCSS}>

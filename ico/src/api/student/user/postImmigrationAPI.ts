@@ -3,22 +3,17 @@ import { successReturnType, errorReturnType } from "@/types/common/apiReturnType
 
 type paramsType = {
 	body: {
-		"school" : string
-		"grade" : number
-		"room" : number
-		"title" : string
-		"currency" : string
+		code: string
 	}
 }
-
 type responseType = {
 	status: number
 	data: successReturnType | errorReturnType
 }
 
-export const postCreateNationAPI = async ({ body }: paramsType) => {
+export const postImmigrationAPI = async ({ body }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.post("/nation/teacher", body)
+		const response: responseType = await tokenInstance.post("/immigration/student", body)
 		return response.data
 	} catch (error) {
 		throw error
