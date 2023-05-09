@@ -11,3 +11,14 @@ insert into tax (id, amount, title, type, nation_id)
 values (1, 10, '자리세', 1, 1),
        (2, 10, '소득세', 1, 1),
        (3, 10, '전기세', 0, 1);
+
+INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (1, 1, 40, 15, 99);
+INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (2, 2, 35, 12, 99);
+INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (3, 3, 30, 10, 99);
+INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (4, 4, 26, 8, 99);
+INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (5, 5, 22, 6, 99);
+INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (6, 6, 19, 5, 99);
+INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (7, 7, 16, 4, 99);
+INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (8, 8, 13, 3, 99);
+INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (9, 9, 10, 0, 99);
+INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (10, 10, 10, 0, 99);

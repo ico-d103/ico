@@ -1,6 +1,6 @@
 package com.ico.api.service.stock;
 
-import com.ico.api.dto.stock.MyStockResDto;
+import com.ico.api.dto.stock.StockMyResDto;
 import com.ico.api.dto.stock.StockColDto;
 import com.ico.api.dto.stock.StockStudentResDto;
 import com.ico.api.dto.stock.StockTeacherResDto;
@@ -74,7 +74,7 @@ public class StockServiceImpl implements StockService{
         Optional<Invest> invest = investRepository.findByStudentId(studentId);
         log.info("매수 여부 확인");
 
-        MyStockResDto myStock = new MyStockResDto();
+        StockMyResDto myStock = new StockMyResDto();
         log.info("학생 매수 정보");
 
         if(invest.isPresent()){
