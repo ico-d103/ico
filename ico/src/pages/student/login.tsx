@@ -6,6 +6,7 @@ import { ID_ICON, PASSWORD2_ICON } from "@/components/teacher/Signup/SignupIcons
 import Button from "@/components/common/Button/Button"
 import { useRouter } from "next/router"
 import useNavigate from "@/hooks/useNavigate"
+import { postLoginAPI } from "@/api/common/postLoginAPI"
 
 const initialState = { id: "", password: "" }
 
@@ -23,7 +24,7 @@ const inputReducer = (state: { id: string; password: string }, action: { type: s
 function login() {
 	const [alarm, setAlarm] = useState<string>("")
 	const [inputState, dispatchInput] = useReducer(inputReducer, initialState)
-    const navigate = useNavigate()
+	const navigate = useNavigate()
 	const router = useRouter()
 
 	const loginHandler = async () => {
@@ -35,10 +36,21 @@ function login() {
 		setAlarm("")
 
 		// 로그인 요청
+		postLoginAPI({
+			body: { identity: inputState.id, password: inputState.password },
+		})
+			.then((res) => {
+				console.log(res)
+				router.push("/student/home")
+			})
+
+			.catch((error) => {
+				setAlarm(error.response.data.message)
+			})
 	}
 
 	const navToSignup = () => {
-        navigate('/student/signup', 'bottomToTop')
+		navigate("/student/signup", "bottomToTop")
 	}
 
 	return (
@@ -52,7 +64,7 @@ function login() {
 					<div css={headerLabelCSS}>환영합니다!</div>
 				</div>
 				<div css={loginFormCSS}>
-				<div>{alarm}</div>
+					<div>{alarm}</div>
 					<Input
 						customCss={inputCSS}
 						leftContent={ID_ICON}
@@ -71,10 +83,12 @@ function login() {
 						placeholder="비밀번호를 입력해주세요."
 						onChange={(e) => dispatchInput({ type: "CHANGE_PW", value: e.target.value })}
 					/>
-					
+
 					<div css={signupLabelCSS}>
 						<span>계정이 없으신가요?&nbsp;</span>
-						<span css={signupCSS} onClick={navToSignup}>회원가입</span>
+						<span css={signupCSS} onClick={navToSignup}>
+							회원가입
+						</span>
 					</div>
 
 					<Button
@@ -129,7 +143,6 @@ const loginSectionCSS = css`
 `
 
 const imageSectionCSS = css`
-	
 	/* height: 100vh; */
 	overflow: hidden;
 	box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
@@ -142,13 +155,11 @@ const imageSectionCSS = css`
 	@media (min-width: 1441px) {
 		flex: 1;
 	}
-
-	
 `
 
 const imageWrapperCSS = css`
 	width: 100%;
-			height: auto;
+	height: auto;
 	/* @media (max-width: 576px) {
 		width: 100%;
 		height: auto;
@@ -166,7 +177,6 @@ const loginFormCSS = css`
 	gap: 24px;
 	width: 100%;
 	/* background-color: blue; */
-	
 `
 
 const inputCSS = css`

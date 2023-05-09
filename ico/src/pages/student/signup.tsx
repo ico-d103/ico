@@ -1,6 +1,7 @@
 import { useReducer, useRef, useEffect } from "react"
 import { css } from "@emotion/react"
-import { postTeacher } from "@/api/teacher/user/postTeacherAPI"
+import { postTeacherAPI } from "@/api/teacher/user/postTeacherAPI"
+import { postStudentAPI } from "@/api/student/user/postStudentAPI"
 import { useState } from "react"
 import { KOREAN_ONLY, ENG_NUM_ONLY, PHONE_NUMBER_ONLY } from "@/util/regex"
 import { lengthCheck } from "@/util/lengthCheck"
@@ -15,9 +16,9 @@ import {
 	CLIP_ICON,
 	PHONE_ICON,
 } from "@/components/teacher/Signup/SignupIcons/SignupIcons"
-// import { postDuplicationCheck } from "@/api/common/postDuplicationCheck"
 
-import { useQuery } from "@tanstack/react-query"
+import { postDuplicationCheckAPI } from "@/api/common/postDuplicationCheckAPI"
+import { useRouter } from "next/router"
 
 const inputReducer = (
 	state: { name: string; id: string; password: string; password2: string },
@@ -93,6 +94,8 @@ function signup() {
 		password2: "",
 	})
 
+	const router = useRouter()
+
 	useEffect(() => {
 		checkValidNameHandler()
 	}, [inputState.name])
@@ -159,22 +162,18 @@ function signup() {
 		dispatchValid({ type: "VALID_ID", value: false })
 
 		if (checkVerify) {
-			// 아이디 중복 검사 요청
-			/* 수정 필요 */
-			// const { data } = useQuery(["postDuplicationCheck"], () => postDuplicationCheck({ id: inputState.id }), {
-			// 	enabled: false,
-			// })
-			// console.log(data)
-			// if (data) {
-			// 	// 사용 가능하면
-			// 	dispatchValidMessage({ type: "VALID_ID", value: "사용 가능한 ID입니다." })
-			// 	dispatchValid({ type: "VALID_ID", value: true })
-			// } else {
-			// 	// 불가능하면
-			// 	dispatchValidMessage({ type: "VALID_ID", value: "이미 중복된 아이디, 혹은 사용 불가능한 아이디입니다." })
-			// 	dispatchValid({ type: "VALID_ID", value: false })
-			// 	return
-			// }
+			postDuplicationCheckAPI({ body: { identity: inputState.id } }).then((res) => {
+				if (res?.isDuplicated === false) {
+					// 사용 가능하면
+					dispatchValidMessage({ type: "VALID_ID", value: "사용 가능한 ID입니다." })
+					dispatchValid({ type: "VALID_ID", value: true })
+				} else {
+					// 불가능하면
+					dispatchValidMessage({ type: "VALID_ID", value: "이미 중복된 아이디, 혹은 사용 불가능한 아이디입니다." })
+					dispatchValid({ type: "VALID_ID", value: false })
+					return
+				}
+			})
 		}
 	}
 
@@ -226,40 +225,22 @@ function signup() {
 		checkValidPWHandler(true)
 		checkValidPW2Handler(true)
 
-		// if (inputState.name === "" || inputState.id === "" || inputState.password === "") {
-		// 	setAlarm("빈 칸을 모두 입력해주세요.")
-		// 	return
-		// }
-
-		// if (KOREAN_ONLY.test(inputState.name) === false) {
-		// 	setAlarm("이름은 한글만 입력 가능합니다.")
-		// 	return
-		// }
-
-		// if (ENG_NUM_ONLY.test(inputState.password) === false || lengthCheck(inputState.password, 8, 16) === false) {
-		// 	setAlarm("비밀번호는 영어, 숫자 조합으로 최소 8자부터 최대 16자까지 입력 가능합니다.")
-		// 	return
-		// }
-
-		// if (!validState.id) {
-		// 	setAlarm("아이디 중복 확인을 해주세요.")
-		// 	return
-		// }
-
-		// if (!validState.password) {
-		// 	setAlarm("비밀번호 재확인을 해주세요.")
-		// 	return
-		// }
-
-		// setAlarm("")
-
-		// 회원가입 요청
-		// const response = await postTeacher({
-		// 	name: inputState.name,
-		// 	identity: inputState.id,
-		// 	password: inputState.password,
-		// 	checkedPassword: inputState.password,
-		// })
+		if (validState.name && validState.id && validState.password && validState.password2) {
+			postStudentAPI({
+				body: {
+					name: inputState.name,
+					identity: inputState.id,
+					password: inputState.password,
+					checkedPassword: inputState.password,
+				},
+			})
+				.then(() => {
+					router.push("/student/login")
+				})
+				.catch((error) => {
+					console.log(error)
+				})
+		}
 	}
 
 	const messageGenerator = ({ message, isValid }: { message: string; isValid: boolean }) => {
