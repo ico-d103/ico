@@ -18,18 +18,31 @@ public class TreasuryHistoryTeacherResDto {
 
     private String title;
 
-    private int amount;
+    private String source;
+
+    private String amount;
 
     @Builder
-    public TreasuryHistoryTeacherResDto(String date, String title, int amount) {
+    public TreasuryHistoryTeacherResDto(String date, String title, String source, String amount) {
         this.date = date;
         this.title = title;
+        this.source = source;
         this.amount = amount;
     }
 
-    public TreasuryHistoryTeacherResDto of(TreasuryHistory treasuryHistory, String date) {
+    /**
+     * 국고 사용 내역 교사용 dto 반환
+     *
+     * @param treasuryHistory
+     * @param date
+     * @return
+     */
+    public TreasuryHistoryTeacherResDto of(TreasuryHistory treasuryHistory, String date, String amount) {
         return TreasuryHistoryTeacherResDto.builder()
                 .date(date)
+                .title(treasuryHistory.getTitle())
+                .source(treasuryHistory.getSource())
+                .amount(amount)
                 .build();
     }
 }

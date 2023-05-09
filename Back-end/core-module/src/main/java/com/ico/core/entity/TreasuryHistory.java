@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.Column;
 import java.time.LocalDateTime;
@@ -29,16 +30,20 @@ public class TreasuryHistory {
 
     private String title;
 
+    private String source;
+
     private int amount;
 
+    @Field
     @CreatedDate
     private LocalDateTime date;
 
     @Builder
-    public TreasuryHistory(String id, Long nationId, String title, int amount, LocalDateTime date) {
+    public TreasuryHistory(String id, Long nationId, String title, String source, int amount, LocalDateTime date) {
         this.id = id;
         this.nationId = nationId;
         this.title = title;
+        this.source = source;
         this.amount = amount;
         this.date = date;
     }

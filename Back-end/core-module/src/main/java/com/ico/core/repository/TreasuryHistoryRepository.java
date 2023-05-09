@@ -20,8 +20,15 @@ public interface TreasuryHistoryRepository extends MongoRepository<TreasuryHisto
      * @param nationId
      * @return
      */
-    List<TreasuryHistory> findAllByNationId(Long nationId);
+    List<TreasuryHistory> findAllByNationIdOrderByIdDesc(Long nationId);
 
+    /**
+     * 교사용 국고 사용 내역 조회에서 사용
+     *
+     * @param nationId
+     * @param pageable
+     * @return
+     */
     Page<TreasuryHistory> findAllByNationId(Long nationId, Pageable pageable);
 
 }

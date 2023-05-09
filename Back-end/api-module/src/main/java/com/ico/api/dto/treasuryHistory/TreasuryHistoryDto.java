@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 
 /**
  * 국고 사용 내역 입력 req dto
- * 국고 사용 내역 조회 contents column dto
  *
  * @author 서재건
  */
@@ -20,12 +19,16 @@ public class TreasuryHistoryDto {
     @NotBlank(message = "501")
     private String title;
 
+    @NotBlank(message = "508")
+    private String source;
+
     @NotNull(message = "502")
     private Integer amount;
 
     @Builder
-    public TreasuryHistoryDto(String title, Integer amount) {
+    public TreasuryHistoryDto(String title, String source, Integer amount) {
         this.title = title;
+        this.source = source;
         this.amount = amount;
     }
 }
