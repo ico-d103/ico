@@ -1,4 +1,4 @@
-import { defaultInstance } from "@/api/instance"
+import { tokenInstance } from "@/api/instance"
 import { successReturnType, errorReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
@@ -18,9 +18,8 @@ type responseType = {
 
 export const postCreateNationAPI = async ({ body }: paramsType) => {
 	try {
-		const response: responseType = await defaultInstance.post("/nation/teacher", body)
-
-		if (response.status === 200) return response.data
+		const response: responseType = await tokenInstance.post("/nation/teacher", body)
+		return response.data
 	} catch (error) {
 		throw error
 	}
