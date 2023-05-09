@@ -77,7 +77,7 @@ function create() {
 	useEffect(() => {
 		if (phase === 2) {
 			setTimeout(() => {
-				router.push('/teacher/class/student')
+				router.push('/teacher/class/students')
 			}, 2000)
 		}
 	}, [phase])
