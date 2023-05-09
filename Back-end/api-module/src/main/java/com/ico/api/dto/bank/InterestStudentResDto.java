@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MyInterestResDto {
+public class InterestStudentResDto {
 
     private Byte creditRating;
 
@@ -24,7 +24,7 @@ public class MyInterestResDto {
     private Integer account;
 
     @Builder
-    public MyInterestResDto(Byte creditRating, Byte shortPeriod, Byte longPeriod, Integer account) {
+    public InterestStudentResDto(Byte creditRating, Byte shortPeriod, Byte longPeriod, Integer account) {
         this.creditRating = creditRating;
         this.shortPeriod = shortPeriod;
         this.longPeriod = longPeriod;

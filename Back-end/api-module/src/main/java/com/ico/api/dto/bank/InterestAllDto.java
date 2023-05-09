@@ -15,12 +15,12 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-public class AllInterestDto {
+public class InterestAllDto {
     private List<Byte> shortPeriod;
     private List<Byte> longPeriod;
 
     @Builder
-    public AllInterestDto(List<Byte> shortPeriod, List<Byte> longPeriod) {
+    public InterestAllDto(List<Byte> shortPeriod, List<Byte> longPeriod) {
         this.shortPeriod = shortPeriod;
         this.longPeriod = longPeriod;
     }
