@@ -18,6 +18,7 @@ export const postGovRuleAPI = async ({body}: paramsType) => {
         const response: responseType = await defaultInstance.post(`/rule/teacher`, body)
         return response.data
     } catch (error) {
+        console.log("fwefwefwfwe", error)
         throw error
     }
 }
