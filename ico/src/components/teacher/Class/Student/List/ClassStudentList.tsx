@@ -18,7 +18,7 @@ function StudentList() {
 		<>
 			<h1 css={headerCSS}>학생 정보</h1>
 			<div css={listWrapperCSS}>
-				{waitingList.length && (
+				{waitingList.length > 0 && (
 					<>
 						<StudentWaitingList waitingList={waitingList} />
 						<div css={divideLineCSS}></div>
