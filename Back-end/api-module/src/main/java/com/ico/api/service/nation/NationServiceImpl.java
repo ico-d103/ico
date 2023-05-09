@@ -36,7 +36,7 @@ public class NationServiceImpl implements NationService {
 
     @Override
     @Transactional
-    public void createNation(NationReqDto reqDto, HttpServletRequest request) {
+    public String createNation(NationReqDto reqDto, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Role role = jwtTokenProvider.getRole(token);
 
@@ -58,16 +58,21 @@ public class NationServiceImpl implements NationService {
                 nationRepository.save(nation);
 
                 // 반을 생성했을 때 교사 테이블의 Nation 업데이트
-                String identity = jwtTokenProvider.getIdentity(token);
-                Optional<Teacher> teacher = teacherRepository.findByIdentity(identity);
+                Long id = jwtTokenProvider.getId(token);
+                Optional<Teacher> teacher = teacherRepository.findById(id);
                 teacher.ifPresent(t -> {
                     t.setNation(nation);
                     teacherRepository.save(t);
                 });
+                // 반을 생성했을 때 교사의 토큰 업데이트 / 학생은 직접 확인 버튼을 눌러서 도메인/api/token 으로 직접 요청해야한다.
+                return jwtTokenProvider.updateTokenCookie(request);
             }
             else {
                 throw new CustomException(ErrorCode.DUPLICATED_NATION_NAME);
             }
+        }
+        else {
+            throw new CustomException(ErrorCode.WRONG_ROLE);
         }
     }
 
