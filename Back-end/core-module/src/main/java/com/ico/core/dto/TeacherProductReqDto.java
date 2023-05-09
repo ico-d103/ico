@@ -1,8 +1,7 @@
-package com.ico.api.dto.studentProduct;
+package com.ico.core.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Min;
@@ -10,29 +9,31 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * 학생들의 판매제안서 등록 dto
+ * 선생님 상품 등록 dto
  *
  * @author 변윤경
  */
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-public class StudentProductProposalDto {
+@NoArgsConstructor
+public class TeacherProductReqDto {
     @NotBlank(message = "605")
-    String title;
+    private String title;
 
     @NotNull(message = "606")
     @Min(value = 1, message = "607")
-    int amount;
+    private int amount;
 
     @NotNull(message = "608")
-    String image;
+    private String image;
 
     @NotBlank(message = "609")
-    String detail;
+    private String detail;
 
     @NotNull(message = "610")
     @Min(value = 1, message = "611")
-    byte count;
+    private byte count;
+
+    @NotNull(message = "612")
+    private Boolean isRental;
 }

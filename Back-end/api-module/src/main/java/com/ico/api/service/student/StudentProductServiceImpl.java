@@ -34,9 +34,13 @@ public class StudentProductServiceImpl implements StudentProductService{
      */
     @Override
     public void createProduct(StudentProductProposalDto proposal) {
-        Student student = studentRepository.findByIdentity(proposal.getIdentity())
+        long nationId = 99;
+        long studentId = 1;
+
+        Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        Nation nation = nationRepository.findById(proposal.getNationId())
+
+        Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
         StudentProduct product = StudentProduct.builder()
@@ -47,8 +51,6 @@ public class StudentProductServiceImpl implements StudentProductService{
                 .image(proposal.getImage())
                 .detail(proposal.getDetail())
                 .count(proposal.getCount())
-                .isAssigned(false)
-                .sold((byte) 0)
                 .build();
         studentProductRepository.save(product);
     }
