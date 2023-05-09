@@ -2,7 +2,7 @@ import { tokenInstance } from "@/api/instance"
 import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
-	id: number
+	immigrationId: number
 }
 
 type responseType = {
@@ -10,9 +10,9 @@ type responseType = {
 	data: successReturnType
 }
 
-export const deleteImmigrationDenyAPI = async ({ id }: paramsType) => {
+export const deleteImmigrationDenyAPI = async ({ immigrationId }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.delete(`/immigration/teacher/${id}`)
+		const response: responseType = await tokenInstance.delete(`/immigration/teacher/${immigrationId}`)
 
 		return response.data
 	} catch (error) {

@@ -7,15 +7,7 @@ import { getImmigrationListAPI } from "@/api/teacher/class/getImmigrationListAPI
 import { useQuery } from "@tanstack/react-query"
 
 function StudentList() {
-	const { data } = useQuery<getImmigrationListType[]>(["studentImmigrationList"], getImmigrationListAPI)
-
-	// const [waitingList, setWaitingList] = useState<getImmigrationListType[]>([])
-
-	// useEffect(() => {
-	// 	getImmigrationListAPI().then((res) => {
-	// 		setWaitingList(res)
-	// 	})
-	// }, [])
+	const { data } = useQuery<getImmigrationListType[]>(["studentList", "immigration"], getImmigrationListAPI)
 
 	return (
 		<>

@@ -9,14 +9,6 @@ import { useQuery } from "@tanstack/react-query"
 function StudentEnteredList() {
 	const { data } = useQuery<getStudentListType[]>(["studentList"], getStudentListAPI)
 
-	// const [enteredList, setEnteredList] = useState<getStudentListType[]>([])
-
-	// useEffect(() => {
-	// 	getStudentListAPI().then((res) => {
-	// 		setEnteredList(res)
-	// 	})
-	// }, [])
-
 	const resetStudentsJob = () => {
 		alert("직업 초기화!")
 	}
@@ -40,7 +32,8 @@ function StudentEnteredList() {
 			</div>
 			<div css={contentCSS}>
 				{data?.map((student, idx) => (
-					<StudentEnteredListItem key={student.number} student={student} idx={idx} />
+					// key={student.number} 로 추후 수정 필요
+					<StudentEnteredListItem key={idx} student={student} idx={idx} />
 				))}
 			</div>
 		</div>

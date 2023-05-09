@@ -9,7 +9,6 @@ type responseType = {
 export const getImmigrationListAPI = async () => {
 	try {
 		const response: responseType = await tokenInstance.get("/immigration/teacher")
-		console.log("멍청이: ", response)
 
 		return response.data
 	} catch (error) {

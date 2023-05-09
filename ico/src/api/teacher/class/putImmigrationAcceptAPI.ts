@@ -2,7 +2,7 @@ import { tokenInstance } from "@/api/instance"
 import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
-	id: number
+	immigrationId: number
 }
 
 type responseType = {
@@ -10,9 +10,9 @@ type responseType = {
 	data: successReturnType
 }
 
-export const putImmigrationAcceptAPI = async ({ id }: paramsType) => {
+export const putImmigrationAcceptAPI = async ({ immigrationId }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.put(`/immigration/teacher/${id}`)
+		const response: responseType = await tokenInstance.put(`/immigration/teacher/${immigrationId}`)
 
 		return response.data
 	} catch (error) {

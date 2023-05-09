@@ -48,7 +48,7 @@ export type getStudentListType = {
 }
 
 export type getImmigrationListType = {
-	id: number
+	immigrationId: number
 	name: string
 	number: number
 }
