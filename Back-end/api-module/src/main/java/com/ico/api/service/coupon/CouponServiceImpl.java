@@ -11,6 +11,7 @@ import com.ico.core.repository.CouponRepository;
 import com.ico.core.repository.CouponRequestMongoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,9 +37,8 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public List<CouponResDto> findAllCoupon(HttpServletRequest request) {
-//        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
-        // TODO: 로그인 완료 시 토큰에서 추출
-        Long studentId = 1L;
+        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
+        log.info("[findAllCoupon] studentId : {}", studentId);
 
         List<Coupon> couponList = couponRepository.findAllByStudentId(studentId);
         List<CouponResDto> dtoList = new ArrayList<>();
@@ -50,12 +50,13 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     @Transactional
-    public void postCoupon(Long couponId) {
-//        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
-//        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
-        // TODO: 로그인 완료 시 토큰에서 추출
-        Long nationId = 1L;
-        Long studentId = 1L;
+    public void postCoupon(Long couponId, HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
+        log.info("[postCoupon] nationId : {}", nationId);
+        log.info("[postCoupon] nationId : {}", studentId);
 
         Coupon coupon = couponRepository.findById(couponId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COUPON_NOT_FOUND));

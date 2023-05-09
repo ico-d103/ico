@@ -14,5 +14,5 @@ public interface CouponService {
 
     List<CouponResDto> findAllCoupon(HttpServletRequest request);
 
-    void postCoupon(Long couponId);
+    void postCoupon(Long couponId, HttpServletRequest request);
 }

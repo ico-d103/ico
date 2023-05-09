@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -40,8 +41,8 @@ public class JobController {
      * @return OK
      */
     @PutMapping("/teacher/{jobId}")
-    public ResponseEntity<HttpStatus> updateJob(@PathVariable Long jobId, @Valid @RequestBody JobReqDto dto) {
-        jobService.updateJob(jobId, dto);
+    public ResponseEntity<HttpStatus> updateJob(@PathVariable Long jobId, @Valid @RequestBody JobReqDto dto, HttpServletRequest request) {
+        jobService.updateJob(jobId, dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -51,8 +52,8 @@ public class JobController {
      * @return
      */
     @GetMapping("/student")
-    public ResponseEntity<List<JobAvailableResDto>> findAllShortFallJob() {
-        return ResponseEntity.ok(jobService.findAllShortFallJob());
+    public ResponseEntity<List<JobAvailableResDto>> findAllShortFallJob(HttpServletRequest request) {
+        return ResponseEntity.ok(jobService.findAllShortFallJob(request));
     }
 
     /**
@@ -61,8 +62,8 @@ public class JobController {
      * @return
      */
     @GetMapping("/teacher/all")
-    public ResponseEntity<List<JobAllResDto>> findAllJob() {
-        return ResponseEntity.ok(jobService.findAllJob());
+    public ResponseEntity<List<JobAllResDto>> findAllJob(HttpServletRequest request) {
+        return ResponseEntity.ok(jobService.findAllJob(request));
     }
 
     /**
@@ -71,7 +72,7 @@ public class JobController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<JobResDto>> findJobList() {
-        return ResponseEntity.ok(jobService.findJobList());
+    public ResponseEntity<List<JobResDto>> findJobList(HttpServletRequest request) {
+        return ResponseEntity.ok(jobService.findJobList(request));
     }
 }

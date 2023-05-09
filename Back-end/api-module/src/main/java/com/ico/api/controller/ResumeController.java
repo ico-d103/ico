@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -36,8 +37,8 @@ public class ResumeController {
      * @return OK
      */
     @PostMapping("/student/{jobId}")
-    public ResponseEntity<HttpStatus> applyJob(@PathVariable Long jobId) {
-        resumeService.applyJob(jobId);
+    public ResponseEntity<HttpStatus> applyJob(@PathVariable Long jobId, HttpServletRequest request) {
+        resumeService.applyJob(jobId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -48,8 +49,8 @@ public class ResumeController {
      * @return [{학생 id, 학생 name, 학생, number}]
      */
     @GetMapping("/teacher/{jobId}")
-    public ResponseEntity<List<ResumeResDto>> findResume(@PathVariable Long jobId) {
-        return ResponseEntity.ok(resumeService.findResume(jobId));
+    public ResponseEntity<List<ResumeResDto>> findResume(@PathVariable Long jobId, HttpServletRequest request) {
+        return ResponseEntity.ok(resumeService.findResume(jobId, request));
     }
 
     /**
@@ -59,8 +60,8 @@ public class ResumeController {
      * @return OK
      */
     @PostMapping("/teacher/{resumeId}")
-    public ResponseEntity<HttpStatus> assignResume(@PathVariable String resumeId) {
-        resumeService.assignResume(resumeId);
+    public ResponseEntity<HttpStatus> assignResume(@PathVariable String resumeId, HttpServletRequest request) {
+        resumeService.assignResume(resumeId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -71,8 +72,8 @@ public class ResumeController {
      * @return OK
      */
     @DeleteMapping("/teacher/{resumeId}")
-    public ResponseEntity<HttpStatus> rejectResume(@PathVariable String resumeId) {
-        resumeService.rejectResumeResume(resumeId);
+    public ResponseEntity<HttpStatus> rejectResume(@PathVariable String resumeId, HttpServletRequest request) {
+        resumeService.rejectResumeResume(resumeId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
