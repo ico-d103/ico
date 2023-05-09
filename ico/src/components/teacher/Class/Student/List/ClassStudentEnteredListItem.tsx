@@ -1,38 +1,33 @@
 import React from "react"
 import { css } from "@emotion/react"
+import { getStudentListType } from "@/types/teacher/apiReturnTypes"
 
 type StudentEnteredListItemPropsType = {
-	mock: {
-		id: number
-		number: number
-		name: string
-		job: string
-		grade: number
-		money: number
-	}
+	student: getStudentListType
+	idx: number
 }
 
-function StudentEnteredListItem({ mock }: StudentEnteredListItemPropsType) {
+function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsType) {
 	return (
-		<div css={wrapperCSS(mock.id)}>
+		<div css={wrapperCSS(idx)}>
 			<div css={leftWrapperCSS}>
-				<h4>{mock.number}</h4>
-				<h4>{mock.name}</h4>
-				<h4>{mock.job}</h4>
+				<h4>{student.number}</h4>
+				<h4>{student.name}</h4>
+				<h4>{student.job}</h4>
 			</div>
 			<div css={rightWrapperCSS}>
-				<div>{mock.grade}등급</div>
-				<div>{mock.money} 미소</div>
+				<div>{student.creditRating}등급</div>
+				<div>{student.amount} 미소</div>
 			</div>
 		</div>
 	)
 }
 
-const wrapperCSS = (id: number) => {
+const wrapperCSS = (idx: number) => {
 	return css`
 		width: 100%;
 		padding: 10px 15px;
-		background-color: ${id % 2 === 0 ? `var(--teacher-main-color-op-2)` : `var(--common-back-color-2)`};
+		background-color: ${idx % 2 === 0 ? `var(--teacher-main-color-op-2)` : `var(--common-back-color-2)`};
 		border-radius: 10px;
 
 		display: flex;
