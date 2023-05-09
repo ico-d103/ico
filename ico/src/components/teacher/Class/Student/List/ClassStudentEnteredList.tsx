@@ -1,4 +1,3 @@
-import React from "react"
 import { css } from "@emotion/react"
 import StudentEnteredListItem from "./ClassStudentEnteredListItem"
 import KebabMenu from "@/components/teacher/common/KebabMenu/KebabMenu"

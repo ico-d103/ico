@@ -62,7 +62,6 @@ function login() {
 				}
 			})
 			.catch((error) => {
-				console.log(error)
 				setAlarm(error.response.data.message)
 			})
 	}
