@@ -2,6 +2,7 @@ package com.ico.api.service.rule;
 
 import com.ico.api.dto.rule.RuleReqDto;
 import com.ico.api.dto.rule.RuleResDto;
+import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Rule;
 import com.ico.core.exception.CustomException;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +32,13 @@ public class RuleServiceImpl implements RuleService {
 
     private final NationRepository nationRepository;
 
+    private final JwtTokenProvider jwtTokenProvider;
+
     private static final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
     @Override
-    public List<RuleResDto> findAllRule() {
-        // TODO: 로그인한 유저 정보
-        Long nationId = 99L;
+    public List<RuleResDto> findAllRule(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         List<Rule> ruleList = ruleRepository.findAllByNationId(nationId);
         List<RuleResDto> resList = new ArrayList<>();
@@ -47,10 +50,8 @@ public class RuleServiceImpl implements RuleService {
     }
 
     @Override
-    public void addRule(RuleReqDto dto) {
-
-        // TODO: 로그인 기능 구현 시 토큰에서 값 적용
-        Long nationId = 99L;
+    public void addRule(RuleReqDto dto, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
@@ -69,9 +70,8 @@ public class RuleServiceImpl implements RuleService {
     }
 
     @Override
-    public void updateRule(RuleReqDto dto, Long ruleId) {
-        // TODO: 로그인 기능 구현 시 토큰에서 값 적용
-        Long nationId = 99L;
+    public void updateRule(RuleReqDto dto, Long ruleId, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         Rule rule = ruleRepository.findById(ruleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.RULE_NOT_FOUND));

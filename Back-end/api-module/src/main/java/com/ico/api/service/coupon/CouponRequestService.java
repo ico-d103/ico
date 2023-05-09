@@ -2,6 +2,7 @@ package com.ico.api.service.coupon;
 
 import com.ico.api.dto.coupon.CouponRequestResDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public interface CouponRequestService {
      *
      * @return
      */
-    List<CouponRequestResDto> findAllCouponRequest();
+    List<CouponRequestResDto> findAllCouponRequest(HttpServletRequest request);
 
     /**
      * 쿠폰 신청 승인

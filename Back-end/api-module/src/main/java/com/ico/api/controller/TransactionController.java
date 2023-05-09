@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +33,8 @@ public class TransactionController {
      * @return
      */
     @GetMapping("/student")
-    public ResponseEntity<Map<String, List<TransactionResDto>>> findTransaction() {
-        return ResponseEntity.ok(transactionService.findTransaction());
+    public ResponseEntity<Map<String, List<TransactionResDto>>> findTransaction(HttpServletRequest request) {
+        return ResponseEntity.ok(transactionService.findTransaction(request));
     }
 
 }

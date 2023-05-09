@@ -2,6 +2,7 @@ package com.ico.api.service.resume;
 
 import com.ico.api.dto.resume.ResumeResDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public interface ResumeService {
      *
      * @param jobId
      */
-    void applyJob(Long jobId);
+    void applyJob(Long jobId, HttpServletRequest request);
 
     /**
      * 하나의 직업에 신청자 목록 조회
@@ -24,7 +25,7 @@ public interface ResumeService {
      * @param jobId
      * @return
      */
-    List<ResumeResDto> findResume(Long jobId);
+    List<ResumeResDto> findResume(Long jobId, HttpServletRequest request);
 
 
     /**
@@ -32,12 +33,12 @@ public interface ResumeService {
      *
      * @param resumeId
      */
-    void assignResume(String resumeId);
+    void assignResume(String resumeId, HttpServletRequest request);
 
     /**
      * 교사가 직업 신청 반려
      *
      * @param resumeId
      */
-    void rejectResumeResume(String resumeId);
+    void rejectResumeResume(String resumeId, HttpServletRequest request);
 }

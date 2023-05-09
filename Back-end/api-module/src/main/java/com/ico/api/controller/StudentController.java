@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import java.util.List;
  * Student Controller
  *
  * @author 강교철
+ * @author 서재건
  */
 @RestController
 @RequiredArgsConstructor
@@ -62,8 +64,8 @@ public class StudentController {
      * @return 학생 목록
      */
     @GetMapping("/teacher")
-    public ResponseEntity<List<StudentListResDto>> findAllStudent() {
-        return ResponseEntity.ok(studentService.findAllStudent());
+    public ResponseEntity<List<StudentListResDto>> findAllStudent(HttpServletRequest request) {
+        return ResponseEntity.ok(studentService.findAllStudent(request));
     }
 
     /**
