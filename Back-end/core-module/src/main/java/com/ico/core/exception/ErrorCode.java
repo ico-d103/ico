@@ -85,6 +85,8 @@ public enum ErrorCode{
 
     INVALID_COUPON(HttpStatus.BAD_REQUEST, "506", "신청하지 않은 쿠폰입니다."),
 
+    BAD_CREDIT_RATING(HttpStatus.BAD_REQUEST, "507", "신용등급은 1~10만 가능합니다."),
+
     PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "없는 판매 제안서입니다."),
 
     NOT_COUPON(HttpStatus.BAD_REQUEST, "614", "해당 상품은 쿠폰이 아닙니다."),
@@ -107,6 +109,15 @@ public enum ErrorCode{
 
     NOT_UPLOAD_TIME(HttpStatus.NOT_FOUND, "712", "거래 시간에는 이슈 등록이 불가능합니다."),
 
+    NOT_FOUND_INTEREST(HttpStatus.NOT_FOUND, "717", "이자율이 없습니다."),
+
+    NOT_All_INTEREST_EXIST(HttpStatus.NOT_FOUND, "718", "신용등급에 따른 이자율 중 빠진 데이터가 있습니다."),
+
+    BAD_UPDATE_INTEREST(HttpStatus.BAD_REQUEST, "719", "수정 이자율값이 잘못되었습니다."),
+
+    LOWER_INTEREST(HttpStatus.BAD_REQUEST, "720", "이자율값은 0 이상이여야 합니다."),
+
+    INTEREST_NOT_DESCENDING(HttpStatus.BAD_REQUEST, "721", "이자율은 신용등급이 낮을수록 작아져야 합니다."),
     ;
 
     private final HttpStatus httpStatus;

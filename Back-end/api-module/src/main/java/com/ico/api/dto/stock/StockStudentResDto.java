@@ -21,12 +21,12 @@ public class StockStudentResDto {
 
     private LocalTime tradingEnd;
 
-    private MyStockResDto myStock;
+    private StockMyResDto myStock;
 
     private List<StockColDto> issue;
 
     @Builder
-    public StockStudentResDto(String stock, LocalTime tradingStart, LocalTime tradingEnd, MyStockResDto myStock, List<StockColDto> issue) {
+    public StockStudentResDto(String stock, LocalTime tradingStart, LocalTime tradingEnd, StockMyResDto myStock, List<StockColDto> issue) {
         this.stock = stock;
         this.tradingStart = tradingStart;
         this.tradingEnd = tradingEnd;
