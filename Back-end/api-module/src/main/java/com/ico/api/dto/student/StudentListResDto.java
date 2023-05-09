@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StudentListResDto {
 
+    private Long id;
+
     private String name;
 
     private int number;
@@ -25,7 +27,8 @@ public class StudentListResDto {
     private String job;
 
     @Builder
-    public StudentListResDto(String name, int number, int amount, int creditRating, String job) {
+    public StudentListResDto(Long id, String name, int number, int amount, int creditRating, String job) {
+        this.id = id;
         this.name = name;
         this.number = number;
         this.amount = amount;
@@ -33,8 +36,15 @@ public class StudentListResDto {
         this.job = job;
     }
 
+    /**
+     * 우리 반 학생 목록 조회 dto 반환
+     *
+     * @param student
+     * @return
+     */
     public StudentListResDto of(Student student) {
         return StudentListResDto.builder()
+                .id(student.getId())
                 .name(student.getName())
                 .number(student.getNumber())
                 .amount(student.getAccount())
