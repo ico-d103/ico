@@ -60,7 +60,7 @@ public class TeacherServiceImpl implements TeacherService {
 
         teacher.encodeTeacherPassword(passwordEncoder);
         teacherRepository.save(teacher);
-        
+
         if (!image.isEmpty()) {
             Certification certification = Certification.builder()
                     .teacher(teacher)
