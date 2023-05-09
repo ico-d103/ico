@@ -5,10 +5,10 @@ import com.ico.api.service.teacher.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 
 /**
@@ -30,8 +30,9 @@ public class TeacherController {
      * @return id
      */
     @PostMapping
-    public ResponseEntity<HttpStatus> teacherSignUp(@RequestBody TeacherSignUpRequestDto requestDto) {
-        teacherService.signUp(requestDto);
+    public ResponseEntity<HttpStatus> teacherSignUp(@RequestBody TeacherSignUpRequestDto requestDto,
+                                                    @RequestParam MultipartFile image) throws IOException {
+        teacherService.signUp(requestDto, image);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

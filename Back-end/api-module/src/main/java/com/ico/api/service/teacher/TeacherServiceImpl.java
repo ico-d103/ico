@@ -1,15 +1,22 @@
 package com.ico.api.service.teacher;
 
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
+import com.ico.api.s3.S3Uploader;
 import com.ico.core.code.Role;
+import com.ico.core.entity.Certification;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.CertificationRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * Teacher ServiceImpl
@@ -27,12 +34,13 @@ public class TeacherServiceImpl implements TeacherService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final CertificationRepository certificationRepository;
 
-//      TODO : S3를 이용한 이미지업로드 할때 사용할 것
-//    private final CertificationRepository certificationRepository;
+    private S3Uploader s3Uploader;
 
     @Override
-    public Long signUp(TeacherSignUpRequestDto requestDto) {
+    @Transactional
+    public Long signUp(TeacherSignUpRequestDto requestDto, MultipartFile image) throws IOException {
         Teacher teacher = Teacher.builder()
                 .identity(requestDto.getIdentity())
                 .password(requestDto.getPassword())
@@ -40,11 +48,6 @@ public class TeacherServiceImpl implements TeacherService {
                 .is_assigned(false)
                 .role(Role.TEACHER)
                 .build();
-//      TODO : S3를 이용한 이미지업로드 할때 사용할 것
-//        Certification certification = Certification.builder()
-//                .teacher(teacher)
-//                .image(requestDto.getImage())   // s3로 바꿔야함
-//                .build();
 
         if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()
                 || studentRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
@@ -57,8 +60,18 @@ public class TeacherServiceImpl implements TeacherService {
 
         teacher.encodeTeacherPassword(passwordEncoder);
         teacherRepository.save(teacher);
-//      TODO : S3를 이용한 이미지업로드 할때 사용할 것
-//        certificationRepository.save(certification);
+        
+        if (!image.isEmpty()) {
+            Certification certification = Certification.builder()
+                    .teacher(teacher)
+                    .image(s3Uploader.upload(image))   // s3로 바꿔야함
+                    .build();
+            certificationRepository.save(certification);
+        }
+        else {
+            throw new CustomException(ErrorCode.NOT_FOUND_IMAGE);
+        }
+
 
         return teacher.getId();
     }
