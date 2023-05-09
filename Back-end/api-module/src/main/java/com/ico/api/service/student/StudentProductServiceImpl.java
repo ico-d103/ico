@@ -62,7 +62,7 @@ public class StudentProductServiceImpl implements StudentProductService{
     @Transactional(readOnly = true)
     @Override
     public List<StudentProductAllResDto> findAllProduct() {
-        long nationId = 1L;
+        long nationId = 99;
 
         if (nationRepository.findById(nationId).isEmpty()){
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
@@ -85,7 +85,7 @@ public class StudentProductServiceImpl implements StudentProductService{
     @Override
     public void updateIsAssigned(Long id) {
         // TODO : 교사의 국가 ID 가지고 오기
-        long nationId = 1L;
+        long nationId = 99L;
         StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PROPOSAL_NOT_FOND));
         product.setAssigned(true);
@@ -100,7 +100,7 @@ public class StudentProductServiceImpl implements StudentProductService{
     @Override
     public void deleteProduct(Long id) {
         // TODO : 교사의 국가 ID 가지고 오기
-        long nationId = 1L;
+        long nationId = 99L;
 
         StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PROPOSAL_NOT_FOND));
