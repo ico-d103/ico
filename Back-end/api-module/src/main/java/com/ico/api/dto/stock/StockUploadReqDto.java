@@ -15,16 +15,16 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class StockUploadReqDto {
     @NotNull(message = "711")
-    private int amount;
+    private Integer amount;
 
     @NotBlank(message = "713")
     private String content;
 
     @NotNull(message =  "714")
-    private double price;
+    private Double price;
 
     @Builder
-    public StockUploadReqDto(int amount, String content, double price) {
+    public StockUploadReqDto(Integer amount, String content, Double price) {
         this.amount = amount;
         this.content = content;
         this.price = price;

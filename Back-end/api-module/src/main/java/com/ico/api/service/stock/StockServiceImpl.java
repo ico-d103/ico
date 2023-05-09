@@ -46,8 +46,8 @@ public class StockServiceImpl implements StockService{
     @Override
     public StockTeacherResDto getIssueTeacher() {
         long nationId = 99;
-        // 유효성 검사
-        Nation nation = validCheck(nationId);
+        // 국가 정보, 투자 종목 여부 유효성 검사
+        Nation nation = validCheckNationStock(nationId);
 
         // 반환값
         StockTeacherResDto res = new StockTeacherResDto();
@@ -67,8 +67,9 @@ public class StockServiceImpl implements StockService{
     public StockStudentResDto getIssueStudent() {
         long nationId = 99;
         long studentId = 1;
-        // 유효성 검사
-        Nation nation = validCheck(nationId);
+
+        // 국가 정보, 투자 종목 여부 유효성 검사
+        Nation nation = validCheckNationStock(nationId);
 
         Optional<Invest> invest = investRepository.findByStudentId(studentId);
         log.info("매수 여부 확인");
@@ -143,7 +144,7 @@ public class StockServiceImpl implements StockService{
      * @param nationId 국가ID
      * @return 국가 객체
      */
-    private Nation validCheck(Long nationId){
+    private Nation validCheckNationStock(Long nationId){
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
