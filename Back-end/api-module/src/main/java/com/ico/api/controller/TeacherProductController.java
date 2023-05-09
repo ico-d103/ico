@@ -1,6 +1,6 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.teacher.TeacherProductAllResDto;
+import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.service.teacher.TeacherProductService;
 import com.ico.core.entity.TeacherProduct;
 import lombok.RequiredArgsConstructor;

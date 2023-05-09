@@ -1,8 +1,8 @@
 package com.ico.api.service.teacher;
 
-import com.ico.api.dto.teacher.TeacherProductAllResDto;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.core.entity.Coupon;
+import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.TeacherProduct;
@@ -30,9 +30,8 @@ public class TeacherProductServiceImpl implements TeacherProductService{
     private final NationRepository nationRepository;
     private final TeacherProductRepository teacherProductRepository;
     private final StudentRepository studentRepository;
-    private final CouponRepository couponRepository;
     private final TransactionService transactionService;
-
+    private final CouponRepository couponRepository;
     /**
      * 교사 상품 등록
      * @param proposal 교사 상품

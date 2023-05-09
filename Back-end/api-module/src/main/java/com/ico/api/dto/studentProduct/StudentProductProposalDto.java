@@ -1,4 +1,4 @@
-package com.ico.api.dto.student;
+package com.ico.api.dto.studentProduct;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
