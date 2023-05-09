@@ -23,7 +23,7 @@ tokenInstance.interceptors.request.use(
 		const accessToken = getCookie("accessToken")
 
 		// 2. accesstoken 있다면 쿠키 값 포함한 채로 http 요청
-		if (accessToken) config.headers["Authorization"] = `Bearer ${accessToken}`
+		if (accessToken) config.headers["Authorization"] = `${accessToken}`
 
 		return config
 	},
