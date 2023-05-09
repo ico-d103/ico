@@ -1,0 +1,27 @@
+package com.ico.api.dto.bank;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
+
+/**
+ * @author 변윤경
+ *
+ * 장기, 단기 이자율 res dto
+ */
+@Setter
+@Getter
+@NoArgsConstructor
+public class AllInterestResDto {
+    private List<Byte> shortPeriod;
+    private List<Byte> longPeriod;
+
+    @Builder
+    public AllInterestResDto(List<Byte> shortPeriod, List<Byte> longPeriod) {
+        this.shortPeriod = shortPeriod;
+        this.longPeriod = longPeriod;
+    }
+}

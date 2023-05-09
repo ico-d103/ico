@@ -107,7 +107,7 @@ public enum ErrorCode{
 
     NOT_UPLOAD_TIME(HttpStatus.NOT_FOUND, "712", "거래 시간에는 이슈 등록이 불가능합니다."),
 
-    NOT_FOUND_INTEREST(HttpStatus.NOT_FOUND, "717", "해당 이자율이 없습니다."),
+    NOT_FOUND_INTEREST(HttpStatus.NOT_FOUND, "717", "이자율이 없습니다."),
     ;
 
     private final HttpStatus httpStatus;
