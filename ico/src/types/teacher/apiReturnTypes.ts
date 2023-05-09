@@ -46,3 +46,9 @@ export type getStudentListType = {
 	creditRating: number
 	job: null | string
 }
+
+export type getImmigrationListType = {
+	id: number
+	name: string
+	number: number
+}
