@@ -20,7 +20,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -41,6 +40,7 @@ public class TransactionServiceImpl implements TransactionService{
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    // TODO: 프론트와 상의하여 날짜 출력값 조정 필요
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일-HH:mm");
 
     public static final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("MM월 dd일");
@@ -120,7 +120,8 @@ public class TransactionServiceImpl implements TransactionService{
             log.info("[findTransaction] studentId[{}]에 해당하는 학생이 없습니다.", studentId);
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
-        List<Transaction> transactions = transactionMongoRepository.findAllByFromOrTo(String.valueOf(studentId), String.valueOf(studentId));
+        // 최신순으로 조회
+        List<Transaction> transactions = transactionMongoRepository.findAllByFromOrToOrderByIdDesc(String.valueOf(studentId), String.valueOf(studentId));
 
         // 순서가 있는 map 생성
         Map<String, List<TransactionResDto>> map = new LinkedHashMap<>();
@@ -131,10 +132,7 @@ public class TransactionServiceImpl implements TransactionService{
 
         int curAccount = student.getAccount();
 
-        // 최신순으로 조회
-        ListIterator<Transaction> iterator = transactions.listIterator(transactions.size());
-        while (iterator.hasPrevious()) {
-            Transaction transaction = iterator.previous();
+        for (Transaction transaction : transactions) {
             String[] dateTime = transaction.getDate().format(formatter).split("-");
 
             int amount = transaction.getFrom().equals(String.valueOf(studentId)) ? -1 * transaction.getAmount() : transaction.getAmount();
