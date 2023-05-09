@@ -24,6 +24,7 @@ export type getNationType = {
 export type getGovExchequerType = {
 	id: number
 	title: string
+	detail: string
 	amount: number
 	type: 0 | 1
 }
@@ -37,6 +38,7 @@ export type getGovJobType = {
 	color: string
 	total: number
 	count: number
+	id: number
 }
 
 export type getStudentListType = {

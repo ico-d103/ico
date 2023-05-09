@@ -73,7 +73,7 @@ function GovExchequerDetail({ title, content, taxAspect, taxValue, showIdx, actu
 	return (
 		<div ref={wrapperRef}>
 			<FormCreator
-				subComp={<GovExchequerCreate />}
+				subComp={<GovExchequerCreate idx={actualIdx} />}
 				showIdx={showIdx}
 				compState={compState}
 				closeComp={closeEditHandler}

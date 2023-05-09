@@ -1,4 +1,4 @@
-import { defaultInstance } from "@/api/instance"
+import { tokenInstance } from "@/api/instance"
 import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
@@ -15,10 +15,9 @@ type responseType = {
 
 export const postGovRuleAPI = async ({body}: paramsType) => {
     try {
-        const response: responseType = await defaultInstance.post(`/rule/teacher`, body)
+        const response: responseType = await tokenInstance.post(`/rule/teacher`, body)
         return response.data
     } catch (error) {
-        console.log("fwefwefwfwe", error)
         throw error
     }
 }

@@ -26,7 +26,7 @@ function index() {
 				showIdx={idx}
 				actualIdx={el.id}
 				title={el.title}
-				content={"세금 내용입니다. 입섬 로렘..."}
+				content={el.detail}
 				taxAspect={el.type}
 				taxValue={el.amount}
 			/>
@@ -60,14 +60,15 @@ function index() {
 				closeComp={closeComp}
 			/>
 
-<GovExchequerDetail
+{/* <GovExchequerDetail
 				showIdx={0}
 				actualIdx={0}
 				title={"세금 제목 1"}
 				content={"세금 내용입니다. 입섬 로렘..."}
 				taxAspect={0}
 				taxValue={11}
-			/>
+			/> */}
+			{renderExchequerList}
 		</div>
 	)
 }

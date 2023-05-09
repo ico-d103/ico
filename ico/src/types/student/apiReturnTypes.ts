@@ -16,3 +16,17 @@ export type getHomeCouponType = {
     assigned: boolean
 }
 
+export type getFinanceInvestType = {
+    stock: string
+    tradingStart: string
+    tradingEnd: string
+    myStock: {
+        price: number
+        amount: number
+    }
+    issue: {
+        date: string
+        amount: number
+        content: string
+    }[]
+}
