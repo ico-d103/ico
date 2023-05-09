@@ -6,6 +6,7 @@ import com.ico.api.dto.transaction.TransactionColDto;
 import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.user.StudentSignUpRequestDto;
 import com.ico.api.service.transaction.TransactionService;
+import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Role;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Transaction;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -51,6 +53,8 @@ public class StudentServiceImpl implements StudentService{
     private final TransactionService transactionService;
 
     private final TransactionMongoRepository transactionMongoRepository;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
 
@@ -125,9 +129,8 @@ public class StudentServiceImpl implements StudentService{
 
     @Transactional(readOnly = true)
     @Override
-    public List<StudentListResDto> findAllStudent() {
-        // TODO: 로그인한 유저 정보 조회 시 나라 id값 대입
-        Long nationId = 1L;
+    public List<StudentListResDto> findAllStudent(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         List<Student> studentList = studentRepository.findAllByNationId(nationId);
         List<StudentListResDto> resList = new ArrayList<>();

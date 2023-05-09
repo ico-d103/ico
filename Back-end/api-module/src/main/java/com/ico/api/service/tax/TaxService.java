@@ -3,6 +3,7 @@ package com.ico.api.service.tax;
 import com.ico.core.dto.TaxReqDto;
 import com.ico.api.dto.tax.TaxResDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public interface TaxService {
      *
      * @return
      */
-    List<TaxResDto> findAllTax();
+    List<TaxResDto> findAllTax(HttpServletRequest request);
 
     /**
      * 국세 정보 수정

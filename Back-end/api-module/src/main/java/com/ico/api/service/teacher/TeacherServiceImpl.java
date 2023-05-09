@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
  * Teacher ServiceImpl
  *
  * @author 강교철
- * @author 서재건
  */
 @Service
 @RequiredArgsConstructor

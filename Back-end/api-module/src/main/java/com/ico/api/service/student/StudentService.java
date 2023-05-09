@@ -5,6 +5,7 @@ import com.ico.api.dto.student.StudentListResDto;
 import com.ico.api.dto.student.StudentResDto;
 import com.ico.api.dto.user.StudentSignUpRequestDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public interface StudentService {
      *
      * @return
      */
-    List<StudentListResDto> findAllStudent();
+    List<StudentListResDto> findAllStudent(HttpServletRequest request);
 
     /**
      * 학생 상세보기 조회

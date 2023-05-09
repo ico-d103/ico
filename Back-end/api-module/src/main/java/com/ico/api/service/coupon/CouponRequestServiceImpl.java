@@ -1,6 +1,7 @@
 package com.ico.api.service.coupon;
 
 import com.ico.api.dto.coupon.CouponRequestResDto;
+import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Coupon;
 import com.ico.core.entity.CouponRequest;
 import com.ico.core.exception.CustomException;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +31,11 @@ public class CouponRequestServiceImpl implements CouponRequestService{
 
     private final CouponRepository couponRepository;
 
+    private final JwtTokenProvider jwtTokenProvider;
+
     @Override
-    public List<CouponRequestResDto> findAllCouponRequest() {
-        // TODO: 로그인 통한 토큰 정보 받아고기
-        Long nationId = 1L;
+    public List<CouponRequestResDto> findAllCouponRequest(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         List<CouponRequest> couponRequestList = couponRequestMongoRepository.findAllByNationId(nationId);
         List<CouponRequestResDto> dtoList = new ArrayList<>();

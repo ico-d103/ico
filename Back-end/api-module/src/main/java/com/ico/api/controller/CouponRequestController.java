@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -36,8 +37,8 @@ public class CouponRequestController {
      * @return
      */
     @GetMapping("/teacher")
-    public ResponseEntity<List<CouponRequestResDto>> findAllCouponRequest() {
-        return ResponseEntity.ok(couponRequestService.findAllCouponRequest());
+    public ResponseEntity<List<CouponRequestResDto>> findAllCouponRequest(HttpServletRequest request) {
+        return ResponseEntity.ok(couponRequestService.findAllCouponRequest(request));
     }
 
     /**
