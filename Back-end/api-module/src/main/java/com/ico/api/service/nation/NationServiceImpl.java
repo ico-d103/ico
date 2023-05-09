@@ -110,12 +110,16 @@ public class NationServiceImpl implements NationService {
     @Override
     public Nation getNation(HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
-
+        log.info("[getNation token] : {}", token);
         Long nationId = jwtTokenProvider.getNation(token);
+        log.info("[getNation nationId] : {}", nationId);
+
         if (nationId != null) {
             Nation nation = nationRepository.findById(nationId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
+            log.info("[getNation] nation 존재");
             return nation;
         } else {
+            log.info("[getNation] nationId가 null입니다.");
             throw new CustomException(ErrorCode.NOT_FOUND_NATION);
         }
 
