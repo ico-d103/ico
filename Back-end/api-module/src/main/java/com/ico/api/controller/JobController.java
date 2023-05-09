@@ -2,8 +2,9 @@ package com.ico.api.controller;
 
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
-import com.ico.core.dto.JobReqDto;
+import com.ico.api.dto.job.JobResDto;
 import com.ico.api.service.job.JobService;
+import com.ico.core.dto.JobReqDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -51,8 +52,7 @@ public class JobController {
      */
     @GetMapping("/student")
     public ResponseEntity<List<JobAvailableResDto>> findAllShortFallJob() {
-        List<JobAvailableResDto> jobList = jobService.findAllShortFallJob();
-        return ResponseEntity.ok(jobList);
+        return ResponseEntity.ok(jobService.findAllShortFallJob());
     }
 
     /**
@@ -62,7 +62,16 @@ public class JobController {
      */
     @GetMapping("/teacher/all")
     public ResponseEntity<List<JobAllResDto>> findAllJob() {
-        List<JobAllResDto> jobList = jobService.findAllJob();
-        return ResponseEntity.ok(jobList);
+        return ResponseEntity.ok(jobService.findAllJob());
+    }
+
+    /**
+     * 공통) 직업 명함 조회
+     *
+     * @return
+     */
+    @GetMapping
+    public ResponseEntity<List<JobResDto>> findJobList() {
+        return ResponseEntity.ok(jobService.findJobList());
     }
 }

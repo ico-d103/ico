@@ -24,16 +24,16 @@ public class JobReqDto {
     private String detail;
 
     @NotNull(message = "412")
-    private int total;
+    private Integer total;
 
     @NotNull(message = "413")
-    private int wage;
+    private Integer wage;
 
     @NotNull(message = "414")
     private String color;
 
     @Builder
-    public JobReqDto(String title, String detail, int total, int wage, String color) {
+    public JobReqDto(String title, String detail, Integer total, Integer wage, String color) {
         this.title = title;
         this.detail = detail;
         this.total = total;

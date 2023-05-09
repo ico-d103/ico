@@ -1,0 +1,47 @@
+package com.ico.api.dto.coupon;
+
+import com.ico.core.entity.CouponRequest;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+/**
+ * 쿠폰 신청 내역 조회 dto
+ *
+ * @author 서재건
+ */
+@Getter
+@NoArgsConstructor
+public class CouponRequestResDto {
+
+    private String id;
+
+    private int number;
+
+    private String name;
+
+    private String title;
+
+    @Builder
+    public CouponRequestResDto(String id, int number, String name, String title) {
+        this.id = id;
+        this.number = number;
+        this.name = name;
+        this.title = title;
+    }
+
+    /**
+     * 쿠폰 신청 내역 조회 dto 생성
+     *
+     * @param couponRequest
+     * @return
+     */
+    public CouponRequestResDto of(CouponRequest couponRequest) {
+        return CouponRequestResDto.builder()
+                .id(couponRequest.getId())
+                .number(couponRequest.getNumber())
+                .name(couponRequest.getName())
+                .title(couponRequest.getTitle())
+                .build();
+    }
+}
