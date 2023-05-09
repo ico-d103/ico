@@ -16,10 +16,10 @@ const FinanceInvestChart = ({ data }: LineSvgProps) => {
 
     
 	return (
-		<div css={css`width: 100vw; height: 40vh;`}>
+		<div css={css`width: 100vw; height: 40vh; overflow: hidden; margin-bottom: 16px;`}>
 			<ResponsiveLine
 				data={data}
-				margin={{ top: 50, right: 10, bottom: 50, left: 50 }}
+				margin={{ top: 50, right: 15, bottom: 30, left: 30 }}
 				xScale={{ type: "point" }}
 				yScale={{
 					type: "linear",
@@ -56,7 +56,7 @@ const FinanceInvestChart = ({ data }: LineSvgProps) => {
 				pointLabelYOffset={-12}
 				useMesh={true}
                 curve={'monotoneX'}
-                // enableArea={true}
+                enableArea={true}
                 // areaBaselineValue={4}
                 gridYValues={5}
                 // enableGridX={false}

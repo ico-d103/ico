@@ -6,6 +6,7 @@ import { getFinanceInvestAPI } from '@/api/student/finance/getFinanceInvestAPI'
 import { getFinanceInvestType } from '@/types/student/apiReturnTypes'
 import FinanceInvestChart from '@/components/student/Finance/Invest/Chart/FinanceInvestChart'
 import { LineSvgProps } from '@nivo/line'
+import ContentWrapper from '@/components/student/common/ContentWrapper/ContentWrapper'
 
 type chartData = {
     "id": string
@@ -33,15 +34,17 @@ function index() {
                 data: []
               }]
               
-              let count = 0
-              for (const el of data.issue) {
-                
-                temp[0].data.push({x: el.date, y: el.amount})
-                count += 1
-                if (count >= 7) {
-                    break
-                }
+
+        
+              for (let i = 6; i >= 0; i--) {
+                const date = new Date(data.issue[i].date)
+                const mfDate: string = `${date.getMonth() + 1}.${date.getDate()}`
+                temp[0].data.push({x: mfDate, y: data.issue[i].amount})
+          
               }
+              
+              
+        
             //   data.issue.forEach((el, idx) => {
             //     temp[0].data.push({x: el.date, y: el.amount})
             //     if (idx >= 7) {
@@ -56,8 +59,8 @@ function index() {
     }, [data])
 
     useEffect(() => {
-        console.log(chartData)
-    }, [chartData])
+        console.log(data)
+    }, [data])
     
 
   return (
@@ -65,7 +68,15 @@ function index() {
         <PageHeader title={"투자"}/>
         <div css={contentWrapperCSS}>
             {chartData && <FinanceInvestChart data={chartData}/>}
-
+            <ContentWrapper>
+                    <div css={sSizeFontCSS}>
+                        일반 계좌
+                    </div>
+                    {data && data?.myStock.price !== 0 &&
+                    <div css={lSizeFontCSS}>
+                        {data.myStock.price} 단위연결! ({data.myStock.amount}주)
+                    </div>}
+            </ContentWrapper>
         </div>
     </div>
   )
@@ -77,5 +88,18 @@ const contentWrapperCSS = css`
     align-items: center;
 
 `
+
+const lSizeFontCSS = css`
+    font-size: var(--student-h1);
+    font-weight: 700;
+    line-height: 150%;
+
+`
+
+const sSizeFontCSS = css`
+    font-size: var(--student-h4);
+    color: rgba(0, 0, 0, 0.6);
+`
+
 
 export default index
