@@ -24,17 +24,17 @@ public class TeacherProductAllResDto {
 
     private byte sold;
 
-    private boolean isRental;
+    private boolean rental;
 
     @Builder
-    public TeacherProductAllResDto(Long id, String title, int amount, String image, byte count, byte sold, boolean isRental) {
+    public TeacherProductAllResDto(Long id, String title, int amount, String image, byte count, byte sold, boolean rental) {
         this.id = id;
         this.title = title;
         this.amount = amount;
         this.image = image;
         this.count = count;
         this.sold = sold;
-        this.isRental = isRental;
+        this.rental = rental;
     }
 
 
@@ -52,7 +52,7 @@ public class TeacherProductAllResDto {
                 .image(product.getImage())
                 .count(product.getCount())
                 .sold(product.getSold())
-                .isRental(product.getIsRental())
+                .rental(product.getRental())
                 .build();
     }
 }
