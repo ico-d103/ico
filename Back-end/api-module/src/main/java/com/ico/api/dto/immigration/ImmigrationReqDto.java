@@ -12,9 +12,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor
 public class ImmigrationReqDto {
-
-    @NotNull(message = "202")
-    Long nationId;
     @NotBlank(message = "20")
     String code;
 }
