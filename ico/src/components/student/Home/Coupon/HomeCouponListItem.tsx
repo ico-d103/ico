@@ -1,12 +1,12 @@
 import React from "react"
 import { css } from "@emotion/react"
+import { getHomeCouponType } from "@/types/student/apiReturnTypes"
+import { postHomeCouponAPI } from "@/api/student/home/postHomeCouponAPI"
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQueryClient } from '@tanstack/react-query';
 // import { CLASS_ACCEPT, CLASS_DENY } from "../ClassIcons"
 
-type HomeCouponListItemPropsType = {
-	title: string
-	quantity: number
-	hasSent: boolean
-}
+type HomeCouponListItemPropsType = getHomeCouponType
 
 const SEND_ICON = (
 	<svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,7 +20,16 @@ const SEND_ICON = (
 	</svg>
 )
 
-function HomeCouponListItem({ title, quantity, hasSent }: HomeCouponListItemPropsType) {
+function HomeCouponListItem({id, title, count, assigned }: HomeCouponListItemPropsType) {
+	const updateMutation = useMutation((idx: number) => postHomeCouponAPI({idx}));
+	const queryClient = useQueryClient();
+	const assignOnClickHandler = () => {
+		updateMutation.mutate(id, {
+			onSuccess: formData => {
+			  return queryClient.invalidateQueries(["student", "homeCouponList"]); // 'return' wait for invalidate
+			}})
+	}
+
 	const waitingLabel = <div css={sSizeFontCSS}>승인을 기다리는 중이에요!</div>
 	return (
 		<div css={wrapperCSS}>
@@ -30,13 +39,13 @@ function HomeCouponListItem({ title, quantity, hasSent }: HomeCouponListItemProp
 						css={[
 							lSizeFontCSS,
 							css`
-								color: ${hasSent && "rgba(0, 0, 0, 0.4)"};
+								color: ${assigned && "rgba(0, 0, 0, 0.4)"};
 							`,
 						]}
 					>
-						{title} {quantity}장
+						{title} {count}장
 					</div>
-					{hasSent && waitingLabel}
+					{assigned && waitingLabel}
 				</div>
 				{/* <div css={rightCSS}>
 					<h4>{mock.student}</h4>
@@ -49,7 +58,7 @@ function HomeCouponListItem({ title, quantity, hasSent }: HomeCouponListItemProp
 			<div css={rightWrapperCSS}>
 				<div css={circleCSS}></div>
 				<div css={buttonWrapperCSS}>
-					<button>{SEND_ICON}</button>
+					<button onClick={assignOnClickHandler}>{SEND_ICON}</button>
 				</div>
 
 				{/* <button>{CLASS_ACCEPT}</button>

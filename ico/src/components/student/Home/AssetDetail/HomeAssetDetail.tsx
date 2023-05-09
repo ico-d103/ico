@@ -1,18 +1,11 @@
 import React from "react"
 import { css } from "@emotion/react"
 import HomeAssetDetailItem from "./HomeAssetDetailItem"
-
+import { getHomeTransactionHistoryType } from "@/types/student/apiReturnTypes"
 
 
 type HomeAssetDetailProps = {
-	tradeHistory: {
-		[prop: string]: {
-			title: string
-			amount: number
-			balance: number
-			source?: string
-		}[]
-	}
+	tradeHistory: getHomeTransactionHistoryType
 }
 
 function HomeAssetDetail({ tradeHistory }: HomeAssetDetailProps) {
@@ -20,7 +13,7 @@ function HomeAssetDetail({ tradeHistory }: HomeAssetDetailProps) {
 		const perDayHistory = tradeHistory[key].map((item, itemIdx) => {
 			return (
 				<div>
-					<HomeAssetDetailItem {...item} unit={"미소"} />
+					<HomeAssetDetailItem {...item} unit={" 단위연결!"} />
 				</div>
 			)
 		})

@@ -9,14 +9,31 @@ import FormCreator from "@/components/teacher/common/Form/FormCreator"
 import GovJobDetail from "@/components/teacher/Gov/Job/GovJobDetail"
 import GovJobCreate from "@/components/teacher/Gov/Job/GovJobCreate"
 import GovJobCardCreate from "@/components/teacher/Gov/Job/GovJobCardCreate"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { getGovJobAPI } from "@/api/teacher/gov/getGovJobAPI"
+import { getGovJobType } from "@/types/teacher/apiReturnTypes"
+
 
 function index() {
 	const [openComp, closeComp, compState] = useCompHandler()
+
+	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getGovJobType[]>(
+		["teacher", "govJob"],
+		getGovJobAPI,
+		// { staleTime: 200000 },
+	)
+	
+	// const renderJobList = data?.map((el, idx) => {
+	// 	return (
+	// 		<GovJobDetail actualIdx={} job={el.title} description={el.detail} wage={el.wage} credit={el.creditRating} backgroundColor={el.color} imgUrl={el.image} total={el.total} count={el.count}/>
+	// 	)
+	// })
+
 	return (
 		<div css={contentWrapperCSS}>
 			<div css={titleCSS}>
 				직업 관리
-				{!compState && (
+				{/* {!compState && (
 					<Button
 						text={"추가"}
 						fontSize={"var(--teacher-h5)"}
@@ -26,13 +43,14 @@ function index() {
 							openComp()
 						}}
 					/>
-				)}
+				)} */}
 			</div>
 			<div css={descCSS}>학급의 직업 목록을 관리할 수 있습니다.</div>
 
-			<FormCreator subComp={<GovJobCreate />} frontComp={<GovJobCardCreate />} idx={0} compState={compState} closeComp={closeComp} mainInit={{title: '', content: ''}} subInit={{wage: '0', backgroundColor: '#FF165C', imgUrl: '/assets/job/worker_male.png', credit: '0' }} />
-			<GovJobDetail job={'소방관'} description={'교실 내 소화기를 주기적으로 관리하는 직업'} wage={10000} credit={3} backgroundColor={'#FF165C'} imgUrl={'/assets/job/firefighter.png'}/>
-			<GovJobDetail job={'기상 캐스터'} description={'학생들의 의견을 수렴하여 에어컨/히터의 온도를 조절하고 다음날 날씨를 알려주는 직업'} wage={12000} credit={4} backgroundColor={'#4A87FF'} imgUrl={'/assets/job/weather_caster.png'}/>
+			{/* <FormCreator subComp={<GovJobCreate />} frontComp={<GovJobCardCreate />} showIdx={0} compState={compState} closeComp={closeComp} mainInit={{title: '', content: ''}} subInit={{wage: '0', backgroundColor: '#FF165C', imgUrl: '/assets/job/worker_male.png', credit: '0' }} /> */}
+			{/* <GovJobDetail job={'소방관'} description={'교실 내 소화기를 주기적으로 관리하는 직업'} wage={10000} credit={3} backgroundColor={'#FF165C'} imgUrl={'/assets/job/firefighter.png'} total={30} count={21}/>
+			<GovJobDetail job={'기상 캐스터'} description={'학생들의 의견을 수렴하여 에어컨/히터의 온도를 조절하고 다음날 날씨를 알려주는 직업'} wage={12000} credit={4} backgroundColor={'#4A87FF'} imgUrl={'/assets/job/weather_caster.png'} total={3} count={1}/> */}
+			{/* {renderJobList} */}
 		</div>
 	)
 }

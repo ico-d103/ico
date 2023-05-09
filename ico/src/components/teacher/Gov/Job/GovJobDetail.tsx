@@ -15,9 +15,12 @@ type GovRuleClassDetailProps = {
 	credit: number
 	backgroundColor: string
 	imgUrl: string
+	total: number
+	count: number
+	actualIdx: number
 }
 
-function GovJobDetail({ job, description, wage, backgroundColor, imgUrl, credit }: GovRuleClassDetailProps) {
+function GovJobDetail({ job, description, wage, backgroundColor, imgUrl, credit, total, count, actualIdx }: GovRuleClassDetailProps) {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [openDropdown, closeDropdown, dropdownState] = useCompHandler()
 	const [isEdit, setIsEdit] = useState<boolean>(false)
@@ -84,14 +87,14 @@ function GovJobDetail({ job, description, wage, backgroundColor, imgUrl, credit 
 
 	return (
 		<div ref={wrapperRef} css={outerWrapperCSS} >
-			<FormCreator subComp={<GovJobCreate />} frontComp={<GovJobCardCreate />} showIdx={0} compState={compState} closeComp={closeEditHandler} mainInit={{title: job, content: description}} subInit={{wage, backgroundColor, imgUrl, credit }} initHeight={`${wrapperRef.current && wrapperRef.current.clientHeight}px`} />
+			<FormCreator subComp={<GovJobCreate count={count}/>} frontComp={<GovJobCardCreate />} showIdx={0} compState={compState} closeComp={closeEditHandler} mainInit={{title: job, content: description}} subInit={{wage, backgroundColor, imgUrl, credit, total }} initHeight={`${wrapperRef.current && wrapperRef.current.clientHeight}px`} />
 			<div css={WrapperCSS({isEdit, backgroundColor})}>
 				<div css={detailWrapperCSS}>
 					<GovJobCard job={job} wage={wage} backgroundColor={backgroundColor} imgUrl={imgUrl} />
 					<div css={contentWrapperCSS}>
 						<div css={headerCSS}>
 							<div css={jobTitleCSS}>
-								{job}
+								{job} ({count} / {total})
 							</div>
 							{buttonRender}
 						</div>

@@ -1,11 +1,8 @@
 import React from "react"
 import { css } from "@emotion/react"
+import { TransactionIndividualType } from "@/types/student/apiReturnTypes"
 
-type HomeAssetDetailItemProps = {
-	title: string
-	source?: string
-	balance: number
-	amount: number
+type HomeAssetDetailItemProps = TransactionIndividualType & {
     unit: string
 }
 
@@ -35,21 +32,21 @@ const MINUS_ICON = (
 
 function HomeAssetDetailItem({ title, source, balance, amount, unit }: HomeAssetDetailItemProps) {
 
-    const amountColor = amount > 0 ? '#0066FF' : 'rgba(0, 0, 0, 0.7)'
+    const amountColor = amount[0] !== '-' ? '#0066FF' : 'rgba(0, 0, 0, 0.7)'
 
 	return (
 		<div css={itemWrapperCSS}>
             <div css={iconWrapperCSS}>
-                {amount > 0 ? PLUS_ICON : MINUS_ICON}
+                {amount[0] !== '-' ? PLUS_ICON : MINUS_ICON}
             </div>
             <div css={textContentWrapperCSS}>
                 <div css={columnWrapperCSS}>
                     <div css={[lSizeFontCSS]}>{title}</div>
-                    <div css={[lSizeFontCSS, css`color: ${amountColor};`]}>{amount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}{unit}</div>
+                    <div css={[lSizeFontCSS, css`color: ${amountColor};`]}>{amount}{unit}</div>
                 </div>
                 <div css={columnWrapperCSS}>
                     <div css={[sSizeFontCSS]}>{source}</div>
-                    <div css={[sSizeFontCSS]}>{balance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}{unit}</div>
+                    <div css={[sSizeFontCSS]}>{balance}{unit}</div>
                 </div>
             </div>
 			

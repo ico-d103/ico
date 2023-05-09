@@ -4,6 +4,8 @@ import CommonListElement from "../../common/CommonListElement/CommonListElement"
 import FormCreator from "../../common/Form/FormCreator"
 import GovRuleClassCreate from "./GovRuleClassCreate"
 import useCompHandler from "@/hooks/useCompHandler"
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQueryClient } from '@tanstack/react-query';
 
 type GovRuleClassDetailProps = {
 	title: string
@@ -32,6 +34,9 @@ function GovRuleClassDetail({ title, content, date, showIdx, actualIdx }: GovRul
 		setIsEdit(() => false)
 	}
 
+	// 학급 규칙 삭제 구현시 수정해서 쓸 것 
+	// const queryClient = useQueryClient();
+	// const createMutation = useMutation((a: number) => postGovRuleAPI({body: {title: inputState.title, detail: inputState.content}}));
 
 	return (
 		<div ref={wrapperRef} >
