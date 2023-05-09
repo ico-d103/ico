@@ -103,7 +103,7 @@ public class StudentProductServiceImpl implements StudentProductService{
         long nationId = 1L;
 
         StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
-                .orElseThrow(() -> new CustomException(ErrorCode.PROPOSAL_NOT_FOND));
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         studentProductRepository.delete(product);
     }
 }

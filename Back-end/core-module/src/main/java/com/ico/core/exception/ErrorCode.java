@@ -85,13 +85,15 @@ public enum ErrorCode{
 
     INVALID_COUPON(HttpStatus.BAD_REQUEST, "506", "신청하지 않은 쿠폰입니다."),
 
-    PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "삭제된 판매 제안서입니다."),
+    PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "없는 판매 제안서입니다."),
 
     NOT_COUPON(HttpStatus.BAD_REQUEST, "614", "해당 상품은 쿠폰이 아닙니다."),
 
     NOT_RENTAL(HttpStatus.BAD_REQUEST, "615", "해당 상품은 대여 상품이 아닙니다."),
 
     SOLD_OUT(HttpStatus.BAD_REQUEST, "616", "품절된 상품입니다."),
+
+    PRODUCT_NOT_FOUND(HttpStatus.BAD_REQUEST, "617", "해당 상품은 없는 상품입니다."),
 
     NOT_TRADING_TIME(HttpStatus.BAD_REQUEST, "701", "거래시간이 아닙니다."),
 
