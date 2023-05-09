@@ -4,15 +4,10 @@ import StudentEnteredListItem from "./ClassStudentEnteredListItem"
 import KebabMenu from "@/components/teacher/common/KebabMenu/KebabMenu"
 import { getStudentListAPI } from "@/api/teacher/class/getStudentListAPI"
 import { getStudentListType } from "@/types/teacher/apiReturnTypes"
+import { useQuery } from "@tanstack/react-query"
 
 function StudentEnteredList() {
-	const [enteredList, setEnteredList] = useState<getStudentListType[]>([])
-
-	useEffect(() => {
-		getStudentListAPI().then((res) => {
-			setEnteredList(res)
-		})
-	}, [])
+	const { data } = useQuery<getStudentListType[]>(["studentList"], getStudentListAPI)
 
 	const resetStudentsJob = () => {
 		alert("직업 초기화!")
@@ -31,13 +26,14 @@ function StudentEnteredList() {
 		<div css={wrapperCSS}>
 			<div css={contentTitleCSS}>
 				<div css={titleCSS}>
-					학생들 <small>({enteredList.length})</small>
+					학생들 <small>({data?.length})</small>
 				</div>
 				<KebabMenu dropdownList={dropdownList} />
 			</div>
 			<div css={contentCSS}>
-				{enteredList.map((student, idx) => (
-					<StudentEnteredListItem key={student.number} student={student} idx={idx} />
+				{data?.map((student, idx) => (
+					// key={student.number} 로 추후 수정 필요
+					<StudentEnteredListItem key={idx} student={student} idx={idx} />
 				))}
 			</div>
 		</div>

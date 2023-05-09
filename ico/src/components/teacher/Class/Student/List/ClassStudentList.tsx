@@ -4,23 +4,18 @@ import StudentEnteredList from "./ClassStudentEnteredList"
 import StudentWaitingList from "./ClassStudentWaitingList"
 import { getImmigrationListType } from "@/types/teacher/apiReturnTypes"
 import { getImmigrationListAPI } from "@/api/teacher/class/getImmigrationListAPI"
+import { useQuery } from "@tanstack/react-query"
 
 function StudentList() {
-	const [waitingList, setWaitingList] = useState<getImmigrationListType[]>([])
-
-	useEffect(() => {
-		getImmigrationListAPI().then((res) => {
-			setWaitingList(res)
-		})
-	}, [])
+	const { data } = useQuery<getImmigrationListType[]>(["studentList", "immigration"], getImmigrationListAPI)
 
 	return (
 		<>
 			<h1 css={headerCSS}>학생 정보</h1>
 			<div css={listWrapperCSS}>
-				{waitingList.length && (
+				{data && data.length > 0 && (
 					<>
-						<StudentWaitingList waitingList={waitingList} />
+						<StudentWaitingList waitingList={data} />
 						<div css={divideLineCSS}></div>
 					</>
 				)}

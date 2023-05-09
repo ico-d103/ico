@@ -1,15 +1,42 @@
-import React from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 import { getImmigrationListType } from "@/types/teacher/apiReturnTypes"
+import { putImmigrationAcceptAPI } from "@/api/teacher/class/putImmigrationAcceptAPI"
+import { deleteImmigrationDenyAPI } from "@/api/teacher/class/deleteImmigrationDenyAPI"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 type StudentWaitingListItemPropsType = {
 	student: getImmigrationListType
+	idx: number
 }
 
-function StudentWaitingListItem({ student }: StudentWaitingListItemPropsType) {
+function StudentWaitingListItem({ student, idx }: StudentWaitingListItemPropsType) {
+	const queryClient = useQueryClient()
+	const acceptMutation = useMutation((immigrationId: number) =>
+		putImmigrationAcceptAPI({ immigrationId: immigrationId }),
+	)
+	const denyMutation = useMutation((immigrationId: number) =>
+		deleteImmigrationDenyAPI({ immigrationId: immigrationId }),
+	)
+
+	const immigrationAcceptHandler = () => {
+		acceptMutation.mutate(student.immigrationId, {
+			onSuccess: () => {
+				return queryClient.invalidateQueries(["studentList"])
+			},
+		})
+	}
+
+	const immigrationDenyHandler = () => {
+		denyMutation.mutate(student.immigrationId, {
+			onSuccess: () => {
+				return queryClient.invalidateQueries(["studentList"])
+			},
+		})
+	}
+
 	return (
-		<div css={wrapperCSS(student.id)}>
+		<div css={wrapperCSS(idx)}>
 			<div css={leftWrapperCSS}>
 				<h4>{student.number}</h4>
 				<h4>{student.name}</h4>
@@ -21,7 +48,7 @@ function StudentWaitingListItem({ student }: StudentWaitingListItemPropsType) {
 					width={"80px"}
 					height={"30px"}
 					theme={"positive"}
-					onClick={() => {}}
+					onClick={immigrationAcceptHandler}
 				/>
 				<Button
 					text={"반려"}
@@ -29,18 +56,18 @@ function StudentWaitingListItem({ student }: StudentWaitingListItemPropsType) {
 					width={"80px"}
 					height={"30px"}
 					theme={"warning"}
-					onClick={() => {}}
+					onClick={immigrationDenyHandler}
 				/>
 			</div>
 		</div>
 	)
 }
 
-const wrapperCSS = (id: number) => {
+const wrapperCSS = (idx: number) => {
 	return css`
 		width: 100%;
 		padding: 10px 15px;
-		background-color: ${id % 2 === 0 ? `var(--teacher-main-color-op-2)` : `var(--common-back-color-2)`};
+		background-color: ${idx % 2 === 0 ? `var(--teacher-main-color-op-2)` : `var(--common-back-color-2)`};
 		border-radius: 10px;
 
 		display: flex;
