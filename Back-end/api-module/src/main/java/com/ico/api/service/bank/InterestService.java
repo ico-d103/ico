@@ -1,6 +1,6 @@
 package com.ico.api.service.bank;
 
-import com.ico.api.dto.bank.AllInterestResDto;
+import com.ico.api.dto.bank.AllInterestDto;
 import com.ico.api.dto.bank.MyInterestResDto;
 
 /**
@@ -18,5 +18,12 @@ public interface InterestService {
      *
      * @return 장기 이자율 리스트, 단기 이자율 리스트
      */
-    AllInterestResDto findAllInterest();
+    AllInterestDto findAllInterest();
+
+    /**
+     * 이자율 수정
+     *
+     * @param dto 단기 이자율 값들, 장기 이자율 값들
+     */
+    void updateInterest(AllInterestDto dto);
 }
