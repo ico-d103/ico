@@ -17,9 +17,10 @@ type GovRuleClassDetailProps = {
 	imgUrl: string
 	total: number
 	count: number
+	actualIdx: number
 }
 
-function GovJobDetail({ job, description, wage, backgroundColor, imgUrl, credit, total, count }: GovRuleClassDetailProps) {
+function GovJobDetail({ job, description, wage, backgroundColor, imgUrl, credit, total, count, actualIdx }: GovRuleClassDetailProps) {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [openDropdown, closeDropdown, dropdownState] = useCompHandler()
 	const [isEdit, setIsEdit] = useState<boolean>(false)

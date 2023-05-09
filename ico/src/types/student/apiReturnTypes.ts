@@ -15,3 +15,4 @@ export type getHomeCouponType = {
     count: number,
     assigned: boolean
 }
+
