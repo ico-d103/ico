@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,15 +31,14 @@ public class Invest {
     @JoinColumn(name = "student_id")
     private Student student;
 
-    private int price;
+    private Integer price;
 
-    private int amount;
+    private Integer amount;
 
-    @CreatedDate
     private LocalDateTime date;
 
     @Builder
-    public Invest(Long id, Student student, int price, int amount, LocalDateTime date) {
+    public Invest(Long id, Student student, Integer price, Integer amount, LocalDateTime date) {
         this.id = id;
         this.student = student;
         this.price = price;
