@@ -10,8 +10,8 @@ function StudentWaitingList({ waitingList }: StudentWaitingListPropsType) {
 	return (
 		<div css={wrapperCSS}>
 			<h5>대기중인 학생을 승인 또는 반려해주세요.</h5>
-			{waitingList.map((student) => (
-				<StudentWaitingListItem key={student.id} student={student} />
+			{waitingList.map((student, idx) => (
+				<StudentWaitingListItem key={student.immigrationId} student={student} idx={idx} />
 			))}
 		</div>
 	)
