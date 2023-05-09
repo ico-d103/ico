@@ -40,9 +40,8 @@ public class NationController {
      * @return Nation
      */
     @GetMapping("/teacher")
-    public Nation getNation(HttpServletRequest request) {
-
-        return nationService.getNation(request);
+    public ResponseEntity<Nation> getNation(HttpServletRequest request) {
+        return ResponseEntity.ok(nationService.getNation(request));
     }
 
     /**
