@@ -7,6 +7,8 @@ import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
 import { KOREAN_ONLY, GRADE_ONLY, CLASS_ONLY } from "@/util/regex"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
+import { postCreateNationAPI } from "@/api/teacher/user/postCreateNationAPI"
+
 
 const inputReducer = (
 	state: { school: string; grade: string; class: string; nation: string; currency: string },
@@ -75,7 +77,7 @@ function create() {
 	useEffect(() => {
 		if (phase === 2) {
 			setTimeout(() => {
-				alert("이동!")
+				router.push('/teacher/class/student')
 			}, 2000)
 		}
 	}, [phase])
@@ -230,7 +232,20 @@ function create() {
 
 	const passSecondPhaseHandler = () => {
 		if (validState.nation && validState.currency) {
-			setPhase(() => 2)
+			postCreateNationAPI({body: {
+				school: inputState.school,
+				grade: Number(inputState.grade),
+				room: Number(inputState.class),
+				title: inputState.nation,
+				currency: inputState.currency
+			}})
+			.then((res) => {
+				setPhase(() => 2)
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+			
 		} else {
 			checkValidNationHandler(true)
 			checkValidCurrencyHandler(true)
