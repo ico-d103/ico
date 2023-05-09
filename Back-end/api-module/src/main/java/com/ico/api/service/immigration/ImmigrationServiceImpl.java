@@ -46,7 +46,7 @@ public class ImmigrationServiceImpl implements ImmigrationService {
     public void createImmigration(ImmigrationReqDto reqDto, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         String identity = jwtTokenProvider.getIdentity(token);
-        Nation nation = nationRepository.findById(reqDto.getNationId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
+        Nation nation = nationRepository.findByCode(reqDto.getCode()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
         Student student = studentRepository.findByIdentity(identity).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if (nation.getCode().equals(reqDto.getCode())) {
