@@ -12,30 +12,31 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TeacherProductAllResDto {
 
-    Long id;
+    private Long id;
 
-    String title;
+    private String title;
 
-    int amount;
+    private int amount;
 
-    String image;
+    private String image;
 
-    byte count;
+    private byte count;
 
-    byte sold;
+    private byte sold;
 
-    String type;
+    private boolean isRental;
 
     @Builder
-    public TeacherProductAllResDto(Long id, String title, int amount, String image, byte count, byte sold, String type) {
+    public TeacherProductAllResDto(Long id, String title, int amount, String image, byte count, byte sold, boolean isRental) {
         this.id = id;
         this.title = title;
         this.amount = amount;
         this.image = image;
         this.count = count;
         this.sold = sold;
-        this.type = type;
+        this.isRental = isRental;
     }
+
 
     /**
      * TeacherProduct TeacherProductAllResDto 생성
@@ -51,7 +52,7 @@ public class TeacherProductAllResDto {
                 .image(product.getImage())
                 .count(product.getCount())
                 .sold(product.getSold())
-                .type(product.getType())
+                .isRental(product.getIsRental())
                 .build();
     }
 }

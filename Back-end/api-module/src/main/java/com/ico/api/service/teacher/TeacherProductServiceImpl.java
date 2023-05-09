@@ -1,6 +1,7 @@
 package com.ico.api.service.teacher;
 
 import com.ico.api.service.transaction.TransactionService;
+import com.ico.core.dto.TeacherProductReqDto;
 import com.ico.core.entity.Coupon;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.core.entity.Nation;
@@ -26,56 +27,59 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class TeacherProductServiceImpl implements TeacherProductService{
+public class TeacherProductServiceImpl implements TeacherProductService {
     private final NationRepository nationRepository;
     private final TeacherProductRepository teacherProductRepository;
     private final StudentRepository studentRepository;
     private final TransactionService transactionService;
     private final CouponRepository couponRepository;
+
     /**
      * 교사 상품 등록
-     * @param proposal 교사 상품
+     *
+     * @param product 교사 상품
      */
     @Override
-    public void createProduct(TeacherProduct proposal) {
+    public void createProduct(TeacherProductReqDto product) {
         long nationId = 99L;
         // Todo : token 생성 이후 nation 바꾸기
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
         // 같은 국가에 같은 선생님 상품 이름이 있는지 확인
-        if(teacherProductRepository.findByNationIdAndTitle(nationId, proposal.getTitle()).isPresent()){
+        if (teacherProductRepository.findByNationIdAndTitle(nationId, product.getTitle()).isPresent()) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_TITLE);
         }
 
-        TeacherProduct product = TeacherProduct.builder()
+        TeacherProduct teacherProduct = TeacherProduct.builder()
                 .nation(nation)
-                .title(proposal.getTitle())
-                .amount(proposal.getAmount())
-                .image(proposal.getImage())
-                .detail(proposal.getDetail())
-                .count(proposal.getCount())
-                .type(proposal.getType())
+                .title(product.getTitle())
+                .amount(product.getAmount())
+                .image(product.getImage())
+                .detail(product.getDetail())
+                .count(product.getCount())
+                .isRental(product.getIsRental())
                 .sold((byte) 0)
                 .build();
-        teacherProductRepository.save(product);
+        teacherProductRepository.save(teacherProduct);
     }
 
     /**
      * 등록된 교사 상품 목록을 조회합니다.
+     *
      * @return 교사상품목록
      */
     @Override
     public List<TeacherProductAllResDto> findAllProduct() {
         long nationId = 99L;
 
-        if (nationRepository.findById(nationId).isEmpty()){
+        if (nationRepository.findById(nationId).isEmpty()) {
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
         }
 
         List<TeacherProduct> productList = teacherProductRepository.findAllByNationId(nationId);
         List<TeacherProductAllResDto> resProductList = new ArrayList<>();
-        for (TeacherProduct product : productList){
+        for (TeacherProduct product : productList) {
             resProductList.add(new TeacherProductAllResDto().of(product));
         }
 
@@ -84,6 +88,7 @@ public class TeacherProductServiceImpl implements TeacherProductService{
 
     /**
      * 쿠폰 유형의 교사 상품을 구매합니다.
+     *
      * @param id 상품 id
      */
     @Transactional
@@ -97,21 +102,21 @@ public class TeacherProductServiceImpl implements TeacherProductService{
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 타입이 일치하는지 확인
-        TeacherProduct product =  teacherProductRepository.findByIdAndNationId(id, nationId)
+        TeacherProduct product = teacherProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
-        if(!product.getType().equals("coupon")){
+        if (product.getIsRental()) {
             throw new CustomException(ErrorCode.NOT_COUPON);
         }
 
         // 재고 있는지 확인
-        if(product.getCount() == product.getSold()){
+        if (product.getCount() == product.getSold()) {
             throw new CustomException(ErrorCode.SOLD_OUT);
         }
 
         // 잔고가 충분한지 확인
         int amount = product.getAmount();
         int account = student.getAccount();
-        if(amount > account){
+        if (amount > account) {
             throw new CustomException(ErrorCode.LOW_BALANCE);
         }
 
@@ -127,16 +132,14 @@ public class TeacherProductServiceImpl implements TeacherProductService{
         // 인벤토리에 추가
         Optional<Coupon> couponOptional = couponRepository.findByTeacherProductIdAndStudentId(id, studentId);
         Coupon coupon;
-        if(couponOptional.isPresent()){
+        if (couponOptional.isPresent()) {
             coupon = couponOptional.get();
             coupon.setCount((byte) (coupon.getCount() + 1));
-        }
-        else{
+        } else {
             coupon = Coupon.builder()
                     .student(student)
                     .teacherProduct(product)
                     .title(product.getTitle())
-                    .count((byte) 1)
                     .isAssigned(false)
                     .build();
         }
