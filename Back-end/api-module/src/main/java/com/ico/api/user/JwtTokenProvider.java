@@ -244,6 +244,8 @@ public class JwtTokenProvider {
         if(cookies!=null){
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("Authorization")) {
+                    log.info("[parseJwt] 쿠키에서 Authorization 캐치");
+                    log.info("[parseJwt] 쿠키에서 Authorization : {}", cookie.getValue());
                     headerAuth = cookie.getValue();
                     break;
                 }
