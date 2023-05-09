@@ -4,6 +4,7 @@ import com.ico.api.dto.immigration.ImmigrationReqDto;
 import com.ico.api.dto.student.StudentSseDto;
 import com.ico.api.sse.SseEmitters;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.core.code.ImmigrationType;
 import com.ico.core.code.Role;
 import com.ico.core.entity.Immigration;
 import com.ico.core.entity.Nation;
@@ -48,6 +49,7 @@ public class ImmigrationServiceImpl implements ImmigrationService {
         String identity = jwtTokenProvider.getIdentity(token);
         Nation nation = nationRepository.findByCode(reqDto.getCode()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
         Student student = studentRepository.findByIdentity(identity).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        log.info(String.valueOf(student));
 
         if (nation.getCode().equals(reqDto.getCode())) {
             if (immigrationRepository.findByStudentId(student.getId()) == null) {
@@ -57,6 +59,11 @@ public class ImmigrationServiceImpl implements ImmigrationService {
                         .student(student)
                         .build();
                 immigrationRepository.save(immigration);
+
+                // 학생의 반 번호 저장 및 type 업데이트
+                student.setNumber((byte) reqDto.getNumber());
+                student.setImmigrationType(ImmigrationType.SEND);
+                studentRepository.save(student);
             } else {
                 throw new CustomException(ErrorCode.WRONG_IMMIGRATION);
             }
@@ -111,6 +118,7 @@ public class ImmigrationServiceImpl implements ImmigrationService {
                 Student student = immigration.get().getStudent();
                 if (student != null) {
                     student.setNation(immigration.get().getNation());
+                    student.setImmigrationType(ImmigrationType.APPROVE);
                     studentRepository.save(student);
 
                     immigrationRepository.delete(immigration.get());

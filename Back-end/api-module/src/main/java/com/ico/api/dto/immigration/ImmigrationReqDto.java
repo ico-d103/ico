@@ -14,4 +14,7 @@ import javax.validation.constraints.NotNull;
 public class ImmigrationReqDto {
     @NotBlank(message = "20")
     String code;
+
+    @NotNull(message = "26")
+    int number;
 }

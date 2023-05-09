@@ -1,5 +1,6 @@
 package com.ico.core.entity;
 
+import com.ico.core.code.ImmigrationType;
 import com.ico.core.code.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -70,6 +71,9 @@ public class Student {
 
     @Column(nullable = false)
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private ImmigrationType immigrationType;
 
     public void encodeStudentPassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);
