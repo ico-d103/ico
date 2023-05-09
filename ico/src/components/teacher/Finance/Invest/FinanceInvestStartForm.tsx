@@ -44,7 +44,7 @@ function FinanceInvestStartForm() {
 
 			<FormCreator
 				subComp={<FinanceInvestCreate />}
-				idx={0}
+				showIdx={0}
 				subInit={{ taxation: 0, value: 100 }}
 				compState={compState}
 				isNoTitle={true}

@@ -1,15 +1,29 @@
-import React from "react"
+import { useState, useEffect } from "react"
 import { css } from "@emotion/react"
 import StudentEnteredList from "./ClassStudentEnteredList"
 import StudentWaitingList from "./ClassStudentWaitingList"
+import { getImmigrationListType } from "@/types/teacher/apiReturnTypes"
+import { getImmigrationListAPI } from "@/api/teacher/class/getImmigrationListAPI"
 
 function StudentList() {
+	const [waitingList, setWaitingList] = useState<getImmigrationListType[]>([])
+
+	useEffect(() => {
+		getImmigrationListAPI().then((res) => {
+			setWaitingList(res)
+		})
+	}, [])
+
 	return (
 		<>
 			<h1 css={headerCSS}>학생 정보</h1>
 			<div css={listWrapperCSS}>
-				<StudentWaitingList />
-				<div css={divideLineCSS}></div>
+				{waitingList.length && (
+					<>
+						<StudentWaitingList waitingList={waitingList} />
+						<div css={divideLineCSS}></div>
+					</>
+				)}
 				<StudentEnteredList />
 			</div>
 		</>

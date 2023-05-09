@@ -209,7 +209,7 @@ function signup() {
 		}
 
 		if (ENG_NUM_ONLY.test(inputState.password) === false || lengthCheck(inputState.password, 8, 16) === false) {
-			dispatchValid({ type: "VALID_PW2", value: false })
+			dispatchValid({ type: "VALID_PW", value: false })
 			dispatchValidMessage({
 				type: "VALID_PW",
 				value: "비밀번호는 영어, 숫자 조합으로 최소 8자부터 최대 16자까지 입력 가능합니다.",

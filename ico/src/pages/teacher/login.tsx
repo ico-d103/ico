@@ -59,7 +59,6 @@ function login() {
 					})
 			})
 			.catch((error) => {
-				console.log(error)
 				setAlarm(error.response.data.message)
 			})
 	}
@@ -67,6 +66,12 @@ function login() {
 	const navToSignup = () => {
 		router.push("/teacher/signup")
 	}
+
+	const handleKeyDown = (event: any) => {
+		if (event.key === 'Enter') {
+		  loginHandler()
+		}
+	  };
 
 	return (
 		<div css={wrapperCSS}>
@@ -97,6 +102,7 @@ function login() {
 						type="password"
 						placeholder="비밀번호를 입력해주세요."
 						onChange={(e) => dispatchInput({ type: "CHANGE_PW", value: e.target.value })}
+						onKeyDown={handleKeyDown}
 					/>
 
 					<div css={signupLabelCSS}>

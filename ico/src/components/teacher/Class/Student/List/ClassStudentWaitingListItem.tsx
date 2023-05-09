@@ -1,21 +1,18 @@
 import React from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
+import { getImmigrationListType } from "@/types/teacher/apiReturnTypes"
 
 type StudentWaitingListItemPropsType = {
-	mock: {
-		id: number
-		number: number
-		name: string
-	}
+	student: getImmigrationListType
 }
 
-function StudentWaitingListItem({ mock }: StudentWaitingListItemPropsType) {
+function StudentWaitingListItem({ student }: StudentWaitingListItemPropsType) {
 	return (
-		<div css={wrapperCSS(mock.id)}>
+		<div css={wrapperCSS(student.id)}>
 			<div css={leftWrapperCSS}>
-				<h4>{mock.number}</h4>
-				<h4>{mock.name}</h4>
+				<h4>{student.number}</h4>
+				<h4>{student.name}</h4>
 			</div>
 			<div css={rightWrapperCSS}>
 				<Button
