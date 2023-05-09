@@ -1,7 +1,7 @@
 package com.ico.api.service.student;
 
-import com.ico.api.dto.student.StudentProductAllResDto;
-import com.ico.api.dto.student.StudentProductProposalDto;
+import com.ico.api.dto.studentProduct.StudentProductAllResDto;
+import com.ico.api.dto.studentProduct.StudentProductProposalDto;
 
 import java.util.List;
 

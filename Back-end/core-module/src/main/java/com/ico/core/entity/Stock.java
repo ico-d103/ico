@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,35 +15,35 @@ import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 /**
- * 투자 내역 조회
- *
  * @author 변윤경
  */
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Invest {
+public class Stock {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id")
-    private Student student;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "nation_id")
+    private Nation nation;
 
-    private Integer price;
+    private double amount;
 
-    private Integer amount;
+    private String content;
 
     private LocalDateTime date;
 
     @Builder
-    public Invest(Long id, Student student, Integer price, Integer amount, LocalDateTime date) {
+    public Stock(Long id, Nation nation, double amount, String content, LocalDateTime date) {
         this.id = id;
-        this.student = student;
-        this.price = price;
+        this.nation = nation;
         this.amount = amount;
+        this.content = content;
         this.date = date;
     }
+
+
 }

@@ -1,13 +1,16 @@
 package com.ico.api.service.nation;
 
 import com.ico.api.dto.nation.NationReqDto;
+import com.ico.core.dto.StockReqDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Role;
 import com.ico.core.entity.Nation;
+import com.ico.core.entity.Stock;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.NationRepository;
+import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
@@ -32,6 +36,7 @@ public class NationServiceImpl implements NationService {
 
     private final NationRepository nationRepository;
     private final TeacherRepository teacherRepository;
+    private final StockRepository stockRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
@@ -139,4 +144,39 @@ public class NationServiceImpl implements NationService {
 //            throw new CustomException(ErrorCode.NOT_FOUND_NATION);
 //        }
 //    }
+
+
+    /**
+     * 투자 종목 등록
+     *
+     * @param stockReqDto 종목 정보
+     */
+    @Transactional
+    @Override
+    public void createStock(StockReqDto stockReqDto) {
+        Long nationId = 99L;
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
+
+        // 이미 주식 존재 여부 확인
+        if(nation.getStock() == null || nation.getStock().equals("")){
+            // Nation에 주식 정보 업데이트
+            nation.updateStock(stockReqDto);
+            nationRepository.save(nation);
+
+            // 주식 가격, 이슈 등록
+            Stock stock = Stock.builder()
+                    .nation(nation)
+                    .amount(stockReqDto.getAmount())
+                    .content(stockReqDto.getContent())
+                    .date(LocalDateTime.now())
+                    .build();
+            stockRepository.save(stock);
+        }
+        else{
+            throw new CustomException(ErrorCode.ALREADY_EXIST_STOCK);
+        }
+    }
+
+
 }
