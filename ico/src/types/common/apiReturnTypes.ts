@@ -9,8 +9,3 @@ export type postDuplicationCheckType = {
 	message: string
 	isDuplicated: boolean
 }
-
-export type postDuplicationCheckType = {
-    message: string
-    isDuplicated: boolean
-}

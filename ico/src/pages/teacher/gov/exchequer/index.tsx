@@ -7,9 +7,33 @@ import { css } from "@emotion/react"
 import GovExchequerCreate from "@/components/teacher/Gov/Exchequer/GovExchequerCreate"
 import GovExchequerDetail from "@/components/teacher/Gov/Exchequer/GovExchequerDetail"
 import FormCreator from "@/components/teacher/common/Form/FormCreator"
+import { getGovExchequerAPI } from "@/api/teacher/gov/getGovExchequerAPI"
+import { getGovExchequerType } from "@/types/teacher/apiReturnTypes"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 
 function index() {
 	const [openComp, closeComp, compState] = useCompHandler()
+
+	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getGovExchequerType[]>(
+		["teacher", "govExchequer"],
+		getGovExchequerAPI,
+		// { staleTime: 200000 },
+	)
+
+	const renderExchequerList = data?.map((el, idx) => {
+		return (
+			<GovExchequerDetail
+				showIdx={idx}
+				actualIdx={el.id}
+				title={el.title}
+				content={"세금 내용입니다. 입섬 로렘..."}
+				taxAspect={el.type}
+				taxValue={el.amount}
+			/>
+		)
+	})
+
+
 	return (
 		<div css={contentWrapperCSS}>
 			<div css={titleCSS}>
@@ -31,13 +55,14 @@ function index() {
 			<FormCreator
 				subComp={<GovExchequerCreate />}
 				subInit={{ taxation: 0, value: 1 }}
-				idx={0}
+				showIdx={0}
 				compState={compState}
 				closeComp={closeComp}
 			/>
 
-			<GovExchequerDetail
-				idx={0}
+<GovExchequerDetail
+				showIdx={0}
+				actualIdx={0}
 				title={"세금 제목 1"}
 				content={"세금 내용입니다. 입섬 로렘..."}
 				taxAspect={0}
