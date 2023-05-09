@@ -58,7 +58,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 .image(product.getImage())
                 .detail(product.getDetail())
                 .count(product.getCount())
-                .isRental(product.getIsRental())
+                .rental(product.getRental())
                 .sold((byte) 0)
                 .build();
         teacherProductRepository.save(teacherProduct);
@@ -104,7 +104,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         // 타입이 일치하는지 확인
         TeacherProduct product = teacherProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
-        if (product.getIsRental()) {
+        if (product.getRental()) {
             throw new CustomException(ErrorCode.NOT_COUPON);
         }
 
