@@ -158,7 +158,7 @@ public class ImmigrationServiceImpl implements ImmigrationService {
         List<Immigration> immigrationList = immigrationRepository.findAllByNationId(nationId);
         List<StudentSseDto> dtoList = new ArrayList<>();
         for (Immigration immigration : immigrationList) {
-            dtoList.add(new StudentSseDto().of(immigration.getStudent()));
+            dtoList.add(new StudentSseDto().of(immigration.getStudent(), immigration.getId()));
         }
         return dtoList;
     }
