@@ -3,6 +3,7 @@ package com.ico.api.controller;
 import com.ico.api.dto.nation.NationReqDto;
 import com.ico.core.dto.StockReqDto;
 import com.ico.api.service.nation.NationService;
+import com.ico.core.entity.Nation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +40,9 @@ public class NationController {
      * @return Nation
      */
     @GetMapping("/teacher")
-    public ResponseEntity<?> getNation(HttpServletRequest request) {
+    public Nation getNation(HttpServletRequest request) {
 
-        return new ResponseEntity<>(nationService.getNation(request), HttpStatus.OK);
+        return nationService.getNation(request);
     }
 
     /**
