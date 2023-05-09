@@ -10,10 +10,11 @@ type GovRuleClassDetailProps = {
 	content: string
 	taxAspect: 0 | 1
 	taxValue: number
-	idx: number
+	showIdx: number
+	actualIdx: number
 }
 
-function GovExchequerDetail({ title, content, taxAspect, taxValue, idx }: GovRuleClassDetailProps) {
+function GovExchequerDetail({ title, content, taxAspect, taxValue, showIdx, actualIdx }: GovRuleClassDetailProps) {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const wrapperRef = useRef<HTMLDivElement>(null)
@@ -73,7 +74,7 @@ function GovExchequerDetail({ title, content, taxAspect, taxValue, idx }: GovRul
 		<div ref={wrapperRef}>
 			<FormCreator
 				subComp={<GovExchequerCreate />}
-				idx={idx}
+				showIdx={showIdx}
 				compState={compState}
 				closeComp={closeEditHandler}
 				mainInit={{ title, content }}
@@ -81,7 +82,7 @@ function GovExchequerDetail({ title, content, taxAspect, taxValue, idx }: GovRul
 				initHeight={`${wrapperRef.current && wrapperRef.current.clientHeight}px`}
 			/>
 			<div css={WrapperCSS({ isEdit, compState })}>
-				<CommonListElement idx={idx} dropdownList={dropdownList}>
+				<CommonListElement idx={showIdx} dropdownList={dropdownList}>
 					<div css={detailWrapperCSS}>
 						<div css={taxInfoWrapperCSS}>
 							<div css={titleCSS}>{title}</div>

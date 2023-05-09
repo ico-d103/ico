@@ -8,7 +8,7 @@ function FormCreateExample() {
 	return (
 		<div>
 			<button onClick={openComp}>폼 열기</button>
-			<FormCreator subComp={<CreateSubForm />} idx={0} compState={compState} closeComp={closeComp} />
+			<FormCreator subComp={<CreateSubForm />} showIdx={0} compState={compState} closeComp={closeComp} />
 		</div>
 	)	
 }
