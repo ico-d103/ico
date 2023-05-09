@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Map;
 
 /**
  * @author 강교철
  * @author 변윤경
+ * @author 서재건
  */
 @RestController
 @RequestMapping("/api/nation")
@@ -54,5 +56,16 @@ public class NationController {
     public ResponseEntity<HttpStatus> createStock(@Valid @RequestBody StockReqDto stockReqDto){
         nationService.createStock(stockReqDto);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 국고 잔금 조회
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping("/treasury")
+    public ResponseEntity<Map<String, Integer>> findTreasury(HttpServletRequest request) {
+        return ResponseEntity.ok(nationService.findTreasury(request));
     }
 }
