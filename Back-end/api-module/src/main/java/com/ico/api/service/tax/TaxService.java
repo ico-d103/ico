@@ -27,4 +27,11 @@ public interface TaxService {
      * @param dto
      */
     void updateTax(Long taxId, TaxReqDto dto);
+
+    /**
+     * 국세 정보 추가
+     *
+     * @param dto
+     */
+    void addTax(TaxReqDto dto, HttpServletRequest request);
 }
