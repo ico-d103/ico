@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { css } from "@emotion/react"
+import { postImmigrationAPI } from "@/api/student/user/postImmigrationAPI"
+
 import Button from "@/components/common/Button/Button"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
@@ -25,6 +27,14 @@ function enter() {
 		code4: "",
 		code5: "",
 	})
+
+	const submitCodeFunction = async () => {
+		postImmigrationAPI({
+			body: {
+				code: submitCode,
+			},
+		})
+	}
 
 	useEffect(() => {
 		if (code.code1 !== "" && code.code2 !== "" && code.code3 !== "" && code.code4 !== "" && code.code5 !== "") {
@@ -77,7 +87,7 @@ function enter() {
 					fontSize={`var(--teacher-h5)`}
 					width={"100%"}
 					theme={"mobileNormal"}
-					onClick={() => {}}
+					onClick={submitCodeFunction}
 				/>
 			</div>
 		</>
