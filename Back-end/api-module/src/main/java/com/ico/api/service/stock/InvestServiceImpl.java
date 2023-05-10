@@ -113,7 +113,7 @@ public class InvestServiceImpl implements InvestService{
         }
 
         // 국가의 주식 데이터가 없을 경우
-        List<Stock> stockList = stockRepository.findAllByNationIdOrderByDateDesc(nationId);
+        List<Stock> stockList = stockRepository.findAllByNationIdOrderByIdDesc(nationId);
         if(stockList.isEmpty()){
             throw new CustomException(ErrorCode.NOT_FOUND_STOCK);
         }

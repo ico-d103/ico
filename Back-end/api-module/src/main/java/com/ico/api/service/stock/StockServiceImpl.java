@@ -166,7 +166,7 @@ public class StockServiceImpl implements StockService{
      */
     private List<StockColDto> getIssues(Long nationId){
         List<StockColDto> issuesRes = new ArrayList<>();
-        List<Stock> issues = stockRepository.findAllByNationIdOrderByDateDesc(nationId);
+        List<Stock> issues = stockRepository.findAllByNationIdOrderByIdDesc(nationId);
         for(Stock issue : issues){
             StockColDto col = new StockColDto();
             col.setContent(issue.getContent());
