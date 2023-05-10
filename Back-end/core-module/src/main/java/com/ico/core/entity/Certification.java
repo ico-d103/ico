@@ -4,6 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * @author 강교철
+ */
 @Entity
 @Getter
 @Setter
@@ -15,7 +18,7 @@ public class Certification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     private Teacher teacher;
     private String image;
 }

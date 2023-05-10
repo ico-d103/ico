@@ -22,3 +22,6 @@ INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_i
 INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (8, 8, 13, 3, 99);
 INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (9, 9, 10, 0, 99);
 INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (10, 10, 10, 0, 99);
+
+INSERT INTO ico.teacher (id, identity, is_assigned, name, password, role)
+VALUES (999, 'ssafyd103', false, '관리자', 'ssafyd103', 'ADMIN');
