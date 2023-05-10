@@ -4,6 +4,7 @@ import { putReleaseAccountAPI } from "@/api/teacher/class/putReleaseAccountAPI"
 import { useAtomValue } from "jotai"
 import { selectedStudent } from "@/store/store"
 import { putSuspendAccountAPI } from "@/api/teacher/class/putSuspendAccountAPI"
+import { putResetStudentJobAPI } from "@/api/teacher/class/putResetStudentJobAPI"
 
 type ClassStudentDetailHeadPropsType = {
 	studentName: string
@@ -14,7 +15,9 @@ function ClassStudentDetailHead({ studentName, frozen }: ClassStudentDetailHeadP
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 
 	const resetStudentJob = () => {
-		// 직업 초기화
+		putResetStudentJobAPI({ studentId: selectedStudentAtom })
+			.then((res) => {})
+			.catch((error) => alert(error.response.message))
 	}
 
 	const preventStudentAccount = () => {

@@ -4,12 +4,15 @@ import KebabMenu from "@/components/teacher/common/KebabMenu/KebabMenu"
 import { getStudentListAPI } from "@/api/teacher/class/getStudentListAPI"
 import { getStudentListType } from "@/types/teacher/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
+import { putResetStudentsJobAPI } from "@/api/teacher/class/putResetStudentsJobAPI"
 
 function StudentEnteredList() {
 	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
 
 	const resetStudentsJob = () => {
-		alert("직업 초기화!")
+		putResetStudentsJobAPI()
+			.then((res) => {})
+			.catch((error) => alert(error.response.message))
 	}
 
 	const dropdownList = [
