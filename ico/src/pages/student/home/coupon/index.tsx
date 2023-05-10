@@ -28,6 +28,12 @@ function coupon() {
 			<PageHeader title={"쿠폰함"} />
 			<div css={couponWrapperCSS}>
 				<ContentWrapper>
+				<Loading
+							size={96}
+							labelSize={18}
+							labelMargin={"24px 0px 16px 0px"}
+							label={"쿠폰들을 불러오는 중이에요!"}
+						/>
 					{isLoading && (
 						<Loading
 							size={96}

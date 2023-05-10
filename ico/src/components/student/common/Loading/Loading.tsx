@@ -9,7 +9,10 @@ function Loading({size, labelSize, label, labelMargin}: {size: number; labelSize
   const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
   return (
     <div css={wrapperCSS}>
+      <div css={css`width: ${size}px; height: ${size}px;`}>
         {isNavigatingAtom === false && <UseAnimations animation={loading} size={size} />}
+      </div>
+        
         <div css={labelCSS({labelSize, labelMargin})}>{label}</div>
     </div>
   )
