@@ -1,5 +1,6 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.student.StudentListResDto;
 import com.ico.api.dto.student.StudentResDto;
@@ -77,6 +78,17 @@ public class StudentController {
     @GetMapping("/teacher/{studentId}")
     public ResponseEntity<StudentResDto> findStudent(@PathVariable Long studentId) {
         return ResponseEntity.ok(studentService.findStudent(studentId));
+    }
+
+    /**
+     * 학생 내 정보 조회
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping("/student/my-page")
+    public ResponseEntity<StudentMyPageResDto> findStudentMyPage(HttpServletRequest request) {
+        return ResponseEntity.ok(studentService.findStudentMyPage(request));
     }
 
 }

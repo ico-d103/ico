@@ -1,6 +1,7 @@
 package com.ico.api.service.student;
 
 import com.ico.api.dto.student.StudentListResDto;
+import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.student.StudentResDto;
 import com.ico.api.dto.transaction.TransactionColDto;
 import com.ico.api.dto.user.AccountDto;
@@ -165,6 +166,16 @@ public class StudentServiceImpl implements StudentService{
                     .build());
         }
         return new StudentResDto().of(student, map);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public StudentMyPageResDto findStudentMyPage(HttpServletRequest request) {
+        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return new StudentMyPageResDto().of(student, student.getNation(), student.getJob());
     }
 
 }
