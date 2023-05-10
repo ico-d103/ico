@@ -27,11 +27,11 @@ public class CertificationServiceImpl implements CertificationService{
         if (optionalCertification.isPresent()) {
             Certification certification = optionalCertification.get();
             // S3 서버에서 파일 삭제
-            s3.deleteFile(certification.getImage());
+            // TODO : 수정 중
+//            s3.deleteFile(certification.getImage());
 
-            Long teacherId = certification.getTeacher().getId();
-            Optional<Teacher> teacher = teacherRepository.findById(teacherId);
-            teacher.get().setAssigned(true);
+            Teacher teacher = certification.getTeacher();
+            teacher.setAssigned(true);
 
             // Certification 삭제
             certificationRepository.deleteById(id);
@@ -44,7 +44,8 @@ public class CertificationServiceImpl implements CertificationService{
         if (optionalCertification.isPresent()) {
             Certification certification = optionalCertification.get();
             // S3 서버에서 파일 삭제
-            s3.deleteFile(certification.getImage());
+            // TODO : 수정 중
+//            s3.deleteFile(certification.getImage());
             // Certification 삭제
             certificationRepository.deleteById(id);
         }
