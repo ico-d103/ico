@@ -20,7 +20,7 @@ public class DepositReqDto {
     @NotNull
     private Boolean longPeriod;
 
-    @Min(value = 0, message = "723")
+    @Min(value = 1, message = "723")
     private int amount;
 
     @Builder

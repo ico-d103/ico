@@ -24,17 +24,17 @@ public class Deposit {
 
     private Long studentId;
 
-    private Byte interest;
+    private byte interest;
 
     @CreatedDate
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
 
-    private Byte creditRating;
+    private byte creditRating;
 
     @Builder
-    public Deposit(String id, Long studentId, Byte interest, LocalDateTime startDate, LocalDateTime endDate, Byte creditRating) {
+    public Deposit(String id, Long studentId, byte interest, LocalDateTime startDate, LocalDateTime endDate, byte creditRating) {
         this.id = id;
         this.studentId = studentId;
         this.interest = interest;

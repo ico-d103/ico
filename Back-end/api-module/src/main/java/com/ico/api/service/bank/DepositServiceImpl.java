@@ -17,6 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+/**
+ * 예금 Service
+ *
+ * @author 변윤경
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -72,7 +77,7 @@ public class DepositServiceImpl implements DepositService{
                 throw new CustomException(ErrorCode.LOWER_INTEREST);
             }
             // 적용 이자율
-            interestRate = interest.getLongPeriod();
+            interestRate = interest.getShortPeriod();
             endDate = LocalDateTime.now().plusDays(7);
         }
 
