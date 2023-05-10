@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from "react"
 import html2canvas from "html2canvas"
-import { navTo } from "@/store/store"
+import { navTo, isNavigating } from "@/store/store"
 import { useAtom } from "jotai"
 import { css } from "@emotion/react"
 import { useRouter } from "next/router"
 import Image from "next/image"
 import DomToImage from "dom-to-image"
 import * as htmlToImage from 'html-to-image';
+import useNavigate from "@/hooks/useNavigate"
 
 type TransitionWrapperProps = {
 	children: any
@@ -15,6 +16,7 @@ type TransitionWrapperProps = {
 function TransitionWrapper({ children }: TransitionWrapperProps) {
 	const [screenshot, setScreenshot] = useState("")
 	const [navToAtom, setNavToAtom] = useAtom(navTo)
+	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 	const [beforeTransition, setBeforeTransition] = useState<boolean>(false)
 	const [isTransitioning, setIsTransitioning] = useState<boolean>(false)
 	const [isImageLoading, setIsImageLoading] = useState<boolean>(false)
@@ -23,6 +25,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
 	const contentInnerWrapperRef = useRef<HTMLDivElement>(null)
 	const router = useRouter()
+	const navigate = useNavigate()
 
 	const isIos = () => {
 		let isIos = false
@@ -45,16 +48,19 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 		router.beforePopState(({ url, as, options }) => {
 			if (isIos() === true) {
+				setIsNavigatingAtom(() => true)
 				setNavToAtom(() => {
 					return { url: "", transition: "" }
 				})
+				// navigate("", "")
 
 				return true
 			} else {
+				setIsNavigatingAtom(() => true)
 				setNavToAtom(() => {
 					return { url: url, transition: "beforeScale" }
 				})
-
+				// navigate(url, "beforeScale")
 				return false
 			}
 		})
@@ -137,6 +143,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				})
 				setScreenshot(() => "")
 				setIsImageLoading(() => false)
+				setIsNavigatingAtom(() => false)
 			}, 300)
 		}
 	}, [router.pathname])
