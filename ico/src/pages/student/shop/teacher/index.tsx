@@ -54,7 +54,7 @@ function index() {
 	return (
 		<>
 			<PageHeader title={"상점"} addComp={<TabMenu menus={ShopTabMenus()} selected={0} />} />
-			<div css={cardWrapperCSS}>
+			{/* <div css={cardWrapperCSS}>
 				{cardData.map((card) => (
 					<Card
 						key={card.id}
@@ -67,7 +67,7 @@ function index() {
 						approved={card.approved}
 					/>
 				))}
-			</div>
+			</div> */}
 		</>
 	)
 }
