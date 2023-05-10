@@ -8,6 +8,13 @@ import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 import java.time.LocalTime;
 
+/**
+ * 나라 Entity
+ *
+ * @author 강교철
+ * @author 변윤경
+ * @author 서재건
+ */
 @Entity
 @Getter
 @Setter
@@ -49,10 +56,10 @@ public class Nation {
 
     private LocalTime trading_end;
 
-    @ColumnDefault("20")
+    @ColumnDefault("50")
     private byte credit_up;
 
-    @ColumnDefault("50")
+    @ColumnDefault("20")
     private byte credit_down;
 
     /**
@@ -64,5 +71,17 @@ public class Nation {
         this.stock = dto.getStock();
         this.trading_start = dto.getTradingStart();
         this.trading_end = dto.getTradingEnd();
+    }
+
+    /**
+     * 신용점수 등락폭 수정
+     *
+     * @param creditUp
+     * @param creditDown
+     */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public void updateCredit(int creditUp, int creditDown) {
+        this.credit_up = (byte) creditUp;
+        this.credit_down = (byte) creditDown;
     }
 }
