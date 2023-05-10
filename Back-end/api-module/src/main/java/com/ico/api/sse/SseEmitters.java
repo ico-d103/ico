@@ -2,8 +2,6 @@ package com.ico.api.sse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ico.api.dto.student.StudentSseDto;
-import com.ico.core.exception.CustomException;
-import com.ico.core.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -56,12 +54,23 @@ public class SseEmitters {
     public void send(List<StudentSseDto> student) {
         emitters.forEach(emitter -> {
             try {
+                log.info("[SSE send] : {}", emitter);
                 emitter.send(SseEmitter.event()
                         .name("studentList")
                         .data(objectMapper.writeValueAsString(student)));
+            } catch (IllegalStateException e) {
+                log.info("[SSE send 실패 IllegalStateException] : {}", emitter);
+                emitter.onCompletion(() -> {
+                    log.info("IllegalStateException onCompletion callback");
+                    this.emitters.remove(emitter);
+                });
             } catch (IOException e) {
+                log.info("[SSE send 실패 IOException] : {}", emitter);
                 log.info("[SseEmitters.send] 전송 실패");
-                throw new CustomException(ErrorCode.FAIL_SSE_SEND);
+                emitter.onCompletion(() -> {
+                    log.info("IOException onCompletion callback");
+                    this.emitters.remove(emitter);
+                });
             }
         });
     }

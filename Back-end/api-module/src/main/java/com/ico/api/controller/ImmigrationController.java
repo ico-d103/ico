@@ -6,6 +6,7 @@ import com.ico.api.dto.student.StudentSseDto;
 import com.ico.api.sse.SseEmitters;
 import com.ico.core.entity.Immigration;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ import java.util.List;
  * @author 강교철
  * @author 서재건
  */
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/immigration")
@@ -126,6 +128,7 @@ public class ImmigrationController {
                     .name("connect")
                     .data("connected!"));
         } catch (IOException e) {
+            log.info("connect 연결 실패");
             throw new RuntimeException(e);
         }
         return ResponseEntity.ok().header("X-Accel-Buffering", "no").body(emitter);
