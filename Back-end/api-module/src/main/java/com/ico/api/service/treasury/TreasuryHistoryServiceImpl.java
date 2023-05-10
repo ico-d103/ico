@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.NumberFormat;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -46,11 +45,9 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
-    private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
-    // TODO: 프론트와 상의하여 날짜 출력값 조정 필요
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM월 dd일-HH:mm");
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd-HH:mm");
 
-    public static final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("MM월 dd일");
+    private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
 
     @Override
     public List<TreasuryHistoryTeacherResDto> findAllTreasuryHistory(int page, int size, HttpServletRequest request) {
@@ -96,10 +93,6 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
 
         Map<String, List<TreasuryHistoryColDto>> map = new LinkedHashMap<>();
 
-        LocalDateTime now = LocalDateTime.now();
-        String curDay = now.format(dayFormatter);
-        String yesterday = now.minusDays(1).format(dayFormatter);
-
         int curTreasury = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND))
                 .getTreasury();
@@ -110,7 +103,7 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
             String source = treasuryHistory.getSource() + " · " + dateTime[1];
             int balance = curTreasury;
             curTreasury += -1 * treasuryHistory.getAmount();
-            String date = getDay(dateTime[0], curDay, yesterday);
+            String date = dateTime[0];
 
             map.putIfAbsent(date, new ArrayList<>());
             map.get(date).add(TreasuryHistoryColDto.builder()
@@ -124,20 +117,4 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
         return map;
     }
 
-    /**
-     * 오늘과 어제일 경우 문자열 추가
-     *
-     * @param day 거래 날짜
-     * @param curDay 오늘 날짜
-     * @param yesterday 어제 날짜
-     * @return
-     */
-    private String getDay(String day, String curDay, String yesterday) {
-        if (curDay.equals(day)) {
-            return day + " · 오늘";
-        } else if (yesterday.equals(day)) {
-            return day + " · 어제";
-        }
-        return day;
-    }
 }
