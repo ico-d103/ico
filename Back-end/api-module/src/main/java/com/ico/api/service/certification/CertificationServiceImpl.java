@@ -36,6 +36,7 @@ public class CertificationServiceImpl implements CertificationService{
     private final JwtTokenProvider jwtTokenProvider;
     private final S3UploadService s3;
 
+    @Override
     @Transactional
     public void approveCertification(HttpServletRequest request, Long id) {
         String token = jwtTokenProvider.parseJwt(request);
@@ -55,9 +56,14 @@ public class CertificationServiceImpl implements CertificationService{
                 // Certification 삭제
                 certificationRepository.delete(certification);
             }
+            else {
+                throw new CustomException(ErrorCode.NOT_FOUND_IMAGE);
+            }
         }
     }
 
+    @Override
+    @Transactional
     public void deleteCertification(HttpServletRequest request, Long id) {
         String token = jwtTokenProvider.parseJwt(request);
         if (token != null && jwtTokenProvider.getRole(token).equals(Role.ADMIN)) {
@@ -71,9 +77,13 @@ public class CertificationServiceImpl implements CertificationService{
                 certificationRepository.delete(certification);
             }
         }
+        else {
+            throw new CustomException(ErrorCode.NOT_FOUND_IMAGE);
+        }
     }
 
     @Override
+    @Transactional
     public Page<CertificationResDto> pageCertification(HttpServletRequest request, Pageable pageable) {
         String token = jwtTokenProvider.parseJwt(request);
         if (token == null || !jwtTokenProvider.getRole(token).equals(Role.ADMIN)) {
@@ -82,12 +92,15 @@ public class CertificationServiceImpl implements CertificationService{
 
         Page<Certification> certificationPage = certificationRepository.findAll(pageable);
 
-        List<CertificationResDto> certificationResDtoList = certificationPage.getContent()
+        List<CertificationResDto> certificationResDtoLists = certificationPage.getContent()
                 .stream()
                 .map(CertificationResDto::new)
                 .collect(Collectors.toList());
-
-        return new PageImpl<>(certificationResDtoList, pageable, certificationPage.getTotalElements());
+        // image url 변경해서 보내주기
+        for (CertificationResDto certificationResDtoList:certificationResDtoLists) {
+            certificationResDtoList.setImage(s3.getFileURL(certificationResDtoList.getImage()));
+        }
+        return new PageImpl<>(certificationResDtoLists, pageable, certificationPage.getTotalElements());
 
     }
 }

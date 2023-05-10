@@ -28,25 +28,31 @@ public class CertificationController {
     /**
      * 교사인증서 승인
      * @param id
-     * @return
+     * @return OK
      */
     @DeleteMapping("/admin/approve/{id}")
-    public ResponseEntity<Void> approveCertification(@PathVariable Long id, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> approveCertification(@PathVariable Long id, HttpServletRequest request) {
         certificationService.approveCertification(request, id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     /**
      * 교사인증서 반려
      * @param id
-     * @return
+     * @return OK
      */
     @DeleteMapping("/admin/delete/{id}")
-    public ResponseEntity<Void> deleteCertification(@PathVariable Long id, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> deleteCertification(@PathVariable Long id, HttpServletRequest request) {
         certificationService.deleteCertification(request, id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    /**
+     * 교사인증서 조회
+     * @param request
+     * @param pageable
+     * @return Page
+     */
     @GetMapping("/admin")
     public ResponseEntity<Page<CertificationResDto>> allCertification(HttpServletRequest request, Pageable pageable) {
 

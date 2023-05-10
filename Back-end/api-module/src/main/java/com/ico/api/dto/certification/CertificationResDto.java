@@ -21,4 +21,8 @@ public class CertificationResDto {
         this.name = certification.getTeacher().getName();
         this.image = certification.getImage();
     }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

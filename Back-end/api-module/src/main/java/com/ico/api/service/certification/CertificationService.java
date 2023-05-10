@@ -24,7 +24,7 @@ public interface CertificationService {
     void deleteCertification(HttpServletRequest request, Long id);
 
     /**
-     * 어드민이 교사인증서 모두를 봄
+     * 어드민이 교사인증서 모두 조회
      * @param request
      * @param pageable
      * @return
