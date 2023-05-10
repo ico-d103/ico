@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react"
+import { useEffect, useReducer, useState } from "react"
 import { css } from "@emotion/react"
 import ClassStudentDetailHead from "./ClassStudentDetailHead"
 import ClassStudentDetailMoney from "./ClassStudentDetailMoney"
@@ -38,6 +38,7 @@ const studentReducer = (
 }
 
 function StudentDetail() {
+	const [isEnabled, setIsEnabled] = useState<boolean>(false)
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 	const [studentState, dispatchStudent] = useReducer(studentReducer, {
 		studentId: -1,
@@ -46,21 +47,25 @@ function StudentDetail() {
 		transactions: {},
 		frozen: false,
 	})
-	const { data } = useQuery<getStudentDetailType>(["entered", "studentDetail"], (id) =>
-		getStudentDetailAPI({ id: selectedStudentAtom }),
+
+	const { data } = useQuery<getStudentDetailType>(
+		["entered", "studentDetail"],
+		() => getStudentDetailAPI({ id: selectedStudentAtom }),
+		{ enabled: isEnabled },
 	)
 
 	useEffect(() => {
 		if (selectedStudentAtom !== -1) {
-			getStudentDetailAPI({ id: selectedStudentAtom })
-				.then((res) => {
-					dispatchStudent({ type: "CHANGE_STATE", value: res })
-				})
-				.catch((error) => {
-					console.log(error.response.message)
-				})
+			setIsEnabled(true)
 		}
 	}, [selectedStudentAtom])
+
+	useEffect(() => {
+		if (data !== undefined) {
+			dispatchStudent({ type: "CHANGE_STATE", value: data })
+			setIsEnabled(false)
+		}
+	}, [data])
 
 	return (
 		<>
