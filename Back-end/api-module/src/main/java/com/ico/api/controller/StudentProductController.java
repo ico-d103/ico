@@ -1,6 +1,7 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.studentProduct.StudentProductAllResDto;
+import com.ico.api.dto.studentProduct.StudentProductDetailResDto;
 import com.ico.api.dto.studentProduct.StudentProductReqDto;
 import com.ico.api.service.student.StudentProductService;
 import lombok.RequiredArgsConstructor;
@@ -76,5 +77,16 @@ public class StudentProductController {
     public ResponseEntity<HttpStatus> deleteProduct(@PathVariable Long studentProductId) {
         studentProductService.deleteProduct(studentProductId);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 학생상품 상세보기
+     *
+     * @param studentProductId 학생 상품 id
+     * @return 학생상품 상세 정보
+     */
+    @GetMapping("/{studentProductId}")
+    public ResponseEntity<StudentProductDetailResDto> detailProduct(@PathVariable Long studentProductId){
+        return ResponseEntity.ok(studentProductService.detailProduct(studentProductId));
     }
 }

@@ -1,6 +1,7 @@
 package com.ico.api.service.teacher;
 
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
+import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.core.dto.TeacherProductReqDto;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,4 +33,6 @@ public interface TeacherProductService {
      * @param id 상품 id
      */
     void buyCoupon(Long id);
+
+    TeacherProductDetailResDto detailProduct(Long id);
 }

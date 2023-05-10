@@ -1,6 +1,7 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
+import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.api.service.teacher.TeacherProductService;
 import com.ico.core.dto.TeacherProductReqDto;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class TeacherProductController {
     private final TeacherProductService teacherProductService;
 
     /**
-     * 판매 제안서 등록
+     * 교사 상품 등록
      *
      * @param product 상품 양식
      *                 제품이름, 가격, 사진 , 상세정보, 개수, 유형(쿠폰, 대여)
@@ -62,6 +63,17 @@ public class TeacherProductController {
     public ResponseEntity<HttpStatus> buyCoupon(@PathVariable Long teacherProductId) {
         teacherProductService.buyCoupon(teacherProductId);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 교사 상품 상세보기
+     *
+     * @param teacherProductId 교사 상품 ID
+     * @return 교사 상품 상세 정보
+     */
+    @GetMapping("/{teacherProductId}")
+    public ResponseEntity<TeacherProductDetailResDto> detailProduct(@PathVariable Long teacherProductId){
+        return ResponseEntity.ok(teacherProductService.detailProduct(teacherProductId));
     }
 
 
