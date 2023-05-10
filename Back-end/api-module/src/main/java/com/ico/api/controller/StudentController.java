@@ -1,6 +1,7 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.nation.CreditScoreReqDto;
+import com.ico.api.dto.student.StudentAllResDto;
 import com.ico.api.dto.student.StudentListResDto;
 import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.student.StudentResDto;
@@ -128,6 +129,16 @@ public class StudentController {
     public ResponseEntity<HttpStatus> releaseAccount(@PathVariable Long studentId) {
         studentService.releaseAccount(studentId);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 학생의 반 친구 목록 조회
+     *
+     * @return
+     */
+    @GetMapping("/student")
+    public ResponseEntity<List<StudentAllResDto>> findListStudent(HttpServletRequest request) {
+        return ResponseEntity.ok(studentService.findListStudent(request));
     }
 
 }
