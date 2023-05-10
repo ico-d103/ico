@@ -62,8 +62,7 @@ subprojects {
 		runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 		// CollSMS
 		implementation 'net.nurigo:sdk:4.2.7'
-		// S3
-		implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 
 	}
 
