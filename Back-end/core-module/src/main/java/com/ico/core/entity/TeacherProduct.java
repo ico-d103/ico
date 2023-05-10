@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.time.LocalDateTime;
 
 /**
  * @author 변윤경
@@ -41,10 +42,13 @@ public class TeacherProduct {
     private byte count;
 
     private Boolean rental;
+
     private byte sold;
 
+    private LocalDateTime date;
+
     @Builder
-    public TeacherProduct(Long id, Nation nation, String title, int amount, String image, String detail, byte count, Boolean rental, byte sold) {
+    public TeacherProduct(Long id, Nation nation, String title, int amount, String image, String detail, byte count, Boolean rental, byte sold, LocalDateTime date) {
         this.id = id;
         this.nation = nation;
         this.title = title;
@@ -54,5 +58,6 @@ public class TeacherProduct {
         this.count = count;
         this.rental = rental;
         this.sold = sold;
+        this.date = date;
     }
 }

@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +61,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 .count(product.getCount())
                 .rental(product.getRental())
                 .sold((byte) 0)
+                .date(LocalDateTime.now())
                 .build();
         teacherProductRepository.save(teacherProduct);
     }
