@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * 투지 이슈 Service
+ *
  * @author 변윤경
  */
 @Slf4j
@@ -120,6 +122,7 @@ public class StockServiceImpl implements StockService{
         }
 
         double value = dto.getPrice();
+
         if(dto.getAmount() > 0){
             value += dto.getAmount() / 100.0 * value;
         }
@@ -163,7 +166,7 @@ public class StockServiceImpl implements StockService{
      */
     private List<StockColDto> getIssues(Long nationId){
         List<StockColDto> issuesRes = new ArrayList<>();
-        List<Stock> issues = stockRepository.findAllByNationIdOrderByDateDesc(nationId);
+        List<Stock> issues = stockRepository.findAllByNationIdOrderByIdDesc(nationId);
         for(Stock issue : issues){
             StockColDto col = new StockColDto();
             col.setContent(issue.getContent());

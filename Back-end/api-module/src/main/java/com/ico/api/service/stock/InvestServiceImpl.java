@@ -3,18 +3,22 @@ package com.ico.api.service.stock;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
+import com.ico.core.entity.Stock;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationRepository;
+import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 /**
  * @author 변윤경
@@ -23,6 +27,7 @@ import java.time.LocalTime;
 @Service
 @RequiredArgsConstructor
 public class InvestServiceImpl implements InvestService{
+    private final StockRepository stockRepository;
     private final StudentRepository studentRepository;
     private final InvestRepository investRepository;
     private final NationRepository nationRepository;
@@ -35,7 +40,8 @@ public class InvestServiceImpl implements InvestService{
      * @param amount 매수 금액
      */
     @Override
-    public void buyStock(int price, int amount) {
+    public void buyStock(double price, int amount) {
+        //Todo: request
         long id = 1;
         // 학생 유효 검사
         Student student = studentRepository.findById(id)
@@ -78,5 +84,65 @@ public class InvestServiceImpl implements InvestService{
 
         // 거래 내역 추가
         transactionService.addTransactionWithdraw(nation.getTitle() + " 증권", student.getId(), amount, nation.getStock() + " 지수 " + price);
+    }
+
+    /**
+     * 주식 매도
+     */
+    @Transactional
+    @Override
+    public void sellStock() {
+        //todo : request
+        long studentId = 1;
+        long nationId = 99;
+
+        // 학생 유효검사
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 매수 내역 확인
+        Invest invest = investRepository.findByStudentId(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_INVESET));
+
+        // 거래 가능 시간 확인
+        Nation nation = nationRepository.findById(student.getNation().getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
+        LocalTime currentTime = LocalTime.now();
+        if(currentTime.isAfter(nation.getTrading_end()) || currentTime.isBefore(nation.getTrading_start())){
+            throw new CustomException(ErrorCode.NOT_TRADING_TIME);
+        }
+
+        // 국가의 주식 데이터가 없을 경우
+        List<Stock> stockList = stockRepository.findAllByNationIdOrderByIdDesc(nationId);
+        if(stockList.isEmpty()){
+            throw new CustomException(ErrorCode.NOT_FOUND_STOCK);
+        }
+
+        // 수익률 계산
+        double price = stockList.get(0).getAmount();
+        log.info("매도지수 : " + price);
+
+        double purchasePrice = invest.getPrice();
+        log.info("매수지수 : " + purchasePrice);
+
+        double changeRate = (price - purchasePrice) / purchasePrice;
+        log.info("수익률 : " + changeRate);
+
+        // 매도 금액 계산(소수점 내림 적용)
+        int amount = invest.getAmount();
+        int salePrice = (int) (amount + amount * changeRate);
+        log.info("매도 이익 : " + salePrice);
+
+        // 매도 금액 입금
+        student.setAccount(student.getAccount() + salePrice);
+        studentRepository.save(student);
+
+        // 거래 내역 기록
+        StringBuilder title = new StringBuilder("수익률 : ");
+        title.append((int)(changeRate * 100)).append("%");
+        transactionService.addTransactionDeposit(studentId, nation.getTitle()+" 증권", salePrice, String.valueOf(title));
+
+        // 매수 이력 삭제
+        investRepository.delete(invest);
     }
 }
