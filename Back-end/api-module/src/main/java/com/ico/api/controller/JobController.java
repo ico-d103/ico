@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,9 +79,28 @@ public class JobController {
         return ResponseEntity.ok(jobService.findJobList(request));
     }
 
+    /**
+     * 직업 추가
+     *
+     * @param dto
+     * @param request
+     * @return
+     */
     @PostMapping("/teacher")
     public ResponseEntity<HttpStatus> addJob(@Valid @RequestBody JobAddReqDto dto, HttpServletRequest request) {
         jobService.addJob(dto, request);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 직업 삭제
+     *
+     * @param jobId
+     * @return
+     */
+    @DeleteMapping("/teacher/{jobId}")
+    public ResponseEntity<HttpStatus> deleteJob(@PathVariable Long jobId) {
+        jobService.deleteJob(jobId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

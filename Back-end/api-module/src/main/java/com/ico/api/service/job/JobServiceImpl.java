@@ -127,4 +127,17 @@ public class JobServiceImpl implements JobService{
                 .build();
         jobRepository.save(job);
     }
+
+    @Override
+    public void deleteJob(Long jobId) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
+
+        if (job.getCount() > 0) {
+            log.info("[deleteJob] 배정된 인원이 존재하여 삭제할 수 없습니다.");
+            throw new CustomException(ErrorCode.ALREADY_ASSIGNED_JOB);
+        }
+
+        jobRepository.delete(job);
+    }
 }

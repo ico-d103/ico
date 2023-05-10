@@ -52,4 +52,11 @@ public interface JobService {
      * @param request
      */
     void addJob(JobAddReqDto dto, HttpServletRequest request);
+
+    /**
+     * 직업 삭제
+     *
+     * @param jobId
+     */
+    void deleteJob(Long jobId);
 }
