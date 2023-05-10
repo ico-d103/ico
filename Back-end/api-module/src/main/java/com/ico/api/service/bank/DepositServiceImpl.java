@@ -46,8 +46,13 @@ public class DepositServiceImpl implements DepositService{
 
         // 예금 기간
         Boolean longPeriod = dto.getLongPeriod();
+
         // 예치 금액
         int amount = dto.getAmount();
+
+        if(depositMongoRepository.findByStudentId(studentId).isPresent()){
+            throw new CustomException(ErrorCode.ALREADY_EXIST_DEPOSIT);
+        }
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
