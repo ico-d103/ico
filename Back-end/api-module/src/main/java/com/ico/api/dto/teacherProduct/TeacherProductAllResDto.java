@@ -5,12 +5,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.format.DateTimeFormatter;
+
 /**
  * @author 변윤경
  */
 @Getter
 @NoArgsConstructor
 public class TeacherProductAllResDto {
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
     private Long id;
 
@@ -26,8 +30,10 @@ public class TeacherProductAllResDto {
 
     private boolean rental;
 
+    private String date;
+
     @Builder
-    public TeacherProductAllResDto(Long id, String title, int amount, String image, byte count, byte sold, boolean rental) {
+    public TeacherProductAllResDto(Long id, String title, int amount, String image, byte count, byte sold, boolean rental, String date) {
         this.id = id;
         this.title = title;
         this.amount = amount;
@@ -35,6 +41,7 @@ public class TeacherProductAllResDto {
         this.count = count;
         this.sold = sold;
         this.rental = rental;
+        this.date = date;
     }
 
 
@@ -53,6 +60,7 @@ public class TeacherProductAllResDto {
                 .count(product.getCount())
                 .sold(product.getSold())
                 .rental(product.getRental())
+                .date(product.getDate().format(formatter))
                 .build();
     }
 }

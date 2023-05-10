@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,8 @@ public class StudentProductServiceImpl implements StudentProductService{
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
-        StudentProduct product = StudentProduct.builder()
+
+        StudentProduct studentProduct = StudentProduct.builder()
                 .student(student)
                 .nation(nation)
                 .title(proposal.getTitle())
@@ -51,8 +53,10 @@ public class StudentProductServiceImpl implements StudentProductService{
                 .image(proposal.getImage())
                 .detail(proposal.getDetail())
                 .count(proposal.getCount())
+                .date(LocalDateTime.now())
                 .build();
-        studentProductRepository.save(product);
+
+        studentProductRepository.save(studentProduct);
     }
 
     /**
