@@ -19,11 +19,11 @@ const inputReducer = (state: { title: string; amount: string }, action: { type: 
 }
 
 function ClassStudentDetailMoneyContent() {
+	const queryClient = useQueryClient()
 	const currency = localStorage.getItem("currency")
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 
 	const [inputState, dispatchInput] = useReducer(inputReducer, { title: "", amount: "" })
-	const queryClient = useQueryClient()
 	const postAccountMutation = useMutation((args: { studentId: number; body: { title: string; amount: string } }) =>
 		postAccountAPI(args),
 	)
