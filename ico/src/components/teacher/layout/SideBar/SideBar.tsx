@@ -35,10 +35,39 @@ function SideBar({ children }: SideBarProps) {
 	const router = useRouter()
 
 	useEffect(() => {
-		Object.keys(SUB_ELEMENT).forEach((el: string, idx: number) => {
+		// Object.keys(SUB_ELEMENT).forEach((el: string, idx: number) => {
+		// 	if (SUB_ELEMENT[Number(el)][router.pathname]) {
+				
+		// 		setSelectedMain(() => Number(el))
+		// 		const curRoute = SUB_ELEMENT[Number(el)][router.pathname]
+
+		// 		if (typeof curRoute.menuIndex === "number") {
+		// 			const temp = curRoute.menuIndex
+		// 			setSelectedSub(() => temp)
+		// 		} else if (typeof curRoute.for === "number") {
+		// 			const temp = curRoute.for
+		// 			setSelectedSub(() => temp)
+		// 		}
+				
+		// 	} else {
+
+		// 		if (Object.keys(SUB_ELEMENT).length - 1 === idx && selectedMain == -1 && selectedSub == -1) {
+					
+		// 			setSelectedMain(() => -2)
+		// 			setSelectedSub(() => -2)
+		// 		}
+		// 	}
+			
+				
+			
+		// })
+
+		for (const el of Object.keys(SUB_ELEMENT)) {
 			if (SUB_ELEMENT[Number(el)][router.pathname]) {
+				
 				setSelectedMain(() => Number(el))
 				const curRoute = SUB_ELEMENT[Number(el)][router.pathname]
+
 				if (typeof curRoute.menuIndex === "number") {
 					const temp = curRoute.menuIndex
 					setSelectedSub(() => temp)
@@ -46,17 +75,31 @@ function SideBar({ children }: SideBarProps) {
 					const temp = curRoute.for
 					setSelectedSub(() => temp)
 				}
-			}
-		})
+				return
+			} else {
 
-		return () => {
-			if (selectedMain == -1 && selectedSub == -1) {
-				setSelectedMain(() => -2)
-				setSelectedSub(() => -2)
-				alert('dfggrfw')
+				if (Object.keys(SUB_ELEMENT).length - 1 === Number(el) && selectedMain == -1 && selectedSub == -1) {
+					
+					setSelectedMain(() => -2)
+					setSelectedSub(() => -2)
+				}
 			}
+			
+				
+			
 		}
+		
+		// return () => {
+		// 	if (selectedMain == -1 && selectedSub == -1) {
+		// 		setSelectedMain(() => -2)
+		// 		setSelectedSub(() => -2)
+		// 		alert('dfggrfw')
+		// 	}
+		// }
+
 	}, [router.pathname])
+
+
 
 	const selectMainHandler = (value: number) => {
 		// setSelectedMain(() => value)
@@ -179,7 +222,6 @@ function SideBar({ children }: SideBarProps) {
 
 	return (
 		<div css={layoutWrapperCSS}>
-			dsadassd
 			{selectedMain >= 0 && selectedSub >= 0 ? sideBarRender : selectedMain === -2 && selectedSub === -2 && children}
 		</div>
 	)
@@ -216,8 +258,6 @@ const contentInnerWrapperCSS = css`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-
-
 `
 
 const indicatorMainWrapperCSS = css`
