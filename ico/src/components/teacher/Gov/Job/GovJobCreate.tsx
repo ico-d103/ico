@@ -3,6 +3,7 @@ import { css } from "@emotion/react"
 import { useQueryClient } from '@tanstack/react-query';
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { putGovJobAPI } from "@/api/teacher/gov/putGovJobAPI";
+import { postGovJobAPI } from "@/api/teacher/gov/postGovJobAPI";
 
 
 function GovJobCreate({
@@ -16,9 +17,9 @@ function GovJobCreate({
 	subInputChangeHandler?: any
 	inputState?: any
 	buttons?: any
-	count: number
+	count?: number
 	closeHandler?: Function
-	idx: number
+	idx?: number
 }) {
 	const COLOR = [
 		"#FF165C",
@@ -37,12 +38,8 @@ function GovJobCreate({
 
 	const queryClient = useQueryClient();
 	// 직업 추가 구현시 수정해서 사용
-	// title: string,
-    //     detail: string,
-    //     total: number,
-    //     wage: number,
-    //     color: string
-	// const createMutation = useMutation((a: number) => postGovExchequerAPI({body: {title: inputState.title, detail: inputState.content, type: inputState.sub.taxation, amount: inputState.sub.value}}));
+
+	const createMutation = useMutation((a: number) => postGovJobAPI({body: {image: 'https://d3bkfkkihwj5ql.cloudfront.net/worker_male.png', title: inputState.title, detail: inputState.content, total: inputState.sub.total, wage: inputState.sub.wage, color: inputState.sub.backgroundColor, creditRating: inputState.sub.credit}}));
 	const updateMutation = useMutation((idx: number) => putGovJobAPI({idx, body: {title: inputState.title, detail: inputState.content, total: inputState.sub.total, wage: inputState.sub.wage, color: inputState.sub.backgroundColor, creditRating: inputState.sub.credit}}));
 
 	const submit = () => {
@@ -54,11 +51,11 @@ function GovJobCreate({
 				}})
 		} else {
 			// 직업 추가 구현시 수정해서 사용
-			// createMutation.mutate(1, {
-			// 	onSuccess: formData => {
-			// 		closeHandler && closeHandler()
-			// 	  return queryClient.invalidateQueries(["teacher", "govExchequer"]); // 'return' wait for invalidate
-			// 	}})
+			createMutation.mutate(1, {
+				onSuccess: formData => {
+					closeHandler && closeHandler()
+				  return queryClient.invalidateQueries(["teacher", "govJob"]); // 'return' wait for invalidate
+				}})
 		}
 	}
 
@@ -132,7 +129,7 @@ function GovJobCreate({
 
 
 				<div css={totalValueInputWrapperCSS}>
-					<div css={textCSS}>인원 {count} /</div>
+					<div css={textCSS}>인원 {count && count + ' /'} </div>
 					<input
 						value={inputState?.sub.total}
 						onChange={(event) => {

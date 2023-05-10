@@ -7,6 +7,8 @@ import useCompHandler from "@/hooks/useCompHandler"
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useQueryClient } from '@tanstack/react-query';
 import { deleteGovRuleAPI } from "@/api/teacher/gov/deleteGovRuleAPI"
+import Modal from "@/components/common/Modal/Modal"
+import ModalAlert from "@/components/common/Modal/ModalAlert"
 
 type GovRuleClassDetailProps = {
 	title: string
@@ -18,11 +20,12 @@ type GovRuleClassDetailProps = {
 
 function GovRuleClassDetail({ title, content, date, showIdx, actualIdx }: GovRuleClassDetailProps) {
 	const [openComp, closeComp, compState] = useCompHandler()
+	const [openDeleteModal, closeDeleteModal, deleteModalState] = useCompHandler()
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const dropdownList = [
 		{ name: "edit", content: null, label: "수정", function: () => {openEditHandler()} },
-		{ name: "delete", content: null, label: "삭제", function: () => {deleteHandler()} },
+		{ name: "delete", content: null, label: "삭제", function: () => {openDeleteModal()} },
 	]
 
 	const openEditHandler = () => {
@@ -51,6 +54,7 @@ function GovRuleClassDetail({ title, content, date, showIdx, actualIdx }: GovRul
 
 	return (
 		<div ref={wrapperRef} >
+			<Modal compState={deleteModalState} closeComp={closeDeleteModal} transition={'scale'} content={<ModalAlert title={'학급 규칙을 삭제합니다.'} titleSize={'var(--teacher-h2)'} proceed={deleteHandler} width={'480px'} content={['학생들이 더이상 해당 학급 규칙을 조회할 수 없습니다!']} />}/>
 			<FormCreator subComp={<GovRuleClassCreate idx={actualIdx} />} showIdx={showIdx} actualIdx={actualIdx} compState={compState} closeComp={closeEditHandler} mainInit={{title, content}} initHeight={`${wrapperRef.current && wrapperRef.current.clientHeight}px`} />
 			<div css={WrapperCSS({isEdit})}>
 				<CommonListElement idx={showIdx} dropdownList={dropdownList}>

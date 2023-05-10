@@ -11,6 +11,7 @@ import useCompHandler from "@/hooks/useCompHandler"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getFinanceDepositRateAPI } from "@/api/student/finance/getFinanceDepositRateAPI"
 import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
+import ModalAlert from "@/components/common/Modal/ModalAlert"
 
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -52,6 +53,7 @@ function asset() {
 					closeComp={closeComp}
 					transition={"scale"}
 				/>
+			
 			)}
 			<div css={navBarOverlayCSS}>
 				<Button
