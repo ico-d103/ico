@@ -37,6 +37,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     @Transactional
     public Long signUp(TeacherSignUpRequestDto requestDto, MultipartFile file) throws IOException {
+        // 교사 회원가입
         Teacher teacher = Teacher.builder()
                 .identity(requestDto.getIdentity())
                 .password(requestDto.getPassword())
@@ -57,8 +58,9 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.encodeTeacherPassword(passwordEncoder);
         teacherRepository.save(teacher);
 
+        // 교사 인증서 저장
         if (!file.isEmpty()) {
-            String image = s3Uploader.upload(file, "file");
+            String image = s3Uploader.upload(file, "certification");
             Certification certification = Certification.builder()
                     .teacher(teacher)
                     .image(image)

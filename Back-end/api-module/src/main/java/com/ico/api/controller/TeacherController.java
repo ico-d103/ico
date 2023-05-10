@@ -4,6 +4,7 @@ import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import com.ico.api.service.teacher.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,10 +30,10 @@ public class TeacherController {
      * @param requestDto
      * @return id
      */
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<HttpStatus> teacherSignUp(@RequestBody TeacherSignUpRequestDto requestDto,
-                                                    @RequestParam MultipartFile image) throws IOException {
-        teacherService.signUp(requestDto, image);
+                                                    @RequestParam("file") MultipartFile file) throws IOException {
+        teacherService.signUp(requestDto, file);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
