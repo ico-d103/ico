@@ -97,3 +97,7 @@ export type getStudentProductsType = {
 	name: string
 	assigned: boolean
 }
+
+export type getNationTreasuryType = {
+	treasury: number
+}

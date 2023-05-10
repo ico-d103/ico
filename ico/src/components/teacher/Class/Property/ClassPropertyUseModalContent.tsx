@@ -1,19 +1,101 @@
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
+import { postTreasuryAPI } from "@/api/teacher/class/postTreasuryAPI"
+import { useReducer } from "react"
+import { NUM_ONLY } from "@/util/regex"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 type ClassPropertyUseModalPropsType = {
 	closeComp: () => void
+	isDepositMenuOpenAtom: boolean
 }
 
-function ClassPropertyUseModal({ closeComp }: ClassPropertyUseModalPropsType) {
+const inputReducer = (
+	state: { title: string; source: string; amount: string },
+	action: { type: string; value: string },
+) => {
+	switch (action.type) {
+		case "CHANGE_AMOUNT":
+			return { ...state, amount: action.value }
+		case "CHANGE_TITLE":
+			return { ...state, title: action.value }
+		case "CHANGE_SOURCE":
+			return { ...state, source: action.value }
+		default:
+			return state
+	}
+}
+
+function ClassPropertyUseModal({ closeComp, isDepositMenuOpenAtom }: ClassPropertyUseModalPropsType) {
+	const queryClient = useQueryClient()
+	const currency = localStorage.getItem("currency")
+	const [inputState, dispatchInput] = useReducer(inputReducer, { title: "", source: "", amount: "" })
+
+	const postTreasuryMutation = useMutation((body: { title: string; source: string; amount: number }) =>
+		postTreasuryAPI({ body }),
+	)
+
+	const changeAmountHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		let inputValue = e.target.value
+
+		if (!NUM_ONLY.test(inputValue)) {
+			inputValue = inputValue.replace(/\D/g, "")
+			e.target.value = inputValue
+			return
+		}
+
+		dispatchInput({ type: "CHANGE_AMOUNT", value: e.target.value })
+	}
+
+	const postTreasuryHandler = () => {
+		if (inputState.title === "" || inputState.amount === "" || inputState.source === "") {
+			alert("빈칸을 모두 입력해주세요.")
+			return
+		}
+
+		const amount = isDepositMenuOpenAtom ? inputState.amount : "-" + inputState.amount
+		const numberAmount = Number(amount)
+
+		postTreasuryMutation.mutate(
+			{ title: inputState.title, source: inputState.source, amount: numberAmount },
+			{
+				onSuccess: () => {
+					return queryClient.invalidateQueries(["property"])
+				},
+			},
+		)
+
+		closeComp()
+	}
+
 	return (
 		<>
 			<div css={contentCSS}>
-				<input type="number" placeholder="사용할 금액을 숫자만 입력해주세요." />
-				<textarea placeholder="사용 사유를 입력해주세요."></textarea>
+				<input
+					type="text"
+					placeholder={
+						isDepositMenuOpenAtom ? `입금할 ${currency}를 입력해주세요.` : `출금할 ${currency}를 입력해주세요.`
+					}
+					onChange={changeAmountHandler}
+				/>
+				<input
+					type="text"
+					placeholder={isDepositMenuOpenAtom ? `누가 입금하나요?` : `누가 출금하나요?`}
+					onChange={(e) => dispatchInput({ type: "CHANGE_TITLE", value: e.target.value })}
+				/>
+				<textarea
+					placeholder="사유를 입력해주세요."
+					onChange={(e) => dispatchInput({ type: "CHANGE_SOURCE", value: e.target.value })}
+				></textarea>
 			</div>
 			<div css={buttonWrapperCSS}>
-				<Button text={"사용"} fontSize={`var(--teacher-h5)`} width={"200px"} theme={"positive"} onClick={() => {}} />
+				<Button
+					text={isDepositMenuOpenAtom ? "입금" : "출금"}
+					fontSize={`var(--teacher-h5)`}
+					width={"200px"}
+					theme={"positive"}
+					onClick={postTreasuryHandler}
+				/>
 				<Button text={"취소"} fontSize={`var(--teacher-h5)`} width={"200px"} theme={"cancelDark"} onClick={closeComp} />
 			</div>
 		</>
