@@ -22,7 +22,7 @@ function asset() {
 	return (
 		<React.Fragment>
 			<Modal content={<ModalContent width={'90vw'} title={'정기 예금 신청'} titleSize={'var(--student-h1)'} icon={APPLY_ICON} content={<FinanceDepositApplyModal unit={"미소"} balance={"25,600"}/>}/>} compState={compState} closeComp={closeComp} transition={"scale"}/>
-            <div css={navBarOverlayCSS} className={'needClone'}>
+            <div css={navBarOverlayCSS} >
                 <Button text={"7일 단기 예금 가입"} fontSize={`var(--student-h3)`} width={"48%"} theme={"mobileSoft"} onClick={() => {openComp()}} />
                 <Button text={"21일 장기 예금 가입"} fontSize={`var(--student-h3)`} width={"48%"} theme={"mobileNormal"} onClick={() => {openComp()}} />
             </div>

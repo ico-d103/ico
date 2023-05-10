@@ -19,7 +19,7 @@ const FinanceInvestChart = ({ data }: LineSvgProps) => {
 		<div css={css`width: 100vw; height: 40vh; overflow: hidden; margin-bottom: 16px;`}>
 			<ResponsiveLine
 				data={data}
-				margin={{ top: 50, right: 15, bottom: 30, left: 30 }}
+				margin={{ top: 4, right: 15, bottom: 30, left: 30 }}
 				xScale={{ type: "point" }}
 				yScale={{
 					type: "linear",

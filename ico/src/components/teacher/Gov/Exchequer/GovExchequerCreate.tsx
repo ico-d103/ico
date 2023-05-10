@@ -18,7 +18,7 @@ function GovExchequerCreate({
 	inputState?: any
 	buttons?: any
 	closeHandler?: Function
-	idx: number
+	idx?: number
 }) {
 	const [openDropdown, closeDropdown, dropdownState] = useCompHandler()
 

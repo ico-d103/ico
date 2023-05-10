@@ -24,9 +24,11 @@ export type getFinanceInvestType = {
         price: number
         amount: number
     }
-    issue: {
-        date: string
-        amount: number
-        content: string
-    }[]
+    issue: FinanceInvestIssueType[]
+}
+
+export type FinanceInvestIssueType = {
+    date: string
+    amount: number
+    content: string
 }
