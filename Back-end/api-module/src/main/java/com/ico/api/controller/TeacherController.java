@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
 
 
@@ -31,8 +33,8 @@ public class TeacherController {
      * @return id
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<HttpStatus> teacherSignUp(@RequestBody TeacherSignUpRequestDto requestDto,
-                                                    @RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<HttpStatus> teacherSignUp(@Valid @RequestPart("dto")  TeacherSignUpRequestDto requestDto,
+                                                    @RequestPart("file") MultipartFile file) throws IOException {
         teacherService.signUp(requestDto, file);
         return ResponseEntity.ok(HttpStatus.OK);
     }

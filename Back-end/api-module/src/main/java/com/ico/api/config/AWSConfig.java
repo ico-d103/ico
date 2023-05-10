@@ -10,12 +10,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 이미지 업로드 용 S3 서버 Config
+ * AWS S3 설정
  *
- * @author 강교철
+ * @author 서재건
  */
 @Configuration
-public class S3Config {
+public class AWSConfig {
+
     @Value("${cloud.aws.credentials.access-key}")
     private String accessKey;
 
@@ -25,6 +26,11 @@ public class S3Config {
     @Value("${cloud.aws.region.static}")
     private String region;
 
+    /**
+     * AWS S3 클라이언트 반환
+     *
+     * @return
+     */
     @Bean
     public AmazonS3 amazonS3Client() {
         AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);

@@ -1,7 +1,7 @@
 package com.ico.api.service.teacher;
 
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
-import com.ico.api.s3.S3Uploader;
+import com.ico.api.service.S3UploadService;
 import com.ico.core.code.Role;
 import com.ico.core.entity.Certification;
 import com.ico.core.entity.Teacher;
@@ -11,6 +11,7 @@ import com.ico.core.repository.CertificationRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,17 +26,18 @@ import java.io.IOException;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
     private final CertificationRepository certificationRepository;
-    private final S3Uploader s3Uploader;
+    private final S3UploadService s3;
 
     @Override
     @Transactional
-    public Long signUp(TeacherSignUpRequestDto requestDto, MultipartFile file) throws IOException {
+    public Long signUp(TeacherSignUpRequestDto requestDto, MultipartFile file) {
         // 교사 회원가입
         Teacher teacher = Teacher.builder()
                 .identity(requestDto.getIdentity())
@@ -59,7 +61,8 @@ public class TeacherServiceImpl implements TeacherService {
 
         // 교사 인증서 저장
         if (!file.isEmpty()) {
-            String image = s3Uploader.upload(file, "certification");
+            String image = s3.upload(file);
+            log.info(image);
             Certification certification = Certification.builder()
                     .teacher(teacher)
                     .image(image)
