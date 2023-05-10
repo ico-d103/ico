@@ -1,4 +1,4 @@
-import { defaultInstance } from "@/api/instance"
+import { tokenInstance } from "@/api/instance"
 import { getGovRuleType } from "@/types/teacher/apiReturnTypes"
 
 type paramsType = {
@@ -11,7 +11,7 @@ type responseType = {
 
 export const getGovRuleAPI = async ({}: paramsType) => {
     try {
-        const response: responseType = await defaultInstance.get(`/rule`)
+        const response: responseType = await tokenInstance.get(`/rule`)
         return response.data
     } catch (error) {
         throw error

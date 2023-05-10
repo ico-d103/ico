@@ -87,7 +87,7 @@ function GovJobDetail({ job, description, wage, backgroundColor, imgUrl, credit,
 
 	return (
 		<div ref={wrapperRef} css={outerWrapperCSS} >
-			<FormCreator subComp={<GovJobCreate count={count}/>} frontComp={<GovJobCardCreate />} showIdx={0} compState={compState} closeComp={closeEditHandler} mainInit={{title: job, content: description}} subInit={{wage, backgroundColor, imgUrl, credit, total }} initHeight={`${wrapperRef.current && wrapperRef.current.clientHeight}px`} />
+			<FormCreator subComp={<GovJobCreate idx={actualIdx} count={count}/>} frontComp={<GovJobCardCreate />} showIdx={0} compState={compState} closeComp={closeEditHandler} mainInit={{title: job, content: description}} subInit={{wage, backgroundColor, imgUrl, credit, total }} initHeight={`${wrapperRef.current && wrapperRef.current.clientHeight}px`} />
 			<div css={WrapperCSS({isEdit, backgroundColor})}>
 				<div css={detailWrapperCSS}>
 					<GovJobCard job={job} wage={wage} backgroundColor={backgroundColor} imgUrl={imgUrl} />

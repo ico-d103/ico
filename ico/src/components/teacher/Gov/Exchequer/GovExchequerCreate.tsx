@@ -2,21 +2,50 @@ import React from "react"
 import useCompHandler from "@/hooks/useCompHandler"
 import { css } from "@emotion/react"
 import Dropdown from "@/components/common/Dropdown/Dropdown"
+import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { postGovExchequerAPI } from "@/api/teacher/gov/postGovExchequerAPI";
+import { putGovExchequerAPI } from "@/api/teacher/gov/putGovExchequerAPI";
 
 function GovExchequerCreate({
 	subInputChangeHandler,
 	inputState,
 	buttons,
+	closeHandler,
+	idx,
 }: {
 	subInputChangeHandler?: any
 	inputState?: any
 	buttons?: any
+	closeHandler?: Function
+	idx?: number
 }) {
 	const [openDropdown, closeDropdown, dropdownState] = useCompHandler()
 
+	
+
+
+	const queryClient = useQueryClient();
+	const createMutation = useMutation((a: number) => postGovExchequerAPI({body: {title: inputState.title, detail: inputState.content, type: inputState.sub.taxation, amount: inputState.sub.value}}));
+	const updateMutation = useMutation((idx: number) => putGovExchequerAPI({idx, body: {title: inputState.title, detail: inputState.content, type: inputState.sub.taxation, amount: inputState.sub.value}}));
+
+
 	const submitHandler = () => {
-		// 제출 함수
+		if (typeof idx === 'number') {
+			updateMutation.mutate(idx, {
+				onSuccess: formData => {
+					closeHandler && closeHandler()
+				  return queryClient.invalidateQueries(["teacher", "govExchequer"]); // 'return' wait for invalidate
+				}})
+		} else {
+			createMutation.mutate(1, {
+				onSuccess: formData => {
+					closeHandler && closeHandler()
+				  return queryClient.invalidateQueries(["teacher", "govExchequer"]); // 'return' wait for invalidate
+				}})
+		}
 	}
+
 
 	const taxPercentIcon = (
 		<svg css={iconCSS} width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -118,6 +147,7 @@ function GovExchequerCreate({
 						/>
 						{inputState?.sub.taxation === 0 ? "%" : "미소"}
 					</div>
+					
 				</div>
 			</div>
 			{buttons(submitHandler)}
