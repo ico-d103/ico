@@ -79,8 +79,6 @@ public enum ErrorCode{
 
     INVALID_JOB_TOTAL(HttpStatus.BAD_REQUEST, "424", "배정된 인원보다 적은 총 인원 수를 설정할 수 없습니다."),
 
-    INVALID_CREDIT_SCORE(HttpStatus.BAD_REQUEST, "429", "신용점수는 0 미만, 1000 초과가 될 수 없습니다."),
-
     INVALID_CREDIT_RATING(HttpStatus.BAD_REQUEST, "500", "신용등급 요건에 적합하지 않습니다."),
 
     REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "503", "신청 내역이 존재하지 않습니다."),

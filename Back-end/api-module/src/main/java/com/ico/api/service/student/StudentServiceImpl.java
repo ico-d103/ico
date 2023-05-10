@@ -196,7 +196,7 @@ public class StudentServiceImpl implements StudentService{
         if (dto.getType()) {
             student.setCreditScore(getTotalCreditScore(student.getCreditScore(), nation.getCredit_up()));
         } else {
-            student.setCreditScore(getTotalCreditScore(student.getCreditScore(), nation.getCredit_down()));
+            student.setCreditScore(getTotalCreditScore(student.getCreditScore(),  -1 * nation.getCredit_down()));
         }
 
         // 신용점수에 맞는 신용등급 부여
@@ -206,7 +206,7 @@ public class StudentServiceImpl implements StudentService{
     }
 
     /**
-     * 신용점수 부여 시 예외 처리 후 올바른 신용점수 부여
+     * 신용점수 부여 시 올바른 범위 내의 신용점수 부여
      *
      * @param studentCreditScore
      * @param creditUpDown
@@ -214,9 +214,10 @@ public class StudentServiceImpl implements StudentService{
      */
     private short getTotalCreditScore(int studentCreditScore, int creditUpDown) {
         int totalScore = studentCreditScore + creditUpDown;
-        if (totalScore < 0 || totalScore > 1000) {
-            log.info("[postCreditScore] 신용등급 점수를 0 미만 또는 1000 초과로 주게 되는 경우 에러");
-            throw new CustomException(ErrorCode.INVALID_CREDIT_SCORE);
+        if (totalScore < 0) {
+            return 0;
+        } else if (totalScore > 1000) {
+            return 1000;
         }
         return (short) totalScore;
     }
