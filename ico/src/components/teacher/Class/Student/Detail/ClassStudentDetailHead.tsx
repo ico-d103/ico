@@ -1,17 +1,40 @@
 import { css } from "@emotion/react"
 import KebabMenu from "@/components/teacher/common/KebabMenu/KebabMenu"
+import { putReleaseAccountAPI } from "@/api/teacher/class/putReleaseAccountAPI"
+import { useAtomValue } from "jotai"
+import { selectedStudent } from "@/store/store"
+import { putSuspendAccountAPI } from "@/api/teacher/class/putSuspendAccountAPI"
 
 type ClassStudentDetailHeadPropsType = {
 	studentName: string
+	frozen: boolean
 }
 
-function ClassStudentDetailHead({ studentName }: ClassStudentDetailHeadPropsType) {
+function ClassStudentDetailHead({ studentName, frozen }: ClassStudentDetailHeadPropsType) {
+	const selectedStudentAtom = useAtomValue(selectedStudent)
+
 	const resetStudentJob = () => {
 		// 직업 초기화
 	}
 
 	const preventStudentAccount = () => {
-		// 계좌 정지
+		if (frozen) {
+			putReleaseAccountAPI({ studentId: selectedStudentAtom })
+				.then((res) => {
+					console.log("계좌 정지 해제")
+				})
+				.catch((error) => {
+					alert(error.response.message)
+				})
+		} else {
+			putSuspendAccountAPI({ studentId: selectedStudentAtom })
+				.then((res) => {
+					console.log("계좌 정지")
+				})
+				.catch((error) => {
+					alert(error.response.message)
+				})
+		}
 	}
 
 	const dropdownList = [
@@ -24,7 +47,7 @@ function ClassStudentDetailHead({ studentName }: ClassStudentDetailHeadPropsType
 		{
 			name: "prevent",
 			content: null,
-			label: "계좌 정지",
+			label: frozen ? "계좌 정지 해제" : "계좌 정지",
 			function: preventStudentAccount,
 		},
 	]

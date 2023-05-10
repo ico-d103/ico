@@ -76,7 +76,7 @@ function StudentDetail() {
 			) : (
 				<>
 					<h1 css={headerCSS}>학생 정보 상세보기</h1>
-					<ClassStudentDetailHead studentName={studentState.studentName} />
+					<ClassStudentDetailHead studentName={studentState.studentName} frozen={studentState.frozen} />
 					<ClassStudentDetailMoney />
 					<ClassStudentDetailGrade creditScore={studentState.creditScore} />
 					<ClassStudentDetailAccountList transactions={studentState.transactions} />
