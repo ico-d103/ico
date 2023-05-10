@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
@@ -182,5 +184,15 @@ public class NationServiceImpl implements NationService {
         }
     }
 
+    @Override
+    public Map<String, Integer> findTreasury(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+        Map<String, Integer> map = new HashMap<>();
+        map.put("treasury", nation.getTreasury());
+        return map;
+    }
 
 }
