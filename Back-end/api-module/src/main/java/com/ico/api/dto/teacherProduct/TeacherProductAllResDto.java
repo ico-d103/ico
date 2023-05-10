@@ -1,11 +1,11 @@
 package com.ico.api.dto.teacherProduct;
 
-import com.ico.core.entity.TeacherProduct;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * @author 변윤경
@@ -22,7 +22,7 @@ public class TeacherProductAllResDto {
 
     private int amount;
 
-    private String image;
+    private List<String> images;
 
     private byte count;
 
@@ -33,34 +33,14 @@ public class TeacherProductAllResDto {
     private String date;
 
     @Builder
-    public TeacherProductAllResDto(Long id, String title, int amount, String image, byte count, byte sold, boolean rental, String date) {
+    public TeacherProductAllResDto(Long id, String title, int amount, List<String> images, byte count, byte sold, boolean rental, String date) {
         this.id = id;
         this.title = title;
         this.amount = amount;
-        this.image = image;
+        this.images = images;
         this.count = count;
         this.sold = sold;
         this.rental = rental;
         this.date = date;
-    }
-
-
-    /**
-     * TeacherProduct TeacherProductAllResDto 생성
-     *
-     * @param product 교사상품
-     * @return TeacherProductAllResDto
-     */
-    public TeacherProductAllResDto of(TeacherProduct product){
-        return TeacherProductAllResDto.builder()
-                .id(product.getId())
-                .title(product.getTitle())
-                .amount(product.getAmount())
-                .image(product.getImage())
-                .count(product.getCount())
-                .sold(product.getSold())
-                .rental(product.getRental())
-                .date(product.getDate().format(formatter))
-                .build();
     }
 }

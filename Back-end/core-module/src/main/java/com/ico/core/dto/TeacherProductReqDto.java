@@ -20,17 +20,12 @@ public class TeacherProductReqDto {
     @NotBlank(message = "605")
     private String title;
 
-    @NotNull(message = "606")
     @Min(value = 1, message = "607")
     private int amount;
-
-    @NotNull(message = "608")
-    private String image;
 
     @NotBlank(message = "609")
     private String detail;
 
-    @NotNull(message = "610")
     @Min(value = 1, message = "611")
     private byte count;
 
