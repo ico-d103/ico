@@ -9,9 +9,14 @@ import useCompHandler from "@/hooks/useCompHandler"
 import ClassPropertyUseModalContent from "@/components/teacher/Class/Property/ClassPropertyUseModalContent"
 import ModalContent from "@/components/common/Modal/ModalContent"
 import { CLASS_BIG_PROPERTY } from "@/components/teacher/Class/ClassIcons"
+import { useQuery } from "@tanstack/react-query"
+import { getNationTreasuryAPI } from "@/api/teacher/class/getNationTreasuryAPI"
+import { getNationTreasuryType } from "@/types/teacher/apiReturnTypes"
 
 function property() {
 	const [openComp, closeComp, compState] = useCompHandler()
+
+	const { data } = useQuery<getNationTreasuryType>(["property"], getNationTreasuryAPI)
 
 	return (
 		<div css={wrapperCSS}>
@@ -22,7 +27,11 @@ function property() {
 			<div css={titleCSS}>
 				<div>{CLASS_PROPERTY}</div>
 				<div>
-					현재 <b>123,456 미소</b>가 국고에 있어요.
+					현재{" "}
+					<b>
+						{data?.treasury} {localStorage.getItem("currency")}
+					</b>
+					가 국고에 있어요.
 				</div>
 			</div>
 			<div css={contentCSS}>
