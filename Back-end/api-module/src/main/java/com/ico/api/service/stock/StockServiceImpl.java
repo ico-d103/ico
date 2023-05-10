@@ -5,6 +5,7 @@ import com.ico.api.dto.stock.StockColDto;
 import com.ico.api.dto.stock.StockStudentResDto;
 import com.ico.api.dto.stock.StockTeacherResDto;
 import com.ico.api.dto.stock.StockUploadReqDto;
+import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Stock;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -35,7 +37,7 @@ public class StockServiceImpl implements StockService{
     private final NationRepository nationRepository;
     private final StockRepository stockRepository;
     private final InvestRepository investRepository;
-
+    private final JwtTokenProvider jwtTokenProvider;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
     /**
@@ -44,8 +46,8 @@ public class StockServiceImpl implements StockService{
      * @return 교사화면의 투자 이슈 정보
      */
     @Override
-    public StockTeacherResDto getIssueTeacher() {
-        long nationId = 99;
+    public StockTeacherResDto getIssueTeacher(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         // 국가 정보, 투자 종목 여부 유효성 검사
         Nation nation = validCheckNationStock(nationId);
 
@@ -64,9 +66,10 @@ public class StockServiceImpl implements StockService{
      * @return 학생 화면의 투자 이슈 정보
      */
     @Override
-    public StockStudentResDto getIssueStudent() {
-        long nationId = 99;
-        long studentId = 1;
+    public StockStudentResDto getIssueStudent(HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
 
         // 국가 정보, 투자 종목 여부 유효성 검사
         Nation nation = validCheckNationStock(nationId);
@@ -104,8 +107,8 @@ public class StockServiceImpl implements StockService{
      * @param dto 지수, 내일의 투자 이슈
      */
     @Override
-    public void uploadIssue(StockUploadReqDto dto) {
-        long nationId = 99;
+    public void uploadIssue(HttpServletRequest request, StockUploadReqDto dto) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
