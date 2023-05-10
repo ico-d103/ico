@@ -1,5 +1,6 @@
 package com.ico.api.service.student;
 
+import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.student.StudentListResDto;
 import com.ico.api.dto.student.StudentResDto;
@@ -41,4 +42,11 @@ public interface StudentService {
      */
     StudentResDto findStudent(Long studentId);
 
+    /**
+     * 학생 내 정보 조회
+     *
+     * @param request
+     * @return
+     */
+    StudentMyPageResDto findStudentMyPage(HttpServletRequest request);
 }
