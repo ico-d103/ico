@@ -4,11 +4,14 @@ import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import com.ico.api.service.teacher.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.io.IOException;
 
 
 /**
@@ -29,9 +32,10 @@ public class TeacherController {
      * @param requestDto
      * @return id
      */
-    @PostMapping
-    public ResponseEntity<HttpStatus> teacherSignUp(@RequestBody TeacherSignUpRequestDto requestDto) {
-        teacherService.signUp(requestDto);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<HttpStatus> teacherSignUp(@Valid @RequestPart("dto")  TeacherSignUpRequestDto requestDto,
+                                                    @RequestPart("file") MultipartFile file) throws IOException {
+        teacherService.signUp(requestDto, file);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
