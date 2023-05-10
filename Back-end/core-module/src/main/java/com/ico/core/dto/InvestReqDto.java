@@ -9,6 +9,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
+ * 매수 시 입력 값
+ * 최신 지수 가격, 매수 금액
+ *
  * @author 변윤경
  */
 @Getter
@@ -16,14 +19,14 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class InvestReqDto {
     @NotNull(message = "714")
-    private Integer price;
+    private Double price;
 
     @NotNull(message = "715")
     @Min(value = 0, message = "716")
     private Integer amount;
 
     @Builder
-    public InvestReqDto(Integer price, Integer amount) {
+    public InvestReqDto(Double price, Integer amount) {
         this.price = price;
         this.amount = amount;
     }

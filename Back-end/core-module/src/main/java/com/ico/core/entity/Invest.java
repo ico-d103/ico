@@ -31,14 +31,14 @@ public class Invest {
     @JoinColumn(name = "student_id")
     private Student student;
 
-    private Integer price;
+    private Double price;
 
     private Integer amount;
 
     private LocalDateTime date;
 
     @Builder
-    public Invest(Long id, Student student, Integer price, Integer amount, LocalDateTime date) {
+    public Invest(Long id, Student student, Double price, Integer amount, LocalDateTime date) {
         this.id = id;
         this.student = student;
         this.price = price;

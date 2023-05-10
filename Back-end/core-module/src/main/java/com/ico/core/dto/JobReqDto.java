@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * 직업 수정 시 입력값 받을 Dto
@@ -18,6 +19,7 @@ import javax.validation.constraints.NotNull;
 public class JobReqDto {
 
     @NotNull(message = "410")
+    @Size(max = 8)
     private String title;
 
     @NotNull(message = "411")
@@ -32,13 +34,17 @@ public class JobReqDto {
     @NotNull(message = "414")
     private String color;
 
+    @NotNull(message = "426")
+    private Integer creditRating;
+
     @Builder
-    public JobReqDto(String title, String detail, Integer total, Integer wage, String color) {
+    public JobReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating) {
         this.title = title;
         this.detail = detail;
         this.total = total;
         this.wage = wage;
         this.color = color;
+        this.creditRating = creditRating;
     }
 
 }

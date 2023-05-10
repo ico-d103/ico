@@ -1,18 +1,24 @@
 package com.ico.api.service.job;
 
+import com.ico.api.dto.job.JobAddReqDto;
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
 import com.ico.api.dto.job.JobResDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.dto.JobReqDto;
 import com.ico.core.entity.Job;
+import com.ico.core.entity.Nation;
+import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.JobRepository;
 import com.ico.core.repository.NationRepository;
+import com.ico.core.repository.ResumeMongoRepository;
+import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -31,6 +37,10 @@ public class JobServiceImpl implements JobService{
     private final JobRepository jobRepository;
 
     private final NationRepository nationRepository;
+
+    private final StudentRepository studentRepository;
+
+    private final ResumeMongoRepository resumeMongoRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -56,6 +66,7 @@ public class JobServiceImpl implements JobService{
         log.info("[updateJob] 수정 완료");
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<JobAllResDto> findAllJob(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -72,6 +83,7 @@ public class JobServiceImpl implements JobService{
         return resJobList;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<JobAvailableResDto> findAllShortFallJob(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -90,6 +102,7 @@ public class JobServiceImpl implements JobService{
         return resJobList;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<JobResDto> findJobList(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -105,5 +118,86 @@ public class JobServiceImpl implements JobService{
             dtoList.add(new JobResDto().of(job));
         }
         return dtoList;
+    }
+
+    @Override
+    public void addJob(JobAddReqDto dto, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        Job job = Job.builder()
+                .nation(nation)
+                .title(dto.getTitle())
+                .detail(dto.getDetail())
+                .image(dto.getImage())
+                .wage(dto.getWage())
+                .creditRating(dto.getCreditRating().byteValue())
+                .total(dto.getTotal().byteValue())
+                .color(dto.getColor())
+                .build();
+        jobRepository.save(job);
+    }
+
+    @Override
+    public void deleteJob(Long jobId) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
+
+        if (job.getCount() > 0) {
+            log.info("[deleteJob] 배정된 인원이 존재하여 삭제할 수 없습니다.");
+            throw new CustomException(ErrorCode.ALREADY_ASSIGNED_JOB);
+        }
+
+        jobRepository.delete(job);
+    }
+
+    @Transactional
+    @Override
+    public void resetAllJob(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        //직업의 배정 인원 0으로 초기화
+        List<Job> jobList = jobRepository.findAllByNationId(nationId);
+        for (Job job : jobList) {
+            job.setCount((byte) 0);
+            jobRepository.save(job);
+        }
+
+        // 학생에게 배정된 직업 삭제
+        List<Student> studentList = studentRepository.findAllByNationId(nationId);
+        for (Student student : studentList) {
+            student.setJob(null);
+            studentRepository.save(student);
+        }
+
+        // 직업신청내역에서도 전부 삭제
+        resumeMongoRepository.deleteAllByNationId(nationId);
+    }
+
+    @Transactional
+    @Override
+    public void resetJob(Long studentId, HttpServletRequest request) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Job job = student.getJob();
+
+        if (job == null) {
+            log.info("[resetJob] 해당 학생은 직업이 없습니다.");
+            throw new CustomException(ErrorCode.HAS_NOT_JOB);
+        }
+
+        // 만약 학생 직업의 배정된 인원이 0인 경우 예외를 던지는 대신 0으로 설정
+        job.setCount((byte) (job.getCount() == 0 ? 0 : job.getCount() - 1));
+        jobRepository.save(job);
+
+        student.setJob(null);
+        studentRepository.save(student);
+
+        // 학생의 직업 신청 내역 전부 삭제
+        resumeMongoRepository.deleteAllByStudentId(studentId);
     }
 }

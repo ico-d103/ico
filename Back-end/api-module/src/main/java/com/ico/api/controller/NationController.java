@@ -1,5 +1,6 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
 import com.ico.core.dto.StockReqDto;
 import com.ico.api.service.nation.NationService;
@@ -11,10 +12,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Map;
 
 /**
  * @author 강교철
  * @author 변윤경
+ * @author 서재건
  */
 @RestController
 @RequestMapping("/api/nation")
@@ -53,6 +56,30 @@ public class NationController {
     @PostMapping("/teacher/stock")
     public ResponseEntity<HttpStatus> createStock(@Valid @RequestBody StockReqDto stockReqDto){
         nationService.createStock(stockReqDto);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 국고 잔금 조회
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping("/treasury")
+    public ResponseEntity<Map<String, String>> findTreasury(HttpServletRequest request) {
+        return ResponseEntity.ok(nationService.findTreasury(request));
+    }
+
+    /**
+     * 신용점수 등락폭 수정
+     *
+     * @param dto
+     * @param request
+     * @return
+     */
+    @PutMapping("/teacher/credit")
+    public ResponseEntity<HttpStatus> updateCredit(@Valid @RequestBody NationCreditReqDto dto, HttpServletRequest request) {
+        nationService.updateCredit(dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }
