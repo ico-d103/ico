@@ -59,4 +59,11 @@ public interface JobService {
      * @param jobId
      */
     void deleteJob(Long jobId);
+
+    /**
+     * 직업 배정 초기화
+     *
+     * @param request
+     */
+    void resetAllJob(HttpServletRequest request);
 }

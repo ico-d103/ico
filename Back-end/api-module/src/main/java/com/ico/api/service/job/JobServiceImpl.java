@@ -8,13 +8,16 @@ import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.dto.JobReqDto;
 import com.ico.core.entity.Job;
 import com.ico.core.entity.Nation;
+import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.JobRepository;
 import com.ico.core.repository.NationRepository;
+import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -33,6 +36,8 @@ public class JobServiceImpl implements JobService{
     private final JobRepository jobRepository;
 
     private final NationRepository nationRepository;
+
+    private final StudentRepository studentRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -58,6 +63,7 @@ public class JobServiceImpl implements JobService{
         log.info("[updateJob] 수정 완료");
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<JobAllResDto> findAllJob(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -74,6 +80,7 @@ public class JobServiceImpl implements JobService{
         return resJobList;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<JobAvailableResDto> findAllShortFallJob(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -92,6 +99,7 @@ public class JobServiceImpl implements JobService{
         return resJobList;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<JobResDto> findJobList(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -139,5 +147,28 @@ public class JobServiceImpl implements JobService{
         }
 
         jobRepository.delete(job);
+    }
+
+    @Transactional
+    @Override
+    public void resetAllJob(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        //직업의 배정 인원 0으로 초기화
+        List<Job> jobList = jobRepository.findAllByNationId(nationId);
+        for (Job job : jobList) {
+            job.setCount((byte) 0);
+            jobRepository.save(job);
+        }
+
+        // 학생에게 배정된 직업 삭제
+        List<Student> studentList = studentRepository.findAllByNationId(nationId);
+        for (Student student : studentList) {
+            student.setJob(null);
+            studentRepository.save(student);
+        }
+
     }
 }
