@@ -1,15 +1,66 @@
-import React from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
+import { useAtomValue } from "jotai"
+import { selectedStudent } from "@/store/store"
+import { useReducer } from "react"
+import { NUM_ONLY } from "@/util/regex"
+import { postAccountAPI } from "@/api/teacher/class/postAccountAPI"
+
+const inputReducer = (state: { title: string; amount: string }, action: { type: string; value: string }) => {
+	switch (action.type) {
+		case "CHANGE_TITLE":
+			return { ...state, title: action.value }
+		case "CHANGE_AMOUNT":
+			return { ...state, amount: action.value }
+		default:
+			return state
+	}
+}
 
 function ClassStudentDetailMoneyContent() {
+	const currency = localStorage.getItem("currency")
+	const selectedStudentAtom = useAtomValue(selectedStudent)
+
+	const [inputState, dispatchInput] = useReducer(inputReducer, { title: "", amount: "" })
+
+	const changeAmountHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		let inputValue = e.target.value
+
+		if (!NUM_ONLY.test(inputValue)) {
+			inputValue = inputValue.replace(/\D/g, "")
+			e.target.value = inputValue
+			return
+		}
+
+		dispatchInput({ type: "CHANGE_AMOUNT", value: e.target.value })
+	}
+
+	const postAccountHandler = (flag: string) => {
+		const amount = flag === "minus" ? "-" + inputState.amount : inputState.amount
+
+		postAccountAPI({ studentId: selectedStudentAtom, bodyType: { title: inputState.title, amount: amount } })
+			.then((res) => {
+				// 학생 목록 리스트에서 금액 업데이트
+			})
+			.catch((error) => {
+				// 학생의 금액이 부족해서 차감 못하는 경우
+				if (error.response.code === "11") {
+					alert(error.response.message)
+				}
+			})
+	}
+
 	return (
 		<div css={wrapperCSS}>
-			<textarea css={reasonWrapperCSS} placeholder="사유를 입력해주세요."></textarea>
+			<textarea
+				css={reasonWrapperCSS}
+				placeholder="사유를 입력해주세요."
+				onChange={(e) => dispatchInput({ type: "CHANGE_TITLE", value: e.target.value })}
+			></textarea>
 			<div>
 				<div css={moneyInputCSS}>
-					<input type="number" placeholder="미소 입력" />
-					<span>미소</span>
+					<input type="text" placeholder="금액 입력" onChange={changeAmountHandler} />
+					<span>{currency}</span>
 				</div>
 				<div css={buttonWrapperCSS}>
 					<Button
@@ -18,7 +69,7 @@ function ClassStudentDetailMoneyContent() {
 						width={"70px"}
 						height={"40px"}
 						theme={"positive"}
-						onClick={() => {}}
+						onClick={() => postAccountHandler("plus")}
 					/>
 					<Button
 						text={"차감"}
@@ -26,7 +77,7 @@ function ClassStudentDetailMoneyContent() {
 						width={"70px"}
 						height={"40px"}
 						theme={"warning"}
-						onClick={() => {}}
+						onClick={() => postAccountHandler("minus")}
 					/>
 				</div>
 			</div>

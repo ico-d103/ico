@@ -9,3 +9,5 @@ export const PHONE_NUMBER_ONLY = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/
 export const CLASS_ONLY = /^[0-9]{1,2}$/
 
 export const GRADE_ONLY = /^[1-6]{1}$/
+
+export const NUM_ONLY = /^\d+$/

@@ -15,7 +15,7 @@ function ClassStudentDetailAccountListItem({
 	return (
 		<div css={wrapperCSS}>
 			<h5 css={dateCSS({ showDate })}>{date}</h5>
-			<h5 css={transaction.amount.toString().includes("+") ? plusMoneyCSS : minusMoneyCSS}>
+			<h5 css={transaction.amount.toString().includes("-") ? minusMoneyCSS : plusMoneyCSS}>
 				{transaction.amount} {localStorage.getItem("currency")}
 			</h5>
 			<h5 css={contentCSS}>{transaction.title}</h5>
