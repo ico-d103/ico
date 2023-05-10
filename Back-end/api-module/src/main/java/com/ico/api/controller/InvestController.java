@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -29,8 +30,8 @@ public class InvestController {
      * @return Httpstatus
      */
     @PostMapping("/student")
-    public ResponseEntity<HttpStatus> buyStock(@Valid @RequestBody InvestReqDto dto) {
-        investService.buyStock(dto.getPrice(), dto.getAmount());
+    public ResponseEntity<HttpStatus> buyStock(HttpServletRequest request, @Valid @RequestBody InvestReqDto dto) {
+        investService.buyStock(request, dto.getPrice(), dto.getAmount());
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }
