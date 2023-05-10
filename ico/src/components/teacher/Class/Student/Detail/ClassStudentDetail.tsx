@@ -49,7 +49,7 @@ function StudentDetail() {
 	})
 
 	const { data } = useQuery<getStudentDetailType>(
-		["entered", "studentDetail"],
+		["enteredStudentDetail"],
 		() => getStudentDetailAPI({ id: selectedStudentAtom }),
 		{ enabled: isEnabled },
 	)

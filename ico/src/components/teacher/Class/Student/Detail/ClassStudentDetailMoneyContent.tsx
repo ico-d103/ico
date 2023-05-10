@@ -5,6 +5,7 @@ import { selectedStudent } from "@/store/store"
 import { useReducer } from "react"
 import { NUM_ONLY } from "@/util/regex"
 import { postAccountAPI } from "@/api/teacher/class/postAccountAPI"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 const inputReducer = (state: { title: string; amount: string }, action: { type: string; value: string }) => {
 	switch (action.type) {
@@ -22,6 +23,36 @@ function ClassStudentDetailMoneyContent() {
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 
 	const [inputState, dispatchInput] = useReducer(inputReducer, { title: "", amount: "" })
+	const queryClient = useQueryClient()
+	const postAccountMutation = useMutation((args: { studentId: number; body: { title: string; amount: string } }) =>
+		postAccountAPI(args),
+	)
+
+	const postAccountHandler = (flag: string) => {
+		if (inputState.title === "" || inputState.amount === "") {
+			alert("빈칸을 모두 입력해주세요.")
+		}
+
+		const amount = flag === "minus" ? "-" + inputState.amount : inputState.amount
+		const args = { studentId: selectedStudentAtom, body: { title: inputState.title, amount: amount } }
+
+		postAccountMutation.mutate(args, {
+			onSuccess: () => {
+				return queryClient.invalidateQueries(["enteredStudentDetail"])
+			},
+		})
+
+		// postAccountAPI({ studentId: selectedStudentAtom, body: { title: inputState.title, amount: amount } })
+		// 	.then((res) => {
+		// 		// mutation으로 학생 목록 리스트에서 금액 업데이트
+		// 	})
+		// 	.catch((error) => {
+		// 		// 학생의 금액이 부족해서 차감 못하는 경우
+		// 		if (error.response.code === "11") {
+		// 			alert(error.response.message)
+		// 		}
+		// 	})
+	}
 
 	const changeAmountHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
 		let inputValue = e.target.value
@@ -33,25 +64,6 @@ function ClassStudentDetailMoneyContent() {
 		}
 
 		dispatchInput({ type: "CHANGE_AMOUNT", value: e.target.value })
-	}
-
-	const postAccountHandler = (flag: string) => {
-		if (inputState.title === "" || inputState.amount === "") {
-			alert("빈칸을 모두 입력해주세요.")
-		}
-
-		const amount = flag === "minus" ? "-" + inputState.amount : inputState.amount
-
-		postAccountAPI({ studentId: selectedStudentAtom, bodyType: { title: inputState.title, amount: amount } })
-			.then((res) => {
-				// mutation으로 학생 목록 리스트에서 금액 업데이트
-			})
-			.catch((error) => {
-				// 학생의 금액이 부족해서 차감 못하는 경우
-				if (error.response.code === "11") {
-					alert(error.response.message)
-				}
-			})
 	}
 
 	return (
