@@ -1,6 +1,7 @@
-import React from "react"
 import { css } from "@emotion/react"
 import { getStudentListType } from "@/types/teacher/apiReturnTypes"
+import { useSetAtom } from "jotai"
+import { selectedStudent } from "@/store/store"
 
 type StudentEnteredListItemPropsType = {
 	student: getStudentListType
@@ -8,8 +9,14 @@ type StudentEnteredListItemPropsType = {
 }
 
 function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsType) {
+	const setSelectedStudentAtom = useSetAtom(selectedStudent)
+
+	const openStudentDetailHandler = (id: number) => {
+		setSelectedStudentAtom(id)
+	}
+
 	return (
-		<div css={wrapperCSS(idx)}>
+		<div css={wrapperCSS(idx)} onClick={() => openStudentDetailHandler(student.id)}>
 			<div css={leftWrapperCSS}>
 				<h4>{student.number}</h4>
 				<h4>{student.name}</h4>
