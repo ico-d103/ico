@@ -5,13 +5,15 @@ import com.ico.api.service.teacher.TeacherProductService;
 import com.ico.core.dto.TeacherProductReqDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -34,9 +36,9 @@ public class TeacherProductController {
      *                 제품이름, 가격, 사진 , 상세정보, 개수, 유형(쿠폰, 대여)
      * @return status
      */
-    @PostMapping("/teacher")
-    public ResponseEntity<HttpStatus> uploadProduct(@Valid @RequestBody TeacherProductReqDto product) {
-        teacherProductService.createProduct(product);
+    @PostMapping(value = "/teacher", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<HttpStatus> uploadProduct(@Valid @RequestPart TeacherProductReqDto product, @RequestPart List<MultipartFile> files) {
+        teacherProductService.createProduct(product, files);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
