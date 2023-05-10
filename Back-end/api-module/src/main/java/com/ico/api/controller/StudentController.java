@@ -1,10 +1,11 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.nation.CreditScoreReqDto;
-import com.ico.api.dto.student.StudentMyPageResDto;
-import com.ico.api.dto.user.AccountDto;
+import com.ico.api.dto.student.StudentAllResDto;
 import com.ico.api.dto.student.StudentListResDto;
+import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.student.StudentResDto;
+import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.user.StudentSignUpRequestDto;
 import com.ico.api.service.student.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -103,6 +105,40 @@ public class StudentController {
     public ResponseEntity<HttpStatus> postCreditScore(@PathVariable Long studentId, @Valid @RequestBody CreditScoreReqDto dto, HttpServletRequest request) {
         studentService.postCreditScore(studentId, dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 학생의 계좌 정지
+     *
+     * @param studentId
+     * @return
+     */
+    @PutMapping("/teacher/{studentId}/suspend-account")
+    public ResponseEntity<HttpStatus> suspendAccount(@PathVariable Long studentId) {
+        studentService.suspendAccount(studentId);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 학생의 계좌 정지 해제
+     *
+     * @param studentId
+     * @return
+     */
+    @PutMapping("/teacher/{studentId}/release-account")
+    public ResponseEntity<HttpStatus> releaseAccount(@PathVariable Long studentId) {
+        studentService.releaseAccount(studentId);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 학생의 반 친구 목록 조회
+     *
+     * @return
+     */
+    @GetMapping("/student")
+    public ResponseEntity<List<StudentAllResDto>> findListStudent(HttpServletRequest request) {
+        return ResponseEntity.ok(studentService.findListStudent(request));
     }
 
 }

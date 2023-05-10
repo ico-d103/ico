@@ -103,4 +103,29 @@ public class JobController {
         jobService.deleteJob(jobId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    /**
+     * 직업 배정 초기화
+     *
+     * @param request
+     * @return
+     */
+    @PutMapping("/teacher/reset")
+    public ResponseEntity<HttpStatus> resetAllJob(HttpServletRequest request) {
+        jobService.resetAllJob(request);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 학생 개별 직업 배정 초기화
+     *
+     * @param studentId
+     * @param request
+     * @return
+     */
+    @PutMapping("/teacher/reset/{studentId}")
+    public ResponseEntity<HttpStatus> resetJob(@PathVariable Long studentId, HttpServletRequest request) {
+        jobService.resetJob(studentId, request);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 }
