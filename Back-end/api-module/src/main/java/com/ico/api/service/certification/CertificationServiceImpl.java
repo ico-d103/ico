@@ -32,6 +32,7 @@ public class CertificationServiceImpl implements CertificationService{
 
             Teacher teacher = certification.getTeacher();
             teacher.setAssigned(true);
+            teacherRepository.save(teacher);
 
             // Certification 삭제
             certificationRepository.deleteById(id);
