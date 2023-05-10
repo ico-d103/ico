@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useEffect} from "react"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWrapper"
 
@@ -7,6 +7,7 @@ import HomeCouponList from "@/components/student/Home/Coupon/HomeCouponList"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getHomeCouponAPI } from "@/api/student/home/getHomeCouponAPI"
 import { getHomeCouponType } from "@/types/student/apiReturnTypes"
+import Loading from "@/components/student/common/Loading/Loading"
 
 
 
@@ -20,11 +21,21 @@ function coupon() {
 	)
 
 
+
+
 	return (
 		<div>
 			<PageHeader title={"쿠폰함"} />
 			<div css={couponWrapperCSS}>
 				<ContentWrapper>
+					{isLoading && (
+						<Loading
+							size={96}
+							labelSize={18}
+							labelMargin={"24px 0px 16px 0px"}
+							label={"쿠폰들을 불러오는 중이에요!"}
+						/>
+					)}
 					{data && <HomeCouponList couponList={data}/>}
 				</ContentWrapper>
 			</div>
