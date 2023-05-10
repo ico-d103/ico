@@ -4,8 +4,12 @@ import { successReturnType } from "@/types/common/apiReturnTypes"
 type paramsType = {
     idx: number;
     body: {
-        title: string,
+        title: string
         detail: string
+        total: number
+        wage: number
+        color: string
+        creditRating: number
     }
 }
 
@@ -14,9 +18,9 @@ type responseType = {
     data: successReturnType
 }
 
-export const putGovRuleAPI = async ({idx, body}: paramsType) => {
+export const putGovJobAPI = async ({idx, body}: paramsType) => {
     try {
-        const response: responseType = await tokenInstance.put(`/rule/teacher/${idx}`, body)
+        const response: responseType = await tokenInstance.put(`/job/teacher/${idx}`, body)
         return response.data
     } catch (error) {
         throw error

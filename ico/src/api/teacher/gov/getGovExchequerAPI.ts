@@ -1,4 +1,4 @@
-import { defaultInstance } from "@/api/instance"
+import { tokenInstance } from "@/api/instance"
 import { getGovExchequerType } from "@/types/teacher/apiReturnTypes"
 
 type paramsType = {
@@ -11,7 +11,7 @@ type responseType = {
 
 export const getGovExchequerAPI = async ({}: paramsType) => {
     try {
-        const response: responseType = await defaultInstance.get(`/tax`)
+        const response: responseType = await tokenInstance.get(`/tax`)
         return response.data
     } catch (error) {
         throw error

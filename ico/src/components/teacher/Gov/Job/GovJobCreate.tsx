@@ -1,16 +1,24 @@
 import React from "react"
 import { css } from "@emotion/react"
+import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { putGovJobAPI } from "@/api/teacher/gov/putGovJobAPI";
+
 
 function GovJobCreate({
 	subInputChangeHandler,
 	inputState,
 	buttons,
-	count
+	count,
+	closeHandler,
+	idx,
 }: {
 	subInputChangeHandler?: any
 	inputState?: any
 	buttons?: any
 	count: number
+	closeHandler?: Function
+	idx: number
 }) {
 	const COLOR = [
 		"#FF165C",
@@ -25,8 +33,33 @@ function GovJobCreate({
 		"#634AFF",
 	]
 
+
+
+	const queryClient = useQueryClient();
+	// 직업 추가 구현시 수정해서 사용
+	// title: string,
+    //     detail: string,
+    //     total: number,
+    //     wage: number,
+    //     color: string
+	// const createMutation = useMutation((a: number) => postGovExchequerAPI({body: {title: inputState.title, detail: inputState.content, type: inputState.sub.taxation, amount: inputState.sub.value}}));
+	const updateMutation = useMutation((idx: number) => putGovJobAPI({idx, body: {title: inputState.title, detail: inputState.content, total: inputState.sub.total, wage: inputState.sub.wage, color: inputState.sub.backgroundColor, creditRating: inputState.sub.credit}}));
+
 	const submit = () => {
-		// 제출
+		if (typeof idx === 'number') {
+			updateMutation.mutate(idx, {
+				onSuccess: formData => {
+					closeHandler && closeHandler()
+				  return queryClient.invalidateQueries(["teacher", "govJob"]); // 'return' wait for invalidate
+				}})
+		} else {
+			// 직업 추가 구현시 수정해서 사용
+			// createMutation.mutate(1, {
+			// 	onSuccess: formData => {
+			// 		closeHandler && closeHandler()
+			// 	  return queryClient.invalidateQueries(["teacher", "govExchequer"]); // 'return' wait for invalidate
+			// 	}})
+		}
 	}
 
 	const creditInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {

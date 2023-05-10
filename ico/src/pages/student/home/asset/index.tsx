@@ -6,6 +6,9 @@ import { css } from "@emotion/react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getHomeTransactionHistoryAPI } from "@/api/student/home/getHomeTransactionHistoryAPI"
 import { getHomeTransactionHistoryType } from "@/types/student/apiReturnTypes"
+import UseAnimations from "react-useanimations"
+import loading from "react-useanimations/lib/loading"
+import Loading from "@/components/student/common/Loading/Loading"
 
 
 
@@ -31,7 +34,10 @@ function asset() {
                     </div>
                 </ContentWrapper>
 				<ContentWrapper>
+					<Loading size={48} fontSize={18} label={'로딩중'} />
+
                     {data && <HomeAssetDetail tradeHistory={data} />}
+					{data && <div>fewfwefwefew</div>}
                 </ContentWrapper>
 			</div>
 		</div>

@@ -1,4 +1,4 @@
-import { defaultInstance } from "@/api/instance"
+import { defaultInstance, tokenInstance } from "@/api/instance"
 import { getHomeTransactionHistoryType } from "@/types/student/apiReturnTypes"
 
 type paramsType = {
@@ -11,7 +11,7 @@ type responseType = {
 
 export const getHomeTransactionHistoryAPI = async ({}: paramsType) => {
     try {
-        const response: responseType = await defaultInstance.get(`/transaction/student`)
+        const response: responseType = await tokenInstance.get(`/transaction/student`)
         return response.data
     } catch (error) {
         throw error
