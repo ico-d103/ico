@@ -6,6 +6,7 @@ import GovRuleClassCreate from "./GovRuleClassCreate"
 import useCompHandler from "@/hooks/useCompHandler"
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useQueryClient } from '@tanstack/react-query';
+import { deleteGovRuleAPI } from "@/api/teacher/gov/deleteGovRuleAPI"
 
 type GovRuleClassDetailProps = {
 	title: string
@@ -21,7 +22,7 @@ function GovRuleClassDetail({ title, content, date, showIdx, actualIdx }: GovRul
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const dropdownList = [
 		{ name: "edit", content: null, label: "수정", function: () => {openEditHandler()} },
-		{ name: "delete", content: null, label: "삭제", function: () => {} },
+		{ name: "delete", content: null, label: "삭제", function: () => {deleteHandler()} },
 	]
 
 	const openEditHandler = () => {
@@ -34,9 +35,19 @@ function GovRuleClassDetail({ title, content, date, showIdx, actualIdx }: GovRul
 		setIsEdit(() => false)
 	}
 
-	// 학급 규칙 삭제 구현시 수정해서 쓸 것 
-	// const queryClient = useQueryClient();
-	// const createMutation = useMutation((a: number) => postGovRuleAPI({body: {title: inputState.title, detail: inputState.content}}));
+
+	const queryClient = useQueryClient();
+	const createMutation = useMutation((idx: number) => deleteGovRuleAPI({idx}));
+
+	const deleteHandler = () => {
+		if (actualIdx) {
+			createMutation.mutate(actualIdx, {
+				onSuccess: formData => {
+				  return queryClient.invalidateQueries(["teacher", "govRule"]); // 'return' wait for invalidate
+				}})
+		}
+		
+	}
 
 	return (
 		<div ref={wrapperRef} >
