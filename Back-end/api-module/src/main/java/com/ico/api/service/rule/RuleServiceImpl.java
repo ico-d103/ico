@@ -85,4 +85,11 @@ public class RuleServiceImpl implements RuleService {
 
         ruleRepository.save(rule);
     }
+
+    @Override
+    public void deleteRule(Long ruleId) {
+        Rule rule = ruleRepository.findById(ruleId)
+                .orElseThrow(() -> new CustomException(ErrorCode.RULE_NOT_FOUND));
+        ruleRepository.delete(rule);
+    }
 }
