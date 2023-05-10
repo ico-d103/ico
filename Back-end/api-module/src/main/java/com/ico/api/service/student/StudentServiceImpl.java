@@ -205,6 +205,34 @@ public class StudentServiceImpl implements StudentService{
         studentRepository.save(student);
     }
 
+    @Override
+    public void suspendAccount(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if (student.isFrozen()) {
+            log.info("[suspendAccount] 이미 학생의 계좌가 정지된 경우");
+            throw new CustomException(ErrorCode.ALREADY_SUSPEND_ACCOUNT);
+        }
+
+        student.setFrozen(true);
+        studentRepository.save(student);
+    }
+
+    @Override
+    public void releaseAccount(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if (!student.isFrozen()) {
+            log.info("[suspendAccount] 이미 학생의 계좌가 정지 해제된 경우");
+            throw new CustomException(ErrorCode.ALREADY_RELEASE_ACCOUNT);
+        }
+
+        student.setFrozen(false);
+        studentRepository.save(student);
+    }
+
     /**
      * 신용점수 부여 시 올바른 범위 내의 신용점수 부여
      *
