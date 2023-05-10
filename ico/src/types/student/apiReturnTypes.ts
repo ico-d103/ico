@@ -9,6 +9,17 @@ export type TransactionIndividualType = {
     balance: string
 }
 
+export type getHomeExchequerHistoryType = {
+    [prop: string]: ExchequerIndividualType[]
+}
+
+export type ExchequerIndividualType = {
+    title: string
+    amount: string
+    source: string
+    balance: string
+}
+
 export type getHomeCouponType = {
     id: number,
     title: string,
@@ -31,4 +42,11 @@ export type FinanceInvestIssueType = {
     date: string
     amount: number
     content: string
+}
+
+export type getFinanceDepositRateType = {
+    creditRating: number
+    shortPeriod: number
+    longPeriod: number
+    account: number
 }

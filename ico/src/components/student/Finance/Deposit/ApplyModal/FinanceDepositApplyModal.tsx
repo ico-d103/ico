@@ -2,6 +2,7 @@ import React from "react"
 import Input from "@/components/common/Input/Input"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
+import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
 
 const ALERT_ICON = (
 	<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,15 +29,16 @@ const CHECK_ICON = (
 )
 
 type FinanceDepositApplyModalProps = {
-	balance: string
+	term: 0 | 1
+	data: getFinanceDepositRateType
 	unit: string
 }
 
-function FinanceDepositApplyModal({balance, unit}: FinanceDepositApplyModalProps) {
+function FinanceDepositApplyModal({term, data, unit}: FinanceDepositApplyModalProps) {
 	return (
 		<div css={wrapperCSS}>
 			<div css={grayLabelCSS}>원하는 액수를 입력해 주세요!</div>
-			<Input theme={"default"} textAlign={"right"} rightContent={<div css={balanceLabelCSS}>/ {balance} {unit}</div>} customCss={inputCSS} />
+			<Input theme={"default"} textAlign={"right"} rightContent={<div css={balanceLabelCSS}>/ {data.account} {unit}</div>} customCss={inputCSS} />
 			<div css={mentWrapperCSS}>
 				<div css={iconWrapperCSS}>
 					{ALERT_ICON}
@@ -49,7 +51,7 @@ function FinanceDepositApplyModal({balance, unit}: FinanceDepositApplyModalProps
 				{CHECK_ICON}
 				</div>
 				
-				<span css={mentCSS}>만기가 되면 원금의 14퍼센트 만큼 추가로 더 돌려받을 수 있어요!</span>
+				<span css={mentCSS}>만기가 되면 원금의 {term === 0 ? data.shortPeriod : data.longPeriod}퍼센트 만큼 추가로 더 돌려받을 수 있어요!</span>
 			</div>
 
 			<div css={buttonWrapperCSS}>
@@ -90,7 +92,8 @@ const mentCSS = css`
 	font-size: 14px;
 	margin-left: 8px;
 	height: 24px;
-	margin-top: 6px;
+	margin-top: 4px;
+	line-height: 130%;
 	
 `
 

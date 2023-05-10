@@ -40,7 +40,7 @@ const headerCSS = ({ titleSize }: { titleSize: string }) => {
 		flex-direction: column;
 		align-items: center;
 		gap: 20px;
-		padding: 30px;
+		padding: 24px;
 
 		> span {
 			font-size: ${titleSize};
@@ -51,7 +51,7 @@ const headerCSS = ({ titleSize }: { titleSize: string }) => {
 const contentWrapperCSS = ({ width }: { width: string }) => {
 	return css`
 		width: ${width};
-		padding: 30px;
+		padding: 24px;
 		background: #f6f8fa;
 		border-radius: 0px 0px 10px 10px;
 		border-top: 1px solid rgba(0, 0, 0, 0.1);
