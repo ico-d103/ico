@@ -10,4 +10,6 @@ const isNavigating = atom(false)
 
 const selectedStudent = atom(-1)
 
-export { navTo, navBeforeScroll, selectedStudent, isNavigating }
+const isDepositMenuOpen = atom(true)
+
+export { navTo, navBeforeScroll, selectedStudent, isNavigating, isDepositMenuOpen }
