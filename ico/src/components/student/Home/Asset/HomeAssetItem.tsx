@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { css } from "@emotion/react"
 import Button from '@/components/common/Button/Button'
 import useNavigate from '@/hooks/useNavigate'
+import Link from 'next/link'
 
 type HomeAssetItemProps = {
     icon: any
@@ -16,8 +17,10 @@ type HomeAssetItemProps = {
 function HomeAssetItem({icon, title, money, moneyUnit, detailUrl }: HomeAssetItemProps) {
 
     const navigate = useNavigate()
+    
   return (
     <div css={contentWrapperCSS}>
+        <Link  href={detailUrl} prefetch/>
         <div css={leftWrapperCSS}>
             <div css={imgWrapperCSS}>
                 {icon}

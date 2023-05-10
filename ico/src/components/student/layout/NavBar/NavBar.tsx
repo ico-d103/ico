@@ -3,6 +3,7 @@ import { css } from "@emotion/react"
 import { useRouter } from "next/router"
 // import navigate from "@/util/navigate"
 import useNavigate from "@/hooks/useNavigate"
+import Link from "next/link"
 
 import { NAVBAR_CLASS, NAVBAR_GOVERNMENT, NAVBAR_STORE, NAVBAR_HOME } from "./NavBarIcons"
 
@@ -68,6 +69,7 @@ function NavBar({ children }: NavBarProps) {
 				}}
 				css={navBarIndivCSS}
 			>
+				<Link href={navBarData[Number(el)].url} prefetch/>
 				<div css={navBarIndivContentCSS({ targetIdx: selected, curIdx: Number(el) })}>
 					{navBarData[Number(el)].content}
 					{navBarData[Number(el)].label}
