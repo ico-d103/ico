@@ -2,6 +2,7 @@ package com.ico.api.service.bank;
 
 import com.ico.api.dto.bank.InterestAllDto;
 import com.ico.api.dto.bank.InterestStudentResDto;
+import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Interest;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,6 +34,7 @@ public class InterestServiceImpl implements InterestService {
     private final NationRepository nationRepository;
     private final StudentRepository studentRepository;
     private final InterestRepository interestRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * 나의 이자율 조회
@@ -39,9 +42,11 @@ public class InterestServiceImpl implements InterestService {
      * @return 해당 장단기 이자율, 계좌 잔액
      */
     @Override
-    public InterestStudentResDto myInterest() {
-        long studentId = 1;
-        long nationId = 99;
+    public InterestStudentResDto myInterest(HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -69,8 +74,8 @@ public class InterestServiceImpl implements InterestService {
      * @return 장기 이자율 리스트, 단기 이자율 리스트
      */
     @Override
-    public InterestAllDto findAllInterest() {
-        long nationId = 99;
+    public InterestAllDto findAllInterest(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         List<Interest> interestList = interestRepository.findAllByNationIdOrderByCreditRating(nationId);
 
         // 국가의 이자율 여부 확인
@@ -104,8 +109,8 @@ public class InterestServiceImpl implements InterestService {
      */
     @Transactional
     @Override
-    public void updateInterest(InterestAllDto dto) {
-        long nationId = 99;
+    public void updateInterest(HttpServletRequest request, InterestAllDto dto) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         // 나라 확인
         if (nationRepository.findById(nationId).isEmpty()) {
