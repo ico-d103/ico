@@ -20,6 +20,7 @@ function index() {
 		// { staleTime: 200000 },
 	)
 
+	console.log(data)
 	const renderExchequerList = data?.map((el, idx) => {
 		return (
 			<GovExchequerDetail
@@ -32,7 +33,6 @@ function index() {
 			/>
 		)
 	})
-
 
 	return (
 		<div css={contentWrapperCSS}>
@@ -60,7 +60,7 @@ function index() {
 				closeComp={closeComp}
 			/>
 
-<GovExchequerDetail
+			<GovExchequerDetail
 				showIdx={0}
 				actualIdx={0}
 				title={"세금 제목 1"}
