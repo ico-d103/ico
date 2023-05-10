@@ -1,5 +1,6 @@
 package com.ico.api.service.student;
 
+import com.ico.api.dto.nation.CreditScoreReqDto;
 import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.student.StudentListResDto;
@@ -49,4 +50,11 @@ public interface StudentService {
      * @return
      */
     StudentMyPageResDto findStudentMyPage(HttpServletRequest request);
+
+    /**
+     * 신용등급 평점 부여
+     *
+     * @param studentId
+     */
+    void postCreditScore(Long studentId, CreditScoreReqDto dto, HttpServletRequest request);
 }
