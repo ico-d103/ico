@@ -22,7 +22,7 @@ public class StudentProductDetailResDto {
 
     private int amount;
 
-    private List<String> image;
+    private List<String> images;
 
     private String detail;
 
@@ -36,11 +36,11 @@ public class StudentProductDetailResDto {
 
     @Builder
 
-    public StudentProductDetailResDto(Long id, String title, int amount, List<String> image, String detail, byte count, boolean isAssigned, byte sold, String date) {
+    public StudentProductDetailResDto(Long id, String title, int amount, List<String> images, String detail, byte count, boolean isAssigned, byte sold, String date) {
         this.id = id;
         this.title = title;
         this.amount = amount;
-        this.image = image;
+        this.images = images;
         this.detail = detail;
         this.count = count;
         this.isAssigned = isAssigned;

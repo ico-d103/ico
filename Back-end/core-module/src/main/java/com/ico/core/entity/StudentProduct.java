@@ -41,7 +41,7 @@ public class StudentProduct {
 
     private int amount;
 
-    private String image;
+    private String images;
 
     private String detail;
 
@@ -54,13 +54,13 @@ public class StudentProduct {
     private LocalDateTime date;
 
     @Builder
-    public StudentProduct(Long id, Student student, Nation nation, String title, int amount, String image, String detail, byte count, boolean isAssigned, byte sold, LocalDateTime date) {
+    public StudentProduct(Long id, Student student, Nation nation, String title, int amount, String images, String detail, byte count, boolean isAssigned, byte sold, LocalDateTime date) {
         this.id = id;
         this.student = student;
         this.nation = nation;
         this.title = title;
         this.amount = amount;
-        this.image = image;
+        this.images = images;
         this.detail = detail;
         this.count = count;
         this.isAssigned = isAssigned;

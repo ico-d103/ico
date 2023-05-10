@@ -19,7 +19,7 @@ public class StudentProductAllResDto {
 
     private int amount;
 
-    private List<String> image;
+    private List<String> images;
 
     private byte count;
 
@@ -32,11 +32,11 @@ public class StudentProductAllResDto {
     private String date;
 
     @Builder
-    public StudentProductAllResDto(Long id, String title, int amount, List<String> image, byte count, boolean isAssigned, byte sold, String name, String date) {
+    public StudentProductAllResDto(Long id, String title, int amount, List<String> images, byte count, boolean isAssigned, byte sold, String name, String date) {
         this.id = id;
         this.title = title;
         this.amount = amount;
-        this.image = image;
+        this.images = images;
         this.count = count;
         this.isAssigned = isAssigned;
         this.sold = sold;
