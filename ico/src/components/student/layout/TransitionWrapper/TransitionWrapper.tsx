@@ -214,11 +214,11 @@ const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 		animation: focus-out 0.3s ease both;
 		@keyframes focus-out {
 			0% {
-				filter: blur(0px);
+				filter:  blur(0px);
 
 			}
 			100% {
-				filter: blur(20px);
+				filter:  blur(6px);
 			}
 		}
 	`
