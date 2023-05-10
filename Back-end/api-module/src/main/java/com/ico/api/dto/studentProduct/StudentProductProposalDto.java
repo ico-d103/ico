@@ -26,9 +26,6 @@ public class StudentProductProposalDto {
     @Min(value = 1, message = "607")
     int amount;
 
-    @NotNull(message = "608")
-    String image;
-
     @NotBlank(message = "609")
     String detail;
 

@@ -2,6 +2,7 @@ package com.ico.api.service.student;
 
 import com.ico.api.dto.studentProduct.StudentProductAllResDto;
 import com.ico.api.dto.studentProduct.StudentProductProposalDto;
+import com.ico.api.service.S3UploadService;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentProduct;
@@ -11,16 +12,20 @@ import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.StudentProductRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author 변윤경
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -28,13 +33,16 @@ public class StudentProductServiceImpl implements StudentProductService{
     private final StudentRepository studentRepository;
     private final NationRepository nationRepository;
     private final StudentProductRepository studentProductRepository;
+    private final S3UploadService s3UploadService;
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
     /**
      * 학생의 상품 판매 제안서를 학생 상품 테이블에 추가합니다.
      * @param proposal 판매제안서 양식
      */
     @Override
-    public void createProduct(StudentProductProposalDto proposal) {
+    public void createProduct(List<MultipartFile> files, StudentProductProposalDto proposal) {
         long nationId = 99;
         long studentId = 1;
 
@@ -44,13 +52,22 @@ public class StudentProductServiceImpl implements StudentProductService{
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
+        // 상품 이미지 s3에 등록하고 파일이름 저장하기
+        StringBuilder images = new StringBuilder();
+        for (MultipartFile file : files) {
+            // 상품이미지를 등록하지 않았을 때
+            if(file.isEmpty()){
+                throw new CustomException(ErrorCode.NO_PRODUCT_IMAGE);
+            }
+            images.append(s3UploadService.upload(file)).append(",");
+        }
 
         StudentProduct studentProduct = StudentProduct.builder()
                 .student(student)
                 .nation(nation)
                 .title(proposal.getTitle())
                 .amount(proposal.getAmount())
-                .image(proposal.getImage())
+                .image(String.valueOf(images))
                 .detail(proposal.getDetail())
                 .count(proposal.getCount())
                 .date(LocalDateTime.now())
@@ -74,8 +91,27 @@ public class StudentProductServiceImpl implements StudentProductService{
 
         List<StudentProduct> productList = studentProductRepository.findAllByNationId(nationId);
         List<StudentProductAllResDto> resProductList = new ArrayList<>();
+
         for (StudentProduct product : productList){
-            resProductList.add(new StudentProductAllResDto().of(product));
+            List<String> images = List.of(product.getImage().split(","));
+            List<String> imageRes = new ArrayList<>();
+            for (String image : images){
+                imageRes.add(s3UploadService.getFileURL(image));
+            }
+
+            StudentProductAllResDto resDto = StudentProductAllResDto.builder()
+                    .id(product.getId())
+                    .title(product.getTitle())
+                    .amount(product.getAmount())
+                    .images(imageRes)
+                    .count(product.getCount())
+                    .isAssigned(product.isAssigned())
+                    .sold(product.getSold())
+                    .name(product.getStudent().getName())
+                    .date(product.getDate().format(formatter))
+                    .build();
+
+            resProductList.add(resDto);
         }
 
         return resProductList;
