@@ -6,9 +6,22 @@ import ClassStudentDetailGrade from "./ClassStudentDetailGrade"
 import ClassStudentDetailAccountList from "./ClassStudentDetailAccountList"
 import { useAtomValue } from "jotai"
 import { selectedStudent } from "@/store/store"
+import { getStudentDetailAPI } from "@/api/teacher/class/getStudentDetailAPI"
 
 function StudentDetail() {
 	const selectedStudentAtom = useAtomValue(selectedStudent)
+
+	useEffect(() => {
+		if (selectedStudentAtom !== -1) {
+			getStudentDetailAPI({ id: selectedStudentAtom })
+				.then((res) => {
+					console.log("@", res)
+				})
+				.catch((error) => {
+					console.log(error.response.message)
+				})
+		}
+	}, [selectedStudentAtom])
 
 	return (
 		<>

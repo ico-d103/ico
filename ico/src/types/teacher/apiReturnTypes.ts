@@ -53,3 +53,53 @@ export type getImmigrationListType = {
 	name: string
 	number: number
 }
+
+export type studentDetailTransactionType = {
+	title: string
+	amount: number
+}
+
+export type getStudentDetailType = {
+	studentId: number
+	studentName: string
+	creditScore: number
+	transactions: studentDetailTransactionType[]
+	frozen: boolean
+}
+
+// {
+//     "studentId": 1,
+//     "studentName": "test",
+//     "creditScore": 500,
+//     "transactions": {
+//         "2023.05.06": [
+//             {
+//                 "title": "거래 내역 누락",
+//                 "amount": 100
+//             }
+//         ],
+//         "2023.05.04": [
+//             {
+//                 "title": "벌금",
+//                 "amount": -100
+//             },
+//             {
+//                 "title": "벌금",
+//                 "amount": -100
+//             },
+//             {
+//                 "title": "거래 내역 누락",
+//                 "amount": 100
+//             }
+//         ]
+//     },
+//     "frozen": false
+// }
+
+// {
+//     "studentId": 1,
+//     "studentName": "test",
+//     "creditScore": 500,
+//     "transactions": {},
+//     "frozen": false
+// }
