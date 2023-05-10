@@ -2,6 +2,7 @@ package com.ico.api.service.user;
 
 import com.ico.api.dto.user.LoginDto;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.core.code.ImmigrationType;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -29,9 +31,10 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public String login(LoginDto members) {
+    public Map<String, String> login(LoginDto members) {
         Optional<Teacher> teacher = teacherRepository.findByIdentity(members.getIdentity());
         Optional<Student> student = studentRepository.findByIdentity(members.getIdentity());
+        String type = "null";
 
         if (teacher.isPresent()) {
             // 받은 비밀번호를 인코딩하면 다르게 인코딩(암호화)돼서 비교가 안됌
@@ -39,11 +42,20 @@ public class MemberServiceImpl implements MemberService {
                 throw new CustomException(ErrorCode.PASSWORD_WRONG);
             }
         } else if (student.isPresent()) {
+            ImmigrationType iType = student.get().getImmigrationType();
             if (!passwordEncoder.matches(members.getPassword(), student.get().getPassword())) {
                 throw new CustomException(ErrorCode.PASSWORD_WRONG);
             }
+            else {
+                if (iType != null) {
+                    type = student.get().getImmigrationType().toString();
+                }
+                else {
+                    type = "null";
+                }
+            }
         }
-        return jwtTokenProvider.generateJwtToken(members);
+        return Map.of("token", jwtTokenProvider.generateJwtToken(members), "status", type);
     }
 
     @Override

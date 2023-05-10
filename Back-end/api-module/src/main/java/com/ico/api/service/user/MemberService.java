@@ -2,6 +2,8 @@ package com.ico.api.service.user;
 
 import com.ico.api.dto.user.LoginDto;
 
+import java.util.Map;
+
 /**
  * Member Service
  *
@@ -15,7 +17,7 @@ public interface MemberService {
      * @param members
      * @return generateJwtToken
      */
-    String login(LoginDto members);
+    Map<String, String> login(LoginDto members);
 
     /**
      * 아이디 중복 체크

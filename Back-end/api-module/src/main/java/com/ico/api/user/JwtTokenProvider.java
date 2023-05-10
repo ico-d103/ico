@@ -1,6 +1,7 @@
 package com.ico.api.user;
 
 import com.ico.api.dto.user.LoginDto;
+import com.ico.core.code.ImmigrationType;
 import com.ico.core.code.Role;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
@@ -31,6 +32,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Jwt Provider
@@ -289,6 +291,10 @@ public class JwtTokenProvider {
                 // 토큰의 클레임 정보를 가져옵니다.
                 Map<String, Object> claims = createClaims(oldToken);
                 if (claims.get("identity").equals(identity)) {
+
+                    // 학생 반 입장 현황 업데이트
+                    studentTypeUpdate(identity);
+
                     // 새로운 토큰을 생성합니다.
                     LoginDto member = new LoginDto();
                     member.setIdentity(identity);
@@ -309,5 +315,13 @@ public class JwtTokenProvider {
             }
         }
         return  "예전 토큰!! " + oldToken;
+    }
+
+    private void studentTypeUpdate(String identity) {
+        Optional<Student> student = studentRepository.findByIdentity(identity);
+        if (student.isPresent()) {
+            student.get().setImmigrationType(ImmigrationType.CHECK);
+            studentRepository.save(student.get());
+        }
     }
 }
