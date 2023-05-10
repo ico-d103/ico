@@ -1,18 +1,20 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.studentProduct.StudentProductAllResDto;
-import com.ico.api.dto.studentProduct.StudentProductProposalDto;
+import com.ico.api.dto.studentProduct.StudentProductReqDto;
 import com.ico.api.service.student.StudentProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -32,12 +34,12 @@ public class StudentProductController {
      *
      * @param proposal 판매제안서 양식
      *                 제품이름, 가격, 사진, 상세정보, 개수
-     *
+     * @param files    제품의 이미지 파일들
      * @return httpstauts
      */
-    @PostMapping("/student/proposal")
-    public ResponseEntity<?> uploadProposal(@Valid @RequestBody StudentProductProposalDto proposal){
-        studentProductService.createProduct(proposal);
+    @PostMapping(value = "/student/proposal", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<HttpStatus> uploadProposal(@Valid @RequestPart StudentProductReqDto proposal, @RequestPart List<MultipartFile> files) {
+        studentProductService.createProduct(files, proposal);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -47,7 +49,7 @@ public class StudentProductController {
      * @return 학생상품목록
      */
     @GetMapping
-    public ResponseEntity<List<StudentProductAllResDto>> findAllProduct(){
+    public ResponseEntity<List<StudentProductAllResDto>> findAllProduct() {
         return ResponseEntity.ok(studentProductService.findAllProduct());
     }
 
@@ -59,7 +61,7 @@ public class StudentProductController {
      * @return httpstauts
      */
     @PostMapping("/teacher/{studentProductId}")
-    public ResponseEntity<HttpStatus> approveProposal(@PathVariable Long studentProductId){
+    public ResponseEntity<HttpStatus> approveProposal(@PathVariable Long studentProductId) {
         studentProductService.updateIsAssigned(studentProductId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -71,7 +73,7 @@ public class StudentProductController {
      * @return httpstauts
      */
     @DeleteMapping("/teacher/{studentProductId}")
-    public ResponseEntity<HttpStatus> deleteProduct(@PathVariable Long studentProductId){
+    public ResponseEntity<HttpStatus> deleteProduct(@PathVariable Long studentProductId) {
         studentProductService.deleteProduct(studentProductId);
         return ResponseEntity.ok(HttpStatus.OK);
     }

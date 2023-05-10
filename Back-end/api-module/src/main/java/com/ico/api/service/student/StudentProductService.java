@@ -1,7 +1,8 @@
 package com.ico.api.service.student;
 
 import com.ico.api.dto.studentProduct.StudentProductAllResDto;
-import com.ico.api.dto.studentProduct.StudentProductProposalDto;
+import com.ico.api.dto.studentProduct.StudentProductReqDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface StudentProductService {
      * 학생의 상품 판매 제안서를 학생 상품 테이블에 추가합니다.
      * @param proposal 판매제안서 양식
      */
-    void createProduct(StudentProductProposalDto proposal);
+    void createProduct(List<MultipartFile> files, StudentProductReqDto proposal);
 
     /**
      * 등록된 학생 상품 목록을 조회합니다.
