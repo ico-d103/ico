@@ -66,4 +66,12 @@ public interface JobService {
      * @param request
      */
     void resetAllJob(HttpServletRequest request);
+
+    /**
+     * 개별 직업 배정 초기화
+     *
+     * @param studentId
+     * @param request
+     */
+    void resetJob(Long studentId, HttpServletRequest request);
 }

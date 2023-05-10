@@ -93,6 +93,8 @@ public enum ErrorCode{
 
     ALREADY_RELEASE_ACCOUNT(HttpStatus.BAD_REQUEST, "509", "이미 정지 해제된 계좌입니다."),
 
+    HAS_NOT_JOB(HttpStatus.NOT_FOUND, "510", "해당 학생은 직업이 없습니다."),
+
     NO_PRODUCT_IMAGE(HttpStatus.NOT_FOUND, "608", "상품 이미지를 입력해주세요"),
 
     PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "없는 판매 제안서입니다."),

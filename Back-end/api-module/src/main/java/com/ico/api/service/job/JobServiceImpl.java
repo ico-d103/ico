@@ -13,6 +13,7 @@ import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.JobRepository;
 import com.ico.core.repository.NationRepository;
+import com.ico.core.repository.ResumeMongoRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,8 @@ public class JobServiceImpl implements JobService{
     private final NationRepository nationRepository;
 
     private final StudentRepository studentRepository;
+
+    private final ResumeMongoRepository resumeMongoRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -170,5 +173,31 @@ public class JobServiceImpl implements JobService{
             studentRepository.save(student);
         }
 
+        // 직업신청내역에서도 전부 삭제
+        resumeMongoRepository.deleteAllByNationId(nationId);
+    }
+
+    @Transactional
+    @Override
+    public void resetJob(Long studentId, HttpServletRequest request) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Job job = student.getJob();
+
+        if (job == null) {
+            log.info("[resetJob] 해당 학생은 직업이 없습니다.");
+            throw new CustomException(ErrorCode.HAS_NOT_JOB);
+        }
+
+        // 만약 학생 직업의 배정된 인원이 0인 경우 예외를 던지는 대신 0으로 설정
+        job.setCount((byte) (job.getCount() == 0 ? 0 : job.getCount() - 1));
+        jobRepository.save(job);
+
+        student.setJob(null);
+        studentRepository.save(student);
+
+        // 학생의 직업 신청 내역 전부 삭제
+        resumeMongoRepository.deleteAllByStudentId(studentId);
     }
 }

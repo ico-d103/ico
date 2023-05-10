@@ -115,4 +115,10 @@ public class JobController {
         jobService.resetAllJob(request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    @PutMapping("/teacher/reset/{studentId}")
+    public ResponseEntity<HttpStatus> resetAllJob(@PathVariable Long studentId, HttpServletRequest request) {
+        jobService.resetJob(studentId, request);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 }
