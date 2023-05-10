@@ -5,7 +5,7 @@ import { css } from "@emotion/react"
 import { useRef, useEffect } from "react"
 import { OverlayScrollbars } from "overlayscrollbars"
 import { Provider } from "jotai"
-import mainStore from "@/store/store"
+import { mainStore } from "@/store/store"
 import { CookiesProvider } from "react-cookie"
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
