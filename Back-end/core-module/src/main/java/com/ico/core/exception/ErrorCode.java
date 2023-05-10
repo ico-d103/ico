@@ -91,7 +91,7 @@ public enum ErrorCode{
 
     BAD_CREDIT_RATING(HttpStatus.BAD_REQUEST, "507", "신용등급은 1~10만 가능합니다."),
 
-    ALREADY_RELEASE_ACCOUNT(HttpStatus.BAD_REQUEST, "509", "이미 정지 해제된 계좌입니다."),
+    ALREADY_RELEASE_ACCOUNT(HttpStatus.BAD_REQUEST, "509", "이미 활성화된 계좌입니다."),
 
     HAS_NOT_JOB(HttpStatus.NOT_FOUND, "510", "해당 학생은 직업이 없습니다."),
 

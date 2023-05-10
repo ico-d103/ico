@@ -116,8 +116,15 @@ public class JobController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    /**
+     * 학생 개별 직업 배정 초기화
+     *
+     * @param studentId
+     * @param request
+     * @return
+     */
     @PutMapping("/teacher/reset/{studentId}")
-    public ResponseEntity<HttpStatus> resetAllJob(@PathVariable Long studentId, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> resetJob(@PathVariable Long studentId, HttpServletRequest request) {
         jobService.resetJob(studentId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
