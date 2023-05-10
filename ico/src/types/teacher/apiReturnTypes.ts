@@ -24,6 +24,7 @@ export type getNationType = {
 export type getGovExchequerType = {
 	id: number
 	title: string
+	detail: string
 	amount: number
 	type: 0 | 1
 }
@@ -37,6 +38,7 @@ export type getGovJobType = {
 	color: string
 	total: number
 	count: number
+	id: number
 }
 
 export type getStudentListType = {
@@ -69,4 +71,29 @@ export type getStudentDetailType = {
 	creditScore: number
 	transactions: transactionsType
 	frozen: boolean
+}
+
+export type getTeacherProductsType = {
+	id: string
+	title: string
+	amount: number
+	image: string
+	count: number
+	sold: number
+	date: string
+	name: string
+	rental: boolean
+	assigned: boolean
+}
+
+export type getStudentProductsType = {
+	id: string
+	title: string
+	amount: number
+	image: string
+	count: number
+	sold: number
+	date: string
+	name: string
+	assigned: boolean
 }

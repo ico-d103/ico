@@ -2,10 +2,11 @@ import { tokenInstance } from "@/api/instance"
 import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
-    idx: number;
     body: {
-        title: string,
+        title: string
         detail: string
+        amount: number
+        type: number
     }
 }
 
@@ -14,9 +15,9 @@ type responseType = {
     data: successReturnType
 }
 
-export const putGovRuleAPI = async ({idx, body}: paramsType) => {
+export const postGovExchequerAPI = async ({body}: paramsType) => {
     try {
-        const response: responseType = await tokenInstance.put(`/rule/teacher/${idx}`, body)
+        const response: responseType = await tokenInstance.post(`/tax/teacher`, body)
         return response.data
     } catch (error) {
         throw error

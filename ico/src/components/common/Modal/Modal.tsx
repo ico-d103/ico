@@ -52,6 +52,7 @@ function Modal({ compState, closeComp, transition, content }: ModalProps) {
 
 const backdropCSS = ({ compState, modalState }: { compState: boolean; modalState: boolean }) => {
 	return css`
+		
 		position: fixed;
 		width: 100%;
 		height: 100%;
@@ -66,10 +67,11 @@ const modalWrapperCSS = css`
 	position: fixed;
 	width: 100vw;
 	height: 100vh;
-	z-index: 10000;
+	z-index: 9999999999999999;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	
 `
 
 const transitions = ({ compState, modalState }: { compState: boolean; modalState: boolean }) => {

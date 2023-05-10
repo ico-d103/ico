@@ -21,6 +21,7 @@ function NavBar({ children }: NavBarProps) {
 		"/student/home/coupon": 0,
 		"/student/home/exchequer": 0,
 		"/student/finance/guide": 0,
+		"/student/finance/invest": 0,
 		"/student/test2": 1,
 		"/student/gov/rule": 2,
 		"/student/gov/exchequer": 2,

@@ -75,20 +75,20 @@ function index() {
 				</div>
 			</div>
 
-			<div css={cardWrapperCSS}>
+			{/* <div css={cardWrapperCSS}>
 				{cardData.map((card) => (
 					<Card
 						key={card.id}
 						image={card.image}
 						name={card.name}
-						price={card.price}
+						amount={card.amount}
 						number={card.number}
 						writer={card.writer}
 						date={card.date}
 						approved={card.approved}
 					/>
 				))}
-			</div>
+			</div> */}
 		</>
 	)
 }

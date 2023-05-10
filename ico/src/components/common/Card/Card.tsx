@@ -5,36 +5,40 @@ import Image from "next/image"
 // 승인 대기중인 상품은 boolean으로 관리한다.
 
 type CardProps = {
+	title: string
+	amount: number
 	image: string
+	sold: number
+	count: number
 	name: string
-	price: number
-	number: number
-	writer: string
 	date: string
-	approved: boolean
+	assigned: boolean
 }
 
-function Card({ image, name, number, price, writer, date, approved }: CardProps) {
+function Card({ title, amount, image, count, sold, name, date, assigned }: CardProps) {
 	return (
 		<div css={cardCSS}>
 			<div css={cardImageWrapperCSS}>
-				<Image src={image} alt={name} layout="fill" />
-				{approved ? (
+				<Image src={image} alt={title} layout="fill" />
+				{assigned ? (
 					<div css={[testCSS, cardRequestTextCSS]}>승인 진행 중</div>
 				) : (
-					number == 0 && <div css={[testCSS, cardSoldOutTextCSS]}>sold out</div>
+					sold == 0 && <div css={[testCSS, cardSoldOutTextCSS]}>sold out</div>
 				)}
 			</div>
 			<div css={cardFirstContentCSS}>
-				<div>{name}</div>
+				<div>{title}</div>
 				<div>
-					<div>{price}미소</div>/ <div>{number}EA</div>
+					<div>{amount}미소</div>/
+					<div>
+						{sold}EA{count - sold}
+					</div>
 				</div>
 			</div>
 			<hr />
 			<div css={cardSecondContentCSS}>
 				<div>
-					<div>{writer}</div>
+					<div>{name}</div>
 					<div>{date}</div>
 				</div>
 			</div>
