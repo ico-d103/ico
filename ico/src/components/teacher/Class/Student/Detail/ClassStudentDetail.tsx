@@ -7,7 +7,8 @@ import ClassStudentDetailAccountList from "./ClassStudentDetailAccountList"
 import { useAtomValue } from "jotai"
 import { selectedStudent } from "@/store/store"
 import { getStudentDetailAPI } from "@/api/teacher/class/getStudentDetailAPI"
-import { transactionsType } from "@/types/teacher/apiReturnTypes"
+import { getStudentDetailType, transactionsType } from "@/types/teacher/apiReturnTypes"
+import { useQuery } from "@tanstack/react-query"
 
 const studentReducer = (
 	state: {
@@ -45,6 +46,9 @@ function StudentDetail() {
 		transactions: {},
 		frozen: false,
 	})
+	const { data } = useQuery<getStudentDetailType>(["entered", "studentDetail"], (id) =>
+		getStudentDetailAPI({ id: selectedStudentAtom }),
+	)
 
 	useEffect(() => {
 		if (selectedStudentAtom !== -1) {

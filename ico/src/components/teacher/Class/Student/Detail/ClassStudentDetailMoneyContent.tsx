@@ -36,11 +36,15 @@ function ClassStudentDetailMoneyContent() {
 	}
 
 	const postAccountHandler = (flag: string) => {
+		if (inputState.title === "" || inputState.amount === "") {
+			alert("빈칸을 모두 입력해주세요.")
+		}
+
 		const amount = flag === "minus" ? "-" + inputState.amount : inputState.amount
 
 		postAccountAPI({ studentId: selectedStudentAtom, bodyType: { title: inputState.title, amount: amount } })
 			.then((res) => {
-				// 학생 목록 리스트에서 금액 업데이트
+				// mutation으로 학생 목록 리스트에서 금액 업데이트
 			})
 			.catch((error) => {
 				// 학생의 금액이 부족해서 차감 못하는 경우

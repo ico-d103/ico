@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react"
 import { css } from "@emotion/react"
 import StudentEnteredListItem from "./ClassStudentEnteredListItem"
 import KebabMenu from "@/components/teacher/common/KebabMenu/KebabMenu"
@@ -7,7 +6,7 @@ import { getStudentListType } from "@/types/teacher/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
 
 function StudentEnteredList() {
-	const { data } = useQuery<getStudentListType[]>(["studentList"], getStudentListAPI)
+	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
 
 	const resetStudentsJob = () => {
 		alert("직업 초기화!")
