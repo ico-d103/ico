@@ -6,9 +6,8 @@ import { css } from "@emotion/react"
 import { useRouter } from "next/router"
 import Image from "next/image"
 import DomToImage from "dom-to-image"
-import * as htmlToImage from 'html-to-image';
+import * as htmlToImage from "html-to-image"
 import useNavigate from "@/hooks/useNavigate"
-
 
 type TransitionWrapperProps = {
 	children: any
@@ -78,7 +77,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				{
 					scale: 0.5,
 					useCORS: true,
-					
 				},
 				// {
 				// 	scrollX: -window.scrollX,
@@ -104,11 +102,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			// 	const screenshot = dataUrl
 			// 	setScreenshot(screenshot)
 			// })
-
-
-
-
-
 		}
 	}
 
@@ -214,11 +207,20 @@ const imgWrapperCSS = css`
 
 const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 	return css`
-
 		width: 100vw;
 		height: auto;
 
 		transform: translate(0, -${scrollTop}px);
+		animation: focus-out 0.3s ease both;
+		@keyframes focus-out {
+			0% {
+				filter: blur(0px);
+
+			}
+			100% {
+				filter: blur(20px);
+			}
+		}
 	`
 }
 
@@ -234,7 +236,6 @@ const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 		/* min-height: calc(100vh - 64px); */
 		min-height: 100vh;
 		overflow: hidden;
-
 	`
 }
 
