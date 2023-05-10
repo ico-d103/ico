@@ -4,6 +4,8 @@ import HomeGradationButton from './HomeGradationButton'
 import LoadImage from '@/components/common/LoadImage/LoadImage'
 import useNavigate from '@/hooks/useNavigate'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
+
 
 function HomeButtonSection() {
     const navigate = useNavigate()
@@ -16,6 +18,9 @@ function HomeButtonSection() {
     
   return (
     <div css={buttonSectionWrapperCSS}>
+        <Link href={'/student/home/coupon'} prefetch/>
+        <Link href={'/student/home/exchequer'} prefetch/>
+        <Link href={'/student/finance/guide'} prefetch/>
         <div css={columnCSS}>
             <HomeGradationButton cssProps={css`width: 42%; height: 140px;`} backgroundColor={['#459BFF', '#001AFF']} onClick={() => {navigate('/student/home/coupon', 'bottomToTop')}}>
             
