@@ -23,11 +23,14 @@ public class InterestStudentResDto {
 
     private Integer account;
 
+    private DepositStudentResDto myDeposit;
+
     @Builder
-    public InterestStudentResDto(Byte creditRating, Byte shortPeriod, Byte longPeriod, Integer account) {
+    public InterestStudentResDto(Byte creditRating, Byte shortPeriod, Byte longPeriod, Integer account, DepositStudentResDto myDeposit) {
         this.creditRating = creditRating;
         this.shortPeriod = shortPeriod;
         this.longPeriod = longPeriod;
         this.account = account;
+        this.myDeposit = myDeposit;
     }
 }
