@@ -17,16 +17,17 @@ function StudentWaitingList({ waitingList }: StudentWaitingListPropsType) {
 
 		sse.addEventListener("connect", (e) => {
 			const { data: receivedConnectData } = e
-			console.log("SSE 연결 테스트 : ", receivedConnectData)
+			console.log(`SSE ${receivedConnectData}`)
 		})
 
 		sse.addEventListener("studentList", (e) => {
 			const { data: receivedListData } = e
-			console.log("SSE 리스트 조회 테스트 : ", receivedListData)
 
 			// 리스트 자동 업데이트
-			// return queryClient.invalidateQueries(["studentList"])
+			return queryClient.invalidateQueries(["studentList"])
 		})
+
+		sse.onerror = () => sse.close()
 	}
 
 	useEffect(() => {

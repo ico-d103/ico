@@ -68,10 +68,10 @@ function login() {
 	}
 
 	const handleKeyDown = (event: any) => {
-		if (event.key === 'Enter') {
-		  loginHandler()
+		if (event.key === "Enter") {
+			loginHandler()
 		}
-	  };
+	}
 
 	return (
 		<div css={wrapperCSS}>
