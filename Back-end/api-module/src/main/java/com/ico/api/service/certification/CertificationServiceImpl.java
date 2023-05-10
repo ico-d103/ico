@@ -35,7 +35,7 @@ public class CertificationServiceImpl implements CertificationService{
             teacherRepository.save(teacher);
 
             // Certification 삭제
-            certificationRepository.deleteById(id);
+            certificationRepository.delete(certification);
         }
     }
 
