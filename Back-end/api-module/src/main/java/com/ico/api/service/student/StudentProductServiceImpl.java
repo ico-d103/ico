@@ -1,6 +1,7 @@
 package com.ico.api.service.student;
 
 import com.ico.api.dto.studentProduct.StudentProductAllResDto;
+import com.ico.api.dto.studentProduct.StudentProductDetailResDto;
 import com.ico.api.dto.studentProduct.StudentProductReqDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.core.entity.Nation;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 학생 상품 Service
+ *
  * @author 변윤경
  */
 @Slf4j
@@ -54,13 +57,13 @@ public class StudentProductServiceImpl implements StudentProductService{
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
         // 상품 이미지 s3에 등록하고 파일이름 저장하기
-        StringBuilder images = new StringBuilder();
+        StringBuilder image = new StringBuilder();
         for (MultipartFile file : files) {
             // 상품이미지를 등록하지 않았을 때
             if(file.isEmpty()){
                 throw new CustomException(ErrorCode.NO_PRODUCT_IMAGE);
             }
-            images.append(s3UploadService.upload(file)).append(",");
+            image.append(s3UploadService.upload(file)).append(",");
         }
 
         StudentProduct studentProduct = StudentProduct.builder()
@@ -68,7 +71,7 @@ public class StudentProductServiceImpl implements StudentProductService{
                 .nation(nation)
                 .title(proposal.getTitle())
                 .amount(proposal.getAmount())
-                .image(String.valueOf(images))
+                .image(String.valueOf(image))
                 .detail(proposal.getDetail())
                 .count(proposal.getCount())
                 .date(LocalDateTime.now())
@@ -95,17 +98,11 @@ public class StudentProductServiceImpl implements StudentProductService{
         List<StudentProductAllResDto> resProductList = new ArrayList<>();
 
         for (StudentProduct product : productList){
-            List<String> images = List.of(product.getImage().split(","));
-            List<String> imageRes = new ArrayList<>();
-            for (String image : images){
-                imageRes.add(s3UploadService.getFileURL(image));
-            }
-
             StudentProductAllResDto resDto = StudentProductAllResDto.builder()
                     .id(product.getId())
                     .title(product.getTitle())
                     .amount(product.getAmount())
-                    .images(imageRes)
+                    .image(getImageURLs(product.getImage()))
                     .count(product.getCount())
                     .isAssigned(product.isAssigned())
                     .sold(product.getSold())
@@ -147,5 +144,46 @@ public class StudentProductServiceImpl implements StudentProductService{
         StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         studentProductRepository.delete(product);
+    }
+
+    /**
+     * 학생상품 상세보기
+     *
+     * @param id 상품 아이디
+     * @return 학생 상품 상세 정보
+     */
+    @Override
+    public StudentProductDetailResDto detailProduct(Long id) {
+        long nationId = 99;
+
+        StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
+
+        return StudentProductDetailResDto.builder()
+                .id(id)
+                .title(product.getTitle())
+                .amount(product.getAmount())
+                .image(getImageURLs(product.getImage()))
+                .detail(product.getDetail())
+                .count(product.getCount())
+                .isAssigned(product.isAssigned())
+                .sold(product.getSold())
+                .date(product.getDate().format(formatter))
+                .build();
+    }
+
+    /**
+     * DB에 저장된 이미지 String url들을 list로 변환
+     *
+     * @param urls ,로 구분되는 url 모음
+     * @return  url List
+     */
+    private List<String> getImageURLs(String urls){
+        List<String> images = List.of(urls.split(","));
+        List<String> imageRes = new ArrayList<>();
+        for (String image : images){
+            imageRes.add(s3UploadService.getFileURL(image));
+        }
+        return imageRes;
     }
 }
