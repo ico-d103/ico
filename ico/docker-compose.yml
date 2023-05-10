@@ -7,7 +7,7 @@ services:
     image: front
     ports:
       - '3000:3000'
-    command: 'npm run dev'
+    command: 'npm run start'
     logging:
       driver: syslog
       options:
