@@ -1,6 +1,4 @@
-import React, { useState } from "react"
 import { css } from "@emotion/react"
-import Button from "@/components/common/Button/Button"
 import { CLASS_PROPERTY } from "@/components/teacher/Class/ClassIcons"
 import PropertyList from "@/components/teacher/Class/Property/ClassPropertyList"
 import Pagination from "@/components/teacher/common/Pagination/Pagination"
@@ -12,17 +10,43 @@ import { CLASS_BIG_PROPERTY } from "@/components/teacher/Class/ClassIcons"
 import { useQuery } from "@tanstack/react-query"
 import { getNationTreasuryAPI } from "@/api/teacher/class/getNationTreasuryAPI"
 import { getNationTreasuryType } from "@/types/teacher/apiReturnTypes"
+import KebabMenu from "@/components/teacher/common/KebabMenu/KebabMenu"
+import { isDepositMenuOpen } from "@/store/store"
+import { useAtom } from "jotai"
 
 function property() {
 	const [openComp, closeComp, compState] = useCompHandler()
-
+	const [isDepositMenuOpenAtom, setIsDepositMenuOpenAtom] = useAtom(isDepositMenuOpen)
 	const { data } = useQuery<getNationTreasuryType>(["property"], getNationTreasuryAPI)
+
+	const openModal = (flag: boolean) => {
+		// flag: true면 입금, false면 출금
+		if (flag) setIsDepositMenuOpenAtom(true)
+		else setIsDepositMenuOpenAtom(false)
+
+		openComp()
+	}
+
+	const dropdownList = [
+		{
+			name: "deposit",
+			content: null,
+			label: "국고 입금",
+			function: () => openModal(true),
+		},
+		{
+			name: "withdrawal",
+			content: null,
+			label: "국고 출금",
+			function: () => openModal(false),
+		},
+	]
 
 	return (
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
 				<h1>국고</h1>
-				<Button text={"국고 사용"} fontSize={`var(--teacher-h4)`} width={"128px"} theme={"normal"} onClick={openComp} />
+				<KebabMenu dropdownList={dropdownList} />
 			</div>
 			<div css={titleCSS}>
 				<div>{CLASS_PROPERTY}</div>
@@ -49,9 +73,11 @@ function property() {
 					<ModalContent
 						width={"500px"}
 						icon={CLASS_BIG_PROPERTY}
-						title={"국고 사용하기"}
+						title={isDepositMenuOpenAtom ? "국고 입금하기" : "국고 출금하기"}
 						titleSize={"var(--teacher-h2)"}
-						content={<ClassPropertyUseModalContent closeComp={closeComp} />}
+						content={
+							<ClassPropertyUseModalContent closeComp={closeComp} isDepositMenuOpenAtom={isDepositMenuOpenAtom} />
+						}
 					/>
 				}
 			/>
