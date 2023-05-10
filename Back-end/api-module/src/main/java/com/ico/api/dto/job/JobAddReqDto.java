@@ -1,22 +1,21 @@
-package com.ico.core.dto;
+package com.ico.api.dto.job;
 
-
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * 직업 수정 시 입력값 받을 Dto
+ * 직업 추가 req dto
  *
  * @author 서재건
  */
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class JobReqDto {
+@NoArgsConstructor
+public class JobAddReqDto {
 
     @NotNull(message = "410")
     @Size(max = 8)
@@ -37,14 +36,17 @@ public class JobReqDto {
     @NotNull(message = "426")
     private Integer creditRating;
 
+    @NotBlank(message = "425")
+    private String image;
+
     @Builder
-    public JobReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating) {
+    public JobAddReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating, String image) {
         this.title = title;
         this.detail = detail;
         this.total = total;
         this.wage = wage;
         this.color = color;
         this.creditRating = creditRating;
+        this.image = image;
     }
-
 }

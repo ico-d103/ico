@@ -1,11 +1,13 @@
 package com.ico.api.service.job;
 
+import com.ico.api.dto.job.JobAddReqDto;
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
 import com.ico.api.dto.job.JobResDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.dto.JobReqDto;
 import com.ico.core.entity.Job;
+import com.ico.core.entity.Nation;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.JobRepository;
@@ -105,5 +107,37 @@ public class JobServiceImpl implements JobService{
             dtoList.add(new JobResDto().of(job));
         }
         return dtoList;
+    }
+
+    @Override
+    public void addJob(JobAddReqDto dto, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        Job job = Job.builder()
+                .nation(nation)
+                .title(dto.getTitle())
+                .detail(dto.getDetail())
+                .image(dto.getImage())
+                .wage(dto.getWage())
+                .creditRating(dto.getCreditRating().byteValue())
+                .total(dto.getTotal().byteValue())
+                .color(dto.getColor())
+                .build();
+        jobRepository.save(job);
+    }
+
+    @Override
+    public void deleteJob(Long jobId) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
+
+        if (job.getCount() > 0) {
+            log.info("[deleteJob] 배정된 인원이 존재하여 삭제할 수 없습니다.");
+            throw new CustomException(ErrorCode.ALREADY_ASSIGNED_JOB);
+        }
+
+        jobRepository.delete(job);
     }
 }
