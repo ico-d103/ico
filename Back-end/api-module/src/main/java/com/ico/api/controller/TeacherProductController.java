@@ -35,7 +35,7 @@ public class TeacherProductController {
      * @return status
      */
     @PostMapping("/teacher")
-    public ResponseEntity<HttpStatus> uploadProposal(@Valid @RequestBody TeacherProductReqDto product) {
+    public ResponseEntity<HttpStatus> uploadProduct(@Valid @RequestBody TeacherProductReqDto product) {
         teacherProductService.createProduct(product);
         return ResponseEntity.ok(HttpStatus.OK);
     }

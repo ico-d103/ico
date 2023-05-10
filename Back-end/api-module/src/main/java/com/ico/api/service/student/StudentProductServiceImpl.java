@@ -43,7 +43,9 @@ public class StudentProductServiceImpl implements StudentProductService{
      */
     @Override
     public void createProduct(List<MultipartFile> files, StudentProductReqDto proposal) {
+        // TODO : REQUEST 변환
         long nationId = 99;
+        // TODO : REQUEST 변환
         long studentId = 1;
 
         Student student = studentRepository.findById(studentId)
@@ -83,6 +85,7 @@ public class StudentProductServiceImpl implements StudentProductService{
     @Transactional(readOnly = true)
     @Override
     public List<StudentProductAllResDto> findAllProduct() {
+        // TODO : REQUEST 변환
         long nationId = 99;
 
         if (nationRepository.findById(nationId).isEmpty()){
@@ -124,7 +127,7 @@ public class StudentProductServiceImpl implements StudentProductService{
      */
     @Override
     public void updateIsAssigned(Long id) {
-        // TODO : 교사의 국가 ID 가지고 오기
+        // TODO : REQUEST 변환
         long nationId = 99L;
         StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PROPOSAL_NOT_FOND));
@@ -139,7 +142,7 @@ public class StudentProductServiceImpl implements StudentProductService{
      */
     @Override
     public void deleteProduct(Long id) {
-        // TODO : 교사의 국가 ID 가지고 오기
+        // TODO : REQUEST 변환
         long nationId = 99L;
 
         StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
