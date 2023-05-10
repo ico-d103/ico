@@ -9,6 +9,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
+ * 매수 시 입력 값
+ * 최신 지수 가격, 매수 금액
+ *
  * @author 변윤경
  */
 @Getter
