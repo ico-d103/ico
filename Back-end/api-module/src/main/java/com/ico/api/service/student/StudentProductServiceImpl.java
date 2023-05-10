@@ -1,7 +1,7 @@
 package com.ico.api.service.student;
 
 import com.ico.api.dto.studentProduct.StudentProductAllResDto;
-import com.ico.api.dto.studentProduct.StudentProductProposalDto;
+import com.ico.api.dto.studentProduct.StudentProductReqDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
@@ -42,7 +42,7 @@ public class StudentProductServiceImpl implements StudentProductService{
      * @param proposal 판매제안서 양식
      */
     @Override
-    public void createProduct(List<MultipartFile> files, StudentProductProposalDto proposal) {
+    public void createProduct(List<MultipartFile> files, StudentProductReqDto proposal) {
         long nationId = 99;
         long studentId = 1;
 

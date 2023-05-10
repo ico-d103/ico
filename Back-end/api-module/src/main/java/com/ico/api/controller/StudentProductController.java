@@ -1,7 +1,7 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.studentProduct.StudentProductAllResDto;
-import com.ico.api.dto.studentProduct.StudentProductProposalDto;
+import com.ico.api.dto.studentProduct.StudentProductReqDto;
 import com.ico.api.service.student.StudentProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,12 +33,12 @@ public class StudentProductController {
      * 학생상품 테이블에 is_assigned = false로 추가됨
      *
      * @param proposal 판매제안서 양식
-     *                 *                 제품이름, 가격, 사진, 상세정보, 개수
+     *                 제품이름, 가격, 사진, 상세정보, 개수
      * @param files    제품의 이미지 파일들
      * @return httpstauts
      */
     @PostMapping(value = "/student/proposal", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<HttpStatus> uploadProposal(@Valid @RequestPart StudentProductProposalDto proposal, @RequestPart List<MultipartFile> files) {
+    public ResponseEntity<HttpStatus> uploadProposal(@Valid @RequestPart StudentProductReqDto proposal, @RequestPart List<MultipartFile> files) {
         studentProductService.createProduct(files, proposal);
         return ResponseEntity.ok(HttpStatus.OK);
     }
