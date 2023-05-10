@@ -1,5 +1,6 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.job.JobAddReqDto;
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
 import com.ico.api.dto.job.JobResDto;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,5 +76,11 @@ public class JobController {
     @GetMapping
     public ResponseEntity<List<JobResDto>> findJobList(HttpServletRequest request) {
         return ResponseEntity.ok(jobService.findJobList(request));
+    }
+
+    @PostMapping("/teacher")
+    public ResponseEntity<HttpStatus> addJob(@Valid @RequestBody JobAddReqDto dto, HttpServletRequest request) {
+        jobService.addJob(dto, request);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }
