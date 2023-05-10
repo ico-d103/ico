@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.Column;
@@ -59,8 +60,10 @@ public class Student {
 
     private boolean isFrozen;
 
+    @ColumnDefault("700")
     private short creditScore;
 
+    @ColumnDefault("6")
     private byte creditRating;
 
     private int salary;
