@@ -51,7 +51,28 @@ tokenInstance.interceptors.response.use(
 				// 3-1. 로그인 페이지로 이동
 			}
 		}
+		throw error
+	},
+)
 
+export const formDataInstance = axios.create({
+	baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+	headers: {
+		"Content-Type": "multipart/form-data",
+	},
+})
+
+formDataInstance.interceptors.response.use(
+	(response) => response,
+	async (error) => {
+		if (error.response.status === 401) {
+			const response = ""
+			if (response) {
+				const originalResponse = await formDataInstance.request(error.config)
+				return originalResponse
+			} else {
+			}
+		}
 		throw error
 	},
 )
