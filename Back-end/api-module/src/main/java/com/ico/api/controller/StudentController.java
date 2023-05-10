@@ -1,5 +1,6 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.nation.CreditScoreReqDto;
 import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.student.StudentListResDto;
@@ -89,6 +90,19 @@ public class StudentController {
     @GetMapping("/student/my-page")
     public ResponseEntity<StudentMyPageResDto> findStudentMyPage(HttpServletRequest request) {
         return ResponseEntity.ok(studentService.findStudentMyPage(request));
+    }
+
+    /**
+     * 신용등급 평점 부여
+     *
+     * @param studentId
+     * @param request
+     * @return
+     */
+    @PostMapping("/teacher/{studentId}/credit-score")
+    public ResponseEntity<HttpStatus> postCreditScore(@PathVariable Long studentId, @Valid @RequestBody CreditScoreReqDto dto, HttpServletRequest request) {
+        studentService.postCreditScore(studentId, dto, request);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 }

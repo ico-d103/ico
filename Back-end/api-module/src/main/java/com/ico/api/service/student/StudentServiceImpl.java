@@ -1,5 +1,6 @@
 package com.ico.api.service.student;
 
+import com.ico.api.dto.nation.CreditScoreReqDto;
 import com.ico.api.dto.student.StudentListResDto;
 import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.student.StudentResDto;
@@ -9,10 +10,12 @@ import com.ico.api.dto.user.StudentSignUpRequestDto;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Role;
+import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Transaction;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import com.ico.core.repository.TransactionMongoRepository;
@@ -43,6 +46,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService{
+    private final NationRepository nationRepository;
 
     private final StudentRepository studentRepository;
 
@@ -176,6 +180,75 @@ public class StudentServiceImpl implements StudentService{
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return new StudentMyPageResDto().of(student, student.getNation(), student.getJob());
+    }
+
+    @Override
+    public void postCreditScore(Long studentId, CreditScoreReqDto dto, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        // 나라의 신용점수 등락폭에 맞게 신용점수 부여
+        if (dto.getType()) {
+            student.setCreditScore(getTotalCreditScore(student.getCreditScore(), nation.getCredit_up()));
+        } else {
+            student.setCreditScore(getTotalCreditScore(student.getCreditScore(), nation.getCredit_down()));
+        }
+
+        // 신용점수에 맞는 신용등급 부여
+        student.setCreditRating(checkCreditRating(student.getCreditScore()));
+
+        studentRepository.save(student);
+    }
+
+    /**
+     * 신용점수 부여 시 예외 처리 후 올바른 신용점수 부여
+     *
+     * @param studentCreditScore
+     * @param creditUpDown
+     * @return
+     */
+    private short getTotalCreditScore(int studentCreditScore, int creditUpDown) {
+        int totalScore = studentCreditScore + creditUpDown;
+        if (totalScore < 0 || totalScore > 1000) {
+            log.info("[postCreditScore] 신용등급 점수를 0 미만 또는 1000 초과로 주게 되는 경우 에러");
+            throw new CustomException(ErrorCode.INVALID_CREDIT_SCORE);
+        }
+        return (short) totalScore;
+    }
+
+    /**
+     * 신용점수에 맞는 신용등급 부여
+     *
+     * @param score
+     * @return
+     */
+    private byte checkCreditRating(int score) {
+        if (score >= 900) {
+            return 1;
+        } else if (score >= 870) {
+            return 2;
+        } else if (score >= 840) {
+            return 3;
+        } else if (score >= 805) {
+            return 4;
+        } else if (score >= 750) {
+            return 5;
+        } else if (score >= 655) {
+            return 6;
+        } else if (score >= 600) {
+            return 7;
+        } else if (score >= 517) {
+            return 8;
+        } else if (score >= 445) {
+            return 9;
+        } else {
+            return 10;
+        }
     }
 
 }
