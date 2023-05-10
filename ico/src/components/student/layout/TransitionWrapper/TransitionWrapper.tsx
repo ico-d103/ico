@@ -9,6 +9,7 @@ import DomToImage from "dom-to-image"
 import * as htmlToImage from 'html-to-image';
 import useNavigate from "@/hooks/useNavigate"
 
+
 type TransitionWrapperProps = {
 	children: any
 }
