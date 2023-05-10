@@ -2,11 +2,14 @@ import React from 'react'
 import UseAnimations from "react-useanimations"
 import loading from "react-useanimations/lib/loading"
 import { css } from "@emotion/react"
+import { isNavigating } from '@/store/store'
+import { useAtom } from 'jotai'
 
 function Loading({size, labelSize, label, labelMargin}: {size: number; labelSize?: number; label?: string; labelMargin?: string;}) {
+  const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
   return (
     <div css={wrapperCSS}>
-        <UseAnimations animation={loading} size={size} />
+        {isNavigatingAtom === false && <UseAnimations animation={loading} size={size} />}
         <div css={labelCSS({labelSize, labelMargin})}>{label}</div>
     </div>
   )

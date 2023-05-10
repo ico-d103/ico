@@ -12,6 +12,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getFinanceDepositRateAPI } from "@/api/student/finance/getFinanceDepositRateAPI"
 import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
+import { isNavigating } from "@/store/store"
+import { useAtom } from "jotai"
 
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -27,6 +29,7 @@ const APPLY_ICON = (
 
 function asset() {
 	const [openComp, closeComp, compState] = useCompHandler()
+	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 	const [term, setTerm] = useState<0 | 1>(0)
 
 	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceDepositRateType>(
@@ -55,7 +58,7 @@ function asset() {
 				/>
 			
 			)}
-			<div css={navBarOverlayCSS}>
+			{isNavigatingAtom === false && <div css={navBarOverlayCSS}>
 				<Button
 					text={"7일 단기 예금 가입"}
 					fontSize={`var(--student-h3)`}
@@ -77,9 +80,10 @@ function asset() {
 						openComp()
 					}}
 				/>
-			</div>
+			</div>}
 			<div>
 				<PageHeader title={"예금"} />
+
 				<div css={guideWrapperCSS}>
 					<div css={mSizeFontCSS}>
 						저희 예금 상품은 아래와 <br />
