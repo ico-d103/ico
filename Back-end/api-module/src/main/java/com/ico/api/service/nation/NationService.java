@@ -1,5 +1,6 @@
 package com.ico.api.service.nation;
 
+import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
 import com.ico.core.dto.StockReqDto;
 import com.ico.core.entity.Nation;
@@ -42,5 +43,13 @@ public interface NationService {
      * @param request
      * @return
      */
-    Map<String, Integer> findTreasury(HttpServletRequest request);
+    Map<String, String> findTreasury(HttpServletRequest request);
+
+    /**
+     * 신용점수 등락폭 수정
+     *
+     * @param dto
+     * @param request
+     */
+    void updateCredit(NationCreditReqDto dto, HttpServletRequest request);
 }
