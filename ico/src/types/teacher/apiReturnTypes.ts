@@ -50,7 +50,32 @@ export type getStudentListType = {
 }
 
 export type getImmigrationListType = {
-	id: number
+	immigrationId: number
 	name: string
 	number: number
+}
+
+export type getTeacherProductsType = {
+	id: string
+	title: string
+	amount: number
+	image: string
+	count: number
+	sold: number
+	date: string
+	name: string
+	rental: boolean
+	assigned: boolean
+}
+
+export type getStudentProductsType = {
+	id: string
+	title: string
+	amount: number
+	image: string
+	count: number
+	sold: number
+	date: string
+	name: string
+	assigned: boolean
 }

@@ -1,21 +1,12 @@
 import { useReducer, useRef, useEffect } from "react"
 import { css } from "@emotion/react"
-import { postTeacherAPI } from "@/api/teacher/user/postTeacherAPI"
 import { postStudentAPI } from "@/api/student/user/postStudentAPI"
-import { useState } from "react"
 import { KOREAN_ONLY, ENG_NUM_ONLY, PHONE_NUMBER_ONLY } from "@/util/regex"
 import { lengthCheck } from "@/util/lengthCheck"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 import Input from "@/components/common/Input/Input"
 import Button from "@/components/common/Button/Button"
-import {
-	NAME_ICON,
-	ID_ICON,
-	PASSWORD_ICON,
-	PASSWORD2_ICON,
-	CLIP_ICON,
-	PHONE_ICON,
-} from "@/components/teacher/Signup/SignupIcons/SignupIcons"
+import { NAME_ICON, ID_ICON, PASSWORD_ICON, PASSWORD2_ICON } from "@/components/teacher/Signup/SignupIcons/SignupIcons"
 
 import { postDuplicationCheckAPI } from "@/api/common/postDuplicationCheckAPI"
 import { useRouter } from "next/router"

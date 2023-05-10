@@ -20,6 +20,7 @@ function index() {
 		// { staleTime: 200000 },
 	)
 
+	console.log(data)
 	const renderExchequerList = data?.map((el, idx) => {
 		return (
 			<GovExchequerDetail
@@ -32,7 +33,6 @@ function index() {
 			/>
 		)
 	})
-
 
 	return (
 		<div css={contentWrapperCSS}>
