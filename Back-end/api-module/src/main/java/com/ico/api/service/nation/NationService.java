@@ -5,6 +5,7 @@ import com.ico.core.dto.StockReqDto;
 import com.ico.core.entity.Nation;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * @author 강교철
@@ -34,4 +35,12 @@ public interface NationService {
      * @param stockReqDto 종목 정보
      */
     public void createStock(StockReqDto stockReqDto);
+
+    /**
+     * 국고 잔금 조회
+     *
+     * @param request
+     * @return
+     */
+    Map<String, Integer> findTreasury(HttpServletRequest request);
 }

@@ -27,7 +27,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -147,16 +146,14 @@ public class StudentServiceImpl implements StudentService{
             log.info("[findStudent] studentId[{}]에 해당하는 학생이 없습니다.", studentId);
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
-        List<Transaction> transactions = transactionMongoRepository.findAllByFromOrTo(String.valueOf(studentId), String.valueOf(studentId));
+        // 최신순으로 조회
+        List<Transaction> transactions = transactionMongoRepository.findAllByFromOrToOrderByIdDesc(String.valueOf(studentId), String.valueOf(studentId));
 
         // 최신순 날짜 별로 묶어서 순서가 있는 Map 생성
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM.dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
         Map<String, List<TransactionColDto>> map = new LinkedHashMap<>();
 
-        // 최신순으로 조회
-        ListIterator<Transaction> iterator = transactions.listIterator(transactions.size());
-        while (iterator.hasPrevious()) {
-            Transaction transaction = iterator.previous();
+        for (Transaction transaction : transactions) {
 
             String date = transaction.getDate().format(formatter);
             int amount = transaction.getFrom().equals(String.valueOf(studentId)) ? -1 * transaction.getAmount() : transaction.getAmount();
