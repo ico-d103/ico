@@ -53,6 +53,7 @@ function SideBar({ children }: SideBarProps) {
 			if (selectedMain == -1 && selectedSub == -1) {
 				setSelectedMain(() => -2)
 				setSelectedSub(() => -2)
+				alert('dfggrfw')
 			}
 		}
 	}, [router.pathname])
@@ -178,6 +179,7 @@ function SideBar({ children }: SideBarProps) {
 
 	return (
 		<div css={layoutWrapperCSS}>
+			dsadassd
 			{selectedMain >= 0 && selectedSub >= 0 ? sideBarRender : selectedMain === -2 && selectedSub === -2 && children}
 		</div>
 	)
