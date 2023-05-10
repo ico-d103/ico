@@ -1,29 +1,42 @@
-import React from "react"
 import { css } from "@emotion/react"
 import ClassStudentDetailAccountListItem from "./ClassStudentDetailAccountListItem"
+import { transactionsType } from "@/types/teacher/apiReturnTypes"
 
-function ClassStudentDetailAccountList() {
+type ClassStudentDetailAccountListPropsType = {
+	transactions: transactionsType
+}
+
+function ClassStudentDetailAccountList({ transactions }: ClassStudentDetailAccountListPropsType) {
 	let prevDate: string | null = null
-	const mockList = [
-		{ id: 0, date: "2023.04.17", money: "+ 3500미소", content: "전기세" },
-		{ id: 1, date: "2023.04.16", money: "+ 3500미소", content: "쓰레기봉투" },
-		{ id: 2, date: "2023.04.15", money: "- 3500미소", content: "지각비" },
-		{ id: 3, date: "2023.04.15", money: "+ 3500미소", content: "쓰레기봉투" },
-		{ id: 4, date: "2023.04.15", money: "+ 3500미소", content: "지각비" },
-		{ id: 5, date: "2023.04.14", money: "- 3500미소", content: "전기세" },
-		{ id: 6, date: "2023.04.12", money: "+ 3500미소", content: "전기세" },
-		{ id: 7, date: "2023.04.12", money: "- 3500미소", content: "지각비" },
-	]
 
 	return (
 		<div css={wrapperCSS}>
 			<h4>거래 내역</h4>
-			{mockList.map((mock) => {
-				const showDate = mock.date !== prevDate
-				prevDate = mock.date
+			{transactions && Object.keys(transactions).length > 0 ? (
+				Object.keys(transactions).map((date) => {
+					const transactionList = transactions[date]
 
-				return <ClassStudentDetailAccountListItem key={mock.id} mock={mock} showDate={showDate} />
-			})}
+					const result = transactionList.map((transaction, index) => {
+						const showDate = date !== prevDate
+						prevDate = date
+
+						return (
+							<ClassStudentDetailAccountListItem
+								key={index}
+								date={date}
+								transaction={transaction}
+								showDate={showDate}
+							/>
+						)
+					})
+
+					return result
+				})
+			) : (
+				<div css={noneWrapperCSS}>
+					<h1>거래 내역이 없습니다.</h1>
+				</div>
+			)}
 		</div>
 	)
 }
@@ -41,6 +54,12 @@ const wrapperCSS = css`
 		font-weight: bold;
 		margin-bottom: 20px;
 	}
+`
+
+const noneWrapperCSS = css`
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `
 
 export default ClassStudentDetailAccountList

@@ -1,15 +1,43 @@
-import React from "react"
 import { css } from "@emotion/react"
-import Button from "@/components/common/Button/Button"
 import KebabMenu from "@/components/teacher/common/KebabMenu/KebabMenu"
+import { putReleaseAccountAPI } from "@/api/teacher/class/putReleaseAccountAPI"
+import { useAtomValue } from "jotai"
+import { selectedStudent } from "@/store/store"
+import { putSuspendAccountAPI } from "@/api/teacher/class/putSuspendAccountAPI"
+import { putResetStudentJobAPI } from "@/api/teacher/class/putResetStudentJobAPI"
 
-function ClassStudentDetailHead() {
+type ClassStudentDetailHeadPropsType = {
+	studentName: string
+	frozen: boolean
+}
+
+function ClassStudentDetailHead({ studentName, frozen }: ClassStudentDetailHeadPropsType) {
+	const selectedStudentAtom = useAtomValue(selectedStudent)
+
 	const resetStudentJob = () => {
-		alert("직업 초기화!")
+		putResetStudentJobAPI({ studentId: selectedStudentAtom })
+			.then((res) => {})
+			.catch((error) => alert(error.response.message))
 	}
 
 	const preventStudentAccount = () => {
-		alert("계좌 정지!")
+		if (frozen) {
+			putReleaseAccountAPI({ studentId: selectedStudentAtom })
+				.then((res) => {
+					console.log("계좌 정지 해제")
+				})
+				.catch((error) => {
+					alert(error.response.message)
+				})
+		} else {
+			putSuspendAccountAPI({ studentId: selectedStudentAtom })
+				.then((res) => {
+					console.log("계좌 정지")
+				})
+				.catch((error) => {
+					alert(error.response.message)
+				})
+		}
 	}
 
 	const dropdownList = [
@@ -22,14 +50,14 @@ function ClassStudentDetailHead() {
 		{
 			name: "prevent",
 			content: null,
-			label: "계좌 정지",
+			label: frozen ? "계좌 정지 해제" : "계좌 정지",
 			function: preventStudentAccount,
 		},
 	]
 
 	return (
 		<div css={studentWrapperCSS}>
-			<div css={studentNameCSS}>사공지은</div>
+			<div css={studentNameCSS}>{studentName}</div>
 			<KebabMenu dropdownList={dropdownList} />
 		</div>
 	)
