@@ -16,14 +16,14 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class InvestReqDto {
     @NotNull(message = "714")
-    private Integer price;
+    private Double price;
 
     @NotNull(message = "715")
     @Min(value = 0, message = "716")
     private Integer amount;
 
     @Builder
-    public InvestReqDto(Integer price, Integer amount) {
+    public InvestReqDto(Double price, Integer amount) {
         this.price = price;
         this.amount = amount;
     }
