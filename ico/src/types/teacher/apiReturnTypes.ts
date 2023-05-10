@@ -42,6 +42,7 @@ export type getGovJobType = {
 }
 
 export type getStudentListType = {
+	id: number
 	name: string
 	number: number
 	amount: number
@@ -53,6 +54,23 @@ export type getImmigrationListType = {
 	immigrationId: number
 	name: string
 	number: number
+}
+
+export type transanctionType = {
+	title: string
+	amount: number
+}
+
+export type transactionsType = {
+	[date: string]: transanctionType[]
+}
+
+export type getStudentDetailType = {
+	studentId: number
+	studentName: string
+	creditScore: number
+	transactions: transactionsType
+	frozen: boolean
 }
 
 export type getTeacherProductsType = {

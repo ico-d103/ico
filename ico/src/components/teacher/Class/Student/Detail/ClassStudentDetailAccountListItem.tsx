@@ -1,22 +1,24 @@
-import React from "react"
+import { transanctionType } from "@/types/teacher/apiReturnTypes"
 import { css } from "@emotion/react"
 
 type ClassStudentDetailAccountListItemPropsType = {
-	mock: {
-		id: number
-		date: string
-		money: string
-		content: string
-	}
+	date: string
+	transaction: transanctionType
 	showDate: boolean
 }
 
-function ClassStudentDetailAccountListItem({ mock, showDate }: ClassStudentDetailAccountListItemPropsType) {
+function ClassStudentDetailAccountListItem({
+	date,
+	transaction,
+	showDate,
+}: ClassStudentDetailAccountListItemPropsType) {
 	return (
 		<div css={wrapperCSS}>
-			<h5 css={dateCSS({ showDate })}>{mock.date}</h5>
-			<h5 css={mock.money.includes("+") ? plusMoneyCSS : minusMoneyCSS}>{mock.money}</h5>
-			<h5 css={contentCSS}>{mock.content}</h5>
+			<h5 css={dateCSS({ showDate })}>{date}</h5>
+			<h5 css={transaction.amount.toString().includes("-") ? minusMoneyCSS : plusMoneyCSS}>
+				{transaction.amount} {localStorage.getItem("currency")}
+			</h5>
+			<h5 css={contentCSS}>{transaction.title}</h5>
 		</div>
 	)
 }

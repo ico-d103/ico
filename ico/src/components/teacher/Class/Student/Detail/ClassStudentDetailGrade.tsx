@@ -1,15 +1,40 @@
-import React from "react"
 import { css } from "@emotion/react"
 import { CLASS_GRADE_UP, CLASS_GRADE_DOWN } from "../../ClassIcons"
+import { postCreditScoreAPI } from "@/api/teacher/class/postCreditScoreAPI"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useAtomValue } from "jotai"
+import { selectedStudent } from "@/store/store"
 
-function ClassStudentDetailGrade() {
+type ClassStudentDetailGradePropsType = {
+	creditScore: number
+}
+
+function ClassStudentDetailGrade({ creditScore }: ClassStudentDetailGradePropsType) {
+	const queryClient = useQueryClient()
+	const selectedStudentAtom = useAtomValue(selectedStudent)
+	const postCreditScoreMutation = useMutation((args: { studentId: number; body: { type: boolean } }) =>
+		postCreditScoreAPI(args),
+	)
+
+	const postCreditScore = (type: boolean) => {
+		const args = type
+			? { studentId: selectedStudentAtom, body: { type: true } }
+			: { studentId: selectedStudentAtom, body: { type: false } }
+
+		postCreditScoreMutation.mutate(args, {
+			onSuccess: () => {
+				return queryClient.invalidateQueries(["enteredStudentDetail"])
+			},
+		})
+	}
+
 	return (
 		<div css={wrapperCSS}>
 			<h4>신용 등급 평점</h4>
 			<div css={buttonWrapperCSS}>
-				<div>{CLASS_GRADE_UP}</div>
-				<h4>300 점</h4>
-				<div>{CLASS_GRADE_DOWN}</div>
+				<div onClick={() => postCreditScore(true)}>{CLASS_GRADE_UP}</div>
+				<h4>{creditScore} 점</h4>
+				<div onClick={() => postCreditScore(false)}>{CLASS_GRADE_DOWN}</div>
 			</div>
 		</div>
 	)
