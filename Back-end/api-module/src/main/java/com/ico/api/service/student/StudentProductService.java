@@ -1,6 +1,7 @@
 package com.ico.api.service.student;
 
 import com.ico.api.dto.studentProduct.StudentProductAllResDto;
+import com.ico.api.dto.studentProduct.StudentProductDetailResDto;
 import com.ico.api.dto.studentProduct.StudentProductReqDto;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,4 +37,12 @@ public interface StudentProductService {
      * @param id 학생 상품 id
      */
     void deleteProduct(Long id);
+
+    /**
+     * 학생상품 상세보기
+     *
+     * @param id 상품 아이디
+     * @return 상품디테일 정보
+     */
+    StudentProductDetailResDto detailProduct(Long id);
 }

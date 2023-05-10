@@ -17,12 +17,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
  * S3 파일 처리 서비스
  *
  * @author 서재건
+ * @author 변윤경
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -113,5 +116,37 @@ public class S3UploadService {
         } catch (StringIndexOutOfBoundsException e) {
             throw new CustomException(ErrorCode.INVALID_FILE_EXTENSION);
         }
+    }
+
+    /**
+     * DB에 저장된 이미지 String url들을 list로 변환
+     *
+     * @param urls ,로 구분되는 url 모음
+     * @return  url List
+     */
+    public List<String> getImageURLs(String urls){
+        List<String> images = List.of(urls.split(","));
+        List<String> imageRes = new ArrayList<>();
+        for (String image : images){
+            imageRes.add(getFileURL(image));
+        }
+        return imageRes;
+    }
+
+    /**
+     * 상품 이미지 s3에 등록하고 파일이름 저장하기
+     *
+     * @param files MultipartFiles List
+     */
+    public String saveImageURLs(List<MultipartFile> files){
+        StringBuilder images = new StringBuilder();
+        for (MultipartFile file : files) {
+            // 상품이미지를 등록하지 않았을 때
+            if (file.isEmpty()) {
+                throw new CustomException(ErrorCode.NO_PRODUCT_IMAGE);
+            }
+            images.append(upload(file)).append(",");
+        }
+        return String.valueOf(images);
     }
 }
