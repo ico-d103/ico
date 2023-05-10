@@ -8,6 +8,7 @@ import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationRepository;
+import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import java.time.LocalTime;
 @Service
 @RequiredArgsConstructor
 public class InvestServiceImpl implements InvestService{
+    private final StockRepository stockRepository;
     private final StudentRepository studentRepository;
     private final InvestRepository investRepository;
     private final NationRepository nationRepository;
@@ -78,5 +80,6 @@ public class InvestServiceImpl implements InvestService{
 
         // 거래 내역 추가
         transactionService.addTransactionWithdraw(nation.getTitle() + " 증권", student.getId(), amount, nation.getStock() + " 지수 " + price);
+
     }
 }
