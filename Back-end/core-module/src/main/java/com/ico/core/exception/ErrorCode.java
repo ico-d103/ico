@@ -51,13 +51,15 @@ public enum ErrorCode{
 
     PASSWORD_WRONG(HttpStatus.BAD_REQUEST, "105", "비밀번호가 틀렸습니다."),
 
+    WRONG_ROLE(HttpStatus.BAD_REQUEST, "111", "권한이 없습니다."),
+
     NOT_FOUND_NAME(HttpStatus.BAD_REQUEST, "112", "이름 입력 칸이 비었습니다."),
 
     WRONG_CODE(HttpStatus.BAD_REQUEST, "200", "일치하는 반 코드가 없습니다."),
 
     WRONG_IMMIGRATION(HttpStatus.BAD_REQUEST, "201", "입국 심사를 기다리고 있는 나라가 있습니다."),
 
-    NOT_FOUND_NATION(HttpStatus.BAD_REQUEST, "202", "나라가 없습니다."),
+    NOT_FOUND_NATION(HttpStatus.NOT_FOUND, "202", "나라가 없습니다."),
 
     NOT_FOUND_IMMIGRATION_NATION(HttpStatus.NOT_FOUND, "203", "입국 심사를 기다리고 있는 나라가 없습니다."),
 
@@ -85,7 +87,9 @@ public enum ErrorCode{
 
     INVALID_COUPON(HttpStatus.BAD_REQUEST, "506", "신청하지 않은 쿠폰입니다."),
 
-    PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "삭제된 판매 제안서입니다."),
+    BAD_CREDIT_RATING(HttpStatus.BAD_REQUEST, "507", "신용등급은 1~10만 가능합니다."),
+
+    PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "없는 판매 제안서입니다."),
 
     NOT_COUPON(HttpStatus.BAD_REQUEST, "614", "해당 상품은 쿠폰이 아닙니다."),
 
@@ -93,6 +97,29 @@ public enum ErrorCode{
 
     SOLD_OUT(HttpStatus.BAD_REQUEST, "616", "품절된 상품입니다."),
 
+    PRODUCT_NOT_FOUND(HttpStatus.BAD_REQUEST, "617", "해당 상품은 없는 상품입니다."),
+
+    NOT_TRADING_TIME(HttpStatus.BAD_REQUEST, "701", "거래시간이 아닙니다."),
+
+    ALREADY_EXIST_STOCK(HttpStatus.BAD_REQUEST, "702", "종목 삭제 후 시도해주세요."),
+
+    NOT_FOUND_STOCK(HttpStatus.BAD_REQUEST, "703", "투자 종목이 없습니다."),
+
+    ALREADY_HAVE_STOCK(HttpStatus.BAD_REQUEST, "704", "매도만 가능합니다."),
+
+    NOT_FOUND_ISSUE(HttpStatus.NOT_FOUND, "705", "가장 최신 투자 이슈를 찾을 수 없습니다."),
+
+    NOT_UPLOAD_TIME(HttpStatus.NOT_FOUND, "712", "거래 시간에는 이슈 등록이 불가능합니다."),
+
+    NOT_FOUND_INTEREST(HttpStatus.NOT_FOUND, "717", "이자율이 없습니다."),
+
+    NOT_All_INTEREST_EXIST(HttpStatus.NOT_FOUND, "718", "신용등급에 따른 이자율 중 빠진 데이터가 있습니다."),
+
+    BAD_UPDATE_INTEREST(HttpStatus.BAD_REQUEST, "719", "수정 이자율값이 잘못되었습니다."),
+
+    LOWER_INTEREST(HttpStatus.BAD_REQUEST, "720", "이자율값은 0 이상이여야 합니다."),
+
+    INTEREST_NOT_DESCENDING(HttpStatus.BAD_REQUEST, "721", "이자율은 신용등급이 낮을수록 작아져야 합니다."),
     ;
 
     private final HttpStatus httpStatus;

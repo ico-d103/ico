@@ -5,7 +5,10 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+
+import java.util.List;
 
 /**
  * 에러 코드 응답
@@ -43,13 +46,17 @@ public class ErrorResponseEntity {
      * @return Validation Exception Response
      */
     public static ResponseEntity<ErrorResponseEntity> toReponseEntity(MethodArgumentNotValidException e) {
+        List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+        FieldError fieldError = fieldErrors.get(fieldErrors.size()-1);  // 가장 첫 번째 에러 필드
+        String fieldName = fieldError.getField();   // 필드명
+        Object rejectedValue = fieldError.getRejectedValue();   // 입력값
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponseEntity.builder()
                         // 에러 코드 in 에러 코드 명세서
-                        .code(e.getBindingResult().getFieldErrors().get(0).getDefaultMessage())
-                        .message("유효하지 않은 입력값입니다.")
+                        .code(fieldError.getDefaultMessage())
+                        .message(fieldName + " 필드의 입력값[ " + rejectedValue + " ]이 유효하지 않습니다.")
                         .build());
     }
 

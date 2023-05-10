@@ -1,6 +1,7 @@
 package com.ico.api.service.resume;
 
 import com.ico.api.dto.resume.ResumeResDto;
+import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Job;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Resume;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,11 +38,13 @@ public class ResumeServiceImpl implements ResumeService {
 
     private final StudentRepository studentRepository;
 
+    private final JwtTokenProvider jwtTokenProvider;
+
     @Override
-    public void applyJob(Long jobId) {
-        // TODO: 로그인한 유저 정보 불러오기
-        Long studentId = 1L;
-        Long nationId = 1L;
+    public void applyJob(Long jobId, HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
 
         Job job = jobRepository.findByIdAndNationId(jobId, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
@@ -61,9 +65,8 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ResumeResDto> findResume(Long jobId) {
-        // TODO: 로그인한 유저 정보 불러오기
-        Long nationId = 1L;
+    public List<ResumeResDto> findResume(Long jobId, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         jobRepository.findById(jobId)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
@@ -80,9 +83,8 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Transactional
     @Override
-    public void assignResume(String resumeId) {
-        // TODO: 로그인한 유저 정보 불러오기
-        Long nationId = 2L;
+    public void assignResume(String resumeId, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         Resume resume = findAndValidateResume(resumeId, nationId);
         Student student = findAndValidateStudent(resume);
@@ -106,9 +108,8 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Transactional
     @Override
-    public void rejectResumeResume(String resumeId) {
-        // TODO: 로그인한 유저 정보 불러오기
-        Long nationId = 2L;
+    public void rejectResumeResume(String resumeId, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         Resume resume = findAndValidateResume(resumeId, nationId);
         findAndValidateStudent(resume);

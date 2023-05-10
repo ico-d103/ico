@@ -14,15 +14,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StudentSseDto {
 
-    private Long id;
+    private Long immigrationId;
 
     private String name;
 
     private int number;
 
     @Builder
-    public StudentSseDto(Long id, String name, int number) {
-        this.id = id;
+    public StudentSseDto(Long immigrationId, String name, int number) {
+        this.immigrationId = immigrationId;
         this.name = name;
         this.number = number;
     }
@@ -32,9 +32,9 @@ public class StudentSseDto {
      * @param student
      * @return 학생 id, 이름, 반 번호
      */
-    public StudentSseDto of(Student student) {
+    public StudentSseDto of(Student student, Long immigrationId) {
         return StudentSseDto.builder()
-                .id(student.getId())
+                .immigrationId(immigrationId)
                 .name(student.getName())
                 .number(student.getNumber())
                 .build();

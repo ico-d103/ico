@@ -1,7 +1,7 @@
 package com.ico.api.service.student;
 
-import com.ico.api.dto.student.StudentProductAllResDto;
-import com.ico.api.dto.student.StudentProductProposalDto;
+import com.ico.api.dto.studentProduct.StudentProductAllResDto;
+import com.ico.api.dto.studentProduct.StudentProductProposalDto;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentProduct;
@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,12 +35,17 @@ public class StudentProductServiceImpl implements StudentProductService{
      */
     @Override
     public void createProduct(StudentProductProposalDto proposal) {
-        Student student = studentRepository.findByIdentity(proposal.getIdentity())
+        long nationId = 99;
+        long studentId = 1;
+
+        Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        Nation nation = nationRepository.findById(proposal.getNationId())
+
+        Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
-        StudentProduct product = StudentProduct.builder()
+
+        StudentProduct studentProduct = StudentProduct.builder()
                 .student(student)
                 .nation(nation)
                 .title(proposal.getTitle())
@@ -47,10 +53,10 @@ public class StudentProductServiceImpl implements StudentProductService{
                 .image(proposal.getImage())
                 .detail(proposal.getDetail())
                 .count(proposal.getCount())
-                .isAssigned(false)
-                .sold((byte) 0)
+                .date(LocalDateTime.now())
                 .build();
-        studentProductRepository.save(product);
+
+        studentProductRepository.save(studentProduct);
     }
 
     /**
@@ -60,7 +66,7 @@ public class StudentProductServiceImpl implements StudentProductService{
     @Transactional(readOnly = true)
     @Override
     public List<StudentProductAllResDto> findAllProduct() {
-        long nationId = 1L;
+        long nationId = 99;
 
         if (nationRepository.findById(nationId).isEmpty()){
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
@@ -83,7 +89,7 @@ public class StudentProductServiceImpl implements StudentProductService{
     @Override
     public void updateIsAssigned(Long id) {
         // TODO : 교사의 국가 ID 가지고 오기
-        long nationId = 1L;
+        long nationId = 99L;
         StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PROPOSAL_NOT_FOND));
         product.setAssigned(true);
@@ -98,10 +104,10 @@ public class StudentProductServiceImpl implements StudentProductService{
     @Override
     public void deleteProduct(Long id) {
         // TODO : 교사의 국가 ID 가지고 오기
-        long nationId = 1L;
+        long nationId = 99L;
 
         StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
-                .orElseThrow(() -> new CustomException(ErrorCode.PROPOSAL_NOT_FOND));
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         studentProductRepository.delete(product);
     }
 }

@@ -2,6 +2,7 @@ package com.ico.api.service.transaction;
 
 import com.ico.api.dto.transaction.TransactionResDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +50,6 @@ public interface TransactionService {
      *
      * @return 날짜별 입출금 내역
      */
-    Map<String, List<TransactionResDto>> findTransaction();
+    Map<String, List<TransactionResDto>> findTransaction(HttpServletRequest request);
 
 }

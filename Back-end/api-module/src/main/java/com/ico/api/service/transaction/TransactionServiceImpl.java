@@ -1,6 +1,7 @@
 package com.ico.api.service.transaction;
 
 import com.ico.api.dto.transaction.TransactionResDto;
+import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Transaction;
 import com.ico.core.exception.CustomException;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -37,9 +39,11 @@ public class TransactionServiceImpl implements TransactionService{
 
     private final StudentRepository studentRepository;
 
+    private final JwtTokenProvider jwtTokenProvider;
+
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일-HH:mm");
 
-    private static final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("MM월 dd일");
+    public static final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("MM월 dd일");
 
     private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
 
@@ -59,7 +63,7 @@ public class TransactionServiceImpl implements TransactionService{
                 .to(String.valueOf(to))
                 .amount(Math.abs(amount))
                 .date(LocalDateTime.now())
-                .title(title + " 거래")
+                .title(title)
                 .build();
 
         transactionMongoRepository.insert(transaction);
@@ -109,9 +113,8 @@ public class TransactionServiceImpl implements TransactionService{
 
     @Transactional(readOnly = true)
     @Override
-    public Map<String, List<TransactionResDto>> findTransaction() {
-        // TODO: 로그인한 유저 정보 조회 시 나라 id값 대입
-        Long studentId = 1L;
+    public Map<String, List<TransactionResDto>> findTransaction(HttpServletRequest request) {
+        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
 
         Student student = studentRepository.findById(studentId).orElseThrow(() -> {
             log.info("[findTransaction] studentId[{}]에 해당하는 학생이 없습니다.", studentId);

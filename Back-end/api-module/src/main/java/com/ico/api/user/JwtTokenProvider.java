@@ -2,16 +2,21 @@ package com.ico.api.user;
 
 import com.ico.api.dto.user.LoginDto;
 import com.ico.core.code.Role;
-import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -26,7 +31,6 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Jwt Provider
@@ -105,7 +109,12 @@ public class JwtTokenProvider {
             claims.put("id", teacher.getId());
             claims.put("identity", member.getIdentity());
             claims.put("role", teacher.getRole());
-            claims.put("nation", teacher.getNation());
+
+            if (teacher.getNation() != null) {
+                claims.put("nation", teacher.getNation().getId());
+            } else {
+                claims.put("nation", null);
+            }
 
         }
         else if (studentRepository.findByIdentity(member.getIdentity()).isPresent()) {
@@ -113,7 +122,12 @@ public class JwtTokenProvider {
             claims.put("id", student.getId());
             claims.put("identity", member.getIdentity());
             claims.put("role", student.getRole());
-            claims.put("nation", student.getNation());
+
+            if (student.getNation() != null) {
+                claims.put("nation", student.getNation().getId());
+            } else {
+                claims.put("nation", null);
+            }
         }
         else {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
@@ -191,11 +205,15 @@ public class JwtTokenProvider {
      * @return nation
      */
     public Long getNation(String token) {
+        log.info("[jwt getNation] token : {}", token);
         Claims claims = getClaims(token);
         Object nationObj = claims.get("nation");
         if (nationObj instanceof Number) {
+            log.info("[jwt getNation] nationObj == Number");
+            log.info("[jwt getNation] longValue : {}", ((Number) nationObj).longValue());
             return ((Number) nationObj).longValue();
         } else {
+            log.info("[jwt getNation] null 반환");
             return null;
         }
     }
@@ -236,6 +254,8 @@ public class JwtTokenProvider {
         if(cookies!=null){
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("Authorization")) {
+                    log.info("[parseJwt] 쿠키에서 Authorization 캐치");
+                    log.info("[parseJwt] 쿠키에서 Authorization : {}", cookie.getValue());
                     headerAuth = cookie.getValue();
                     break;
                 }
@@ -275,16 +295,19 @@ public class JwtTokenProvider {
                     String newToken = generateJwtToken(member);
 
                     // 새로운 토큰으로 쿠키를 갱신합니다.
+                    log.info("[updateTokenCookie] 쿠키 넣기 전의 새로운 토큰 생성 : {}", newToken);
                     HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+                    log.info("[updateTokenCookie] response 생성");
                     Cookie cookie = new Cookie("Authorization", newToken);
                     cookie.setPath("/");
                     cookie.setMaxAge((int) tokenValidTime / 1000);
                     response.addCookie(cookie);
-                    log.info("새로바뀐 토큰!!" + newToken);
+                    log.info("[updateTokenCookie] response에 cookie 넣기 완료");
+                    log.info("[updateTokenCookie] 새로바뀐 토큰!! " + newToken);
                     return newToken;
                 }
             }
         }
-        return  "예전 토큰!!" + oldToken;
+        return  "예전 토큰!! " + oldToken;
     }
 }

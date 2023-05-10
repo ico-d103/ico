@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -38,8 +39,8 @@ public class RuleController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<RuleResDto>> findAllRule() {
-        return ResponseEntity.ok(ruleService.findAllRule());
+    public ResponseEntity<List<RuleResDto>> findAllRule(HttpServletRequest request) {
+        return ResponseEntity.ok(ruleService.findAllRule(request));
     }
 
     /**
@@ -49,14 +50,22 @@ public class RuleController {
      * @return
      */
     @PostMapping("/teacher")
-    public ResponseEntity<HttpStatus> addRule(@Valid @RequestBody RuleReqDto dto) {
-        ruleService.addRule(dto);
+    public ResponseEntity<HttpStatus> addRule(@Valid @RequestBody RuleReqDto dto, HttpServletRequest request) {
+        ruleService.addRule(dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    /**
+     * 학급규칙 수정
+     *
+     * @param dto
+     * @param ruleId
+     * @param request
+     * @return
+     */
     @PutMapping("/teacher/{ruleId}")
-    public ResponseEntity<HttpStatus> addRule(@Valid @RequestBody RuleReqDto dto, @PathVariable Long ruleId) {
-        ruleService.updateRule(dto, ruleId);
+    public ResponseEntity<HttpStatus> addRule(@Valid @RequestBody RuleReqDto dto, @PathVariable Long ruleId, HttpServletRequest request) {
+        ruleService.updateRule(dto, ruleId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

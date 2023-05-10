@@ -47,8 +47,8 @@ public class CouponController {
      * @return
      */
     @PostMapping("/student/{couponId}")
-    public ResponseEntity<HttpStatus> postCoupon(@PathVariable Long couponId) {
-        couponService.postCoupon(couponId);
+    public ResponseEntity<HttpStatus> postCoupon(@PathVariable Long couponId, HttpServletRequest request) {
+        couponService.postCoupon(couponId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

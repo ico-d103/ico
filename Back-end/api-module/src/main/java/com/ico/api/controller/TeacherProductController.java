@@ -1,8 +1,8 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.teacher.TeacherProductAllResDto;
+import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.service.teacher.TeacherProductService;
-import com.ico.core.entity.TeacherProduct;
+import com.ico.core.dto.TeacherProductReqDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +17,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
+ * 교사 상품 Controller
+ *
  * @author 변윤경
  */
 @RestController
@@ -28,13 +30,13 @@ public class TeacherProductController {
     /**
      * 판매 제안서 등록
      *
-     * @param proposal 상품 양식
-     *                제품이름, 가격, 사진 , 상세정보, 개수, 유형(쿠폰, 대여)
+     * @param product 상품 양식
+     *                 제품이름, 가격, 사진 , 상세정보, 개수, 유형(쿠폰, 대여)
      * @return status
      */
     @PostMapping("/teacher")
-    public ResponseEntity<HttpStatus> uploadProposal(@Valid @RequestBody TeacherProduct proposal){
-        teacherProductService.createProduct(proposal);
+    public ResponseEntity<HttpStatus> uploadProposal(@Valid @RequestBody TeacherProductReqDto product) {
+        teacherProductService.createProduct(product);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -44,7 +46,7 @@ public class TeacherProductController {
      * @return 교사 상품 목록
      */
     @GetMapping
-    public ResponseEntity<List<TeacherProductAllResDto>> findAllProduct(){
+    public ResponseEntity<List<TeacherProductAllResDto>> findAllProduct() {
         return ResponseEntity.ok(teacherProductService.findAllProduct());
     }
 
@@ -55,7 +57,7 @@ public class TeacherProductController {
      * @return Httpstatus
      */
     @PostMapping("/student/{teacherProductId}/coupon")
-    public ResponseEntity<HttpStatus> buyCoupon(@PathVariable Long teacherProductId){
+    public ResponseEntity<HttpStatus> buyCoupon(@PathVariable Long teacherProductId) {
         teacherProductService.buyCoupon(teacherProductId);
         return ResponseEntity.ok(HttpStatus.OK);
     }

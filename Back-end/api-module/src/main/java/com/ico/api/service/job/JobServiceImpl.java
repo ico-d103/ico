@@ -3,6 +3,7 @@ package com.ico.api.service.job;
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
 import com.ico.api.dto.job.JobResDto;
+import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.dto.JobReqDto;
 import com.ico.core.entity.Job;
 import com.ico.core.exception.CustomException;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,10 +32,11 @@ public class JobServiceImpl implements JobService{
 
     private final NationRepository nationRepository;
 
+    private final JwtTokenProvider jwtTokenProvider;
+
     @Override
-    public void updateJob(Long jobId, JobReqDto dto) {
-        // TODO: 토큰에서 nation id 값 받아오기 필요
-        long nationId = 1;
+    public void updateJob(Long jobId, JobReqDto dto, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
@@ -54,9 +57,9 @@ public class JobServiceImpl implements JobService{
     }
 
     @Override
-    public List<JobAllResDto> findAllJob() {
-        // TODO: 토큰에서 nation id 값 받아오기 필요
-        long nationId = 1;
+    public List<JobAllResDto> findAllJob(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
         if (nationRepository.findById(nationId).isEmpty()) {
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
         }
@@ -70,9 +73,9 @@ public class JobServiceImpl implements JobService{
     }
 
     @Override
-    public List<JobAvailableResDto> findAllShortFallJob() {
-        // TODO: 토큰에서 nation id 값 받아오기 필요
-        long nationId = 1;
+    public List<JobAvailableResDto> findAllShortFallJob(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
         if (nationRepository.findById(nationId).isEmpty())
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
 
@@ -88,9 +91,9 @@ public class JobServiceImpl implements JobService{
     }
 
     @Override
-    public List<JobResDto> findJobList() {
-        // TODO: 토큰에서 nation id 값 받아오기 필요
-        long nationId = 1;
+    public List<JobResDto> findJobList(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
         if (nationRepository.findById(nationId).isEmpty()) {
             log.info("토큰의 nationId에 해당하는 나라가 존재하지 않는 경우");
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);

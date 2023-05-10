@@ -1,13 +1,16 @@
 package com.ico.api.service.nation;
 
 import com.ico.api.dto.nation.NationReqDto;
+import com.ico.core.dto.StockReqDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Role;
 import com.ico.core.entity.Nation;
+import com.ico.core.entity.Stock;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.NationRepository;
+import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
@@ -32,11 +36,12 @@ public class NationServiceImpl implements NationService {
 
     private final NationRepository nationRepository;
     private final TeacherRepository teacherRepository;
+    private final StockRepository stockRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     @Transactional
-    public void createNation(NationReqDto reqDto, HttpServletRequest request) {
+    public String createNation(NationReqDto reqDto, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Role role = jwtTokenProvider.getRole(token);
 
@@ -58,16 +63,21 @@ public class NationServiceImpl implements NationService {
                 nationRepository.save(nation);
 
                 // 반을 생성했을 때 교사 테이블의 Nation 업데이트
-                String identity = jwtTokenProvider.getIdentity(token);
-                Optional<Teacher> teacher = teacherRepository.findByIdentity(identity);
+                Long id = jwtTokenProvider.getId(token);
+                Optional<Teacher> teacher = teacherRepository.findById(id);
                 teacher.ifPresent(t -> {
                     t.setNation(nation);
                     teacherRepository.save(t);
                 });
+                // 반을 생성했을 때 교사의 토큰 업데이트 / 학생은 직접 확인 버튼을 눌러서 도메인/api/token 으로 직접 요청해야한다.
+                return jwtTokenProvider.updateTokenCookie(request);
             }
             else {
                 throw new CustomException(ErrorCode.DUPLICATED_NATION_NAME);
             }
+        }
+        else {
+            throw new CustomException(ErrorCode.WRONG_ROLE);
         }
     }
 
@@ -100,16 +110,16 @@ public class NationServiceImpl implements NationService {
     @Override
     public Nation getNation(HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
-        // TODO : Token 업데이트하면 아래 코드 사용
-        // Long nationId = (Long) jwtTokenProvider.getNation(token);
-        // Long nationId = ((Number) jwtTokenProvider.getNation(token)).longValue();
+        log.info("[getNation token] : {}", token);
+        Long nationId = jwtTokenProvider.getNation(token);
+        log.info("[getNation nationId] : {}", nationId);
 
-        Long id = jwtTokenProvider.getId(token);
-        try {
-            Long nationId = teacherRepository.findById(id).get().getNation().getId();
+        if (nationId != null) {
             Nation nation = nationRepository.findById(nationId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
+            log.info("[getNation] nation 존재");
             return nation;
-        } catch (NoSuchElementException e) {
+        } else {
+            log.info("[getNation] nationId가 null입니다.");
             throw new CustomException(ErrorCode.NOT_FOUND_NATION);
         }
 
@@ -138,4 +148,39 @@ public class NationServiceImpl implements NationService {
 //            throw new CustomException(ErrorCode.NOT_FOUND_NATION);
 //        }
 //    }
+
+
+    /**
+     * 투자 종목 등록
+     *
+     * @param stockReqDto 종목 정보
+     */
+    @Transactional
+    @Override
+    public void createStock(StockReqDto stockReqDto) {
+        Long nationId = 99L;
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
+
+        // 이미 주식 존재 여부 확인
+        if(nation.getStock() == null || nation.getStock().equals("")){
+            // Nation에 주식 정보 업데이트
+            nation.updateStock(stockReqDto);
+            nationRepository.save(nation);
+
+            // 주식 가격, 이슈 등록
+            Stock stock = Stock.builder()
+                    .nation(nation)
+                    .amount(stockReqDto.getAmount())
+                    .content(stockReqDto.getContent())
+                    .date(LocalDateTime.now())
+                    .build();
+            stockRepository.save(stock);
+        }
+        else{
+            throw new CustomException(ErrorCode.ALREADY_EXIST_STOCK);
+        }
+    }
+
+
 }

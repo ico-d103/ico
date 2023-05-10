@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class JobResDto {
 
+    private Long id;
+
     private String title;
 
     private String detail;
@@ -31,7 +33,8 @@ public class JobResDto {
     private int count;
 
     @Builder
-    public JobResDto(String title, String detail, int creditRating, int wage, String image, String color, int total, int count) {
+    public JobResDto(Long id, String title, String detail, int creditRating, int wage, String image, String color, int total, int count) {
+        this.id = id;
         this.title = title;
         this.detail = detail;
         this.creditRating = creditRating;
@@ -50,6 +53,7 @@ public class JobResDto {
      */
     public JobResDto of(Job job) {
         return JobResDto.builder()
+                .id(job.getId())
                 .title(job.getTitle())
                 .detail(job.getDetail())
                 .creditRating(job.getCreditRating())

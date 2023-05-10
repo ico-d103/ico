@@ -22,7 +22,6 @@ import java.io.IOException;
  * Teacher ServiceImpl
  *
  * @author 강교철
- * @author 서재건
  */
 @Service
 @RequiredArgsConstructor
