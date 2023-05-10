@@ -15,5 +15,5 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
      * @param nationId 국가ID
      * @return 투자 이슈 최신순 목록
      */
-    List<Stock> findAllByNationIdOrderByDateDesc(Long nationId);
+    List<Stock> findAllByNationIdOrderByIdDesc(Long nationId);
 }

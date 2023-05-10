@@ -6,6 +6,7 @@ import com.ico.core.dto.InvestReqDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class InvestController {
 
     /**
      * 주식 매수
+     *
      * @param dto 현재 지수, 매수 금액
      * @return Httpstatus
      */
@@ -33,4 +35,18 @@ public class InvestController {
         investService.buyStock(dto.getPrice(), dto.getAmount());
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    /**
+     * 주식 매도
+     *
+     * @return Httpstatus
+     */
+    @DeleteMapping("/student")
+    public ResponseEntity<HttpStatus> sellStock() {
+        investService.sellStock();
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+
 }
+
