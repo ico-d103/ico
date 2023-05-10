@@ -7,6 +7,11 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * 교상 상품 상세 조회 Res Dto
+ *
+ * @author 변윤경
+ */
 @Getter
 @Setter
 @NoArgsConstructor

@@ -65,6 +65,12 @@ public class TeacherProductController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    /**
+     * 교사 상품 상세보기
+     *
+     * @param teacherProductId 교사 상품 ID
+     * @return 교사 상품 상세 정보
+     */
     @GetMapping("/{teacherProductId}")
     public ResponseEntity<TeacherProductDetailResDto> detailProduct(@PathVariable Long teacherProductId){
         return ResponseEntity.ok(teacherProductService.detailProduct(teacherProductId));
