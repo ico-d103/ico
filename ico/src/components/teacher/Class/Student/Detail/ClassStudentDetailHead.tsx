@@ -1,15 +1,17 @@
-import React from "react"
 import { css } from "@emotion/react"
-import Button from "@/components/common/Button/Button"
 import KebabMenu from "@/components/teacher/common/KebabMenu/KebabMenu"
 
-function ClassStudentDetailHead() {
+type ClassStudentDetailHeadPropsType = {
+	studentName: string
+}
+
+function ClassStudentDetailHead({ studentName }: ClassStudentDetailHeadPropsType) {
 	const resetStudentJob = () => {
-		alert("직업 초기화!")
+		// 직업 초기화
 	}
 
 	const preventStudentAccount = () => {
-		alert("계좌 정지!")
+		// 계좌 정지
 	}
 
 	const dropdownList = [
@@ -29,7 +31,7 @@ function ClassStudentDetailHead() {
 
 	return (
 		<div css={studentWrapperCSS}>
-			<div css={studentNameCSS}>사공지은</div>
+			<div css={studentNameCSS}>{studentName}</div>
 			<KebabMenu dropdownList={dropdownList} />
 		</div>
 	)

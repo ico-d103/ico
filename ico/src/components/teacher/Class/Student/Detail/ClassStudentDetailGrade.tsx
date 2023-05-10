@@ -1,15 +1,26 @@
-import React from "react"
 import { css } from "@emotion/react"
 import { CLASS_GRADE_UP, CLASS_GRADE_DOWN } from "../../ClassIcons"
 
-function ClassStudentDetailGrade() {
+type ClassStudentDetailGradePropsType = {
+	creditScore: number
+}
+
+function ClassStudentDetailGrade({ creditScore }: ClassStudentDetailGradePropsType) {
+	const upCreditScoreHandler = () => {
+		// 신용등급 평점 올리기
+	}
+
+	const downCreditScoreHandler = () => {
+		// 신용등급 평점 내리기
+	}
+
 	return (
 		<div css={wrapperCSS}>
 			<h4>신용 등급 평점</h4>
 			<div css={buttonWrapperCSS}>
-				<div>{CLASS_GRADE_UP}</div>
-				<h4>300 점</h4>
-				<div>{CLASS_GRADE_DOWN}</div>
+				<div onClick={upCreditScoreHandler}>{CLASS_GRADE_UP}</div>
+				<h4>{creditScore} 점</h4>
+				<div onClick={downCreditScoreHandler}>{CLASS_GRADE_DOWN}</div>
 			</div>
 		</div>
 	)

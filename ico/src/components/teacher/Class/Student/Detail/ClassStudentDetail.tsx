@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useReducer } from "react"
 import { css } from "@emotion/react"
 import ClassStudentDetailHead from "./ClassStudentDetailHead"
 import ClassStudentDetailMoney from "./ClassStudentDetailMoney"
@@ -7,15 +7,50 @@ import ClassStudentDetailAccountList from "./ClassStudentDetailAccountList"
 import { useAtomValue } from "jotai"
 import { selectedStudent } from "@/store/store"
 import { getStudentDetailAPI } from "@/api/teacher/class/getStudentDetailAPI"
+import { transactionsType } from "@/types/teacher/apiReturnTypes"
+
+const studentReducer = (
+	state: {
+		studentId: number
+		studentName: string
+		creditScore: number
+		transactions: transactionsType
+		frozen: boolean
+	},
+	action: {
+		type: string
+		value: {
+			studentId: number
+			studentName: string
+			creditScore: number
+			transactions: transactionsType
+			frozen: boolean
+		}
+	},
+) => {
+	switch (action.type) {
+		case "CHANGE_STATE":
+			return action.value
+		default:
+			return state
+	}
+}
 
 function StudentDetail() {
 	const selectedStudentAtom = useAtomValue(selectedStudent)
+	const [studentState, dispatchStudent] = useReducer(studentReducer, {
+		studentId: -1,
+		studentName: "",
+		creditScore: -1,
+		transactions: {},
+		frozen: false,
+	})
 
 	useEffect(() => {
 		if (selectedStudentAtom !== -1) {
 			getStudentDetailAPI({ id: selectedStudentAtom })
 				.then((res) => {
-					console.log("@", res)
+					dispatchStudent({ type: "CHANGE_STATE", value: res })
 				})
 				.catch((error) => {
 					console.log(error.response.message)
@@ -32,10 +67,10 @@ function StudentDetail() {
 			) : (
 				<>
 					<h1 css={headerCSS}>학생 정보 상세보기</h1>
-					<ClassStudentDetailHead />
+					<ClassStudentDetailHead studentName={studentState.studentName} />
 					<ClassStudentDetailMoney />
-					<ClassStudentDetailGrade />
-					<ClassStudentDetailAccountList />
+					<ClassStudentDetailGrade creditScore={studentState.creditScore} />
+					<ClassStudentDetailAccountList transactions={studentState.transactions} />
 				</>
 			)}
 		</>
