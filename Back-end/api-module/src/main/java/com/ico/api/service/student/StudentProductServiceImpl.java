@@ -56,22 +56,12 @@ public class StudentProductServiceImpl implements StudentProductService{
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
-        // 상품 이미지 s3에 등록하고 파일이름 저장하기
-        StringBuilder image = new StringBuilder();
-        for (MultipartFile file : files) {
-            // 상품이미지를 등록하지 않았을 때
-            if(file.isEmpty()){
-                throw new CustomException(ErrorCode.NO_PRODUCT_IMAGE);
-            }
-            image.append(s3UploadService.upload(file)).append(",");
-        }
-
         StudentProduct studentProduct = StudentProduct.builder()
                 .student(student)
                 .nation(nation)
                 .title(proposal.getTitle())
                 .amount(proposal.getAmount())
-                .image(String.valueOf(image))
+                .image(s3UploadService.saveImageURLs(files))
                 .detail(proposal.getDetail())
                 .count(proposal.getCount())
                 .date(LocalDateTime.now())
@@ -102,7 +92,7 @@ public class StudentProductServiceImpl implements StudentProductService{
                     .id(product.getId())
                     .title(product.getTitle())
                     .amount(product.getAmount())
-                    .image(getImageURLs(product.getImage()))
+                    .image(s3UploadService.getImageURLs(product.getImage()))
                     .count(product.getCount())
                     .isAssigned(product.isAssigned())
                     .sold(product.getSold())
@@ -163,7 +153,7 @@ public class StudentProductServiceImpl implements StudentProductService{
                 .id(id)
                 .title(product.getTitle())
                 .amount(product.getAmount())
-                .image(getImageURLs(product.getImage()))
+                .image(s3UploadService.getImageURLs(product.getImage()))
                 .detail(product.getDetail())
                 .count(product.getCount())
                 .isAssigned(product.isAssigned())
@@ -172,18 +162,4 @@ public class StudentProductServiceImpl implements StudentProductService{
                 .build();
     }
 
-    /**
-     * DB에 저장된 이미지 String url들을 list로 변환
-     *
-     * @param urls ,로 구분되는 url 모음
-     * @return  url List
-     */
-    private List<String> getImageURLs(String urls){
-        List<String> images = List.of(urls.split(","));
-        List<String> imageRes = new ArrayList<>();
-        for (String image : images){
-            imageRes.add(s3UploadService.getFileURL(image));
-        }
-        return imageRes;
-    }
 }

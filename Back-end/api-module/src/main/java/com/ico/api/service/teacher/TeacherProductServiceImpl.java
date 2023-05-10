@@ -1,6 +1,7 @@
 package com.ico.api.service.teacher;
 
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
+import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.core.dto.TeacherProductReqDto;
@@ -57,21 +58,11 @@ public class TeacherProductServiceImpl implements TeacherProductService {
             throw new CustomException(ErrorCode.ALREADY_EXIST_TITLE);
         }
 
-        // 상품 이미지 s3에 등록하고 파일이름 저장하기
-        StringBuilder images = new StringBuilder();
-        for (MultipartFile file : files) {
-            // 상품이미지를 등록하지 않았을 때
-            if (file.isEmpty()) {
-                throw new CustomException(ErrorCode.NO_PRODUCT_IMAGE);
-            }
-            images.append(s3UploadService.upload(file)).append(",");
-        }
-
         TeacherProduct teacherProduct = TeacherProduct.builder()
                 .nation(nation)
                 .title(product.getTitle())
                 .amount(product.getAmount())
-                .image(String.valueOf(images))
+                .image(s3UploadService.saveImageURLs(files))
                 .detail(product.getDetail())
                 .count(product.getCount())
                 .rental(product.getRental())
@@ -99,17 +90,11 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         List<TeacherProductAllResDto> resProductList = new ArrayList<>();
 
         for (TeacherProduct product : productList) {
-            List<String> images = List.of(product.getImage().split(","));
-            List<String> imageRes = new ArrayList<>();
-            for (String image : images) {
-                imageRes.add(s3UploadService.getFileURL(image));
-            }
-
             TeacherProductAllResDto resDto = TeacherProductAllResDto.builder()
                     .id(product.getId())
                     .title(product.getTitle())
                     .amount(product.getAmount())
-                    .images(imageRes)
+                    .images(s3UploadService.getImageURLs(product.getImage()))
                     .count(product.getCount())
                     .sold(product.getSold())
                     .rental(product.getRental())
@@ -182,5 +167,25 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                     .build();
         }
         couponRepository.save(coupon);
+    }
+
+    @Override
+    public TeacherProductDetailResDto detailProduct(Long id) {
+        long nationId = 99;
+
+        TeacherProduct product = teacherProductRepository.findByIdAndNationId(id, nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
+
+        return TeacherProductDetailResDto.builder()
+                .id(id)
+                .title(product.getTitle())
+                .amount(product.getAmount())
+                .image(s3UploadService.getImageURLs(product.getImage()))
+                .detail(product.getDetail())
+                .count(product.getCount())
+                .rental(product.getRental())
+                .sold(product.getSold())
+                .date(product.getDate().format(formatter))
+                .build();
     }
 }
