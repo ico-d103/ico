@@ -1,6 +1,7 @@
 package com.ico.api.service.student;
 
 import com.ico.api.dto.nation.CreditScoreReqDto;
+import com.ico.api.dto.student.StudentAllResDto;
 import com.ico.api.dto.student.StudentListResDto;
 import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.student.StudentResDto;
@@ -110,6 +111,7 @@ public class StudentServiceImpl implements StudentService{
      * @param id 학생 아이디
      * @param accountDto 학생
      */
+    @Transactional
     @Override
     public void teacherUpdateAccount(Long id, AccountDto accountDto){
         Student student = studentRepository.findById(id)
@@ -203,6 +205,47 @@ public class StudentServiceImpl implements StudentService{
         student.setCreditRating(checkCreditRating(student.getCreditScore()));
 
         studentRepository.save(student);
+    }
+
+    @Override
+    public void suspendAccount(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if (student.isFrozen()) {
+            log.info("[suspendAccount] 이미 학생의 계좌가 정지된 경우");
+            throw new CustomException(ErrorCode.ALREADY_SUSPEND_ACCOUNT);
+        }
+
+        student.setFrozen(true);
+        studentRepository.save(student);
+    }
+
+    @Override
+    public void releaseAccount(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if (!student.isFrozen()) {
+            log.info("[suspendAccount] 이미 학생의 계좌가 정지 해제된 경우");
+            throw new CustomException(ErrorCode.ALREADY_RELEASE_ACCOUNT);
+        }
+
+        student.setFrozen(false);
+        studentRepository.save(student);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<StudentAllResDto> findListStudent(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        List<Student> studentList = studentRepository.findAllByNationId(nationId);
+        List<StudentAllResDto> dtoList = new ArrayList<>();
+        for (Student student : studentList) {
+            dtoList.add(new StudentAllResDto().of(student, student.getJob()));
+        }
+        return dtoList;
     }
 
     /**

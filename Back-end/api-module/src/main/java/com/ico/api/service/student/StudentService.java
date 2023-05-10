@@ -1,10 +1,11 @@
 package com.ico.api.service.student;
 
 import com.ico.api.dto.nation.CreditScoreReqDto;
-import com.ico.api.dto.student.StudentMyPageResDto;
-import com.ico.api.dto.user.AccountDto;
+import com.ico.api.dto.student.StudentAllResDto;
 import com.ico.api.dto.student.StudentListResDto;
+import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.student.StudentResDto;
+import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.user.StudentSignUpRequestDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,4 +58,26 @@ public interface StudentService {
      * @param studentId
      */
     void postCreditScore(Long studentId, CreditScoreReqDto dto, HttpServletRequest request);
+
+    /**
+     * 학생의 계좌 정지
+     *
+     * @param studentId
+     */
+    void suspendAccount(Long studentId);
+
+    /**
+     * 학생의 계좌 정지 해제
+     *
+     * @param studentId
+     */
+    void releaseAccount(Long studentId);
+
+    /**
+     * 학생의 반 친구 목록 조회
+     *
+     * @param request
+     * @return
+     */
+    List<StudentAllResDto> findListStudent(HttpServletRequest request);
 }
