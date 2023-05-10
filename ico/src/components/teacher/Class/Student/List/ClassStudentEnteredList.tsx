@@ -32,8 +32,7 @@ function StudentEnteredList() {
 			</div>
 			<div css={contentCSS}>
 				{data?.map((student, idx) => (
-					// key={student.number} 로 추후 수정 필요
-					<StudentEnteredListItem key={idx} student={student} idx={idx} />
+					<StudentEnteredListItem key={student.id} student={student} idx={idx} />
 				))}
 			</div>
 		</div>

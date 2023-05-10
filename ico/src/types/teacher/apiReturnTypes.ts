@@ -40,6 +40,7 @@ export type getGovJobType = {
 }
 
 export type getStudentListType = {
+	id: number
 	name: string
 	number: number
 	amount: number
