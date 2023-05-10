@@ -31,6 +31,7 @@ function ClassStudentDetailMoneyContent() {
 	const postAccountHandler = (flag: string) => {
 		if (inputState.title === "" || inputState.amount === "") {
 			alert("빈칸을 모두 입력해주세요.")
+			return
 		}
 
 		const amount = flag === "minus" ? "-" + inputState.amount : inputState.amount
