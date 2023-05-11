@@ -12,4 +12,6 @@ const selectedStudent = atom(-1)
 
 const isDepositMenuOpen = atom(true)
 
-export { navTo, navBeforeScroll, selectedStudent, isNavigating, isDepositMenuOpen }
+const stackNotification = atom<{[prop: number]: {width: number; height: number; duration: number; content: any;}}>({})
+
+export { navTo, navBeforeScroll, selectedStudent, isNavigating, isDepositMenuOpen, stackNotification }
