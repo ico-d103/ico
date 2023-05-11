@@ -2,6 +2,8 @@ import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import { css } from "@emotion/react"
 import ClassJobSearchCard from "@/components/student/Class/JobSearch/ClassJobSearchCard"
 import useNavigate from "@/hooks/useNavigate"
+import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
+import { ClassTabMenus } from "@/components/student/Class/ClassTabMenus"
 
 function jobsearch() {
 	const navigate = useNavigate()
@@ -14,7 +16,7 @@ function jobsearch() {
 
 	return (
 		<>
-			<PageHeader title={"일자리 찾기"} />
+			<PageHeader title={"일자리 찾기"} addComp={<TabMenu menus={ClassTabMenus()} selected={1} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					<span css={titleCSS}>

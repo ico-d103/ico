@@ -2,6 +2,8 @@ import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import { css } from "@emotion/react"
 import { CLASS_SEARCH } from "@/components/student/Class/ClassIcons"
 import ClassStudentsListItem from "@/components/student/Class/Students/ClassStudentsListItem"
+import { ClassTabMenus } from "@/components/student/Class/ClassTabMenus"
+import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
 
 function students() {
 	const mockList = [
@@ -15,7 +17,7 @@ function students() {
 
 	return (
 		<>
-			<PageHeader title={"반 친구들"} />
+			<PageHeader title={"반 친구들"} addComp={<TabMenu menus={ClassTabMenus()} selected={0} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					<div css={searchWrapperCSS}>

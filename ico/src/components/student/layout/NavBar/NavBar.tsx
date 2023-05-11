@@ -24,7 +24,7 @@ function NavBar({ children }: NavBarProps) {
 		"/student/finance/guide": 0,
 		"/student/finance/invest": 0,
 		"/student/class/students": 1,
-		"/student/class/jobsearch": 2,
+		"/student/class/jobsearch": 1,
 		"/student/gov/rule": 2,
 		"/student/gov/exchequer": 2,
 		"/student/gov/job": 2,
@@ -70,7 +70,7 @@ function NavBar({ children }: NavBarProps) {
 				}}
 				css={navBarIndivCSS}
 			>
-				<Link href={navBarData[Number(el)].url} prefetch/>
+				<Link href={navBarData[Number(el)].url} prefetch />
 				<div css={navBarIndivContentCSS({ targetIdx: selected, curIdx: Number(el) })}>
 					{navBarData[Number(el)].content}
 					{navBarData[Number(el)].label}
@@ -104,8 +104,8 @@ const navBarParentCSS = () => {
 
 const contentWrapperCSS = ({ selected }: { selected: number }) => {
 	return css`
-		min-height: ${selected !== -2 && 'calc(100vh - 64px)'};
-		margin-bottom: ${selected !== -2 && '64px'};
+		min-height: ${selected !== -2 && "calc(100vh - 64px)"};
+		margin-bottom: ${selected !== -2 && "64px"};
 		/* position: relative; */
 	`
 }
