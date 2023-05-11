@@ -23,16 +23,13 @@ function Card({ title, amount, image, count, sold, name, date, assigned }: CardP
 				{assigned ? (
 					<div css={[testCSS, cardRequestTextCSS]}>승인 진행 중</div>
 				) : (
-					sold == 0 && <div css={[testCSS, cardSoldOutTextCSS]}>sold out</div>
+					count - sold == 0 && <div css={[testCSS, cardSoldOutTextCSS]}>sold out</div>
 				)}
 			</div>
 			<div css={cardFirstContentCSS}>
 				<div>{title}</div>
 				<div>
-					<div>{amount}미소</div>/
-					<div>
-						{sold}EA{count - sold}
-					</div>
+					<div>{amount}미소</div>/<div>{count - sold}EA</div>
 				</div>
 			</div>
 			<hr />

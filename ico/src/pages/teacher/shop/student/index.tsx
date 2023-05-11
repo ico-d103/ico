@@ -3,7 +3,6 @@ import Card from "@/components/common/Card/Card"
 import { useEffect } from "react"
 
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-
 import { getStudentProductsAPI } from "@/api/common/shop/getStudentProductsAPI"
 import { getStudentProductsType } from "@/types/teacher/apiReturnTypes"
 
@@ -16,7 +15,7 @@ function student() {
 		error,
 		isSuccess,
 		refetch,
-	} = useQuery<getStudentProductsType[]>(["teacherProducts"], getStudentProductsAPI)
+	} = useQuery<getStudentProductsType[]>(["studentProducts"], getStudentProductsAPI)
 
 	console.log(cardData)
 

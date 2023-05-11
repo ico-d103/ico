@@ -8,11 +8,17 @@ import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
 import { ShopTabMenus } from "@/components/student/Shop/ShopTabMenus"
 
 function create() {
-	const [product, setProduct] = useState({
-		name: "",
-		price: "",
-		number: "",
-	})
+	const formData = new FormData()
+
+	const [title, setTitle] = useState("")
+	const [amount, setAmount] = useState("")
+	const [imageList, setImageList] = useState([])
+	const [count, setCount] = useState("")
+	const [detail, setDetail] = useState("")
+
+	const handleTitleChange = (event: any) => {
+		setTitle(event.target.value)
+	}
 
 	return (
 		<div>
@@ -20,31 +26,16 @@ function create() {
 			<div css={contentWrapperCSS}>
 				<ContentWrapper>
 					<div css={inputWrapperCSS}>
-						<input
-							css={inputCSS}
-							placeholder="상품의 이름이 뭔가요?"
-							value={product.name}
-							onChange={(e) => setProduct({ ...product, name: e.target.value })}
-						/>
+						<input css={inputCSS} placeholder="상품의 이름이 뭔가요?" value={title} onChange={handleTitleChange} />
 					</div>
 
 					<div css={inputWrapperCSS}>
-						<input
-							css={inputCSS}
-							placeholder="상품의 가격은 얼마인가요?"
-							value={product.price}
-							onChange={(e) => setProduct({ ...product, price: e.target.value })}
-						/>
+						<input css={inputCSS} placeholder="상품의 가격은 얼마인가요?" />
 						<div css={unitCSS}>원</div>
 					</div>
 
 					<div css={inputWrapperCSS}>
-						<input
-							css={inputCSS}
-							placeholder="상품은 총 몇 개인가요?"
-							value={product.number}
-							onChange={(e) => setProduct({ ...product, number: e.target.value })}
-						/>
+						<input css={inputCSS} placeholder="상품은 총 몇 개인가요?" />
 						<div css={unitCSS}>개</div>
 					</div>
 
