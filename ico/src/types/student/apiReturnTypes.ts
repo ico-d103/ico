@@ -56,3 +56,10 @@ export type getClassRuleType = {
 	title: string
 	detail: string
 }
+
+export type getStudentListType = {
+	number: number
+	name: string
+	jobName: string | null
+	creditRating: number
+}
