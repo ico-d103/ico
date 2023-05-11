@@ -42,7 +42,7 @@ function login() {
 		})
 			.then((res) => {
 				setCookie("Authorization", res)
-				router.push("/student/home")
+				router.push("/student/enter")
 			})
 
 			.catch((error) => {
