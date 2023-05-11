@@ -1,6 +1,9 @@
 package com.ico.api.service.teacher;
 
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * Teacher Service
@@ -15,7 +18,7 @@ public interface TeacherService {
      * @param requestDto
      * @return
      */
-    Long signUp(TeacherSignUpRequestDto requestDto);
+    Long signUp(TeacherSignUpRequestDto requestDto, MultipartFile file) throws IOException;
 
     /**
      * 휴대폰 인증

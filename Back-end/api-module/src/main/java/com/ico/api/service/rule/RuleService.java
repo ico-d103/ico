@@ -34,4 +34,11 @@ public interface RuleService {
      * @param ruleId
      */
     void updateRule(RuleReqDto dto, Long ruleId, HttpServletRequest request);
+
+    /**
+     * 학급규칙 삭제
+     *
+     * @param ruleId
+     */
+    void deleteRule(Long ruleId);
 }

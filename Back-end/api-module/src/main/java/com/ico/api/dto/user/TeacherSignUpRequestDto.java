@@ -3,6 +3,7 @@ package com.ico.api.dto.user;
 import com.ico.core.code.Role;
 import com.ico.core.entity.Teacher;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotBlank;
  *
  * @author 강교철
  */
-@Data
+@Getter
 @NoArgsConstructor
 public class TeacherSignUpRequestDto {
 

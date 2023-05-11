@@ -1,7 +1,6 @@
 package com.ico.core.entity;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,17 +13,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.time.LocalDateTime;
 
 /**
  * 학생 상품 Entity
+ *
  * @author 변윤경
  */
 @Entity
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class StudentProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +41,7 @@ public class StudentProduct {
 
     private int amount;
 
-    private String image;
+    private String images;
 
     private String detail;
 
@@ -51,4 +50,21 @@ public class StudentProduct {
     private boolean isAssigned;
 
     private byte sold;
+
+    private LocalDateTime date;
+
+    @Builder
+    public StudentProduct(Long id, Student student, Nation nation, String title, int amount, String images, String detail, byte count, boolean isAssigned, byte sold, LocalDateTime date) {
+        this.id = id;
+        this.student = student;
+        this.nation = nation;
+        this.title = title;
+        this.amount = amount;
+        this.images = images;
+        this.detail = detail;
+        this.count = count;
+        this.isAssigned = isAssigned;
+        this.sold = sold;
+        this.date = date;
+    }
 }

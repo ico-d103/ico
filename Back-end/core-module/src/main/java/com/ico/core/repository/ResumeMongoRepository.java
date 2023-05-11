@@ -17,4 +17,8 @@ public interface ResumeMongoRepository extends MongoRepository<Resume, String> {
 
     void deleteAllByStudentId(Long studentId);
 
+    void deleteAllByNationId(Long nationId);
+
+    List<Resume> findAllByNationId(Long nationId);
+
 }

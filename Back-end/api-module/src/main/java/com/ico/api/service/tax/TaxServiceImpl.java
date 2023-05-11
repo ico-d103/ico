@@ -73,5 +73,11 @@ public class TaxServiceImpl implements TaxService{
         taxRepository.save(tax);
     }
 
+    @Override
+    public void deleteTax(Long taxId) {
+        Tax tax = taxRepository.findById(taxId)
+                .orElseThrow(() -> new CustomException(ErrorCode.TAX_NOT_FOUND));
+        taxRepository.delete(tax);
+    }
 
 }

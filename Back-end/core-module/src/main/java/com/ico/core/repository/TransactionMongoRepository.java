@@ -22,5 +22,5 @@ public interface TransactionMongoRepository extends MongoRepository<Transaction,
      * @param to
      * @return 거래 내역 목록
      */
-    List<Transaction> findAllByFromOrTo(String from, String to);
+    List<Transaction> findAllByFromOrToOrderByIdDesc(String from, String to);
 }

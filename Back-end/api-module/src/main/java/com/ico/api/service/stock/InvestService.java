@@ -12,5 +12,10 @@ public interface InvestService {
      * @param price 현재 지수
      * @param amount 매수 금액
      */
-    void buyStock(HttpServletRequest request, int price, int amount);
+    void buyStock(HttpServletRequest request, double price, int amount);
+
+    /**
+     * 주식 매도
+     */
+    void sellStock();
 }

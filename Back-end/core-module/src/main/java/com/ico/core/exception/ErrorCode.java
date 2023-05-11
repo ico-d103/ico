@@ -43,6 +43,8 @@ public enum ErrorCode{
 
     NOT_FOUND_TOKEN(HttpStatus.BAD_REQUEST, "25", "토큰이 없습니다."),
 
+    NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "28", "교사인증서가 없습니다."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, "104", "비밀번호 입력 칸이 비었습니다."),
@@ -81,19 +83,29 @@ public enum ErrorCode{
 
     REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "503", "신청 내역이 존재하지 않습니다."),
 
+    ALREADY_SUSPEND_ACCOUNT(HttpStatus.BAD_REQUEST, "504", "이미 정지된 계좌입니다."),
+
     ZERO_COUPON(HttpStatus.BAD_REQUEST, "505", "사용할 수 있는 쿠폰 재고가 없습니다."),
 
     INVALID_COUPON(HttpStatus.BAD_REQUEST, "506", "신청하지 않은 쿠폰입니다."),
 
     BAD_CREDIT_RATING(HttpStatus.BAD_REQUEST, "507", "신용등급은 1~10만 가능합니다."),
 
-    PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "삭제된 판매 제안서입니다."),
+    ALREADY_RELEASE_ACCOUNT(HttpStatus.BAD_REQUEST, "509", "이미 활성화된 계좌입니다."),
+
+    HAS_NOT_JOB(HttpStatus.NOT_FOUND, "510", "해당 학생은 직업이 없습니다."),
+
+    NO_PRODUCT_IMAGE(HttpStatus.NOT_FOUND, "608", "상품 이미지를 입력해주세요"),
+
+    PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "없는 판매 제안서입니다."),
 
     NOT_COUPON(HttpStatus.BAD_REQUEST, "614", "해당 상품은 쿠폰이 아닙니다."),
 
     NOT_RENTAL(HttpStatus.BAD_REQUEST, "615", "해당 상품은 대여 상품이 아닙니다."),
 
     SOLD_OUT(HttpStatus.BAD_REQUEST, "616", "품절된 상품입니다."),
+
+    PRODUCT_NOT_FOUND(HttpStatus.BAD_REQUEST, "617", "해당 상품은 없는 상품입니다."),
 
     NOT_TRADING_TIME(HttpStatus.BAD_REQUEST, "701", "거래시간이 아닙니다."),
 
@@ -116,6 +128,12 @@ public enum ErrorCode{
     LOWER_INTEREST(HttpStatus.BAD_REQUEST, "720", "이자율값은 0 이상이여야 합니다."),
 
     INTEREST_NOT_DESCENDING(HttpStatus.BAD_REQUEST, "721", "이자율은 신용등급이 낮을수록 작아져야 합니다."),
+
+    NOT_FOUND_INVESET(HttpStatus.BAD_REQUEST, "722", "매수 이력이 없습니다."),
+
+    ALREADY_EXIST_DEPOSIT(HttpStatus.BAD_REQUEST, "724", "예금은 1개만 신청이 가능합니다."),
+
+    NOT_FOUNT_DEPOSIT(HttpStatus.BAD_REQUEST, "725", "예금 신청 내역이 없습니다."),
     ;
 
     private final HttpStatus httpStatus;

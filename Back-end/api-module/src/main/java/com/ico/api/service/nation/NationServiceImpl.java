@@ -1,9 +1,10 @@
 package com.ico.api.service.nation;
 
+import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
-import com.ico.core.dto.StockReqDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Role;
+import com.ico.core.dto.StockReqDto;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Stock;
 import com.ico.core.entity.Teacher;
@@ -15,12 +16,14 @@ import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -38,6 +41,8 @@ public class NationServiceImpl implements NationService {
     private final TeacherRepository teacherRepository;
     private final StockRepository stockRepository;
     private final JwtTokenProvider jwtTokenProvider;
+
+    private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
 
     @Override
     @Transactional
@@ -182,5 +187,25 @@ public class NationServiceImpl implements NationService {
         }
     }
 
+    @Override
+    public Map<String, String> findTreasury(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+        Map<String, String> map = new HashMap<>();
+        map.put("treasury", numberFormat.format(nation.getTreasury()));
+        return map;
+    }
+
+    @Override
+    public void updateCredit(NationCreditReqDto dto, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+        nation.updateCredit(dto.getCreditUp(), dto.getCreditDown());
+        nationRepository.save(nation);
+    }
 
 }

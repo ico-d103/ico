@@ -1,9 +1,11 @@
 package com.ico.api.service.teacher;
 
+import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
+import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
+import com.ico.api.service.S3UploadService;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.core.dto.TeacherProductReqDto;
 import com.ico.core.entity.Coupon;
-import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.TeacherProduct;
@@ -15,8 +17,11 @@ import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +38,8 @@ public class TeacherProductServiceImpl implements TeacherProductService {
     private final StudentRepository studentRepository;
     private final TransactionService transactionService;
     private final CouponRepository couponRepository;
+    private final S3UploadService s3UploadService;
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
     /**
      * 교사 상품 등록
@@ -40,7 +47,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
      * @param product 교사 상품
      */
     @Override
-    public void createProduct(TeacherProductReqDto product) {
+    public void createProduct(TeacherProductReqDto product, List<MultipartFile> files) {
         long nationId = 99L;
         // Todo : token 생성 이후 nation 바꾸기
         Nation nation = nationRepository.findById(nationId)
@@ -55,11 +62,12 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 .nation(nation)
                 .title(product.getTitle())
                 .amount(product.getAmount())
-                .image(product.getImage())
+                .images(s3UploadService.saveImageURLs(files))
                 .detail(product.getDetail())
                 .count(product.getCount())
                 .rental(product.getRental())
                 .sold((byte) 0)
+                .date(LocalDateTime.now())
                 .build();
         teacherProductRepository.save(teacherProduct);
     }
@@ -71,6 +79,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
      */
     @Override
     public List<TeacherProductAllResDto> findAllProduct() {
+        //TODO : REQUSET
         long nationId = 99L;
 
         if (nationRepository.findById(nationId).isEmpty()) {
@@ -79,8 +88,20 @@ public class TeacherProductServiceImpl implements TeacherProductService {
 
         List<TeacherProduct> productList = teacherProductRepository.findAllByNationId(nationId);
         List<TeacherProductAllResDto> resProductList = new ArrayList<>();
+
         for (TeacherProduct product : productList) {
-            resProductList.add(new TeacherProductAllResDto().of(product));
+            TeacherProductAllResDto resDto = TeacherProductAllResDto.builder()
+                    .id(product.getId())
+                    .title(product.getTitle())
+                    .amount(product.getAmount())
+                    .images(s3UploadService.getImageURLs(product.getImages()))
+                    .count(product.getCount())
+                    .sold(product.getSold())
+                    .rental(product.getRental())
+                    .date(product.getDate().format(formatter))
+                    .build();
+
+            resProductList.add(resDto);
         }
 
         return resProductList;
@@ -95,7 +116,9 @@ public class TeacherProductServiceImpl implements TeacherProductService {
     @Override
     public void buyCoupon(Long id) {
         // 해당 국가인지 확인
+        // TODO : REQUEST 변환
         long nationId = 99L;
+        // TODO : REQUEST 변환
         long studentId = 1L;
 
         Student student = studentRepository.findById(studentId)
@@ -144,5 +167,25 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                     .build();
         }
         couponRepository.save(coupon);
+    }
+
+    @Override
+    public TeacherProductDetailResDto detailProduct(Long id) {
+        long nationId = 99;
+
+        TeacherProduct product = teacherProductRepository.findByIdAndNationId(id, nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
+
+        return TeacherProductDetailResDto.builder()
+                .id(id)
+                .title(product.getTitle())
+                .amount(product.getAmount())
+                .images(s3UploadService.getImageURLs(product.getImages()))
+                .detail(product.getDetail())
+                .count(product.getCount())
+                .rental(product.getRental())
+                .sold(product.getSold())
+                .date(product.getDate().format(formatter))
+                .build();
     }
 }

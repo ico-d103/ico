@@ -1,7 +1,9 @@
 package com.ico.api.service.teacher;
 
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
+import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.core.dto.TeacherProductReqDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ public interface TeacherProductService {
      *
      * @param proposal 교사 상품
      */
-    void createProduct(TeacherProductReqDto proposal);
+    void createProduct(TeacherProductReqDto proposal, List<MultipartFile> files);
 
     /**
      * 등록된 교사 상품 목록을 조회합니다.
@@ -31,4 +33,6 @@ public interface TeacherProductService {
      * @param id 상품 id
      */
     void buyCoupon(Long id);
+
+    TeacherProductDetailResDto detailProduct(Long id);
 }

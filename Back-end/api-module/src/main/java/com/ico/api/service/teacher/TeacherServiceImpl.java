@@ -1,15 +1,23 @@
 package com.ico.api.service.teacher;
 
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
+import com.ico.api.service.S3UploadService;
 import com.ico.core.code.Role;
+import com.ico.core.entity.Certification;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.CertificationRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * Teacher ServiceImpl
@@ -18,32 +26,26 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
-
     private final StudentRepository studentRepository;
-
     private final PasswordEncoder passwordEncoder;
-
-
-//      TODO : S3를 이용한 이미지업로드 할때 사용할 것
-//    private final CertificationRepository certificationRepository;
+    private final CertificationRepository certificationRepository;
+    private final S3UploadService s3;
 
     @Override
-    public Long signUp(TeacherSignUpRequestDto requestDto) {
+    @Transactional
+    public Long signUp(TeacherSignUpRequestDto requestDto, MultipartFile file) {
+        // 교사 회원가입
         Teacher teacher = Teacher.builder()
                 .identity(requestDto.getIdentity())
                 .password(requestDto.getPassword())
                 .name(requestDto.getName())
-                .is_assigned(false)
+                .isAssigned(false)
                 .role(Role.TEACHER)
                 .build();
-//      TODO : S3를 이용한 이미지업로드 할때 사용할 것
-//        Certification certification = Certification.builder()
-//                .teacher(teacher)
-//                .image(requestDto.getImage())   // s3로 바꿔야함
-//                .build();
 
         if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()
                 || studentRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
@@ -56,8 +58,20 @@ public class TeacherServiceImpl implements TeacherService {
 
         teacher.encodeTeacherPassword(passwordEncoder);
         teacherRepository.save(teacher);
-//      TODO : S3를 이용한 이미지업로드 할때 사용할 것
-//        certificationRepository.save(certification);
+
+        // 교사 인증서 저장
+        if (!file.isEmpty()) {
+            String image = s3.upload(file);
+            log.info(image);
+            Certification certification = Certification.builder()
+                    .teacher(teacher)
+                    .image(image)
+                    .build();
+            certificationRepository.save(certification);
+        }
+        else {
+            throw new CustomException(ErrorCode.NOT_FOUND_IMAGE);
+        }
 
         return teacher.getId();
     }
@@ -90,5 +104,4 @@ public class TeacherServiceImpl implements TeacherService {
 //        }
 //        네이버로 다시 구현하기
     }
-
 }

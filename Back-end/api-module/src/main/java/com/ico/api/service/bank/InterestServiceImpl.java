@@ -1,12 +1,15 @@
 package com.ico.api.service.bank;
 
+import com.ico.api.dto.bank.DepositStudentResDto;
 import com.ico.api.dto.bank.InterestAllDto;
 import com.ico.api.dto.bank.InterestStudentResDto;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.core.entity.Deposit;
 import com.ico.core.entity.Interest;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.DepositMongoRepository;
 import com.ico.core.repository.InterestRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.StudentRepository;
@@ -16,10 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -34,6 +39,8 @@ public class InterestServiceImpl implements InterestService {
     private final NationRepository nationRepository;
     private final StudentRepository studentRepository;
     private final InterestRepository interestRepository;
+    private final DepositMongoRepository depositMongoRepository;
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
     private final JwtTokenProvider jwtTokenProvider;
 
     /**
@@ -60,11 +67,25 @@ public class InterestServiceImpl implements InterestService {
         Interest interest = interestRepository.findByNationIdAndCreditRating(nationId, myCredit)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_INTEREST));
 
+        // 나의 진행중인 예금
+        Optional<Deposit> depositOptional = depositMongoRepository.findByStudentId(studentId);
+        DepositStudentResDto myDeposit = new DepositStudentResDto();
+        if(depositOptional.isPresent()){
+            Deposit deposit = depositOptional.get();
+            myDeposit = myDeposit.builder()
+                    .interest(deposit.getInterest())
+                    .startDate(deposit.getStartDate().format(formatter))
+                    .endDate(deposit.getEndDate().format(formatter))
+                    .creditRating(deposit.getCreditRating())
+                    .build();
+        }
+
         return InterestStudentResDto.builder()
                 .account(student.getAccount())
                 .creditRating(myCredit)
                 .longPeriod(interest.getLongPeriod())
                 .shortPeriod(interest.getShortPeriod())
+                .myDeposit(myDeposit)
                 .build();
     }
 

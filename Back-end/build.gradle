@@ -63,6 +63,7 @@ subprojects {
 		// CollSMS
 		implementation 'net.nurigo:sdk:4.2.7'
 
+
 	}
 
 	test {

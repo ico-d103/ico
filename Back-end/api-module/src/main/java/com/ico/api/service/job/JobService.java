@@ -1,5 +1,6 @@
 package com.ico.api.service.job;
 
+import com.ico.api.dto.job.JobAddReqDto;
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
 import com.ico.api.dto.job.JobResDto;
@@ -43,4 +44,34 @@ public interface JobService {
      * @return
      */
     List<JobResDto> findJobList(HttpServletRequest request);
+
+    /**
+     * 직업 추가
+     *
+     * @param dto
+     * @param request
+     */
+    void addJob(JobAddReqDto dto, HttpServletRequest request);
+
+    /**
+     * 직업 삭제
+     *
+     * @param jobId
+     */
+    void deleteJob(Long jobId);
+
+    /**
+     * 직업 배정 초기화
+     *
+     * @param request
+     */
+    void resetAllJob(HttpServletRequest request);
+
+    /**
+     * 개별 직업 배정 초기화
+     *
+     * @param studentId
+     * @param request
+     */
+    void resetJob(Long studentId, HttpServletRequest request);
 }

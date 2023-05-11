@@ -1,10 +1,12 @@
 package com.ico.api.service.nation;
 
+import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
 import com.ico.core.dto.StockReqDto;
 import com.ico.core.entity.Nation;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * @author 강교철
@@ -34,4 +36,20 @@ public interface NationService {
      * @param stockReqDto 종목 정보
      */
     public void createStock(HttpServletRequest request, StockReqDto stockReqDto);
+
+    /**
+     * 국고 잔금 조회
+     *
+     * @param request
+     * @return
+     */
+    Map<String, String> findTreasury(HttpServletRequest request);
+
+    /**
+     * 신용점수 등락폭 수정
+     *
+     * @param dto
+     * @param request
+     */
+    void updateCredit(NationCreditReqDto dto, HttpServletRequest request);
 }

@@ -20,7 +20,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -41,9 +40,7 @@ public class TransactionServiceImpl implements TransactionService{
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일-HH:mm");
-
-    public static final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("MM월 dd일");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd-HH:mm");
 
     private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
 
@@ -120,28 +117,22 @@ public class TransactionServiceImpl implements TransactionService{
             log.info("[findTransaction] studentId[{}]에 해당하는 학생이 없습니다.", studentId);
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
-        List<Transaction> transactions = transactionMongoRepository.findAllByFromOrTo(String.valueOf(studentId), String.valueOf(studentId));
+        // 최신순으로 조회
+        List<Transaction> transactions = transactionMongoRepository.findAllByFromOrToOrderByIdDesc(String.valueOf(studentId), String.valueOf(studentId));
 
         // 순서가 있는 map 생성
         Map<String, List<TransactionResDto>> map = new LinkedHashMap<>();
 
-        LocalDateTime now = LocalDateTime.now();
-        String curDay = now.format(dayFormatter);
-        String yesterday = now.minusDays(1).format(dayFormatter);
-
         int curAccount = student.getAccount();
 
-        // 최신순으로 조회
-        ListIterator<Transaction> iterator = transactions.listIterator(transactions.size());
-        while (iterator.hasPrevious()) {
-            Transaction transaction = iterator.previous();
+        for (Transaction transaction : transactions) {
             String[] dateTime = transaction.getDate().format(formatter).split("-");
 
             int amount = transaction.getFrom().equals(String.valueOf(studentId)) ? -1 * transaction.getAmount() : transaction.getAmount();
             String source = getSource(String.valueOf(studentId), transaction) + " · " + dateTime[1];
             int balance = curAccount;
             curAccount += -1 * amount;
-            String date = getDay(dateTime[0], curDay, yesterday);
+            String date = dateTime[0];
 
             map.putIfAbsent(date, new ArrayList<>());
             map.get(date).add(TransactionResDto.builder()
@@ -152,23 +143,6 @@ public class TransactionServiceImpl implements TransactionService{
                     .build());
         }
         return map;
-    }
-
-    /**
-     * 오늘과 어제일 경우 문자열 추가
-     *
-     * @param day 거래 날짜
-     * @param curDay 오늘 날짜
-     * @param yesterday 어제 날짜
-     * @return
-     */
-    private String getDay(String day, String curDay, String yesterday) {
-        if (curDay.equals(day)) {
-            return day + " · 오늘";
-        } else if (yesterday.equals(day)) {
-            return day + " · 어제";
-        }
-        return day;
     }
 
     /**
