@@ -4,33 +4,31 @@ import CollapseMenu from "@/components/teacher/common/CollapseMenu/CollapseMenu"
 import ListNumbering from "@/components/student/Gov/ListNumbering"
 import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
 import { GovTabMenus } from "@/components/student/Gov/GovTabMenus"
+import { getGovExchequerAPI } from "@/api/teacher/gov/getGovExchequerAPI"
+import { useEffect, useState } from "react"
+import { getGovExchequerType } from "@/types/teacher/apiReturnTypes"
 
 function index() {
-	const mockList = [
-		{ id: 0, title: "소득세", content: "국민의 월급에서 10%에 해당하는 미소를 세금으로 부과합니다." },
-		{ id: 1, title: "전기세", content: "국민의 월급에서 10%에 해당하는 미소를 세금으로 부과합니다." },
-		{ id: 2, title: "쓰레기봉투", content: "국민의 월급에서 10%에 해당하는 미소를 세금으로 부과합니다." },
-		{ id: 3, title: "건강보험료", content: "국민의 월급에서 10%에 해당하는 미소를 세금으로 부과합니다." },
-	]
+	const [exchequerList, setExchequerList] = useState<getGovExchequerType[]>([])
 
-	const menus = [
-		{ idx: 0, url: "/student/gov/rule", title: "학급 규칙" },
-		{ idx: 1, url: "/student/gov/exchequer", title: "세금 목록" },
-		{ idx: 2, url: "/student/gov/job", title: "직업 목록" },
-	]
+	useEffect(() => {
+		getGovExchequerAPI({}).then((res) => {
+			setExchequerList(res)
+		})
+	}, [])
 
 	return (
 		<>
 			<PageHeader title={"세금 목록"} addComp={<TabMenu menus={GovTabMenus()} selected={1} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
-					{mockList.map((mock) => (
+					{exchequerList.map((exchequer, idx) => (
 						<CollapseMenu
-							key={mock.id}
-							title={<ListNumbering number={mock.id + 1} text={mock.title} />}
+							key={exchequer.id}
+							title={<ListNumbering number={idx + 1} text={exchequer.title} />}
 							fontSize={`var(--student-h3)`}
 							bracketSize={"10px"}
-							children={<div>{mock.content}</div>}
+							children={<div>{exchequer.detail}</div>}
 							marginBottom={"10px"}
 						/>
 					))}
