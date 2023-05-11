@@ -2,15 +2,19 @@ import React, { useState } from "react"
 import { css } from "@emotion/react"
 
 type ToggleButtonProps = {
+	rental: boolean
 	leftLabel: string
 	rightLabel: string
+	onClick: () => void;
 }
 
-const ShopCreateToggleButton = ({ leftLabel, rightLabel }: ToggleButtonProps) => {
-	const [toggle, setToggle] = useState(false)
+const ShopCreateToggleButton = ({ rental, leftLabel, rightLabel, onClick }: ToggleButtonProps) => {
+	const [toggle, setToggle] = useState(rental)
 
 	const toggleState = () => {
 		setToggle(!toggle)
+		onClick()
+		console.log(toggle)
 	}
 
 	return (

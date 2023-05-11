@@ -15,7 +15,7 @@ function create() {
 	const [amount, setAmount] = useState("")
 	const [imageList, setImageList] = useState([])
 	const [count, setCount] = useState("")
-	const [rental, setRental] = useState(true)
+	const [rental, setRental] = useState(false)
 	const [detail, setDetail] = useState("")
 
 	const handleInputChange = (event: any) => {
@@ -47,24 +47,22 @@ function create() {
 					amount: amount,
 					count: count,
 					detail: detail,
-					rental: true,
+					rental: rental,
 				}),
 			],
 			{ type: "application/json" },
 		),
 	)
 
-	const [isChecked, setIsChecked] = useState(false)
-
-	const handleToggle = () => {
-		setIsChecked(!isChecked)
+	const rentalToggle = () => {
+		setRental(!rental)
 	}
 
 	function receiveImageList(imageList: any) {
 		setImageList(imageList)
 	}
 
-	const regist = () => {
+	const createProduct = () => {
 		postTeacherProductsAPI({ body: formData })
 			.then(() => {
 				router.push("/teacher/shop/my")
@@ -74,7 +72,7 @@ function create() {
 			})
 	}
 
-	console.log(imageList)
+	// console.log(imageList)
 
 	return (
 		<div css={shopCreateWrapperCSS}>
@@ -96,7 +94,7 @@ function create() {
 				</div>
 				<div>
 					<div css={contentCSS}>상품 유형</div>
-					<ShopCreateToggleButton leftLabel="판매" rightLabel="대여" />
+					<ShopCreateToggleButton rental={rental} leftLabel="판매" rightLabel="대여" onClick={rentalToggle} />
 				</div>
 			</div>
 
@@ -108,7 +106,13 @@ function create() {
 			<input css={inputCSS} value={detail} onChange={handleDetailChange} />
 
 			<div css={buttonCSS}>
-				<Button text={"등록하기"} fontSize={`var(--teacher-h4)`} width={"190px"} theme={"normal"} onClick={regist} />
+				<Button
+					text={"등록하기"}
+					fontSize={`var(--teacher-h4)`}
+					width={"190px"}
+					theme={"normal"}
+					onClick={createProduct}
+				/>
 			</div>
 		</div>
 	)
@@ -153,8 +157,6 @@ const productCSS = css`
 	align-items: center;
 	margin-top: 20px;
 `
-
-
 
 const buttonCSS = css`
 	display: flex;
