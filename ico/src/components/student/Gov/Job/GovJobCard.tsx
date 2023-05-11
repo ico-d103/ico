@@ -5,6 +5,7 @@ import useCompHandler from "@/hooks/useCompHandler"
 import ModalContent from "@/components/common/Modal/ModalContent"
 import { GOV_JOB } from "../GovIcons"
 import GovJobCardModalContent from "./GovJobCardModalContent"
+import useGetNation from "@/hooks/useGetNation"
 
 type GovJobCardPropsType = {
 	mock: {
@@ -19,6 +20,7 @@ type GovJobCardPropsType = {
 
 function GovJobCard({ mock }: GovJobCardPropsType) {
 	const [openComp, closeComp, compState] = useCompHandler()
+	const [nation] = useGetNation()
 
 	return (
 		<>
@@ -36,7 +38,7 @@ function GovJobCard({ mock }: GovJobCardPropsType) {
 					</div>
 					<div css={conditionWrapperCSS}>
 						<h4>월급</h4>
-						<h3>{mock.money} 미소</h3>
+						<h3>{mock.money} {nation.currency}</h3>
 					</div>
 				</div>
 			</div>

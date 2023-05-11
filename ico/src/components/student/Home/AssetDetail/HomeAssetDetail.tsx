@@ -14,7 +14,7 @@ type HomeAssetDetailProps = {
 
 function HomeAssetDetail({ tradeHistory }: HomeAssetDetailProps) {
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
-	const nation = useGetNation()
+	const [nation] = useGetNation()
 
 	const renderHistory = Object.keys(tradeHistory).map((key, dayIdx) => {
 		const perDayHistory = tradeHistory[key].map((item, itemIdx) => {

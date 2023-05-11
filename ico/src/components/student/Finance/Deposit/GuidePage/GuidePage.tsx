@@ -30,11 +30,11 @@ const APPLY_ICON = (
 	</svg>
 )
 
-function asset() {
+function GuidePage() {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 	const [term, setTerm] = useState<0 | 1>(0)
-	const nation = useGetNation()
+	const [nation] = useGetNation()
 
 	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceDepositRateType>(
 		["student", "homeFinanceGetRate"],
@@ -89,8 +89,8 @@ function asset() {
 					}}
 				/>
 			</div>}
-			<div>
-				<PageHeader title={"예금"} />
+		
+				
 
 				<div css={guideWrapperCSS}>
 					<div css={mSizeFontCSS}>
@@ -148,7 +148,7 @@ function asset() {
 						/>
 					</div>
 				</div>
-			</div>
+	
 		</React.Fragment>
 	)
 }
@@ -214,4 +214,4 @@ const firstImageWrapperCSS = css`
 	height: 40vw;
 `
 
-export default asset
+export default GuidePage

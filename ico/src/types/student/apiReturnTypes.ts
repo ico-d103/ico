@@ -28,14 +28,15 @@ export type getHomeCouponType = {
 }
 
 export type getFinanceInvestType = {
-	stock: string
-	tradingStart: string
-	tradingEnd: string
-	myStock: {
-		price: number
-		amount: number
-	}
-	issue: FinanceInvestIssueType[]
+    stock: string
+    account: number
+    tradingStart: string
+    tradingEnd: string
+    myStock: {
+        price: number
+        amount: number
+    }
+    issue: FinanceInvestIssueType[]
 }
 
 export type FinanceInvestIssueType = {

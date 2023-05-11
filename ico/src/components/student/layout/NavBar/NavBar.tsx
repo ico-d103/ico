@@ -21,7 +21,7 @@ function NavBar({ children }: NavBarProps) {
 		"/student/home/asset": 0,
 		"/student/home/coupon": 0,
 		"/student/home/exchequer": 0,
-		"/student/finance/guide": 0,
+		"/student/finance/deposit": 0,
 		"/student/finance/invest": 0,
 		"/student/class/students": 1,
 		"/student/class/jobsearch": 1,
@@ -121,7 +121,7 @@ const navBarWrapperCSS = ({ selected }: { selected: number }) => {
 		bottom: 0;
 		display: flex;
 		flex-direction: column;
-		z-index: 9999999;
+		z-index: 99999;
 		display: ${selected === -2 && "none"};
 	`
 }

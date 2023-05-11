@@ -12,6 +12,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { deleteGovJobAPI } from "@/api/teacher/gov/deleteGovJobAPI"
 import Modal from "@/components/common/Modal/Modal"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
+import useGetNation from "@/hooks/useGetNation"
 
 type GovRuleClassDetailProps = {
 	job: string
@@ -31,6 +32,7 @@ function GovJobDetail({ job, description, wage, backgroundColor, imgUrl, credit,
 	const [openDeleteModal, closeDeleteModal, deleteModalState] = useCompHandler()
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const wrapperRef = useRef<HTMLDivElement>(null)
+	const [nation] = useGetNation()
 	const dropdownList = [
 		{ name: "edit", content: null, label: "수정", function: () => {openEditHandler()} },
 		{ name: "delete", content: null, label: "삭제", function: () => {openDeleteModal()} },
@@ -124,7 +126,7 @@ function GovJobDetail({ job, description, wage, backgroundColor, imgUrl, credit,
 								{description}
 							</div>
 							<div css={secondaryInfoCSS}>
-								{credit}등급 이상 / 일급 {wage}미소
+								{credit}등급 이상 / 일급 {wage}{nation.currency}
 							</div>
 						</div>
 					</div>
