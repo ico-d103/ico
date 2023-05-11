@@ -101,3 +101,10 @@ export type getStudentProductsType = {
 export type getNationTreasuryType = {
 	treasury: number
 }
+
+export type getTreasuryHistoryType = {
+	date: string
+	title: string
+	source: string
+	amount: string
+}
