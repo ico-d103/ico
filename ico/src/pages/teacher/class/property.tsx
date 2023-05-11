@@ -9,15 +9,22 @@ import ModalContent from "@/components/common/Modal/ModalContent"
 import { CLASS_BIG_PROPERTY } from "@/components/teacher/Class/ClassIcons"
 import { useQuery } from "@tanstack/react-query"
 import { getNationTreasuryAPI } from "@/api/teacher/class/getNationTreasuryAPI"
-import { getNationTreasuryType } from "@/types/teacher/apiReturnTypes"
+import { getNationTreasuryType, getTreasuryHistoryType } from "@/types/teacher/apiReturnTypes"
 import KebabMenu from "@/components/teacher/common/KebabMenu/KebabMenu"
 import { isDepositMenuOpen } from "@/store/store"
-import { useAtom } from "jotai"
+import { useAtom, useAtomValue } from "jotai"
+import { getTreasuryHistoryAPI } from "@/api/teacher/class/getTreasuryHistoryAPI"
+import { selectedPage } from "@/store/store"
 
 function property() {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [isDepositMenuOpenAtom, setIsDepositMenuOpenAtom] = useAtom(isDepositMenuOpen)
-	const { data } = useQuery<getNationTreasuryType>(["property"], getNationTreasuryAPI)
+	const selectedPageAtom = useAtomValue(selectedPage)
+
+	const treasury = useQuery<getNationTreasuryType>(["property"], getNationTreasuryAPI)
+	const treasuryList = useQuery<getTreasuryHistoryType>(["propertyList"], () =>
+		getTreasuryHistoryAPI({ page: selectedPageAtom }),
+	)
 
 	const openModal = (flag: boolean) => {
 		// flag: true면 입금, false면 출금
@@ -53,7 +60,7 @@ function property() {
 				<div>
 					현재{" "}
 					<b>
-						{data?.treasury} {localStorage.getItem("currency")}
+						{treasury.data?.treasury} {localStorage.getItem("currency")}
 					</b>
 					가 국고에 있어요.
 				</div>
@@ -62,9 +69,9 @@ function property() {
 				<div>
 					<h3 css={contentTitleCSS}>국고 입출금 내역</h3>
 				</div>
-				<PropertyList />
+				<PropertyList propertyList={treasuryList.data?.page ? treasuryList.data.page : []} />
 			</div>
-			<Pagination />
+			<Pagination size={treasuryList.data?.size ? treasuryList.data.size : 1} />
 			<Modal
 				compState={compState}
 				closeComp={closeComp}

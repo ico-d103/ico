@@ -1,8 +1,12 @@
-import React from "react"
 import { css } from "@emotion/react"
 import PropertyListItem from "./ClassPropertyListItem"
+import { getTreasuryHistoryPageType } from "@/types/teacher/apiReturnTypes"
 
-function PropertyList() {
+type PropertyListPropsType = {
+	propertyList: getTreasuryHistoryPageType[]
+}
+
+function PropertyList({ propertyList }: PropertyListPropsType) {
 	let prevDate: string | null = null
 	const mockList = [
 		{ id: 0, date: "2023.12.31", money: "+ 3500 미소", content: "정기 세금", name: "4번 사공지은" },
@@ -26,11 +30,11 @@ function PropertyList() {
 	return (
 		<table css={wrapperCSS}>
 			<tbody>
-				{mockList.map((mock) => {
-					const showDate = mock.date !== prevDate
-					prevDate = mock.date
+				{propertyList.map((property, idx) => {
+					const showDate = property.date !== prevDate
+					prevDate = property.date
 
-					return <PropertyListItem key={mock.id} mock={mock} showDate={showDate} />
+					return <PropertyListItem key={idx} property={property} showDate={showDate} />
 				})}
 			</tbody>
 		</table>

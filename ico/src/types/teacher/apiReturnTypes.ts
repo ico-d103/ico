@@ -102,9 +102,14 @@ export type getNationTreasuryType = {
 	treasury: number
 }
 
-export type getTreasuryHistoryType = {
+export type getTreasuryHistoryPageType = {
 	date: string
 	title: string
 	source: string
 	amount: string
+}
+
+export type getTreasuryHistoryType = {
+	size: number
+	page: getTreasuryHistoryPageType[]
 }

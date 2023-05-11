@@ -1,32 +1,37 @@
 import { css } from "@emotion/react"
 
 type PropertyListItemPropsType = {
-	mock: {
-		id: number
+	property: {
 		date: string
-		money: string
-		content: string
-		name: string
+		title: string
+		source: string
+		amount: string
 	}
 	showDate: boolean
 }
 
-function PropertyListItem({ mock, showDate }: PropertyListItemPropsType) {
+function PropertyListItem({ property, showDate }: PropertyListItemPropsType) {
+	const currency = localStorage.getItem("currency")
+
 	return (
 		<tr css={wrapperCSS}>
-			<td css={dateCSS}>{showDate ? <h4>{mock.date}</h4> : <h4 css={hiddenDateCSS}>{mock.date}</h4>}</td>
+			<td css={dateCSS}>{showDate ? <h4>{property.date}</h4> : <h4 css={hiddenDateCSS}>{property.date}</h4>}</td>
 			<td css={moneyCSS}>
-				{mock.money.includes("+") ? (
-					<h3 css={plusMoneyCSS}>{mock.money}</h3>
+				{property.amount.includes("+") ? (
+					<h3 css={plusMoneyCSS}>
+						{property.amount} {currency}
+					</h3>
 				) : (
-					<h3 css={minusMoneyCSS}>{mock.money}</h3>
+					<h3 css={minusMoneyCSS}>
+						{property.amount} {currency}
+					</h3>
 				)}
 			</td>
-			<td css={contentCSS}>
-				<h3>{mock.content}</h3>
+			<td css={titleCSS}>
+				<h3>{property.source}</h3>
 			</td>
-			<td css={nameCSS}>
-				<h3>{mock.name}</h3>
+			<td css={sourceCSS}>
+				<h3>{property.title}</h3>
 			</td>
 		</tr>
 	)
@@ -71,12 +76,12 @@ const moneyCSS = css`
 	}
 `
 
-const contentCSS = css`
+const titleCSS = css`
 	flex: 5;
 	min-width: 150px;
 `
 
-const nameCSS = css`
+const sourceCSS = css`
 	width: 150px;
 	text-align: right;
 `

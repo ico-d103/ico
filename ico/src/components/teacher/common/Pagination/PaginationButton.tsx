@@ -1,12 +1,16 @@
-import React from "react"
 import { css } from "@emotion/react"
 
 type PaginationButtonPropsType = {
 	pgNumber: string
+	onClick: () => void
 }
 
-function PaginationButton({ pgNumber }: PaginationButtonPropsType) {
-	return <button css={buttonCSS}>{pgNumber}</button>
+function PaginationButton({ pgNumber, onClick }: PaginationButtonPropsType) {
+	return (
+		<button css={buttonCSS} onClick={onClick}>
+			{pgNumber}
+		</button>
+	)
 }
 
 const buttonCSS = css`

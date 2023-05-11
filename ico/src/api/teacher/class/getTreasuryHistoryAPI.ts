@@ -7,7 +7,7 @@ type paramsType = {
 
 type responseType = {
 	status: number
-	data: getTreasuryHistoryType[]
+	data: getTreasuryHistoryType
 }
 
 export const getTreasuryHistoryAPI = async ({ page }: paramsType) => {
