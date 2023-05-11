@@ -42,7 +42,7 @@ public class NationController {
      * @param request
      * @return Nation
      */
-    @GetMapping("/teacher")
+    @GetMapping
     public ResponseEntity<Nation> getNation(HttpServletRequest request) {
         return ResponseEntity.ok(nationService.getNation(request));
     }

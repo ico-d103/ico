@@ -9,11 +9,13 @@ import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Stock;
+import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.StockRepository;
+import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class StockServiceImpl implements StockService{
+    private final StudentRepository studentRepository;
 
     private final NationRepository nationRepository;
     private final StockRepository stockRepository;
@@ -76,6 +79,9 @@ public class StockServiceImpl implements StockService{
         // 국가 정보, 투자 종목 여부 유효성 검사
         Nation nation = validCheckNationStock(nationId);
 
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
         Optional<Invest> invest = investRepository.findByStudentId(studentId);
         log.info("매수 여부 확인");
 
@@ -95,6 +101,7 @@ public class StockServiceImpl implements StockService{
 
         // 반환값
         StockStudentResDto res = new StockStudentResDto();
+        res.setAccount(student.getAccount());
         res.setStock(nation.getStock());
         res.setTradingStart(nation.getTrading_start());
         res.setTradingEnd(nation.getTrading_end());
