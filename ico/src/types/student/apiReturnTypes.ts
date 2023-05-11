@@ -29,6 +29,7 @@ export type getHomeCouponType = {
 
 export type getFinanceInvestType = {
     stock: string
+    account: number
     tradingStart: string
     tradingEnd: string
     myStock: {

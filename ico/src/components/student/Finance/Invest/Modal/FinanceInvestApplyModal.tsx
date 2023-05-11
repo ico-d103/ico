@@ -2,8 +2,7 @@ import React, { useState } from "react"
 import Input from "@/components/common/Input/Input"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
-import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
-import { postFinanceDepositAPI } from "@/api/student/finance/postFinanceDepositAPI"
+import { postFinanceInvestAPI } from "@/api/student/finance/postFinanceInvestAPI"
 import useNotification from "@/hooks/useNotification"
 import UseAnimations from "react-useanimations"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
@@ -33,46 +32,34 @@ const CHECK_ICON = (
 	</svg>
 )
 
-type FinanceDepositApplyModalProps = {
-	term: 0 | 1
-	data: getFinanceDepositRateType
+type FinanceInvestApplyModalProps = {
+	price: number
+	account: number
 	unit: string
 	closeComp: Function
 	refetch: Function
 }
 
-function FinanceDepositApplyModal({ term, data, unit, closeComp, refetch }: FinanceDepositApplyModalProps) {
+function FinanceInvestApplyModal({ price, account, unit, closeComp, refetch }: FinanceInvestApplyModalProps) {
 	const noti = useNotification()
 	const [value, setValue] = useState<number>(0)
 
 	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (Number(e.target.value) <= data.account) {
+		if (Number(e.target.value) <= account) {
 			setValue(() => Number(e.target.value))
 		}
 	}
 
 	const submitHandler = () => {
-		postFinanceDepositAPI({ body: { longPeriod: term === 1 ? true : false, amount: value } })
-			.then((res) => {
-				refetch()
-				noti({
-					content: <NotiTemplate type={"ok"} content="예금 신청에 성공했어요!" />,
-					width: "300px",
-					height: "120px",
-					duration: 3000,
-				})
-				closeComp()
-			})
-			.catch((err) => {
-				console.log(err)
-
-				noti({
-					content: <NotiTemplate type={"alert"} content="예금 신청에 실패했어요!" />,
-					width: "300px",
-					height: "120px",
-					duration: 3000,
-				})
-			})
+		postFinanceInvestAPI({body: {price, amount: value}}).then((res) => {
+			refetch()
+			noti({content: <NotiTemplate type={'ok'} content="투자 매수에 성공했어요!"/>, width: '300px', height: '120px', duration: 3000})
+			closeComp()
+		})
+		.catch((err) => {
+			console.log(err)
+			noti({content: <NotiTemplate type={'alert'} content="투자 매수에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
+		})
 	}
 	return (
 		<div css={wrapperCSS}>
@@ -84,7 +71,7 @@ function FinanceDepositApplyModal({ term, data, unit, closeComp, refetch }: Fina
 				textAlign={"right"}
 				rightContent={
 					<div css={balanceLabelCSS}>
-						/ {data.account.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {unit}
+						/ {account.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {unit}
 					</div>
 				}
 				customCss={inputCSS}
@@ -92,19 +79,17 @@ function FinanceDepositApplyModal({ term, data, unit, closeComp, refetch }: Fina
 			<div css={mentWrapperCSS}>
 				<div css={iconWrapperCSS}>{ALERT_ICON}</div>
 
-				<span css={mentCSS}>중도에 해지하면, 원금만 돌려받을 수 있어요!</span>
+				<span css={mentCSS}>이번에 매수하면 반드시 매도해야만 해요!</span>
 			</div>
 			<div css={mentWrapperCSS}>
-				<div css={iconWrapperCSS}>{CHECK_ICON}</div>
+				<div css={iconWrapperCSS}>{ALERT_ICON}</div>
 
-				<span css={mentCSS}>
-					만기가 되면 원금의 {term === 0 ? data.shortPeriod : data.longPeriod}퍼센트 만큼 추가로 더 돌려받을 수 있어요!
-				</span>
+				<span css={mentCSS}>하루에 한번만 매도/매수할 수 있어요!</span>
 			</div>
 
 			<div css={buttonWrapperCSS}>
 				<Button
-					text={"정기 예금 신청"}
+					text={"매수"}
 					fontSize={"var(--student-h3)"}
 					width={"47%"}
 					theme={"positive"}
@@ -173,4 +158,4 @@ const balanceLabelCSS = css`
 	white-space: nowrap;
 `
 
-export default FinanceDepositApplyModal
+export default FinanceInvestApplyModal

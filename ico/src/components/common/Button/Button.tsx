@@ -9,6 +9,7 @@ type ButtonPropsType = {
 	theme: string // 버튼 테마
 	margin?: string
 	onClick: () => void // 버튼의 onClick 메서드
+	disabled?: boolean
 }
 
 type themeType = {
@@ -18,7 +19,7 @@ type themeType = {
 	backgroundColor: string // 테마의 background-color
 }
 
-function Button({ text, fontSize, width, height, theme, margin, onClick }: ButtonPropsType) {
+function Button({ text, fontSize, width, height, theme, margin, onClick, disabled }: ButtonPropsType) {
 	// 원하는 버튼 테마 추가
 	const themes: { [prop: string]: themeType } = {
 		normal: {
@@ -88,7 +89,7 @@ function Button({ text, fontSize, width, height, theme, margin, onClick }: Butto
 	}
 
 	return (
-		<button css={buttonCSS({ fontSize, width, height, themes, theme, margin })} onClick={onClick}>
+		<button disabled={disabled} css={buttonCSS({ fontSize, width, height, themes, theme, margin })} onClick={onClick}>
 			{text}
 		</button>
 	)
@@ -123,8 +124,13 @@ const buttonCSS = ({
 		align-items: center;
 		transition: all 0.2s;
 		
-		:hover {
+		:hover:enabled {
 			filter: brightness(120%);
+		}
+
+		:disabled {
+			filter: brightness(60%);
+			cursor: default;
 		}
 	`
 }

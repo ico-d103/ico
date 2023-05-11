@@ -9,6 +9,8 @@ import { useQueryClient } from "@tanstack/react-query"
 import { deleteGovExchequerAPI } from "@/api/teacher/gov/deleteGovExchequerAPI"
 import Modal from "@/components/common/Modal/Modal"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
+import useGetNation from "@/hooks/useGetNation"
+import { appendEulReul } from "@/util/isEndWithConsonant"
 
 type GovRuleClassDetailProps = {
 	title: string
@@ -24,6 +26,7 @@ function GovExchequerDetail({ title, content, taxAspect, taxValue, showIdx, actu
 	const [openDeleteModal, closeDeleteModal, deleteModalState] = useCompHandler()
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const wrapperRef = useRef<HTMLDivElement>(null)
+	const [nation] = useGetNation()
 	const dropdownList = [
 		{
 			name: "edit",
@@ -77,7 +80,7 @@ function GovExchequerDetail({ title, content, taxAspect, taxValue, showIdx, actu
 					strokeLinejoin="round"
 				/>
 			</svg>
-			학생 월급에서 <span css={valueTextCSS}>&nbsp;{taxValue}%</span>에 해당하는 미소를 세금으로 부과합니다.
+			학생 월급에서 <span css={valueTextCSS}>&nbsp;{taxValue}%</span>에 해당하는 {appendEulReul(nation.currency)} 세금으로 부과합니다.
 		</div>
 	)
 
@@ -92,7 +95,7 @@ function GovExchequerDetail({ title, content, taxAspect, taxValue, showIdx, actu
 					strokeLinejoin="round"
 				/>
 			</svg>
-			학생 월급에서 <span css={valueTextCSS}>&nbsp;{taxValue}미소</span>를 세금으로 부과합니다.
+			학생 월급에서 <span css={valueTextCSS}>&nbsp;{taxValue} {nation.currency}</span>{appendEulReul(nation.currency)} 세금으로 부과합니다.
 		</div>
 	)
 

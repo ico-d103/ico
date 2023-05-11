@@ -15,7 +15,7 @@ function asset() {
 		getHomeExchequerHistoryAPI,
 		// { staleTime: 200000 },
 	)
-	const nation = useGetNation()
+	const [nation] = useGetNation()
 
 	return (
 		<div>

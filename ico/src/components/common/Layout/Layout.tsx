@@ -5,9 +5,12 @@ import { css } from "@emotion/react"
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react"
 import TransitionWrapper from "@/components/student/layout/TransitionWrapper/TransitionWrapper"
 import NavBar from "@/components/student/layout/NavBar/NavBar"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getNationAPI } from "@/api/common/getNationAPI"
 import { getNationType } from "@/types/common/apiReturnTypes"
+import { nationData } from "@/store/store"
+import { useAtom } from "jotai"
+
 
 
 type LayoutProps = {
@@ -16,25 +19,22 @@ type LayoutProps = {
 
 function Layout({ children }: LayoutProps) {
 	const router = useRouter()
-
-	const { data, refetch } = useQuery<getNationType>(["common", "nation"], getNationAPI, {
-		enabled: false
-	})
+	const [nationDataAtom, setNationDataAtom] = useAtom(nationData)
+	 
 
 	useEffect(() => {
-		refetch()
+		getNationAPI()
+		.then((res) => {
+			setNationDataAtom(() => res)
+		})
 	}, [])
 
 	useEffect(() => {
-		console.log(data)
-	}, [router.pathname])
-
-	// useEffect(() => {
-	// 	if (data) {
-	// 		localStorage.setData("currency", data.currency)
-	// 		localStorage.setData("nation", data.title)
-	// 	}
-	// }, [data])
+		if (nationDataAtom) {
+			window.localStorage.setItem("currency", nationDataAtom.currency)
+			window.localStorage.setItem("nation", nationDataAtom.title)
+		}
+	}, [nationDataAtom])
 
 	const separator: string = useRouter().pathname.split("/")[1]
 

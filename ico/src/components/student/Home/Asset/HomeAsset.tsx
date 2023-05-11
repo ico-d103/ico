@@ -39,7 +39,7 @@ const STOCK_ICON = (
 )
 
 function HomeAsset() {
-	const nation = useGetNation()
+	const [nation] = useGetNation()
 
 	const list = [
 		{ icon: WALLET_ICON, title: "일반 계좌", money: 25600, moneyUnit: ` ${nation?.currency}`, detailUrl: "/student/home/asset" },

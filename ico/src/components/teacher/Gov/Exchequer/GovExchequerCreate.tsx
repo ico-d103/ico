@@ -6,6 +6,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { postGovExchequerAPI } from "@/api/teacher/gov/postGovExchequerAPI";
 import { putGovExchequerAPI } from "@/api/teacher/gov/putGovExchequerAPI";
+import useGetNation from "@/hooks/useGetNation";
 
 function GovExchequerCreate({
 	subInputChangeHandler,
@@ -24,7 +25,7 @@ function GovExchequerCreate({
 
 	
 
-
+	const [nation] = useGetNation()
 	const queryClient = useQueryClient();
 	const createMutation = useMutation((a: number) => postGovExchequerAPI({body: {title: inputState.title, detail: inputState.content, type: inputState.sub.taxation, amount: inputState.sub.value}}));
 	const updateMutation = useMutation((idx: number) => putGovExchequerAPI({idx, body: {title: inputState.title, detail: inputState.content, type: inputState.sub.taxation, amount: inputState.sub.value}}));
@@ -145,7 +146,7 @@ function GovExchequerCreate({
 							max={20}
 							css={taxInputCSS}
 						/>
-						{inputState?.sub.taxation === 0 ? "%" : "미소"}
+						{inputState?.sub.taxation === 0 ? "%" : `${nation.currency}`}
 					</div>
 					
 				</div>
