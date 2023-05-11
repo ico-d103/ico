@@ -4,30 +4,32 @@ import { CLASS_SEARCH } from "@/components/student/Class/ClassIcons"
 import ClassStudentsListItem from "@/components/student/Class/Students/ClassStudentsListItem"
 import { ClassTabMenus } from "@/components/student/Class/ClassTabMenus"
 import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
+import { getStudentListAPI } from "@/api/student/class/getStudentListAPI"
+import { useEffect, useState } from "react"
+import { getStudentListType } from "@/types/student/apiReturnTypes"
 
 function students() {
-	const mockList = [
-		{ id: 0, number: 1, name: "강교철", job: "한국 전력", grade: 3 },
-		{ id: 1, number: 2, name: "김동주", job: "한국 전력", grade: 2 },
-		{ id: 2, number: 3, name: "변윤경", job: "한국 전력", grade: 6 },
-		{ id: 3, number: 4, name: "사공지은", job: "한국 전력", grade: 3 },
-		{ id: 4, number: 5, name: "서재건", job: "한국 전력", grade: 1 },
-		{ id: 5, number: 6, name: "오민준", job: "한국 전력", grade: 7 },
-	]
+	const [studentList, setStudentList] = useState<getStudentListType[]>([])
+
+	useEffect(() => {
+		getStudentListAPI().then((res) => {
+			setStudentList(res)
+		})
+	}, [])
 
 	return (
 		<>
 			<PageHeader title={"반 친구들"} addComp={<TabMenu menus={ClassTabMenus()} selected={0} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
-					<div css={searchWrapperCSS}>
+					{/* <div css={searchWrapperCSS}>
 						<div>{CLASS_SEARCH}</div>
 						<input placeholder="친구 이름을 검색해봐요" spellCheck="false" />
-					</div>
+					</div> */}
 					<div css={contentWrapperCSS}>
-						<span>전체 {mockList.length}</span>
-						{mockList.map((mock) => (
-							<ClassStudentsListItem key={mock.id} mock={mock} />
+						<span>전체 {studentList.length} 명</span>
+						{studentList.map((student) => (
+							<ClassStudentsListItem key={student.number} student={student} />
 						))}
 					</div>
 				</div>
