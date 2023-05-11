@@ -1,19 +1,23 @@
-import React from "react"
 import { css } from "@emotion/react"
 import { CLASS_COUPON } from "@/components/teacher/Class/ClassIcons"
 import CouponList from "@/components/teacher/Class/Coupon/ClassCouponList"
+import { useQuery } from "@tanstack/react-query"
+import { getCouponListAPI } from "@/api/teacher/class/getCouponListAPI"
+import { getCouponListType } from "@/types/teacher/apiReturnTypes"
 
 function coupons() {
+	const { data } = useQuery<getCouponListType[]>(["couponList"], getCouponListAPI)
+
 	return (
 		<div css={wrapperCSS}>
 			<h1>쿠폰</h1>
 			<div css={titleCSS}>
 				<div>{CLASS_COUPON}</div>
 				<div>
-					<b>6개</b>의 쿠폰 사용 요청 목록이 있습니다.
+					<b>{data?.length}개</b>의 쿠폰 사용 요청 목록이 있습니다.
 				</div>
 			</div>
-			<CouponList />
+			<CouponList list={data ? data : []} />
 		</div>
 	)
 }

@@ -113,3 +113,10 @@ export type getTreasuryHistoryType = {
 	size: number
 	page: getTreasuryHistoryPageType[]
 }
+
+export type getCouponListType = {
+	id: string
+	number: number
+	name: string
+	title: string
+}

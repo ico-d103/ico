@@ -1,37 +1,53 @@
-import React from "react"
 import { css } from "@emotion/react"
 import { CLASS_ACCEPT, CLASS_DENY } from "../ClassIcons"
+import { getCouponListType } from "@/types/teacher/apiReturnTypes"
+import { postCouponAcceptAPI } from "@/api/teacher/class/postCouponAcceptAPI"
+import { deleteCouponDenyAPI } from "@/api/teacher/class/deleteCouponDenyAPI"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 type CouponListItemPropsType = {
-	mock: {
-		id: number
-		title: string
-		money: number
-		student: string
-		date: string
-	}
+	coupon: getCouponListType
 }
 
-function CouponListItem({ mock }: CouponListItemPropsType) {
+function CouponListItem({ coupon }: CouponListItemPropsType) {
+	const queryClient = useQueryClient()
+	const postCouponAcceptMutation = useMutation((id: string) => postCouponAcceptAPI({ id }))
+	const deleteCouponDenyMutation = useMutation((id: string) => deleteCouponDenyAPI({ id }))
+
+	const acceptCouponHandler = () => {
+		postCouponAcceptMutation.mutate(coupon.id, {
+			onSuccess: () => {
+				return queryClient.invalidateQueries(["couponList"])
+			},
+		})
+	}
+
+	const denyCouponHandler = () => {
+		deleteCouponDenyMutation.mutate(coupon.id, {
+			onSuccess: () => {
+				return queryClient.invalidateQueries(["couponList"])
+			},
+		})
+	}
+
 	return (
 		<div css={wrapperCSS}>
 			<div css={leftWrapperCSS}>
 				<div css={leftCSS}>
-					<h3>{mock.title}</h3>
-					{/* <h4>{mock.money} 미소</h4> */}
+					<h3>{coupon.title}</h3>
 				</div>
 				<div css={rightCSS}>
-					<h4>{mock.student}</h4>
+					<h4>{coupon.name}</h4>
 					<div>
 						<div></div>
-						<h5>{mock.date}</h5>
+						{/* <h5>{coupon.date}</h5> */}
 					</div>
 				</div>
 			</div>
 			<div css={rightWrapperCSS}>
 				<div></div>
-				<button>{CLASS_ACCEPT}</button>
-				<button>{CLASS_DENY}</button>
+				<button onClick={acceptCouponHandler}>{CLASS_ACCEPT}</button>
+				<button onClick={denyCouponHandler}>{CLASS_DENY}</button>
 			</div>
 		</div>
 	)
@@ -69,10 +85,6 @@ const leftCSS = css`
 	> h3 {
 		font-size: var(--teacher-h3);
 		font-weight: bold;
-	}
-
-	> h4 {
-		font-size: var(--teacher-h4);
 	}
 `
 
