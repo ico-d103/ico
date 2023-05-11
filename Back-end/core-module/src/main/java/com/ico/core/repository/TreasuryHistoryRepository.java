@@ -31,4 +31,12 @@ public interface TreasuryHistoryRepository extends MongoRepository<TreasuryHisto
      */
     Page<TreasuryHistory> findAllByNationId(Long nationId, Pageable pageable);
 
+    /**
+     * 국고 사용 내용 갯수 반환
+     *
+     * @param nationId
+     * @return
+     */
+    Long countByNationId(Long nationId);
+
 }

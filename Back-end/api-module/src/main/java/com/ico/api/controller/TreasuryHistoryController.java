@@ -42,9 +42,9 @@ public class TreasuryHistoryController {
      * @return
      */
     @GetMapping("/teacher")
-    public ResponseEntity<List<TreasuryHistoryTeacherResDto>> findAllTreasuryHistory(@RequestParam(value = "page", defaultValue = "1") int page,
-                                                                                     @RequestParam(value = "size", defaultValue = "10") int size,
-                                                                                     HttpServletRequest request) {
+    public ResponseEntity<TreasuryHistoryTeacherResDto> findAllTreasuryHistory(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                                               @RequestParam(value = "size", defaultValue = "10") int size,
+                                                                               HttpServletRequest request) {
         return ResponseEntity.ok(treasuryHistoryService.findAllTreasuryHistory(page - 1, size, request));
     }
 
