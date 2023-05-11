@@ -54,6 +54,17 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
     public TreasuryHistoryTeacherResDto findAllTreasuryHistory(int page, int size, HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
+        // 페이지 번호 갯수
+        // page 변수는 인덱스 값으로 적용
+        int totalPageNumber = (int) (((treasuryHistoryRepository.countByNationId(nationId) - 1) / 10) + 1);
+        if (page < 0) {
+            log.info("[findAllTreasuryHistory] 1 미만의 페이지 번호를 넘겨받은 경우");
+            page = 0;
+        } else if (page >= totalPageNumber) {
+            log.info("[findAllTreasuryHistory] 페이지 번호의 최댓값보다 큰 번호를 넘겨받은 경우");
+            page = totalPageNumber - 1;
+        }
+
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("_id").descending());
         Page<TreasuryHistory> treasuryHistoryList = treasuryHistoryRepository.findAllByNationId(nationId, pageRequest);
         List<TreasuryHistoryTeacherColDto> pageList = new ArrayList<>();
@@ -61,8 +72,7 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
             pageList.add(new TreasuryHistoryTeacherColDto()
                     .of(treasuryHistory, treasuryHistory.getDate().format(formatter), numberFormat.format(treasuryHistory.getAmount())));
         }
-        // 페이지 번호 갯수
-        long totalPageNumber = ((treasuryHistoryRepository.countByNationId(nationId) - 1) / 10) + 1;
+
         return TreasuryHistoryTeacherResDto.builder()
                 .size(totalPageNumber)
                 .page(pageList)
