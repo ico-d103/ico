@@ -83,6 +83,8 @@ const validMessageReducer = (
 }
 
 function signup() {
+	const formData = new FormData()
+
 	const [validState, dispatchValid] = useReducer(validReducer, {
 		name: false,
 		id: false,
@@ -123,6 +125,9 @@ function signup() {
 	useEffect(() => {
 		checkValidPW2Handler()
 	}, [inputState.password2])
+	useEffect(() => {
+		if (file) checkValidFileHandler()
+	}, [file])
 	useEffect(() => {
 		checkValidPhoneHandler()
 	}, [inputState.phone])
@@ -282,41 +287,7 @@ function signup() {
 		}
 
 		dispatchValidMessage({ type: "VALID_FILE", value: "" })
-		dispatchValid({ type: "VALID_PHONE", value: true })
-	}
-
-	const ceritfyHandler = () => {
-		// 본인 인증 SMS
-	}
-
-	const signUpHandler = () => {
-		checkValidNameHandler(true)
-		checkValidIDHandler(true)
-		checkValidPWHandler(true)
-		checkValidPW2Handler(true)
-		checkValidFileHandler(true)
-		checkValidPhoneHandler(true, true)
-
-		// 유효성 검사를 모두 완료하면
-		// 현재는 phone, file 임시로 제외
-		if (validState.name && validState.id && validState.password && validState.password2) {
-			// 회원가입 요청
-			postTeacherAPI({
-				body: {
-					name: inputState.name,
-					identity: inputState.id,
-					password: inputState.password,
-					checkedPassword: inputState.password,
-				},
-			})
-				.then(() => {
-					router.push("/teacher/login")
-				})
-				.catch((error) => {
-					// 회원가입 관련해서 어떤 error 코드가 존재하는지 몰라서 일단
-					console.log(error)
-				})
-		}
+		dispatchValid({ type: "VALID_FILE", value: true })
 	}
 
 	const inputFileOnChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -333,6 +304,49 @@ function signup() {
 			{fileUrl ? fileUrl : "교사 인증서를 첨부해 주세요."}
 		</div>
 	)
+
+	const ceritfyHandler = () => {
+		// 본인 인증 SMS
+	}
+
+	const signUpHandler = () => {
+		checkValidNameHandler(true)
+		checkValidIDHandler(true)
+		checkValidPWHandler(true)
+		checkValidPW2Handler(true)
+		checkValidFileHandler(true)
+		checkValidPhoneHandler(true, true)
+
+		file && formData.append("file", file)
+
+		formData.append(
+			"dto",
+			new Blob(
+				[
+					JSON.stringify({
+						name: inputState.name,
+						identity: inputState.id,
+						password: inputState.password,
+						checkedPassword: inputState.password,
+					}),
+				],
+				{ type: "application/json" },
+			),
+		)
+
+		// 유효성 검사를 모두 완료하면 (현재는 phone 임시로 제외)
+		if (validState.name && validState.id && validState.password && validState.password2 && validState.file) {
+			// 회원가입 요청
+			postTeacherAPI({ body: formData })
+				.then(() => {
+					router.push("/teacher/login")
+				})
+				.catch((error) => {
+					// 회원가입 관련해서 어떤 error 코드가 존재하는지 몰라서 일단
+					console.log(error)
+				})
+		}
+	}
 
 	const messageGenerator = ({ message, isValid }: { message: string; isValid: boolean }) => {
 		return <div css={messageCSS({ isValid })}>{message}</div>
@@ -474,24 +488,18 @@ function signup() {
 	)
 }
 
-// 임시 값
 const wrapperCSS = css`
 	display: flex;
 	flex-direction: column;
-	/* justify-content: center; */
 	align-items: center;
 	width: 100%;
-	/* height: 100%; */
 	height: auto;
 `
 
 const innerWrapperCSS = css`
 	width: 40vw;
-	/* height: 40vh; */
-	/* background-color: red; */
 	display: flex;
 	flex-direction: column;
-	/* align-items: center; */
 `
 
 const inputTitleCSS = css`
@@ -512,7 +520,6 @@ const inputCSS = css`
 const inputFileCSS = ({ fileUrl }: { fileUrl: string }) => {
 	return css`
 		display: flex;
-		/* width: 300px; */
 		align-items: center;
 		gap: 12px;
 		color: ${fileUrl ? "rgba(0, 20, 50, 1)" : "rgba(0, 20, 50, 0.5)"};
