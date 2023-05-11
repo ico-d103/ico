@@ -295,8 +295,6 @@ function signup() {
 			const file = e.target.files[0]
 			setFile(() => file)
 			setFileUrl(() => file.name)
-
-			formData.append("file", file)
 		}
 	}
 
@@ -319,6 +317,8 @@ function signup() {
 		checkValidFileHandler(true)
 		checkValidPhoneHandler(true, true)
 
+		file && formData.append("file", file)
+
 		formData.append(
 			"dto",
 			new Blob(
@@ -333,14 +333,6 @@ function signup() {
 				{ type: "application/json" },
 			),
 		)
-
-		for (let key of formData.keys()) {
-			console.log(key, ":", formData.get(key))
-		}
-
-		for (let value of formData.values()) {
-			console.log(value)
-		}
 
 		// 유효성 검사를 모두 완료하면 (현재는 phone 임시로 제외)
 		if (validState.name && validState.id && validState.password && validState.password2 && validState.file) {
