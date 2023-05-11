@@ -15,6 +15,8 @@ import ModalAlert from "@/components/common/Modal/ModalAlert"
 import { isNavigating } from "@/store/store"
 import { useAtom } from "jotai"
 
+
+
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
 		<path
@@ -31,6 +33,7 @@ function asset() {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 	const [term, setTerm] = useState<0 | 1>(0)
+
 
 	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceDepositRateType>(
 		["student", "homeFinanceGetRate"],
