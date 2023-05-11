@@ -2,6 +2,7 @@ package com.ico.api.service.treasury;
 
 import com.ico.api.dto.treasuryHistory.TreasuryHistoryColDto;
 import com.ico.api.dto.treasuryHistory.TreasuryHistoryDto;
+import com.ico.api.dto.treasuryHistory.TreasuryHistoryTeacherColDto;
 import com.ico.api.dto.treasuryHistory.TreasuryHistoryTeacherResDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Nation;
@@ -50,17 +51,22 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
     private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
 
     @Override
-    public List<TreasuryHistoryTeacherResDto> findAllTreasuryHistory(int page, int size, HttpServletRequest request) {
+    public TreasuryHistoryTeacherResDto findAllTreasuryHistory(int page, int size, HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("_id").descending());
         Page<TreasuryHistory> treasuryHistoryList = treasuryHistoryRepository.findAllByNationId(nationId, pageRequest);
-        List<TreasuryHistoryTeacherResDto> dtoList = new ArrayList<>();
+        List<TreasuryHistoryTeacherColDto> pageList = new ArrayList<>();
         for (TreasuryHistory treasuryHistory : treasuryHistoryList) {
-            dtoList.add(new TreasuryHistoryTeacherResDto()
+            pageList.add(new TreasuryHistoryTeacherColDto()
                     .of(treasuryHistory, treasuryHistory.getDate().format(formatter), numberFormat.format(treasuryHistory.getAmount())));
         }
-        return dtoList;
+        // 페이지 번호 갯수
+        long totalPageNumber = ((treasuryHistoryRepository.countByNationId(nationId) - 1) / 10) + 1;
+        return TreasuryHistoryTeacherResDto.builder()
+                .size(totalPageNumber)
+                .page(pageList)
+                .build();
     }
 
     @Transactional
