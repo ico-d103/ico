@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 
 import { css } from "@emotion/react"
@@ -38,6 +38,10 @@ function asset() {
 		// { staleTime: 200000 },
 	)
 
+	useEffect(() => {
+		console.log(data)
+	}, [data])
+
 	return (
 		<React.Fragment>
 			{data && (
@@ -48,7 +52,7 @@ function asset() {
 							title={"정기 예금 신청"}
 							titleSize={"var(--student-h1)"}
 							icon={APPLY_ICON}
-							content={<FinanceDepositApplyModal unit={"미소"} data={data} term={term}/>}
+							content={<FinanceDepositApplyModal refetch={refetch} closeComp={closeComp} unit={"단위 설정!"} data={data} term={term}/>}
 							
 						/>
 					}
