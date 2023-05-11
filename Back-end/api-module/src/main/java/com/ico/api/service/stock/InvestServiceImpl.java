@@ -98,10 +98,11 @@ public class InvestServiceImpl implements InvestService{
      */
     @Transactional
     @Override
-    public void sellStock() {
-        //todo : request
-        long studentId = 1;
-        long nationId = 99;
+    public void sellStock(HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
 
         // 학생 유효검사
         Student student = studentRepository.findById(studentId)

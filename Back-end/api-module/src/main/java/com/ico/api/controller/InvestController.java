@@ -43,8 +43,8 @@ public class InvestController {
      * @return Httpstatus
      */
     @DeleteMapping("/student")
-    public ResponseEntity<HttpStatus> sellStock() {
-        investService.sellStock();
+    public ResponseEntity<HttpStatus> sellStock(HttpServletRequest request) {
+        investService.sellStock(request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
