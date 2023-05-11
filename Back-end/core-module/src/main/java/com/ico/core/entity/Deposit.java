@@ -33,13 +33,16 @@ public class Deposit {
 
     private byte creditRating;
 
+    private int amount;
+
     @Builder
-    public Deposit(String id, Long studentId, byte interest, LocalDateTime startDate, LocalDateTime endDate, byte creditRating) {
+    public Deposit(String id, Long studentId, byte interest, LocalDateTime startDate, LocalDateTime endDate, byte creditRating, int amount) {
         this.id = id;
         this.studentId = studentId;
         this.interest = interest;
         this.startDate = startDate;
         this.endDate = endDate;
         this.creditRating = creditRating;
+        this.amount = amount;
     }
 }
