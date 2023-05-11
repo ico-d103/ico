@@ -62,7 +62,7 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
                     .of(treasuryHistory, treasuryHistory.getDate().format(formatter), numberFormat.format(treasuryHistory.getAmount())));
         }
         // 페이지 번호 갯수
-        int totalPageNumber = ((treasuryHistoryRepository.countByNationId(nationId) - 1) / 10) + 1;
+        long totalPageNumber = ((treasuryHistoryRepository.countByNationId(nationId) - 1) / 10) + 1;
         return TreasuryHistoryTeacherResDto.builder()
                 .size(totalPageNumber)
                 .page(pageList)

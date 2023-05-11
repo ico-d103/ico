@@ -37,6 +37,6 @@ public interface TreasuryHistoryRepository extends MongoRepository<TreasuryHisto
      * @param nationId
      * @return
      */
-    int countByNationId(Long nationId);
+    Long countByNationId(Long nationId);
 
 }
