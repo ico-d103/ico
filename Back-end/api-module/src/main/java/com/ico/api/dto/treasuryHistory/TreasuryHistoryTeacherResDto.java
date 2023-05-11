@@ -1,12 +1,13 @@
 package com.ico.api.dto.treasuryHistory;
 
-import com.ico.core.entity.TreasuryHistory;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
- * 국고 사용 내역 조회 교사용 res dto
+ * 교사용 국고 사용 내역 조회 res dto
  *
  * @author 서재건
  */
@@ -14,35 +15,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TreasuryHistoryTeacherResDto {
 
-    private String date;
+    private int size;
 
-    private String title;
-
-    private String source;
-
-    private String amount;
+    private List<TreasuryHistoryTeacherColDto> page;
 
     @Builder
-    public TreasuryHistoryTeacherResDto(String date, String title, String source, String amount) {
-        this.date = date;
-        this.title = title;
-        this.source = source;
-        this.amount = amount;
-    }
-
-    /**
-     * 국고 사용 내역 교사용 dto 반환
-     *
-     * @param treasuryHistory
-     * @param date
-     * @return
-     */
-    public TreasuryHistoryTeacherResDto of(TreasuryHistory treasuryHistory, String date, String amount) {
-        return TreasuryHistoryTeacherResDto.builder()
-                .date(date)
-                .title(treasuryHistory.getTitle())
-                .source(treasuryHistory.getSource())
-                .amount(amount)
-                .build();
+    public TreasuryHistoryTeacherResDto(int size, List<TreasuryHistoryTeacherColDto> page) {
+        this.size = size;
+        this.page = page;
     }
 }
