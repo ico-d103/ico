@@ -1,7 +1,13 @@
-import React from "react"
+import React, {useState} from "react"
 import Input from "@/components/common/Input/Input"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
+import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
+import { postFinanceDepositAPI } from "@/api/student/finance/postFinanceDepositAPI"
+import useNotification from "@/hooks/useNotification"
+import UseAnimations from "react-useanimations";
+import alertTriangle from 'react-useanimations/lib/alertTriangle';
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 const ALERT_ICON = (
 	<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,15 +34,41 @@ const CHECK_ICON = (
 )
 
 type FinanceDepositApplyModalProps = {
-	balance: string
+	term: 0 | 1
+	data: getFinanceDepositRateType
 	unit: string
+	closeComp: Function
+	refetch: Function
 }
 
-function FinanceDepositApplyModal({balance, unit}: FinanceDepositApplyModalProps) {
+
+function FinanceDepositApplyModal({term, data, unit, closeComp, refetch}: FinanceDepositApplyModalProps) {
+	const noti = useNotification()
+	const [ value, setValue] = useState<number>(0)
+
+	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (Number(e.target.value) <= data.account) {
+			setValue(() => Number(e.target.value))
+		}
+	}
+
+	
+
+	const submitHandler = () => {
+		postFinanceDepositAPI({body: {longPeriod: term === 1 ? true : false, amount: value}}).then((res) => {
+			refetch()
+			closeComp()
+		})
+		.catch((err) => {
+			console.log(err)
+			
+			noti({content: <NotiTemplate type={'ok'} content="예금 신청에 실패했어요!"/>, width: 400, height: 120, duration: 3000})
+		})
+	}
 	return (
 		<div css={wrapperCSS}>
 			<div css={grayLabelCSS}>원하는 액수를 입력해 주세요!</div>
-			<Input theme={"default"} textAlign={"right"} rightContent={<div css={balanceLabelCSS}>/ {balance} {unit}</div>} customCss={inputCSS} />
+			<Input value={value} onChange={onChangeHandler} theme={"default"} textAlign={"right"} rightContent={<div css={balanceLabelCSS}>/ {data.account} {unit}</div>} customCss={inputCSS} />
 			<div css={mentWrapperCSS}>
 				<div css={iconWrapperCSS}>
 					{ALERT_ICON}
@@ -49,12 +81,12 @@ function FinanceDepositApplyModal({balance, unit}: FinanceDepositApplyModalProps
 				{CHECK_ICON}
 				</div>
 				
-				<span css={mentCSS}>만기가 되면 원금의 14퍼센트 만큼 추가로 더 돌려받을 수 있어요!</span>
+				<span css={mentCSS}>만기가 되면 원금의 {term === 0 ? data.shortPeriod : data.longPeriod}퍼센트 만큼 추가로 더 돌려받을 수 있어요!</span>
 			</div>
 
 			<div css={buttonWrapperCSS}>
-			<Button text={"정기 예금 신청"} fontSize={"var(--student-h3)"} width={"47%"} theme={"positive"} onClick={()=>{}} />
-			<Button text={"취소"} fontSize={"var(--student-h3)"} width={"47%"} theme={"cancelDark"} onClick={()=>{}} />
+			<Button text={"정기 예금 신청"} fontSize={"var(--student-h3)"} width={"47%"} theme={"positive"} onClick={()=>{submitHandler()}} />
+			<Button text={"취소"} fontSize={"var(--student-h3)"} width={"47%"} theme={"cancelDark"} onClick={()=>{closeComp()}} />
 			</div>
 		</div>
 	)
@@ -78,6 +110,7 @@ const inputCSS = css`
 const mentWrapperCSS = css`
 	
 	display: flex;
+	margin-bottom: 12px;
 `
 
 const iconWrapperCSS = css`
@@ -90,7 +123,8 @@ const mentCSS = css`
 	font-size: 14px;
 	margin-left: 8px;
 	height: 24px;
-	margin-top: 6px;
+	margin-top: 4px;
+	line-height: 130%;
 	
 `
 
@@ -103,6 +137,7 @@ margin-top: 24px;
 const balanceLabelCSS = css`
 	color: rgba(0, 20, 50, 0.6);
 	margin-right: 8px;
+	white-space: nowrap;
 `
 
 export default FinanceDepositApplyModal

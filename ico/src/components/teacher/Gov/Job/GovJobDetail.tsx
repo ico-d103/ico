@@ -7,6 +7,11 @@ import useCompHandler from "@/hooks/useCompHandler"
 import GovJobCard from "./GovJobCard"
 import GovJobCardCreate from "./GovJobCardCreate"
 import Dropdown from "@/components/common/Dropdown/Dropdown"
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQueryClient } from '@tanstack/react-query';
+import { deleteGovJobAPI } from "@/api/teacher/gov/deleteGovJobAPI"
+import Modal from "@/components/common/Modal/Modal"
+import ModalAlert from "@/components/common/Modal/ModalAlert"
 
 type GovRuleClassDetailProps = {
 	job: string
@@ -23,11 +28,12 @@ type GovRuleClassDetailProps = {
 function GovJobDetail({ job, description, wage, backgroundColor, imgUrl, credit, total, count, actualIdx }: GovRuleClassDetailProps) {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [openDropdown, closeDropdown, dropdownState] = useCompHandler()
+	const [openDeleteModal, closeDeleteModal, deleteModalState] = useCompHandler()
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const dropdownList = [
 		{ name: "edit", content: null, label: "수정", function: () => {openEditHandler()} },
-		{ name: "delete", content: null, label: "삭제", function: () => {} },
+		{ name: "delete", content: null, label: "삭제", function: () => {openDeleteModal()} },
 	]
 
 	const openEditHandler = () => {
@@ -38,6 +44,19 @@ function GovJobDetail({ job, description, wage, backgroundColor, imgUrl, credit,
 	const closeEditHandler = () => {
 		closeComp()
 		setIsEdit(() => false)
+	}
+
+	const queryClient = useQueryClient();
+	const createMutation = useMutation((idx: number) => deleteGovJobAPI({idx}));
+
+	const deleteHandler = () => {
+		if (actualIdx) {
+			createMutation.mutate(actualIdx, {
+				onSuccess: formData => {
+				  return queryClient.invalidateQueries(["teacher", "govJob"]); // 'return' wait for invalidate
+				}})
+		}
+		
 	}
 
 	const buttonRender = dropdownList && (
@@ -87,6 +106,7 @@ function GovJobDetail({ job, description, wage, backgroundColor, imgUrl, credit,
 
 	return (
 		<div ref={wrapperRef} css={outerWrapperCSS} >
+			<Modal compState={deleteModalState} closeComp={closeDeleteModal} transition={'scale'} content={<ModalAlert title={'직업을 삭제합니다.'} titleSize={'var(--teacher-h2)'} proceed={deleteHandler} width={'480px'} content={['학생들이 더이상 해당 직업을 조회할 수 없습니다!', '학생들이 더이상 해당 직업을 가질 수 없습니다!']} />}/>
 			<FormCreator subComp={<GovJobCreate idx={actualIdx} count={count}/>} frontComp={<GovJobCardCreate />} showIdx={0} compState={compState} closeComp={closeEditHandler} mainInit={{title: job, content: description}} subInit={{wage, backgroundColor, imgUrl, credit, total }} initHeight={`${wrapperRef.current && wrapperRef.current.clientHeight}px`} />
 			<div css={WrapperCSS({isEdit, backgroundColor})}>
 				<div css={detailWrapperCSS}>

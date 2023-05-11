@@ -1,17 +1,37 @@
-import React from "react"
 import { css } from "@emotion/react"
 import PaginationButton from "./PaginationButton"
+import { selectedPage } from "@/store/store"
+import { useAtom } from "jotai"
 
-function Pagination() {
+type PaginationPropsType = {
+	size: number
+}
+
+function Pagination({ size }: PaginationPropsType) {
+	const [selectedPageAtom, setSelectedPageAtom] = useAtom(selectedPage)
+
+	const pageHandler = (flag: boolean) => {
+		// 이전 페이지 이동
+		if (!flag && selectedPageAtom > 1) {
+			setSelectedPageAtom(selectedPageAtom - 1)
+		}
+		// 다음 페이지 이동
+		else if (flag && selectedPageAtom < size) {
+			setSelectedPageAtom(selectedPageAtom + 1)
+		}
+	}
+
+	const changePageHandler = (page: number) => {
+		setSelectedPageAtom(page)
+	}
+
 	return (
 		<div css={wrapperCSS}>
-			<PaginationButton pgNumber={"<"} />
-			<PaginationButton pgNumber={"1"} />
-			<PaginationButton pgNumber={"2"} />
-			<PaginationButton pgNumber={"3"} />
-			<PaginationButton pgNumber={"4"} />
-			<PaginationButton pgNumber={"5"} />
-			<PaginationButton pgNumber={">"} />
+			<PaginationButton pgNumber={"<"} onClick={() => pageHandler(false)} />
+			{Array.from({ length: size }, (_, index) => (
+				<PaginationButton key={index} pgNumber={(index + 1).toString()} onClick={() => changePageHandler(index + 1)} />
+			))}
+			<PaginationButton pgNumber={">"} onClick={() => pageHandler(true)} />
 		</div>
 	)
 }

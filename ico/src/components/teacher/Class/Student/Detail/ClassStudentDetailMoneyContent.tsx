@@ -1,15 +1,83 @@
-import React from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
+import { useAtomValue } from "jotai"
+import { selectedStudent } from "@/store/store"
+import { useReducer } from "react"
+import { NUM_ONLY } from "@/util/regex"
+import { postAccountAPI } from "@/api/teacher/class/postAccountAPI"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+
+const inputReducer = (state: { title: string; amount: string }, action: { type: string; value: string }) => {
+	switch (action.type) {
+		case "CHANGE_TITLE":
+			return { ...state, title: action.value }
+		case "CHANGE_AMOUNT":
+			return { ...state, amount: action.value }
+		default:
+			return state
+	}
+}
 
 function ClassStudentDetailMoneyContent() {
+	const queryClient = useQueryClient()
+	const currency = localStorage.getItem("currency")
+	const selectedStudentAtom = useAtomValue(selectedStudent)
+
+	const [inputState, dispatchInput] = useReducer(inputReducer, { title: "", amount: "" })
+	const postAccountMutation = useMutation((args: { studentId: number; body: { title: string; amount: string } }) =>
+		postAccountAPI(args),
+	)
+
+	const postAccountHandler = (flag: string) => {
+		if (inputState.title === "" || inputState.amount === "") {
+			alert("빈칸을 모두 입력해주세요.")
+			return
+		}
+
+		const amount = flag === "minus" ? "-" + inputState.amount : inputState.amount
+		const args = { studentId: selectedStudentAtom, body: { title: inputState.title, amount: amount } }
+
+		postAccountMutation.mutate(args, {
+			onSuccess: () => {
+				return queryClient.invalidateQueries(["enteredStudentDetail"])
+			},
+		})
+
+		// postAccountAPI({ studentId: selectedStudentAtom, body: { title: inputState.title, amount: amount } })
+		// 	.then((res) => {
+		// 		// mutation으로 학생 목록 리스트에서 금액 업데이트
+		// 	})
+		// 	.catch((error) => {
+		// 		// 학생의 금액이 부족해서 차감 못하는 경우
+		// 		if (error.response.code === "11") {
+		// 			alert(error.response.message)
+		// 		}
+		// 	})
+	}
+
+	const changeAmountHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		let inputValue = e.target.value
+
+		if (!NUM_ONLY.test(inputValue)) {
+			inputValue = inputValue.replace(/\D/g, "")
+			e.target.value = inputValue
+			return
+		}
+
+		dispatchInput({ type: "CHANGE_AMOUNT", value: e.target.value })
+	}
+
 	return (
 		<div css={wrapperCSS}>
-			<textarea css={reasonWrapperCSS} placeholder="사유를 입력해주세요."></textarea>
+			<textarea
+				css={reasonWrapperCSS}
+				placeholder="사유를 입력해주세요."
+				onChange={(e) => dispatchInput({ type: "CHANGE_TITLE", value: e.target.value })}
+			></textarea>
 			<div>
 				<div css={moneyInputCSS}>
-					<input type="number" placeholder="미소 입력" />
-					<span>미소</span>
+					<input type="text" placeholder="금액 입력" onChange={changeAmountHandler} />
+					<span>{currency}</span>
 				</div>
 				<div css={buttonWrapperCSS}>
 					<Button
@@ -18,7 +86,7 @@ function ClassStudentDetailMoneyContent() {
 						width={"70px"}
 						height={"40px"}
 						theme={"positive"}
-						onClick={() => {}}
+						onClick={() => postAccountHandler("plus")}
 					/>
 					<Button
 						text={"차감"}
@@ -26,7 +94,7 @@ function ClassStudentDetailMoneyContent() {
 						width={"70px"}
 						height={"40px"}
 						theme={"warning"}
-						onClick={() => {}}
+						onClick={() => postAccountHandler("minus")}
 					/>
 				</div>
 			</div>

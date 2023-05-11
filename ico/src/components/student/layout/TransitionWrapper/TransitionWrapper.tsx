@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from "react"
 import html2canvas from "html2canvas"
-import { navTo } from "@/store/store"
+import { navTo, isNavigating } from "@/store/store"
 import { useAtom } from "jotai"
 import { css } from "@emotion/react"
 import { useRouter } from "next/router"
 import Image from "next/image"
 import DomToImage from "dom-to-image"
-import * as htmlToImage from 'html-to-image';
+import * as htmlToImage from "html-to-image"
+import useNavigate from "@/hooks/useNavigate"
 
 type TransitionWrapperProps = {
 	children: any
@@ -15,6 +16,7 @@ type TransitionWrapperProps = {
 function TransitionWrapper({ children }: TransitionWrapperProps) {
 	const [screenshot, setScreenshot] = useState("")
 	const [navToAtom, setNavToAtom] = useAtom(navTo)
+	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 	const [beforeTransition, setBeforeTransition] = useState<boolean>(false)
 	const [isTransitioning, setIsTransitioning] = useState<boolean>(false)
 	const [isImageLoading, setIsImageLoading] = useState<boolean>(false)
@@ -23,6 +25,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
 	const contentInnerWrapperRef = useRef<HTMLDivElement>(null)
 	const router = useRouter()
+	const navigate = useNavigate()
 
 	const isIos = () => {
 		let isIos = false
@@ -45,16 +48,19 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 		router.beforePopState(({ url, as, options }) => {
 			if (isIos() === true) {
+				setIsNavigatingAtom(() => true)
 				setNavToAtom(() => {
 					return { url: "", transition: "" }
 				})
+				// navigate("", "")
 
 				return true
 			} else {
+				setIsNavigatingAtom(() => true)
 				setNavToAtom(() => {
 					return { url: url, transition: "beforeScale" }
 				})
-
+				// navigate(url, "beforeScale")
 				return false
 			}
 		})
@@ -71,7 +77,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				{
 					scale: 0.5,
 					useCORS: true,
-					
 				},
 				// {
 				// 	scrollX: -window.scrollX,
@@ -97,11 +102,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			// 	const screenshot = dataUrl
 			// 	setScreenshot(screenshot)
 			// })
-
-
-
-
-
 		}
 	}
 
@@ -137,6 +137,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				})
 				setScreenshot(() => "")
 				setIsImageLoading(() => false)
+				setIsNavigatingAtom(() => false)
 			}, 300)
 		}
 	}, [router.pathname])
@@ -206,11 +207,20 @@ const imgWrapperCSS = css`
 
 const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 	return css`
-
 		width: 100vw;
 		height: auto;
 
 		transform: translate(0, -${scrollTop}px);
+		/* animation: focus-out 0.3s ease both;
+		@keyframes focus-out {
+			0% {
+				filter:  blur(0px);
+
+			}
+			100% {
+				filter:  blur(6px);
+			}
+		} */
 	`
 }
 
@@ -226,7 +236,6 @@ const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 		/* min-height: calc(100vh - 64px); */
 		min-height: 100vh;
 		overflow: hidden;
-
 	`
 }
 

@@ -10,7 +10,7 @@ function coupons() {
 			<div css={titleCSS}>
 				<div>{CLASS_COUPON}</div>
 				<div>
-					<b>5개</b>의 쿠폰 사용 요청 목록이 있습니다.
+					<b>6개</b>의 쿠폰 사용 요청 목록이 있습니다.
 				</div>
 			</div>
 			<CouponList />

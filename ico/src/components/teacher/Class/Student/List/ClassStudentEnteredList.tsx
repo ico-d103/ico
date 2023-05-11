@@ -1,16 +1,18 @@
-import { useState, useEffect } from "react"
 import { css } from "@emotion/react"
 import StudentEnteredListItem from "./ClassStudentEnteredListItem"
 import KebabMenu from "@/components/teacher/common/KebabMenu/KebabMenu"
 import { getStudentListAPI } from "@/api/teacher/class/getStudentListAPI"
 import { getStudentListType } from "@/types/teacher/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
+import { putResetStudentsJobAPI } from "@/api/teacher/class/putResetStudentsJobAPI"
 
 function StudentEnteredList() {
-	const { data } = useQuery<getStudentListType[]>(["studentList"], getStudentListAPI)
+	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
 
 	const resetStudentsJob = () => {
-		alert("직업 초기화!")
+		putResetStudentsJobAPI()
+			.then((res) => {})
+			.catch((error) => alert(error.response.message))
 	}
 
 	const dropdownList = [
@@ -26,14 +28,13 @@ function StudentEnteredList() {
 		<div css={wrapperCSS}>
 			<div css={contentTitleCSS}>
 				<div css={titleCSS}>
-					학생들 <small>({data?.length})</small>
+					학생들 <small>({data && data.length > 0 ? data.length : 0})</small>
 				</div>
 				<KebabMenu dropdownList={dropdownList} />
 			</div>
 			<div css={contentCSS}>
 				{data?.map((student, idx) => (
-					// key={student.number} 로 추후 수정 필요
-					<StudentEnteredListItem key={idx} student={student} idx={idx} />
+					<StudentEnteredListItem key={student.id} student={student} idx={idx} />
 				))}
 			</div>
 		</div>
