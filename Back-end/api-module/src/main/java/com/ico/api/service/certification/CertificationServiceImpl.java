@@ -40,25 +40,32 @@ public class CertificationServiceImpl implements CertificationService{
     @Transactional
     public void approveCertification(HttpServletRequest request, Long id) {
         String token = jwtTokenProvider.parseJwt(request);
-        if (token != null && jwtTokenProvider.getRole(token).equals(Role.ADMIN)) {
-            // Certification 객체 가져오기
-            Optional<Certification> optionalCertification = certificationRepository.findById(id);
-            if (optionalCertification.isPresent()) {
-                Certification certification = optionalCertification.get();
+        if (token != null){
+            if (jwtTokenProvider.getRole(token).equals(Role.ADMIN)) {
+                // Certification 객체 가져오기
+                Optional<Certification> optionalCertification = certificationRepository.findById(id);
+                if (optionalCertification.isPresent()) {
+                    Certification certification = optionalCertification.get();
 
-                // S3 서버에서 파일 삭제
-                s3.deleteFile(certification.getImage());
+                    // S3 서버에서 파일 삭제
+                    s3.deleteFile(certification.getImage());
 
-                Teacher teacher = certification.getTeacher();
-                teacher.setAssigned(true);
-                teacherRepository.save(teacher);
+                    Teacher teacher = certification.getTeacher();
+                    teacher.setAssigned(true);
+                    teacherRepository.save(teacher);
 
-                // Certification 삭제
-                certificationRepository.delete(certification);
+                    // Certification 삭제
+                    certificationRepository.delete(certification);
+                } else {
+                    throw new CustomException(ErrorCode.NOT_FOUND_IMAGE);
+                }
             }
             else {
-                throw new CustomException(ErrorCode.NOT_FOUND_IMAGE);
+                throw new CustomException(ErrorCode.WRONG_ROLE);
             }
+        }
+        else {
+            throw new CustomException(ErrorCode.NOT_FOUND_TOKEN);
         }
     }
 
@@ -66,19 +73,24 @@ public class CertificationServiceImpl implements CertificationService{
     @Transactional
     public void deleteCertification(HttpServletRequest request, Long id) {
         String token = jwtTokenProvider.parseJwt(request);
-        if (token != null && jwtTokenProvider.getRole(token).equals(Role.ADMIN)) {
-            // Certification 객체 가져오기
-            Optional<Certification> optionalCertification = certificationRepository.findById(id);
-            if (optionalCertification.isPresent()) {
-                Certification certification = optionalCertification.get();
-                // S3 서버에서 파일 삭제
-                s3.deleteFile(certification.getImage());
-                // Certification 삭제
-                certificationRepository.delete(certification);
+        if (token != null) {
+            if (jwtTokenProvider.getRole(token).equals(Role.ADMIN)) {
+                // Certification 객체 가져오기
+                Optional<Certification> optionalCertification = certificationRepository.findById(id);
+                if (optionalCertification.isPresent()) {
+                    Certification certification = optionalCertification.get();
+                    // S3 서버에서 파일 삭제
+                    s3.deleteFile(certification.getImage());
+                    // Certification 삭제
+                    certificationRepository.delete(certification);
+                }
+            }
+            else {
+                throw new CustomException(ErrorCode.NOT_FOUND_IMAGE);
             }
         }
         else {
-            throw new CustomException(ErrorCode.NOT_FOUND_IMAGE);
+            throw new CustomException(ErrorCode.NOT_FOUND_TOKEN);
         }
     }
 
@@ -86,7 +98,10 @@ public class CertificationServiceImpl implements CertificationService{
     @Transactional
     public Page<CertificationResDto> pageCertification(HttpServletRequest request, Pageable pageable) {
         String token = jwtTokenProvider.parseJwt(request);
-        if (token == null || !jwtTokenProvider.getRole(token).equals(Role.ADMIN)) {
+        if (token == null) {
+            throw new CustomException(ErrorCode.NOT_FOUND_TOKEN);
+        }
+        else if (!jwtTokenProvider.getRole(token).equals(Role.ADMIN)) {
             throw new CustomException(ErrorCode.WRONG_ROLE);
         }
 
