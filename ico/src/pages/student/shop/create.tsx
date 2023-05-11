@@ -78,7 +78,7 @@ function create() {
 						<div css={unitCSS}>개</div>
 					</div>
 
-					<ShopCreateImage sendImageList={receiveImageList} />
+					{/* <ShopCreateImage sendImageList={receiveImageList} /> */}
 					{/* <div css={imageWrapperCSS}>
 						<input style={{ width: "100%" }} css={inputCSS} placeholder="상품의 사진을 넣어주세요" />
 					</div> */}
