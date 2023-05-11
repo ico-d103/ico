@@ -1,9 +1,15 @@
 import { css } from "@emotion/react"
 import Image from "next/image"
+import { useRouter } from "next/router";
+
+
 import ShopCarousel from "@/components/teacher/Shop/ShopCarousel"
 import Button from "@/components/common/Button/Button"
 
 function product() {
+	const router = useRouter()
+	const { pid } = router.query
+
 	const product = {
 		id: 1,
 		image: "https://placehold.it/250x250",
