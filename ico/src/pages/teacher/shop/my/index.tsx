@@ -20,8 +20,6 @@ function teacher() {
 		refetch,
 	} = useQuery<getTeacherProductsType[]>(["teacherProducts"], getTeacherProductsAPI)
 
-	console.log(cardData)
-
 	const createProduct = () => {
 		router.push("/teacher/shop/create")
 	}
@@ -45,7 +43,7 @@ function teacher() {
 						key={card.id}
 						title={card.title}
 						amount={card.amount}
-						image={card.image}
+						image={card.images[0]}
 						count={card.count}
 						sold={card.sold}
 						name={card?.name}

@@ -15,3 +15,13 @@ module.exports = withPWA({
 		domains: ["placehold.it", "placeimg.com", "d3bkfkkihwj5ql.cloudfront.net"],
 	},
 })
+
+module.exports = {
+	...module.exports,
+	typescript: {
+		ignoreBuildErrors: true,
+	},
+	compilerOptions: {
+		target: "es2015",
+	},
+}

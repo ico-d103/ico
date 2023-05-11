@@ -62,6 +62,15 @@ export const formDataInstance = axios.create({
 	},
 })
 
+formDataInstance.interceptors.request.use(
+	(config) => {
+		const accessToken = getCookie("Authorization")
+		if (accessToken) config.headers["Authorization"] = `${accessToken}`
+		return config
+	},
+	(error) => Promise.reject(error),
+)
+
 formDataInstance.interceptors.response.use(
 	(response) => response,
 	async (error) => {
