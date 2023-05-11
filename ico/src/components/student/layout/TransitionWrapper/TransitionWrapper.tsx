@@ -211,7 +211,7 @@ const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 		height: auto;
 
 		transform: translate(0, -${scrollTop}px);
-		animation: focus-out 0.3s ease both;
+		/* animation: focus-out 0.3s ease both;
 		@keyframes focus-out {
 			0% {
 				filter:  blur(0px);
@@ -220,7 +220,7 @@ const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 			100% {
 				filter:  blur(6px);
 			}
-		}
+		} */
 	`
 }
 
