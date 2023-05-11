@@ -13,4 +13,9 @@ public interface DepositService {
      * @param dto 예치 기간, 예치 금액
      */
     void createDeposit(DepositReqDto dto);
+
+    /**
+     * 예금 중도 해지, 수령
+     */
+    void deleteDeposit();
 }

@@ -96,6 +96,7 @@ public class DepositServiceImpl implements DepositService{
                 .interest(interestRate)
                 .endDate(endDate)
                 .creditRating(student.getCreditRating())
+                .amount(dto.getAmount())
                 .build();
         depositMongoRepository.insert(deposit);
 
@@ -103,5 +104,48 @@ public class DepositServiceImpl implements DepositService{
         // 거래 내역 기록
         transactionService.addTransactionWithdraw("은행", studentId, amount, "예금");
 
+    }
+
+    /**
+     * 예금 중도 해지, 수령
+     */
+    @Transactional
+    @Override
+    public void deleteDeposit() {
+        //todo : request
+        long studentId = 1;
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 예금 신청 내역 확인
+        Deposit deposit = depositMongoRepository.findByStudentId(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_DEPOSIT));
+
+        // 오늘 날짜
+        LocalDateTime now = LocalDateTime.now();
+
+        //입금 금액
+        int inputAmount = deposit.getAmount();
+        // 거래 내역 타이틀
+        String title;
+
+        // 중도 해지
+        if(now.toLocalDate().isBefore(deposit.getEndDate().toLocalDate())){
+            title = "예금 중도 해지";
+        }
+        else{
+            title = "예금 수령 " + deposit.getInterest() +" %";
+            inputAmount += inputAmount * deposit.getInterest() / 100;
+        }
+
+        // 계좌 잔고 변경
+        student.setAccount(student.getAccount() + inputAmount);
+        studentRepository.save(student);
+
+        // 거래 내역 기록
+        transactionService.addTransactionDeposit(studentId, "은행", inputAmount, title);
+
+        // 예금 신청 내역 삭제
+        depositMongoRepository.delete(deposit);
     }
 }

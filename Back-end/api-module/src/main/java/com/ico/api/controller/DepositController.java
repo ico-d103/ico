@@ -5,6 +5,7 @@ import com.ico.api.service.bank.DepositService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,17 @@ public class DepositController {
     @PostMapping("/student")
     public ResponseEntity<HttpStatus> createDeposit(@Valid @RequestBody DepositReqDto dto){
         depositService.createDeposit(dto);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 예금 중도 해지, 수령
+     *
+     * @return Httpstatus
+     */
+    @DeleteMapping("/student")
+    public ResponseEntity<HttpStatus> deleteDeposit(){
+        depositService.deleteDeposit();
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }
