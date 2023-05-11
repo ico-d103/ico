@@ -1,4 +1,4 @@
-import { formDataInstance } from "@/api/instance"
+import { formDataTokenInstance } from "@/api/instance"
 import { successReturnType, errorReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
@@ -11,7 +11,7 @@ type responseType = {
 
 export const postTeacherProductsAPI = async ({ body }: paramsType) => {
 	try {
-		const response: responseType = await formDataInstance.post("/teacher-product/teacher", body)
+		const response: responseType = await formDataTokenInstance.post("/teacher-product/teacher", body)
 		return response.data
 	} catch (error) {
 		throw error
