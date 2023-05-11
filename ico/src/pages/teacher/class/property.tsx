@@ -15,6 +15,7 @@ import { isDepositMenuOpen } from "@/store/store"
 import { useAtom, useAtomValue } from "jotai"
 import { getTreasuryHistoryAPI } from "@/api/teacher/class/getTreasuryHistoryAPI"
 import { selectedPage } from "@/store/store"
+import { useEffect } from "react"
 
 function property() {
 	const [openComp, closeComp, compState] = useCompHandler()
@@ -22,7 +23,7 @@ function property() {
 	const selectedPageAtom = useAtomValue(selectedPage)
 
 	const treasury = useQuery<getNationTreasuryType>(["property"], getNationTreasuryAPI)
-	const treasuryList = useQuery<getTreasuryHistoryType>(["propertyList"], () =>
+	const treasuryList = useQuery<getTreasuryHistoryType>(["propertyList", selectedPageAtom], () =>
 		getTreasuryHistoryAPI({ page: selectedPageAtom }),
 	)
 

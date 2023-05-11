@@ -17,21 +17,21 @@ function PropertyListItem({ property, showDate }: PropertyListItemPropsType) {
 		<tr css={wrapperCSS}>
 			<td css={dateCSS}>{showDate ? <h4>{property.date}</h4> : <h4 css={hiddenDateCSS}>{property.date}</h4>}</td>
 			<td css={moneyCSS}>
-				{property.amount.includes("+") ? (
-					<h3 css={plusMoneyCSS}>
+				{property.amount.includes("-") ? (
+					<h3 css={minusMoneyCSS}>
 						{property.amount} {currency}
 					</h3>
 				) : (
-					<h3 css={minusMoneyCSS}>
+					<h3 css={plusMoneyCSS}>
 						{property.amount} {currency}
 					</h3>
 				)}
 			</td>
 			<td css={titleCSS}>
-				<h3>{property.source}</h3>
+				<h3>{property.title}</h3>
 			</td>
 			<td css={sourceCSS}>
-				<h3>{property.title}</h3>
+				<h3>{property.source}</h3>
 			</td>
 		</tr>
 	)
