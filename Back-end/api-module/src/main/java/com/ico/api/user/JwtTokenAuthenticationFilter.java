@@ -33,6 +33,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailService customUserDetailService;
 
+//    TODO : 아래코드가 안먹을 경우 되돌릴 코드
 //    @Override
 //    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 //                                    FilterChain filterChain) throws ServletException, IOException {
