@@ -17,7 +17,7 @@
   left: 0;
   width: 100%;
   height: 100vh;
-  z-index: 1000;
+  z-index: 9999999999999999999999999999999999999999;
   pointer-events: none;
 }
 
@@ -54,5 +54,6 @@
 .indicator {
   height: 3px;
   width: 100%;
-  background-color: rgba(154, 76, 249, 0.7);
+  /* background-color: rgba(154, 76, 249, 0.7); */
+  background-color: var(--teacher-main-color);
 }
