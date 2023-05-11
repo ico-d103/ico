@@ -9,18 +9,11 @@ import Link from 'next/link'
 
 function HomeButtonSection() {
     const navigate = useNavigate()
-    const router = useRouter()
-    useEffect(() => {
-        router.prefetch("/student/home/coupon")
-        router.prefetch("/student/home/exchequer")
-        router.prefetch("/student/finance/guide")
-    }, [])
+
+
     
   return (
     <div css={buttonSectionWrapperCSS}>
-        <Link href={'/student/home/coupon'} prefetch/>
-        <Link href={'/student/home/exchequer'} prefetch/>
-        <Link href={'/student/finance/guide'} prefetch/>
         <div css={columnCSS}>
             <HomeGradationButton cssProps={css`width: 42%; height: 140px;`} backgroundColor={['#459BFF', '#001AFF']} onClick={() => {navigate('/student/home/coupon', 'bottomToTop')}}>
             
@@ -58,7 +51,7 @@ function HomeButtonSection() {
                     <LoadImage src={'/assets/home/deposit.png'} alt={'exchequer'} wrapperCss={css`width: 120px; height: 120px;`} />
                 </div>
             </HomeGradationButton>
-            <HomeGradationButton cssProps={css`width: 42%; height: 140px;`} backgroundColor={['#FF4567', '#BD00FF']}>
+            <HomeGradationButton cssProps={css`width: 42%; height: 140px;`} backgroundColor={['#FF4567', '#BD00FF']} onClick={() => {navigate('/student/finance/invest', 'bottomToTop')}}>
                 <div css={lsizeFontCSS}>
                     실전형 투자 체험
                 </div>

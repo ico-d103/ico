@@ -11,7 +11,7 @@
   overflow: hidden;
 }
 
-.backdrop {
+/* .backdrop {
   position: fixed;
   top: 0;
   left: 0;
@@ -19,20 +19,19 @@
   height: 100vh;
   z-index: 9999999999999999999999999999999999999999;
   pointer-events: none;
-}
+} */
 
-.pop-up {
-  /* right: 20px; */
+/* .pop-up {
+
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  /* width: 320px;
-    height:200px; */
-}
 
-.content-wrapper {
+} */
+
+/* .content-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: end;
@@ -41,19 +40,19 @@
   box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   overflow: hidden;
-}
+} */
 
-.content {
+/* .content {
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   pointer-events: all;
-}
+} */
 
-.indicator {
+/* .indicator {
   height: 3px;
   width: 100%;
-  /* background-color: rgba(154, 76, 249, 0.7); */
+
   background-color: var(--teacher-main-color);
-}
+} */

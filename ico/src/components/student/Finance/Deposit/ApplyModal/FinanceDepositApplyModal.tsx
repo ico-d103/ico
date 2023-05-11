@@ -62,7 +62,7 @@ function FinanceDepositApplyModal({term, data, unit, closeComp, refetch}: Financ
 		.catch((err) => {
 			console.log(err)
 			
-			noti({content: <NotiTemplate type={'ok'} content="예금 신청에 실패했어요!"/>, width: 400, height: 120, duration: 3000})
+			noti({content: <NotiTemplate type={'ok'} content="예금 신청에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
 		})
 	}
 	return (
@@ -135,6 +135,7 @@ margin-top: 24px;
 `
 
 const balanceLabelCSS = css`
+	/* width: 200px; */
 	color: rgba(0, 20, 50, 0.6);
 	margin-right: 8px;
 	white-space: nowrap;
