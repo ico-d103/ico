@@ -19,12 +19,16 @@ function GovRuleCredit() {
 					<TableGenerator table={creditRating} perHeight={"48px"} />
 				</div>
 				<div css={footerCSS}>
+					<div>
+						상승폭 : 10 / 하락폭: 5
+					</div>
 					<Button
 						text={"등락폭 수정"}
 						fontSize={"var(--teacher-h5)"}
 						theme={"normal"}
 						width={"110px"}
 						onClick={() => {}}
+						margin={'0px 0px 0px 24px'}
 					/>
 				</div>
 			</React.Fragment>
@@ -40,6 +44,7 @@ const footerCSS = css`
 	margin-top: 16px;
 	display: flex;
 	justify-content: end;
+	align-items: center;
 `
 
 export default GovRuleCredit

@@ -4,17 +4,23 @@ import HomeAssetDetailItem from "./HomeAssetDetailItem"
 import { getHomeTransactionHistoryType } from "@/types/student/apiReturnTypes"
 import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
+import { isNavigating } from '@/store/store'
+import { useAtom } from 'jotai'
+import useGetNation from "@/hooks/useGetNation"
 
 type HomeAssetDetailProps = {
 	tradeHistory: getHomeTransactionHistoryType
 }
 
 function HomeAssetDetail({ tradeHistory }: HomeAssetDetailProps) {
+	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
+	const nation = useGetNation()
+
 	const renderHistory = Object.keys(tradeHistory).map((key, dayIdx) => {
 		const perDayHistory = tradeHistory[key].map((item, itemIdx) => {
 			return (
 				<div>
-					<HomeAssetDetailItem {...item} unit={" 단위연결!"} />
+					<HomeAssetDetailItem {...item} unit={` ${nation?.currency}`} />
 				</div>
 			)
 		})
@@ -31,7 +37,9 @@ function HomeAssetDetail({ tradeHistory }: HomeAssetDetailProps) {
 		<div css={historyWrapperCSS}>
 			{Object.keys(tradeHistory).length === 0 ? (
 				<div css={alertWrapperCSS}>
-					<UseAnimations animation={alertCircle} size={128} />
+					<div css={css`width: 128px; height: 128px;`}>
+					{isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={128} />}
+					</div>
 					<div css={labelCSS}>거래 내역이 없어요!</div>
 				</div>
 			) : (
@@ -52,7 +60,7 @@ const sSizeFontCSS = css`
 `
 
 const perDayWrapperCSS = css`
-	margin-bottom: 42px;
+	margin: 8px 0px;
 	width: 100%;
 `
 

@@ -9,6 +9,7 @@ import { LineSvgProps } from "@nivo/line"
 import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWrapper"
 import FinanceInvestIssueList from "@/components/student/Finance/Invest/IssueList/FinanceInvestIssueList"
 import Button from "@/components/common/Button/Button"
+import useGetNation from "@/hooks/useGetNation"
 
 type chartData = {
 	id: string
@@ -23,6 +24,7 @@ function index() {
 	const [chartData, setChartData] = useState<LineSvgProps["data"] | null>(null)
 	const [calcStock, setCalcStock] = useState<number>(0)
 	const [calcDiff, setCalcDiff] = useState<number>(0)
+	const nation = useGetNation()
 	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceInvestType>(
 		["student", "financeInvest"],
 		getFinanceInvestAPI,
@@ -101,10 +103,10 @@ function index() {
 				)}
 				{data && data?.myStock.price !== 0 && (
 					<ContentWrapper>
-						<div css={lSizeFontCSS}>{calcStock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} 단위연결!</div>
+						<div css={lSizeFontCSS}>{calcStock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {nation?.currency}</div>
 						<div css={diffLabelCSS({ calcDiff })}>
 							{calcDiff > 0 && "+"}
-							{calcDiff.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} 단위연결!
+							{calcDiff.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {nation?.currency}
 						</div>
 					</ContentWrapper>
 				)}

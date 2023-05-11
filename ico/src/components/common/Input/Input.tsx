@@ -43,6 +43,7 @@ const initInputCSS = ({ isFile, textAlign }: { isFile?: boolean, textAlign?: 'le
 		flex: 1;
 		/* width: 100%; */
 		border: none;
+		min-width: 0px;
 		background-color: rgba(255, 255, 255, 0);
 		padding: 12px;
 		display: ${isFile && "none"};

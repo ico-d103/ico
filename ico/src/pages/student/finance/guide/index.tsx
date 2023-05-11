@@ -14,6 +14,7 @@ import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
 import { isNavigating } from "@/store/store"
 import { useAtom } from "jotai"
+import useGetNation from "@/hooks/useGetNation"
 
 
 
@@ -33,7 +34,7 @@ function asset() {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 	const [term, setTerm] = useState<0 | 1>(0)
-
+	const nation = useGetNation()
 
 	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceDepositRateType>(
 		["student", "homeFinanceGetRate"],
@@ -55,7 +56,7 @@ function asset() {
 							title={"정기 예금 신청"}
 							titleSize={"var(--student-h1)"}
 							icon={APPLY_ICON}
-							content={<FinanceDepositApplyModal refetch={refetch} closeComp={closeComp} unit={"단위 설정!"} data={data} term={term}/>}
+							content={<FinanceDepositApplyModal refetch={refetch} closeComp={closeComp} unit={` ${nation?.currency}`} data={data} term={term}/>}
 							
 						/>
 					}
