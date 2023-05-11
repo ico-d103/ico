@@ -15,12 +15,12 @@ import java.util.List;
 @NoArgsConstructor
 public class TreasuryHistoryTeacherResDto {
 
-    private long size;
+    private int size;
 
     private List<TreasuryHistoryTeacherColDto> page;
 
     @Builder
-    public TreasuryHistoryTeacherResDto(long size, List<TreasuryHistoryTeacherColDto> page) {
+    public TreasuryHistoryTeacherResDto(int size, List<TreasuryHistoryTeacherColDto> page) {
         this.size = size;
         this.page = page;
     }
