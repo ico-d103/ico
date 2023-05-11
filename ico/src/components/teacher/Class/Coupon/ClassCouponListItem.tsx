@@ -18,7 +18,7 @@ function CouponListItem({ mock }: CouponListItemPropsType) {
 			<div css={leftWrapperCSS}>
 				<div css={leftCSS}>
 					<h3>{mock.title}</h3>
-					<h4>{mock.money} 미소</h4>
+					{/* <h4>{mock.money} 미소</h4> */}
 				</div>
 				<div css={rightCSS}>
 					<h4>{mock.student}</h4>
