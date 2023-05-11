@@ -67,7 +67,7 @@ const modalWrapperCSS = css`
 	position: fixed;
 	width: 100vw;
 	height: 100vh;
-	z-index: 9999999999999999;
+	z-index: 199999999;
 	display: flex;
 	justify-content: center;
 	align-items: center;
