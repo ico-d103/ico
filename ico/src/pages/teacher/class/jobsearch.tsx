@@ -10,7 +10,7 @@ function jobsearch() {
 			<div css={titleCSS}>
 				<div>{CLASS_JOB_SEARCH}</div>
 				<div>
-					현재 구직 중인 직업은 <b>5개</b>입니다.
+					현재 구직 중인 직업은 <b>6개</b>입니다.
 				</div>
 			</div>
 			<ClassJobSearchList />

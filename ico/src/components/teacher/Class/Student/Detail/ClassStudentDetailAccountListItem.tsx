@@ -30,7 +30,6 @@ const wrapperCSS = css`
 	padding: 10px;
 	border-radius: 10px;
 	transition: all 0.1s;
-	cursor: pointer;
 
 	:hover {
 		background-color: rgba(0, 0, 0, 0.1);

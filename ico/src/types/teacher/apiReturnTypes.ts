@@ -77,7 +77,7 @@ export type getTeacherProductsType = {
 	id: string
 	title: string
 	amount: number
-	image: string
+	images: string[] // images 속성 추가
 	count: number
 	sold: number
 	date: string
@@ -90,7 +90,7 @@ export type getStudentProductsType = {
 	id: string
 	title: string
 	amount: number
-	image: string
+	images: string[]
 	count: number
 	sold: number
 	date: string
@@ -100,4 +100,16 @@ export type getStudentProductsType = {
 
 export type getNationTreasuryType = {
 	treasury: number
+}
+
+export type getTreasuryHistoryPageType = {
+	date: string
+	title: string
+	source: string
+	amount: string
+}
+
+export type getTreasuryHistoryType = {
+	size: number
+	page: getTreasuryHistoryPageType[]
 }

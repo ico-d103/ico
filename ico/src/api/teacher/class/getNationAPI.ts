@@ -8,7 +8,7 @@ type responseType = {
 
 export const getNationAPI = async () => {
 	try {
-		const response: responseType = await tokenInstance.get("/nation/teacher")
+		const response: responseType = await tokenInstance.get("/nation")
 
 		return response.data
 	} catch (error) {

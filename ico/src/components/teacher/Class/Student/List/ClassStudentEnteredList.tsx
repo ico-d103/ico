@@ -28,7 +28,7 @@ function StudentEnteredList() {
 		<div css={wrapperCSS}>
 			<div css={contentTitleCSS}>
 				<div css={titleCSS}>
-					학생들 <small>({data?.length})</small>
+					학생들 <small>({data && data.length > 0 ? data.length : 0})</small>
 				</div>
 				<KebabMenu dropdownList={dropdownList} />
 			</div>

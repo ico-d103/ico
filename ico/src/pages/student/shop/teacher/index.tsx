@@ -6,68 +6,39 @@ import Card from "@/components/common/Card/Card"
 import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
 import { ShopTabMenus } from "@/components/student/Shop/ShopTabMenus"
 
-function index() {
+import { useQuery } from "@tanstack/react-query"
+import { getTeacherProductsAPI } from "@/api/common/shop/getTeacherProductsAPI"
+import { getTeacherProductsType } from "@/types/teacher/apiReturnTypes"
 
-	const cardData = [
-		{
-			id: 1,
-			image: "https://placehold.it/250x250",
-			name: "헤드셋",
-			number: 0,
-			price: 4000,
-			writer: "서재건",
-			date: "2023년 4월 27일",
-			approved: false,
-		},
-		{
-			id: 2,
-			image: "https://placehold.it/250x250",
-			name: "물통",
-			number: 1,
-			price: 2000,
-			writer: "서재건",
-			date: "2023년 4월 27일",
-			approved: false,
-		},
-		{
-			id: 3,
-			image: "https://placehold.it/250x250",
-			name: "마우스패드",
-			number: 1,
-			price: 1000,
-			writer: "서재건",
-			date: "2023년 4월 27일",
-			approved: false,
-		},
-		{
-			id: 4,
-			image: "https://placehold.it/250x250",
-			name: "키보드",
-			number: 3,
-			price: 4000,
-			writer: "서재건",
-			date: "2023년 4월 27일",
-			approved: true,
-		},
-	]
+function index() {
+	const {
+		data: cardData,
+		isError,
+		isLoading,
+		isFetching,
+		error,
+		isSuccess,
+		refetch,
+	} = useQuery<getTeacherProductsType[]>(["teacherProducts"], getTeacherProductsAPI)
 
 	return (
 		<>
 			<PageHeader title={"상점"} addComp={<TabMenu menus={ShopTabMenus()} selected={0} />} />
-			{/* <div css={cardWrapperCSS}>
-				{cardData.map((card) => (
+			<div css={cardWrapperCSS}>
+				{cardData?.map((card) => (
 					<Card
 						key={card.id}
-						image={card.image}
-						name={card.name}
-						price={card.price}
-						number={card.number}
-						writer={card.writer}
+						title={card.title}
+						amount={card.amount}
+						image={card.images[0]}
+						count={card.count}
+						sold={card.sold}
+						name={card?.name}
 						date={card.date}
-						approved={card.approved}
+						assigned={card?.assigned}
 					/>
 				))}
-			</div> */}
+			</div>
 		</>
 	)
 }

@@ -10,13 +10,15 @@ export const defaultInstance = axios.create({
 })
 
 /**
- * 인증이 필요한 요청
+ * 인증이 필요한 기본 요청
  */
 export const tokenInstance = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 })
 
-/* 인터셉터 처리 */
+/**
+ * tokenInstance 인터셉터 처리
+ */
 tokenInstance.interceptors.request.use(
 	(config) => {
 		// 1. 쿠키 값에서 accesstoken 가져오기
@@ -55,14 +57,39 @@ tokenInstance.interceptors.response.use(
 	},
 )
 
+// ----------------------------------------------------------------------------------------
+
+/**
+ * 인증이 필요 없는 formData 요청
+ */
 export const formDataInstance = axios.create({
+	baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+	withCredentials: false,
+})
+
+/**
+ * 인증이 필요한 formData 요청
+ */
+export const formDataTokenInstance = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 	headers: {
 		"Content-Type": "multipart/form-data",
 	},
 })
 
-formDataInstance.interceptors.response.use(
+/**
+ * formDataTokenInstance 인터셉터 처리
+ */
+formDataTokenInstance.interceptors.request.use(
+	(config) => {
+		const accessToken = getCookie("Authorization")
+		if (accessToken) config.headers["Authorization"] = `${accessToken}`
+		return config
+	},
+	(error) => Promise.reject(error),
+)
+
+formDataTokenInstance.interceptors.response.use(
 	(response) => response,
 	async (error) => {
 		if (error.response.status === 401) {

@@ -7,12 +7,52 @@ import { css } from "@emotion/react"
 import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
 import { ShopTabMenus } from "@/components/student/Shop/ShopTabMenus"
 
+import ShopCreateImage from "@/components/student/Shop/ShopCreate/ShopCreateImage"
+
 function create() {
-	const [product, setProduct] = useState({
-		name: "",
-		price: "",
-		number: "",
+	const formData = new FormData()
+
+	const [title, setTitle] = useState("")
+	const [amount, setAmount] = useState("")
+	const [count, setCount] = useState("")
+	const [imageList, setImageList] = useState([])
+	const [detail, setDetail] = useState("")
+
+	const handleTitleChange = (event: any) => {
+		setTitle(event.target.value)
+	}
+
+	const handleAmountChange = (event: any) => {
+		setAmount(event.target.value)
+	}
+
+	const handleCountChange = (event: any) => {
+		setCount(event.target.value)
+	}
+
+	const handleDetailChange = (event: any) => {
+		setDetail(event.target.value)
+	}
+
+	imageList.forEach((image) => {
+		formData.append("files", image)
 	})
+
+	formData.append(
+		"product",
+		new Blob(
+			[
+				JSON.stringify({
+					title: title,
+					amount: amount,
+					count: count,
+					detail: detail,
+					rental: true,
+				}),
+			],
+			{ type: "application/json" },
+		),
+	)
 
 	return (
 		<div>
@@ -20,48 +60,35 @@ function create() {
 			<div css={contentWrapperCSS}>
 				<ContentWrapper>
 					<div css={inputWrapperCSS}>
-						<input
-							css={inputCSS}
-							placeholder="상품의 이름이 뭔가요?"
-							value={product.name}
-							onChange={(e) => setProduct({ ...product, name: e.target.value })}
-						/>
+						<input css={inputCSS} placeholder="상품의 이름이 뭔가요?" value={title} onChange={handleTitleChange} />
 					</div>
 
 					<div css={inputWrapperCSS}>
 						<input
 							css={inputCSS}
 							placeholder="상품의 가격은 얼마인가요?"
-							value={product.price}
-							onChange={(e) => setProduct({ ...product, price: e.target.value })}
+							value={amount}
+							onChange={handleAmountChange}
 						/>
 						<div css={unitCSS}>원</div>
 					</div>
 
 					<div css={inputWrapperCSS}>
-						<input
-							css={inputCSS}
-							placeholder="상품은 총 몇 개인가요?"
-							value={product.number}
-							onChange={(e) => setProduct({ ...product, number: e.target.value })}
-						/>
+						<input css={inputCSS} placeholder="상품은 총 몇 개인가요?" value={count} onChange={handleCountChange} />
 						<div css={unitCSS}>개</div>
 					</div>
 
-					<div css={imageWrapperCSS}>
-						<input style={{ width: "100%" }} css={inputCSS} placeholder="상품의 사진을 넣어주세요" disabled />
-						<svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path
-								d="M19 9.5V12.2737C19 14.2781 19 15.2803 18.6076 16.0459C18.2625 16.7193 17.7117 17.2668 17.0344 17.6099C16.2643 18 15.2562 18 13.24 18H6.76C4.74381 18 3.73572 18 2.96563 17.6099C2.28825 17.2668 1.73752 16.7193 1.39238 16.0459C1 15.2803 1 14.2781 1 12.2737V7.62105C1 5.61665 1 4.61445 1.39238 3.84888C1.73752 3.17545 2.28825 2.62794 2.96563 2.28482C3.73572 1.89474 4.74381 1.89474 6.76 1.89474H10.45M16.3 6.36842V1M13.6 3.68421H19M13.6 9.94737C13.6 11.924 11.9882 13.5263 10 13.5263C8.01177 13.5263 6.4 11.924 6.4 9.94737C6.4 7.97077 8.01177 6.36842 10 6.36842C11.9882 6.36842 13.6 7.97077 13.6 9.94737Z"
-								stroke="#828282"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-						</svg>
-					</div>
+					{/* <ShopCreateImage sendImageList={receiveImageList} /> */}
+					{/* <div css={imageWrapperCSS}>
+						<input style={{ width: "100%" }} css={inputCSS} placeholder="상품의 사진을 넣어주세요" />
+					</div> */}
 					<div css={explainWrapperCSS}>
-						<textarea css={textareaCSS} placeholder="선생님에게 상품을 설명해주세요." />
+						<textarea
+							css={textareaCSS}
+							placeholder="선생님에게 상품을 설명해주세요."
+							value={detail}
+							onChange={handleDetailChange}
+						/>
 					</div>
 				</ContentWrapper>
 			</div>
