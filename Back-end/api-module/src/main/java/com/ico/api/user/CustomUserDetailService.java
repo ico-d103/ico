@@ -39,7 +39,8 @@ public class CustomUserDetailService implements UserDetailsService {
     public CustomUserDetails loadUserByUsername(String identity) throws UsernameNotFoundException {
         Optional<Teacher> teacher = teacherRepository.findByIdentity(identity);
         Optional<Student> student = studentRepository.findByIdentity(identity);
-        log.info("LoadUserByUserName " + teacher + " ---- " + student);
+        log.info("LoadUserByUserName  teacher : {}", teacher);
+        log.info("LoadUserByUserName  student : {}", student);
 
         if (teacher.isPresent()) {
             return new CustomUserDetails(teacher.get());
