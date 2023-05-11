@@ -131,7 +131,9 @@ public enum ErrorCode{
 
     NOT_FOUND_INVESET(HttpStatus.BAD_REQUEST, "722", "매수 이력이 없습니다."),
 
-    ALREADY_EXIST_DEPOSIT(HttpStatus.BAD_REQUEST, "723", "적금은 1개만 신청이 가능합니다."),
+    ALREADY_EXIST_DEPOSIT(HttpStatus.BAD_REQUEST, "724", "예금은 1개만 신청이 가능합니다."),
+
+    NOT_FOUNT_DEPOSIT(HttpStatus.BAD_REQUEST, "725", "예금 신청 내역이 없습니다."),
     ;
 
     private final HttpStatus httpStatus;
