@@ -83,6 +83,8 @@ const validMessageReducer = (
 }
 
 function signup() {
+	const formData = new FormData()
+
 	const [validState, dispatchValid] = useReducer(validReducer, {
 		name: false,
 		id: false,
@@ -123,6 +125,9 @@ function signup() {
 	useEffect(() => {
 		checkValidPW2Handler()
 	}, [inputState.password2])
+	useEffect(() => {
+		if (file) checkValidFileHandler()
+	}, [file])
 	useEffect(() => {
 		checkValidPhoneHandler()
 	}, [inputState.phone])
@@ -282,8 +287,25 @@ function signup() {
 		}
 
 		dispatchValidMessage({ type: "VALID_FILE", value: "" })
-		dispatchValid({ type: "VALID_PHONE", value: true })
+		dispatchValid({ type: "VALID_FILE", value: true })
 	}
+
+	const inputFileOnChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files && e.target.files[0]) {
+			const file = e.target.files[0]
+			setFile(() => file)
+			setFileUrl(() => file.name)
+
+			formData.append("file", file)
+		}
+	}
+
+	const renderFileInputUrl = (
+		<div css={inputFileCSS({ fileUrl })}>
+			{CLIP_ICON}
+			{fileUrl ? fileUrl : "교사 인증서를 첨부해 주세요."}
+		</div>
+	)
 
 	const ceritfyHandler = () => {
 		// 본인 인증 SMS
@@ -297,18 +319,33 @@ function signup() {
 		checkValidFileHandler(true)
 		checkValidPhoneHandler(true, true)
 
-		// 유효성 검사를 모두 완료하면
-		// 현재는 phone, file 임시로 제외
-		if (validState.name && validState.id && validState.password && validState.password2) {
+		formData.append(
+			"dto",
+			new Blob(
+				[
+					JSON.stringify({
+						name: inputState.name,
+						identity: inputState.id,
+						password: inputState.password,
+						checkedPassword: inputState.password,
+					}),
+				],
+				{ type: "application/json" },
+			),
+		)
+
+		for (let key of formData.keys()) {
+			console.log(key, ":", formData.get(key))
+		}
+
+		for (let value of formData.values()) {
+			console.log(value)
+		}
+
+		// 유효성 검사를 모두 완료하면 (현재는 phone 임시로 제외)
+		if (validState.name && validState.id && validState.password && validState.password2 && validState.file) {
 			// 회원가입 요청
-			postTeacherAPI({
-				body: {
-					name: inputState.name,
-					identity: inputState.id,
-					password: inputState.password,
-					checkedPassword: inputState.password,
-				},
-			})
+			postTeacherAPI({ body: formData })
 				.then(() => {
 					router.push("/teacher/login")
 				})
@@ -318,21 +355,6 @@ function signup() {
 				})
 		}
 	}
-
-	const inputFileOnChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files && e.target.files[0]) {
-			const file = e.target.files[0]
-			setFile(() => file)
-			setFileUrl(() => file.name)
-		}
-	}
-
-	const renderFileInputUrl = (
-		<div css={inputFileCSS({ fileUrl })}>
-			{CLIP_ICON}
-			{fileUrl ? fileUrl : "교사 인증서를 첨부해 주세요."}
-		</div>
-	)
 
 	const messageGenerator = ({ message, isValid }: { message: string; isValid: boolean }) => {
 		return <div css={messageCSS({ isValid })}>{message}</div>
@@ -474,24 +496,18 @@ function signup() {
 	)
 }
 
-// 임시 값
 const wrapperCSS = css`
 	display: flex;
 	flex-direction: column;
-	/* justify-content: center; */
 	align-items: center;
 	width: 100%;
-	/* height: 100%; */
 	height: auto;
 `
 
 const innerWrapperCSS = css`
 	width: 40vw;
-	/* height: 40vh; */
-	/* background-color: red; */
 	display: flex;
 	flex-direction: column;
-	/* align-items: center; */
 `
 
 const inputTitleCSS = css`
@@ -512,7 +528,6 @@ const inputCSS = css`
 const inputFileCSS = ({ fileUrl }: { fileUrl: string }) => {
 	return css`
 		display: flex;
-		/* width: 300px; */
 		align-items: center;
 		gap: 12px;
 		color: ${fileUrl ? "rgba(0, 20, 50, 1)" : "rgba(0, 20, 50, 0.5)"};

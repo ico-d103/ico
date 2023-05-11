@@ -1,13 +1,8 @@
-import { defaultInstance } from "@/api/instance"
+import { formDataInstance } from "@/api/instance"
 import { successReturnType, errorReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
-	body: {
-		name: string
-		identity: string
-		password: string
-		checkedPassword: string
-	}
+	body: FormData
 }
 
 type responseType = {
@@ -17,9 +12,9 @@ type responseType = {
 
 export const postTeacherAPI = async ({ body }: paramsType) => {
 	try {
-		const response: responseType = await defaultInstance.post("/teacher", body)
+		const response: responseType = await formDataInstance.post("/teacher", body)
 
-		if (response.status === 200) return response.data
+		return response.data
 	} catch (error) {
 		throw error
 	}
