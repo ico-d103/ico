@@ -31,7 +31,7 @@ function student() {
 						key={card.id}
 						title={card.title}
 						amount={card.amount}
-						image={card.image}
+						image={card.images[0]}
 						count={card.count}
 						sold={card.sold}
 						name={card?.name}

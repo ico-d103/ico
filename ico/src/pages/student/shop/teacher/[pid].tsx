@@ -1,9 +1,13 @@
 import { css } from "@emotion/react"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
+import { useRouter } from "next/router"
 
 import Image from "next/image"
 
 function product() {
+	const router = useRouter()
+	const { pid } = router.query	
+
 	const product = {
 		id: 1,
 		image: "https://placehold.it/250x250",

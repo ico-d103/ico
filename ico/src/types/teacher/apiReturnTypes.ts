@@ -72,7 +72,7 @@ export type getStudentProductsType = {
 	id: string
 	title: string
 	amount: number
-	image: string
+	images: string[]
 	count: number
 	sold: number
 	date: string
