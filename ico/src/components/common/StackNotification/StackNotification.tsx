@@ -19,8 +19,8 @@ const NotificationOverlay = (props: any) => {
 				// passToFixed={stackNotificationAtom[numKey].passToFixed}
 				key={key}
 				id={key}
-				width={stackNotificationAtom[numKey].width ? stackNotificationAtom[numKey].width : 320}
-				height={stackNotificationAtom[numKey].height ? stackNotificationAtom[numKey].height : 150}
+				width={stackNotificationAtom[numKey].width ? stackNotificationAtom[numKey].width : '320px'}
+				height={stackNotificationAtom[numKey].height ? stackNotificationAtom[numKey].height : '320px'}
 				content={stackNotificationAtom[numKey].content}
 				duration={stackNotificationAtom[numKey].duration ? stackNotificationAtom[numKey].duration : 3000}
 				state={stackNotificationAtom}

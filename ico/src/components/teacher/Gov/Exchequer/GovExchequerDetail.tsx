@@ -4,6 +4,11 @@ import CommonListElement from "../../common/CommonListElement/CommonListElement"
 import FormCreator from "../../common/Form/FormCreator"
 import GovExchequerCreate from "./GovExchequerCreate"
 import useCompHandler from "@/hooks/useCompHandler"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { useQueryClient } from "@tanstack/react-query"
+import { deleteGovExchequerAPI } from "@/api/teacher/gov/deleteGovExchequerAPI"
+import Modal from "@/components/common/Modal/Modal"
+import ModalAlert from "@/components/common/Modal/ModalAlert"
 
 type GovRuleClassDetailProps = {
 	title: string
@@ -16,6 +21,7 @@ type GovRuleClassDetailProps = {
 
 function GovExchequerDetail({ title, content, taxAspect, taxValue, showIdx, actualIdx }: GovRuleClassDetailProps) {
 	const [openComp, closeComp, compState] = useCompHandler()
+	const [openDeleteModal, closeDeleteModal, deleteModalState] = useCompHandler()
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const dropdownList = [
@@ -27,7 +33,14 @@ function GovExchequerDetail({ title, content, taxAspect, taxValue, showIdx, actu
 				openEditHandler()
 			},
 		},
-		{ name: "delete", content: null, label: "삭제", function: () => {} },
+		{
+			name: "delete",
+			content: null,
+			label: "삭제",
+			function: () => {
+				openDeleteModal()
+			},
+		},
 	]
 
 	const openEditHandler = () => {
@@ -38,6 +51,19 @@ function GovExchequerDetail({ title, content, taxAspect, taxValue, showIdx, actu
 	const closeEditHandler = () => {
 		closeComp()
 		setIsEdit(() => false)
+	}
+
+	const queryClient = useQueryClient()
+	const createMutation = useMutation((idx: number) => deleteGovExchequerAPI({ idx }))
+
+	const deleteHandler = () => {
+		if (actualIdx) {
+			createMutation.mutate(actualIdx, {
+				onSuccess: (formData) => {
+					return queryClient.invalidateQueries(["teacher", "govExchequer"]) // 'return' wait for invalidate
+				},
+			})
+		}
 	}
 
 	const taxPercent = (
@@ -72,6 +98,20 @@ function GovExchequerDetail({ title, content, taxAspect, taxValue, showIdx, actu
 
 	return (
 		<div ref={wrapperRef}>
+			<Modal
+				compState={deleteModalState}
+				closeComp={closeDeleteModal}
+				transition={"scale"}
+				content={
+					<ModalAlert
+						title={"세금 항목을 삭제합니다."}
+						titleSize={"var(--teacher-h2)"}
+						proceed={deleteHandler}
+						width={"480px"}
+						content={["학생들이 더이상 해당 세금을 납부하지 않습니다!"]}
+					/>
+				}
+			/>
 			<FormCreator
 				subComp={<GovExchequerCreate idx={actualIdx} />}
 				showIdx={showIdx}

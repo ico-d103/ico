@@ -17,8 +17,8 @@ const useNotification = () => {
 	}: {
 		content: any
 		duration: number
-		width: number
-		height: number
+		width: string
+		height: string
 	}) => {
 		let key =
 			Object.keys(stackNotificationAtom).length !== 0

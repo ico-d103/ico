@@ -9,6 +9,7 @@ import { getHomeTransactionHistoryType } from "@/types/student/apiReturnTypes"
 import UseAnimations from "react-useanimations"
 import loading from "react-useanimations/lib/loading"
 import Loading from "@/components/student/common/Loading/Loading"
+import useGetNation from "@/hooks/useGetNation"
 
 function asset() {
 	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getHomeTransactionHistoryType>(
@@ -16,6 +17,9 @@ function asset() {
 		getHomeTransactionHistoryAPI,
 		// { staleTime: 200000 },
 	)
+
+	const nation = useGetNation()
+	
 
 	return (
 		<div>
@@ -26,8 +30,8 @@ function asset() {
 					<div css={lSizeFontCSS}>
 						{data
 							? Object.keys(data).length === 0
-								? "0 단위연결!"
-								: `${data[Object.keys(data)[0]][0].balance} 단위연결!`
+								? `0 ${nation?.currency}`
+								: `${data[Object.keys(data)[0]][0].balance} ${nation?.currency}`
 							: "잔액을 조회중이에요."}
 					</div>
 				</ContentWrapper>
