@@ -70,10 +70,6 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
-        if (nation.getTreasury() + dto.getAmount() < 0) {
-            log.info("[addTreasuryHistory] 국고 잔액보다 사용하는 금액이 큰 경우");
-            throw new CustomException(ErrorCode.LOW_BALANCE);
-        }
         nation.setTreasury(nation.getTreasury() + dto.getAmount());
         nationRepository.save(nation);
 

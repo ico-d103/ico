@@ -45,7 +45,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         log.info("[token]{}", token);
 
         // 3. JWT 토큰을 쿠키에 저장
-        Cookie cookie = new Cookie("Authentication", token);
+        Cookie cookie = new Cookie("Authorization", token);
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60 * 24 * 30);
         response.addCookie(cookie);
