@@ -4,6 +4,10 @@ import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
 import { postFinanceDepositAPI } from "@/api/student/finance/postFinanceDepositAPI"
+import useNotification from "@/hooks/useNotification"
+import UseAnimations from "react-useanimations";
+import alertTriangle from 'react-useanimations/lib/alertTriangle';
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 const ALERT_ICON = (
 	<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -39,6 +43,7 @@ type FinanceDepositApplyModalProps = {
 
 
 function FinanceDepositApplyModal({term, data, unit, closeComp, refetch}: FinanceDepositApplyModalProps) {
+	const noti = useNotification()
 	const [ value, setValue] = useState<number>(0)
 
 	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,13 +52,17 @@ function FinanceDepositApplyModal({term, data, unit, closeComp, refetch}: Financ
 		}
 	}
 
+	
+
 	const submitHandler = () => {
 		postFinanceDepositAPI({body: {longPeriod: term === 1 ? true : false, amount: value}}).then((res) => {
 			refetch()
 			closeComp()
 		})
 		.catch((err) => {
+			console.log(err)
 			
+			noti({content: <NotiTemplate type={'ok'} content="예금 신청에 실패했어요!"/>, width: 400, height: 120, duration: 3000})
 		})
 	}
 	return (
@@ -101,6 +110,7 @@ const inputCSS = css`
 const mentWrapperCSS = css`
 	
 	display: flex;
+	margin-bottom: 12px;
 `
 
 const iconWrapperCSS = css`
