@@ -43,7 +43,7 @@ function HomeButtonSection() {
             </HomeGradationButton>
         </div>
         <div css={columnCSS}>
-            <HomeGradationButton cssProps={css`width: 54%; height: 140px;`} backgroundColor={['#A175FF', '#5200FF']} onClick={() => {navigate('/student/finance/guide', 'bottomToTop')}}>
+            <HomeGradationButton cssProps={css`width: 54%; height: 140px;`} backgroundColor={['#A175FF', '#5200FF']} onClick={() => {navigate('/student/finance/deposit', 'bottomToTop')}}>
                 <div css={lsizeFontCSS}>
                     예금하러 가요!
                 </div>

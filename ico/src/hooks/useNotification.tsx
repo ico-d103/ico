@@ -12,13 +12,13 @@ const useNotification = () => {
 	const notiDelieverer = ({
 		content,
 		duration,
-		width,
-		height,
+		width = '350px',
+		height = '100px',
 	}: {
 		content: any
 		duration: number
-		width: string
-		height: string
+		width?: string
+		height?: string
 	}) => {
 		let key =
 			Object.keys(stackNotificationAtom).length !== 0

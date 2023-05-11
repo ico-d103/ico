@@ -44,23 +44,33 @@ const initInputCSS = ({ isFile, textAlign }: { isFile?: boolean, textAlign?: 'le
 		/* width: 100%; */
 		border: none;
 		min-width: 0px;
+		
 		background-color: rgba(255, 255, 255, 0);
-		padding: 12px;
+		padding: 0px 12px 0px 12px;
+		height: 100%;
 		display: ${isFile && "none"};
 		&:focus {
 			outline: none;
 		}
 		text-align: ${textAlign};
+
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
 	`
 }
 
 const initLabelCSS = css`
 	width: 100%;
+	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	overflow: hidden;
 	flex-wrap: nowrap;
+
 `
 
 const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
@@ -78,6 +88,20 @@ const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
 			& input::placeholder {
 				color: rgba(0, 20, 50, 0.5);
 			}
+		`,
+		greenDefault: css`
+		/* border: 2px solid rgba(0, 0, 0, 0.1); */
+		border: none;
+		background-color: rgb(230, 240, 235);
+		border-radius: 10px;
+		height: 42px;
+		outline: ${isFocusing ? "4px solid rgba(0, 150, 70, 0.2)" : "2px solid rgba(0, 50, 20, 0.1)"};
+		transition-duration: 0.15s;
+		transition-property: outline ease;
+
+		& input::placeholder {
+			color: rgba(0, 50, 20, 0.5);
+		}
 		`,
 		mobileDefault: css`
 		/* border: 2px solid rgba(0, 0, 0, 0.1); */

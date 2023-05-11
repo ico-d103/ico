@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { putGovJobAPI } from "@/api/teacher/gov/putGovJobAPI";
 import { postGovJobAPI } from "@/api/teacher/gov/postGovJobAPI";
+import useGetNation from "@/hooks/useGetNation";
 
 
 function GovJobCreate({
@@ -34,7 +35,7 @@ function GovJobCreate({
 		"#634AFF",
 	]
 
-
+	const [nation] = useGetNation()
 
 	const queryClient = useQueryClient();
 	// 직업 추가 구현시 수정해서 사용
@@ -123,7 +124,7 @@ function GovJobCreate({
 							max={20}
 							css={inputCSS}
 						/>
-						미소
+						{nation.currency}
 					</div>
 				</div>
 

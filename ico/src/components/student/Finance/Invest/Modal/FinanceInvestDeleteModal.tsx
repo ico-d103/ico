@@ -2,8 +2,7 @@ import React, { useState } from "react"
 import Input from "@/components/common/Input/Input"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
-import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
-import { postFinanceDepositAPI } from "@/api/student/finance/postFinanceDepositAPI"
+import { deleteFinanceInvestAPI } from "@/api/student/finance/deleteFinanceInvestAPI"
 import useNotification from "@/hooks/useNotification"
 import UseAnimations from "react-useanimations"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
@@ -33,81 +32,59 @@ const CHECK_ICON = (
 	</svg>
 )
 
-type FinanceDepositApplyModalProps = {
-	term: 0 | 1
-	data: getFinanceDepositRateType
-	unit: string
+type FinanceInvestDeleteModalProps = {
+	diff: number
 	closeComp: Function
 	refetch: Function
 }
 
-function FinanceDepositApplyModal({ term, data, unit, closeComp, refetch }: FinanceDepositApplyModalProps) {
+function FinanceInvestDeleteModal({diff, closeComp, refetch }: FinanceInvestDeleteModalProps) {
 	const noti = useNotification()
 	const [value, setValue] = useState<number>(0)
 
-	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (Number(e.target.value) <= data.account) {
-			setValue(() => Number(e.target.value))
-		}
-	}
+
 
 	const submitHandler = () => {
-		postFinanceDepositAPI({ body: { longPeriod: term === 1 ? true : false, amount: value } })
-			.then((res) => {
-				refetch()
-				noti({
-					content: <NotiTemplate type={"ok"} content="예금 신청에 성공했어요!" />,
-					width: "300px",
-					height: "120px",
-					duration: 3000,
-				})
-				closeComp()
-			})
-			.catch((err) => {
-				console.log(err)
-
-				noti({
-					content: <NotiTemplate type={"alert"} content="예금 신청에 실패했어요!" />,
-					width: "300px",
-					height: "120px",
-					duration: 3000,
-				})
-			})
+		deleteFinanceInvestAPI({}).then((res) => {
+			refetch()
+			noti({content: <NotiTemplate type={'ok'} content="투자 매도에 성공했어요!"/>, width: '300px', height: '120px', duration: 3000})
+			closeComp()
+		})
+		.catch((err) => {
+			console.log(err)
+			noti({content: <NotiTemplate type={'alert'} content="투자 매도에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
+		})
 	}
 	return (
 		<div css={wrapperCSS}>
-			<div css={grayLabelCSS}>원하는 액수를 입력해 주세요!</div>
-			<Input
-				value={value}
-				onChange={onChangeHandler}
-				theme={"default"}
-				textAlign={"right"}
-				rightContent={
-					<div css={balanceLabelCSS}>
-						/ {data.account.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {unit}
-					</div>
-				}
-				customCss={inputCSS}
-			/>
+			
+			{diff < 0 && <div css={mentWrapperCSS}>
+				<div css={iconWrapperCSS}>{ALERT_ICON}</div>
+
+				<span css={mentCSS}>이번에 매도하면 손해를 보게 되요!</span>
+			</div>}
+
+			{diff > 0 && <div css={mentWrapperCSS}>
+				<div css={iconWrapperCSS}>{CHECK_ICON}</div>
+
+				<span css={mentCSS}>이번에 매도하면 수익을 얻을 수 있어요!</span>
+			</div>}
+
+			
+			
+
 			<div css={mentWrapperCSS}>
 				<div css={iconWrapperCSS}>{ALERT_ICON}</div>
 
-				<span css={mentCSS}>중도에 해지하면, 원금만 돌려받을 수 있어요!</span>
-			</div>
-			<div css={mentWrapperCSS}>
-				<div css={iconWrapperCSS}>{CHECK_ICON}</div>
-
-				<span css={mentCSS}>
-					만기가 되면 원금의 {term === 0 ? data.shortPeriod : data.longPeriod}퍼센트 만큼 추가로 더 돌려받을 수 있어요!
-				</span>
+				<span css={mentCSS}>하루에 한번만 매도/매수할 수 있어요!</span>
 			</div>
 
 			<div css={buttonWrapperCSS}>
 				<Button
-					text={"정기 예금 신청"}
+					text={"매도"}
 					fontSize={"var(--student-h3)"}
 					width={"47%"}
-					theme={"positive"}
+					theme={diff > 0 ? "positive" : "warning"}
 					onClick={() => {
 						submitHandler()
 					}}
@@ -138,12 +115,12 @@ const grayLabelCSS = css`
 
 const inputCSS = css`
 	width: 100%;
-	margin-bottom: 16px;
+	margin-bottom: 12px;
 `
 
 const mentWrapperCSS = css`
 	display: flex;
-	margin-bottom: 8px;
+	margin-bottom: 12px;
 `
 
 const iconWrapperCSS = css`
@@ -173,4 +150,4 @@ const balanceLabelCSS = css`
 	white-space: nowrap;
 `
 
-export default FinanceDepositApplyModal
+export default FinanceInvestDeleteModal
