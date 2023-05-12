@@ -72,7 +72,8 @@ public class StudentServiceImpl implements StudentService{
                 .name(requestDto.getName())
                 .account(0)
                 .isFrozen(false)
-                .creditScore((byte) 0)
+                .creditScore((byte) 700)
+                .creditRating((byte) 6)
                 .role(Role.STUDENT)
                 .salary(0)
                 .build();
