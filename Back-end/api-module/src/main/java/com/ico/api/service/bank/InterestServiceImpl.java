@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,6 +68,8 @@ public class InterestServiceImpl implements InterestService {
         DepositStudentResDto myDeposit = new DepositStudentResDto();
         if(depositOptional.isPresent()){
             Deposit deposit = depositOptional.get();
+            boolean isEnd = !LocalDateTime.now().toLocalDate().isBefore(deposit.getEndDate().toLocalDate());
+
             myDeposit = myDeposit.builder()
                     .amount(deposit.getAmount())
                     .depositAmount(deposit.getAmount() * deposit.getInterest() / 100)
@@ -74,6 +77,7 @@ public class InterestServiceImpl implements InterestService {
                     .startDate(deposit.getStartDate().format(formatter))
                     .endDate(deposit.getEndDate().format(formatter))
                     .creditRating(deposit.getCreditRating())
+                    .end(isEnd)
                     .build();
         }
 
