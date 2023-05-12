@@ -5,6 +5,7 @@ import com.ico.api.dto.studentProduct.StudentProductDetailResDto;
 import com.ico.api.dto.studentProduct.StudentProductReqDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.service.transaction.TransactionService;
+import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentProduct;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ public class StudentProductServiceImpl implements StudentProductService {
     private final NationRepository nationRepository;
     private final StudentProductRepository studentProductRepository;
     private final S3UploadService s3UploadService;
+    private final JwtTokenProvider jwtTokenProvider;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
     /**
@@ -47,11 +50,11 @@ public class StudentProductServiceImpl implements StudentProductService {
      * @param proposal 판매제안서 양식
      */
     @Override
-    public void createProduct(List<MultipartFile> files, StudentProductReqDto proposal) {
-        // TODO : REQUEST 변환
-        long nationId = 99;
-        // TODO : REQUEST 변환
-        long studentId = 1;
+    public void createProduct(HttpServletRequest request, List<MultipartFile> files, StudentProductReqDto proposal) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -80,9 +83,8 @@ public class StudentProductServiceImpl implements StudentProductService {
      */
     @Transactional(readOnly = true)
     @Override
-    public List<StudentProductAllResDto> findAllProduct() {
-        // TODO : REQUEST 변환
-        long nationId = 99;
+    public List<StudentProductAllResDto> findAllProduct(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         if (nationRepository.findById(nationId).isEmpty()) {
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
@@ -116,9 +118,9 @@ public class StudentProductServiceImpl implements StudentProductService {
      * @param id 학생 상품 id
      */
     @Override
-    public void updateIsAssigned(Long id) {
-        // TODO : REQUEST 변환
-        long nationId = 99L;
+    public void updateIsAssigned(HttpServletRequest request, Long id) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
         StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PROPOSAL_NOT_FOND));
         product.setAssigned(true);
@@ -131,9 +133,8 @@ public class StudentProductServiceImpl implements StudentProductService {
      * @param id 학생 상품 id
      */
     @Override
-    public void deleteProduct(Long id) {
-        // TODO : REQUEST 변환
-        long nationId = 99L;
+    public void deleteProduct(HttpServletRequest request, Long id) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
@@ -147,8 +148,8 @@ public class StudentProductServiceImpl implements StudentProductService {
      * @return 학생 상품 상세 정보
      */
     @Override
-    public StudentProductDetailResDto detailProduct(Long id) {
-        long nationId = 99;
+    public StudentProductDetailResDto detailProduct(HttpServletRequest request, Long id) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));

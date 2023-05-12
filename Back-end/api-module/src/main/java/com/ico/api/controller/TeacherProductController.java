@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -38,8 +39,8 @@ public class TeacherProductController {
      * @return status
      */
     @PostMapping(value = "/teacher", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<HttpStatus> uploadProduct(@Valid @RequestPart TeacherProductReqDto product, @RequestPart List<MultipartFile> files) {
-        teacherProductService.createProduct(product, files);
+    public ResponseEntity<HttpStatus> uploadProduct(HttpServletRequest request, @Valid @RequestPart TeacherProductReqDto product, @RequestPart List<MultipartFile> files) {
+        teacherProductService.createProduct(request, product, files);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -49,8 +50,8 @@ public class TeacherProductController {
      * @return 교사 상품 목록
      */
     @GetMapping
-    public ResponseEntity<List<TeacherProductAllResDto>> findAllProduct() {
-        return ResponseEntity.ok(teacherProductService.findAllProduct());
+    public ResponseEntity<List<TeacherProductAllResDto>> findAllProduct(HttpServletRequest request) {
+        return ResponseEntity.ok(teacherProductService.findAllProduct(request));
     }
 
     /**
@@ -60,8 +61,8 @@ public class TeacherProductController {
      * @return Httpstatus
      */
     @PostMapping("/student/{teacherProductId}")
-    public ResponseEntity<HttpStatus> buyProduct(@PathVariable Long teacherProductId) {
-        teacherProductService.buyProduct(teacherProductId);
+    public ResponseEntity<HttpStatus> buyProduct(HttpServletRequest request, @PathVariable Long teacherProductId) {
+        teacherProductService.buyProduct(request, teacherProductId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -72,9 +73,7 @@ public class TeacherProductController {
      * @return 교사 상품 상세 정보
      */
     @GetMapping("/{teacherProductId}")
-    public ResponseEntity<TeacherProductDetailResDto> detailProduct(@PathVariable Long teacherProductId){
-        return ResponseEntity.ok(teacherProductService.detailProduct(teacherProductId));
+    public ResponseEntity<TeacherProductDetailResDto> detailProduct(HttpServletRequest request, @PathVariable Long teacherProductId){
+        return ResponseEntity.ok(teacherProductService.detailProduct(request, teacherProductId));
     }
-
-
 }
