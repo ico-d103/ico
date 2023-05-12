@@ -1,6 +1,5 @@
 import { tokenInstance } from "@/api/instance"
-import { successReturnType } from "@/types/common/apiReturnTypes"
-import {} from "@/types/teacher/apiReturnTypes"
+import { getJobApplierType } from "@/types/teacher/apiReturnTypes"
 
 type paramsType = {
 	id: number
@@ -8,7 +7,7 @@ type paramsType = {
 
 type responseType = {
 	status: number
-	data: successReturnType // 임시
+	data: getJobApplierType[]
 }
 
 export const getJobApplierAPI = async ({ id }: paramsType) => {

@@ -110,9 +110,7 @@ export type getStudentProductsType = {
 	assigned: boolean
 }
 
-export type getStudentProductDetailType = {
-	
-}
+export type getStudentProductDetailType = {}
 
 export type getNationTreasuryType = {
 	treasury: number
@@ -155,7 +153,7 @@ export type getJobListType = {
 }
 
 export type getJobApplierType = {
-	id: string // 수정 예정
+	resumeId: string
 	name: string
 	number: number
 }
