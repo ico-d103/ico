@@ -66,6 +66,7 @@ export type getStudentListType = {
 }
 
 export type getJobListType = {
+	id: number
 	title: string
 	creditRating: number
 	count: number

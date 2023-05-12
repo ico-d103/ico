@@ -27,7 +27,7 @@ function ClassJobSearchCard({ job }: ClassJobSearchCardPropsType) {
 				compState={compState}
 				closeComp={closeComp}
 				transition={"scale"}
-				content={<ClassJobSearchModal job={job.title} closeComp={closeComp} />}
+				content={<ClassJobSearchModal job={job.title} id={job.id} closeComp={closeComp} />}
 			/>
 		</>
 	)

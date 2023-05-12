@@ -1,13 +1,22 @@
 import { css } from "@emotion/react"
+import { postResumeAPI } from "@/api/student/class/postResumeAPI"
 
 type ClassJobSearchModalPropsType = {
 	job: string
+	id: number
 	closeComp: () => void
 }
 
-function ClassJobSearchModal({ job, closeComp }: ClassJobSearchModalPropsType) {
+function ClassJobSearchModal({ job, id, closeComp }: ClassJobSearchModalPropsType) {
 	const applyJobHandler = () => {
-		// 여기서 id 받아서 신청
+		postResumeAPI({ id })
+			.then((res) => {
+				// 성공적으로 신청했다는 stackNotification 띄우기
+				closeComp()
+			})
+			.catch((error) => {
+				alert(error.response.message)
+			})
 	}
 
 	return (
