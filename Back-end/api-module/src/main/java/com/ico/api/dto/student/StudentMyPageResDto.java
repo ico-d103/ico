@@ -34,8 +34,12 @@ public class StudentMyPageResDto {
 
     private String color;
 
+    private int deposit;
+
+    private int invest;
+
     @Builder
-    public StudentMyPageResDto(String school, int room, int number, String name, int account, int creditRating, String jobImage, String jobName, String color) {
+    public StudentMyPageResDto(String school, int room, int number, String name, int account, int creditRating, String jobImage, String jobName, String color, int deposit, int invest) {
         this.school = school;
         this.room = room;
         this.number = number;
@@ -45,6 +49,8 @@ public class StudentMyPageResDto {
         this.jobImage = jobImage;
         this.jobName = jobName;
         this.color = color;
+        this.deposit = deposit;
+        this.invest = invest;
     }
 
     /**
@@ -55,7 +61,7 @@ public class StudentMyPageResDto {
      * @param job
      * @return
      */
-    public StudentMyPageResDto of(Student student, Nation nation, Job job) {
+    public StudentMyPageResDto of(Student student, Nation nation, Job job, int depositAmount, int investAmount) {
         return StudentMyPageResDto.builder()
                 .school(nation.getSchool())
                 .room(nation.getRoom())
@@ -67,6 +73,8 @@ public class StudentMyPageResDto {
                 .jobImage(job == null ? null : job.getImage())
                 .jobName(job == null ? null : job.getTitle())
                 .color(job == null ? null : job.getColor())
+                .deposit(depositAmount)
+                .invest(investAmount)
                 .build();
     }
 }
