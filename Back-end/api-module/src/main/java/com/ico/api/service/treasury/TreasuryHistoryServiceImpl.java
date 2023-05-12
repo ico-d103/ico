@@ -4,6 +4,7 @@ import com.ico.api.dto.treasuryHistory.TreasuryHistoryColDto;
 import com.ico.api.dto.treasuryHistory.TreasuryHistoryDto;
 import com.ico.api.dto.treasuryHistory.TreasuryHistoryTeacherColDto;
 import com.ico.api.dto.treasuryHistory.TreasuryHistoryTeacherResDto;
+import com.ico.api.util.Formatter;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.TreasuryHistory;
@@ -20,12 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -43,12 +42,6 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
     private final JwtTokenProvider jwtTokenProvider;
 
     private final NationRepository nationRepository;
-
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd-HH:mm");
-
-    private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
 
     @Override
     public TreasuryHistoryTeacherResDto findAllTreasuryHistory(int page, int size, HttpServletRequest request) {
@@ -70,7 +63,7 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
         List<TreasuryHistoryTeacherColDto> pageList = new ArrayList<>();
         for (TreasuryHistory treasuryHistory : treasuryHistoryList) {
             pageList.add(new TreasuryHistoryTeacherColDto()
-                    .of(treasuryHistory, treasuryHistory.getDate().format(formatter), numberFormat.format(treasuryHistory.getAmount())));
+                    .of(treasuryHistory, treasuryHistory.getDate().format(Formatter.date), Formatter.number.format(treasuryHistory.getAmount())));
         }
 
         return TreasuryHistoryTeacherResDto.builder()
@@ -110,7 +103,7 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
                 .getTreasury();
 
         for (TreasuryHistory treasuryHistory : treasuryHistories) {
-            String[] dateTime = treasuryHistory.getDate().format(dateTimeFormatter).split("-");
+            String[] dateTime = treasuryHistory.getDate().format(Formatter.dateTime).split("-");
 
             String source = treasuryHistory.getSource() + " · " + dateTime[1];
             int balance = curTreasury;
@@ -120,9 +113,9 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
             map.putIfAbsent(date, new ArrayList<>());
             map.get(date).add(TreasuryHistoryColDto.builder()
                             .title(treasuryHistory.getTitle())
-                            .amount(numberFormat.format(treasuryHistory.getAmount()))
+                            .amount(Formatter.number.format(treasuryHistory.getAmount()))
                             .source(source)
-                            .balance(numberFormat.format(balance))
+                            .balance(Formatter.number.format(balance))
                     .build());
         }
 

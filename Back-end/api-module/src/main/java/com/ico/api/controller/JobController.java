@@ -65,7 +65,7 @@ public class JobController {
      * @return
      */
     @GetMapping("/teacher/all")
-    public ResponseEntity<List<JobAllResDto>> findAllJob(HttpServletRequest request) {
+    public ResponseEntity<JobAllResDto> findAllJob(HttpServletRequest request) {
         return ResponseEntity.ok(jobService.findAllJob(request));
     }
 

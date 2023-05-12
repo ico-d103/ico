@@ -76,7 +76,7 @@ public class ResumeServiceImpl implements ResumeService {
         for (Resume resume : resumeList) {
             Student student = studentRepository.findById(resume.getStudentId())
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-            dtoList.add(new ResumeResDto().of(student));
+            dtoList.add(new ResumeResDto().of(resume.getId(), student));
         }
         return dtoList;
     }
@@ -108,7 +108,7 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Transactional
     @Override
-    public void rejectResumeResume(String resumeId, HttpServletRequest request) {
+    public void rejectResume(String resumeId, HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         Resume resume = findAndValidateResume(resumeId, nationId);
@@ -206,6 +206,7 @@ public class ResumeServiceImpl implements ResumeService {
      */
     private void assignJobToStudent(Job job, Student student) {
         job.setCount((byte) (job.getCount() + 1));
+        job.setStudentName(job.getStudentName() + student.getName() + ",");
         jobRepository.save(job);
         log.info("[assignResume] 직업 배정 인원 추가");
         student.setJob(job);

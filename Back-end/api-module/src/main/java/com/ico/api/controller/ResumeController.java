@@ -73,7 +73,7 @@ public class ResumeController {
      */
     @DeleteMapping("/teacher/{resumeId}")
     public ResponseEntity<HttpStatus> rejectResume(@PathVariable String resumeId, HttpServletRequest request) {
-        resumeService.rejectResumeResume(resumeId, request);
+        resumeService.rejectResume(resumeId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

@@ -1,57 +1,41 @@
 package com.ico.api.dto.job;
 
-
-import com.ico.core.entity.Job;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
- * 교사가 전체 직업 조회할 때 사용하는 Dto
+ * 교사가 전체 직업 조회할 때 사용하는 res Dto
  *
  * @author 서재건
  */
 @Getter
-@NoArgsConstructor()
+@NoArgsConstructor
 public class JobAllResDto {
 
-    private Long id;
+    private int restJobCount;
 
-    private String title;
-
-    private String image;
-
-    private int total;
-
-    private int count;
-
-    private String color;
+    private List<JobAllColDto> jobList;
 
     @Builder
-    public JobAllResDto(Long id, String title, String image, int total, int count, String color) {
-        this.id = id;
-        this.title = title;
-        this.image = image;
-        this.total = total;
-        this.count = count;
-        this.color = color;
+    public JobAllResDto(int restJobCount, List<JobAllColDto> jobList) {
+        this.restJobCount = restJobCount;
+        this.jobList = jobList;
     }
 
     /**
-     * repository에서 불러온 Job을 JobAllResDto로 생성
+     * 교사의 전체 직업 조회 res dto 반환
      *
-     * @param job
-     * @return JobAllResDto
+     * @param restJobCount
+     * @param jobList
+     * @return
      */
-    public JobAllResDto of(Job job) {
+    public JobAllResDto of(int restJobCount, List<JobAllColDto> jobList) {
         return JobAllResDto.builder()
-                .id(job.getId())
-                .title(job.getTitle())
-                .image(job.getImage())
-                .total(job.getTotal())
-                .count(job.getCount())
-                .color(job.getColor())
+                .restJobCount(restJobCount)
+                .jobList(jobList)
                 .build();
     }
-
 }

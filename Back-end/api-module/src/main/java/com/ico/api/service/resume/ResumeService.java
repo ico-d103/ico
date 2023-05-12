@@ -40,5 +40,5 @@ public interface ResumeService {
      *
      * @param resumeId
      */
-    void rejectResumeResume(String resumeId, HttpServletRequest request);
+    void rejectResume(String resumeId, HttpServletRequest request);
 }
