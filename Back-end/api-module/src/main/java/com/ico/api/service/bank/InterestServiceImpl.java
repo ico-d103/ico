@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,6 +73,8 @@ public class InterestServiceImpl implements InterestService {
         DepositStudentResDto myDeposit = new DepositStudentResDto();
         if(depositOptional.isPresent()){
             Deposit deposit = depositOptional.get();
+            boolean isEnd = !LocalDateTime.now().toLocalDate().isBefore(deposit.getEndDate().toLocalDate());
+
             myDeposit = myDeposit.builder()
                     .amount(deposit.getAmount())
                     .depositAmount(deposit.getAmount() * deposit.getInterest() / 100)
