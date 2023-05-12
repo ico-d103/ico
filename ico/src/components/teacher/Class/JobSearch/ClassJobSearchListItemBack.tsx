@@ -14,7 +14,7 @@ function ClassJobSearchListItemBack({ job }: ClassJobSearchListItemBackPropsType
 	return (
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
-				<b>{job.title}</b> 신청자 목록
+				<b>{job.title}</b> 신청 목록
 			</div>
 			{data?.length === 0 ? (
 				<div css={noneWrapperCSS}>
@@ -33,7 +33,6 @@ function ClassJobSearchListItemBack({ job }: ClassJobSearchListItemBackPropsType
 
 const wrapperCSS = css`
 	padding: 25px 20px;
-	position: relative;
 `
 
 const headerCSS = css`
@@ -51,8 +50,15 @@ const listWrapperCSS = css`
 `
 
 const noneWrapperCSS = css`
-	position: absolute;
-	top: calc(300px / 2);
+	width: 100%;
+	height: 300px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	> span {
+		color: #6e6f71;
+	}
 `
 
 export default ClassJobSearchListItemBack

@@ -1,9 +1,8 @@
-import React from "react"
 import { css } from "@emotion/react"
 import { CLASS_APPLY_APPROVE, CLASS_APPLY_DENY } from "../ClassIcons"
 import { postJobAcceptAPI } from "@/api/teacher/class/postJobAcceptAPI"
 import { deleteJobDenyAPI } from "@/api/teacher/class/deleteJobDenyAPI"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { getJobApplierType } from "@/types/teacher/apiReturnTypes"
 
 type ClassJobSearchListApplyListItemPropsType = {
@@ -11,27 +10,28 @@ type ClassJobSearchListApplyListItemPropsType = {
 }
 
 function ClassJobSearchListApplyListItem({ student }: ClassJobSearchListApplyListItemPropsType) {
-	// const acceptMutation = useMutation(({ id: string }) => postJobAcceptAPI(id))
-	// const denyMutation = useMutation(({ id: string }) => deleteJobDenyAPI(id))
+	const queryClient = useQueryClient()
+	const acceptMutation = useMutation((id: string) => postJobAcceptAPI({ id }))
+	const denyMutation = useMutation((id: string) => deleteJobDenyAPI({ id }))
 
 	const approveHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
 		e.stopPropagation() // 이벤트 버블링 방지
 
-		// acceptMutation.mutate(id, {
-		// 	onSuccess: () => {
-		// 		return
-		// 	},
-		// })
+		acceptMutation.mutate(student.resumeId, {
+			onSuccess: () => {
+				return queryClient.invalidateQueries(["jobList"])
+			},
+		})
 	}
 
 	const denyHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
 		e.stopPropagation()
 
-		// denyMutation.mutate(id, {
-		// 	onSuccess: () => {
-		// 		return
-		// 	},
-		// })
+		denyMutation.mutate(student.resumeId, {
+			onSuccess: () => {
+				return queryClient.invalidateQueries(["jobList"])
+			},
+		})
 	}
 
 	return (

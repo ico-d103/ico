@@ -8,8 +8,6 @@ import { getJobListType } from "@/types/teacher/apiReturnTypes"
 function jobsearch() {
 	const { data } = useQuery<getJobListType>(["jobList"], getJobListAPI)
 
-	console.log(data)
-
 	return (
 		<div css={wrapperCSS}>
 			<h1>구인 구직</h1>
