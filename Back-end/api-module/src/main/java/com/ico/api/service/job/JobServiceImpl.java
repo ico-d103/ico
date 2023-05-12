@@ -83,7 +83,7 @@ public class JobServiceImpl implements JobService{
         int restJobCount = 0;
         for (Job job : jobList) {
             // 아직 총 인원 수를 채우지 못한 직업 체크
-            if (job.getTotal() == job.getCount()) {
+            if (job.getTotal() > job.getCount()) {
                 restJobCount++;
             }
             String salary = Formatter.number.format(job.getWage() * 30L);
