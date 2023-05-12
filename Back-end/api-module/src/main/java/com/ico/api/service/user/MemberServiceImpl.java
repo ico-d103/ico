@@ -69,17 +69,16 @@ public class MemberServiceImpl implements MemberService {
                     return "home";
                 }
                 else {
-                    Optional<Student> student = studentRepository.findById(studentId);
-                    if (student.get().getNation() != null) {
+                    Student student = studentRepository.findById(studentId)
+                            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                    if (student.getNation() != null) {
                         return "check";
                     }
                     else {
                         if (immigrationRepository.findByStudentId(studentId) != null) {
                             return "check";
                         }
-                        else {
-                            return "enter";
-                        }
+                        return "enter";
                     }
                 }
             }
@@ -87,18 +86,11 @@ public class MemberServiceImpl implements MemberService {
                 if (jwtTokenProvider.getNation(token) != null) {
                     return "class/students";
                 }
-                else {
-                    return "create";
-
-                }
+                return "create";
             }
-            else {
-                return "admin";
-            }
+            return "admin";
         }
-        else {
-            return "login";
-        }
+        return "login";
     }
 }
 

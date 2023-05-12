@@ -54,13 +54,14 @@ public class NationServiceImpl implements NationService {
         if (role == Role.TEACHER) {
             String title = reqDto.getTitle();
             // 나라 이름 중복
-            if (!nationRepository.findByTitle(title).isPresent()) {
+            if (nationRepository.findByTitle(title).isEmpty()) {
                 Long teacherId = jwtTokenProvider.getId(token);
-                Optional<Teacher> teacher = teacherRepository.findById(teacherId);
+                Teacher teacher = teacherRepository.findById(teacherId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
                 // 교사 인증 여부
-                if (teacher.get().isAssigned()){
+                if (teacher.isAssigned()){
                     // 교사가 만든 나라의 여부
-                    if (teacher.get().getNation() != null) {
+                    if (teacher.getNation() != null) {
                         Nation nation = Nation.builder()
                                 .school(reqDto.getSchool())
                                 .grade((byte) reqDto.getGrade())
@@ -75,10 +76,8 @@ public class NationServiceImpl implements NationService {
                         nationRepository.save(nation);
 
                         // 반을 생성했을 때 교사 테이블의 Nation 업데이트
-                        teacher.ifPresent(t -> {
-                            t.setNation(nation);
-                            teacherRepository.save(t);
-                        });
+                        teacher.setNation(nation);
+                        teacherRepository.save(teacher);
                         // 반을 생성했을 때 교사의 토큰 업데이트 / 학생은 직접 확인 버튼을 눌러서 도메인/api/token 으로 직접 요청해야한다.
                         return jwtTokenProvider.updateTokenCookie(request);
                     }
