@@ -10,7 +10,6 @@ import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.ImmigrationRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -67,22 +66,19 @@ public class MemberServiceImpl implements MemberService {
                 Long studentId = jwtTokenProvider.getId(token);
                 if (jwtTokenProvider.getNation(token) != null) {
                     return "home";
-                }
-                else {
+                } else {
                     Student student = studentRepository.findById(studentId)
                             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
                     if (student.getNation() != null) {
                         return "check";
-                    }
-                    else {
+                    } else {
                         if (immigrationRepository.findByStudentId(studentId) != null) {
                             return "check";
                         }
                         return "enter";
                     }
                 }
-            }
-            else if (role.equals(Role.TEACHER)) {
+            } else if (role.equals(Role.TEACHER)) {
                 if (jwtTokenProvider.getNation(token) != null) {
                     return "class/students";
                 }
