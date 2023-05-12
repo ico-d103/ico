@@ -2,6 +2,7 @@ package com.ico.api.service.transaction;
 
 import com.ico.api.dto.transaction.TransactionResDto;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.api.util.Formatter;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Transaction;
 import com.ico.core.exception.CustomException;
@@ -39,10 +40,6 @@ public class TransactionServiceImpl implements TransactionService{
     private final StudentRepository studentRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
-
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd-HH:mm");
-
-    private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
 
     /**
      * 상점 거래
@@ -126,7 +123,7 @@ public class TransactionServiceImpl implements TransactionService{
         int curAccount = student.getAccount();
 
         for (Transaction transaction : transactions) {
-            String[] dateTime = transaction.getDate().format(formatter).split("-");
+            String[] dateTime = transaction.getDate().format(Formatter.dateTime).split("-");
 
             int amount = transaction.getFrom().equals(String.valueOf(studentId)) ? -1 * transaction.getAmount() : transaction.getAmount();
             String source = getSource(String.valueOf(studentId), transaction) + " · " + dateTime[1];
@@ -137,9 +134,9 @@ public class TransactionServiceImpl implements TransactionService{
             map.putIfAbsent(date, new ArrayList<>());
             map.get(date).add(TransactionResDto.builder()
                             .title(transaction.getTitle())
-                            .amount(numberFormat.format(amount))
+                            .amount(Formatter.number.format(amount))
                             .source(source)
-                            .balance(numberFormat.format(balance))
+                            .balance(Formatter.number.format(balance))
                     .build());
         }
         return map;

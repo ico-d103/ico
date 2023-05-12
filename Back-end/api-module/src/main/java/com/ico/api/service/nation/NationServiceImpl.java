@@ -3,6 +3,7 @@ package com.ico.api.service.nation;
 import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.api.util.Formatter;
 import com.ico.core.code.Role;
 import com.ico.core.dto.StockReqDto;
 import com.ico.core.entity.Nation;
@@ -41,8 +42,6 @@ public class NationServiceImpl implements NationService {
     private final TeacherRepository teacherRepository;
     private final StockRepository stockRepository;
     private final JwtTokenProvider jwtTokenProvider;
-
-    private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
 
     @Override
     @Transactional
@@ -194,7 +193,7 @@ public class NationServiceImpl implements NationService {
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
         Map<String, String> map = new HashMap<>();
-        map.put("treasury", numberFormat.format(nation.getTreasury()));
+        map.put("treasury", Formatter.number.format(nation.getTreasury()));
         return map;
     }
 

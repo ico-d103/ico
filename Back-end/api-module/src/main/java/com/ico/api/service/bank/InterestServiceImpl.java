@@ -3,6 +3,7 @@ package com.ico.api.service.bank;
 import com.ico.api.dto.bank.DepositStudentResDto;
 import com.ico.api.dto.bank.InterestAllDto;
 import com.ico.api.dto.bank.InterestStudentResDto;
+import com.ico.api.util.Formatter;
 import com.ico.core.entity.Deposit;
 import com.ico.core.entity.Interest;
 import com.ico.core.entity.Student;
@@ -69,8 +70,8 @@ public class InterestServiceImpl implements InterestService {
             Deposit deposit = depositOptional.get();
             myDeposit = myDeposit.builder()
                     .interest(deposit.getInterest())
-                    .startDate(deposit.getStartDate().format(formatter))
-                    .endDate(deposit.getEndDate().format(formatter))
+                    .startDate(deposit.getStartDate().format(Formatter.date))
+                    .endDate(deposit.getEndDate().format(Formatter.date))
                     .creditRating(deposit.getCreditRating())
                     .build();
         }
