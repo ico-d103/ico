@@ -23,11 +23,17 @@ public class DepositStudentResDto {
 
     private byte creditRating;
 
+    private int amount;
+
+    private int depositAmount;
+
     @Builder
-    public DepositStudentResDto(byte interest, String startDate, String endDate, byte creditRating) {
+    public DepositStudentResDto(byte interest, String startDate, String endDate, byte creditRating, int amount, int depositAmount) {
         this.interest = interest;
         this.startDate = startDate;
         this.endDate = endDate;
         this.creditRating = creditRating;
+        this.amount = amount;
+        this.depositAmount = depositAmount;
     }
 }

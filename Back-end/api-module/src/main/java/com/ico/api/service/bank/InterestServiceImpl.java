@@ -68,6 +68,8 @@ public class InterestServiceImpl implements InterestService {
         if(depositOptional.isPresent()){
             Deposit deposit = depositOptional.get();
             myDeposit = myDeposit.builder()
+                    .amount(deposit.getAmount())
+                    .depositAmount(deposit.getAmount() * deposit.getInterest() / 100)
                     .interest(deposit.getInterest())
                     .startDate(deposit.getStartDate().format(formatter))
                     .endDate(deposit.getEndDate().format(formatter))

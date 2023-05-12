@@ -22,7 +22,7 @@ public class InvestReqDto {
     private Double price;
 
     @NotNull(message = "715")
-    @Min(value = 0, message = "716")
+    @Min(value = 1, message = "716")
     private Integer amount;
 
     @Builder
