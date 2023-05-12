@@ -63,41 +63,35 @@ public class MemberServiceImpl implements MemberService {
         String token = jwtTokenProvider.parseJwt(request);
         if (token != null) {
             Role role = jwtTokenProvider.getRole(token);
-            Long memberId = jwtTokenProvider.getId(token);
             if (role.equals(Role.STUDENT)) {
+                Long studentId = jwtTokenProvider.getId(token);
                 if (jwtTokenProvider.getNation(token) != null) {
-                    return "home or 2";
+                    return "home";
                 }
                 else {
-                    Optional<Student> student = studentRepository.findById(memberId);
+                    Optional<Student> student = studentRepository.findById(studentId);
                     if (student.get().getNation() != null) {
-                        return "check or 1";
+                        return "check";
                     }
                     else {
-                        if (immigrationRepository.findByStudentId(memberId) != null) {
-                            return "check or 1";
+                        if (immigrationRepository.findByStudentId(studentId) != null) {
+                            return "check";
                         }
                         else {
-                            return "enter or 0";
+                            return "enter";
                         }
                     }
                 }
             }
-//            TODO : 프론트와 상의 후 코드 교체
-//            else if (role.equals(Role.TEACHER)) {
-//                if (jwtTokenProvider.getNation(token) != null) {
-//                    return "home or 2";
-//                }
-//                else {
-//                    Optional<Teacher> teacher = teacherRepository.findById(memberId);
-//                    if (teacher.get().getNation() != null) {
-//                        return "check or 1";
-//                    }
-//                    else {
-//                        return "enter or 0";
-//                    }
-//                }
-//            }
+            else if (role.equals(Role.TEACHER)) {
+                if (jwtTokenProvider.getNation(token) != null) {
+                    return "class/students";
+                }
+                else {
+                    return "create";
+
+                }
+            }
             else {
                 return "admin";
             }

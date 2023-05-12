@@ -53,29 +53,42 @@ public class NationServiceImpl implements NationService {
         // 교사만 반 생성
         if (role == Role.TEACHER) {
             String title = reqDto.getTitle();
+            // 나라 이름 중복
             if (!nationRepository.findByTitle(title).isPresent()) {
-                Nation nation = Nation.builder()
-                        .school(reqDto.getSchool())
-                        .grade((byte) reqDto.getGrade())
-                        .room((byte) reqDto.getRoom())
-                        .title(title)
-                        .code(randomCode())
-                        .currency(reqDto.getCurrency())
-                        .treasury(0)
-                        .credit_up((byte) 20)
-                        .credit_down((byte) 50)
-                        .build();
-                nationRepository.save(nation);
+                Long teacherId = jwtTokenProvider.getId(token);
+                Optional<Teacher> teacher = teacherRepository.findById(teacherId);
+                // 교사 인증 여부
+                if (teacher.get().isAssigned()){
+                    // 교사가 만든 나라의 여부
+                    if (teacher.get().getNation() != null) {
+                        Nation nation = Nation.builder()
+                                .school(reqDto.getSchool())
+                                .grade((byte) reqDto.getGrade())
+                                .room((byte) reqDto.getRoom())
+                                .title(title)
+                                .code(randomCode())
+                                .currency(reqDto.getCurrency())
+                                .treasury(0)
+                                .credit_up((byte) 20)
+                                .credit_down((byte) 50)
+                                .build();
+                        nationRepository.save(nation);
 
-                // 반을 생성했을 때 교사 테이블의 Nation 업데이트
-                Long id = jwtTokenProvider.getId(token);
-                Optional<Teacher> teacher = teacherRepository.findById(id);
-                teacher.ifPresent(t -> {
-                    t.setNation(nation);
-                    teacherRepository.save(t);
-                });
-                // 반을 생성했을 때 교사의 토큰 업데이트 / 학생은 직접 확인 버튼을 눌러서 도메인/api/token 으로 직접 요청해야한다.
-                return jwtTokenProvider.updateTokenCookie(request);
+                        // 반을 생성했을 때 교사 테이블의 Nation 업데이트
+                        teacher.ifPresent(t -> {
+                            t.setNation(nation);
+                            teacherRepository.save(t);
+                        });
+                        // 반을 생성했을 때 교사의 토큰 업데이트 / 학생은 직접 확인 버튼을 눌러서 도메인/api/token 으로 직접 요청해야한다.
+                        return jwtTokenProvider.updateTokenCookie(request);
+                    }
+                    else {
+                        throw new CustomException(ErrorCode.EXIST_TEACHER_NATION);
+                    }
+                }
+                else {
+                    throw new CustomException(ErrorCode.NOT_FOUND_TEACHER_CERTIFICATION);
+                }
             }
             else {
                 throw new CustomException(ErrorCode.DUPLICATED_NATION_NAME);
