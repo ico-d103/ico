@@ -120,3 +120,19 @@ export type getCouponListType = {
 	name: string
 	title: string
 }
+
+export type jobListType = {
+	id: number
+	title: string
+	image: string
+	color: string
+	creditRating: number
+	resumeCount: number
+	recruitStudent: number
+	studentNames: string
+}
+
+export type getJobListType = {
+	restJobCount: number
+	jobList: jobListType[]
+}
