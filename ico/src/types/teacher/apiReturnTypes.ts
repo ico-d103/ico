@@ -110,9 +110,7 @@ export type getStudentProductsType = {
 	assigned: boolean
 }
 
-export type getStudentProductDetailType = {
-	
-}
+export type getStudentProductDetailType = {}
 
 export type getNationTreasuryType = {
 	treasury: number
@@ -152,4 +150,10 @@ export type jobListType = {
 export type getJobListType = {
 	restJobCount: number
 	jobList: jobListType[]
+}
+
+export type getJobApplierType = {
+	resumeId: string
+	name: string
+	number: number
 }
