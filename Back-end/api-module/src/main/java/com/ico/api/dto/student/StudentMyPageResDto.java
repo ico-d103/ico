@@ -32,8 +32,10 @@ public class StudentMyPageResDto {
 
     private String jobName;
 
+    private String color;
+
     @Builder
-    public StudentMyPageResDto(String school, int room, int number, String name, int account, int creditRating, String jobImage, String jobName) {
+    public StudentMyPageResDto(String school, int room, int number, String name, int account, int creditRating, String jobImage, String jobName, String color) {
         this.school = school;
         this.room = room;
         this.number = number;
@@ -42,6 +44,7 @@ public class StudentMyPageResDto {
         this.creditRating = creditRating;
         this.jobImage = jobImage;
         this.jobName = jobName;
+        this.color = color;
     }
 
     /**
@@ -63,6 +66,7 @@ public class StudentMyPageResDto {
                 // TODO: 학생의 직업이 엾을 경우 추후에 학생 기본 이미지 반환
                 .jobImage(job == null ? null : job.getImage())
                 .jobName(job == null ? null : job.getTitle())
+                .color(job == null ? null : job.getColor())
                 .build();
     }
 }

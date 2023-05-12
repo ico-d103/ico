@@ -4,6 +4,7 @@ import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.service.transaction.TransactionService;
+import com.ico.api.util.Formatter;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.dto.TeacherProductReqDto;
 import com.ico.core.entity.Coupon;
@@ -42,7 +43,6 @@ public class TeacherProductServiceImpl implements TeacherProductService {
     private final CouponRepository couponRepository;
     private final S3UploadService s3UploadService;
     private final JwtTokenProvider jwtTokenProvider;
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
     /**
      * 교사 상품 등록
@@ -100,7 +100,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                     .count(product.getCount())
                     .sold(product.getSold())
                     .rental(product.getRental())
-                    .date(product.getDate().format(formatter))
+                    .date(product.getDate().format(Formatter.date))
                     .build();
 
             resProductList.add(resDto);
@@ -196,7 +196,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 .count(product.getCount())
                 .rental(product.getRental())
                 .sold(product.getSold())
-                .date(product.getDate().format(formatter))
+                .date(product.getDate().format(Formatter.date))
                 .build();
     }
 }

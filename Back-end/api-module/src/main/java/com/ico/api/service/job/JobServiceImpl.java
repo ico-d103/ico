@@ -1,10 +1,12 @@
 package com.ico.api.service.job;
 
 import com.ico.api.dto.job.JobAddReqDto;
+import com.ico.api.dto.job.JobAllColDto;
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
 import com.ico.api.dto.job.JobResDto;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.api.util.Formatter;
 import com.ico.core.dto.JobReqDto;
 import com.ico.core.entity.Job;
 import com.ico.core.entity.Nation;
@@ -68,7 +70,7 @@ public class JobServiceImpl implements JobService{
 
     @Transactional(readOnly = true)
     @Override
-    public List<JobAllResDto> findAllJob(HttpServletRequest request) {
+    public JobAllResDto findAllJob(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         if (nationRepository.findById(nationId).isEmpty()) {
@@ -76,11 +78,22 @@ public class JobServiceImpl implements JobService{
         }
 
         List<Job> jobList = jobRepository.findAllByNationId(nationId);
-        List<JobAllResDto> resJobList = new ArrayList<>();
+        List<JobAllColDto> colJobList = new ArrayList<>();
+
+        int restJobCount = 0;
         for (Job job : jobList) {
-            resJobList.add(new JobAllResDto().of(job));
+            // 아직 총 인원 수를 채우지 못한 직업 체크
+            if (job.getTotal() == job.getCount()) {
+                restJobCount++;
+            }
+            String salary = Formatter.number.format(job.getWage() * 30L);
+            colJobList.add(new JobAllColDto().of(job, salary));
         }
-        return resJobList;
+
+        return JobAllResDto.builder()
+                .restJobCount(restJobCount)
+                .jobList(colJobList)
+                .build();
     }
 
     @Transactional(readOnly = true)
@@ -159,10 +172,11 @@ public class JobServiceImpl implements JobService{
         nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
-        //직업의 배정 인원 0으로 초기화
+        //직업의 배정 인원 및 이름 초기화
         List<Job> jobList = jobRepository.findAllByNationId(nationId);
         for (Job job : jobList) {
             job.setCount((byte) 0);
+            job.setStudentNames("");
             jobRepository.save(job);
         }
 
@@ -192,6 +206,8 @@ public class JobServiceImpl implements JobService{
 
         // 만약 학생 직업의 배정된 인원이 0인 경우 예외를 던지는 대신 0으로 설정
         job.setCount((byte) (job.getCount() == 0 ? 0 : job.getCount() - 1));
+
+        job.setStudentNames(job.getStudentNames().replace(student.getName() + ",", ""));
         jobRepository.save(job);
 
         student.setJob(null);

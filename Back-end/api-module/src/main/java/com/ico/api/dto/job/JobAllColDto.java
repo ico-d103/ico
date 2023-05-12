@@ -1,5 +1,6 @@
 package com.ico.api.dto.job;
 
+
 import com.ico.core.entity.Job;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,66 +10,64 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 직업 명함 조회 res dto
+ * 교사가 전체 직업 조회할 때 사용하는 Dto column
  *
  * @author 서재건
  */
 @Getter
-@NoArgsConstructor
-public class JobResDto {
+@NoArgsConstructor()
+public class JobAllColDto {
 
     private Long id;
 
     private String title;
 
-    private String detail;
-
-    private int creditRating;
-
-    private int wage;
-
     private String image;
 
     private String color;
 
+    private int creditRating;
+
     private int total;
 
-    private int count;
+    private String salary;
+
+    private int recruitStudent;
 
     private List<String> studentNames;
 
     @Builder
-    public JobResDto(Long id, String title, String detail, int creditRating, int wage, String image, String color, int total, int count, List<String> studentNames) {
+    public JobAllColDto(Long id, String title, String image, String color, int creditRating, int total, String salary, int recruitStudent, List<String> studentNames) {
         this.id = id;
         this.title = title;
-        this.detail = detail;
-        this.creditRating = creditRating;
-        this.wage = wage;
         this.image = image;
         this.color = color;
+        this.creditRating = creditRating;
         this.total = total;
-        this.count = count;
+        this.salary = salary;
+        this.recruitStudent = recruitStudent;
         this.studentNames = studentNames;
     }
 
     /**
-     * 직업 명함 조회 dto 반환
+     * repository에서 불러온 Job을 JobAllColDto로 생성
      *
      * @param job
-     * @return
+     * @return JobAllResDto
      */
-    public JobResDto of(Job job) {
-        return JobResDto.builder()
+    public JobAllColDto of(Job job, String salary) {
+        return JobAllColDto.builder()
                 .id(job.getId())
                 .title(job.getTitle())
-                .detail(job.getDetail())
-                .creditRating(job.getCreditRating())
-                .wage(job.getWage())
                 .image(job.getImage())
                 .color(job.getColor())
+                .creditRating(job.getCreditRating())
                 .total(job.getTotal())
-                .count(job.getCount())
+                .salary(salary)
+                .recruitStudent(job.getTotal() - job.getCount())
                 .studentNames(job.getStudentNames().equals("") ? new ArrayList<>() : List.of(job.getStudentNames().split(",")))
                 .build();
+
     }
+
 }
