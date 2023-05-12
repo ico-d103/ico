@@ -9,12 +9,12 @@ type paramsType = {
 
 type responseType = {
 	status: number
-	data: getTeacherProductDetailType[]
+	data: getTeacherProductDetailType
 }
 
 export const getTeacherProductDetailAPI = async ({ body }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.get(`/teacher-product/${body.pid}`)
+		const response: responseType = await tokenInstance.get(`/student-product/${body.pid}`)
 		return response.data
 	} catch (error) {
 		throw error
