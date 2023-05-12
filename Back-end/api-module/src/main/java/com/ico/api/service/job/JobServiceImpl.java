@@ -176,7 +176,7 @@ public class JobServiceImpl implements JobService{
         List<Job> jobList = jobRepository.findAllByNationId(nationId);
         for (Job job : jobList) {
             job.setCount((byte) 0);
-            job.setStudentName("");
+            job.setStudentNames("");
             jobRepository.save(job);
         }
 
@@ -207,7 +207,7 @@ public class JobServiceImpl implements JobService{
         // 만약 학생 직업의 배정된 인원이 0인 경우 예외를 던지는 대신 0으로 설정
         job.setCount((byte) (job.getCount() == 0 ? 0 : job.getCount() - 1));
 
-        job.setStudentName(job.getStudentName().replace(student.getName() + ",", ""));
+        job.setStudentNames(job.getStudentNames().replace(student.getName() + ",", ""));
         jobRepository.save(job);
 
         student.setJob(null);
