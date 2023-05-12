@@ -2,6 +2,7 @@ package com.ico.api.service.nation;
 
 import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
+import com.ico.api.dto.nation.TradingTimeReqDto;
 import com.ico.core.dto.StockReqDto;
 import com.ico.core.entity.Nation;
 
@@ -52,4 +53,6 @@ public interface NationService {
      * @param request
      */
     void updateCredit(NationCreditReqDto dto, HttpServletRequest request);
+
+    void updateTradingTime(TradingTimeReqDto dto);
 }

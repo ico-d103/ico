@@ -2,6 +2,7 @@ package com.ico.api.service.nation;
 
 import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
+import com.ico.api.dto.nation.TradingTimeReqDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Role;
 import com.ico.core.dto.StockReqDto;
@@ -76,18 +77,17 @@ public class NationServiceImpl implements NationService {
                 });
                 // 반을 생성했을 때 교사의 토큰 업데이트 / 학생은 직접 확인 버튼을 눌러서 도메인/api/token 으로 직접 요청해야한다.
                 return jwtTokenProvider.updateTokenCookie(request);
-            }
-            else {
+            } else {
                 throw new CustomException(ErrorCode.DUPLICATED_NATION_NAME);
             }
-        }
-        else {
+        } else {
             throw new CustomException(ErrorCode.WRONG_ROLE);
         }
     }
 
     /**
      * 반 생성시 입장 코드 난수로 생성
+     *
      * @return code
      */
     private String randomCode() {
@@ -132,7 +132,7 @@ public class NationServiceImpl implements NationService {
 
 //    @Override
 //    public Nation updateNation(NationReqDto reqDto, HttpServletRequest request) {
-        // TODO : 나라 수정 때 사용할 것
+    // TODO : 나라 수정 때 사용할 것
 //        String token = jwtTokenProvider.parseJwt(request);
 //        Long id = jwtTokenProvider.getId(token);
 //
@@ -168,7 +168,7 @@ public class NationServiceImpl implements NationService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
 
         // 이미 주식 존재 여부 확인
-        if(nation.getStock() == null || nation.getStock().equals("")){
+        if (nation.getStock() == null || nation.getStock().equals("")) {
             // Nation에 주식 정보 업데이트
             nation.updateStock(stockReqDto);
             nationRepository.save(nation);
@@ -181,8 +181,7 @@ public class NationServiceImpl implements NationService {
                     .date(LocalDateTime.now())
                     .build();
             stockRepository.save(stock);
-        }
-        else{
+        } else {
             throw new CustomException(ErrorCode.ALREADY_EXIST_STOCK);
         }
     }
@@ -205,6 +204,22 @@ public class NationServiceImpl implements NationService {
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
         nation.updateCredit(dto.getCreditUp(), dto.getCreditDown());
+        nationRepository.save(nation);
+    }
+
+    /**
+     * 투자 가능 시간 수정
+     *
+     * @param dto
+     */
+    @Override
+    public void updateTradingTime(TradingTimeReqDto dto) {
+        long nationId = 99;
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        nation.setTrading_start(dto.getTradingStart());
+        nation.setTrading_end(dto.getTradingEnd());
         nationRepository.save(nation);
     }
 
