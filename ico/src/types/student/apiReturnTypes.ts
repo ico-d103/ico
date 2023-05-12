@@ -82,4 +82,7 @@ export type getHomeMyInfoType = {
     creditRating: number
     jobImage: null | string
     jobName: null | string
+	color: null | string
+	deposit: number
+	invest: number
 }

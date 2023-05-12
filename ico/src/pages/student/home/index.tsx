@@ -34,10 +34,12 @@ function index() {
 						/>
 					)}
 				</ContentWrapper>
+				{data && 
 				<ContentWrapper>
 					<div css={contentTitleCSS}>자산</div>
-					<HomeAsset />
+					<HomeAsset account={data.account} deposit={data.deposit} invest={data.invest}/>
 				</ContentWrapper>
+				}
 				<HomeButtonSection />
 				<HomeTipSection />
 			</div>

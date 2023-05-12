@@ -1,69 +1,96 @@
 import React from "react"
 import { css } from "@emotion/react"
-import Button from "@/components/common/Button/Button";
+import Button from "@/components/common/Button/Button"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { getAdminTeacherCertAPI } from "@/api/admin/getAdminTeacherCertAPI"
+import { getAdminTeacherCertType } from "@/types/admin/apiReturnTypes"
+import { deleteAdminTeacherCertApproveAPI } from "@/api/admin/deleteAdminTeacherCertApproveAPI"
+import { deleteAdminTeacherCertDenyAPI } from "@/api/admin/deleteAdminTeacherCertDenyAPI"
 
 function index() {
-	const dummy: { id: string; name: string; image: string }[] = [
-		{
-			id: "jook1356",
-			name: "김뿡빵",
-			image: "https://velog.velcdn.com/images/eddy_song/post/dc0bf670-a3cf-4d53-beff-f81193b48e9d/image.png",
-		},
-        {
-			id: "jook1356a",
-			name: "응우옌 꾸억 응우옌",
-			image: "https://velog.velcdn.com/images/eddy_song/post/dc0bf670-a3cf-4d53-beff-f81193b48e9d/image.png",
-		},
-	]
+	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getAdminTeacherCertType[]>(
+		["admin", "teacherCert"],
+		getAdminTeacherCertAPI,
+		// { staleTime: 200000 },
+	)
 
+	const queryClient = useQueryClient()
 
-    
-    const indivRender = dummy.map((el, idx) => { 
-        return (
-            <div css={individualCSS}>
-                <div css={textWrapperCSS}>
-                    {el.id}, {el.name}
-                </div>
-                <div>
-                    <img css={imgCSS} src={el.image}/>
-                </div>
-                <div css={buttonWrapperCSS}>
-                    <Button text={"승인"} fontSize={`var(--teacher-h5)`} width={"200px"} theme={"positive"} onClick={() => {}} />
-                    <Button text={"반려"} fontSize={`var(--teacher-h5)`} width={"200px"} theme={"warning"} onClick={() => {}} />
-                </div>
-                
-            </div>
-        )
-    })
+	const approveMutation = useMutation((idx: number) => deleteAdminTeacherCertApproveAPI({ idx }))
+	const denyMutation = useMutation((idx: number) => deleteAdminTeacherCertDenyAPI({ idx }))
 
-	return (
-        <div>
-            {indivRender}
-        </div>
-    )
+	const approveHandler = (idx: number) => {
+		approveMutation.mutate(idx, {
+			onSuccess: (formData) => {
+				return queryClient.invalidateQueries(["admin", "teacherCert"]) // 'return' wait for invalidate
+			},
+		})
+	}
+
+	const denyHandler = (idx: number) => {
+		denyMutation.mutate(idx, {
+			onSuccess: (formData) => {
+				return queryClient.invalidateQueries(["admin", "teacherCert"]) // 'return' wait for invalidate
+			},
+		})
+	}
+
+	const indivRender =
+		data &&
+		data.map((el, idx) => {
+			return (
+				<div css={individualCSS}>
+					<div css={textWrapperCSS}>{el.name}</div>
+					<div>
+						<img css={imgCSS} src={el.image} />
+					</div>
+					<div css={buttonWrapperCSS}>
+						<Button
+							text={"승인"}
+							fontSize={`var(--teacher-h5)`}
+							width={"200px"}
+							theme={"positive"}
+							onClick={() => {
+								approveHandler(el.id)
+							}}
+						/>
+						<Button
+							text={"반려"}
+							fontSize={`var(--teacher-h5)`}
+							width={"200px"}
+							theme={"warning"}
+							onClick={() => {
+								denyHandler(el.id)
+							}}
+						/>
+					</div>
+				</div>
+			)
+		})
+
+	return <div>{data && indivRender}</div>
 }
 
 const individualCSS = css`
-    display: flex;
-    align-items: center;
-    width: 100vw;
-    justify-content: space-between;
-    border: 1px solid black;
-
+	display: flex;
+	align-items: center;
+	width: 100vw;
+	justify-content: space-between;
+	border: 1px solid black;
 `
 
 const imgCSS = css`
-    max-width: 500px;
-    max-height: auto; 
+	max-width: 500px;
+	max-height: auto;
 `
 
 const textWrapperCSS = css`
-    max-width: 200px;
-    width: 200px;
+	max-width: 200px;
+	width: 200px;
 `
 
 const buttonWrapperCSS = css`
-    display: flex;
+	display: flex;
 `
 
 export default index

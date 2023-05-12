@@ -11,7 +11,13 @@ export const getNationAPI = async () => {
 		const response: responseType = await tokenInstance.get("/nation")
 
 		return response.data
-	} catch (error) {
-		throw error
+	} catch (error: any) {
+
+		if (error.response.data.code === '202') {
+			console.log('나라 없음!')
+		} else {
+			throw error
+		}
+		
 	}
 }

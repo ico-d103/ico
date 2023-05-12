@@ -23,7 +23,7 @@ function HomeAssetItem({ icon, title, money, moneyUnit, detailUrl }: HomeAssetIt
 					<div css={textContentWrapperCSS}>
 						<div css={titleWrapperCSS}>{title}</div>
 						<div css={moneyWrapperCSS}>
-							{money.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}
+							{money?.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}
 							{moneyUnit}
 						</div>
 					</div>
