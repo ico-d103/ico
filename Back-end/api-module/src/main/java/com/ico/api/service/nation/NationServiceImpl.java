@@ -54,7 +54,7 @@ public class NationServiceImpl implements NationService {
         // 교사만 반 생성
         if (role == Role.TEACHER) {
             String title = reqDto.getTitle();
-            if (!nationRepository.findByTitle(title).isPresent()) {
+            if (nationRepository.findByTitle(title).isEmpty()) {
                 Nation nation = Nation.builder()
                         .school(reqDto.getSchool())
                         .grade((byte) reqDto.getGrade())
