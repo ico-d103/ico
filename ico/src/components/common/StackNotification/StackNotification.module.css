@@ -7,7 +7,7 @@
   z-index: 9999999999999999999999999999999999999999;
   pointer-events: none;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .notification-place {

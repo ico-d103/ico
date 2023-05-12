@@ -1,10 +1,11 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 // import { notificationSliceActions } from "../../../redux/notificationSlice";
 
 // import { useSelector, useDispatch } from "react-redux";
 
 import { stackNotification } from "@/store/store"
 import { useAtom } from "jotai"
+
 
 const useNotification = () => {
 	const [stackNotificationAtom, setStackNotificationAtom] = useAtom(stackNotification)

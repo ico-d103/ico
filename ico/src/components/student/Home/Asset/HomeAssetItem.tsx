@@ -17,7 +17,6 @@ function HomeAssetItem({ icon, title, money, moneyUnit, detailUrl }: HomeAssetIt
 
 	return (
 		<React.Fragment>
-			<Link href={detailUrl} prefetch />
 			<div css={contentWrapperCSS}>
 				<div css={leftWrapperCSS}>
 					<div css={imgWrapperCSS}>{icon}</div>

@@ -5,6 +5,7 @@ import { css } from "@emotion/react"
 type LoadImageProps = {
 	src: string
 	alt: string
+    sizes?: string
 	wrapperCss?: any
     imageCss?: any
     skeletonCss?: any
@@ -12,7 +13,7 @@ type LoadImageProps = {
     dev?: boolean;
 }
 
-function LoadImage({ src, alt, wrapperCss, imageCss, useSkeleton, skeletonCss, dev }: LoadImageProps) {
+function LoadImage({ src, alt, sizes, wrapperCss, imageCss, useSkeleton, skeletonCss, dev }: LoadImageProps) {
     const [isLoading, setIsLoading] = useState<boolean>(true)
 	return (
         <div className={'image-wrapper'} css={[wrapperCss, imageWrapperCSS({isLoading, dev})]}>
@@ -23,10 +24,11 @@ function LoadImage({ src, alt, wrapperCss, imageCss, useSkeleton, skeletonCss, d
                     css={[imageCss, imageCSS({isLoading, dev})]}
                     src={src}
                     alt={alt}
+                    sizes={sizes}
                     priority={true}
-                    layout="fill"
-                    objectFit="contain"
-                    objectPosition="center"
+                    fill
+                    // objectFit="contain"
+                    // objectPosition="center"
                     
                     onLoad={() => {setIsLoading(() => false)}}
                 />
@@ -63,6 +65,8 @@ const imageCSS = ({isLoading, dev}: {isLoading: boolean, dev?: boolean}) => {
         transition-duration: 0.2s;
         opacity: ${isLoading ? '0%' : '100%'};
         border: ${dev && '1px solid red'};
+        object-fit: contain;
+        
     `
 }
 
