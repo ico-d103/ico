@@ -107,6 +107,8 @@ public enum ErrorCode{
 
     PRODUCT_NOT_FOUND(HttpStatus.BAD_REQUEST, "617", "해당 상품은 없는 상품입니다."),
 
+    IS_SELLER(HttpStatus.BAD_REQUEST, "618", "판매자는 구매를 할 수 없습니다."),
+
     NOT_TRADING_TIME(HttpStatus.BAD_REQUEST, "701", "거래시간이 아닙니다."),
 
     ALREADY_EXIST_STOCK(HttpStatus.BAD_REQUEST, "702", "종목 삭제 후 시도해주세요."),

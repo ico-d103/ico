@@ -45,4 +45,11 @@ public interface StudentProductService {
      * @return 상품디테일 정보
      */
     StudentProductDetailResDto detailProduct(Long id);
+
+    /**
+     * 학생 상품 구매
+     *
+     * @param studentProductId 상품 id
+     */
+    void buyProduct(Long studentProductId);
 }
