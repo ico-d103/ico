@@ -39,7 +39,7 @@ function create() {
 	})
 
 	formData.append(
-		"product",
+		"proposal",
 		new Blob(
 			[
 				JSON.stringify({
@@ -47,7 +47,6 @@ function create() {
 					amount: amount,
 					count: count,
 					detail: detail,
-					rental: true,
 				}),
 			],
 			{ type: "application/json" },
