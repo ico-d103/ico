@@ -208,9 +208,10 @@ public class NationServiceImpl implements NationService {
     }
 
     /**
-     * 투자 가능 시간 수정
+     * 거래 시간 변경
      *
-     * @param dto
+     * @param request
+     * @param dto 거래 시작 시간, 종료 시간
      */
     @Override
     public void updateTradingTime(HttpServletRequest request, TradingTimeReqDto dto) {
