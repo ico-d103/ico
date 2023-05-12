@@ -71,13 +71,12 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                     return;
                 }
             }
-        } catch (TokenNotFoundException ex) {
+        } catch (IllegalArgumentException ex) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("UTF-8");
-            ResponseEntity<Object> errorResponse = ResponseEntity.badRequest().body(new Object());
+            ResponseEntity<Object> errorResponse = ResponseEntity.badRequest().body(new ErrorResponse("25", "토큰이 없습니다."));
             objectMapper.writeValue(response.getWriter(), errorResponse);
-//            response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse.getBody()));
             return;
         }
         // HTTP 요청을 필터링한 후 다음 필터로 체인을 전달

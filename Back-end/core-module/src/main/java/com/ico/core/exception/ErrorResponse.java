@@ -1,18 +1,13 @@
 package com.ico.core.exception;
 
-import lombok.AccessLevel;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ErrorResponse {
     private String code;
     private String message;
-
-    public ErrorResponse(String code, String message) {
-        this.code = code;
-        this.message = message;
-    }
 }
