@@ -54,14 +54,14 @@ public class TeacherProductController {
     }
 
     /**
-     * 쿠폰유형 교사상품 구매
+     * 교사상품 구매
      *
      * @param teacherProductId 상품 ID
      * @return Httpstatus
      */
-    @PostMapping("/student/{teacherProductId}/coupon")
-    public ResponseEntity<HttpStatus> buyCoupon(@PathVariable Long teacherProductId) {
-        teacherProductService.buyCoupon(teacherProductId);
+    @PostMapping("/student/{teacherProductId}")
+    public ResponseEntity<HttpStatus> buyProduct(@PathVariable Long teacherProductId) {
+        teacherProductService.buyProduct(teacherProductId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

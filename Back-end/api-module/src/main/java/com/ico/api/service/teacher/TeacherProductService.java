@@ -32,7 +32,7 @@ public interface TeacherProductService {
      *
      * @param id 상품 id
      */
-    void buyCoupon(Long id);
+    void buyProduct(Long id);
 
     TeacherProductDetailResDto detailProduct(Long id);
 }

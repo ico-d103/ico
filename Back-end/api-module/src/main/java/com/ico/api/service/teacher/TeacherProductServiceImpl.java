@@ -114,7 +114,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
      */
     @Transactional
     @Override
-    public void buyCoupon(Long id) {
+    public void buyProduct(Long id) {
         // 해당 국가인지 확인
         // TODO : REQUEST 변환
         long nationId = 99L;
@@ -127,9 +127,6 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         // 타입이 일치하는지 확인
         TeacherProduct product = teacherProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
-        if (product.getRental()) {
-            throw new CustomException(ErrorCode.NOT_COUPON);
-        }
 
         // 재고 있는지 확인
         if (product.getCount() == product.getSold()) {
@@ -145,6 +142,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
 
         // 상품 가격 지불
         student.setAccount(account - amount);
+        studentRepository.save(student);
 
         // 거래 내역 추가
         transactionService.addTransactionWithdraw("교사 상점", studentId, amount, product.getTitle());
@@ -152,21 +150,24 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         // 재고 개수 수정
         product.setSold((byte) (product.getSold() + 1));
 
-        // 인벤토리에 추가
-        Optional<Coupon> couponOptional = couponRepository.findByTeacherProductIdAndStudentId(id, studentId);
-        Coupon coupon;
-        if (couponOptional.isPresent()) {
-            coupon = couponOptional.get();
-            coupon.setCount((byte) (coupon.getCount() + 1));
-        } else {
-            coupon = Coupon.builder()
-                    .student(student)
-                    .teacherProduct(product)
-                    .title(product.getTitle())
-                    .isAssigned(false)
-                    .build();
+        // 쿠폰일 때
+        if (!product.getRental()) {
+            // 인벤토리에 추가
+            Optional<Coupon> couponOptional = couponRepository.findByTeacherProductIdAndStudentId(id, studentId);
+            Coupon coupon;
+            if (couponOptional.isPresent()) {
+                coupon = couponOptional.get();
+                coupon.setCount((byte) (coupon.getCount() + 1));
+            } else {
+                coupon = Coupon.builder()
+                        .student(student)
+                        .teacherProduct(product)
+                        .title(product.getTitle())
+                        .isAssigned(false)
+                        .build();
+            }
+            couponRepository.save(coupon);
         }
-        couponRepository.save(coupon);
     }
 
     @Override
