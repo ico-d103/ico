@@ -4,15 +4,19 @@ import ClassJobSearchCard from "@/components/student/Class/JobSearch/ClassJobSea
 import useNavigate from "@/hooks/useNavigate"
 import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
 import { ClassTabMenus } from "@/components/student/Class/ClassTabMenus"
+import { getJobListAPI } from "@/api/student/class/getJobListAPI"
+import { useEffect, useState } from "react"
+import { getJobListType } from "@/types/student/apiReturnTypes"
 
 function jobsearch() {
 	const navigate = useNavigate()
+	const [jobList, setJobList] = useState<getJobListType[]>([])
 
-	const mockList = [
-		{ id: 0, name: "기상캐스터", need: 1 },
-		{ id: 1, name: "소방관", need: 2 },
-		{ id: 2, name: "한국 전력", need: 3 },
-	]
+	useEffect(() => {
+		getJobListAPI().then((res) => {
+			setJobList(res)
+		})
+	}, [])
 
 	return (
 		<>
@@ -20,11 +24,11 @@ function jobsearch() {
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					<span css={titleCSS}>
-						현재 <b>&nbsp;5개</b>의 직업을 구인하고 있어요
+						현재 <b>&nbsp;{jobList.length}개</b>의 직업을 구인하고 있어요
 					</span>
 					<div css={jobListCSS}>
-						{mockList.map((mock) => (
-							<ClassJobSearchCard key={mock.id} mock={mock} />
+						{jobList.map((job, idx) => (
+							<ClassJobSearchCard key={idx} job={job} />
 						))}
 					</div>
 					<div
@@ -65,15 +69,14 @@ const titleCSS = css`
 `
 
 const jobListCSS = css`
+	/* padding: 30px 20px; */
+	/* width: 100%; */
+	/* background-color: var(--student-wrapper-color); */
+	/* border-radius: 10px; */
 	margin-top: 30px;
-	padding: 30px 20px;
-	width: 100%;
-	background-color: var(--student-wrapper-color);
-	border-radius: 10px;
-
 	display: grid;
 	place-items: center;
-	grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
 	grid-column-gap: 10px;
 	grid-row-gap: 20px;
 `
