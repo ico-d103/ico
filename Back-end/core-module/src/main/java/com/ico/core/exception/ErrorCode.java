@@ -45,6 +45,8 @@ public enum ErrorCode{
 
     NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "28", "교사인증서가 없습니다."),
 
+    NOT_VALID_TOKEN(HttpStatus.BAD_REQUEST, "29", "토큰이 유효하지 않습니다."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, "104", "비밀번호 입력 칸이 비었습니다."),
