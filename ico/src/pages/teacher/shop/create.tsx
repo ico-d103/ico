@@ -72,8 +72,6 @@ function create() {
 			})
 	}
 
-	// console.log(imageList)
-
 	return (
 		<div css={shopCreateWrapperCSS}>
 			<div css={headerCSS}>
@@ -119,13 +117,15 @@ function create() {
 }
 
 const shopCreateWrapperCSS = css`
-	flex: 1;
+	/* flex: 1; */
+
+	display: grid;
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
 	padding: 30px;
 `
 const headerCSS = css`
-	display: flex;
+	display: grid;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
@@ -159,7 +159,7 @@ const productCSS = css`
 `
 
 const buttonCSS = css`
-	display: flex;
+	display: grid;
 	justify-content: end;
 
 	margin-top: 20px;

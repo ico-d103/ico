@@ -86,6 +86,18 @@ export type getTeacherProductsType = {
 	assigned: boolean
 }
 
+export type getTeacherProductDetailType = {
+	id: number
+	title: string
+	amount: number
+	images: string[]
+	count: number
+	sold: number
+	date: string
+	rental: boolean
+	detail: string
+}
+
 export type getStudentProductsType = {
 	id: string
 	title: string
@@ -96,6 +108,10 @@ export type getStudentProductsType = {
 	date: string
 	name: string
 	assigned: boolean
+}
+
+export type getStudentProductDetailType = {
+	
 }
 
 export type getNationTreasuryType = {

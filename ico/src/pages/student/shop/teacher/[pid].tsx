@@ -1,32 +1,44 @@
 import { css } from "@emotion/react"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import { useRouter } from "next/router"
-
-import Image from "next/image"
+import React, { useState, useEffect, useRef } from "react"
+import { getTeacherProductDetailAPI } from "@/api/common/shop/getTeacherProductDetailAPI"
+import { getTeacherProductDetailType } from "@/types/teacher/apiReturnTypes"
 
 function product() {
 	const router = useRouter()
-	const { pid } = router.query	
+	const { pid } = router.query
 
-	const product = {
-		id: 1,
-		image: "https://placehold.it/250x250",
-		name: "헤드셋",
-		number: 1,
-		price: 4000,
-		writer: "서재건",
-		date: "2023년 4월 27일",
-		approved: false,
-		explanation: "상품에 대한 자세한 설명입니다.",
-	}
+	const [product, setProduct] = useState<getTeacherProductDetailType>({
+		id: 0,
+		title: "",
+		amount: 0,
+		images: [],
+		count: 0,
+		sold: 0,
+		date: "",
+		rental: true,
+		detail: "",
+	})
+
+	useEffect(() => {
+		if (typeof pid === "string") {
+			getTeacherProductDetailAPI({ body: { pid: pid } })
+				.then((res) => {
+					setProduct(res)
+				})
+				.catch((error) => {
+					console.log(error)
+				})
+		}
+	}, [pid])
 
 	return (
 		<div>
 			<PageHeader title={"상점"} />
+			{product?.title}
 		</div>
 	)
 }
-
-const testCSS = css``
 
 export default product
