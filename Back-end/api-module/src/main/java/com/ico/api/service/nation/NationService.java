@@ -54,5 +54,5 @@ public interface NationService {
      */
     void updateCredit(NationCreditReqDto dto, HttpServletRequest request);
 
-    void updateTradingTime(TradingTimeReqDto dto);
+    void updateTradingTime(HttpServletRequest request, TradingTimeReqDto dto);
 }

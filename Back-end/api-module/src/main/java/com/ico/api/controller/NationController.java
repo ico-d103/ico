@@ -91,8 +91,8 @@ public class NationController {
      * @return Httpstatus
      */
     @PutMapping("teacher/trading-time")
-    public ResponseEntity<HttpStatus> updateTradingTime(@Valid @RequestBody TradingTimeReqDto dto){
-        nationService.updateTradingTime(dto);
+    public ResponseEntity<HttpStatus> updateTradingTime(HttpServletRequest request, @Valid @RequestBody TradingTimeReqDto dto){
+        nationService.updateTradingTime(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

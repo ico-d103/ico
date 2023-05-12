@@ -213,8 +213,9 @@ public class NationServiceImpl implements NationService {
      * @param dto
      */
     @Override
-    public void updateTradingTime(TradingTimeReqDto dto) {
-        long nationId = 99;
+    public void updateTradingTime(HttpServletRequest request, TradingTimeReqDto dto) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
