@@ -2,6 +2,8 @@ package com.ico.api.service.user;
 
 import com.ico.api.dto.user.LoginDto;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Member Service
  *
@@ -23,4 +25,11 @@ public interface MemberService {
      * @param identity
      */
     boolean duplicated(String identity);
+
+    /**
+     * 토큰의 값의 상태 반환
+     * @param request
+     * @return status
+     */
+    String returnStatus(HttpServletRequest request);
 }
