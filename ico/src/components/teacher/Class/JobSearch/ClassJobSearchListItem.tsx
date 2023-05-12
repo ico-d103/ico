@@ -1,25 +1,19 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { css } from "@emotion/react"
 import ClassJobSearchListItemFront from "./ClassJobSearchListItemFront"
 import ClassJobSearchListItemBack from "./ClassJobSearchListItemBack"
+import { jobListType } from "@/types/teacher/apiReturnTypes"
 
 type ClassJobSearchListItemPropsType = {
-	mock: {
-		id: number
-		jobname: string
-		needcount: number
-		applycount: number
-		grade: number
-		money: number
-	}
+	job: jobListType
 }
 
-function ClassJobSearchListItem({ mock }: ClassJobSearchListItemPropsType) {
+function ClassJobSearchListItem({ job }: ClassJobSearchListItemPropsType) {
 	const [isReverse, setIsReverse] = useState<boolean>(false)
 
 	return (
 		<div css={wrapperCSS} onClick={() => setIsReverse(!isReverse)}>
-			{!isReverse ? <ClassJobSearchListItemFront mock={mock} /> : <ClassJobSearchListItemBack mock={mock} />}
+			{!isReverse ? <ClassJobSearchListItemFront job={job} /> : <ClassJobSearchListItemBack job={job} />}
 		</div>
 	)
 }
