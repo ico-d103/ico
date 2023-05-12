@@ -1,23 +1,25 @@
 package com.ico.api.user;
 
-import com.ico.core.code.Role;
-import com.ico.core.entity.Student;
-import com.ico.core.exception.CustomException;
-import com.ico.core.exception.ErrorCode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ico.core.exception.ErrorResponse;
+import com.ico.core.exception.TokenNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -30,9 +32,13 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Component
 @Slf4j
+@WebFilter(urlPatterns = {"/api/teacher", "/api/student", "/api/login", "api/duplicated-id"},
+        filterName = "JwtTokenAuthenticationFilter",
+        dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD})
 public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailService customUserDetailService;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -64,13 +70,15 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                     filterChain.doFilter(request, response);
                     return;
                 }
-                // 그 외의 경우에는 예외를 발생시킴
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "토큰이 없습니다.");
             }
-        } catch (ExpiredJwtException e){
-            log.info("[doFilterInternal]에서 발생 : {}", e.getMessage());
-            e.printStackTrace();
+        } catch (TokenNotFoundException ex) {
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            ResponseEntity<Object> errorResponse = ResponseEntity.badRequest().body(new Object());
+            objectMapper.writeValue(response.getWriter(), errorResponse);
+//            response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse.getBody()));
+            return;
         }
         // HTTP 요청을 필터링한 후 다음 필터로 체인을 전달
         filterChain.doFilter(request, response);
