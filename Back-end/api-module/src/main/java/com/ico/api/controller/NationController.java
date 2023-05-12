@@ -2,6 +2,7 @@ package com.ico.api.controller;
 
 import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
+import com.ico.api.dto.nation.TradingTimeReqDto;
 import com.ico.core.dto.StockReqDto;
 import com.ico.api.service.nation.NationService;
 import com.ico.core.entity.Nation;
@@ -54,8 +55,8 @@ public class NationController {
      * @return Httpstatus
      */
     @PostMapping("/teacher/stock")
-    public ResponseEntity<HttpStatus> createStock(@Valid @RequestBody StockReqDto stockReqDto){
-        nationService.createStock(stockReqDto);
+    public ResponseEntity<HttpStatus> createStock(HttpServletRequest request, @Valid @RequestBody StockReqDto stockReqDto){
+        nationService.createStock(request, stockReqDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -80,6 +81,18 @@ public class NationController {
     @PutMapping("/teacher/credit")
     public ResponseEntity<HttpStatus> updateCredit(@Valid @RequestBody NationCreditReqDto dto, HttpServletRequest request) {
         nationService.updateCredit(dto, request);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 투자 거래 시간 수정
+     *
+     * @param dto 거래 시작 시간, 거래 종료 시간
+     * @return Httpstatus
+     */
+    @PutMapping("teacher/trading-time")
+    public ResponseEntity<HttpStatus> updateTradingTime(HttpServletRequest request, @Valid @RequestBody TradingTimeReqDto dto){
+        nationService.updateTradingTime(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

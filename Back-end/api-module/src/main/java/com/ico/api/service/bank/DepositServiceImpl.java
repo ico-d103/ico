@@ -2,6 +2,7 @@ package com.ico.api.service.bank;
 
 import com.ico.api.dto.bank.DepositReqDto;
 import com.ico.api.service.transaction.TransactionService;
+import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Deposit;
 import com.ico.core.entity.Interest;
 import com.ico.core.entity.Student;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 /**
@@ -27,10 +29,10 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class DepositServiceImpl implements DepositService{
     private final DepositMongoRepository depositMongoRepository;
-
     private final StudentRepository studentRepository;
     private final InterestRepository interestRepository;
     private final TransactionService transactionService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * 예금 신청
@@ -39,10 +41,10 @@ public class DepositServiceImpl implements DepositService{
      */
     @Transactional
     @Override
-    public void createDeposit(DepositReqDto dto) {
-        //todo : request
-        long studentId = 1;
-        long nationId = 99;
+    public void createDeposit(HttpServletRequest request, DepositReqDto dto) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
 
         // 예금 기간
         Boolean longPeriod = dto.getLongPeriod();
@@ -111,9 +113,9 @@ public class DepositServiceImpl implements DepositService{
      */
     @Transactional
     @Override
-    public void deleteDeposit() {
-        //todo : request
-        long studentId = 1;
+    public void deleteDeposit(HttpServletRequest request) {
+        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
+
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
