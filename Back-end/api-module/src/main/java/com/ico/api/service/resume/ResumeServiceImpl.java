@@ -206,7 +206,7 @@ public class ResumeServiceImpl implements ResumeService {
      */
     private void assignJobToStudent(Job job, Student student) {
         job.setCount((byte) (job.getCount() + 1));
-        job.setStudentName(job.getStudentName() + student.getName() + ",");
+        job.setStudentNames(job.getStudentNames() + student.getName() + ",");
         jobRepository.save(job);
         log.info("[assignResume] 직업 배정 인원 추가");
         student.setJob(job);
