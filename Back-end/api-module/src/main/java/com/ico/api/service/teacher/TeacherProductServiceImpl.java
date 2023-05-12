@@ -116,7 +116,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
      */
     @Transactional
     @Override
-    public void buyCoupon(HttpServletRequest request, Long id) {
+    public void buyProduct(HttpServletRequest request, Long id) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
         Long studentId = jwtTokenProvider.getId(token);
@@ -145,6 +145,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
 
         // 상품 가격 지불
         student.setAccount(account - amount);
+        studentRepository.save(student);
 
         // 거래 내역 추가
         transactionService.addTransactionWithdraw("교사 상점", studentId, amount, product.getTitle());
@@ -152,23 +153,33 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         // 재고 개수 수정
         product.setSold((byte) (product.getSold() + 1));
 
-        // 인벤토리에 추가
-        Optional<Coupon> couponOptional = couponRepository.findByTeacherProductIdAndStudentId(id, studentId);
-        Coupon coupon;
-        if (couponOptional.isPresent()) {
-            coupon = couponOptional.get();
-            coupon.setCount((byte) (coupon.getCount() + 1));
-        } else {
-            coupon = Coupon.builder()
-                    .student(student)
-                    .teacherProduct(product)
-                    .title(product.getTitle())
-                    .isAssigned(false)
-                    .build();
+        // 쿠폰일 때
+        if (!product.getRental()) {
+            // 인벤토리에 추가
+            Optional<Coupon> couponOptional = couponRepository.findByTeacherProductIdAndStudentId(id, studentId);
+            Coupon coupon;
+            if (couponOptional.isPresent()) {
+                coupon = couponOptional.get();
+                coupon.setCount((byte) (coupon.getCount() + 1));
+            } else {
+                coupon = Coupon.builder()
+                        .student(student)
+                        .teacherProduct(product)
+                        .title(product.getTitle())
+                        .isAssigned(false)
+                        .build();
+            }
+            couponRepository.save(coupon);
         }
-        couponRepository.save(coupon);
     }
 
+    /**
+     * 교사 상품 상세정보 조회
+     *
+     * @param request
+     * @param id
+     * @return
+     */
     @Override
     public TeacherProductDetailResDto detailProduct(HttpServletRequest request, Long id) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));

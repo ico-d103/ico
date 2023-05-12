@@ -33,7 +33,14 @@ public interface TeacherProductService {
      *
      * @param id 상품 id
      */
-    void buyCoupon(HttpServletRequest request, Long id);
+    void buyProduct(HttpServletRequest request, Long id);
 
+    /**
+     * 교사 상품 상세정보 조회
+     *
+     * @param request
+     * @param id
+     * @return
+     */
     TeacherProductDetailResDto detailProduct(HttpServletRequest request, Long id);
 }

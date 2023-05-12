@@ -55,14 +55,14 @@ public class TeacherProductController {
     }
 
     /**
-     * 쿠폰유형 교사상품 구매
+     * 교사상품 구매
      *
      * @param teacherProductId 상품 ID
      * @return Httpstatus
      */
-    @PostMapping("/student/{teacherProductId}/coupon")
-    public ResponseEntity<HttpStatus> buyCoupon(HttpServletRequest request, @PathVariable Long teacherProductId) {
-        teacherProductService.buyCoupon(request, teacherProductId);
+    @PostMapping("/student/{teacherProductId}")
+    public ResponseEntity<HttpStatus> buyProduct(HttpServletRequest request, @PathVariable Long teacherProductId) {
+        teacherProductService.buyProduct(request, teacherProductId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -76,6 +76,4 @@ public class TeacherProductController {
     public ResponseEntity<TeacherProductDetailResDto> detailProduct(HttpServletRequest request, @PathVariable Long teacherProductId){
         return ResponseEntity.ok(teacherProductService.detailProduct(request, teacherProductId));
     }
-
-
 }

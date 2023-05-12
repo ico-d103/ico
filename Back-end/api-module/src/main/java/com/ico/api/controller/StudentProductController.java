@@ -90,4 +90,16 @@ public class StudentProductController {
     public ResponseEntity<StudentProductDetailResDto> detailProduct(HttpServletRequest request, @PathVariable Long studentProductId){
         return ResponseEntity.ok(studentProductService.detailProduct(request, studentProductId));
     }
+
+    /**
+     * 학생 상품 구매
+     *
+     * @param studentProductId 구매 상품 ID
+     * @return Httpstatus
+     */
+    @PostMapping("/student/{studentProductId}")
+    public ResponseEntity<HttpStatus> buyProduct(@PathVariable Long studentProductId){
+        studentProductService.buyProduct(studentProductId);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 }
