@@ -22,12 +22,15 @@ public class CouponRequestResDto {
 
     private String title;
 
+    private String date;
+
     @Builder
-    public CouponRequestResDto(String id, int number, String name, String title) {
+    public CouponRequestResDto(String id, int number, String name, String title, String date) {
         this.id = id;
         this.number = number;
         this.name = name;
         this.title = title;
+        this.date = date;
     }
 
     /**
@@ -36,12 +39,13 @@ public class CouponRequestResDto {
      * @param couponRequest
      * @return
      */
-    public CouponRequestResDto of(CouponRequest couponRequest) {
+    public CouponRequestResDto of(CouponRequest couponRequest, String date) {
         return CouponRequestResDto.builder()
                 .id(couponRequest.getId())
                 .number(couponRequest.getNumber())
                 .name(couponRequest.getName())
                 .title(couponRequest.getTitle())
+                .date(date)
                 .build();
     }
 }
