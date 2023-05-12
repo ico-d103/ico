@@ -9,20 +9,21 @@ type ClassJobSearchListItemFrontPropsType = {
 function ClassJobSearchListItemFront({ job }: ClassJobSearchListItemFrontPropsType) {
 	return (
 		<>
-			<div css={imageWrapperCSS}>
+			<div css={imageWrapperCSS(job.color)}>
 				<LoadImage wrapperCss={imgCSS} src={job.image} alt={"job_image"} />
-				<span>{job.total}</span>
+				<span>
+					{job.recruitStudent}/{job.total}
+				</span>
 			</div>
 			<div css={contentWrapperCSS}>
 				<div css={firstContentCSS}>
-					<h4>{job.title}</h4>
-					{job.recruitStudent !== 0 ? <h5>{job.recruitStudent}명 모집중</h5> : <h5>{job.studentNames[0]} 외</h5>}
+					<h3>{job.title}</h3>
 				</div>
 				<div css={divideLineCSS}></div>
 				<div css={secondContentCSS}>
 					<h5>{job.creditRating}등급 이상</h5>
 					<h5>
-						약 {job.salary} {localStorage.getItem("currency")}
+						월급 약 {job.salary} {localStorage.getItem("currency")}
 					</h5>
 				</div>
 			</div>
@@ -30,22 +31,26 @@ function ClassJobSearchListItemFront({ job }: ClassJobSearchListItemFrontPropsTy
 	)
 }
 
-const imageWrapperCSS = css`
-	height: 240px;
-	background-color: #007bc0;
-	position: relative;
-	overflow: hidden;
+const imageWrapperCSS = (color: string) => {
+	return css`
+		height: 240px;
+		background-color: ${color};
+		position: relative;
+		overflow: hidden;
+		user-select: none;
 
-	> span {
-		position: absolute;
-		bottom: 1px;
-		right: 10px;
+		> span {
+			position: absolute;
+			bottom: 10px;
+			right: 10px;
+			z-index: 10;
 
-		font-size: 130px;
-		font-weight: 700;
-		color: rgba(255, 255, 255, 0.7);
-	}
-`
+			font-size: 4.5rem;
+			font-weight: bold;
+			color: rgba(255, 255, 255, 0.7);
+		}
+	`
+}
 
 const imgCSS = css`
 	position: absolute;
@@ -61,6 +66,10 @@ const contentWrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+
+	h3 {
+		font-size: var(--teacher-h3);
+	}
 
 	h4 {
 		font-size: var(--teacher-h4);
@@ -82,7 +91,7 @@ const firstContentCSS = css`
 	align-items: center;
 	justify-content: space-between;
 
-	> h4 {
+	> h3 {
 		font-weight: bold;
 	}
 `
