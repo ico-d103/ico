@@ -1,6 +1,8 @@
 import { css } from "@emotion/react"
 import ClassJobSearchListApplyListItem from "./ClassJobSearchListApplyListItem"
 import { jobListType } from "@/types/teacher/apiReturnTypes"
+import { useQuery } from "@tanstack/react-query"
+import { getJobApplierAPI } from "@/api/teacher/class/getJobApplierAPI"
 
 type ClassJobSearchListItemBackPropsType = {
 	job: jobListType
@@ -18,6 +20,8 @@ function ClassJobSearchListItemBack({ job }: ClassJobSearchListItemBackPropsType
 		{ id: 7, number: 8, name: "서재건", grade: 5 },
 		{ id: 8, number: 9, name: "오민준", grade: 6 },
 	]
+
+	// const { data } = useQuery<return 타입>(["jobApplier"], ({ id: number }) => getJobApplierAPI(id))
 
 	return (
 		<div css={wrapperCSS}>

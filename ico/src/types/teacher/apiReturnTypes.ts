@@ -137,3 +137,9 @@ export type getJobListType = {
 	restJobCount: number
 	jobList: jobListType[]
 }
+
+export type getJobApplierType = {
+	id: string // 수정 예정
+	name: string
+	number: number
+}

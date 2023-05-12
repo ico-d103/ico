@@ -1,6 +1,9 @@
 import React from "react"
 import { css } from "@emotion/react"
 import { CLASS_APPLY_APPROVE, CLASS_APPLY_DENY } from "../ClassIcons"
+import { postJobAcceptAPI } from "@/api/teacher/class/postJobAcceptAPI"
+import { deleteJobDenyAPI } from "@/api/teacher/class/deleteJobDenyAPI"
+import { useMutation } from "@tanstack/react-query"
 
 type ClassJobSearchListApplyListItemPropsType = {
 	mockList: {
@@ -12,14 +15,27 @@ type ClassJobSearchListApplyListItemPropsType = {
 }
 
 function ClassJobSearchListApplyListItem({ mockList }: ClassJobSearchListApplyListItemPropsType) {
+	// const acceptMutation = useMutation(({ id: string }) => postJobAcceptAPI(id))
+	// const denyMutation = useMutation(({ id: string }) => deleteJobDenyAPI(id))
+
 	const approveHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
 		e.stopPropagation() // 이벤트 버블링 방지
-		alert("승인!")
+
+		// acceptMutation.mutate(id, {
+		// 	onSuccess: () => {
+		// 		return
+		// 	},
+		// })
 	}
 
 	const denyHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
 		e.stopPropagation()
-		alert("반려!")
+
+		// denyMutation.mutate(id, {
+		// 	onSuccess: () => {
+		// 		return
+		// 	},
+		// })
 	}
 
 	return (
