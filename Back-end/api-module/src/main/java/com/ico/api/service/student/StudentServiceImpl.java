@@ -12,11 +12,15 @@ import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.code.Role;
+import com.ico.core.entity.Deposit;
+import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Transaction;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.DepositMongoRepository;
+import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
@@ -28,13 +32,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 
 /**
@@ -59,6 +62,10 @@ public class StudentServiceImpl implements StudentService{
     private final TransactionService transactionService;
 
     private final TransactionMongoRepository transactionMongoRepository;
+
+    private final DepositMongoRepository depositMongoRepository;
+
+    private final InvestRepository investRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -181,7 +188,20 @@ public class StudentServiceImpl implements StudentService{
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        return new StudentMyPageResDto().of(student, student.getNation(), student.getJob());
+
+        int depositAmount = 0;
+        Optional<Deposit> deposit = depositMongoRepository.findByStudentId(studentId);
+        if (deposit.isPresent()) {
+            depositAmount = deposit.get().getAmount();
+        }
+
+        int investAmount = 0;
+        Optional<Invest> invest = investRepository.findByStudentId(studentId);
+        if (invest.isPresent()) {
+            investAmount = invest.get().getAmount();
+        }
+
+        return new StudentMyPageResDto().of(student, student.getNation(), student.getJob(), depositAmount, investAmount);
     }
 
     @Override
