@@ -127,9 +127,10 @@ export type jobListType = {
 	image: string
 	color: string
 	creditRating: number
-	resumeCount: number
+	total: number
+	salary: string
 	recruitStudent: number
-	studentNames: string
+	studentNames: string[] | string
 }
 
 export type getJobListType = {

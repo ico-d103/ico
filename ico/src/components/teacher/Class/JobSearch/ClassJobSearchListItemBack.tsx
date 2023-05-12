@@ -1,19 +1,12 @@
-import React from "react"
 import { css } from "@emotion/react"
 import ClassJobSearchListApplyListItem from "./ClassJobSearchListApplyListItem"
+import { jobListType } from "@/types/teacher/apiReturnTypes"
 
 type ClassJobSearchListItemBackPropsType = {
-	mock: {
-		id: number
-		jobname: string
-		needcount: number
-		applycount: number
-		grade: number
-		money: number
-	}
+	job: jobListType
 }
 
-function ClassJobSearchListItemBack({ mock }: ClassJobSearchListItemBackPropsType) {
+function ClassJobSearchListItemBack({ job }: ClassJobSearchListItemBackPropsType) {
 	const mockApplyList = [
 		{ id: 0, number: 1, name: "강교철", grade: 1 },
 		{ id: 1, number: 2, name: "김동주", grade: 2 },
@@ -29,7 +22,7 @@ function ClassJobSearchListItemBack({ mock }: ClassJobSearchListItemBackPropsTyp
 	return (
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
-				<b>{mock.jobname}</b> 신청자 목록
+				<b>{job.title}</b> 신청자 목록
 			</div>
 			<div css={listWrapperCSS}>
 				{mockApplyList.map((mock) => (

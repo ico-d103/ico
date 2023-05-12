@@ -1,19 +1,23 @@
-import React from "react"
 import { css } from "@emotion/react"
 import { CLASS_JOB_SEARCH } from "@/components/teacher/Class/ClassIcons"
 import ClassJobSearchList from "@/components/teacher/Class/JobSearch/ClassJobSearchList"
+import { getJobListAPI } from "@/api/teacher/class/getJobListAPI"
+import { useQuery } from "@tanstack/react-query"
+import { getJobListType } from "@/types/teacher/apiReturnTypes"
 
 function jobsearch() {
+	const { data } = useQuery<getJobListType>(["jobList"], getJobListAPI)
+
 	return (
 		<div css={wrapperCSS}>
 			<h1>구인 구직</h1>
 			<div css={titleCSS}>
 				<div>{CLASS_JOB_SEARCH}</div>
 				<div>
-					현재 구직 중인 직업은 <b>6개</b>입니다.
+					현재 구직 중인 직업은 <b>{data?.restJobCount}개</b>입니다.
 				</div>
 			</div>
-			<ClassJobSearchList />
+			<ClassJobSearchList jobList={data ? data.jobList : []} />
 		</div>
 	)
 }
