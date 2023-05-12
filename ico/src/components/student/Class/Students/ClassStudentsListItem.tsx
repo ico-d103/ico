@@ -10,7 +10,7 @@ function ClassStudentsListItem({ student }: ClassStudentsListItemPropsType) {
 		<div css={wrapperCSS}>
 			<span css={numberCSS}>{student.number}</span>
 			<span css={nameCSS}>{student.name}</span>
-			<span css={jobCSS}>{student.jobName}</span>
+			<span css={jobCSS}>{student.jobName ? student.jobName : "직업이 없어요"}</span>
 		</div>
 	)
 }
