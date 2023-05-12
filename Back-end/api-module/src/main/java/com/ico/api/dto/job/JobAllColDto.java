@@ -65,7 +65,7 @@ public class JobAllColDto {
                 .total(job.getTotal())
                 .salary(salary)
                 .recruitStudent(job.getTotal() - job.getCount())
-                .studentNames(job.getStudentName().equals("") ? new ArrayList<>() : List.of(job.getStudentName().split(",")))
+                .studentNames(job.getStudentNames().equals("") ? new ArrayList<>() : List.of(job.getStudentNames().split(",")))
                 .build();
 
     }
