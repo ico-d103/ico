@@ -56,8 +56,11 @@ public class Job {
 
     private String color;
 
+    @ColumnDefault("")
+    private String studentName;
+
     @Builder
-    public Job(Long id, Nation nation, String title, String detail, String image, int wage, byte creditRating, byte count, byte total, String color) {
+    public Job(Long id, Nation nation, String title, String detail, String image, int wage, byte creditRating, byte count, byte total, String color, String studentName) {
         this.id = id;
         this.nation = nation;
         this.title = title;
@@ -68,6 +71,7 @@ public class Job {
         this.count = count;
         this.total = total;
         this.color = color;
+        this.studentName = studentName;
     }
 
     /**
