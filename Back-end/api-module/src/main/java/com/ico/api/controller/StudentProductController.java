@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -39,8 +40,8 @@ public class StudentProductController {
      * @return httpstauts
      */
     @PostMapping(value = "/student/proposal", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<HttpStatus> uploadProposal(@Valid @RequestPart StudentProductReqDto proposal, @RequestPart List<MultipartFile> files) {
-        studentProductService.createProduct(files, proposal);
+    public ResponseEntity<HttpStatus> uploadProposal(HttpServletRequest request, @Valid @RequestPart StudentProductReqDto proposal, @RequestPart List<MultipartFile> files) {
+        studentProductService.createProduct(request, files, proposal);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -50,8 +51,8 @@ public class StudentProductController {
      * @return 학생상품목록
      */
     @GetMapping
-    public ResponseEntity<List<StudentProductAllResDto>> findAllProduct() {
-        return ResponseEntity.ok(studentProductService.findAllProduct());
+    public ResponseEntity<List<StudentProductAllResDto>> findAllProduct(HttpServletRequest request) {
+        return ResponseEntity.ok(studentProductService.findAllProduct(request));
     }
 
 
@@ -62,8 +63,8 @@ public class StudentProductController {
      * @return httpstauts
      */
     @PostMapping("/teacher/{studentProductId}")
-    public ResponseEntity<HttpStatus> approveProposal(@PathVariable Long studentProductId) {
-        studentProductService.updateIsAssigned(studentProductId);
+    public ResponseEntity<HttpStatus> approveProposal(HttpServletRequest request, @PathVariable Long studentProductId) {
+        studentProductService.updateIsAssigned(request, studentProductId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -74,8 +75,8 @@ public class StudentProductController {
      * @return httpstauts
      */
     @DeleteMapping("/teacher/{studentProductId}")
-    public ResponseEntity<HttpStatus> deleteProduct(@PathVariable Long studentProductId) {
-        studentProductService.deleteProduct(studentProductId);
+    public ResponseEntity<HttpStatus> deleteProduct(HttpServletRequest request, @PathVariable Long studentProductId) {
+        studentProductService.deleteProduct(request, studentProductId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -86,8 +87,8 @@ public class StudentProductController {
      * @return 학생상품 상세 정보
      */
     @GetMapping("/{studentProductId}")
-    public ResponseEntity<StudentProductDetailResDto> detailProduct(@PathVariable Long studentProductId){
-        return ResponseEntity.ok(studentProductService.detailProduct(studentProductId));
+    public ResponseEntity<StudentProductDetailResDto> detailProduct(HttpServletRequest request, @PathVariable Long studentProductId){
+        return ResponseEntity.ok(studentProductService.detailProduct(request, studentProductId));
     }
 
     /**
