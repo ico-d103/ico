@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -57,6 +58,16 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                 context.setAuthentication(authentication);
                 SecurityContextHolder.setContext(context);
                 log.info("SecurityContextHolder 저장 완료");
+            } else {
+                // 로그인 전 일 경우에는 토큰이 없어도 요청 처리 가능
+                if (request.getRequestURI().startsWith("/api/login") || request.getRequestURI().startsWith("/api/student")
+                        || request.getRequestURI().startsWith("/api/teacher") || request.getRequestURI().startsWith("/api/duplicated-id")) {
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+                // 그 외의 경우에는 예외를 발생시킴
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "토큰이 없습니다.");
             }
         } catch (ExpiredJwtException e){
             log.info("[doFilterInternal]에서 발생 : {}", e.getMessage());
