@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 직업 명함 조회 res dto
  *
@@ -32,8 +35,10 @@ public class JobResDto {
 
     private int count;
 
+    private List<String> studentNames;
+
     @Builder
-    public JobResDto(Long id, String title, String detail, int creditRating, int wage, String image, String color, int total, int count) {
+    public JobResDto(Long id, String title, String detail, int creditRating, int wage, String image, String color, int total, int count, List<String> studentNames) {
         this.id = id;
         this.title = title;
         this.detail = detail;
@@ -43,6 +48,7 @@ public class JobResDto {
         this.color = color;
         this.total = total;
         this.count = count;
+        this.studentNames = studentNames;
     }
 
     /**
@@ -62,6 +68,7 @@ public class JobResDto {
                 .color(job.getColor())
                 .total(job.getTotal())
                 .count(job.getCount())
+                .studentNames(job.getStudentNames().equals("") ? new ArrayList<>() : List.of(job.getStudentNames().split(",")))
                 .build();
     }
 }
