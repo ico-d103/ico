@@ -6,39 +6,34 @@ import ModalContent from "@/components/common/Modal/ModalContent"
 import { GOV_JOB } from "../GovIcons"
 import GovJobCardModalContent from "./GovJobCardModalContent"
 import useGetNation from "@/hooks/useGetNation"
+import { getGovJobType } from "@/types/teacher/apiReturnTypes"
 
 type GovJobCardPropsType = {
-	mock: {
-		id: number
-		student: string
-		name: string
-		content: string
-		grade: number
-		money: number
-	}
+	job: getGovJobType
 }
 
-function GovJobCard({ mock }: GovJobCardPropsType) {
+function GovJobCard({ job }: GovJobCardPropsType) {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [nation] = useGetNation()
 
 	return (
 		<>
-			<div css={cardWrapperCSS} onClick={openComp}>
+			<div css={cardWrapperCSS(job.color)} onClick={openComp}>
 				<div css={imageWrapperCSS}>
-					<LoadImage wrapperCss={imgCSS} src={"/assets/job/weather_caster.png"} alt={"job_image"} />
+					<LoadImage wrapperCss={imgCSS} src={job.image} alt={"job_image"} />
 				</div>
 				<div css={contentWrapperCSS}>
-					<h3>{mock.student}</h3>
-					<h4>{mock.name}</h4>
+					<h3>{job.title}</h3>
 					<div css={divideCSS}></div>
 					<div css={conditionWrapperCSS}>
 						<h4>신용 등급</h4>
-						<h3>{mock.grade}등급 이상</h3>
+						<h3>{job.creditRating}등급 이상</h3>
 					</div>
 					<div css={conditionWrapperCSS}>
 						<h4>월급</h4>
-						<h3>{mock.money} {nation.currency}</h3>
+						<h3>
+							{job.wage} {nation.currency}
+						</h3>
 					</div>
 				</div>
 			</div>
@@ -50,9 +45,9 @@ function GovJobCard({ mock }: GovJobCardPropsType) {
 					<ModalContent
 						width={"320px"}
 						icon={GOV_JOB}
-						title={`${mock.name}의 업무`}
+						title={`${job.title}의 업무`}
 						titleSize={"var(--student-h2)"}
-						content={<GovJobCardModalContent content={mock.content} closeComp={closeComp} />}
+						content={<GovJobCardModalContent content={job.detail} closeComp={closeComp} />}
 					/>
 				}
 			/>
@@ -60,22 +55,26 @@ function GovJobCard({ mock }: GovJobCardPropsType) {
 	)
 }
 
-const cardWrapperCSS = css`
-	width: 270px;
-	min-width: 270px;
-	height: 150px;
-	border-radius: 10px;
-	background: #007bc0;
-	position: relative;
-	transition: all 0.2s;
-`
+const cardWrapperCSS = (color: string) => {
+	return css`
+		width: 270px;
+		min-width: 270px;
+		height: 160px;
+		border-radius: 10px;
+		background: ${color};
+		position: relative;
+		transition: all 0.2s;
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		overflow: hidden;
+	`
+}
 
 const imageWrapperCSS = css`
 	position: absolute;
-	top: -20px;
-	left: 10px;
-	width: 102px;
-	height: 164px;
+	top: 5px;
+	left: 25px;
+	width: 100px;
+	height: 180px;
 `
 
 const imgCSS = css`
@@ -86,21 +85,20 @@ const imgCSS = css`
 `
 
 const contentWrapperCSS = css`
+	/* border: 1px solid white; */
 	position: absolute;
 	width: 130px;
+	height: 120px;
 	top: 20px;
 	left: 120px;
 
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+
 	> h3 {
 		color: var(--common-back-color-2);
-		font-size: var(--student-h3);
-		margin-bottom: 7px;
-	}
-
-	> h4 {
-		font-size: var(--student-h4);
-		color: rgba(255, 255, 255, 0.6);
-		line-height: 18px;
+		font-size: var(--student-h2);
 	}
 `
 
