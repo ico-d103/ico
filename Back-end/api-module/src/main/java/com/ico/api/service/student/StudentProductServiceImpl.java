@@ -4,6 +4,7 @@ import com.ico.api.dto.studentProduct.StudentProductAllResDto;
 import com.ico.api.dto.studentProduct.StudentProductDetailResDto;
 import com.ico.api.dto.studentProduct.StudentProductReqDto;
 import com.ico.api.service.S3UploadService;
+import com.ico.api.service.transaction.TransactionService;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentProduct;
@@ -32,7 +33,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class StudentProductServiceImpl implements StudentProductService{
+public class StudentProductServiceImpl implements StudentProductService {
+    private final TransactionService transactionService;
     private final StudentRepository studentRepository;
     private final NationRepository nationRepository;
     private final StudentProductRepository studentProductRepository;
@@ -41,6 +43,7 @@ public class StudentProductServiceImpl implements StudentProductService{
 
     /**
      * 학생의 상품 판매 제안서를 학생 상품 테이블에 추가합니다.
+     *
      * @param proposal 판매제안서 양식
      */
     @Override
@@ -72,6 +75,7 @@ public class StudentProductServiceImpl implements StudentProductService{
 
     /**
      * 등록된 학생 상품 목록을 조회합니다.
+     *
      * @return 학생상품목록
      */
     @Transactional(readOnly = true)
@@ -80,14 +84,14 @@ public class StudentProductServiceImpl implements StudentProductService{
         // TODO : REQUEST 변환
         long nationId = 99;
 
-        if (nationRepository.findById(nationId).isEmpty()){
+        if (nationRepository.findById(nationId).isEmpty()) {
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
         }
 
         List<StudentProduct> productList = studentProductRepository.findAllByNationId(nationId);
         List<StudentProductAllResDto> resProductList = new ArrayList<>();
 
-        for (StudentProduct product : productList){
+        for (StudentProduct product : productList) {
             StudentProductAllResDto resDto = StudentProductAllResDto.builder()
                     .id(product.getId())
                     .title(product.getTitle())
@@ -162,4 +166,52 @@ public class StudentProductServiceImpl implements StudentProductService{
                 .build();
     }
 
+    /**
+     * 학생 상품 구매
+     *
+     * @param studentProductId 상품 id
+     */
+    @Transactional
+    @Override
+    public void buyProduct(Long studentProductId) {
+        long studentId = 1;
+        long nationId = 99;
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        StudentProduct product = studentProductRepository.findByIdAndNationId(studentProductId, nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        // 판매자 유효 검사
+        if (studentRepository.findById(product.getStudent().getId()).isEmpty()) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        // 판매자와 구매자 일치 여부 확인
+        if (product.getStudent().getId() == studentId) {
+            throw new CustomException(ErrorCode.IS_SELLER);
+        }
+
+        // 잔액 확인
+        if (product.getAmount() > student.getAccount()) {
+            throw new CustomException(ErrorCode.LOW_BALANCE);
+        }
+
+        // 품절 상품 예외처리
+        if (product.getSold() == product.getCount()) {
+            throw new CustomException(ErrorCode.SOLD_OUT);
+        }
+        // 상품 판매 개수 수정
+        product.setSold((byte) (product.getSold() + 1));
+        studentProductRepository.save(product);
+
+        // 잔액 수정
+        student.setAccount(student.getAccount() - product.getAmount());
+        studentRepository.save(student);
+
+        // 거래 내역 기록
+        transactionService.addTransaction(product.getStudent().getId(), student.getId(), product.getAmount(), product.getTitle());
+
+    }
 }
