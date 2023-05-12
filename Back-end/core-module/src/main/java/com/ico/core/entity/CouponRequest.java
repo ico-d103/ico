@@ -35,16 +35,16 @@ public class CouponRequest {
     private byte number;
 
     @CreatedDate
-    private LocalDateTime time;
+    private LocalDateTime date;
 
     @Builder
-    public CouponRequest(String id, Long nationId, Long couponId, String title, String name, byte number, LocalDateTime time) {
+    public CouponRequest(String id, Long nationId, Long couponId, String title, String name, byte number, LocalDateTime date) {
         this.id = id;
         this.nationId = nationId;
         this.couponId = couponId;
         this.title = title;
         this.name = name;
         this.number = number;
-        this.time = time;
+        this.date = date;
     }
 }

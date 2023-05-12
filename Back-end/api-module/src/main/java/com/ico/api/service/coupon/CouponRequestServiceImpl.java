@@ -2,6 +2,7 @@ package com.ico.api.service.coupon;
 
 import com.ico.api.dto.coupon.CouponRequestResDto;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.api.util.Formatter;
 import com.ico.core.entity.Coupon;
 import com.ico.core.entity.CouponRequest;
 import com.ico.core.exception.CustomException;
@@ -41,7 +42,7 @@ public class CouponRequestServiceImpl implements CouponRequestService{
         List<CouponRequestResDto> dtoList = new ArrayList<>();
 
         for (CouponRequest couponRequest : couponRequestList) {
-            dtoList.add(new CouponRequestResDto().of(couponRequest));
+            dtoList.add(new CouponRequestResDto().of(couponRequest, couponRequest.getDate().format(Formatter.date)));
         }
 
         return dtoList;
