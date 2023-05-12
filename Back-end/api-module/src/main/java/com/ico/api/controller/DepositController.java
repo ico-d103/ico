@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -31,8 +32,8 @@ public class DepositController {
      * @return Httpstatus
      */
     @PostMapping("/student")
-    public ResponseEntity<HttpStatus> createDeposit(@Valid @RequestBody DepositReqDto dto){
-        depositService.createDeposit(dto);
+    public ResponseEntity<HttpStatus> createDeposit(HttpServletRequest request, @Valid @RequestBody DepositReqDto dto){
+        depositService.createDeposit(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -42,8 +43,8 @@ public class DepositController {
      * @return Httpstatus
      */
     @DeleteMapping("/student")
-    public ResponseEntity<HttpStatus> deleteDeposit(){
-        depositService.deleteDeposit();
+    public ResponseEntity<HttpStatus> deleteDeposit(HttpServletRequest request){
+        depositService.deleteDeposit(request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

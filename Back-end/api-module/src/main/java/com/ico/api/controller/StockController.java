@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -30,8 +31,8 @@ public class StockController {
      * @return 투자 이슈 정보, 투자 종목 정보(거래가능시간, 이름)
      */
     @GetMapping("/teacher")
-    public ResponseEntity<StockTeacherResDto> stockIssueTeacher(){
-        return ResponseEntity.ok(stockService.getIssueTeacher());
+    public ResponseEntity<StockTeacherResDto> stockIssueTeacher(HttpServletRequest request){
+        return ResponseEntity.ok(stockService.getIssueTeacher(request));
     }
 
     /**
@@ -40,8 +41,8 @@ public class StockController {
      * @return Httpstatus
      */
     @PostMapping("/teacher/upload")
-    public ResponseEntity<HttpStatus> uploadIssue(@Valid @RequestBody StockUploadReqDto dto){
-        stockService.uploadIssue(dto);
+    public ResponseEntity<HttpStatus> uploadIssue(HttpServletRequest request, @Valid @RequestBody StockUploadReqDto dto){
+        stockService.uploadIssue(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -50,8 +51,8 @@ public class StockController {
      * @return 투자 이슈
      */
     @GetMapping("/student")
-    public ResponseEntity<StockStudentResDto> stockIssueStudent(){
-        return ResponseEntity.ok(stockService.getIssueStudent());
+    public ResponseEntity<StockStudentResDto> stockIssueStudent(HttpServletRequest request){
+        return ResponseEntity.ok(stockService.getIssueStudent(request));
     }
 
 }

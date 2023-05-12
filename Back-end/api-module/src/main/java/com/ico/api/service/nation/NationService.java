@@ -36,7 +36,7 @@ public interface NationService {
      * 투자 종목 등록
      * @param stockReqDto 종목 정보
      */
-    public void createStock(StockReqDto stockReqDto);
+    public void createStock(HttpServletRequest request, StockReqDto stockReqDto);
 
     /**
      * 국고 잔금 조회

@@ -55,8 +55,8 @@ public class NationController {
      * @return Httpstatus
      */
     @PostMapping("/teacher/stock")
-    public ResponseEntity<HttpStatus> createStock(@Valid @RequestBody StockReqDto stockReqDto){
-        nationService.createStock(stockReqDto);
+    public ResponseEntity<HttpStatus> createStock(HttpServletRequest request, @Valid @RequestBody StockReqDto stockReqDto){
+        nationService.createStock(request, stockReqDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

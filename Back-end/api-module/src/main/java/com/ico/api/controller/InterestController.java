@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 이자율 Controller
  *
@@ -30,8 +32,8 @@ public class InterestController {
      * @return Httpstatus
      */
     @GetMapping("/student")
-    public ResponseEntity<InterestStudentResDto> getMyInterest() {
-        return ResponseEntity.ok(interestService.myInterest());
+    public ResponseEntity<InterestStudentResDto> getMyInterest(HttpServletRequest request) {
+        return ResponseEntity.ok(interestService.myInterest(request));
     }
 
     /**
@@ -40,8 +42,8 @@ public class InterestController {
      * @return Httpstatus
      */
     @GetMapping
-    public ResponseEntity<InterestAllDto> findAllInterest() {
-        return ResponseEntity.ok(interestService.findAllInterest());
+    public ResponseEntity<InterestAllDto> findAllInterest(HttpServletRequest request) {
+        return ResponseEntity.ok(interestService.findAllInterest(request));
     }
 
     /**
@@ -51,8 +53,8 @@ public class InterestController {
      * @return Httpstatus
      */
     @PutMapping("/teacher")
-    public ResponseEntity<HttpStatus> updateInterest(@RequestBody InterestAllDto dto) {
-        interestService.updateInterest(dto);
+    public ResponseEntity<HttpStatus> updateInterest(HttpServletRequest request, @RequestBody InterestAllDto dto) {
+        interestService.updateInterest(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

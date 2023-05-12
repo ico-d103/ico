@@ -162,8 +162,8 @@ public class NationServiceImpl implements NationService {
      */
     @Transactional
     @Override
-    public void createStock(StockReqDto stockReqDto) {
-        Long nationId = 99L;
+    public void createStock(HttpServletRequest request, StockReqDto stockReqDto) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
 
