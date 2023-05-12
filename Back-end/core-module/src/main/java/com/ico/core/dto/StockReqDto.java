@@ -7,9 +7,12 @@ import lombok.Setter;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 
 /**
+ * 투자 종목 생성
+ *
  * @author 변윤경
  */
 @Getter
@@ -19,13 +22,13 @@ public class StockReqDto {
     @NotBlank(message = "708")
     private String stock;
 
-    @NotBlank(message = "709")
+    @NotNull(message = "709")
     private LocalTime tradingStart;
 
-    @NotBlank(message = "710")
+    @NotNull(message = "710")
     private LocalTime tradingEnd;
 
-    @NotBlank(message = "711")
+    @NotNull(message = "711")
     @Min(value = 0, message = "712")
     private double amount;
 

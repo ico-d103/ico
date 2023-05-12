@@ -4,6 +4,7 @@ import com.ico.api.dto.bank.DepositStudentResDto;
 import com.ico.api.dto.bank.InterestAllDto;
 import com.ico.api.dto.bank.InterestStudentResDto;
 import com.ico.api.util.Formatter;
+import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Deposit;
 import com.ico.core.entity.Interest;
 import com.ico.core.entity.Student;
@@ -18,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +43,7 @@ public class InterestServiceImpl implements InterestService {
     private final InterestRepository interestRepository;
     private final DepositMongoRepository depositMongoRepository;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * 나의 이자율 조회
@@ -47,9 +51,11 @@ public class InterestServiceImpl implements InterestService {
      * @return 해당 장단기 이자율, 계좌 잔액
      */
     @Override
-    public InterestStudentResDto myInterest() {
-        long studentId = 1;
-        long nationId = 99;
+    public InterestStudentResDto myInterest(HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -68,7 +74,11 @@ public class InterestServiceImpl implements InterestService {
         DepositStudentResDto myDeposit = new DepositStudentResDto();
         if(depositOptional.isPresent()){
             Deposit deposit = depositOptional.get();
+            boolean isEnd = !LocalDateTime.now().toLocalDate().isBefore(deposit.getEndDate().toLocalDate());
+
             myDeposit = myDeposit.builder()
+                    .amount(deposit.getAmount())
+                    .depositAmount(deposit.getAmount() * deposit.getInterest() / 100)
                     .interest(deposit.getInterest())
                     .startDate(deposit.getStartDate().format(Formatter.date))
                     .endDate(deposit.getEndDate().format(Formatter.date))
@@ -91,8 +101,8 @@ public class InterestServiceImpl implements InterestService {
      * @return 장기 이자율 리스트, 단기 이자율 리스트
      */
     @Override
-    public InterestAllDto findAllInterest() {
-        long nationId = 99;
+    public InterestAllDto findAllInterest(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         List<Interest> interestList = interestRepository.findAllByNationIdOrderByCreditRating(nationId);
 
         // 국가의 이자율 여부 확인
@@ -126,8 +136,8 @@ public class InterestServiceImpl implements InterestService {
      */
     @Transactional
     @Override
-    public void updateInterest(InterestAllDto dto) {
-        long nationId = 99;
+    public void updateInterest(HttpServletRequest request, InterestAllDto dto) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         // 나라 확인
         if (nationRepository.findById(nationId).isEmpty()) {

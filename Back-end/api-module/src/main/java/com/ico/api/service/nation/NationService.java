@@ -2,6 +2,7 @@ package com.ico.api.service.nation;
 
 import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
+import com.ico.api.dto.nation.TradingTimeReqDto;
 import com.ico.core.dto.StockReqDto;
 import com.ico.core.entity.Nation;
 
@@ -35,7 +36,7 @@ public interface NationService {
      * 투자 종목 등록
      * @param stockReqDto 종목 정보
      */
-    public void createStock(StockReqDto stockReqDto);
+    public void createStock(HttpServletRequest request, StockReqDto stockReqDto);
 
     /**
      * 국고 잔금 조회
@@ -52,4 +53,12 @@ public interface NationService {
      * @param request
      */
     void updateCredit(NationCreditReqDto dto, HttpServletRequest request);
+
+    /**
+     * 거래 시간 변경
+     *
+     * @param request
+     * @param dto 거래 시작 시간, 종료 시간
+     */
+    void updateTradingTime(HttpServletRequest request, TradingTimeReqDto dto);
 }

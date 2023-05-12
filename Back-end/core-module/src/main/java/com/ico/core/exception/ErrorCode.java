@@ -67,6 +67,10 @@ public enum ErrorCode{
 
     DUPLICATED_NATION_NAME(HttpStatus.NOT_FOUND, "205", "이미 존재하는 나라 이름입니다."),
 
+    NOT_FOUND_TEACHER_CERTIFICATION(HttpStatus.NOT_FOUND, "206", "교사 인증이 되지 않았습니다."),
+
+    EXIST_TEACHER_NATION(HttpStatus.BAD_REQUEST, "207", "이미 교사가 생성한 나라가 있습니다."),
+
     ALREADY_ASSIGNED_COUPON(HttpStatus.BAD_REQUEST, "300", "승인 대기 중인 쿠폰입니다."),
 
     ALREADY_ASSIGNED_JOB(HttpStatus.BAD_REQUEST, "409", "이미 배정된 직업입니다."),
@@ -106,6 +110,8 @@ public enum ErrorCode{
     SOLD_OUT(HttpStatus.BAD_REQUEST, "616", "품절된 상품입니다."),
 
     PRODUCT_NOT_FOUND(HttpStatus.BAD_REQUEST, "617", "해당 상품은 없는 상품입니다."),
+
+    IS_SELLER(HttpStatus.BAD_REQUEST, "618", "판매자는 구매를 할 수 없습니다."),
 
     NOT_TRADING_TIME(HttpStatus.BAD_REQUEST, "701", "거래시간이 아닙니다."),
 

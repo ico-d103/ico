@@ -5,6 +5,7 @@ import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.util.Formatter;
+import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.dto.TeacherProductReqDto;
 import com.ico.core.entity.Coupon;
 import com.ico.core.entity.Nation;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -40,6 +42,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
     private final TransactionService transactionService;
     private final CouponRepository couponRepository;
     private final S3UploadService s3UploadService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * 교사 상품 등록
@@ -47,9 +50,9 @@ public class TeacherProductServiceImpl implements TeacherProductService {
      * @param product 교사 상품
      */
     @Override
-    public void createProduct(TeacherProductReqDto product, List<MultipartFile> files) {
-        long nationId = 99L;
-        // Todo : token 생성 이후 nation 바꾸기
+    public void createProduct(HttpServletRequest request, TeacherProductReqDto product, List<MultipartFile> files) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
@@ -78,9 +81,8 @@ public class TeacherProductServiceImpl implements TeacherProductService {
      * @return 교사상품목록
      */
     @Override
-    public List<TeacherProductAllResDto> findAllProduct() {
-        //TODO : REQUSET
-        long nationId = 99L;
+    public List<TeacherProductAllResDto> findAllProduct(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         if (nationRepository.findById(nationId).isEmpty()) {
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
@@ -114,12 +116,10 @@ public class TeacherProductServiceImpl implements TeacherProductService {
      */
     @Transactional
     @Override
-    public void buyCoupon(Long id) {
-        // 해당 국가인지 확인
-        // TODO : REQUEST 변환
-        long nationId = 99L;
-        // TODO : REQUEST 변환
-        long studentId = 1L;
+    public void buyProduct(HttpServletRequest request, Long id) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -145,6 +145,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
 
         // 상품 가격 지불
         student.setAccount(account - amount);
+        studentRepository.save(student);
 
         // 거래 내역 추가
         transactionService.addTransactionWithdraw("교사 상점", studentId, amount, product.getTitle());
@@ -152,26 +153,36 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         // 재고 개수 수정
         product.setSold((byte) (product.getSold() + 1));
 
-        // 인벤토리에 추가
-        Optional<Coupon> couponOptional = couponRepository.findByTeacherProductIdAndStudentId(id, studentId);
-        Coupon coupon;
-        if (couponOptional.isPresent()) {
-            coupon = couponOptional.get();
-            coupon.setCount((byte) (coupon.getCount() + 1));
-        } else {
-            coupon = Coupon.builder()
-                    .student(student)
-                    .teacherProduct(product)
-                    .title(product.getTitle())
-                    .isAssigned(false)
-                    .build();
+        // 쿠폰일 때
+        if (!product.getRental()) {
+            // 인벤토리에 추가
+            Optional<Coupon> couponOptional = couponRepository.findByTeacherProductIdAndStudentId(id, studentId);
+            Coupon coupon;
+            if (couponOptional.isPresent()) {
+                coupon = couponOptional.get();
+                coupon.setCount((byte) (coupon.getCount() + 1));
+            } else {
+                coupon = Coupon.builder()
+                        .student(student)
+                        .teacherProduct(product)
+                        .title(product.getTitle())
+                        .isAssigned(false)
+                        .build();
+            }
+            couponRepository.save(coupon);
         }
-        couponRepository.save(coupon);
     }
 
+    /**
+     * 교사 상품 상세정보 조회
+     *
+     * @param request
+     * @param id
+     * @return
+     */
     @Override
-    public TeacherProductDetailResDto detailProduct(Long id) {
-        long nationId = 99;
+    public TeacherProductDetailResDto detailProduct(HttpServletRequest request, Long id) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         TeacherProduct product = teacherProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));

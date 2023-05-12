@@ -1,6 +1,7 @@
 package com.ico.api.service.stock;
 
 import com.ico.api.service.transaction.TransactionService;
+import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Stock;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -32,6 +34,7 @@ public class InvestServiceImpl implements InvestService{
     private final InvestRepository investRepository;
     private final NationRepository nationRepository;
     private final TransactionService transactionService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * 주식 매수
@@ -40,16 +43,18 @@ public class InvestServiceImpl implements InvestService{
      * @param amount 매수 금액
      */
     @Override
-    public void buyStock(double price, int amount) {
-        //Todo: request
-        long id = 1;
+    public void buyStock(HttpServletRequest request, double price, int amount) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
         // 학생 유효 검사
-        Student student = studentRepository.findById(id)
+        Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         log.info("확생 유효 검사 완료");
 
         // 거래 가능 시간 확인
-        Nation nation = nationRepository.findById(student.getNation().getId())
+        Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
         LocalTime currentTime = LocalTime.now();
         if(currentTime.isAfter(nation.getTrading_end()) || currentTime.isBefore(nation.getTrading_start())){
@@ -58,7 +63,7 @@ public class InvestServiceImpl implements InvestService{
         log.info("거래 가능 시간");
 
         // 매수 여부 확인
-        investRepository.findByStudentId(student.getId()).ifPresent(i -> {
+        investRepository.findByStudentId(studentId).ifPresent(i -> {
             throw new CustomException(ErrorCode.ALREADY_HAVE_STOCK);
         });
         log.info("매수 여부 확인");
@@ -83,6 +88,7 @@ public class InvestServiceImpl implements InvestService{
         investRepository.save(invest);
 
         // 거래 내역 추가
+        transactionService.addTransactionWithdraw(nation.getTitle() + " 증권", studentId, amount, nation.getStock() + " 지수 " + price);
         transactionService.addTransactionWithdraw(nation.getTitle() + " 증권", student.getId(), amount, nation.getStock() + " 지수 " + price);
 
     }
@@ -92,10 +98,11 @@ public class InvestServiceImpl implements InvestService{
      */
     @Transactional
     @Override
-    public void sellStock() {
-        //todo : request
-        long studentId = 1;
-        long nationId = 99;
+    public void sellStock(HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
 
         // 학생 유효검사
         Student student = studentRepository.findById(studentId)

@@ -6,6 +6,7 @@ import com.ico.api.user.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +41,7 @@ public class MemberController {
 
     /**
      * 아이디 중복 확인
+     *
      * @param req
      * @return ok
      */
@@ -53,11 +55,23 @@ public class MemberController {
 
     /**
      * 교사와 학생의 정보가 업데이트 될 때 토큰을 업데이트 하는 것
+     *
      * @param request
      * @return
      */
     @PostMapping("/token")
     public ResponseEntity<?> updateToken(HttpServletRequest request) {
         return new ResponseEntity<>(jwtTokenProvider.updateTokenCookie(request), HttpStatus.OK);
+    }
+
+    /**
+     * 토큰의 상태 반환
+     *
+     * @param request
+     * @return status
+     */
+    @GetMapping("/status")
+    public ResponseEntity<String> getStatus(HttpServletRequest request) {
+        return ResponseEntity.ok(memberService.returnStatus(request));
     }
 }
