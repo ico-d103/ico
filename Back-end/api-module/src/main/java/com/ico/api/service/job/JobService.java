@@ -29,7 +29,7 @@ public interface JobService {
      *
      * @return
      */
-    List<JobAllResDto> findAllJob(HttpServletRequest request);
+    JobAllResDto findAllJob(HttpServletRequest request);
 
     /**
      * 학생이 인원 미달 직업을 조회

@@ -4,6 +4,7 @@ import com.ico.api.dto.studentProduct.StudentProductAllResDto;
 import com.ico.api.dto.studentProduct.StudentProductDetailResDto;
 import com.ico.api.dto.studentProduct.StudentProductReqDto;
 import com.ico.api.service.S3UploadService;
+import com.ico.api.util.Formatter;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Nation;
@@ -42,7 +43,6 @@ public class StudentProductServiceImpl implements StudentProductService {
     private final StudentProductRepository studentProductRepository;
     private final S3UploadService s3UploadService;
     private final JwtTokenProvider jwtTokenProvider;
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
     /**
      * 학생의 상품 판매 제안서를 학생 상품 테이블에 추가합니다.
@@ -103,7 +103,7 @@ public class StudentProductServiceImpl implements StudentProductService {
                     .isAssigned(product.isAssigned())
                     .sold(product.getSold())
                     .name(product.getStudent().getName())
-                    .date(product.getDate().format(formatter))
+                    .date(product.getDate().format(Formatter.date))
                     .build();
 
             resProductList.add(resDto);
@@ -163,7 +163,7 @@ public class StudentProductServiceImpl implements StudentProductService {
                 .count(product.getCount())
                 .isAssigned(product.isAssigned())
                 .sold(product.getSold())
-                .date(product.getDate().format(formatter))
+                .date(product.getDate().format(Formatter.date))
                 .build();
     }
 

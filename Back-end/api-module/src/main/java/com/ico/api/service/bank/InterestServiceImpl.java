@@ -3,6 +3,7 @@ package com.ico.api.service.bank;
 import com.ico.api.dto.bank.DepositStudentResDto;
 import com.ico.api.dto.bank.InterestAllDto;
 import com.ico.api.dto.bank.InterestStudentResDto;
+import com.ico.api.util.Formatter;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Deposit;
 import com.ico.core.entity.Interest;
@@ -79,8 +80,8 @@ public class InterestServiceImpl implements InterestService {
                     .amount(deposit.getAmount())
                     .depositAmount(deposit.getAmount() * deposit.getInterest() / 100)
                     .interest(deposit.getInterest())
-                    .startDate(deposit.getStartDate().format(formatter))
-                    .endDate(deposit.getEndDate().format(formatter))
+                    .startDate(deposit.getStartDate().format(Formatter.date))
+                    .endDate(deposit.getEndDate().format(Formatter.date))
                     .creditRating(deposit.getCreditRating())
                     .build();
         }

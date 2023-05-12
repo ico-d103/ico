@@ -5,6 +5,7 @@ import com.ico.api.dto.stock.StockColDto;
 import com.ico.api.dto.stock.StockStudentResDto;
 import com.ico.api.dto.stock.StockTeacherResDto;
 import com.ico.api.dto.stock.StockUploadReqDto;
+import com.ico.api.util.Formatter;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
@@ -43,7 +44,6 @@ public class StockServiceImpl implements StockService{
     private final StockRepository stockRepository;
     private final InvestRepository investRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
     /**
      * 교사 투자 이슈 목록 조회
@@ -181,7 +181,7 @@ public class StockServiceImpl implements StockService{
             StockColDto col = new StockColDto();
             col.setContent(issue.getContent());
             col.setAmount(issue.getAmount());
-            col.setDate(issue.getDate().format(formatter));
+            col.setDate(issue.getDate().format(Formatter.date));
             issuesRes.add(col);
         }
 

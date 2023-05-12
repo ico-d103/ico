@@ -21,4 +21,6 @@ public interface ResumeMongoRepository extends MongoRepository<Resume, String> {
 
     List<Resume> findAllByNationId(Long nationId);
 
+    Long countByJobId(Long jobId);
+
 }

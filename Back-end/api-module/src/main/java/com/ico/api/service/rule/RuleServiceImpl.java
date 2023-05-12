@@ -3,6 +3,7 @@ package com.ico.api.service.rule;
 import com.ico.api.dto.rule.RuleReqDto;
 import com.ico.api.dto.rule.RuleResDto;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.api.util.Formatter;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Rule;
 import com.ico.core.exception.CustomException;
@@ -34,8 +35,6 @@ public class RuleServiceImpl implements RuleService {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private static final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-
     @Override
     public List<RuleResDto> findAllRule(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -43,7 +42,7 @@ public class RuleServiceImpl implements RuleService {
         List<Rule> ruleList = ruleRepository.findAllByNationId(nationId);
         List<RuleResDto> resList = new ArrayList<>();
         for (Rule rule : ruleList) {
-            String dateTime = rule.getDateTime().format(dayFormatter);
+            String dateTime = rule.getDateTime().format(Formatter.date);
             resList.add(new RuleResDto().of(rule, dateTime));
         }
         return resList;

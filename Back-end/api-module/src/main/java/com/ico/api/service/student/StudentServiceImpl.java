@@ -10,6 +10,7 @@ import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.user.StudentSignUpRequestDto;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.api.util.Formatter;
 import com.ico.core.code.Role;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
@@ -60,8 +61,6 @@ public class StudentServiceImpl implements StudentService{
     private final TransactionMongoRepository transactionMongoRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
-
-    private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
 
     @Override
     public Long signUp(StudentSignUpRequestDto requestDto) {
@@ -169,7 +168,7 @@ public class StudentServiceImpl implements StudentService{
             map.putIfAbsent(date, new ArrayList<>());
             map.get(date).add(TransactionColDto.builder()
                             .title(transaction.getTitle())
-                            .amount(numberFormat.format(amount))
+                            .amount(Formatter.number.format(amount))
                     .build());
         }
         return new StudentResDto().of(student, map);
