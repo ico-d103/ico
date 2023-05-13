@@ -77,7 +77,7 @@ export type getTeacherProductsType = {
 	id: string
 	title: string
 	amount: number
-	images: string[] // images 속성 추가
+	images: string[]
 	count: number
 	sold: number
 	date: string
