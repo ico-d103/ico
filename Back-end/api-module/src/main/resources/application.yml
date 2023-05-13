@@ -54,3 +54,7 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+
+  dependencies:
+    net.nurigo:
+      java-sdk: 3.5

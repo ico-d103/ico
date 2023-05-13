@@ -57,6 +57,10 @@ public enum ErrorCode{
 
     NOT_FOUND_NAME(HttpStatus.BAD_REQUEST, "112", "이름 입력 칸이 비었습니다."),
 
+    NOT_FOUND_PHONE_NUMBER(HttpStatus.NOT_FOUND, "113", "휴대폰 번호를 입력하지 않았습니다."),
+
+    WRONG_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "114", "휴대폰 번호 양식이 틀렸습니다."),
+
     WRONG_CODE(HttpStatus.BAD_REQUEST, "200", "일치하는 반 코드가 없습니다."),
 
     WRONG_IMMIGRATION(HttpStatus.BAD_REQUEST, "201", "입국 심사를 기다리고 있는 나라가 있습니다."),

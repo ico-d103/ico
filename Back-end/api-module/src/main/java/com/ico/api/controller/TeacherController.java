@@ -3,6 +3,8 @@ package com.ico.api.controller;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import com.ico.api.service.teacher.TeacherService;
 import lombok.RequiredArgsConstructor;
+import net.nurigo.sdk.message.service.DefaultMessageService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -26,6 +30,8 @@ public class TeacherController {
 
     private final TeacherService teacherService;
 
+
+
     /**
      * 교사 회원가입
      *
@@ -39,4 +45,9 @@ public class TeacherController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @PostMapping("/phone")
+    @ResponseBody
+    public ResponseEntity<?> certifiedPhone(@RequestBody Map<String, String> req) {
+        return new ResponseEntity<>(teacherService.certifiedPhoneNum(req.get("phoneNum")), HttpStatus.OK);
+    }
 }
