@@ -31,9 +31,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-@WebFilter(urlPatterns = {"/api/teacher", "/api/student", "/api/login", "api/duplicated-id", "api/teacher/**"},
-        filterName = "JwtTokenAuthenticationFilter",
-        dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD})
 public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailService customUserDetailService;
