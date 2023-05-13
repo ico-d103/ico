@@ -39,7 +39,8 @@ function login() {
 			body: { identity: inputState.id, password: inputState.password },
 		})
 			.then((res) => {
-				setCookie("Authorization", res)
+				console.log("token : ", res)
+				setCookie("Authorization", res, { path: "/teacher" })
 
 				// 교사가 생성한 나라 조회
 				getNationAPI()
