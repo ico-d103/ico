@@ -11,6 +11,7 @@ type ModalProps = {
 	closeComp: () => void
 	transition: string
 	content: JSX.Element
+	
 }
 
 function Modal({ compState, closeComp, transition, content }: ModalProps) {
