@@ -10,8 +10,7 @@ import { getNationAPI } from "@/api/common/getNationAPI"
 import { getNationType } from "@/types/common/apiReturnTypes"
 import { nationData } from "@/store/store"
 import { useAtom } from "jotai"
-
-
+import { getCookie } from "@/api/cookie"
 
 type LayoutProps = {
 	children: any
@@ -20,14 +19,15 @@ type LayoutProps = {
 function Layout({ children }: LayoutProps) {
 	const router = useRouter()
 	const [nationDataAtom, setNationDataAtom] = useAtom(nationData)
-	 
 
 	useEffect(() => {
-		getNationAPI()
-		.then((res) => {
-			setNationDataAtom(() => res)
-		})
-	}, [])
+		const accessToken = getCookie("Authorization")
+		if (accessToken) {
+			getNationAPI().then((res) => {
+				setNationDataAtom(() => res)
+			})
+		}
+	}, [getCookie("Authorization")])
 
 	useEffect(() => {
 		if (nationDataAtom) {

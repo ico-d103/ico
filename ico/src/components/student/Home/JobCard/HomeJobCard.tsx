@@ -24,6 +24,7 @@ function HomeJobCard({name, job, wage, credit, backgroundColor, imgUrl }: HomeJo
 						wrapperCss={imgCSS}
 						src={imgUrl}
 						alt={"job_image"}
+            sizes={'250px'}
             // useSkeleton={true}
 						// priority={true}
 						// layout="fill"

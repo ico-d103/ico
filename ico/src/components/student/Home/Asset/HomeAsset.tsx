@@ -38,16 +38,23 @@ const STOCK_ICON = (
 	</svg>
 )
 
-function HomeAsset() {
+type HomeAssetProps = {
+	account: number
+	deposit: number
+	invest: number
+}
+
+function HomeAsset({account, deposit, invest}: HomeAssetProps) {
 	const [nation] = useGetNation()
 
 	const list = [
-		{ icon: WALLET_ICON, title: "일반 계좌", money: 25600, moneyUnit: ` ${nation?.currency}`, detailUrl: "/student/home/asset" },
-		{ icon: DEPOSIT_ICON, title: "정기 예금", money: 25600, moneyUnit: ` ${nation?.currency}`, detailUrl: "/student/test" },
-		{ icon: STOCK_ICON, title: "투자", money: 25600, moneyUnit: ` ${nation?.currency}`, detailUrl: "/student/test" },
+		{ icon: WALLET_ICON, title: "일반 계좌", money: account ? account : 0, moneyUnit: ` ${nation?.currency}`, detailUrl: "/student/home/asset" },
+		{ icon: DEPOSIT_ICON, title: "정기 예금", money: deposit ? deposit : 0, moneyUnit: ` ${nation?.currency}`, detailUrl: "/student/finance/deposit" },
+		{ icon: STOCK_ICON, title: "투자", money: invest ? invest : 0, moneyUnit: ` ${nation?.currency}`, detailUrl: "/student/finance/invest" },
 	]
 
 	const renderAssets = list.map((el, idx) => {
+		
 		return <HomeAssetItem key={`assets-${el.title}`} {...el} />
 	})
 	return <div>{renderAssets}</div>

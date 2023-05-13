@@ -6,7 +6,7 @@ import Button from "@/components/common/Button/Button"
 import useGetNation from "@/hooks/useGetNation"
 import Input from "@/components/common/Input/Input"
 import { putGovCreditAPI } from "@/api/teacher/gov/putGovCreditAPI"
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery,  } from "@tanstack/react-query";
 import { useQueryClient } from '@tanstack/react-query';
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"

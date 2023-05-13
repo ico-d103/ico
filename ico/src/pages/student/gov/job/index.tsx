@@ -3,6 +3,9 @@ import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import GovJobCard from "@/components/student/Gov/Job/GovJobCard"
 import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
 import { GovTabMenus } from "@/components/student/Gov/GovTabMenus"
+import { getGovJobAPI } from "@/api/teacher/gov/getGovJobAPI"
+import { useQuery } from "@tanstack/react-query"
+import { getGovJobType } from "@/types/teacher/apiReturnTypes"
 
 function index() {
 	const mockList = [
@@ -32,11 +35,7 @@ function index() {
 		},
 	]
 
-	const menus = [
-		{ idx: 0, url: "/student/gov/rule", title: "학급 규칙" },
-		{ idx: 1, url: "/student/gov/exchequer", title: "세금 목록" },
-		{ idx: 2, url: "/student/gov/job", title: "직업 목록" },
-	]
+	const { data } = useQuery<getGovJobType[]>(["govJobList"], getGovJobAPI)
 
 	return (
 		<>
@@ -45,11 +44,11 @@ function index() {
 				<div css={contentCSS}>
 					<span css={titleCSS}>
 						우리반에는
-						<b>&nbsp;20개</b>의 직업이 있어요
+						<b>&nbsp;{data?.length ? data.length : 0}개</b>의 직업이 있어요
 					</span>
 					<div css={jobListCSS}>
-						{mockList.map((mock) => (
-							<GovJobCard key={mock.id} mock={mock} />
+						{data?.map((job) => (
+							<GovJobCard key={job.id} job={job} />
 						))}
 					</div>
 				</div>
@@ -83,14 +82,19 @@ const titleCSS = css`
 
 const jobListCSS = css`
 	margin-top: 30px;
-	padding: 30px;
+	display: grid;
+	place-items: center;
+	grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+	grid-column-gap: 10px;
+	grid-row-gap: 20px;
+	/* padding: 30px;
 	width: 100%;
 	background-color: var(--student-wrapper-color);
 	border-radius: 10px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 30px;
+	gap: 30px; */
 `
 
 export default index

@@ -1,33 +1,44 @@
-import React from "react"
 import { css } from "@emotion/react"
 import { CLASS_APPLY_APPROVE, CLASS_APPLY_DENY } from "../ClassIcons"
+import { postJobAcceptAPI } from "@/api/teacher/class/postJobAcceptAPI"
+import { deleteJobDenyAPI } from "@/api/teacher/class/deleteJobDenyAPI"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { getJobApplierType } from "@/types/teacher/apiReturnTypes"
 
 type ClassJobSearchListApplyListItemPropsType = {
-	mockList: {
-		id: number
-		number: number
-		name: string
-		grade: number
-	}
+	student: getJobApplierType
 }
 
-function ClassJobSearchListApplyListItem({ mockList }: ClassJobSearchListApplyListItemPropsType) {
+function ClassJobSearchListApplyListItem({ student }: ClassJobSearchListApplyListItemPropsType) {
+	const queryClient = useQueryClient()
+	const acceptMutation = useMutation((id: string) => postJobAcceptAPI({ id }))
+	const denyMutation = useMutation((id: string) => deleteJobDenyAPI({ id }))
+
 	const approveHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
 		e.stopPropagation() // 이벤트 버블링 방지
-		alert("승인!")
+
+		acceptMutation.mutate(student.resumeId, {
+			onSuccess: () => {
+				return queryClient.invalidateQueries(["jobList"])
+			},
+		})
 	}
 
 	const denyHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
 		e.stopPropagation()
-		alert("반려!")
+
+		denyMutation.mutate(student.resumeId, {
+			onSuccess: () => {
+				return queryClient.invalidateQueries(["jobList"])
+			},
+		})
 	}
 
 	return (
 		<div css={wrapperCSS}>
 			<div>
-				<div css={numberCSS}>{mockList.number}</div>
-				<h5 css={nameCSS}>{mockList.name}</h5>
-				<h6>{mockList.grade}등급</h6>
+				<div css={numberCSS}>{student.number}</div>
+				<h5 css={nameCSS}>{student.name}</h5>
 			</div>
 			<div css={buttonWrapperCSS}>
 				<div onClick={approveHandler}>{CLASS_APPLY_APPROVE}</div>
