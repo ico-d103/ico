@@ -12,12 +12,18 @@ import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import net.nurigo.sdk.message.service.DefaultMessageService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.util.Random;
 
 /**
  * Teacher ServiceImpl
@@ -76,32 +82,37 @@ public class TeacherServiceImpl implements TeacherService {
         return teacher.getId();
     }
 
+    @Value("${coolsms.apiKey}")
+    private String apiKey;
+
+    @Value("${coolsms.apiSecret}")
+    private String apiSecret;
+
+    @Value("${coolsms.fromPhoneNum}")
+    private String fromPhoneNum;
+
     @Override
-    public void certifiedPhoneNum(String phoneNum) {
-//        TODO : PhoneNum 인증할 때 사용할 것
-//        String api_key = "NCSCQN2HADECWPGN";
-//        String api_secret = "XWRCSV8OFGHBAUQ8NOGUTF2VXKYB8ZCV";
-//        Message coolsms = new Message(api_key, api_secret);       // 여기 오류
-//
-//        Random rand  = new Random();
-//        String numStr = "";
-//        for(int i=0; i<4; i++) {
-//            String ran = Integer.toString(rand.nextInt(10));
-//            numStr += ran;
-//        }
-//
-//        // 4 params(to, from, type, text) are mandatory. must be filled
-//        HashMap<String, String> params = new HashMap<String, String>();
-//        params.put("to", phoneNum);    // 수신전화번호
-//        params.put("from", "01037822170");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
-//        params.put("type", "SMS");
-//        params.put("text", "아이코 휴대폰인증 테스트 메시지 : 인증번호는 [" + numStr + "] 입니다.");
-//
-//        try {
-//            coolsms.send(params);         // 여기도 오류
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
-//        네이버로 다시 구현하기
+    public String certifiedPhoneNum(String phoneNum) {
+        // 휴대폰 번호가 입력 되지않았을 때 에러(null 로 처리하면 coolsms에 에러 빼앗김)
+        if (phoneNum.isBlank()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_PHONE_NUMBER);
+        }
+        // 하이픈이 있을 때와 휴대폰 번호 자리가 11개가 넘을 때 에러
+        if (phoneNum.contains("-") || phoneNum.length() > 11) {
+            throw new CustomException(ErrorCode.WRONG_PHONE_NUMBER);
+        }
+        // 인증번호 생성 및 메시지에 포함
+        String randomNum = String.format("%06d", new Random().nextInt(999999));
+        log.info(phoneNum);
+        Message message = new Message();
+        message.setFrom(fromPhoneNum);
+        message.setTo(phoneNum);
+        message.setText("[아이코 인증번호]\n입력하셔야할 인증번호는 [" + randomNum + "] 입니다.");
+
+        // 메세지 전송
+        final DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecret, "https://api.coolsms.co.kr");
+        messageService.sendOne(new SingleMessageSendingRequest(message));
+
+        return randomNum;
     }
 }
