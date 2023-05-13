@@ -1,19 +1,34 @@
 import { css } from "@emotion/react"
+import { postResumeAPI } from "@/api/student/class/postResumeAPI"
+import { appendEulReul } from "@/util/isEndWithConsonant"
 
 type ClassJobSearchModalPropsType = {
 	job: string
+	id: number
 	closeComp: () => void
 }
 
-function ClassJobSearchModal({ job, closeComp }: ClassJobSearchModalPropsType) {
+function ClassJobSearchModal({ job, id, closeComp }: ClassJobSearchModalPropsType) {
+	const applyJobHandler = () => {
+		postResumeAPI({ id })
+			.then((res) => {
+				// 성공적으로 신청했다는 stackNotification 띄우기
+				closeComp()
+			})
+			.catch((error) => {
+				alert(error.response.message)
+			})
+	}
+
 	return (
 		<div css={wrapperCSS}>
-			<span>
-				<b>{job}</b> (을/를) 선택했어요
-			</span>
+			<div css={jobNameCSS}>
+				<b>{job}</b>
+				<span>{appendEulReul(job)} 선택했어요</span>
+			</div>
 			<div css={buttonWrapperCSS}>
 				<button onClick={closeComp}>취소</button>
-				<button>신청할래요 !</button>
+				<button onClick={applyJobHandler}>신청할래요 !</button>
 			</div>
 		</div>
 	)
@@ -21,8 +36,8 @@ function ClassJobSearchModal({ job, closeComp }: ClassJobSearchModalPropsType) {
 
 const wrapperCSS = css`
 	padding: 30px 20px;
-	width: 280px;
-	height: 170px;
+	width: 300px;
+	height: 190px;
 	background: #ffffff;
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -31,16 +46,23 @@ const wrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
-	gap: 35px;
+	justify-content: space-around;
+`
+
+const jobNameCSS = css`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+
+	> b {
+		font-size: 1.1rem;
+		font-weight: bold;
+		color: var(--student-main-color-5);
+	}
 
 	> span {
-		font-size: 1rem;
-
-		> b {
-			font-weight: bold;
-			color: var(--student-main-color-5);
-		}
+		font-size: 1.1rem;
 	}
 `
 
@@ -51,7 +73,7 @@ const buttonWrapperCSS = css`
 
 	> button {
 		border-radius: 20px;
-		padding: 10px;
+		padding: 10px 15px;
 		font-size: var(--student-h3);
 	}
 

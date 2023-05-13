@@ -1,10 +1,11 @@
 import { css } from "@emotion/react"
 import Image from "next/image"
-
+import { useRouter } from "next/router"
 // 상품 갯수가 0개면 sold out
 // 승인 대기중인 상품은 boolean으로 관리한다.
 
 type CardProps = {
+	id: string
 	title: string
 	amount: number
 	image: string
@@ -15,9 +16,24 @@ type CardProps = {
 	assigned: boolean
 }
 
-function Card({ title, amount, image, count, sold, name, date, assigned }: CardProps) {
+function Card({ id, title, amount, image, count, sold, name, date, assigned }: CardProps) {
+	const router = useRouter()
+
+	const handleClickCard = () => {
+		const currentPath = router.asPath
+		if (currentPath.includes("/teacher/shop/my")) {
+			router.push(`/teacher/shop/my/${id}`)
+		} else if (currentPath.includes("/teacher/shop/student")) {
+			router.push(`/teacher/shop/student/${id}`)
+		} else if (currentPath.includes("student/shop/teacher")) {
+			router.push(`/student/shop/teacher/${id}`)
+		} else if (currentPath.includes("/student/shop/student")) {
+			router.push(`/student/shop/student/${id}`)
+		}
+	}
+
 	return (
-		<div css={cardCSS}>
+		<div css={cardCSS} onClick={handleClickCard}>
 			<div css={cardImageWrapperCSS}>
 				<Image src={image} alt={title} layout="fill" />
 				{assigned ? (

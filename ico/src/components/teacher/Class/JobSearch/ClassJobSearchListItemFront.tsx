@@ -1,68 +1,75 @@
-import React from "react"
 import { css } from "@emotion/react"
-import Image from "next/image"
+import { jobListType } from "@/types/teacher/apiReturnTypes"
+import LoadImage from "@/components/common/LoadImage/LoadImage"
 
 type ClassJobSearchListItemFrontPropsType = {
-	mock: {
-		id: number
-		jobname: string
-		needcount: number
-		applycount: number
-		grade: number
-		money: number
-	}
+	job: jobListType
 }
 
-function ClassJobSearchListItemFront({ mock }: ClassJobSearchListItemFrontPropsType) {
+function ClassJobSearchListItemFront({ job }: ClassJobSearchListItemFrontPropsType) {
 	return (
 		<>
-			<div css={imageWrapperCSS}>
-				<Image src={"/assets/job/weather_caster.png"} alt={mock.jobname} width={150} height={250} />
-				{mock.applycount !== 0 && <span>{mock.applycount}</span>}
+			<div css={imageWrapperCSS(job.color)}>
+				<LoadImage wrapperCss={imgCSS} src={job.image} alt={"job_image"} />
+				<span>
+					{job.recruitStudent}/{job.total}
+				</span>
 			</div>
 			<div css={contentWrapperCSS}>
 				<div css={firstContentCSS}>
-					<h4>{mock.jobname}</h4>
-					{mock.needcount !== 0 ? <h5>{mock.needcount}명 모집중</h5> : <h5>담당 학생</h5>}
+					<h3>{job.title}</h3>
 				</div>
 				<div css={divideLineCSS}></div>
 				<div css={secondContentCSS}>
-					<h5>{mock.grade}등급 이상</h5>
-					<h5>일급 {mock.money} 미소</h5>
+					<h5>{job.creditRating}등급 이상</h5>
+					<h5>
+						월급 약 {job.salary} {localStorage.getItem("currency")}
+					</h5>
 				</div>
 			</div>
 		</>
 	)
 }
 
-const imageWrapperCSS = css`
-	height: 240px;
-	background-color: #007bc0;
-	position: relative;
-	overflow: hidden;
+const imageWrapperCSS = (color: string) => {
+	return css`
+		height: 240px;
+		background-color: ${color};
+		position: relative;
+		overflow: hidden;
+		user-select: none;
 
-	> img {
-		position: absolute;
-		top: 10px;
-		left: 10px;
-		z-index: 1;
-	}
+		> span {
+			position: absolute;
+			bottom: 10px;
+			right: 10px;
+			z-index: 10;
 
-	> span {
-		position: absolute;
-		bottom: 1px;
-		right: 10px;
+			font-size: 4.5rem;
+			font-weight: bold;
+			color: rgba(255, 255, 255, 0.7);
+		}
+	`
+}
 
-		font-size: 130px;
-		font-weight: 700;
-		color: rgba(255, 255, 255, 0.7);
-	}
+const imgCSS = css`
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 1;
+	width: 150px;
+	height: 250px;
+	filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.2));
 `
 
 const contentWrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+
+	h3 {
+		font-size: var(--teacher-h3);
+	}
 
 	h4 {
 		font-size: var(--teacher-h4);
@@ -84,7 +91,7 @@ const firstContentCSS = css`
 	align-items: center;
 	justify-content: space-between;
 
-	> h4 {
+	> h3 {
 		font-weight: bold;
 	}
 `

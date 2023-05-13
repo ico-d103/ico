@@ -142,12 +142,7 @@ function signup() {
 			dispatchValid({ type: "VALID_NAME", value: false })
 			return
 		}
-		// 유효하지 않을 때
-		if (KOREAN_ONLY.test(inputState.name) === false) {
-			dispatchValidMessage({ type: "VALID_NAME", value: "이름은 한글만 입력 가능합니다." })
-			dispatchValid({ type: "VALID_NAME", value: false })
-			return
-		}
+
 		// 사용가능하다면
 		dispatchValidMessage({ type: "VALID_NAME", value: "" })
 		dispatchValid({ type: "VALID_NAME", value: true })
@@ -352,21 +347,33 @@ function signup() {
 		return <div css={messageCSS({ isValid })}>{message}</div>
 	}
 
+	const changeNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		let inputValue = e.target.value
+
+		if (!KOREAN_ONLY.test(inputValue)) {
+			inputValue = inputValue.replace(/[^가-힣]/g, "")
+			e.target.value = inputValue
+
+			dispatchValidMessage({ type: "VALID_NAME", value: "이름은 한글만 입력 가능합니다." })
+			dispatchValid({ type: "VALID_NAME", value: false })
+
+			return
+		}
+
+		dispatchInput({ type: "CHANGE_NAME", value: e.target.value })
+	}
+
 	return (
 		<div css={wrapperCSS}>
 			<div css={innerWrapperCSS}>
 				<LoadImage src={"/assets/signup/illust.png"} alt={"signup_illust"} wrapperCss={imageWrapperCSS} dev={false} />
-
-				{/* placeholder 멘트도 더 좋은게 있다면 수정해주세요 */}
 
 				<div css={inputTitleCSS}>이름</div>
 				<Input
 					leftContent={NAME_ICON}
 					theme={"default"}
 					placeholder="이름 (한글만 입력해주세요)"
-					onChange={(e) => {
-						dispatchInput({ type: "CHANGE_NAME", value: e.target.value })
-					}}
+					onChange={changeNameHandler}
 					customCss={inputCSS}
 				/>
 				{messageGenerator({ message: validMessageState.name, isValid: validState.name })}

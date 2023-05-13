@@ -3,54 +3,54 @@ import { css } from "@emotion/react"
 import Modal from "@/components/common/Modal/Modal"
 import useCompHandler from "@/hooks/useCompHandler"
 import ClassJobSearchModal from "./ClassJobSearchModal"
+import { getJobListType } from "@/types/student/apiReturnTypes"
 
 type ClassJobSearchCardPropsType = {
-	mock: {
-		id: number
-		name: string
-		need: number
-	}
+	job: getJobListType
 }
 
-function ClassJobSearchCard({ mock }: ClassJobSearchCardPropsType) {
+function ClassJobSearchCard({ job }: ClassJobSearchCardPropsType) {
 	const [openComp, closeComp, compState] = useCompHandler()
 
 	return (
 		<>
-			<div css={wrapperCSS}>
+			<div css={wrapperCSS(job.color)} onClick={openComp}>
 				<div css={imageWrapperCSS}>
-					<LoadImage wrapperCss={imgCSS} src={"/assets/job/weather_caster.png"} alt={"job_image"} />
+					<LoadImage wrapperCss={imgCSS} src={job.image} alt={"job_image"} />
 				</div>
-				<div css={contentWrapperCSS} onClick={openComp}>
-					<span css={nameCSS}>{mock.name}</span>
-					<span css={needCSS}>{mock.need}</span>
+				<div css={contentWrapperCSS}>
+					<span css={nameCSS}>{job.title}</span>
+					<span css={needCSS}>{job.total}명</span>
 				</div>
 			</div>
 			<Modal
 				compState={compState}
 				closeComp={closeComp}
 				transition={"scale"}
-				content={<ClassJobSearchModal job={mock.name} closeComp={closeComp} />}
+				content={<ClassJobSearchModal job={job.title} id={job.id} closeComp={closeComp} />}
 			/>
 		</>
 	)
 }
 
-const wrapperCSS = css`
-	width: 150px;
-	height: 100px;
-	background-color: #007bc0;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-	border-radius: 10px;
-	position: relative;
-`
+const wrapperCSS = (color: string) => {
+	return css`
+		width: 270px;
+		height: 160px;
+		background-color: ${color};
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		border-radius: 10px;
+		position: relative;
+		overflow: hidden;
+	`
+}
 
 const imageWrapperCSS = css`
 	position: absolute;
 	top: 5px;
-	left: 10px;
-	width: 50px;
-	height: 90px;
+	left: 25px;
+	width: 100px;
+	height: 180px;
 `
 
 const imgCSS = css`
@@ -61,11 +61,12 @@ const imgCSS = css`
 `
 
 const contentWrapperCSS = css`
-	width: 70px;
-	height: 80px;
+	/* border: 1px solid red; */
+	width: 140px;
+	height: 120px;
 	position: absolute;
-	top: 10px;
-	right: 10px;
+	top: 20px;
+	right: 20px;
 
 	display: flex;
 	flex-direction: column;
@@ -74,14 +75,15 @@ const contentWrapperCSS = css`
 
 const nameCSS = css`
 	text-align: right;
-	font-size: var(--student-h3);
+	font-size: var(--student-h2);
 	color: white;
+	font-weight: bold;
 `
 
 const needCSS = css`
 	text-align: right;
 	color: rgba(255, 255, 255, 0.7);
-	font-size: 3rem;
+	font-size: 4.5rem;
 	font-weight: bold;
 `
 

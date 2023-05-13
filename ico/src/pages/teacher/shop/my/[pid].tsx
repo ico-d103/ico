@@ -1,37 +1,52 @@
 import { css } from "@emotion/react"
 import Image from "next/image"
-import { useRouter } from "next/router";
-
+import { useRouter } from "next/router"
+import React, { useState, useEffect, useRef } from "react"
 
 import ShopCarousel from "@/components/teacher/Shop/ShopCarousel"
 import Button from "@/components/common/Button/Button"
+import { getTeacherProductDetailAPI } from "@/api/common/shop/getTeacherProductDetailAPI"
+import { getTeacherProductDetailType } from "@/types/teacher/apiReturnTypes"
 
 function product() {
 	const router = useRouter()
 	const { pid } = router.query
 
-	const product = {
-		id: 1,
-		image: "https://placehold.it/250x250",
-		name: "헤드셋",
-		number: 1,
-		price: 4000,
-		writer: "서재건",
-		date: "2023년 4월 27일",
-		approved: false,
-		explanation: "상품에 대한 자세한 설명입니다.",
-	}
+	const [product, setProduct] = useState<getTeacherProductDetailType>({
+		id: 0,
+		title: "",
+		amount: 0,
+		images: [],
+		count: 0,
+		sold: 0,
+		date: "",
+		rental: true,
+		detail: "",
+	})
+
+	useEffect(() => {
+		if (typeof pid === "string") {
+			getTeacherProductDetailAPI({ body: { pid: pid } })
+				.then((res) => {
+					setProduct(res)
+				})
+				.catch((error) => {
+					console.log(error)
+				})
+		}
+	}, [pid])
 
 	return (
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
 				<div css={productCSS}>
-					<div>{product.name}</div>
-					<div>{product.writer}</div>
+					<div>{product?.title}</div>
+					{/* <div>{product?.name}</div>  */}
+					{/* 이름 getnation으로 선생님이름 받아올까 생각중 */}
 					<hr />
 					<div>
-						<div>{product.price}미소</div>
-						<div>현재 상품이 {product.number}개 남았습니다.</div>
+						<div>{product.amount}미소</div>
+						<div>현재 상품이 {product?.count - product?.sold}개 남았습니다.</div>
 					</div>
 				</div>
 				<div css={QRcss}>
@@ -39,14 +54,12 @@ function product() {
 				</div>
 			</div>
 
-			<div css={parentCSS}>
-				<ShopCarousel />
-			</div>
+			<div css={parentCSS}>{/* <ShopCarousel /> */}</div>
 
 			<div css={footerCSS}>
 				<div>
 					<div>상품 상세 설명</div>
-					<div>{product.explanation}</div>
+					<div>{product.detail}</div>
 				</div>
 				<div>
 					<Button
