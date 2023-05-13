@@ -46,9 +46,10 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         String token = jwtTokenProvider.parseJwt(request);
         // token이 없을 때
         if (token == null || token.trim().isEmpty()) {
-            // 토큰이 없더라도 요청가능한 api uri
+            // 토큰이 없더라도 요청가능한 api uri(/api/teacher/** != /api/teacher)
             if (request.getRequestURI().startsWith("/api/login") || request.getRequestURI().startsWith("/api/student")
-                    || request.getRequestURI().startsWith("/api/teacher") || request.getRequestURI().startsWith("/api/duplicated-id")) {
+                    || request.getRequestURI().startsWith("/api/teacher") || request.getRequestURI().startsWith("/api/duplicated-id")
+                    || request.getRequestURI().startsWith("/api/teacher/phone")) {
                 filterChain.doFilter(request, response);
                 return;
             }
