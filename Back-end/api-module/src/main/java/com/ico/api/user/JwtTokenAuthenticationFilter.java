@@ -42,6 +42,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        // HttpServletRequest 객체에서 JWT 토큰을 추출
         String token = jwtTokenProvider.parseJwt(request);
         // token이 없을 때
         if (token == null || token.trim().isEmpty()) {
@@ -60,6 +61,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         try {
+            // 유효성 검사
             if (!jwtTokenProvider.isValidate(token)) {
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -68,7 +70,6 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                 objectMapper.writeValue(response.getWriter(), errorResponse);
                 return;
             }
-            // HttpServletRequest 객체에서 JWT 토큰을 추출
             log.info("request: {}", request.getHeader("Authorization"));
             log.info("token: {}", token);
 
