@@ -339,7 +339,7 @@ function signup() {
 	}
 
 	const checkCertifyCodeHandler = () => {
-		if (certifyCode !== inputCertifyCode) {
+		if (certifyCode != inputCertifyCode) {
 			dispatchValidMessage({ type: "VALID_CODE", value: "코드가 일치하지 않습니다." })
 			dispatchValid({ type: "VALID_CODE", value: false })
 		} else {
