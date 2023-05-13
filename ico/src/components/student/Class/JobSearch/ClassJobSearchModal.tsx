@@ -1,5 +1,6 @@
 import { css } from "@emotion/react"
 import { postResumeAPI } from "@/api/student/class/postResumeAPI"
+import { appendEulReul } from "@/util/isEndWithConsonant"
 
 type ClassJobSearchModalPropsType = {
 	job: string
@@ -23,7 +24,7 @@ function ClassJobSearchModal({ job, id, closeComp }: ClassJobSearchModalPropsTyp
 		<div css={wrapperCSS}>
 			<div css={jobNameCSS}>
 				<b>{job}</b>
-				<span>(을/를) 선택했어요</span>
+				<span>{appendEulReul(job)} 선택했어요</span>
 			</div>
 			<div css={buttonWrapperCSS}>
 				<button onClick={closeComp}>취소</button>
