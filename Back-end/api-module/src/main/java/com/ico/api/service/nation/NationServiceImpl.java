@@ -59,7 +59,7 @@ public class NationServiceImpl implements NationService {
                 Teacher teacher = teacherRepository.findById(teacherId)
                         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
                 // 교사 인증 여부
-                if (teacher.isAssigned()){
+                if (teacher.getIsAssigned()){
                     // 교사가 만든 나라의 여부
                     if (teacher.getNation() != null) {
                         Nation nation = Nation.builder()
