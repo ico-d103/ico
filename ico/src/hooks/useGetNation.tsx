@@ -10,7 +10,10 @@ function useGetNation(): [getNationType, () => void] {
   const refetch = () => {
     getNationAPI()
       .then((res) => {
-        setNationDataAtom(() => res)
+        if (res) {
+          setNationDataAtom(() => res)
+        }
+        
 
       })
     }
