@@ -53,6 +53,12 @@ function Button({ text, fontSize, width, height, theme, margin, onClick, disable
 			fontColor: `var(--common-back-color-2)`,
 			backgroundColor: `#D94A4A`,
 		},
+		mobileWarning: {
+			border: "none",
+			borderRadius: "20px",
+			fontColor: `var(--common-back-color-2)`,
+			backgroundColor: `#D94A4A`,
+		},
 		positive: {
 			border: "none",
 			borderRadius: "10px",

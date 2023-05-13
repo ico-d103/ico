@@ -50,6 +50,14 @@ export type getFinanceDepositRateType = {
 	shortPeriod: number
 	longPeriod: number
 	account: number
+	myDeposit: {
+        interest: number
+        startDate: string
+        endDate: string
+        creditRating: number
+        amount: number
+        depositAmount: number
+    }
 }
 
 export type getClassRuleType = {
@@ -65,6 +73,21 @@ export type getStudentListType = {
 	creditRating: number
 }
 
+
+export type getHomeMyInfoType = {
+    school: string
+    room: number
+    number: number
+    name: string
+    account: number
+    creditRating: number
+    jobImage: null | string
+    jobName: null | string
+	color: null | string
+	deposit: number
+	invest: number
+}
+
 export type getJobListType = {
 	id: number
 	title: string
@@ -74,3 +97,4 @@ export type getJobListType = {
 	image: string
 	color: string
 }
+

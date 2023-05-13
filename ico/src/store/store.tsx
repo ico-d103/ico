@@ -13,8 +13,10 @@ const selectedStudent = atom(-1)
 
 const isDepositMenuOpen = atom(true)
 
+
 const stackNotification = atom<{ [prop: number]: { width: string; height: string; duration: number; content: any } }>(
 	{},
+	
 )
 
 const selectedPage = atom(1)

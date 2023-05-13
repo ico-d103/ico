@@ -60,11 +60,17 @@ function index() {
 				},
 			]
 
-			for (let i = 6; i >= 0; i--) {
-				const date = new Date(data.issue[i].date)
-				const mfDate: string = `${date.getMonth() + 1}.${date.getDate()}`
-				temp[0].data.push({ x: mfDate, y: data.issue[i].amount })
+			if (data.issue.length !== 0) {
+				for (let i = 6; i >= 0; i--) {
+					if (data.issue.length > i) {
+						const date = new Date(data.issue[i].date)
+						const mfDate: string = `${date.getMonth() + 1}.${date.getDate()}`
+						temp[0].data.push({ x: mfDate, y: data.issue[i].amount })
+					}
+					
+				}
 			}
+			
 
 			//   data.issue.forEach((el, idx) => {
 			//     temp[0].data.push({x: el.date, y: el.amount})
@@ -88,67 +94,103 @@ function index() {
 		}
 	}, [data])
 
+	function isTimeBetween(startTime: string, endTime: string): boolean {
+		const startTimeArr = startTime.split(":")
+		const startHour = Number(startTimeArr[0])
+		const startMinute = Number(startTimeArr[1])
+		const endTimeArr = endTime.split(":")
+		const endHour = Number(endTimeArr[0])
+		const endMinute = Number(endTimeArr[1])
+		const currentTime = new Date()
+		const currentHour = currentTime.getHours()
+		const currentMinute = currentTime.getMinutes()
+
+		if (currentHour > startHour && currentHour < endHour) {
+			return true
+		} else if (currentHour === startHour && currentMinute >= startMinute) {
+			return true
+		} else if (currentHour === endHour && currentMinute <= endMinute) {
+			return true
+		}
+
+		return false
+	}
+
 	return (
 		<div>
 			{data && (
 				<React.Fragment>
 					<Modal
-					content={
-						<ModalContent
-							width={"90vw"}
-							title={"투자 매도"}
-							titleSize={"var(--student-h1)"}
-							icon={APPLY_ICON}
-							content={<FinanceInvestDeleteModal refetch={refetch} closeComp={closeDeleteComp} diff={calcDiff}/>}
-							
-						/>
-					}
-					compState={compDeleteState}
-					closeComp={closeDeleteComp}
-					transition={"scale"}
-				/>
+						content={
+							<ModalContent
+								width={"90vw"}
+								title={"투자 매도"}
+								titleSize={"var(--student-h1)"}
+								icon={APPLY_ICON}
+								content={<FinanceInvestDeleteModal refetch={refetch} closeComp={closeDeleteComp} diff={calcDiff} />}
+							/>
+						}
+						compState={compDeleteState}
+						closeComp={closeDeleteComp}
+						transition={"scale"}
+					/>
 
 					<Modal
-					content={
-						<ModalContent
-							width={"90vw"}
-							title={"투자 매수"}
-							titleSize={"var(--student-h1)"}
-							icon={APPLY_ICON}
-							content={<FinanceInvestApplyModal refetch={refetch} closeComp={closeApplyComp} unit={` ${nation?.currency}`} account={data.account} price={data.issue[0].amount}/>}
-							
-						/>
-					}
-					compState={compApplyState}
-					closeComp={closeApplyComp}
-					transition={"scale"}
-				/>
+						content={
+							<ModalContent
+								width={"90vw"}
+								title={"투자 매수"}
+								titleSize={"var(--student-h1)"}
+								icon={APPLY_ICON}
+								content={
+									<FinanceInvestApplyModal
+										refetch={refetch}
+										closeComp={closeApplyComp}
+										unit={` ${nation?.currency}`}
+										account={data.account}
+										price={data.issue[0].amount}
+									/>
+								}
+							/>
+						}
+						compState={compApplyState}
+						closeComp={closeApplyComp}
+						transition={"scale"}
+					/>
 				</React.Fragment>
-				
-
-				
-			
 			)}
-
 
 			{data && (
 				<div css={navBarOverlayCSS}>
-					{data.myStock.amount === 0 ? (
-						<Button
-							text={"매수하기"}
-							fontSize={`var(--student-h3)`}
-							width={"90%"}
-							theme={"mobileNormal"}
-							onClick={() => {openApplyComp()}}
-						/>
+					{isTimeBetween(data.tradingStart, data.tradingEnd) ? (
+						data.myStock.amount === 0 ? (
+							<Button
+								text={"매수하기"}
+								fontSize={`var(--student-h3)`}
+								width={"90%"}
+								theme={"mobileNormal"}
+								onClick={() => {
+									openApplyComp()
+								}}
+							/>
+						) : (
+							<Button
+								text={"매도하기"}
+								fontSize={`var(--student-h3)`}
+								width={"90%"}
+								theme={"mobileSoft"}
+								onClick={() => {
+									openDeleteComp()
+								}}
+							/>
+						)
 					) : (
-						<Button
-							text={"매도하기"}
-							fontSize={`var(--student-h3)`}
-							width={"90%"}
-							theme={"mobileSoft"}
-							onClick={() => {openDeleteComp()}}
-						/>
+						<div css={css`display: flex; flex-direction: column; align-items: center;`}>
+							지금은 거래 시간이 아니에요!
+							<div css={sSizeFontCSS}>
+								{data.tradingStart} ~ {data.tradingEnd}
+							</div>
+						</div>
 					)}
 				</div>
 			)}
@@ -163,7 +205,9 @@ function index() {
 				)}
 				{data && data?.myStock.price !== 0 && (
 					<ContentWrapper>
-						<div css={lSizeFontCSS}>{calcStock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {nation?.currency}</div>
+						<div css={lSizeFontCSS}>
+							{calcStock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {nation?.currency}
+						</div>
 						<div css={diffLabelCSS({ calcDiff })}>
 							{calcDiff > 0 && "+"}
 							{calcDiff.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {nation?.currency}
@@ -229,7 +273,7 @@ const navBarOverlayCSS = css`
 	padding: 0px 16px;
 
 	opacity: 0%;
-	animation: fadein 0.6s ease-in forwards;
+	animation: fadein 0.2s ease-in forwards;
 
 	@keyframes fadein {
 		from {

@@ -5,12 +5,15 @@ import { useAtom } from "jotai"
 import { css } from "@emotion/react"
 
 
+
+
 const Notification = (props: any) => {
 	const indicatorRef = useRef<HTMLDivElement>(null)
 	const popUpRef = useRef<HTMLDivElement>(null)
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
 	const [stackNotificationAtom, setStackNotificationAtom] = useAtom(stackNotification)
 	const duration = props.duration
+
 
 	useEffect(() => {
 		// if (indicatorRef.current) {

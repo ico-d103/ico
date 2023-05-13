@@ -6,7 +6,16 @@ export function isEndWithConsonant(korStr: string) {
 }
 
 export function appendEulReul(value: string) {
-	if (!value) return
+    if (!value) {
+        return
+    }
+    return value + (isEndWithConsonant(value) ? "을" : "를")
+};
 
-	return value + (isEndWithConsonant(value) ? "을" : "를")
-}
+export function appendEiGa(value: string) {
+    if (!value) {
+        return
+    }
+    return value + (isEndWithConsonant(value) ? "이" : "가")
+};
+

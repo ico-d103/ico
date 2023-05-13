@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { css } from "@emotion/react"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWrapper"
@@ -7,28 +7,42 @@ import HomeAsset from "@/components/student/Home/Asset/HomeAsset"
 import HomeGradationButton from "@/components/student/Home/GradationButton/HomeGradationButton"
 import HomeButtonSection from "@/components/student/Home/GradationButton/HomeButtonSection"
 import HomeTipSection from "@/components/student/Home/Tip/HomeTipSection"
-
+import { getHomeMyInfoAPI } from "@/api/student/home/getHomeMyInfoAPI"
+import { getHomeMyInfoType } from "@/types/student/apiReturnTypes"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 
 function index() {
+	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getHomeMyInfoType>(
+		["student", "homeMyInfo"],
+		getHomeMyInfoAPI,
+		// { staleTime: 200000 },
+	)
+
 	return (
 		<div>
 			<PageHeader title={"아이코"} />
+
 			<div css={contentParentCSS}>
 				<ContentWrapper>
-          <div css={contentTitleCSS}>
-            내 프로필
-          </div>
-          <HomeJobCard name={'김빵빵'} credit={3} backgroundColor={'#634AFF'} imgUrl={'/assets/job/firefighter.png'}/>
-        </ContentWrapper>
+					<div css={contentTitleCSS}>내 프로필</div>
+					{data && (
+						<HomeJobCard
+							name={data.name}
+							credit={data.creditRating}
+							backgroundColor={"#634AFF"}
+							imgUrl={data.jobImage !== null ? data.jobImage : "/assets/job/firefighter.png"}
+						/>
+					)}
+				</ContentWrapper>
+				{data && 
 				<ContentWrapper>
-          <div css={contentTitleCSS}>
-            자산
-          </div>
-          <HomeAsset />
-        </ContentWrapper>
-        <HomeButtonSection/>
-        <HomeTipSection/>
-      </div>
+					<div css={contentTitleCSS}>자산</div>
+					<HomeAsset account={data.account} deposit={data.deposit} invest={data.invest}/>
+				</ContentWrapper>
+				}
+				<HomeButtonSection />
+				<HomeTipSection />
+			</div>
 		</div>
 	)
 }
@@ -36,11 +50,11 @@ function index() {
 const header = css``
 
 const contentTitleCSS = css`
-  font-size: var(--student-h2);
-  font-weight: 700;
+	font-size: var(--student-h2);
+	font-weight: 700;
 `
 const contentParentCSS = css`
-/* background-color: red; */
+	/* background-color: red; */
 	display: flex;
 	flex-direction: column;
 	align-items: center;
