@@ -17,6 +17,8 @@ import {
 } from "@/components/teacher/Signup/SignupIcons/SignupIcons"
 import { postDuplicationCheckAPI } from "@/api/common/postDuplicationCheckAPI"
 import { useRouter } from "next/router"
+import { postPhoneIdentifyAPI } from "@/api/teacher/user/postPhoneIdentifyAPI"
+import { NUM_ONLY } from "@/util/regex"
 
 const inputReducer = (
 	state: { name: string; id: string; password: string; password2: string; phone: string },
@@ -39,7 +41,15 @@ const inputReducer = (
 }
 
 const validReducer = (
-	state: { name: boolean; id: boolean; password: boolean; password2: boolean; phone: boolean; file: boolean },
+	state: {
+		name: boolean
+		id: boolean
+		password: boolean
+		password2: boolean
+		phone: boolean
+		file: boolean
+		code: boolean
+	},
 	action: { type: string; value: boolean },
 ) => {
 	switch (action.type) {
@@ -55,13 +65,15 @@ const validReducer = (
 			return { ...state, phone: action.value }
 		case "VALID_FILE":
 			return { ...state, file: action.value }
+		case "VALID_CODE":
+			return { ...state, code: action.value }
 		default:
 			return state
 	}
 }
 
 const validMessageReducer = (
-	state: { name: string; id: string; password: string; password2: string; phone: string; file: string },
+	state: { name: string; id: string; password: string; password2: string; phone: string; file: string; code: string },
 	action: { type: string; value: string },
 ) => {
 	switch (action.type) {
@@ -77,6 +89,8 @@ const validMessageReducer = (
 			return { ...state, phone: action.value }
 		case "VALID_FILE":
 			return { ...state, file: action.value }
+		case "VALID_CODE":
+			return { ...state, code: action.value }
 		default:
 			return state
 	}
@@ -92,6 +106,7 @@ function signup() {
 		password2: false,
 		phone: false,
 		file: false,
+		code: false,
 	})
 	const [validMessageState, dispatchValidMessage] = useReducer(validMessageReducer, {
 		name: "",
@@ -100,6 +115,7 @@ function signup() {
 		password2: "",
 		phone: "",
 		file: "",
+		code: "",
 	})
 	const [inputState, dispatchInput] = useReducer(inputReducer, {
 		name: "",
@@ -112,6 +128,8 @@ function signup() {
 	const [file, setFile] = useState<File | null>(null)
 	const [fileUrl, setFileUrl] = useState<string>("")
 	const router = useRouter()
+	const [certifyCode, setCertifyCode] = useState<string>("")
+	const [inputCertifyCode, setInputCertifyCode] = useState<string>("")
 
 	useEffect(() => {
 		checkValidNameHandler()
@@ -132,11 +150,27 @@ function signup() {
 		checkValidPhoneHandler()
 	}, [inputState.phone])
 
-	const checkValidNameHandler = (forSumbit = false) => {
+	const changeNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		let inputValue = e.target.value
+
+		if (!KOREAN_ONLY.test(inputValue)) {
+			inputValue = inputValue.replace(/[^가-힣]/g, "")
+			e.target.value = inputValue
+
+			dispatchValidMessage({ type: "VALID_NAME", value: "이름은 한글만 입력 가능합니다." })
+			dispatchValid({ type: "VALID_NAME", value: false })
+
+			return
+		}
+
+		dispatchInput({ type: "CHANGE_NAME", value: e.target.value })
+	}
+
+	const checkValidNameHandler = (forSubmit = false) => {
 		// 입력값이 없을 때
 		if (inputState.name === "") {
 			// 제출버튼을 눌렀다면
-			if (forSumbit) {
+			if (forSubmit) {
 				dispatchValidMessage({ type: "VALID_NAME", value: "이름을 입력해 주세요." })
 			}
 			dispatchValid({ type: "VALID_NAME", value: false })
@@ -148,11 +182,11 @@ function signup() {
 		dispatchValid({ type: "VALID_NAME", value: true })
 	}
 
-	const checkValidIDHandler = (forSumbit = false, checkVerify = false) => {
+	const checkValidIDHandler = (forSubmit = false, checkVerify = false) => {
 		// 입력값이 없을 때
 		if (inputState.id === "") {
 			// 제출버튼을 눌렀다면
-			if (forSumbit) {
+			if (forSubmit) {
 				dispatchValidMessage({ type: "VALID_ID", value: "아이디를 입력해 주세요." })
 			}
 			dispatchValid({ type: "VALID_ID", value: false })
@@ -168,7 +202,7 @@ function signup() {
 			return
 		}
 		// 중복 확인을 하지 않았다면
-		if (forSumbit) {
+		if (forSubmit) {
 			if (!validState.id) {
 				dispatchValidMessage({ type: "VALID_ID", value: "아이디 중복 확인을 해주세요." })
 				dispatchValid({ type: "VALID_ID", value: false })
@@ -196,9 +230,9 @@ function signup() {
 		}
 	}
 
-	const checkValidPWHandler = (forSumbit = false) => {
+	const checkValidPWHandler = (forSubmit = false) => {
 		if (inputState.password === "") {
-			if (forSumbit) {
+			if (forSubmit) {
 				dispatchValidMessage({
 					type: "VALID_PW",
 					value: "비밀번호를 입력해 주세요.",
@@ -221,7 +255,7 @@ function signup() {
 		dispatchValid({ type: "VALID_PW", value: true })
 	}
 
-	const checkValidPW2Handler = (forSumbit = false) => {
+	const checkValidPW2Handler = (forSubmit = false) => {
 		if (inputState.password === "") {
 			dispatchValid({ type: "VALID_PW2", value: false })
 			return
@@ -238,43 +272,7 @@ function signup() {
 		dispatchValid({ type: "VALID_PW2", value: true })
 	}
 
-	const checkValidPhoneHandler = (forSumbit = false, checkVerify = false) => {
-		// 입력값이 없을 때
-		if (inputState.phone === "") {
-			// 제출버튼을 눌렀다면
-			if (forSumbit) {
-				dispatchValidMessage({ type: "VALID_PHONE", value: "휴대폰 번호를 입력해 주세요." })
-			}
-			dispatchValid({ type: "VALID_PHONE", value: false })
-			return
-		}
-		// 유효하지 않을 때
-		if (PHONE_NUMBER_ONLY.test(inputState.phone) === false) {
-			dispatchValidMessage({
-				type: "VALID_PHONE",
-				value: "유효하지 않은 휴대폰 번호입니다. 올바른 번호를 입력해 주세요.",
-			})
-			dispatchValid({ type: "VALID_PHONE", value: false })
-			return
-		}
-
-		dispatchValidMessage({ type: "VALID_PHONE", value: "" })
-
-		if (checkVerify) {
-			// 휴대폰 인증 확인
-
-			// 인증안했을 때 (if문 추가하기)
-			dispatchValidMessage({ type: "VALID_PHONE", value: "휴대폰 인증이 필요합니다." })
-			dispatchValid({ type: "VALID_PHONE", value: false })
-			return
-
-			// 인증 되었을때
-			// dispatchValidMessage({ type: "VALID_PHONE", value: "본인 인증되었습니다." })
-			// dispatchValid({ type: "VALID_PHONE", value: true })
-		}
-	}
-
-	const checkValidFileHandler = (forSumbit = false) => {
+	const checkValidFileHandler = (forSubmit = false) => {
 		if (file === null) {
 			dispatchValidMessage({ type: "VALID_FILE", value: "교사 인증서를 첨부해 주세요" })
 			dispatchValid({ type: "VALID_FILE", value: false })
@@ -300,8 +298,71 @@ function signup() {
 		</div>
 	)
 
-	const ceritfyHandler = () => {
-		// 본인 인증 SMS
+	const changePhoneHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		let inputValue = e.target.value
+
+		if (!NUM_ONLY.test(inputValue) || !PHONE_NUMBER_ONLY.test(inputValue)) {
+			inputValue = inputValue.replace(/\D/g, "")
+			e.target.value = inputValue
+
+			dispatchValidMessage({
+				type: "VALID_PHONE",
+				value: "유효하지 않은 휴대폰 번호입니다. 올바른 번호를 입력해 주세요.",
+			})
+			dispatchValid({ type: "VALID_PHONE", value: false })
+
+			return
+		}
+
+		dispatchInput({ type: "CHANGE_PHONE", value: e.target.value })
+	}
+
+	const certifyPhoneHandler = () => {
+		if (inputState.phone === "" || inputState.phone.length < 10 || inputState.phone.length > 11) return
+
+		postPhoneIdentifyAPI({ body: { phoneNum: inputState.phone } })
+			.then((res) => {
+				dispatchValidMessage({
+					type: "VALID_PHONE",
+					value: "휴대폰으로 받은 인증 코드를 아래에 입력해주세요",
+				})
+
+				setCertifyCode(res)
+			})
+			.catch((error) => {
+				dispatchValidMessage({
+					type: "VALID_PHONE",
+					value: error.response.message,
+				})
+				dispatchValid({ type: "VALID_PHONE", value: false })
+			})
+	}
+
+	const checkCertifyCodeHandler = () => {
+		if (certifyCode !== inputCertifyCode) {
+			dispatchValidMessage({ type: "VALID_CODE", value: "코드가 일치하지 않습니다." })
+			dispatchValid({ type: "VALID_CODE", value: false })
+		} else {
+			dispatchValidMessage({ type: "VALID_CODE", value: "코드가 일치합니다." })
+			dispatchValid({ type: "VALID_CODE", value: true })
+			dispatchValidMessage({ type: "VALID_PHONE", value: "본인 인증되었습니다." })
+			dispatchValid({ type: "VALID_PHONE", value: true })
+		}
+	}
+
+	const checkValidPhoneHandler = (forSubmit = false) => {
+		// 입력값이 없을 때
+		if (inputState.phone === "") {
+			// 제출버튼을 눌렀다면
+			if (forSubmit) {
+				dispatchValidMessage({ type: "VALID_PHONE", value: "휴대폰 번호를 입력해 주세요." })
+			}
+			dispatchValid({ type: "VALID_PHONE", value: false })
+			return
+		}
+
+		dispatchValidMessage({ type: "VALID_PHONE", value: "" })
+		dispatchValidMessage({ type: "VALID_CODE", value: "" })
 	}
 
 	const signUpHandler = () => {
@@ -310,7 +371,7 @@ function signup() {
 		checkValidPWHandler(true)
 		checkValidPW2Handler(true)
 		checkValidFileHandler(true)
-		checkValidPhoneHandler(true, true)
+		checkValidPhoneHandler(true)
 
 		file && formData.append("file", file)
 
@@ -329,9 +390,15 @@ function signup() {
 			),
 		)
 
-		// 유효성 검사를 모두 완료하면 (현재는 phone 임시로 제외)
-		if (validState.name && validState.id && validState.password && validState.password2 && validState.file) {
-			// 회원가입 요청
+		// 유효성 검사를 모두 완료하면 회원가입 요청
+		if (
+			validState.name &&
+			validState.id &&
+			validState.password &&
+			validState.password2 &&
+			validState.file &&
+			validState.phone
+		) {
 			postTeacherAPI({ body: formData })
 				.then(() => {
 					router.push("/teacher/login")
@@ -343,24 +410,8 @@ function signup() {
 		}
 	}
 
-	const messageGenerator = ({ message, isValid }: { message: string; isValid: boolean }) => {
-		return <div css={messageCSS({ isValid })}>{message}</div>
-	}
-
-	const changeNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-		let inputValue = e.target.value
-
-		if (!KOREAN_ONLY.test(inputValue)) {
-			inputValue = inputValue.replace(/[^가-힣]/g, "")
-			e.target.value = inputValue
-
-			dispatchValidMessage({ type: "VALID_NAME", value: "이름은 한글만 입력 가능합니다." })
-			dispatchValid({ type: "VALID_NAME", value: false })
-
-			return
-		}
-
-		dispatchInput({ type: "CHANGE_NAME", value: e.target.value })
+	const messageGenerator = ({ message, isValid, visible }: { message: string; isValid: boolean; visible: boolean }) => {
+		return <div css={messageCSS({ isValid, visible })}>{message}</div>
 	}
 
 	return (
@@ -376,7 +427,7 @@ function signup() {
 					onChange={changeNameHandler}
 					customCss={inputCSS}
 				/>
-				{messageGenerator({ message: validMessageState.name, isValid: validState.name })}
+				{messageGenerator({ message: validMessageState.name, isValid: validState.name, visible: true })}
 
 				<div css={inputTitleCSS}>아이디</div>
 				<Input
@@ -398,12 +449,10 @@ function signup() {
 					type="text"
 					placeholder="영어와 숫자를 조합해 4자~10자 입력해주세요"
 					onChange={(e) => {
-						// dispatchValid({ type: "VALID_ID", value: false })
-
 						dispatchInput({ type: "CHANGE_ID", value: e.target.value })
 					}}
 				/>
-				{messageGenerator({ message: validMessageState.id, isValid: validState.id })}
+				{messageGenerator({ message: validMessageState.id, isValid: validState.id, visible: true })}
 
 				<div css={inputTitleCSS}>비밀번호</div>
 				<Input
@@ -413,12 +462,10 @@ function signup() {
 					type="password"
 					placeholder="영어와 숫자를 조합해 8자~16자 입력해주세요"
 					onChange={(e) => {
-						// dispatchValid({ type: "VALID_PW", value: false })
-
 						dispatchInput({ type: "CHANGE_PW", value: e.target.value })
 					}}
 				/>
-				{messageGenerator({ message: validMessageState.password, isValid: validState.password })}
+				{messageGenerator({ message: validMessageState.password, isValid: validState.password, visible: true })}
 
 				<div css={inputTitleCSS}>비밀번호 확인</div>
 				<Input
@@ -431,7 +478,7 @@ function signup() {
 						dispatchInput({ type: "CHANGE_PW2", value: e.target.value })
 					}}
 				/>
-				{messageGenerator({ message: validMessageState.password2, isValid: validState.password2 })}
+				{messageGenerator({ message: validMessageState.password2, isValid: validState.password2, visible: true })}
 
 				<div css={inputTitleCSS}>교사 인증서</div>
 				<Input
@@ -456,7 +503,7 @@ function signup() {
 					isFile={true}
 					ref={fileInputRef}
 				/>
-				{messageGenerator({ message: validMessageState.file, isValid: validState.file })}
+				{messageGenerator({ message: validMessageState.file, isValid: validState.file, visible: true })}
 
 				<div css={inputTitleCSS}>휴대폰 번호</div>
 				<Input
@@ -468,17 +515,36 @@ function signup() {
 							height={"42px"}
 							text={"본인 인증"}
 							fontSize={"var(--teacher-h5)"}
-							onClick={() => {}}
+							onClick={certifyPhoneHandler}
 						></Button>
 					}
 					theme={"default"}
 					placeholder="휴대폰 번호를 입력해 주세요"
-					onChange={(e) => {
-						dispatchInput({ type: "CHANGE_PHONE", value: e.target.value })
-					}}
+					onChange={changePhoneHandler}
 					customCss={inputCSS}
 				/>
-				{messageGenerator({ message: validMessageState.phone, isValid: validState.phone })}
+				{messageGenerator({ message: validMessageState.phone, isValid: validState.phone, visible: true })}
+				<Input
+					leftContent={PHONE_ICON}
+					rightContent={
+						<Button
+							theme={"RadialPositive"}
+							width={"120px"}
+							height={"42px"}
+							text={"인증 하기"}
+							fontSize={"var(--teacher-h5)"}
+							onClick={checkCertifyCodeHandler}
+						></Button>
+					}
+					theme={"default"}
+					placeholder="인증 코드를 입력해주세요"
+					onChange={(e) => {
+						setInputCertifyCode(e.target.value)
+					}}
+					customCss={hiddenInputCSS(certifyCode !== "")}
+				/>
+				{/* certifyCode === "" -> certifyCode !== "" 으로 변경 */}
+				{messageGenerator({ message: validMessageState.code, isValid: validState.code, visible: certifyCode !== "" })}
 
 				<div css={footerWrapperCSS}>
 					<Button
@@ -524,6 +590,13 @@ const inputCSS = css`
 	width: 100%;
 `
 
+const hiddenInputCSS = (isOpen: boolean) => {
+	return css`
+		width: 100%;
+		display: ${isOpen ? "block" : "none"};
+	`
+}
+
 const inputFileCSS = ({ fileUrl }: { fileUrl: string }) => {
 	return css`
 		display: flex;
@@ -537,12 +610,13 @@ const inputFileCSS = ({ fileUrl }: { fileUrl: string }) => {
 	`
 }
 
-const messageCSS = ({ isValid }: { isValid: boolean }) => {
+const messageCSS = ({ isValid, visible }: { isValid: boolean; visible: boolean }) => {
 	return css`
 		font-size: var(--teacher-h6);
 		color: ${isValid ? "rgba(0, 20, 50, 1)" : "var(--teacher-warning-color)"};
 		margin: 8px 0px 28px 0px;
 		height: 12px;
+		display: ${visible ? "block" : "none"};
 	`
 }
 
