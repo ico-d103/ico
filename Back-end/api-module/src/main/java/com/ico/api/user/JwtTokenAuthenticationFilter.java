@@ -31,7 +31,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-@WebFilter(urlPatterns = {"/api/teacher", "/api/student", "/api/login", "api/duplicated-id"},
+@WebFilter(urlPatterns = {"/api/teacher", "/api/student", "/api/login", "api/duplicated-id", "api/teacher/**"},
         filterName = "JwtTokenAuthenticationFilter",
         dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD})
 public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
@@ -49,7 +49,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
             // 토큰이 없더라도 요청가능한 api uri(/api/teacher/** != /api/teacher)
             if (request.getRequestURI().startsWith("/api/login") || request.getRequestURI().startsWith("/api/student")
                     || request.getRequestURI().startsWith("/api/teacher") || request.getRequestURI().startsWith("/api/duplicated-id")
-                    || request.getRequestURI().startsWith("/api/teacher/phone")) {
+                    || request.getRequestURI().startsWith("/api/teacher/**")) {
                 filterChain.doFilter(request, response);
                 return;
             }
