@@ -9,7 +9,6 @@ import { KOREAN_ONLY, GRADE_ONLY, CLASS_ONLY } from "@/util/regex"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 import { postCreateNationAPI } from "@/api/teacher/user/postCreateNationAPI"
 
-
 const inputReducer = (
 	state: { school: string; grade: string; class: string; nation: string; currency: string },
 	action: { type: string; value: string },
@@ -77,7 +76,7 @@ function create() {
 	useEffect(() => {
 		if (phase === 2) {
 			setTimeout(() => {
-				router.push('/teacher/class/students')
+				router.push("/teacher/class/students")
 			}, 2000)
 		}
 	}, [phase])
@@ -190,8 +189,8 @@ function create() {
 			dispatchValid({ type: "VALID_NATION", value: false })
 			return
 		}
-		if (KOREAN_ONLY.test(inputState.nation) === false) {
-			dispatchValidMessage({ type: "VALID_NATION", value: "나라 이름은 한글만 입력 가능합니다." })
+		if (KOREAN_ONLY.test(inputState.nation) === false || inputState.nation.length > 6) {
+			dispatchValidMessage({ type: "VALID_NATION", value: "나라 이름은 한글로 최대 6글자 가능합니다." })
 			dispatchValid({ type: "VALID_NATION", value: false })
 			return
 		}
@@ -210,8 +209,8 @@ function create() {
 			dispatchValid({ type: "VALID_CURRENCY", value: false })
 			return
 		}
-		if (KOREAN_ONLY.test(inputState.currency) === false) {
-			dispatchValidMessage({ type: "VALID_CURRENCY", value: "화폐 단위는 한글만 입력 가능합니다." })
+		if (KOREAN_ONLY.test(inputState.currency) === false || inputState.currency.length > 3) {
+			dispatchValidMessage({ type: "VALID_CURRENCY", value: "화폐 단위는 한글로 최대 3글자 입력 가능합니다." })
 			dispatchValid({ type: "VALID_CURRENCY", value: false })
 			return
 		}
@@ -232,20 +231,21 @@ function create() {
 
 	const passSecondPhaseHandler = () => {
 		if (validState.nation && validState.currency) {
-			postCreateNationAPI({body: {
-				school: inputState.school,
-				grade: Number(inputState.grade),
-				room: Number(inputState.class),
-				title: inputState.nation,
-				currency: inputState.currency
-			}})
-			.then((res) => {
-				setPhase(() => 2)
+			postCreateNationAPI({
+				body: {
+					school: inputState.school,
+					grade: Number(inputState.grade),
+					room: Number(inputState.class),
+					title: inputState.nation,
+					currency: inputState.currency,
+				},
 			})
-			.catch((err) => {
-				console.log(err)
-			})
-			
+				.then((res) => {
+					setPhase(() => 2)
+				})
+				.catch((err) => {
+					console.log(err)
+				})
 		} else {
 			checkValidNationHandler(true)
 			checkValidCurrencyHandler(true)
