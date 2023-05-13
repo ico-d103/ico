@@ -2,15 +2,16 @@ import React, { useEffect } from "react"
 import { css } from "@emotion/react"
 import StudentList from "@/components/teacher/Class/Student/List/ClassStudentList"
 import StudentDetail from "@/components/teacher/Class/Student/Detail/ClassStudentDetail"
-import { useIsResponsive } from "@/hooks/useIsResponsive"
+import useMediaQuery from "@/hooks/useMediaQuery"
 import useCompHandler from "@/hooks/useCompHandler"
 import Modal from "@/components/common/Modal/Modal"
 import { useAtom } from "jotai"
 import { selectedStudent } from "@/store/store"
 
+
 function students() {
 	const [openComp, closeComp, compState] = useCompHandler()
-	const [isDeskTop, isTablet, isMobile] = useIsResponsive()
+	const isDeskTop = useMediaQuery('(min-width: 1440px')
 	const [selectedStudentAtom, setSelectedStudentAtom] = useAtom(selectedStudent)
 
 	useEffect(() => {
@@ -82,6 +83,7 @@ const detailWrapperCSS = css`
 	position: sticky;
 	top: 0;
 	padding: 30px;
+	height: 100%;
 `
 
 const modalWrapperCSS = css`
