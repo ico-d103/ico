@@ -5,10 +5,13 @@ import LoadImage from '@/components/common/LoadImage/LoadImage'
 import useNavigate from '@/hooks/useNavigate'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import useGetNation from '@/hooks/useGetNation'
+import { appendEiGa } from '@/util/isEndWithConsonant'
 
 
 function HomeButtonSection() {
     const navigate = useNavigate()
+    const [nation] = useGetNation()
 
 
     
@@ -32,7 +35,7 @@ function HomeButtonSection() {
                     우리나라의 국고에
                 </div>
                 <div css={lsizeFontCSS}>
-                    121,05,123Ruble이
+                    {nation.treasury} {appendEiGa(nation.currency)}
                 </div>
                 <div css={msizeFontCSS}>
                     남아있어요!

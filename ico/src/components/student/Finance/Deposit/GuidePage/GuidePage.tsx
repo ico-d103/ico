@@ -4,7 +4,7 @@ import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import { css } from "@emotion/react"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 import Button from "@/components/common/Button/Button"
-import FinanceDepositApplyModal from "@/components/student/Finance/Deposit/ApplyModal/FinanceDepositApplyModal"
+import FinanceDepositApplyModal from "@/components/student/Finance/Deposit/Modal/FinanceDepositApplyModal"
 import ModalContent from "@/components/common/Modal/ModalContent"
 import Modal from "@/components/common/Modal/Modal"
 import useCompHandler from "@/hooks/useCompHandler"
@@ -30,17 +30,18 @@ const APPLY_ICON = (
 	</svg>
 )
 
-function GuidePage() {
+type GuidePageProps = {
+	data: getFinanceDepositRateType
+	refetch: Function
+}
+
+function GuidePage({data, refetch}: GuidePageProps) {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 	const [term, setTerm] = useState<0 | 1>(0)
 	const [nation] = useGetNation()
 
-	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceDepositRateType>(
-		["student", "homeFinanceGetRate"],
-		getFinanceDepositRateAPI,
-		// { staleTime: 200000 },
-	)
+	
 
 	useEffect(() => {
 		console.log(data)
@@ -166,7 +167,7 @@ const navBarOverlayCSS = css`
 	padding: 0px 16px;
 
 	opacity: 0%;
-	animation: fadein 0.6s ease-in forwards;
+	animation: fadein 0.2s ease-in forwards;
 
 	@keyframes fadein {
 		from {

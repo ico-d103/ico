@@ -17,14 +17,13 @@ function HomeAssetItem({ icon, title, money, moneyUnit, detailUrl }: HomeAssetIt
 
 	return (
 		<React.Fragment>
-			<Link href={detailUrl} prefetch />
 			<div css={contentWrapperCSS}>
 				<div css={leftWrapperCSS}>
 					<div css={imgWrapperCSS}>{icon}</div>
 					<div css={textContentWrapperCSS}>
 						<div css={titleWrapperCSS}>{title}</div>
 						<div css={moneyWrapperCSS}>
-							{money.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}
+							{money?.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}
 							{moneyUnit}
 						</div>
 					</div>

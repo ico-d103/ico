@@ -4,6 +4,7 @@ import UseAnimations from "react-useanimations";
 import alertTriangle from 'react-useanimations/lib/alertTriangle';
 import radioButton from 'react-useanimations/lib/radioButton';
 
+
 function NotiTemplate({type, content}: {type: string; content: string}) {
 	const data: {[prop: string]: any} = {
         alert: (

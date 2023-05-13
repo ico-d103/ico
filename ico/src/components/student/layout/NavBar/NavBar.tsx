@@ -70,7 +70,6 @@ function NavBar({ children }: NavBarProps) {
 				}}
 				css={navBarIndivCSS}
 			>
-				<Link href={navBarData[Number(el)].url} prefetch />
 				<div css={navBarIndivContentCSS({ targetIdx: selected, curIdx: Number(el) })}>
 					{navBarData[Number(el)].content}
 					{navBarData[Number(el)].label}
