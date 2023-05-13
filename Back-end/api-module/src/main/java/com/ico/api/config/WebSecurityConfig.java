@@ -47,7 +47,6 @@ public class WebSecurityConfig{
                 .antMatchers("api/**/teacher/**").hasRole("TEACHER")
                 .antMatchers("api/**/student/**").hasRole("STUDENT")
                 .antMatchers("api/admin/**").hasRole("ADMIN")
-                .antMatchers("api/login").permitAll()
                 .anyRequest().permitAll();
 
         return http.build();
