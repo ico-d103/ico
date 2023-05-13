@@ -24,7 +24,9 @@ function Layout({ children }: LayoutProps) {
 		const accessToken = getCookie("Authorization")
 		if (accessToken) {
 			getNationAPI().then((res) => {
-				setNationDataAtom(() => res)
+				if (res) {
+					setNationDataAtom(() => res)
+				}
 			})
 		}
 	}, [getCookie("Authorization")])

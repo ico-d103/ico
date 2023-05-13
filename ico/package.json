@@ -36,6 +36,7 @@
     "react-cookie": "^4.1.1",
     "react-dom": "18.2.0",
     "react-easy-swipe": "^0.0.23",
+    "react-responsive": "^9.0.2",
     "react-useanimations": "^2.10.0",
     "rehype-format": "^4.0.1",
     "rehype-parse": "^8.0.4",
