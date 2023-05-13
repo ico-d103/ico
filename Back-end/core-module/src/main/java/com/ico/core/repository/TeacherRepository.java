@@ -17,4 +17,6 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
      */
     Optional<Teacher> findByIdentity(String identity);
 
+    Optional<Teacher> findById(Long id);
+
 }

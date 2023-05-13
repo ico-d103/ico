@@ -62,18 +62,18 @@ public class MemberServiceImpl implements MemberService {
         String token = jwtTokenProvider.parseJwt(request);
         if (token != null) {
             Role role = jwtTokenProvider.getRole(token);
+            Long memberId = jwtTokenProvider.getId(token);
             if (role.equals(Role.STUDENT)) {
-                Long studentId = jwtTokenProvider.getId(token);
                 if (jwtTokenProvider.getNation(token) != null) {
                     return "home";
                 } else {
-                    Student student = studentRepository.findById(studentId)
+                    Student student = studentRepository.findById(memberId)
                             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
                     if (student.getNation() != null) {
                         return "check";
                     } else {
-                        if (immigrationRepository.findByStudentId(studentId) != null) {
-                            return "check";
+                        if (immigrationRepository.findByStudentId(memberId) != null) {
+                            return "wait";
                         }
                         return "enter";
                     }
@@ -81,8 +81,15 @@ public class MemberServiceImpl implements MemberService {
             } else if (role.equals(Role.TEACHER)) {
                 if (jwtTokenProvider.getNation(token) != null) {
                     return "class/students";
+                } else {
+                    Teacher teacher = teacherRepository.findById(memberId)
+                            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                    if (teacher.getIsAssigned() != null) {
+                        return "create";
+                    }
+                    return "wait";
                 }
-                return "create";
+
             }
             return "admin";
         }
