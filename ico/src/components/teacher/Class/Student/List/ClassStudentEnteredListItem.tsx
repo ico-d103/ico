@@ -23,10 +23,11 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 				<h4>{student.job}</h4>
 			</div>
 			<div css={rightWrapperCSS}>
-				<div>{student.creditRating}등급</div>
-				<div>
-					{student.amount} {localStorage.getItem("currency")}
+				<div css={currencyWrapperCSS}>
+					<div css={amountWrapperCSS}>{student.amount}</div>
+					{localStorage.getItem("currency")}
 				</div>
+				<div css={creditWrapperCSS}>{student.creditRating}등급</div>
 			</div>
 		</div>
 	)
@@ -72,10 +73,10 @@ const leftWrapperCSS = css`
 `
 
 const rightWrapperCSS = css`
-	padding: 3px;
+	padding: 3px 3px 3px 0px;
 	background-color: var(--teacher-main-color);
 	border-radius: 5px;
-
+	/* width: 200px; */
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -90,8 +91,23 @@ const rightWrapperCSS = css`
 
 	> div:nth-of-type(2) {
 		background-color: var(--common-back-color-2);
-		border-radius: 0px 3px 3px 0px;
+		border-radius: 3px 3px 3px 3px;
 	}
+`
+
+const currencyWrapperCSS = css`
+	display: flex;
+`
+
+const amountWrapperCSS = css`
+	/* width: 70px; */
+	text-align: right;
+`
+
+const creditWrapperCSS = css`
+	width: 65px;
+	display: flex;
+	justify-content: center;
 `
 
 export default StudentEnteredListItem
