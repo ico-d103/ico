@@ -45,19 +45,9 @@ public class TeacherController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    // TODO : 남은 횟수 보기 위해
-    int cnt = 11;
-
     @PostMapping("/phone")
     @ResponseBody
     public ResponseEntity<?> certifiedPhone(@RequestBody Map<String, String> req) {
-//      // TODO : 원래는 이거만 사용! 전송된 랜덤 코드만 보내줌!
-//        return new ResponseEntity<>(teacherService.certifiedPhoneNum(req.get("phoneNum")), HttpStatus.OK);
-//      // TODO : 몇번 남았는지 보기 위해 아래 코드 작성
-        cnt--;
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("code", teacherService.certifiedPhoneNum(req.get("phoneNum")));
-        resultMap.put("count", cnt + "번 남음");
-        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        return new ResponseEntity<>(teacherService.certifiedPhoneNum(req.get("phoneNum")), HttpStatus.OK);
     }
 }
