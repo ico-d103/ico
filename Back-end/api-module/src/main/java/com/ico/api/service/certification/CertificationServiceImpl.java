@@ -51,7 +51,7 @@ public class CertificationServiceImpl implements CertificationService{
                     s3.deleteFile(certification.getImage());
 
                     Teacher teacher = certification.getTeacher();
-                    teacher.setAssigned(true);
+                    teacher.setIsAssigned(true);
                     teacherRepository.save(teacher);
 
                     // Certification 삭제
