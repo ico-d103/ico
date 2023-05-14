@@ -11,7 +11,7 @@ type SideBarLeftProps = {
 
 function SideBarLeft({ element, logo, selectHandler, selected }: SideBarLeftProps) {
 	const signoutHandler = () => {
-		removeCookie("Authorization", { path: "/" })
+		removeCookie("Authorization")
 		window.location.href = "/teacher/login"
 	}
 

@@ -22,7 +22,8 @@ export default function App({ Component, pageProps }: AppProps) {
 	useEffect(() => {
 		if (getCookie("Authorization") === undefined) {
 			// 처음 접근할 때 토큰이 없다면 로그인 페이지로 이동
-			router.push("/teacher/login")
+			// router.push("/teacher/login") // teacher
+			// student
 		}
 	}, [])
 

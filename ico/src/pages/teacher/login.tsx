@@ -39,7 +39,9 @@ function login() {
 			body: { identity: inputState.id, password: inputState.password },
 		})
 			.then((res) => {
-				setCookie("Authorization", res, { path: "/", maxAge: 30 * 24 * 60 * 60 })
+				// 토큰 뿐만 아니라 학생인지 선생인지도 저장하기
+				setCookie("Authorization", res)
+				// setCookie("Authorization", res, { path: "/", maxAge: 30 * 24 * 60 * 60 })
 
 				// 교사가 생성한 나라 조회
 				getNationAPI()
