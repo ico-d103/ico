@@ -5,7 +5,7 @@ import { getCookie } from "./cookie"
  * 인증이 필요 없는 기본 요청
  */
 export const defaultInstance = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+	baseURL: "/api",
 	withCredentials: false,
 })
 
@@ -13,7 +13,7 @@ export const defaultInstance = axios.create({
  * 인증이 필요한 기본 요청
  */
 export const tokenInstance = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+	baseURL: "/api",
 })
 
 /**
