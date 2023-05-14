@@ -4,6 +4,8 @@ import { postTreasuryAPI } from "@/api/teacher/class/postTreasuryAPI"
 import { useReducer } from "react"
 import { NUM_ONLY } from "@/util/regex"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { selectedPage } from "@/store/store"
+import { useAtomValue } from "jotai"
 
 type ClassPropertyUseModalPropsType = {
 	closeComp: () => void
@@ -28,6 +30,7 @@ const inputReducer = (
 
 function ClassPropertyUseModal({ closeComp, isDepositMenuOpenAtom }: ClassPropertyUseModalPropsType) {
 	const queryClient = useQueryClient()
+	const selectedPageAtom = useAtomValue(selectedPage)
 	const currency = localStorage.getItem("currency")
 	const [inputState, dispatchInput] = useReducer(inputReducer, { title: "", source: "", amount: "" })
 
@@ -60,7 +63,8 @@ function ClassPropertyUseModal({ closeComp, isDepositMenuOpenAtom }: ClassProper
 			{ title: inputState.title, source: inputState.source, amount: numberAmount },
 			{
 				onSuccess: () => {
-					return queryClient.invalidateQueries(["property"])
+					queryClient.invalidateQueries(["property"])
+					queryClient.invalidateQueries(["propertyList", selectedPageAtom])
 				},
 			},
 		)
@@ -81,11 +85,11 @@ function ClassPropertyUseModal({ closeComp, isDepositMenuOpenAtom }: ClassProper
 				<input
 					type="text"
 					placeholder={isDepositMenuOpenAtom ? `누가 입금하나요?` : `누가 출금하나요?`}
-					onChange={(e) => dispatchInput({ type: "CHANGE_TITLE", value: e.target.value })}
+					onChange={(e) => dispatchInput({ type: "CHANGE_SOURCE", value: e.target.value })}
 				/>
 				<textarea
 					placeholder="사유를 입력해주세요."
-					onChange={(e) => dispatchInput({ type: "CHANGE_SOURCE", value: e.target.value })}
+					onChange={(e) => dispatchInput({ type: "CHANGE_TITLE", value: e.target.value })}
 				></textarea>
 			</div>
 			<div css={buttonWrapperCSS}>

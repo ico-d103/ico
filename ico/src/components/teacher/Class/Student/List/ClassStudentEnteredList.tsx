@@ -5,13 +5,23 @@ import { getStudentListAPI } from "@/api/teacher/class/getStudentListAPI"
 import { getStudentListType } from "@/types/teacher/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
 import { putResetStudentsJobAPI } from "@/api/teacher/class/putResetStudentsJobAPI"
+import { useRouter } from "next/router"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 function StudentEnteredList() {
+	const router = useRouter()
+	const noti = useNotification()
 	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
 
 	const resetStudentsJob = () => {
 		putResetStudentsJobAPI()
-			.then((res) => {})
+			.then((res) => {
+				noti({
+					content: <NotiTemplate type={"ok"} content={"직업을 초기화했습니다."} />,
+					duration: 3000,
+				})
+			})
 			.catch((error) => alert(error.response.message))
 	}
 
