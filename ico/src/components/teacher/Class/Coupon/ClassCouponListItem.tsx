@@ -40,7 +40,7 @@ function CouponListItem({ coupon }: CouponListItemPropsType) {
 					<h4>{coupon.name}</h4>
 					<div>
 						<div></div>
-						{/* <h5>{coupon.date}</h5> */}
+						<h5>{`${coupon.date.split(".")[0]}년 ${coupon.date.split(".")[1]}월 ${coupon.date.split(".")[2]}일`}</h5>
 					</div>
 				</div>
 			</div>
@@ -55,7 +55,7 @@ function CouponListItem({ coupon }: CouponListItemPropsType) {
 
 const wrapperCSS = css`
 	width: 300px;
-	height: 200px;
+	height: 170px;
 	background: var(--common-back-color-2);
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);

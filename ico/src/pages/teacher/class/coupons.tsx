@@ -8,6 +8,8 @@ import { getCouponListType } from "@/types/teacher/apiReturnTypes"
 function coupons() {
 	const { data } = useQuery<getCouponListType[]>(["couponList"], getCouponListAPI)
 
+	console.log(data)
+
 	return (
 		<div css={wrapperCSS}>
 			<h1>쿠폰</h1>
