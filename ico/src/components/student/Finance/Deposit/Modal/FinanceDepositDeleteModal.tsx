@@ -76,7 +76,7 @@ function FinanceDepositDeleteModal({closeComp, refetch }: FinanceDepositDeleteMo
 					text={"매도"}
 					fontSize={"var(--student-h3)"}
 					width={"47%"}
-					theme={"warning"}
+					theme={"mobileWarning"}
 					onClick={() => {
 						submitHandler()
 					}}
@@ -85,7 +85,7 @@ function FinanceDepositDeleteModal({closeComp, refetch }: FinanceDepositDeleteMo
 					text={"취소"}
 					fontSize={"var(--student-h3)"}
 					width={"47%"}
-					theme={"cancelDark"}
+					theme={"mobileCancel"}
 					onClick={() => {
 						closeComp()
 					}}

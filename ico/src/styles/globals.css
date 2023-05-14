@@ -20,13 +20,14 @@
 	--teacher-h4: 1.1rem;
 	--teacher-h5: 0.95rem;
 	--teacher-h6: 0.75rem;
-
+	--student-main-color-soft: #fffdf2;
 	--student-main-color: #fffae2;
 	--student-main-color-2: #ffebb9;
 	--student-main-color-3: #ffdb60;
 	--student-main-color-4: #ffcd00;
 	--student-main-color-5: #ff9f00;
-
+	--student-main-color-6: #e36a00;
+	--student-main-color-7: #fff6cb;
 	--student-font-color: #3d2f21;
 	--student-wrapper-color: #ffffff;
 

@@ -84,7 +84,7 @@ function FinanceInvestDeleteModal({diff, closeComp, refetch }: FinanceInvestDele
 					text={"매도"}
 					fontSize={"var(--student-h3)"}
 					width={"47%"}
-					theme={diff > 0 ? "positive" : "warning"}
+					theme={diff > 0 ? "mobileSoft2" : "mobileWarning"}
 					onClick={() => {
 						submitHandler()
 					}}
@@ -93,7 +93,7 @@ function FinanceInvestDeleteModal({diff, closeComp, refetch }: FinanceInvestDele
 					text={"취소"}
 					fontSize={"var(--student-h3)"}
 					width={"47%"}
-					theme={"cancelDark"}
+					theme={"mobileCancel"}
 					onClick={() => {
 						closeComp()
 					}}

@@ -113,7 +113,7 @@ const navBarWrapperCSS = ({ selected }: { selected: number }) => {
 		height: 64px;
 		width: 100%;
 		/* background-color: #fff9e6; */
-		background-color: var(--student-main-color);
+		background-color: var(--student-main-color-soft);
 		/* backdrop-filter: blur(30px); */
 		box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1);
 		position: fixed;
