@@ -41,10 +41,6 @@ const selectedCSS = css`
 	border: 1px solid rgb(240, 240, 240);
 	border-radius: 5px;
 	transition: all 0.1s;
-
-	:hover {
-		background-color: var(--common-back-color-2);
-	}
 `
 
 export default PaginationButton

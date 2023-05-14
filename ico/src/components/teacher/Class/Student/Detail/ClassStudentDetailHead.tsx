@@ -5,6 +5,8 @@ import { useAtomValue } from "jotai"
 import { selectedStudent } from "@/store/store"
 import { putSuspendAccountAPI } from "@/api/teacher/class/putSuspendAccountAPI"
 import { putResetStudentJobAPI } from "@/api/teacher/class/putResetStudentJobAPI"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 type ClassStudentDetailHeadPropsType = {
 	studentName: string
@@ -12,30 +14,53 @@ type ClassStudentDetailHeadPropsType = {
 }
 
 function ClassStudentDetailHead({ studentName, frozen }: ClassStudentDetailHeadPropsType) {
+	const noti = useNotification()
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 
 	const resetStudentJob = () => {
 		putResetStudentJobAPI({ studentId: selectedStudentAtom })
-			.then((res) => {})
-			.catch((error) => alert(error.response.message))
+			.then(() => {
+				noti({
+					content: <NotiTemplate type={"ok"} content={`${studentName}의 직업을 초기화했습니다.`} />,
+					duration: 3000,
+				})
+			})
+			.catch(() => {
+				noti({
+					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+					duration: 3000,
+				})
+			})
 	}
 
 	const preventStudentAccount = () => {
 		if (frozen) {
 			putReleaseAccountAPI({ studentId: selectedStudentAtom })
-				.then((res) => {
-					console.log("계좌 정지 해제")
+				.then(() => {
+					noti({
+						content: <NotiTemplate type={"ok"} content={`${studentName}의 계좌 정지를 해제하였습니다.`} />,
+						duration: 3000,
+					})
 				})
 				.catch((error) => {
-					alert(error.response.message)
+					noti({
+						content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+						duration: 3000,
+					})
 				})
 		} else {
 			putSuspendAccountAPI({ studentId: selectedStudentAtom })
-				.then((res) => {
-					console.log("계좌 정지")
+				.then(() => {
+					noti({
+						content: <NotiTemplate type={"ok"} content={`${studentName}의 계좌를 정지하였습니다.`} />,
+						duration: 3000,
+					})
 				})
 				.catch((error) => {
-					alert(error.response.message)
+					noti({
+						content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+						duration: 3000,
+					})
 				})
 		}
 	}

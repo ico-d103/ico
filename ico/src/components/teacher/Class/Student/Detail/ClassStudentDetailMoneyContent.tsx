@@ -6,6 +6,8 @@ import { useReducer } from "react"
 import { NUM_ONLY } from "@/util/regex"
 import { postAccountAPI } from "@/api/teacher/class/postAccountAPI"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 const inputReducer = (state: { title: string; amount: string }, action: { type: string; value: string }) => {
 	switch (action.type) {
@@ -18,7 +20,12 @@ const inputReducer = (state: { title: string; amount: string }, action: { type: 
 	}
 }
 
-function ClassStudentDetailMoneyContent() {
+type ClassStudentDetailMoneyContentPropsType = {
+	refetch: any
+}
+
+function ClassStudentDetailMoneyContent({ refetch }: ClassStudentDetailMoneyContentPropsType) {
+	const noti = useNotification()
 	const queryClient = useQueryClient()
 	const currency = localStorage.getItem("currency")
 	const selectedStudentAtom = useAtomValue(selectedStudent)
@@ -39,20 +46,27 @@ function ClassStudentDetailMoneyContent() {
 
 		postAccountMutation.mutate(args, {
 			onSuccess: () => {
-				return queryClient.invalidateQueries(["enteredStudentDetail"])
+				flag === "minus"
+					? noti({
+							content: <NotiTemplate type={"ok"} content={"성공적으로 차감되었습니다."} />,
+							duration: 3000,
+					  })
+					: noti({
+							content: <NotiTemplate type={"ok"} content={"성공적으로 지급되었습니다."} />,
+							duration: 3000,
+					  })
+
+				queryClient.invalidateQueries(["studentList", "entered"])
+				queryClient.invalidateQueries(["enteredStudentDetail", selectedStudentAtom])
+				refetch()
+			},
+			onError: () => {
+				noti({
+					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+					duration: 3000,
+				})
 			},
 		})
-
-		// postAccountAPI({ studentId: selectedStudentAtom, body: { title: inputState.title, amount: amount } })
-		// 	.then((res) => {
-		// 		// mutation으로 학생 목록 리스트에서 금액 업데이트
-		// 	})
-		// 	.catch((error) => {
-		// 		// 학생의 금액이 부족해서 차감 못하는 경우
-		// 		if (error.response.code === "11") {
-		// 			alert(error.response.message)
-		// 		}
-		// 	})
 	}
 
 	const changeAmountHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
