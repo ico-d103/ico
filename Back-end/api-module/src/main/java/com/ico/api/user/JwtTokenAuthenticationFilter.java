@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -15,10 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.DispatcherType;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -45,8 +42,8 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         if (token == null || token.trim().isEmpty()) {
             // 토큰이 없더라도 요청가능한 api uri(/api/teacher/** != /api/teacher)
             if (request.getRequestURI().startsWith("/api/login") || request.getRequestURI().startsWith("/api/student")
-                    || request.getRequestURI().startsWith("/api/teacher") || request.getRequestURI().startsWith("/api/duplicated-id")
-                    || request.getRequestURI().startsWith("/api/teacher/**")) {
+                    || request.getRequestURI().startsWith("/api/teacher") || request.getRequestURI().startsWith("/api/duplicated-id")) {
+                log.info("[doFilterInternal] : 토큰이 없는 uri : {}", request.getRequestURI());
                 filterChain.doFilter(request, response);
                 return;
             }
