@@ -73,7 +73,7 @@ const cardWrapperCSS = (color: string) => {
 const imageWrapperCSS = css`
 	position: absolute;
 	top: 5px;
-	left: 25px;
+	left: 20px;
 	width: 100px;
 	height: 180px;
 `
@@ -86,7 +86,6 @@ const imgCSS = css`
 `
 
 const contentWrapperCSS = css`
-	/* border: 1px solid white; */
 	position: absolute;
 	width: 130px;
 	height: 120px;

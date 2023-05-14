@@ -133,6 +133,7 @@ export type getCouponListType = {
 	number: number
 	name: string
 	title: string
+	date: string
 }
 
 export type jobListType = {

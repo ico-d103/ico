@@ -11,33 +11,31 @@ type ClassJobSearchModalPropsType = {
 }
 
 function ClassJobSearchModal({ job, id, closeComp }: ClassJobSearchModalPropsType) {
-
 	const noti = useNotification()
-	
+
 	const applyJobHandler = () => {
 		postResumeAPI({ id })
-			.then((res) => {
-				// 성공적으로 신청했다는 stackNotification 띄우기
+			.then(() => {
 				noti({
-					content: <NotiTemplate type={"ok"} content={"직업을 신청했어요!"}/>,
+					content: <NotiTemplate type={"ok"} content={`${appendEulReul(job)} 신청했어요!`} />,
 					duration: 3000,
 				})
 				closeComp()
 			})
 			.catch((error) => {
 				noti({
-					content: <NotiTemplate type={"alert"} content={error.response.data.message}/>,
+					content: <NotiTemplate type={"alert"} content={error.response.data.message} />,
 					duration: 3000,
 				})
-				
 			})
 	}
 
 	return (
 		<div css={wrapperCSS}>
 			<div css={jobNameCSS}>
-				<b>{job}</b>
-				<span>{appendEulReul(job)} 선택했어요</span>
+				<span>
+					<b>{appendEulReul(job)}</b> 선택했어요
+				</span>
 			</div>
 			<div css={buttonWrapperCSS}>
 				<button onClick={closeComp}>취소</button>
@@ -68,14 +66,14 @@ const jobNameCSS = css`
 	align-items: center;
 	gap: 10px;
 
-	> b {
-		font-size: 1.1rem;
-		font-weight: bold;
-		color: var(--student-main-color-5);
-	}
-
 	> span {
 		font-size: 1.1rem;
+
+		> b {
+			font-size: 1.1rem;
+			font-weight: bold;
+			color: var(--student-main-color-5);
+		}
 	}
 `
 
