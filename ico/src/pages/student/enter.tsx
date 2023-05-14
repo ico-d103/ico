@@ -31,89 +31,23 @@ function enter() {
 	// }
 
 	const handleChange = (e: any, index: number) => {
-		console.log(e)
-	
 		
-
-		
-
-		
+			const inputLength = e.target.value.length
 		const nextIndex = index + 1
 		const prevIndex = index - 1
 
-		if (e.keyCode === 8) {
-			if (prevIndex >= -1) {
-				
-				
-					setCode((prevCode:any) => {
-						const updatedCode = {
-							...prevCode,
-							[`code${index + 1}`]: "",
-						}
-						return updatedCode
-					})
-				
-					inputRefs.current[prevIndex]?.focus()
-		
-				
-
-
-				
-			}
-		} else {
-			if (e.key.length > 1) {
-				return
-			}
-		const inputValue = e.key.toUpperCase();
-		const filteredValue = inputValue.replace(/[^A-Z0-9]/g, '');
-		
-		if (e.target.value.length < 2) {
-
-			if (code[`code${index + 1}`].length === 0) {
-			setCode((prevCode:any) => {
-				const updatedCode = {
-					...prevCode,
-					[`code${index + 1}`]: filteredValue,
-				}
-				return updatedCode
-			})
-
-			if (filteredValue.length === 0) {
-				return
-			}
-			if (nextIndex < inputRefs.current.length) {
-				inputRefs.current[nextIndex]?.focus()
-			}
-		} else {
-			setCode((prevCode:any) => {
-				const updatedCode = {
-					...prevCode,
-					[`code${index + 2}`]: filteredValue,
-				}
-				return updatedCode
-			})
-
-			if (filteredValue.length === 0) {
-				return
-			}
-			if (nextIndex < inputRefs.current.length) {
-				inputRefs.current[nextIndex + 1]?.focus()
-			}
+		if (inputLength === 1 && nextIndex < inputRefs.current.length) {
+			inputRefs.current[nextIndex]?.focus()
 		}
-			// handleChange(e, i - 1)
+		if (inputLength === 0 && prevIndex >= 0) {
+			inputRefs.current[prevIndex]?.focus()
 		}
-
-
-			
-		}
-		
-		
 	}
 
 
 	let submitCode = ""
 
-	const [code, setCode] = useState<any>({
+	const [code, setCode] = useState({
 		code1: "",
 		code2: "",
 		code3: "",
@@ -153,19 +87,19 @@ function enter() {
 					value={code[key]}
 	
 					onChange={(e) => {
-						// const inputValue = e.target.value;
-    					// const filteredValue = inputValue.toUpperCase().replace(/[^A-Z0-9]/g, '');
+						const inputValue = e.target.value;
+    					const filteredValue = inputValue.toUpperCase().replace(/[^A-Z0-9]/g, '');
 						
-						// if (e.target.value.length < 2) {
-						// 	setCode((prevCode) => {
-						// 		const updatedCode = {
-						// 			...prevCode,
-						// 			[key]: filteredValue,
-						// 		}
-						// 		return updatedCode
-						// 	})
-						// 	// handleChange(e, i - 1)
-						// }
+						if (e.target.value.length < 2) {
+							setCode((prevCode) => {
+								const updatedCode = {
+									...prevCode,
+									[key]: filteredValue,
+								}
+								return updatedCode
+							})
+							// handleChange(e, i - 1)
+						}
 						
 						
 					}}
@@ -195,7 +129,7 @@ function enter() {
 				</div> */}
 
 				<div css={phaseWrapperCSS}>
-					<PageHeader title={"우리반 입장하기"} />
+					{/* <PageHeader title={"우리반 입장하기"} /> */}
 					<div css={WrapperCSS}>
 						<LoadImage
 							src={"/assets/enter/enter_image.png"}
@@ -203,18 +137,21 @@ function enter() {
 							wrapperCss={imageWrapper}
 							dev={false}
 						/>
-						<div css={css`margin-top: 24px; font-weight: 600; font-size: 6vw;`}>반 입장 코드를 입력해주세요.</div>
-
-						<div css={inputOuterWrapperCSS}>{renderInput(code)}</div>
-
-						<Button
-							text={"입장할래요!"}
-							fontSize={`4vw`}
-							width={"40%"}
-							height={"10vw"}
-							theme={"mobileNormal"}
-							onClick={submitCodeFunction}
-						/>
+						<div css={css`margin-top: 12px; font-weight: 700; font-size: 8vw;`}>반 입장</div>
+						<div css={css`margin-top: 12px; font-weight: 500; font-size: 5vw;`}>코드를 입력해주세요.</div>
+						
+							<div css={inputOuterWrapperCSS}>{renderInput(code)}</div>
+						
+							<Button
+								text={"입장할래요!"}
+								fontSize={`5vw`}
+								width={"60%"}
+								height={"15vw"}
+								theme={"mobileNormal"}
+								onClick={submitCodeFunction}
+							/>
+		
+						
 					</div>
 				</div>
 			</div>
@@ -250,19 +187,22 @@ const phaseWrapperCSS = css`
 `
 
 const WrapperCSS = css`
+	width: 100%;
+	height: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	
 `
 
 const imageWrapper = css`
-	width: 100%;
-	height: 50vw;
+	width: 150%;
+	height: 75vw;
 `
 
 const inputOuterWrapperCSS = css`
 	height: 22vw;
-	margin: 48px 0px;
+	margin: 40% 0px 10% 0px;
 `
 const inputWrapperCSS = css`
 	width: 15vw;
