@@ -39,8 +39,9 @@ function login() {
 			body: { identity: inputState.id, password: inputState.password },
 		})
 			.then((res) => {
-				console.log("token : ", res)
-				setCookie("Authorization", res, { path: "/teacher" })
+				// 토큰 뿐만 아니라 학생인지 선생인지도 저장하기
+				setCookie("Authorization", res)
+				// setCookie("Authorization", res, { path: "/", maxAge: 30 * 24 * 60 * 60 })
 
 				// 교사가 생성한 나라 조회
 				getNationAPI()
@@ -51,9 +52,7 @@ function login() {
 						router.push("/teacher/class/students")
 					})
 					.catch((error) => {
-						console.log(error.response.data)
 						// 반이 없다면 반 생성 페이지로 이동
-						// (나라 이름, 화폐 이름은 반 생성 후 localStorage에 저장)
 						if (error.response.data.code === "202") {
 							router.push("/teacher/create")
 						}
