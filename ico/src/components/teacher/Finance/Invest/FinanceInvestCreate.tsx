@@ -1,3 +1,4 @@
+import { postInvestItemAPI } from "@/api/teacher/finanace/postInvestItemAPI"
 import { css } from "@emotion/react"
 import FinanceInvestToggleButton from "./FinanceInvestToggleButton"
 
@@ -10,6 +11,10 @@ function FinanceInvestCreate({
 	inputState?: any
 	buttons?: any
 }) {
+	const pushInvestIssue = () => {
+		postInvestItemAPI().then((res) => console.log(res))
+	}
+
 	const submitHandler = () => {
 		// 제출 함수
 	}
@@ -38,7 +43,7 @@ function FinanceInvestCreate({
 						%
 					</div>
 				</div>
-				<FinanceInvestToggleButton leftLabel="판매" rightLabel="대여" />
+				<FinanceInvestToggleButton leftLabel="상승" rightLabel="하락" />
 			</div>
 			{buttons(submitHandler)}
 		</>

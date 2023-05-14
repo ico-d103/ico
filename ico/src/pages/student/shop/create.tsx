@@ -3,13 +3,17 @@ import { useState } from "react"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWrapper"
 import { css } from "@emotion/react"
+import { useRouter } from "next/router"
 
 import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
 import { ShopTabMenus } from "@/components/student/Shop/ShopTabMenus"
 
 import ShopCreateImage from "@/components/student/Shop/ShopCreate/ShopCreateImage"
+import { postStudentProposalAPI } from "@/api/teacher/shop/postStudentProposalAPI"
 
 function create() {
+	const router = useRouter()
+
 	const formData = new FormData()
 
 	const [title, setTitle] = useState("")
@@ -53,6 +57,22 @@ function create() {
 		),
 	)
 
+	function receiveImageList(imageList: any) {
+		setImageList(imageList)
+	}
+
+	const proposalProduct = () => {
+		postStudentProposalAPI({ body: formData })
+			.then(() => {
+				router.push("/student/shop/student")
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+	}
+
+	console.log(formData)
+
 	return (
 		<div>
 			<PageHeader title={"상점"} addComp={<TabMenu menus={ShopTabMenus()} selected={1} />} />
@@ -77,10 +97,10 @@ function create() {
 						<div css={unitCSS}>개</div>
 					</div>
 
-					{/* <ShopCreateImage sendImageList={receiveImageList} /> */}
-					{/* <div css={imageWrapperCSS}>
-						<input style={{ width: "100%" }} css={inputCSS} placeholder="상품의 사진을 넣어주세요" />
-					</div> */}
+					<div css={imageWrapperCSS}>
+						<ShopCreateImage sendImageList={receiveImageList} />
+					</div>
+
 					<div css={explainWrapperCSS}>
 						<textarea
 							css={textareaCSS}
@@ -91,6 +111,7 @@ function create() {
 					</div>
 				</ContentWrapper>
 			</div>
+			<button onClick={proposalProduct}>gogo</button>
 		</div>
 	)
 }
