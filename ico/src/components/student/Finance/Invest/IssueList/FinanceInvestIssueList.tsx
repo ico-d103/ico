@@ -34,7 +34,7 @@ function FinanceInvestIssueList({ issueList }: FinanceInvestIssueListProps) {
 
 	return (
 		<div>
-			<div css={mSizeFontCSS}>뉴스</div>
+			
             {renderIssueList}
 		</div>
 	)
@@ -49,11 +49,7 @@ const issueWrapperCSS = css`
     
 `
 
-const mSizeFontCSS = css`
-	font-size: var(--student-h2);
-	font-weight: 700;
-	line-height: 150%;
-`
+
 
 const rSizeFontCSS = css`
 	/* font-size: var(--student-h2); */

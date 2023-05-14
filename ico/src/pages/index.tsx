@@ -2,11 +2,12 @@ import { css } from "@emotion/react"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 import Button from "@/components/common/Button/Button"
 import { useRouter } from "next/router"
+import useMediaQuery from "@/hooks/useMediaQuery"
 
 export default function Home() {
 
 	const router = useRouter()
-
+	const isMobile = useMediaQuery('(max-width: 768px')
 	
 
 	return (
@@ -20,19 +21,21 @@ export default function Home() {
 					<Button
 						theme={"cancelLight"}
 						width={"240px"}
-						height={"96px"}
+						height={"84px"}
 						text={"학생 로그인"}
 						fontSize={"var(--teacher-h2)"}
-						onClick={() => {}}
+						onClick={() => {router.push('/student/login')}}
 					></Button>
+					{!isMobile && 
 					<Button
 						theme={"highlighted"}
 						width={"240px"}
-						height={"96px"}
+						height={"84px"}
 						text={"교사 로그인"}
 						fontSize={"var(--teacher-h2)"}
 						onClick={() => {router.push('/teacher/login')}}
 					></Button>
+				}
 					</div>
 					
 					<img src={'/assets/guide/14.jpg'} css={css`width: 200px; height: auto; position: absolute; top: 70%; visibility: hidden;`}/>

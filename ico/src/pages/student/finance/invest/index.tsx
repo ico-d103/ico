@@ -128,6 +128,7 @@ function index() {
 								titleSize={"var(--student-h1)"}
 								icon={APPLY_ICON}
 								content={<FinanceInvestDeleteModal refetch={refetch} closeComp={closeDeleteComp} diff={calcDiff} />}
+								forChild={true}
 							/>
 						}
 						compState={compDeleteState}
@@ -142,6 +143,7 @@ function index() {
 								title={"투자 매수"}
 								titleSize={"var(--student-h1)"}
 								icon={APPLY_ICON}
+								forChild={true}
 								content={
 									<FinanceInvestApplyModal
 										refetch={refetch}
@@ -160,38 +162,31 @@ function index() {
 				</React.Fragment>
 			)}
 
-			{data && (
+			{data && isTimeBetween(data.tradingStart, data.tradingEnd) &&  (
 				<div css={navBarOverlayCSS}>
-					{isTimeBetween(data.tradingStart, data.tradingEnd) ? (
-						data.myStock.amount === 0 ? (
-							<Button
-								text={"매수하기"}
-								fontSize={`var(--student-h3)`}
-								width={"90%"}
-								theme={"mobileNormal"}
-								onClick={() => {
-									openApplyComp()
-								}}
-							/>
-						) : (
-							<Button
-								text={"매도하기"}
-								fontSize={`var(--student-h3)`}
-								width={"90%"}
-								theme={"mobileSoft"}
-								onClick={() => {
-									openDeleteComp()
-								}}
-							/>
-						)
-					) : (
-						<div css={css`display: flex; flex-direction: column; align-items: center;`}>
-							지금은 거래 시간이 아니에요!
-							<div css={sSizeFontCSS}>
-								{data.tradingStart} ~ {data.tradingEnd}
-							</div>
-						</div>
-					)}
+					
+						{data.myStock.amount === 0 ? (
+								<Button
+									text={"매수하기"}
+									fontSize={`var(--student-h3)`}
+									width={"90%"}
+									theme={"mobileNormal"}
+									onClick={() => {
+										openApplyComp()
+									}}
+								/>
+							) : (
+								<Button
+									text={"매도하기"}
+									fontSize={`var(--student-h3)`}
+									width={"90%"}
+									theme={"mobileSoft"}
+									onClick={() => {
+										openDeleteComp()
+									}}
+								/>
+							)
+						}
 				</div>
 			)}
 			<PageHeader title={"투자"} />
@@ -202,7 +197,10 @@ function index() {
 					<div css={stockMentWrapperCSS}>
 						현재 종목은 <span>“{data.stock}”</span> 입니다!
 					</div>
+					
 				)}
+
+				
 				{data && data?.myStock.price !== 0 && (
 					<ContentWrapper>
 						<div css={lSizeFontCSS}>
@@ -216,6 +214,13 @@ function index() {
 				)}
 				{data && (
 					<ContentWrapper>
+						<div css={mSizeFontCSS}>뉴스</div>
+						{data && !isTimeBetween(data.tradingStart, data.tradingEnd) && <div css={css`display: flex; flex-direction: column; align-items: center;`}>
+							지금은 거래 시간이 아니에요!
+							<div css={sSizeFontCSS}>
+								{data.tradingStart} ~ {data.tradingEnd}
+							</div>
+						</div>}
 						<FinanceInvestIssueList issueList={data.issue} />
 					</ContentWrapper>
 				)}
@@ -284,6 +289,12 @@ const navBarOverlayCSS = css`
 			opacity: 100%;
 		}
 	}
+`
+
+const mSizeFontCSS = css`
+	font-size: var(--student-h2);
+	font-weight: 700;
+	line-height: 150%;
 `
 
 export default index

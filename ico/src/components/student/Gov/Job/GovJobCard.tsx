@@ -48,6 +48,7 @@ function GovJobCard({ job }: GovJobCardPropsType) {
 						title={`${job.title}의 업무`}
 						titleSize={"var(--student-h2)"}
 						content={<GovJobCardModalContent content={job.detail} closeComp={closeComp} />}
+						forChild={true}
 					/>
 				}
 			/>

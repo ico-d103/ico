@@ -60,7 +60,7 @@ function DetailPage({ data, refetch }: DetailPageProps) {
 							titleSize={"var(--student-h1)"}
 							icon={APPLY_ICON}
 							content={<FinanceDepositDeleteModal refetch={refetch} closeComp={closeComp}/>}
-							
+							forChild={true}
 						/>
 					}
 					compState={compState}

@@ -1,6 +1,8 @@
 import { css } from "@emotion/react"
 import { postResumeAPI } from "@/api/student/class/postResumeAPI"
 import { appendEulReul } from "@/util/isEndWithConsonant"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import useNotification from "@/hooks/useNotification"
 
 type ClassJobSearchModalPropsType = {
 	job: string
@@ -9,14 +11,25 @@ type ClassJobSearchModalPropsType = {
 }
 
 function ClassJobSearchModal({ job, id, closeComp }: ClassJobSearchModalPropsType) {
+
+	const noti = useNotification()
+	
 	const applyJobHandler = () => {
 		postResumeAPI({ id })
 			.then((res) => {
 				// 성공적으로 신청했다는 stackNotification 띄우기
+				noti({
+					content: <NotiTemplate type={"ok"} content={"직업을 신청했어요!"}/>,
+					duration: 3000,
+				})
 				closeComp()
 			})
 			.catch((error) => {
-				alert(error.response.message)
+				noti({
+					content: <NotiTemplate type={"alert"} content={error.response.data.message}/>,
+					duration: 3000,
+				})
+				
 			})
 	}
 
