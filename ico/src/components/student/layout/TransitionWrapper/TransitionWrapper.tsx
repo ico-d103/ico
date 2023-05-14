@@ -4,9 +4,6 @@ import { navTo, isNavigating } from "@/store/store"
 import { useAtom } from "jotai"
 import { css } from "@emotion/react"
 import { useRouter } from "next/router"
-import Image from "next/image"
-import DomToImage from "dom-to-image"
-import * as htmlToImage from "html-to-image"
 import useNavigate from "@/hooks/useNavigate"
 
 type TransitionWrapperProps = {
@@ -26,6 +23,8 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	const contentInnerWrapperRef = useRef<HTMLDivElement>(null)
 	const router = useRouter()
 	const navigate = useNavigate()
+	// const [isPrev, setIsPrev] = useState<boolean>(false)
+	// const [trgScroll, setTrgScroll] = useState<boolean>(false)
 
 	const isIos = () => {
 		let isIos = false
@@ -42,18 +41,45 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		return isIos
 	}
 
+	// useEffect(() => {
+
+	// 	const scrollY = sessionStorage.getItem(router.pathname)
+	// 		if (scrollY !== undefined && trgScroll === true) {
+	// 			window.scrollTo({ top: Number(scrollY), left: 0 });
+	// 			setTrgScroll(() => false)
+	// 		}
+	
+
+	// }, [trgScroll])
+
+
+
+
+
+
+
+
+
 	useEffect(() => {
 		// window.history.scrollRestoration = "auto";
 		window.history.scrollRestoration = "manual"
 
+
+		
+
 		router.beforePopState(({ url, as, options }) => {
+
+
+			
+			
+
 			if (isIos() === true) {
 				setIsNavigatingAtom(() => true)
 				setNavToAtom(() => {
 					return { url: "", transition: "" }
 				})
 				// navigate("", "")
-
+				// setIsPrev(() => true)
 				return true
 			} else {
 				setIsNavigatingAtom(() => true)
@@ -61,8 +87,12 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 					return { url: url, transition: "beforeScale" }
 				})
 				// navigate(url, "beforeScale")
+				
+				// setIsPrev(() => true)
 				return false
 			}
+
+
 		})
 
 		return () => {
@@ -109,6 +139,9 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		if (navToAtom.url !== "") {
 			setScrollTop(() => window.scrollY)
 
+			
+			
+			// sessionStorage.setItem(router.pathname, `${window.scrollY}`)
 			handleScreenshot()
 			// setScrollTop(() => window.scrollY)
 		}
@@ -130,6 +163,17 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		if (screenshot !== "") {
 			setBeforeTransition(() => false)
 			setIsTransitioning(() => true)
+
+			
+			
+			
+			
+			// if ( isPrev) {
+			// 	setTrgScroll(() => true)
+			// }
+			// setIsPrev(() => false)
+		
+
 			setTimeout(() => {
 				setIsTransitioning(() => false)
 				setNavToAtom(() => {
@@ -138,6 +182,27 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				setScreenshot(() => "")
 				setIsImageLoading(() => false)
 				setIsNavigatingAtom(() => false)
+				
+
+
+
+				const _scroll = sessionStorage.getItem(`__next_scroll_${window.history.state.key}`);
+			if (_scroll) {
+			  // 스크롤 복원 후 저장된 위치 제거
+			  const { x, y } = JSON.parse(_scroll);
+			
+				// window.scrollTo(x, y);
+			  
+				window.scroll({
+					top: y,
+					left: x,
+					behavior: 'smooth'
+				  });
+			  sessionStorage.removeItem(`__next_scroll_${window.history.state.key}`);
+			}
+				
+
+
 			}, 300)
 		}
 	}, [router.pathname])
@@ -254,8 +319,8 @@ const contentInnerWrapperCSS = ({
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
 		width: ${isTransitioning && "100vw"};
 		/* height: ${isTransitioning && "calc(100vh - 64px)"}; */
-		height: ${isTransitioning && "100vh"};
-		overflow: ${isTransitioning && "hidden"};
+		/* height: ${isTransitioning && "100vh"}; */
+		/* overflow: ${isTransitioning && "hidden"}; */
 		visibility: ${beforeTransition && "hidden"};
 	`
 }
