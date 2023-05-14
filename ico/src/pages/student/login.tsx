@@ -8,6 +8,7 @@ import { useRouter } from "next/router"
 import useNavigate from "@/hooks/useNavigate"
 import { setCookie } from "@/api/cookie"
 import { postLoginAPI } from "@/api/common/postLoginAPI"
+import { getTokenStatusAPI } from "@/api/common/getTokenStatusAPI"
 
 const initialState = { id: "", password: "" }
 
@@ -42,7 +43,22 @@ function login() {
 		})
 			.then((res) => {
 				setCookie("Authorization", res)
-				router.push("/student/enter")
+
+				getTokenStatusAPI().then((res) => {
+					if (res.status == "enter") {
+						router.push("/student/enter")
+					}
+					if (res.status == "wait") {
+						console.log("/student/check")
+					}
+					if (res.status == "check") {
+						router.push("/student/check")
+					}
+					if (res.status == "home") {
+						console.log("홈이다!")
+						router.push("/student/home")
+					}
+				})
 			})
 
 			.catch((error) => {

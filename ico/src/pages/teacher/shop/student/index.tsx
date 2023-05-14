@@ -29,6 +29,7 @@ function student() {
 				{cardData?.map((card) => (
 					<Card
 						key={card.id}
+						id={card.id}
 						title={card.title}
 						amount={card.amount}
 						image={card.images[0]}

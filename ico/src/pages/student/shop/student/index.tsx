@@ -87,7 +87,7 @@ const contentWrapperCSS = css`
 		font-size: 0.95rem;
 	}
 `
-
+// 오민준
 const cardWrapperCSS = css`
 	margin-top: 15px;
 

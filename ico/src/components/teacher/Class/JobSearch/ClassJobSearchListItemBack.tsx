@@ -9,7 +9,10 @@ type ClassJobSearchListItemBackPropsType = {
 }
 
 function ClassJobSearchListItemBack({ job }: ClassJobSearchListItemBackPropsType) {
-	const { data } = useQuery<getJobApplierType[]>(["jobApplier", job.id], () => getJobApplierAPI({ id: job.id }))
+
+	const { data } = useQuery<getJobApplierType[]>(["jobApplier", job.id], () => 
+		getJobApplierAPI({ id: job.id })
+	)
 
 	return (
 		<div css={wrapperCSS}>

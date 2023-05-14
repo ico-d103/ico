@@ -49,7 +49,7 @@ function teacher() {
 						sold={card.sold}
 						name={card?.name}
 						date={card.date}
-						assigned={card?.assigned}
+						assigned={card?.assigned ?? true}
 					/>
 				))}
 			</div>

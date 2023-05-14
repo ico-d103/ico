@@ -13,7 +13,7 @@ type CardProps = {
 	count: number
 	name: string
 	date: string
-	assigned: boolean
+	assigned: boolean | null
 }
 
 function Card({ id, title, amount, image, count, sold, name, date, assigned }: CardProps) {
@@ -32,14 +32,17 @@ function Card({ id, title, amount, image, count, sold, name, date, assigned }: C
 		}
 	}
 
+	console.log(router.asPath)
+
 	return (
 		<div css={cardCSS} onClick={handleClickCard}>
 			<div css={cardImageWrapperCSS}>
 				<Image src={image} alt={title} layout="fill" />
-				{assigned ? (
+				{router.asPath === "/teacher/shop/student" && assigned == false && (
 					<div css={[testCSS, cardRequestTextCSS]}>승인 진행 중</div>
-				) : (
-					count - sold == 0 && <div css={[testCSS, cardSoldOutTextCSS]}>sold out</div>
+				)}
+				{router.asPath !== "/teacher/shop/student" && count - sold === 0 && (
+					<div css={[testCSS, cardSoldOutTextCSS]}>sold out</div>
 				)}
 			</div>
 			<div css={cardFirstContentCSS}>
