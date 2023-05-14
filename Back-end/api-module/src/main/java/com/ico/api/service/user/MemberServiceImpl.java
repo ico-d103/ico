@@ -65,32 +65,40 @@ public class MemberServiceImpl implements MemberService {
         Long memberId = jwtTokenProvider.getId(token);
         if (role.equals(Role.STUDENT)) {
             if (jwtTokenProvider.getNation(token) != null) {
+                // 학생의 토큰에 NationId 값이 있을 때
                 return Map.of("status", "home", "role", role);
             } else {
                 Student student = studentRepository.findById(memberId)
                         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
                 if (student.getNation() != null) {
+                    // 학생이 반 코드 요청을 보냈고 교사에게 승인 받은 후
                     return Map.of("status", "check", "role", role);
                 } else {
                     if (immigrationRepository.findByStudentId(memberId) != null) {
+                        // 학생이 반 코드 요청을 보냈고 교사에게 승인 받기 전
                         return Map.of("status", "wait", "role", role);
                     }
+                    // 학생이 로그인 후에 아무것도 안했을 때
                     return Map.of("status", "enter", "role", role);
                 }
             }
         } else if (role.equals(Role.TEACHER)) {
             if (jwtTokenProvider.getNation(token) != null) {
+                // 교사 토큰에 NationId가 있을 때
                 return Map.of("status", "class/students", "role", role);
             } else {
                 Teacher teacher = teacherRepository.findById(memberId)
                         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
                 if (teacher.getIsAssigned()) {
+                    // 교사가 교사 인증서 승인 받은 후
                     return Map.of("status", "create", "role", role);
                 }
+                // 교사가 교사 인증서 승인 받기 전
                 return Map.of("status", "wait", "role", role);
             }
 
         }
+        // Admin 계정이 로그인했을 때
         return Map.of("status", "admin", "role", role);
     }
 }
