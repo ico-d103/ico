@@ -38,7 +38,7 @@ function FinanceInvestCreate({
 						%
 					</div>
 				</div>
-				<FinanceInvestToggleButton leftLabel="판매" rightLabel="대여" />
+				<FinanceInvestToggleButton leftLabel="상승" rightLabel="하락" />
 			</div>
 			{buttons(submitHandler)}
 		</>

@@ -1,3 +1,4 @@
+// 투자 이슈 등록
 import { tokenInstance } from "@/api/instance"
 import { getNationType } from "@/types/common/apiReturnTypes"
 
@@ -6,9 +7,9 @@ type responseType = {
 	data: getNationType
 }
 
-export const postInvestItemAPI = async () => {
+export const postInvestIssueAPI = async () => {
 	try {
-		const response: responseType = await tokenInstance.get("/interest")
+		const response: responseType = await tokenInstance.post("/stock/teacher/upload")
 
 		return response.data
 	} catch (error) {

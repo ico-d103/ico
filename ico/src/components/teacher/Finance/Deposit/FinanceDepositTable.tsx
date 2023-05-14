@@ -2,8 +2,18 @@ import React, { useState } from "react"
 import { css } from "@emotion/react"
 import TableGenerator from "../../../common/TableGenerator/TableGenerator"
 import Button from "@/components/common/Button/Button"
+import { useQuery } from "@tanstack/react-query"
+
+import { getDepositInterestListAPI } from "@/api/teacher/finanace/getDepositInterestListAPI"
 
 function FinanceDepositTable() {
+	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery(
+		["teacherProducts"],
+		getDepositInterestListAPI,
+	)
+
+	console.log(data)
+
 	const dayList = ["", "7일", "21일"]
 	const gradeList = ["1등급", "2등급", "3등급", "4등급", "5등급", "6등급", "7등급", "8등급", "9등급", "10등급"]
 
@@ -74,6 +84,8 @@ function FinanceDepositTable() {
 			),
 		],
 	]
+
+	console.log(creditRating)
 
 	const editDepositTable = () => {
 		setTest(test.map((item) => ({ ...item, editable: true })))
