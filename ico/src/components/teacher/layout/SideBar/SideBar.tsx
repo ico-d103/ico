@@ -82,6 +82,9 @@ function SideBar({ children }: SideBarProps) {
 					
 					setSelectedMain(() => -2)
 					setSelectedSub(() => -2)
+				} else if (!SUB_ELEMENT[Number(el)][router.pathname]) {
+					setSelectedMain(() => -2)
+					setSelectedSub(() => -2)
 				}
 			}
 			
@@ -222,6 +225,7 @@ function SideBar({ children }: SideBarProps) {
 
 	return (
 		<div css={layoutWrapperCSS}>
+			
 			{selectedMain >= 0 && selectedSub >= 0 ? sideBarRender : selectedMain === -2 && selectedSub === -2 && children}
 		</div>
 	)
