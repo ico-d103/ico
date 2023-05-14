@@ -13,7 +13,7 @@ function StudentWaitingList({ waitingList }: StudentWaitingListPropsType) {
 	const queryClient = useQueryClient()
 
 	const sseConnectHandler = () => {
-		const sse = new EventSource(`${BASE_URL}/immigration/connect`) // SSE 연결 요청
+		const sse = new EventSource(`/api/immigration/connect`) // SSE 연결 요청
 
 		sse.addEventListener("connect", (e) => {
 			const { data: receivedConnectData } = e
