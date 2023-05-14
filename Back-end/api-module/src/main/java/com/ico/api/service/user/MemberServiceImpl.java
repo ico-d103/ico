@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -58,42 +59,39 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String returnStatus(HttpServletRequest request) {
+    public Map<String, Object> returnStatus(HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
-        if (token != null) {
-            Role role = jwtTokenProvider.getRole(token);
-            Long memberId = jwtTokenProvider.getId(token);
-            if (role.equals(Role.STUDENT)) {
-                if (jwtTokenProvider.getNation(token) != null) {
-                    return "home";
+        Role role = jwtTokenProvider.getRole(token);
+        Long memberId = jwtTokenProvider.getId(token);
+        if (role.equals(Role.STUDENT)) {
+            if (jwtTokenProvider.getNation(token) != null) {
+                return Map.of("status", "home", "role", role);
+            } else {
+                Student student = studentRepository.findById(memberId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                if (student.getNation() != null) {
+                    return Map.of("status", "check", "role", role);
                 } else {
-                    Student student = studentRepository.findById(memberId)
-                            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-                    if (student.getNation() != null) {
-                        return "check";
-                    } else {
-                        if (immigrationRepository.findByStudentId(memberId) != null) {
-                            return "wait";
-                        }
-                        return "enter";
+                    if (immigrationRepository.findByStudentId(memberId) != null) {
+                        return Map.of("status", "wait", "role", role);
                     }
+                    return Map.of("status", "enter", "role", role);
                 }
-            } else if (role.equals(Role.TEACHER)) {
-                if (jwtTokenProvider.getNation(token) != null) {
-                    return "class/students";
-                } else {
-                    Teacher teacher = teacherRepository.findById(memberId)
-                            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-                    if (teacher.getIsAssigned() != null) {
-                        return "create";
-                    }
-                    return "wait";
-                }
-
             }
-            return "admin";
+        } else if (role.equals(Role.TEACHER)) {
+            if (jwtTokenProvider.getNation(token) != null) {
+                return Map.of("status", "class/students", "role", role);
+            } else {
+                Teacher teacher = teacherRepository.findById(memberId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                if (teacher.getIsAssigned()) {
+                    return Map.of("status", "create", "role", role);
+                }
+                return Map.of("status", "wait", "role", role);
+            }
+
         }
-        return "login";
+        return Map.of("status", "admin", "role", role);
     }
 }
 

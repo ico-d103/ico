@@ -3,6 +3,7 @@ package com.ico.api.service.user;
 import com.ico.api.dto.user.LoginDto;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * Member Service
@@ -31,5 +32,5 @@ public interface MemberService {
      * @param request
      * @return status
      */
-    String returnStatus(HttpServletRequest request);
+    Map<String, Object> returnStatus(HttpServletRequest request);
 }
