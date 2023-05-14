@@ -21,10 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
@@ -61,7 +59,7 @@ public class NationServiceImpl implements NationService {
                 // 교사 인증 여부
                 if (teacher.getIsAssigned()){
                     // 교사가 만든 나라의 여부
-                    if (teacher.getNation() != null) {
+                    if (teacher.getNation() == null) {
                         Nation nation = Nation.builder()
                                 .school(reqDto.getSchool())
                                 .grade((byte) reqDto.getGrade())
