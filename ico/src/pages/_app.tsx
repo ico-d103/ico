@@ -13,12 +13,18 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { useQuery } from "@tanstack/react-query"
 import StackNotification from "@/components/common/StackNotification/StackNotification"
 import { getCookie } from "@/api/cookie"
-
+import { useRouter } from "next/router"
 
 export default function App({ Component, pageProps }: AppProps) {
 	const queryClient = new QueryClient()
+	const router = useRouter()
 
-
+	useEffect(() => {
+		if (getCookie("Authorization") === undefined) {
+			// 처음 접근할 때 토큰이 없다면 로그인 페이지로 이동
+			router.push("/teacher/login")
+		}
+	}, [])
 
 	return (
 		<CookiesProvider>
