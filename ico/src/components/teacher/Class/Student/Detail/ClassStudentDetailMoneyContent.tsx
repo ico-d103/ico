@@ -20,7 +20,11 @@ const inputReducer = (state: { title: string; amount: string }, action: { type: 
 	}
 }
 
-function ClassStudentDetailMoneyContent() {
+type ClassStudentDetailMoneyContentPropsType = {
+	refetch: any
+}
+
+function ClassStudentDetailMoneyContent({ refetch }: ClassStudentDetailMoneyContentPropsType) {
 	const noti = useNotification()
 	const queryClient = useQueryClient()
 	const currency = localStorage.getItem("currency")
@@ -51,7 +55,10 @@ function ClassStudentDetailMoneyContent() {
 							content: <NotiTemplate type={"ok"} content={"성공적으로 지급되었습니다."} />,
 							duration: 3000,
 					  })
-				return queryClient.invalidateQueries(["studentList", "entered"])
+
+				queryClient.invalidateQueries(["studentList", "entered"])
+				queryClient.invalidateQueries(["enteredStudentDetail", selectedStudentAtom])
+				refetch()
 			},
 		})
 	}

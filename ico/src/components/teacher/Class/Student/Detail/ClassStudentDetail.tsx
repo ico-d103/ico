@@ -7,46 +7,11 @@ import ClassStudentDetailAccountList from "./ClassStudentDetailAccountList"
 import { useAtomValue } from "jotai"
 import { selectedStudent } from "@/store/store"
 import { getStudentDetailAPI } from "@/api/teacher/class/getStudentDetailAPI"
-import { getStudentDetailType, transactionsType } from "@/types/teacher/apiReturnTypes"
+import { getStudentDetailType } from "@/types/teacher/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
 
-// const studentReducer = (
-// 	state: {
-// 		studentId: number
-// 		studentName: string
-// 		creditScore: number
-// 		transactions: transactionsType
-// 		frozen: boolean
-// 	},
-// 	action: {
-// 		type: string
-// 		value: {
-// 			studentId: number
-// 			studentName: string
-// 			creditScore: number
-// 			transactions: transactionsType
-// 			frozen: boolean
-// 		}
-// 	},
-// ) => {
-// 	switch (action.type) {
-// 		case "CHANGE_STATE":
-// 			return action.value
-// 		default:
-// 			return state
-// 	}
-// }
-
 function StudentDetail() {
-	const [isEnabled, setIsEnabled] = useState<boolean>(false)
 	const selectedStudentAtom = useAtomValue(selectedStudent)
-	// const [studentState, dispatchStudent] = useReducer(studentReducer, {
-	// 	studentId: -1,
-	// 	studentName: "",
-	// 	creditScore: -1,
-	// 	transactions: {},
-	// 	frozen: false,
-	// })
 
 	const { data, refetch } = useQuery<getStudentDetailType>(
 		["enteredStudentDetail", selectedStudentAtom],
@@ -56,17 +21,9 @@ function StudentDetail() {
 
 	useEffect(() => {
 		if (selectedStudentAtom !== -1) {
-			// setIsEnabled(true)
 			refetch()
 		}
 	}, [selectedStudentAtom])
-
-	// useEffect(() => {
-	// 	if (data !== undefined) {
-	// 		dispatchStudent({ type: "CHANGE_STATE", value: data })
-	// 		setIsEnabled(false)
-	// 	}
-	// }, [data])
 
 	return (
 		<>
@@ -79,8 +36,8 @@ function StudentDetail() {
 					<React.Fragment key={`studentDetail-${selectedStudentAtom}`}>
 						<h1 css={headerCSS}>학생 정보 상세보기</h1>
 						<ClassStudentDetailHead studentName={data.studentName} frozen={data.frozen} />
-						<ClassStudentDetailMoney />
-						<ClassStudentDetailGrade creditScore={data.creditScore} />
+						<ClassStudentDetailMoney refetch={refetch} />
+						<ClassStudentDetailGrade creditScore={data.creditScore} refetch={refetch} />
 						<ClassStudentDetailAccountList transactions={data.transactions} />
 					</React.Fragment>
 				)

@@ -9,9 +9,10 @@ import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 type ClassStudentDetailGradePropsType = {
 	creditScore: number
+	refetch: any
 }
 
-function ClassStudentDetailGrade({ creditScore }: ClassStudentDetailGradePropsType) {
+function ClassStudentDetailGrade({ creditScore, refetch }: ClassStudentDetailGradePropsType) {
 	const noti = useNotification()
 	const queryClient = useQueryClient()
 	const selectedStudentAtom = useAtomValue(selectedStudent)
@@ -30,7 +31,10 @@ function ClassStudentDetailGrade({ creditScore }: ClassStudentDetailGradePropsTy
 					content: <NotiTemplate type={"ok"} content={"성공적으로 수정되었습니다."} />,
 					duration: 3000,
 				})
-				return queryClient.invalidateQueries(["enteredStudentDetail", selectedStudentAtom])
+
+				queryClient.invalidateQueries(["studentList", "entered"])
+				queryClient.invalidateQueries(["enteredStudentDetail", selectedStudentAtom])
+				refetch()
 			},
 		})
 	}

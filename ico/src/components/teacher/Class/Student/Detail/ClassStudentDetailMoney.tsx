@@ -2,7 +2,11 @@ import { css } from "@emotion/react"
 import CollapseMenu from "@/components/teacher/common/CollapseMenu/CollapseMenu"
 import ClassStudentDetailMoneyContent from "./ClassStudentDetailMoneyContent"
 
-function ClassStudentDetailMoney() {
+type ClassStudentDetailMoneyPropsType = {
+	refetch: any
+}
+
+function ClassStudentDetailMoney({ refetch }: ClassStudentDetailMoneyPropsType) {
 	return (
 		<div css={contentWrapperCSS}>
 			<CollapseMenu
@@ -11,7 +15,7 @@ function ClassStudentDetailMoney() {
 				bracketSize={`10px`}
 				border={`1px solid #dde3ea`}
 			>
-				<ClassStudentDetailMoneyContent />
+				<ClassStudentDetailMoneyContent refetch={refetch} />
 			</CollapseMenu>
 		</div>
 	)
