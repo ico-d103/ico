@@ -4,12 +4,15 @@ import { getCouponListType } from "@/types/teacher/apiReturnTypes"
 import { postCouponAcceptAPI } from "@/api/teacher/class/postCouponAcceptAPI"
 import { deleteCouponDenyAPI } from "@/api/teacher/class/deleteCouponDenyAPI"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 type CouponListItemPropsType = {
 	coupon: getCouponListType
 }
 
 function CouponListItem({ coupon }: CouponListItemPropsType) {
+	const noti = useNotification()
 	const queryClient = useQueryClient()
 	const postCouponAcceptMutation = useMutation((id: string) => postCouponAcceptAPI({ id }))
 	const deleteCouponDenyMutation = useMutation((id: string) => deleteCouponDenyAPI({ id }))
@@ -17,7 +20,18 @@ function CouponListItem({ coupon }: CouponListItemPropsType) {
 	const acceptCouponHandler = () => {
 		postCouponAcceptMutation.mutate(coupon.id, {
 			onSuccess: () => {
-				return queryClient.invalidateQueries(["couponList"])
+				noti({
+					content: <NotiTemplate type={"ok"} content={`쿠폰 사용을 승인했습니다.`} />,
+					duration: 3000,
+				})
+
+				queryClient.invalidateQueries(["couponList"])
+			},
+			onError: () => {
+				noti({
+					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+					duration: 3000,
+				})
 			},
 		})
 	}
@@ -25,7 +39,18 @@ function CouponListItem({ coupon }: CouponListItemPropsType) {
 	const denyCouponHandler = () => {
 		deleteCouponDenyMutation.mutate(coupon.id, {
 			onSuccess: () => {
-				return queryClient.invalidateQueries(["couponList"])
+				noti({
+					content: <NotiTemplate type={"ok"} content={`쿠폰 사용을 반려했습니다.`} />,
+					duration: 3000,
+				})
+
+				queryClient.invalidateQueries(["couponList"])
+			},
+			onError: () => {
+				noti({
+					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+					duration: 3000,
+				})
 			},
 		})
 	}
@@ -40,7 +65,7 @@ function CouponListItem({ coupon }: CouponListItemPropsType) {
 					<h4>{coupon.name}</h4>
 					<div>
 						<div></div>
-						{/* <h5>{coupon.date}</h5> */}
+						<h5>{`${coupon.date.split(".")[0]}년 ${coupon.date.split(".")[1]}월 ${coupon.date.split(".")[2]}일`}</h5>
 					</div>
 				</div>
 			</div>
@@ -55,7 +80,7 @@ function CouponListItem({ coupon }: CouponListItemPropsType) {
 
 const wrapperCSS = css`
 	width: 300px;
-	height: 200px;
+	height: 170px;
 	background: var(--common-back-color-2);
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);

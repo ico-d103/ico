@@ -10,7 +10,7 @@ type ClassJobSearchListItemBackPropsType = {
 
 function ClassJobSearchListItemBack({ job }: ClassJobSearchListItemBackPropsType) {
 
-	const { data } = useQuery<getJobApplierType[]>(["jobApplier"], () => 
+	const { data } = useQuery<getJobApplierType[]>(["jobApplier", job.id], () => 
 		getJobApplierAPI({ id: job.id })
 	)
 
@@ -26,7 +26,7 @@ function ClassJobSearchListItemBack({ job }: ClassJobSearchListItemBackPropsType
 			) : (
 				<div css={listWrapperCSS}>
 					{data?.map((student) => (
-						<ClassJobSearchListApplyListItem key={student.resumeId} student={student} />
+						<ClassJobSearchListApplyListItem key={student.resumeId} student={student} jobId={job.id} />
 					))}
 				</div>
 			)}

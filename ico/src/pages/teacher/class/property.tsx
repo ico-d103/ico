@@ -15,7 +15,6 @@ import { isDepositMenuOpen } from "@/store/store"
 import { useAtom, useAtomValue } from "jotai"
 import { getTreasuryHistoryAPI } from "@/api/teacher/class/getTreasuryHistoryAPI"
 import { selectedPage } from "@/store/store"
-import { useEffect } from "react"
 
 function property() {
 	const [openComp, closeComp, compState] = useCompHandler()

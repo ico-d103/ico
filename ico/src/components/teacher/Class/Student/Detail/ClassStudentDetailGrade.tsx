@@ -4,12 +4,16 @@ import { postCreditScoreAPI } from "@/api/teacher/class/postCreditScoreAPI"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useAtomValue } from "jotai"
 import { selectedStudent } from "@/store/store"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 type ClassStudentDetailGradePropsType = {
 	creditScore: number
+	refetch: any
 }
 
-function ClassStudentDetailGrade({ creditScore }: ClassStudentDetailGradePropsType) {
+function ClassStudentDetailGrade({ creditScore, refetch }: ClassStudentDetailGradePropsType) {
+	const noti = useNotification()
 	const queryClient = useQueryClient()
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 	const postCreditScoreMutation = useMutation((args: { studentId: number; body: { type: boolean } }) =>
@@ -23,7 +27,20 @@ function ClassStudentDetailGrade({ creditScore }: ClassStudentDetailGradePropsTy
 
 		postCreditScoreMutation.mutate(args, {
 			onSuccess: () => {
-				return queryClient.invalidateQueries(["enteredStudentDetail"])
+				noti({
+					content: <NotiTemplate type={"ok"} content={"성공적으로 수정되었습니다."} />,
+					duration: 3000,
+				})
+
+				queryClient.invalidateQueries(["studentList", "entered"])
+				queryClient.invalidateQueries(["enteredStudentDetail", selectedStudentAtom])
+				refetch()
+			},
+			onError: () => {
+				noti({
+					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+					duration: 3000,
+				})
 			},
 		})
 	}

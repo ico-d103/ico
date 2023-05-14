@@ -5,6 +5,7 @@ import { useAtom } from "jotai"
 import { css } from "@emotion/react"
 import { useRouter } from "next/router"
 import useNavigate from "@/hooks/useNavigate"
+import { scrollTo } from "@/util/scrollTo"
 
 type TransitionWrapperProps = {
 	children: any
@@ -48,31 +49,14 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	// 			window.scrollTo({ top: Number(scrollY), left: 0 });
 	// 			setTrgScroll(() => false)
 	// 		}
-	
 
 	// }, [trgScroll])
-
-
-
-
-
-
-
-
 
 	useEffect(() => {
 		// window.history.scrollRestoration = "auto";
 		window.history.scrollRestoration = "manual"
 
-
-		
-
 		router.beforePopState(({ url, as, options }) => {
-
-
-			
-			
-
 			if (isIos() === true) {
 				setIsNavigatingAtom(() => true)
 				setNavToAtom(() => {
@@ -87,12 +71,10 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 					return { url: url, transition: "beforeScale" }
 				})
 				// navigate(url, "beforeScale")
-				
+
 				// setIsPrev(() => true)
 				return false
 			}
-
-
 		})
 
 		return () => {
@@ -139,8 +121,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		if (navToAtom.url !== "") {
 			setScrollTop(() => window.scrollY)
 
-			
-			
 			// sessionStorage.setItem(router.pathname, `${window.scrollY}`)
 			handleScreenshot()
 			// setScrollTop(() => window.scrollY)
@@ -164,15 +144,26 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 			setBeforeTransition(() => false)
 			setIsTransitioning(() => true)
 
-			
-			
-			
-			
 			// if ( isPrev) {
 			// 	setTrgScroll(() => true)
 			// }
 			// setIsPrev(() => false)
-		
+			setTimeout(() => {
+				const _scroll = sessionStorage.getItem(`__next_scroll_${window.history.state.key}`)
+				if (_scroll) {
+					// 스크롤 복원 후 저장된 위치 제거
+					const { x, y } = JSON.parse(_scroll)
+
+					// window.scrollTo(x, y);
+					scrollTo(y, 300)
+					// window.scroll({
+					// 	top: y,
+					// 	left: x,
+					// 	behavior: 'smooth'
+					//   });
+					sessionStorage.removeItem(`__next_scroll_${window.history.state.key}`)
+				}
+			}, 100)
 
 			setTimeout(() => {
 				setIsTransitioning(() => false)
@@ -182,27 +173,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				setScreenshot(() => "")
 				setIsImageLoading(() => false)
 				setIsNavigatingAtom(() => false)
-				
-
-
-
-				const _scroll = sessionStorage.getItem(`__next_scroll_${window.history.state.key}`);
-			if (_scroll) {
-			  // 스크롤 복원 후 저장된 위치 제거
-			  const { x, y } = JSON.parse(_scroll);
-			
-				// window.scrollTo(x, y);
-			  
-				window.scroll({
-					top: y,
-					left: x,
-					behavior: 'smooth'
-				  });
-			  sessionStorage.removeItem(`__next_scroll_${window.history.state.key}`);
-			}
-				
-
-
 			}, 300)
 		}
 	}, [router.pathname])
