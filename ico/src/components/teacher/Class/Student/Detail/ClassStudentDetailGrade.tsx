@@ -36,6 +36,12 @@ function ClassStudentDetailGrade({ creditScore, refetch }: ClassStudentDetailGra
 				queryClient.invalidateQueries(["enteredStudentDetail", selectedStudentAtom])
 				refetch()
 			},
+			onError: () => {
+				noti({
+					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+					duration: 3000,
+				})
+			},
 		})
 	}
 
