@@ -20,6 +20,7 @@ function ClassJobSearchCard({ job }: ClassJobSearchCardPropsType) {
 				</div>
 				<div css={contentWrapperCSS}>
 					<span css={nameCSS}>{job.title}</span>
+					<span css={gradeCSS}>{job.creditRating}등급 이상</span>
 					<span css={needCSS}>{job.total}명</span>
 				</div>
 			</div>
@@ -80,10 +81,16 @@ const nameCSS = css`
 	font-weight: bold;
 `
 
+const gradeCSS = css`
+	text-align: right;
+	font-size: 1.1rem;
+	color: white;
+`
+
 const needCSS = css`
 	text-align: right;
 	color: rgba(255, 255, 255, 0.7);
-	font-size: 4.5rem;
+	font-size: 4rem;
 	font-weight: bold;
 `
 
