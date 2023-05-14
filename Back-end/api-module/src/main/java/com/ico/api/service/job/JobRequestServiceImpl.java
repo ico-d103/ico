@@ -24,7 +24,7 @@ public class JobRequestServiceImpl implements JobRequestService{
 
 
     @Override
-    public void saveJob(Nation nation) {
+    public void createJob(Nation nation) {
         List<JobRequest> jobs = jobRequestRepository.findAll();
         for (JobRequest job : jobs) {
             Job result = Job.builder()

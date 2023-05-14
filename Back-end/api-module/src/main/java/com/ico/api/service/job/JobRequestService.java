@@ -12,5 +12,5 @@ public interface JobRequestService {
      * @param nation
      * @return true or false
      */
-    void saveJob(Nation nation);
+    void createJob(Nation nation);
 }
