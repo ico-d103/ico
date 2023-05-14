@@ -14,6 +14,7 @@ module.exports = withPWA({
 	images: {
 		domains: ["placehold.it", "placeimg.com", "d3bkfkkihwj5ql.cloudfront.net"],
 	},
+
 	async rewrites() {
     return [
       {
@@ -32,6 +33,7 @@ module.exports = {
 	compilerOptions: {
 		target: "es2015",
 	},
+
 	async rewrites() {
     return [
       {
