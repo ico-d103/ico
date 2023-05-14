@@ -1,116 +1,79 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { css } from "@emotion/react"
 import TableGenerator from "../../../common/TableGenerator/TableGenerator"
 import Button from "@/components/common/Button/Button"
-import { useQuery } from "@tanstack/react-query"
 
 import { getDepositInterestListAPI } from "@/api/teacher/finanace/getDepositInterestListAPI"
+import { putDepositInterestListAPI } from "@/api/teacher/finanace/putDepositInterestListAPI"
 
 function FinanceDepositTable() {
-	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery(
-		["teacherProducts"],
-		getDepositInterestListAPI,
-	)
+	const [longPeriod, setLongPeriod] = useState<string[]>([])
+	const [shortPeriod, setShortPeriod] = useState<string[]>([])
 
-	console.log(data)
+	useEffect(() => {
+		getDepositInterestListAPI().then((res) => {
+			setLongPeriod(res.longPeriod)
+			setShortPeriod(res.shortPeriod)
+		})
+	}, [])
 
-	const dayList = ["", "7일", "21일"]
-	const gradeList = ["1등급", "2등급", "3등급", "4등급", "5등급", "6등급", "7등급", "8등급", "9등급", "10등급"]
+	const handleShortPeriodChange = (index: number, value: string) => {
+		const newShortPeriod = [...shortPeriod]
+		newShortPeriod[index] = value
+		setShortPeriod(newShortPeriod)
+	}
 
-	const [test, setTest] = useState([
-		{ value: 15, editable: false },
-		{ value: 12, editable: false },
-		{ value: 10, editable: false },
-		{ value: 8, editable: false },
-		{ value: 6, editable: false },
-		{ value: 5, editable: false },
-		{ value: 4, editable: false },
-		{ value: 3, editable: false },
-		{ value: 0, editable: false },
-		{ value: 0, editable: false },
-	])
-
-	const [test2, setTest2] = useState([
-		{ value: 40, editable: false },
-		{ value: 35, editable: false },
-		{ value: 30, editable: false },
-		{ value: 26, editable: false },
-		{ value: 22, editable: false },
-		{ value: 19, editable: false },
-		{ value: 16, editable: false },
-		{ value: 13, editable: false },
-		{ value: 10, editable: false },
-		{ value: 10, editable: false },
-	])
-
-	const [isEditing, setIsEditing] = useState(false)
+	const handleLongPeriodChange = (index: number, value: string) => {
+		const newLongPeriod = [...longPeriod]
+		newLongPeriod[index] = value
+		setLongPeriod(newLongPeriod)
+	}
 
 	const creditRating = [
-		[dayList[0], ...gradeList],
+		["등급", "1등급", "2등급", "3등급", "4등급", "5등급", "6등급", "7등급", "8등급", "9등급", "10등급"],
 		[
-			dayList[1],
-			...test.map((item) =>
-				item.editable ? (
-					<input
-						css={inputCSS}
-						// type="number"
-						value={item.value}
-						onChange={(e) => {
-							item.value = parseInt(e.target.value)
-							setTest([...test])
-						}}
-					/>
-				) : (
-					item.value
-				),
-			),
+			"7일",
+			...shortPeriod.map((value, index) => (
+				<input
+					css={inputCSS}
+					type="text"
+					value={value}
+					onChange={(e) => handleShortPeriodChange(index, e.target.value)}
+				/>
+			)),
 		],
 		[
-			dayList[2],
-			...test2.map((item) =>
-				item.editable ? (
-					<input
-						css={inputCSS}
-						// type="number"
-						value={item.value}
-						onChange={(e) => {
-							item.value = parseInt(e.target.value)
-							setTest2([...test2])
-						}}
-					/>
-				) : (
-					item.value
-				),
-			),
+			"21일",
+			...longPeriod.map((value, index) => (
+				<input
+					css={inputCSS}
+					key={`long-${index}`}
+					type="text"
+					value={value}
+					onChange={(e) => handleLongPeriodChange(index, e.target.value)}
+				/>
+			)),
 		],
 	]
 
-	console.log(creditRating)
-
-	const editDepositTable = () => {
-		setTest(test.map((item) => ({ ...item, editable: true })))
-		setTest2(test2.map((item) => ({ ...item, editable: true })))
-
-		setIsEditing(true)
+	const pushInterst = () => {
+		putDepositInterestListAPI({ body: { shortPeriod: shortPeriod, longPeriod: longPeriod } }).then((res) => {
+			console.log(res)
+		})
 	}
 
-	const saveDepositTable = () => {
-		setTest(test.map((item) => ({ ...item, editable: false })))
-		setTest2(test2.map((item) => ({ ...item, editable: false })))
-
-		setIsEditing(false)
-	}
+	console.log(longPeriod, shortPeriod)
 
 	return (
 		<>
 			<TableGenerator table={creditRating} perHeight={"48px"} />
 			<div css={buttonCSS}>
 				<Button
-					text={isEditing ? "저장하기" : "수정하기"}
+					text={"이자율 저장"}
 					fontSize={`var(--teacher-h4)`}
 					width={"190px"}
 					theme={"normal"}
-					onClick={isEditing ? saveDepositTable : editDepositTable}
+					onClick={pushInterst}
 				/>
 			</div>
 		</>

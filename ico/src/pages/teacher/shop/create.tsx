@@ -72,6 +72,8 @@ function create() {
 			})
 	}
 
+	console.log(formData)
+
 	return (
 		<div css={shopCreateWrapperCSS}>
 			<div css={headerCSS}>

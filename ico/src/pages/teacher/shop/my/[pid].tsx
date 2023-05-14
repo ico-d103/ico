@@ -27,8 +27,6 @@ function product() {
 		/>
 	))
 
-
-
 	console.log(imageElements)
 
 	return (
@@ -56,25 +54,7 @@ function product() {
 				<div>
 					<div>상품 상세 설명</div>
 					<div>{data?.detail}</div>
-				</div>
-				<div>
-					<Button
-						text={"상품 승인하기"}
-						fontSize={`var(--teacher-h5)`}
-						width={"190px"}
-						height={"30px"}
-						theme={"positive"}
-						onClick={() => {}}
-					/>
-					<Button
-						text={"상품 반려하기"}
-						fontSize={`var(--teacher-h5)`}
-						width={"190px"}
-						height={"30px"}
-						theme={"warning"}
-						onClick={() => {}}
-					/>
-				</div>
+				</div>	
 			</div>
 		</div>
 	)

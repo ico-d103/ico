@@ -9,7 +9,7 @@ type responseType = {
 
 export const getInvestItemAPI = async () => {
 	try {
-		const response: responseType = await tokenInstance.get("/nation/teacher/stock")
+		const response: responseType = await tokenInstance.get("/stock/teacher")
 		return response.data
 	} catch (error) {
 		throw error
