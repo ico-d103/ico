@@ -7,9 +7,10 @@ import { getJobApplierType } from "@/types/teacher/apiReturnTypes"
 
 type ClassJobSearchListApplyListItemPropsType = {
 	student: getJobApplierType
+	jobId: number
 }
 
-function ClassJobSearchListApplyListItem({ student }: ClassJobSearchListApplyListItemPropsType) {
+function ClassJobSearchListApplyListItem({ student, jobId }: ClassJobSearchListApplyListItemPropsType) {
 	const queryClient = useQueryClient()
 	const acceptMutation = useMutation((id: string) => postJobAcceptAPI({ id }))
 	const denyMutation = useMutation((id: string) => deleteJobDenyAPI({ id }))
@@ -19,7 +20,8 @@ function ClassJobSearchListApplyListItem({ student }: ClassJobSearchListApplyLis
 
 		acceptMutation.mutate(student.resumeId, {
 			onSuccess: () => {
-				return queryClient.invalidateQueries(["jobList"])
+				queryClient.invalidateQueries(["jobList"])
+				queryClient.invalidateQueries(["jobApplier", jobId])
 			},
 		})
 	}
@@ -29,7 +31,8 @@ function ClassJobSearchListApplyListItem({ student }: ClassJobSearchListApplyLis
 
 		denyMutation.mutate(student.resumeId, {
 			onSuccess: () => {
-				return queryClient.invalidateQueries(["jobList"])
+				queryClient.invalidateQueries(["jobList"])
+				queryClient.invalidateQueries(["jobApplier", jobId])
 			},
 		})
 	}
