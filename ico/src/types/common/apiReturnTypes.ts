@@ -10,7 +10,6 @@ export type postDuplicationCheckType = {
 	isDuplicated: boolean
 }
 
-
 export type getNationType = {
 	id: number
 	school: string
@@ -25,4 +24,9 @@ export type getNationType = {
 	trading_end: string | null
 	credit_up: number
 	credit_down: number
+}
+
+export type getTokenStatusType = {
+	status: string
+	role: string
 }

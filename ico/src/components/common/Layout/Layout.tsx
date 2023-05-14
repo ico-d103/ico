@@ -1,16 +1,15 @@
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import SideBar from "@/components/teacher/layout/SideBar/SideBar"
 import { useRouter } from "next/router"
-import { css } from "@emotion/react"
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react"
 import TransitionWrapper from "@/components/student/layout/TransitionWrapper/TransitionWrapper"
 import NavBar from "@/components/student/layout/NavBar/NavBar"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getNationAPI } from "@/api/common/getNationAPI"
-import { getNationType } from "@/types/common/apiReturnTypes"
-import { nationData } from "@/store/store"
+import { nationData, loginRole } from "@/store/store"
 import { useAtom } from "jotai"
 import { getCookie } from "@/api/cookie"
+import { getTokenStatusAPI } from "@/api/common/getTokenStatusAPI"
+import tokenStatusBranch from "./tokenStatusBranch"
 
 type LayoutProps = {
 	children: any
@@ -19,15 +18,28 @@ type LayoutProps = {
 function Layout({ children }: LayoutProps) {
 	const router = useRouter()
 	const [nationDataAtom, setNationDataAtom] = useAtom(nationData)
+	const [loginRoleAtom, setLoginRoleAtom] = useAtom(loginRole)
 
 	useEffect(() => {
 		const accessToken = getCookie("Authorization")
+
 		if (accessToken) {
+			// 나라 정보 저장
 			getNationAPI().then((res) => {
 				if (res) {
 					setNationDataAtom(() => res)
 				}
 			})
+
+			// 토큰 상태 저장
+			getTokenStatusAPI()
+				.then((res) => {
+					setLoginRoleAtom(res.role)
+					// tokenStatusBranch(res.role, res.status)
+				})
+				.catch((error) => {
+					console.log(error)
+				})
 		}
 	}, [getCookie("Authorization")])
 
