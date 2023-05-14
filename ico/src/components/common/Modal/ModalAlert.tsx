@@ -12,9 +12,10 @@ type ModalAlertProps = {
 	titleSize: string
     proceed: any
     closeComp?: Function
+	forChild?: boolean
 }
 
-function ModalAlert({ content, proceed, closeComp, width, title, titleSize, }: ModalAlertProps) {
+function ModalAlert({ content, proceed, closeComp, width, title, titleSize, forChild }: ModalAlertProps) {
 	const ICON = <div css={css`margin-bottom: -16px;`}><UseAnimations animation={alertTriangle} size={128} /></div>
 
 	const CONTENT: JSX.Element = (
@@ -41,13 +42,13 @@ function ModalAlert({ content, proceed, closeComp, width, title, titleSize, }: M
 				})}
 			</div>
 			<div css={buttonWrapperCSS}>
-				<Button text={"확인"} fontSize={"var(--student-h3)"} width={"40%"} theme={"warning"} onClick={() => {proceed && proceed(); closeComp && closeComp();}} margin={'0px 16px 0px 0px'} />
-				<Button text={"취소"} fontSize={"var(--student-h3)"} width={"40%"} theme={"cancelDark"} onClick={() => {closeComp && closeComp()}} />
+				<Button text={"확인"} fontSize={"var(--student-h3)"} width={"40%"} theme={forChild ? "mobileWarning" : "warning"} onClick={() => {proceed && proceed(); closeComp && closeComp();}} margin={'0px 16px 0px 0px'} />
+				<Button text={"취소"} fontSize={"var(--student-h3)"} width={"40%"} theme={forChild ? "mobileCancel" : "cancelDark"} onClick={() => {closeComp && closeComp()}} />
 			</div>
 		</div>
 	)
 
-	return <ModalContent title={title} titleSize={titleSize} width={width} icon={ICON} content={CONTENT} />
+	return <ModalContent title={title} titleSize={titleSize} width={width} icon={ICON} content={CONTENT} forChild={forChild} />
 }
 
 const contentWrapperCSS = css`

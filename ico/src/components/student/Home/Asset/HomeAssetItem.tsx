@@ -34,7 +34,7 @@ function HomeAssetItem({ icon, title, money, moneyUnit, detailUrl }: HomeAssetIt
 						fontSize={`var(--teacher-h5)`}
 						width={"72px"}
 						height={"100%"}
-						theme={"mobileNormal"}
+						theme={"mobileSoft3"}
 						onClick={() => {
 							navigate(detailUrl, "bottomToTop")
 						}}

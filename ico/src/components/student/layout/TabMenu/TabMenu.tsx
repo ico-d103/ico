@@ -42,7 +42,7 @@ const wrapperCSS = (length: number) => {
 }
 
 const selectedCSS = css`
-	background-color: #ffffff62;
+	background-color: var(--student-main-color-2);
 	border-radius: 10px 10px 0px 0px;
 	border-bottom: 3px solid #ff9f00;
 	font-weight: bold;
