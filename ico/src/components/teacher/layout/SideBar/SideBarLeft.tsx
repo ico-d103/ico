@@ -1,6 +1,6 @@
-import React from "react"
 import { css } from "@emotion/react"
 import { MAIN_SETTING, MAIN_SIGNOUT } from "./SideBarIcons"
+import { removeCookie } from "@/api/cookie"
 
 type SideBarLeftProps = {
 	element: { [prop: number]: { name: string; label: string; content: any } }
@@ -11,7 +11,8 @@ type SideBarLeftProps = {
 
 function SideBarLeft({ element, logo, selectHandler, selected }: SideBarLeftProps) {
 	const signoutHandler = () => {
-		// 로그아웃 로직 작성
+		removeCookie("Authorization", { path: "/teacher" })
+		window.location.href = "/teacher/login"
 	}
 
 	const renderElement = Object.keys(element).map((el: any, idx) => {
