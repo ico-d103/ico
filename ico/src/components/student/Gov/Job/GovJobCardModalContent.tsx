@@ -10,7 +10,7 @@ function GovJobCardModalContent({ content, closeComp }: GovJobCardModalContentPr
 	return (
 		<div css={wrapperCSS}>
 			<textarea readOnly value={content} />
-			<Button text={"확인"} fontSize={"var(--student-h3)"} width={"130px"} theme={"cancelDark"} onClick={closeComp} />
+			<Button text={"확인"} fontSize={"var(--student-h3)"} width={"130px"} theme={"mobileSoft2"} onClick={closeComp} />
 		</div>
 	)
 }
@@ -24,7 +24,7 @@ const wrapperCSS = css`
 	> textarea {
 		width: 286px;
 		height: 118px;
-		background: #e3e8ef;
+		background: rgba(0, 0, 0, 0.05);
 		border-radius: 10px;
 		resize: none;
 		outline: none;

@@ -18,7 +18,7 @@ function HomeButtonSection() {
   return (
     <div css={buttonSectionWrapperCSS}>
         <div css={columnCSS}>
-            <HomeGradationButton cssProps={css`width: 42%; height: 140px;`} backgroundColor={['#459BFF', '#001AFF']} onClick={() => {navigate('/student/home/coupon', 'bottomToTop')}}>
+            <HomeGradationButton cssProps={css`width: 42%; height: 140px;`} backgroundColor={['#e0c3fc', '#8ec5fc']} onClick={() => {navigate('/student/home/coupon', 'bottomToTop')}}>
             
                 <div css={lsizeFontCSS}>
                     쿠폰을 써보아요.
@@ -30,7 +30,7 @@ function HomeButtonSection() {
 
                 
             </HomeGradationButton>
-            <HomeGradationButton cssProps={css`width: 54%; height: 140px;`} backgroundColor={['#91FF75', '#00A3FF']} onClick={() => {navigate('/student/home/exchequer', 'bottomToTop')}}>
+            <HomeGradationButton cssProps={css`width: 54%; height: 140px;`} backgroundColor={['#a18cd1', '#fbc2eb']} onClick={() => {navigate('/student/home/exchequer', 'bottomToTop')}}>
                 <div css={msizeFontCSS}>
                     우리나라의 국고에
                 </div>
@@ -40,26 +40,26 @@ function HomeButtonSection() {
                 <div css={msizeFontCSS}>
                     남아있어요!
                 </div>
-                <div css={[imageWrapperCSS, css`margin-top: -34px;`]}>
-                    <LoadImage src={'/assets/home/exchequer.png'} alt={'exchequer'} wrapperCss={css`width: 120px; height: 120px;`} />
+                <div css={[imageWrapperCSS, css`margin-top: -24px;`]}>
+                    <LoadImage src={'/assets/home/exchequer.png'} alt={'exchequer'} wrapperCss={css`width: 120px; height: 80px;`}/>
                 </div>
             </HomeGradationButton>
         </div>
         <div css={columnCSS}>
-            <HomeGradationButton cssProps={css`width: 54%; height: 140px;`} backgroundColor={['#A175FF', '#5200FF']} onClick={() => {navigate('/student/finance/deposit', 'bottomToTop')}}>
+            <HomeGradationButton cssProps={css`width: 54%; height: 140px;`} backgroundColor={['#fa709a', '#fee140']} onClick={() => {navigate('/student/finance/deposit', 'bottomToTop')}}>
                 <div css={lsizeFontCSS}>
                     예금하러 가요!
                 </div>
-                <div css={[imageWrapperCSS, css`margin-top: -14px;`]}>
-                    <LoadImage src={'/assets/home/deposit.png'} alt={'exchequer'} wrapperCss={css`width: 120px; height: 120px;`} />
+                <div css={[imageWrapperCSS, css`margin-top: 10px;`]}>
+                    <LoadImage src={'/assets/home/deposit.png'} alt={'exchequer'} wrapperCss={css`width: 120px; height: 80px;`} />
                 </div>
             </HomeGradationButton>
-            <HomeGradationButton cssProps={css`width: 42%; height: 140px;`} backgroundColor={['#FF4567', '#BD00FF']} onClick={() => {navigate('/student/finance/invest', 'bottomToTop')}}>
+            <HomeGradationButton cssProps={css`width: 42%; height: 140px;`} backgroundColor={['#84fab0', '#8fd3f4']} onClick={() => {navigate('/student/finance/invest', 'bottomToTop')}}>
                 <div css={lsizeFontCSS}>
                     실전형 투자 체험
                 </div>
-                <div css={[imageWrapperCSS, css`margin-top: -14px;`]}>
-                    <LoadImage src={'/assets/home/stock.png'} alt={'exchequer'} wrapperCss={css`width: 120px; height: 120px;`} />
+                <div css={[imageWrapperCSS, css`margin-top: 15px;`]}>
+                    <LoadImage src={'/assets/home/stock.png'} alt={'exchequer'} wrapperCss={css`width: 120px; height: 77px;`} />
                 </div>
             </HomeGradationButton>
         </div>

@@ -67,7 +67,7 @@ function FinanceInvestApplyModal({ price, account, unit, closeComp, refetch }: F
 			<Input
 				value={value}
 				onChange={onChangeHandler}
-				theme={"default"}
+				theme={"mobileWhite"}
 				textAlign={"right"}
 				rightContent={
 					<div css={balanceLabelCSS}>
@@ -92,7 +92,7 @@ function FinanceInvestApplyModal({ price, account, unit, closeComp, refetch }: F
 					text={"매수"}
 					fontSize={"var(--student-h3)"}
 					width={"47%"}
-					theme={"positive"}
+					theme={"mobileSoft2"}
 					onClick={() => {
 						submitHandler()
 					}}
@@ -101,7 +101,7 @@ function FinanceInvestApplyModal({ price, account, unit, closeComp, refetch }: F
 					text={"취소"}
 					fontSize={"var(--student-h3)"}
 					width={"47%"}
-					theme={"cancelDark"}
+					theme={"mobileCancel"}
 					onClick={() => {
 						closeComp()
 					}}
