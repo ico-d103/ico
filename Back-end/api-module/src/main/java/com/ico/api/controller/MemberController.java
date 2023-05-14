@@ -71,7 +71,7 @@ public class MemberController {
      * @return status
      */
     @GetMapping("/status")
-    public ResponseEntity<String> getStatus(HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> getStatus(HttpServletRequest request) {
         return ResponseEntity.ok(memberService.returnStatus(request));
     }
 }
