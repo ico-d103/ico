@@ -24,6 +24,7 @@ import java.io.IOException;
  * JWT Provider 를 사용
  *
  * @author 강교철
+ * @author 서재건
  */
 @RequiredArgsConstructor
 @Component
@@ -41,8 +42,8 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         // token이 없을 때
         if (token == null || token.trim().isEmpty()) {
             // 토큰이 없더라도 요청가능한 api uri(/api/teacher/** != /api/teacher)
-            if (request.getRequestURI().startsWith("/api/login") || request.getRequestURI().startsWith("/api/student")
-                    || request.getRequestURI().startsWith("/api/teacher") || request.getRequestURI().startsWith("/api/duplicated-id")) {
+            if (request.getRequestURI().equals("/api/login") || request.getRequestURI().equals("/api/student")
+                    || request.getRequestURI().equals("/api/teacher") || request.getRequestURI().equals("/api/duplicated-id")) {
                 log.info("[doFilterInternal] : 토큰이 없는 uri : {}", request.getRequestURI());
                 filterChain.doFilter(request, response);
                 return;
