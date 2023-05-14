@@ -15,6 +15,7 @@ export const postResumeAPI = async ({ id }: paramsType) => {
 		const response: responseType = await tokenInstance.post(`/resume/student/${id}`)
 		return response.data
 	} catch (error) {
+		console.log(error)
 		throw error
 	}
 }

@@ -10,6 +10,7 @@ import HomeTipSection from "@/components/student/Home/Tip/HomeTipSection"
 import { getHomeMyInfoAPI } from "@/api/student/home/getHomeMyInfoAPI"
 import { getHomeMyInfoType } from "@/types/student/apiReturnTypes"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
+import LoadImage from "@/components/common/LoadImage/LoadImage"
 
 function index() {
 	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getHomeMyInfoType>(
@@ -20,9 +21,13 @@ function index() {
 
 	return (
 		<div>
-			<PageHeader title={"아이코"} />
+			
 
 			<div css={contentParentCSS}>
+			<div css={headerWrapperCSS}>
+				<LoadImage src={'/assets/children_icon.png'} alt={'icon'} wrapperCss={css`width: 36px; height: 36px; margin-right: 12px;`} sizes={'128px'} />
+				아이코
+			</div>
 				<ContentWrapper>
 					<div css={contentTitleCSS}>내 프로필</div>
 					{data && (
@@ -34,12 +39,12 @@ function index() {
 						/>
 					)}
 				</ContentWrapper>
-				{data && 
-				<ContentWrapper>
-					<div css={contentTitleCSS}>자산</div>
-					<HomeAsset account={data.account} deposit={data.deposit} invest={data.invest}/>
-				</ContentWrapper>
-				}
+				{data && (
+					<ContentWrapper>
+						<div css={contentTitleCSS}>자산</div>
+						<HomeAsset account={data.account} deposit={data.deposit} invest={data.invest} />
+					</ContentWrapper>
+				)}
 				<HomeButtonSection />
 				<HomeTipSection />
 			</div>
@@ -60,4 +65,14 @@ const contentParentCSS = css`
 	align-items: center;
 `
 
+const headerWrapperCSS = css`
+
+	width: 90%;
+	height: 64px;
+	font-size: var(--student-h1);
+	font-weight: 500;
+	display: flex;
+	align-items: center;
+
+`
 export default index

@@ -80,7 +80,7 @@ function FinanceDepositApplyModal({ term, data, unit, closeComp, refetch }: Fina
 			<Input
 				value={value}
 				onChange={onChangeHandler}
-				theme={"default"}
+				theme={"mobileWhite"}
 				textAlign={"right"}
 				rightContent={
 					<div css={balanceLabelCSS}>
@@ -107,7 +107,7 @@ function FinanceDepositApplyModal({ term, data, unit, closeComp, refetch }: Fina
 					text={"정기 예금 신청"}
 					fontSize={"var(--student-h3)"}
 					width={"47%"}
-					theme={"positive"}
+					theme={"mobileSoft2"}
 					onClick={() => {
 						submitHandler()
 					}}
@@ -116,7 +116,7 @@ function FinanceDepositApplyModal({ term, data, unit, closeComp, refetch }: Fina
 					text={"취소"}
 					fontSize={"var(--student-h3)"}
 					width={"47%"}
-					theme={"cancelDark"}
+					theme={"mobileCancel"}
 					onClick={() => {
 						closeComp()
 					}}

@@ -58,7 +58,7 @@ function GuidePage({data, refetch}: GuidePageProps) {
 							titleSize={"var(--student-h1)"}
 							icon={APPLY_ICON}
 							content={<FinanceDepositApplyModal refetch={refetch} closeComp={closeComp} unit={` ${nation?.currency}`} data={data} term={term}/>}
-							
+							forChild={true}
 						/>
 					}
 					compState={compState}

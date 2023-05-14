@@ -21,117 +21,173 @@ type themeType = {
 
 function Button({ text, fontSize, width, height, theme, margin, onClick, disabled }: ButtonPropsType) {
 	// 원하는 버튼 테마 추가
-	const themes: { [prop: string]: themeType } = {
-		normal: {
-			border: "none",
-			borderRadius: "10px",
-			fontColor: `var(--common-back-color-2)`,
-			backgroundColor: `var(--teacher-main-color)`,
-		},
-		highlighted: {
-			border: "none",
-			borderRadius: "10px",
-			fontColor: `var(--common-back-color-2)`,
-			backgroundColor: `var(--teacher-highlight-color)`,
-		},
-		cancelLight: {
-			border: "1px solid rgba(255, 255, 255, 0.15)",
-			borderRadius: "10px",
-			fontColor: `var(--common-back-color-2)`,
-			backgroundColor: `rgba(255, 255, 255, 0.1)`,
-		},
-		cancelDark: {
-			border: "none",
-			borderRadius: "10px",
-			// fontColor: `var(--common-back-color-2)`,
-			fontColor: "black",
-			backgroundColor: `rgba(0, 0, 0, 0.1)`,
-		},
-		warning: {
-			border: "none",
-			borderRadius: "10px",
-			fontColor: `var(--common-back-color-2)`,
-			backgroundColor: `#D94A4A`,
-		},
-		mobileWarning: {
-			border: "none",
-			borderRadius: "20px",
-			fontColor: `var(--common-back-color-2)`,
-			backgroundColor: `#D94A4A`,
-		},
-		positive: {
-			border: "none",
-			borderRadius: "10px",
-			fontColor: `var(--common-back-color-2)`,
-			backgroundColor: `var(--teacher-blue-color)`,
-		},
-		RadialPositive: {
-			border: "none",
-			borderRadius: "10px",
-			fontColor: `rgba(0, 20, 50, 1)`,
-			backgroundColor: `rgba(0, 20, 50, 0.05)`,
-		},
-		RadialPositiveMobile: {
-			border: "none",
-			borderRadius: "10px",
-			fontColor: `#9b6f00`,
-			backgroundColor: `rgba(0, 20, 50, 0.05)`,
-		},
-		mobileNormal: {
-			border: "none",
-			borderRadius: "20px",
-			fontColor: `#3D2F21`,
-			backgroundColor: `#FFCD00`,
-
-		},
-		mobileSoft: {
-			border: "1px solid var(--student-main-color-5)",
-			borderRadius: "20px",
-			fontColor: `var(--student-main-color-5)`,
-			backgroundColor: `var(--student-main-color)`,
-
-		},
-
-	}
 
 	return (
-		<button disabled={disabled} css={buttonCSS({ fontSize, width, height, themes, theme, margin })} onClick={onClick}>
+		<button
+			disabled={disabled}
+			css={[initCSS({ fontSize, width, height, margin }), buttonCSS({ theme })]}
+			onClick={onClick}
+		>
+			{/* <button disabled={disabled} css={buttonCSS({ fontSize, width, height, themes, theme, margin })} onClick={onClick}></button> */}
 			{text}
 		</button>
 	)
 }
 
-const buttonCSS = ({
+// const buttonCSS = ({
+// 	fontSize,
+// 	width,
+// 	height,
+// 	themes,
+// 	theme,
+// 	margin,
+// }: {
+// 	fontSize: string
+// 	width: string
+// 	height: string | undefined
+// 	themes: { [prop: string]: themeType }
+// 	theme: string
+// 	margin?: string
+// }) => {
+// 	return css`
+// 		font-size: ${fontSize};
+// 		width: ${width};
+// 		height: ${height ? height : "40px"}; // 기본 height 40px
+// 		border: ${themes[theme].border};
+// 		border-radius: ${themes[theme].borderRadius};
+// 		color: ${themes[theme].fontColor};
+// 		background-color: ${themes[theme].backgroundColor};
+// 		margin: ${margin};
+// 		display: flex;
+// 		justify-content: center;
+// 		align-items: center;
+// 		transition: all 0.2s;
+
+// 		:hover:enabled {
+// 			filter: brightness(120%);
+// 		}
+
+// 		:disabled {
+// 			filter: brightness(60%);
+// 			cursor: default;
+// 		}
+// 	`
+// }
+
+const buttonCSS = ({ theme }: { theme: string }) => {
+	const themes: { [prop: string]: any } = {
+		normal: css`
+			border: none;
+			border-radius: 10px;
+			color: var(--common-back-color-2);
+			background-color: var(--teacher-main-color);
+		`,
+		highlighted: css`
+			border: none;
+			border-radius: 10px;
+			color: var(--common-back-color-2);
+			background-color: var(--teacher-highlight-color);
+		`,
+		cancelLight: css`
+			border: 1px solid rgba(255, 255, 255, 0.15);
+			border-radius: 10px;
+			color: var(--common-back-color-2);
+			background-color: rgba(255, 255, 255, 0.1);
+		`,
+		cancelDark: css`
+			border: none;
+			border-radius: 10px;
+			color: black;
+			background-color: rgba(0, 0, 0, 0.1);
+		`,
+		warning: css`
+			border: none;
+			border-radius: 10px;
+			color: var(--common-back-color-2);
+			background-color: #d94a4a;
+		`,
+		mobileWarning: css`
+			border: none;
+			border-radius: 20px;
+			color: var(--common-back-color-2);
+			background-color: #d94a4a;
+		`,
+		positive: css`
+			border: none;
+			border-radius: 10px;
+			color: var(--common-back-color-2);
+			background-color: var(--teacher-blue-color);
+		`,
+		RadialPositive: css`
+			border: none;
+			border-radius: 10px;
+			color: rgba(0, 20, 50, 1);
+			background-color: rgba(0, 20, 50, 0.05);
+		`,
+		RadialPositiveMobile: css`
+			border: none;
+			border-radius: 10px;
+			color: #9b6f00;
+			background-color: rgba(0, 20, 50, 0.05);
+		`,
+		mobileNormal: css`
+			border: none;
+			border-radius: 20px;
+			color: #3d2f21;
+			background-color: #ffcd00;
+		`,
+		mobileSoft: css`
+			border: 1px solid var(--student-main-color-5);
+			border-radius: 20px;
+			color: var(--student-main-color-5);
+			background-color: var(--student-main-color);
+		`,
+		mobileSoft2: css`
+			border: none;
+			border-radius: 20px;
+			background-color: #fff7d2;
+			color: var(--student-main-color-5);
+		`,
+		mobileSoft3: css`
+		border: none;
+		border-radius: 20px;
+		background-color: var(--student-main-color-7);
+		color: var(--student-main-color-6);
+		`,
+		mobileCancel: css`
+			border: none;
+			border-radius: 20px;
+			background-color: rgba(199, 199, 199, 0.4);
+			color: #828282;
+		`,
+	}
+
+	return themes[theme]
+}
+
+const initCSS = ({
 	fontSize,
 	width,
 	height,
-	themes,
-	theme,
 	margin,
 }: {
 	fontSize: string
 	width: string
 	height: string | undefined
-	themes: { [prop: string]: themeType }
-	theme: string
 	margin?: string
 }) => {
 	return css`
 		font-size: ${fontSize};
 		width: ${width};
 		height: ${height ? height : "40px"}; // 기본 height 40px
-		border: ${themes[theme].border};
-		border-radius: ${themes[theme].borderRadius};
-		color: ${themes[theme].fontColor};
-		background-color: ${themes[theme].backgroundColor};
 		margin: ${margin};
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		transition: all 0.2s;
-		
+
 		:hover:enabled {
-			filter: brightness(120%);
+			filter: brightness(95%) saturate(200%);
 		}
 
 		:disabled {
