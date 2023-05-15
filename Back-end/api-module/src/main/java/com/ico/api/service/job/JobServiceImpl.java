@@ -5,6 +5,7 @@ import com.ico.api.dto.job.JobAllColDto;
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
 import com.ico.api.dto.job.JobResDto;
+import com.ico.api.service.S3UploadService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.dto.JobReqDto;
@@ -44,6 +45,8 @@ public class JobServiceImpl implements JobService{
 
     private final ResumeMongoRepository resumeMongoRepository;
 
+    private final S3UploadService s3UploadService;
+
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
@@ -63,7 +66,7 @@ public class JobServiceImpl implements JobService{
             throw new CustomException(ErrorCode.INVALID_JOB_TOTAL);
         }
 
-        studentJob.updateJob(dto);
+        studentJob.updateJob(dto, s3UploadService.getFileName(dto.getImage()));
         studentJobRepository.save(studentJob);
         log.info("[updateJob] 수정 완료");
     }
@@ -87,7 +90,7 @@ public class JobServiceImpl implements JobService{
                 restJobCount++;
             }
             String salary = Formatter.number.format(studentJob.getWage() * 30L);
-            colJobList.add(new JobAllColDto().of(studentJob, salary));
+            colJobList.add(new JobAllColDto().of(studentJob, salary, s3UploadService.getFileURL(studentJob.getImage())));
         }
 
         return JobAllResDto.builder()
@@ -110,7 +113,7 @@ public class JobServiceImpl implements JobService{
             if (studentJob.getCount() == studentJob.getTotal())   continue;
 
             // 정원이 채워지지 않은 직업을 목록에 추가
-            resJobList.add(new JobAvailableResDto().of(studentJob));
+            resJobList.add(new JobAvailableResDto().of(studentJob, s3UploadService.getFileURL(studentJob.getImage())));
         }
         return resJobList;
     }
@@ -125,10 +128,10 @@ public class JobServiceImpl implements JobService{
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
         }
 
-        List<StudentJob> studentJobList = studentJobRepository.findAllByNationId(nationId);
+        List<StudentJob> studentJobList = studentJobRepository.findAllByNationIdOrderByTotalDesc(nationId);
         List<JobResDto> dtoList = new ArrayList<>();
         for (StudentJob studentJob : studentJobList) {
-            dtoList.add(new JobResDto().of(studentJob));
+            dtoList.add(new JobResDto().of(studentJob, s3UploadService.getFileURL(studentJob.getImage())));
         }
         return dtoList;
     }
@@ -143,7 +146,7 @@ public class JobServiceImpl implements JobService{
                 .nation(nation)
                 .title(dto.getTitle())
                 .detail(dto.getDetail())
-                .image(dto.getImage())
+                .image(s3UploadService.getFileName(dto.getImage()))
                 .wage(dto.getWage())
                 .creditRating(dto.getCreditRating().byteValue())
                 .total(dto.getTotal().byteValue())

@@ -40,4 +40,12 @@ public interface StudentJobRepository extends JpaRepository<StudentJob, Long> {
      */
     Optional<StudentJob> findByIdNotAndTitleAndNationId(Long id, String title, Long nationId);
 
+    /**
+     * 직업 명함 조회 시 total이 0인 직업은 아래로 정렬
+     *
+     * @param nationId
+     * @return
+     */
+    List<StudentJob> findAllByNationIdOrderByTotalDesc(Long nationId);
+
 }

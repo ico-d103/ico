@@ -149,4 +149,17 @@ public class S3UploadService {
         }
         return String.valueOf(images);
     }
+
+    /**
+     * url에서 파일 이름.확장명 추출
+     *
+     * @param url
+     * @return
+     */
+    public String getFileName(String url) {
+        if (!url.contains("/") || url.lastIndexOf("/") + 1 >= url.length()) {
+            throw new CustomException(ErrorCode.INVALID_FILE_URL);
+        }
+        return url.substring(url.lastIndexOf("/") + 1);
+    }
 }

@@ -37,14 +37,18 @@ public class JobReqDto {
     @NotNull(message = "426")
     private Integer creditRating;
 
+    @NotNull(message = "430")
+    private String image;
+
     @Builder
-    public JobReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating) {
+    public JobReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating, String image) {
         this.title = title;
         this.detail = detail;
         this.total = total;
         this.wage = wage;
         this.color = color;
         this.creditRating = creditRating;
+        this.image = image;
     }
 
 }
