@@ -126,10 +126,10 @@ public class StockServiceImpl implements StockService{
             throw new CustomException(ErrorCode.NOT_FOUND_STOCK);
         }
 
-        if(nation.getTrading_start().isAfter(LocalTime.now()) && nation.getTrading_end().isBefore(LocalTime.now())){
-            log.info("거래시간에는 투자 이슈 등록이 불가능합니다.");
-            throw new CustomException(ErrorCode.NOT_UPLOAD_TIME);
-        }
+//        if(nation.getTrading_start().isAfter(LocalTime.now()) && nation.getTrading_end().isBefore(LocalTime.now())){
+//            log.info("거래시간에는 투자 이슈 등록이 불가능합니다.");
+//            throw new CustomException(ErrorCode.NOT_UPLOAD_TIME);
+//        }
 
         double value = dto.getPrice();
 

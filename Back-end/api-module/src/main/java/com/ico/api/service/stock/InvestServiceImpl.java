@@ -57,10 +57,10 @@ public class InvestServiceImpl implements InvestService{
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
         LocalTime currentTime = LocalTime.now();
-        if(currentTime.isAfter(nation.getTrading_end()) || currentTime.isBefore(nation.getTrading_start())){
-            throw new CustomException(ErrorCode.NOT_TRADING_TIME);
-        }
-        log.info("거래 가능 시간");
+//        if(currentTime.isAfter(nation.getTrading_end()) || currentTime.isBefore(nation.getTrading_start())){
+//            throw new CustomException(ErrorCode.NOT_TRADING_TIME);
+//        }
+//        log.info("거래 가능 시간");
 
         // 매수 여부 확인
         investRepository.findByStudentId(studentId).ifPresent(i -> {
@@ -115,10 +115,10 @@ public class InvestServiceImpl implements InvestService{
         // 거래 가능 시간 확인
         Nation nation = nationRepository.findById(student.getNation().getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
-        LocalTime currentTime = LocalTime.now();
-        if(currentTime.isAfter(nation.getTrading_end()) || currentTime.isBefore(nation.getTrading_start())){
-            throw new CustomException(ErrorCode.NOT_TRADING_TIME);
-        }
+//        LocalTime currentTime = LocalTime.now();
+//        if(currentTime.isAfter(nation.getTrading_end()) || currentTime.isBefore(nation.getTrading_start())){
+//            throw new CustomException(ErrorCode.NOT_TRADING_TIME);
+//        }
 
         // 국가의 주식 데이터가 없을 경우
         List<Stock> stockList = stockRepository.findAllByNationIdOrderByIdDesc(nationId);
