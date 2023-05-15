@@ -56,6 +56,7 @@ public class JobAllColDto {
      * @return JobAllResDto
      */
     public JobAllColDto of(StudentJob studentJob, String salary, String image) {
+        String studentNames = studentJob.getStudentNames();
         return JobAllColDto.builder()
                 .id(studentJob.getId())
                 .title(studentJob.getTitle())
@@ -65,8 +66,8 @@ public class JobAllColDto {
                 .total(studentJob.getTotal())
                 .salary(salary)
                 .count(studentJob.getCount())
-                .studentNames(studentJob.getStudentNames().equals("") || studentJob.getStudentNames() == null
-                        ? new ArrayList<>() : List.of(studentJob.getStudentNames().split(",")))
+                .studentNames((studentNames == null || studentNames.equals(""))
+                        ? new ArrayList<>() : List.of(studentNames.split(",")))
                 .build();
 
     }
