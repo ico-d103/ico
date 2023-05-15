@@ -41,4 +41,12 @@ public interface ResumeService {
      * @param resumeId
      */
     void rejectResume(String resumeId, HttpServletRequest request);
+
+    /**
+     * 학생의 직업 신청 여부 확인
+     *
+     * @param request
+     * @return
+     */
+    boolean checkRequestJob(Long jobId, HttpServletRequest request);
 }

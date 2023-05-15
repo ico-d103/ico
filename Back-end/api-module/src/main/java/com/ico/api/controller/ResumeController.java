@@ -77,4 +77,15 @@ public class ResumeController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    /**
+     * 학생의 직업 신청 여부 확인
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping("/student/check/{jobId}")
+    public ResponseEntity<Boolean> checkRequestJob(@PathVariable Long jobId, HttpServletRequest request) {
+        return ResponseEntity.ok(resumeService.checkRequestJob(jobId, request));
+    }
+
 }
