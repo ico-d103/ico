@@ -1,12 +1,25 @@
 import Button from '@/components/common/Button/Button'
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import QRScanner from './QRScanner'
 import { css } from "@emotion/react"
 
-function QRScannerModal({closeComp}: {closeComp?: Function}) {
+function QRScannerModal({closeComp, compState}: {closeComp?: Function; compState: boolean;}) {
+  const [unmount, setUnmount] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (compState === false) {
+      setTimeout(() => {
+        setUnmount(() => true)
+      }, 300)
+    } else {
+      setUnmount(() => false)
+    }
+  }, [compState])
+
+
   return (
     <div css={wrapperCSS}>
-        <QRScanner />
+        {unmount === false && <QRScanner />}
         <div css={buttonWrapperCSS}>
         <Button text={"취소"} fontSize={"var(--student-h3)"} width={"40%"} theme={"mobileCancel"} onClick={() => {closeComp && closeComp()}} />
         </div>
