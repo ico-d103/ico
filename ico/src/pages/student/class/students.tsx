@@ -18,7 +18,7 @@ function students() {
 	}, [])
 
 	return (
-		<>
+		<div css={mainWrapperCSS}>
 			<PageHeader title={"반 친구들"} addComp={<TabMenu menus={ClassTabMenus()} selected={0} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
@@ -34,9 +34,13 @@ function students() {
 					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	)
 }
+
+const mainWrapperCSS = css`
+	padding-bottom: 30px;
+`
 
 const wrapperCSS = css`
 	width: 100%;
@@ -79,7 +83,6 @@ const contentWrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-	margin-bottom: 30px;
 
 	> span {
 		font-size: var(--student-h3);
