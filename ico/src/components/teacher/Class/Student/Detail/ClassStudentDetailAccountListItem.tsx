@@ -1,3 +1,4 @@
+import useGetNation from "@/hooks/useGetNation"
 import { transanctionType } from "@/types/teacher/apiReturnTypes"
 import { css } from "@emotion/react"
 
@@ -12,11 +13,13 @@ function ClassStudentDetailAccountListItem({
 	transaction,
 	showDate,
 }: ClassStudentDetailAccountListItemPropsType) {
+	const [nation] = useGetNation()
+
 	return (
 		<div css={wrapperCSS}>
 			<h5 css={dateCSS({ showDate })}>{date}</h5>
 			<h5 css={transaction.amount.toString().includes("-") ? minusMoneyCSS : plusMoneyCSS}>
-				{transaction.amount} {localStorage.getItem("currency")}
+				{transaction.amount} {nation.currency}
 			</h5>
 			<h5 css={contentCSS}>{transaction.title}</h5>
 		</div>

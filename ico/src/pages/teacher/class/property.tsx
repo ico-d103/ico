@@ -17,8 +17,10 @@ import { getTreasuryHistoryAPI } from "@/api/teacher/class/getTreasuryHistoryAPI
 import { selectedPage } from "@/store/store"
 import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
+import useGetNation from "@/hooks/useGetNation"
 
 function property() {
+	const [nation] = useGetNation()
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [isDepositMenuOpenAtom, setIsDepositMenuOpenAtom] = useAtom(isDepositMenuOpen)
 	const selectedPageAtom = useAtomValue(selectedPage)
@@ -62,7 +64,7 @@ function property() {
 				<div>
 					현재{" "}
 					<b>
-						{treasury.data?.treasury} {localStorage.getItem("currency")}
+						{treasury.data?.treasury} {nation.currency}
 					</b>
 					가 국고에 있어요.
 				</div>
