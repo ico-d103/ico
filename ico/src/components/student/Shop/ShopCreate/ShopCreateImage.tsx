@@ -20,7 +20,8 @@ const ShopCreateImage = ({ sendImageList }: ShopCreateImageProps) => {
 			e.preventDefault()
 			return
 		}
-		setImageList([...imageList, ...e.target.files])
+
+		setImageList([...imageList, ...Array.from(e.target.files)])
 	}
 
 	function getImageUrl(file: File): string {

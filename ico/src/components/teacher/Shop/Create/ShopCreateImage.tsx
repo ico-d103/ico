@@ -22,7 +22,9 @@ const ShopCreateImage = ({ sendImageList }: ShopCreateImageProps) => {
 			e.preventDefault()
 			return
 		}
-		setImageList([...imageList, ...e.target.files])
+		console.log(e)
+
+		setImageList([...imageList, ...Array.from(e.target.files)])
 	}
 
 	function getImageUrl(file: File): string {
@@ -68,7 +70,7 @@ const ShopCreateImage = ({ sendImageList }: ShopCreateImageProps) => {
 				</svg>
 			</div>
 			<div css={parentCSS}>
-				<Carousel content={imageElements} />
+				<Carousel content={imageElements} identifier={"createImages"} />
 			</div>
 		</>
 	)

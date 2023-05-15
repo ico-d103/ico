@@ -27,9 +27,6 @@ module.exports = withPWA({
 
 module.exports = {
 	...module.exports,
-	typescript: {
-		ignoreBuildErrors: true,
-	},
 	compilerOptions: {
 		target: "es2015",
 	},
