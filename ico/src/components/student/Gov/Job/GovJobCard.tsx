@@ -32,7 +32,7 @@ function GovJobCard({ job }: GovJobCardPropsType) {
 					<div css={conditionWrapperCSS}>
 						<h4>월급</h4>
 						<h3>
-							{job.wage} {nation.currency}
+							{(job.wage * 30).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} {nation.currency}
 						</h3>
 					</div>
 				</div>
@@ -91,10 +91,10 @@ const contentWrapperCSS = css`
 	height: 120px;
 	top: 20px;
 	left: 120px;
-
+	margin-top: 8px;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-around;
+	/* justify-content: space-around; */
 
 	> h3 {
 		color: var(--common-back-color-2);
@@ -112,7 +112,7 @@ const conditionWrapperCSS = css`
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 7px;
+	margin-bottom: 6px;
 
 	> h3 {
 		font-size: var(--student-h3);

@@ -3,9 +3,11 @@ import Image from "next/image"
 import { useRouter } from "next/router"
 import { useQuery } from "@tanstack/react-query"
 import Carousel from "@/components/common/Carousel/Carousel"
+import QRCode from "react-qr-code"
 
 import { getTeacherProductDetailAPI } from "@/api/common/shop/getTeacherProductDetailAPI"
 import { getTeacherProductDetailType } from "@/types/teacher/apiReturnTypes"
+import QRScanner from "@/components/student/Shop/QRScanner"
 
 function product() {
 	const router = useRouter()
@@ -43,7 +45,9 @@ function product() {
 					)}
 				</div>
 				<div css={QRcss}>
-					<Image src={"https://placehold.it/150x150"} alt={"QR"} width={150} height={150} />
+				<QRCode value={`${new Date()}`} />
+				<QRScanner/>
+					{/* <Image src={"https://placehold.it/150x150"} alt={"QR"} width={150} height={150} /> */}
 				</div>
 			</div>
 
