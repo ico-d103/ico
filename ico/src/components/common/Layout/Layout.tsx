@@ -6,26 +6,30 @@ import TransitionWrapper from "@/components/student/layout/TransitionWrapper/Tra
 import NavBar from "@/components/student/layout/NavBar/NavBar"
 import { getNationAPI } from "@/api/common/getNationAPI"
 import { nationData } from "@/store/store"
-import { useAtom } from "jotai"
+import { useSetAtom } from "jotai"
 import { getCookie } from "@/api/cookie"
 import { useQueryClient } from "@tanstack/react-query"
 import { getTokenStatusAPI } from "@/api/common/getTokenStatusAPI"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "../StackNotification/NotiTemplate"
 
 type LayoutProps = {
 	children: any
 }
 
 function Layout({ children }: LayoutProps) {
-	const [nationDataAtom, setNationDataAtom] = useAtom(nationData)
-	const queryClient = useQueryClient()
-
+	const noti = useNotification()
 	const router = useRouter()
+	const pathname = router.pathname
+	const queryClient = useQueryClient()
+	const setNationDataAtom = useSetAtom(nationData)
+	const separator: string = useRouter().pathname.split("/")[1]
+	const accessToken = getCookie("Authorization")
 
 	useEffect(() => {
 		queryClient.clear()
 	}, [])
 
-	
 	useEffect(() => {
 		getTokenStatusAPI()
 			.then((res) => {
@@ -50,8 +54,6 @@ function Layout({ children }: LayoutProps) {
 	}, [getTokenStatusAPI])
 
 	useEffect(() => {
-		const accessToken = getCookie("Authorization")
-
 		if (accessToken) {
 			getNationAPI().then((res) => {
 				if (res) {
@@ -59,9 +61,62 @@ function Layout({ children }: LayoutProps) {
 				}
 			})
 		}
-	}, [getCookie("Authorization")])
+	}, [accessToken])
 
-	const separator: string = useRouter().pathname.split("/")[1]
+	useEffect(() => {
+		if (accessToken) {
+			getTokenStatusAPI().then((res) => {
+				if (res.role === "TEACHER") {
+					if (separator === "teacher") {
+						if (res.status === "approved") {
+							return
+						} else if (res.status === "require_create_nation") {
+							router.push("/teacher/create")
+						} else if (res.status === "waiting") {
+							router.push("/teacher/login")
+							noti({
+								content: <NotiTemplate type={"alert"} content={`교사 인증서 승인 대기중입니다.`} />,
+								duration: 3000,
+							})
+						} else if (res.status === "require_submit_certification") {
+							router.push("/teacher/login")
+							noti({
+								content: <NotiTemplate type={"alert"} content={`교사 인증에 실패하였습니다.`} />,
+								duration: 3000,
+							})
+						}
+					} else if (separator === "student" || separator === "admin") {
+						router.push("/")
+						noti({
+							content: <NotiTemplate type={"alert"} content={`잘못된 접근입니다.`} />,
+							duration: 3000,
+						})
+					}
+				} else if (res.role === "STUDENT") {
+					if (separator === "student") {
+						if (res.status == "require_submit_code") {
+							router.push("/student/enter")
+						} else if (res.status == "waiting") {
+							router.push("/student/check")
+						} else if (res.status == "require_refresh_token") {
+							router.push("/student/check")
+						} else if (res.status == "approved") {
+							// router.push("/student/home")
+							return
+						}
+					} else if (separator === "teacher" || separator === "admin") {
+						router.push("/")
+						noti({
+							content: <NotiTemplate type={"alert"} content={`잘못된 접근입니다.`} />,
+							duration: 3000,
+						})
+					}
+				} else if (res.role === "ADMIN") {
+					router.push("/admin")
+				}
+			})
+		}
+	}, [pathname])
 
 	if (separator === "teacher") {
 		return (
