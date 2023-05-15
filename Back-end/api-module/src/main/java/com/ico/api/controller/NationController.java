@@ -95,7 +95,7 @@ public class NationController {
      * @param dto 거래 시작 시간, 거래 종료 시간
      * @return Httpstatus
      */
-    @PutMapping("teacher/trading-time")
+    @PutMapping("/teacher/trading-time")
     public ResponseEntity<HttpStatus> updateTradingTime(HttpServletRequest request, @Valid @RequestBody TradingTimeReqDto dto){
         nationService.updateTradingTime(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);

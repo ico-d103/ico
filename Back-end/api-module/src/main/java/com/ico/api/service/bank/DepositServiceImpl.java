@@ -134,7 +134,8 @@ public class DepositServiceImpl implements DepositService{
         String title;
 
         // 중도 해지
-        if(now.toLocalDate().isBefore(deposit.getEndDate().toLocalDate())){
+//        if(now.toLocalDate().isBefore(deposit.getEndDate().toLocalDate())){
+        if(now.isBefore(deposit.getEndDate())){
             title = "예금 중도 해지";
         }
         else{

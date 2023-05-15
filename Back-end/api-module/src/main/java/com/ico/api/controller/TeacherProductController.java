@@ -1,5 +1,6 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.teacherProduct.ProductQRReqDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.api.service.teacher.TeacherProductService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,6 +65,19 @@ public class TeacherProductController {
     @PostMapping("/student/{teacherProductId}")
     public ResponseEntity<HttpStatus> buyProduct(HttpServletRequest request, @PathVariable Long teacherProductId) {
         teacherProductService.buyProduct(request, teacherProductId);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * QR스캔을 통한 교사 상품 대여
+     *
+     * @param request
+     * @param dto
+     * @return
+     */
+    @PostMapping("/student/rental")
+    public ResponseEntity<HttpStatus> rentalProduct(HttpServletRequest request, @Valid @RequestBody ProductQRReqDto dto){
+        teacherProductService.rentalProduct(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
