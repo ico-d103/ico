@@ -111,6 +111,8 @@ const dateCSS = css`
 
 const contentCSS = css`
 	line-height: 130%;
+	word-break: normal;
+	white-space: pre;
 `
 
 export default GovRuleClassDetail

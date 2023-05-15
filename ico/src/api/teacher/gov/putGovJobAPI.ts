@@ -4,6 +4,7 @@ import { successReturnType } from "@/types/common/apiReturnTypes"
 type paramsType = {
     idx: number;
     body: {
+        image: string
         title: string
         detail: string
         total: number
