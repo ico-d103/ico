@@ -9,18 +9,22 @@ import CommonListElement from "../../common/CommonListElement/CommonListElement"
 import { getInvestItemAPI } from "@/api/teacher/finanace/getInvestItemAPI"
 import FinanceInvestIssueCreate from "./FinanceInvestIssueCreate"
 import FinanceInvestChart from "./FinanceInvestChart"
+import FinanceInvestIssueDetail from "./FinanceInvestIssueDetail"
 
 import { LineSvgProps } from "@nivo/line"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getFinanceInvestIssueType } from "@/types/student/apiReturnTypes"
+import { dateFormatter } from "@/util/dateFormatter"
 
 function FinanceInvestIssueForm() {
 	const [chartData, setChartData] = useState<LineSvgProps["data"] | null>(null)
 
 	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceInvestIssueType>(
-		["financeInvest"],
+		["teacher", "financeInvest"],
 		getInvestItemAPI,
 	)
+
+	console.log(data)
 
 	const price = data?.issue[0].amount
 
@@ -50,6 +54,12 @@ function FinanceInvestIssueForm() {
 
 	const [openComp, closeComp, compState] = useCompHandler()
 
+	const renderRule =
+		data?.issue &&
+		data?.issue.map((el, idx) => {
+			return <FinanceInvestIssueDetail showIdx={idx} date={el.date} amount={el.amount} content={el.content} />
+		})
+
 	return (
 		<>
 			{chartData && <FinanceInvestChart data={chartData} />}
@@ -77,45 +87,9 @@ function FinanceInvestIssueForm() {
 				closeComp={closeComp}
 			/>
 
-			{/* <CommonListElement idx={showIdx}>
-				<div css={detailWrapperCSS}>
-					<div>
-						<div css={titleCSS}>{title}</div>
-						<div css={contentCSS}>{content}</div>
-					</div>
-					<div css={dateCSS}>{date}</div>
-				</div>
-			</CommonListElement> */}
+			{renderRule}
 		</>
 	)
 }
-
-const detailWrapperCSS = css`
-	width: 100%;
-	display: flex;
-	justify-content: space-between;
-	margin-top: 12px;
-	/* align-items: center; */
-`
-const titleCSS = css`
-	font-weight: 700;
-	margin-bottom: 10px;
-`
-
-const dateCSS = css`
-	height: 100%;
-	min-width: 100px;
-	font-size: var(--teacher-h6);
-	font-weight: 600;
-	color: rgba(0, 0, 0, 0.6);
-
-	margin: 4px 16px 0px 16px;
-`
-
-const contentCSS = css`
-	line-height: 130%;
-	word-break: normal;
-	white-space: pre;
-`
 
 export default FinanceInvestIssueForm

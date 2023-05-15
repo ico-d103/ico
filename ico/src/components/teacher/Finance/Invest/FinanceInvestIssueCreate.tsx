@@ -4,38 +4,36 @@ import React, { useEffect, useState } from "react"
 import Dropdown from "@/components/common/Dropdown/Dropdown"
 import useCompHandler from "@/hooks/useCompHandler"
 import { postInvestItemAPI } from "@/api/teacher/finanace/postInvestItemAPI"
+import { useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
 function FinanceInvestIssueCreate({
 	subInputChangeHandler,
 	inputState,
 	buttons,
+	closeHandler,
 	price,
 }: {
 	subInputChangeHandler?: any
 	inputState?: any
 	buttons?: any
+	closeHandler?: Function
 	price?: any
 }) {
+	const queryClient = useQueryClient()
+	const createMutation = useMutation((a: number) =>
+		postInvestItemAPI({ body: { amount: inputState?.sub.value, content: inputState?.content, price: price } }),
+	)
+
 	const [openDropdown, closeDropdown, dropdownState] = useCompHandler()
 
-	const pushInvestIssue = async () => {
-		postInvestItemAPI({
-			body: {
-				amount: inputState?.sub.value,
-				content: inputState?.content,
-				price: price,
+	const submitHandler = () => {
+		createMutation.mutate(1, {
+			onSuccess: () => {
+				closeHandler && closeHandler()
+				return queryClient.invalidateQueries(["teacher", "financeInvest"])
 			},
 		})
-			.then((res) => {
-				console.log(res)
-			})
-			.catch((err) => {
-				console.log(err)
-			})
-	}
-
-	const submitHandler = () => {
-		pushInvestIssue()
 	}
 
 	const setTaxPercent = () => {

@@ -101,7 +101,7 @@ function GovExchequerCreate({
 
 	const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (
-			(inputState?.sub.taxation === 0 && Number(event.target.value) <= 20) ||
+			(inputState?.sub.taxation === 0 && Number(event.target.value) <= 50) ||
 			(inputState?.sub.taxation === 1 && Number(event.target.value) <= 1000000)
 		) {
 			subInputChangeHandler && subInputChangeHandler({ key: "value", event })
