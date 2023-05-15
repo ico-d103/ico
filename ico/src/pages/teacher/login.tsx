@@ -53,8 +53,6 @@ function login() {
 				setCookie("Authorization", res, { path: "/", maxAge: 30 * 24 * 60 * 60 })
 
 				getTokenStatusAPI().then((res) => {
-					console.log("res : ", res)
-
 					if (res.role === "TEACHER") {
 						// 교사인증 O -> nation ID가 있을 때
 						if (res.status === "approved") {
