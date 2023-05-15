@@ -268,6 +268,14 @@ public class StudentServiceImpl implements StudentService{
         return dtoList;
     }
 
+    @Override
+    public Byte findStudentCreditRating(HttpServletRequest request) {
+        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return student.getCreditRating();
+    }
+
     /**
      * 신용점수 부여 시 올바른 범위 내의 신용점수 부여
      *

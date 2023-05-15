@@ -119,6 +119,12 @@ public class ResumeServiceImpl implements ResumeService {
         log.info("[rejectResume] 직업 승인 신청 거절로 내역 삭제");
     }
 
+    @Override
+    public boolean checkRequestJob(Long jobId, HttpServletRequest request) {
+        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
+        return resumeMongoRepository.findByStudentIdAndJobId(studentId, jobId).isPresent();
+    }
+
     /**
      * 유효한 이력서 조회
      *

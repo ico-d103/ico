@@ -141,4 +141,16 @@ public class StudentController {
         return ResponseEntity.ok(studentService.findListStudent(request));
     }
 
+    /**
+     * 학생의 신용등급 조회
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping("/student/credit-rating")
+    public ResponseEntity<Byte> findStudentCreditRating(HttpServletRequest request) {
+        return ResponseEntity.ok(studentService.findStudentCreditRating(request));
+    }
+
+
 }
