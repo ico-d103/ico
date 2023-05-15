@@ -37,7 +37,7 @@ public class MongoDefaultNationLoader implements CommandLineRunner {
         document.put("_id", "1");
 
         // 기본 세금
-        document.put("default_tax", Arrays.asList(
+        document.put("default_taxes", Arrays.asList(
                 new HashMap<String, Object>() {{
                     put("title", "자리세");
                     put("detail", "자리세 설명");
@@ -59,7 +59,7 @@ public class MongoDefaultNationLoader implements CommandLineRunner {
         ));
 
         // 기본 직업
-        document.put("default_job", Arrays.asList(
+        document.put("default_jobs", Arrays.asList(
                 new HashMap<String, Object>() {{
                     put("title", "소방관");
                     put("detail", "불을 끄는 소방관");
@@ -83,7 +83,7 @@ public class MongoDefaultNationLoader implements CommandLineRunner {
         ));
 
         // 기본 예금 이자율
-        document.put("default_interest", Arrays.asList(
+        document.put("default_interests", Arrays.asList(
                 new HashMap<String, Object>() {{
                     put("credit_rating", 1);
                     put("short_period", 15);
@@ -137,7 +137,7 @@ public class MongoDefaultNationLoader implements CommandLineRunner {
         ));
 
         // 기본 학급규칙
-        document.put("default_rule", Arrays.asList(
+        document.put("default_rules", Arrays.asList(
                 new HashMap<String, Object>() {{
                     put("title", "헌법 제 1조 1항");
                     put("detail", "대한민국은 민주공화국이다.");
