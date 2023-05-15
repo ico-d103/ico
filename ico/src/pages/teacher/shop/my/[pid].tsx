@@ -8,11 +8,14 @@ import QRCode from "react-qr-code"
 import { getTeacherProductDetailAPI } from "@/api/common/shop/getTeacherProductDetailAPI"
 import { getTeacherProductDetailType } from "@/types/teacher/apiReturnTypes"
 import QRScanner from "@/components/student/Shop/QRScanner/QRScanner"
+import useGetNation from "@/hooks/useGetNation"
+import Button from "@/components/common/Button/Button"
 
 function product() {
 	const router = useRouter()
 	const { pid } = router.query
 	const productId = typeof pid === "string" ? pid : ""
+	const [nation] = useGetNation()
 
 	const { data } = useQuery<getTeacherProductDetailType>(["product", productId], () =>
 		getTeacherProductDetailAPI({ pid: productId }),
@@ -23,7 +26,8 @@ function product() {
 			src={imageUrl}
 			css={css`
 				width: auto;
-				height: 40vh;
+				height: 60vh;
+				border-radius: 10px;
 			`}
 		/>
 	))
@@ -34,20 +38,20 @@ function product() {
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
 				<div css={productCSS}>
-					<div>{data?.title}</div>
+					<div css={titleWrapperCSS}>
+						<div>
+						{data?.title}
+						</div>
+						<Button text={"QR코드 생성"} fontSize={"var(--teacher-h5)"} width={"140px"} theme={"vividPositive"} onClick={() => {}}  />
+					</div>
 					{/* 이름 getnation으로 선생님이름 받아올까 생각중 */}
 					<hr />
-					{data && (
-						<div>
-							<div>{data?.amount}미소</div>
-							<div>현재 상품이 {data?.count - data?.sold}개 남았습니다.</div>
-						</div>
-					)}
+					{/* <div css={css`width: 100%; height: 1px; border-bottom: 1px solid rgba(0, 0, 0, 0.2);`}/> */}
+					
 				</div>
 				<div css={QRcss}>
-					<QRCode value={`/student/teacher/buy/${new Date().getTime()}`} />
-					{}
-					{/* <Image src={"https://placehold.it/150x150"} alt={"QR"} width={150} height={150} /> */}
+					{/* <QRCode value={`/student/teacher/buy/${new Date().getTime()}`} size={128} /> */}
+					
 				</div>
 			</div>
 
@@ -56,10 +60,27 @@ function product() {
 			</div>
 
 			<div css={footerCSS}>
-				<div>
-					<div>상품 상세 설명</div>
+		
+				{data && (
+						<div css={adinfoWrapperCSS}>
+							<div css={amountWrapperCSS}><div css={decoCSS}/>상품 정보</div>
+
+
+							<div css={priceCSS}>{data?.amount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {nation.currency}</div>
+							<div css={css`display: flex;`}>
+							<div css={leftWrapperCSS}>{data?.count - data?.sold}개 남음 </div>
+							<div css={leftWrapperCSS}>&nbsp; · {data.date}에 등록된 상품입니다.</div>
+								</div>
+							
+						</div>
+					)}
+					<div css={lineCSS}/>
+					<div css={detailLabelWrapperCSS}>
+						<div css={decoCSS}/>
+						상품 상세 설명
+					</div>
 					<div>{data?.detail}</div>
-				</div>
+				
 			</div>
 		</div>
 	)
@@ -76,6 +97,7 @@ const wrapperCSS = css`
 	grid-gap: 0;
 `
 
+
 const headerCSS = css`
 	display: flex;
 	margin-bottom: 10px;
@@ -89,12 +111,12 @@ const productCSS = css`
 	}
 
 	> hr {
-		border: 1.5px solid rgba(0, 0, 0, 0.5);
-		margin-bottom: 5px;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		margin-bottom: 10px;
 	}
 
 	> div:nth-of-type(1) {
-		font-size: 3rem;
+		font-size: 2rem;
 		font-weight: bold;
 
 		margin-bottom: 5px;
@@ -138,28 +160,91 @@ const parentCSS = css`
 `
 
 const footerCSS = css`
-	display: flex;
+	/* display: flex;
 	justify-content: space-between;
-	align-items: center;
+	align-items: center; */
 	overflow: hidden;
-
-	> div:nth-of-type(1) {
+	width: 100%;
+	/* > div:nth-of-type(1) {
 		> div:nth-of-type(1) {
-			font-size: 1.6rem;
+			
 		}
 		> div:nth-of-type(2) {
-			font-size: 0.95rem;
-			word-wrap: break-word;
-			/* max-height: 100px;
-			overflow-y: auto; */
+
 		}
-		width: 70%; /* 좌측 div에 고정된 크기 지정 */
+		width: 70%;
 	}
 
 	> div:nth-of-type(2) {
 		display: flex;
-		width: 30%; /* 우측 div에 고정된 크기 지정 */
-	}
+		width: 30%; 
+	} */
 `
+
+const adinfoWrapperCSS = css`
+	/* display: flex; */
+	/* justify-content: space-between; */
+	width: 100%;
+`
+
+const amountWrapperCSS = css`
+	font-size: 1.4rem;
+	font-weight: 600;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 21px;
+	margin-top: 36px;
+`
+
+const priceCSS = css`
+font-size: 1.2rem;
+	font-weight: 700;
+	color: var(--teacher-highlight-color);
+
+	margin-bottom: 8px;
+`
+
+const detailLabelWrapperCSS = css`
+	height: 24px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-top: 16px;
+	font-size: 1.4rem;
+	font-weight: 600;
+	margin-bottom: 21px;
+`
+
+const leftWrapperCSS = css`
+	color: rgba(0, 0, 0, 0.6);
+	font-size: var(--teacher-h5);
+	font-weight: 500;
+	margin-bottom: 4px;
+	
+`
+
+const titleWrapperCSS = css`
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+`
+
+const decoCSS = css`
+	height: 100%;
+	width: 12px;
+	border-radius: 2px;
+	background-color: var(--teacher-highlight-color);
+`
+
+const lineCSS = css`
+	width: 100%;
+	height: 1px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+	margin-top: 24px;
+	margin-bottom: 24px;
+`
+
 
 export default product
