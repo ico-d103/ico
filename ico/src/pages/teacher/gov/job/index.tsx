@@ -55,6 +55,13 @@ function index() {
 	)
 }
 
+export async function getServerSideProps() {
+	return {
+	  props: {},
+	};
+  }
+
+
 const contentWrapperCSS = css`
 	flex: 1;
 	background-color: var(--common-back-color-2);

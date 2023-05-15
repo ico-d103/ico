@@ -51,6 +51,13 @@ function asset() {
 	)
 }
 
+export async function getServerSideProps() {
+	return {
+	  props: {},
+	};
+  }
+
+
 const assetWrapperCSS = css`
 	display: flex;
 	flex-direction: column;

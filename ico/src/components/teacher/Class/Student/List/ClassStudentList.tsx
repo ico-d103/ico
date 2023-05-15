@@ -20,6 +20,7 @@ function StudentList() {
 					</>
 				)}
 				<StudentEnteredList />
+
 			</div>
 		</>
 	)

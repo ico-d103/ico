@@ -43,6 +43,13 @@ function coupon() {
 	)
 }
 
+export async function getServerSideProps() {
+	return {
+	  props: {},
+	};
+  }
+
+
 const couponWrapperCSS = css`
 	display: flex;
 	flex-direction: column;

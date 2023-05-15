@@ -103,7 +103,7 @@ function Form({
 	return (
 		<AnimatedRenderer compState={isOpened} initHeight={initHeight}>
 			<div css={formWrapperCSS}>
-				{frontCompRender ? frontCompRender : idxRender}
+				{frontCompRender ? <div css={css`margin-right: 16px;`}>{frontCompRender}</div> : idxRender}
 
 				<FormInput
 					inputState={inputState}
@@ -124,14 +124,16 @@ function Form({
 const formWrapperCSS = css`
 	background-color: var(--teacher-main-color-2);
 	padding: 16px 16px 16px 20px;
-	
 	border-radius: 10px;
 	display: flex;
+
+
 `
 
 const subInputWrapperCSS = css`
 	background-color: rgba(0, 50, 30, 0.1);
 	border-radius: 0px 0px 10px 10px;
+	
 `
 
 const showIdxCSS = css`
