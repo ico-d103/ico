@@ -11,11 +11,13 @@ import { getJobListType } from "@/types/student/apiReturnTypes"
 function jobsearch() {
 	const navigate = useNavigate()
 	const [jobList, setJobList] = useState<getJobListType[]>([])
+	const [myGrade, setMyGrade] = useState<number>(4)
 
 	useEffect(() => {
 		getJobListAPI().then((res) => {
 			setJobList(res)
 		})
+		// 내 신용등급 불러오는 api 연결 후 setMyGrade에 저장
 	}, [])
 
 	return (
@@ -28,7 +30,7 @@ function jobsearch() {
 					</span>
 					<div css={jobListCSS}>
 						{jobList.map((job, idx) => (
-							<ClassJobSearchCard key={idx} job={job} />
+							<ClassJobSearchCard key={idx} job={job} myGrade={myGrade} />
 						))}
 					</div>
 					<div

@@ -4,17 +4,42 @@ import Modal from "@/components/common/Modal/Modal"
 import useCompHandler from "@/hooks/useCompHandler"
 import ClassJobSearchModal from "./ClassJobSearchModal"
 import { getJobListType } from "@/types/student/apiReturnTypes"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 type ClassJobSearchCardPropsType = {
 	job: getJobListType
+	myGrade: number
 }
 
-function ClassJobSearchCard({ job }: ClassJobSearchCardPropsType) {
+function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
+	const noti = useNotification()
 	const [openComp, closeComp, compState] = useCompHandler()
+
+	const checkValidApplyHandler = (canApply: boolean) => {
+		if (!canApply) {
+			noti({
+				content: <NotiTemplate type={"alert"} content={`신청할 수 없는 직업입니다.`} />,
+				duration: 3000,
+			})
+
+			return
+		}
+
+		// 학생이 이미 이 직업을 신청했는지 여부를 알기
+
+		// 이미 신청했다면 notification 알림
+
+		// 신청하지 않았다면 모달 오픈
+		openComp()
+	}
 
 	return (
 		<>
-			<div css={wrapperCSS(job.color)} onClick={openComp}>
+			<div
+				css={myGrade <= job.creditRating ? wrapperCSS(job.color) : hiddenWrapperCSS(job.color)}
+				onClick={() => checkValidApplyHandler(myGrade <= job.creditRating)}
+			>
 				<div css={imageWrapperCSS}>
 					<LoadImage wrapperCss={imgCSS} src={job.image} alt={"job_image"} />
 				</div>
@@ -39,6 +64,19 @@ const wrapperCSS = (color: string) => {
 		width: 270px;
 		height: 160px;
 		background-color: ${color};
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		border-radius: 10px;
+		position: relative;
+		overflow: hidden;
+	`
+}
+
+const hiddenWrapperCSS = (color: string) => {
+	return css`
+		width: 270px;
+		height: 160px;
+		background-color: ${color};
+		filter: brightness(55%);
 		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 		border-radius: 10px;
 		position: relative;
