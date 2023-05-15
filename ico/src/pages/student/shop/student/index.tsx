@@ -49,7 +49,8 @@ function index() {
 			<div css={cardWrapperCSS}>
 				{cardData?.map((card) => (
 					<Card
-						key={card.id}
+						id={card.id}
+						key={`shop-student-${card.id}`}
 						title={card.title}
 						amount={card.amount}
 						image={card.images[0]}
