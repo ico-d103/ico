@@ -3,6 +3,9 @@ package com.ico.api.service.nation;
 import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
 import com.ico.api.dto.nation.TradingTimeReqDto;
+import com.ico.api.service.interest.InterestRequestService;
+import com.ico.api.service.job.JobRequestService;
+import com.ico.api.service.tax.TaxRequestService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.code.Role;
@@ -42,6 +45,9 @@ public class NationServiceImpl implements NationService {
     private final TeacherRepository teacherRepository;
     private final StockRepository stockRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final JobRequestService jobRequestService;
+    private final InterestRequestService interestRequestService;
+    private final TaxRequestService taxRequestService;
 
     @Override
     @Transactional
@@ -77,6 +83,16 @@ public class NationServiceImpl implements NationService {
                         // 반을 생성했을 때 교사 테이블의 Nation 업데이트
                         teacher.setNation(nation);
                         teacherRepository.save(teacher);
+
+                        // Job 생성
+                        jobRequestService.createJob(nation);
+
+                        // Interest 생성
+                        interestRequestService.createInterest(nation);
+
+                        // Tax 생성
+                        taxRequestService.createTax(nation);
+
                         // 반을 생성했을 때 교사의 토큰 업데이트 / 학생은 직접 확인 버튼을 눌러서 도메인/api/token 으로 직접 요청해야한다.
                         return jwtTokenProvider.updateTokenCookie(request);
                     }
