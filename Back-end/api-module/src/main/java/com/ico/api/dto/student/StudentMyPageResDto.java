@@ -1,6 +1,6 @@
 package com.ico.api.dto.student;
 
-import com.ico.core.entity.Job;
+import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import lombok.Builder;
@@ -58,10 +58,10 @@ public class StudentMyPageResDto {
      *
      * @param student
      * @param nation
-     * @param job
+     * @param studentJob
      * @return
      */
-    public StudentMyPageResDto of(Student student, Nation nation, Job job, int depositAmount, int investAmount) {
+    public StudentMyPageResDto of(Student student, Nation nation, StudentJob studentJob, int depositAmount, int investAmount) {
         return StudentMyPageResDto.builder()
                 .school(nation.getSchool())
                 .room(nation.getRoom())
@@ -70,9 +70,9 @@ public class StudentMyPageResDto {
                 .account(student.getAccount())
                 .creditRating(student.getCreditRating())
                 // TODO: 학생의 직업이 엾을 경우 추후에 학생 기본 이미지 반환
-                .jobImage(job == null ? null : job.getImage())
-                .jobName(job == null ? null : job.getTitle())
-                .color(job == null ? null : job.getColor())
+                .jobImage(studentJob == null ? null : studentJob.getImage())
+                .jobName(studentJob == null ? null : studentJob.getTitle())
+                .color(studentJob == null ? null : studentJob.getColor())
                 .deposit(depositAmount)
                 .invest(investAmount)
                 .build();

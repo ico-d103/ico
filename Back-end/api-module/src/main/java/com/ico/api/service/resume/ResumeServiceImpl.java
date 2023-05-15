@@ -2,13 +2,13 @@ package com.ico.api.service.resume;
 
 import com.ico.api.dto.resume.ResumeResDto;
 import com.ico.api.user.JwtTokenProvider;
-import com.ico.core.entity.Job;
+import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Resume;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
-import com.ico.core.repository.JobRepository;
+import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.ResumeMongoRepository;
 import com.ico.core.repository.StudentRepository;
@@ -34,7 +34,7 @@ public class ResumeServiceImpl implements ResumeService {
 
     private final ResumeMongoRepository resumeMongoRepository;
 
-    private final JobRepository jobRepository;
+    private final StudentJobRepository studentJobRepository;
 
     private final StudentRepository studentRepository;
 
@@ -46,11 +46,11 @@ public class ResumeServiceImpl implements ResumeService {
         Long nationId = jwtTokenProvider.getNation(token);
         Long studentId = jwtTokenProvider.getId(token);
 
-        Job job = jobRepository.findByIdAndNationId(jobId, nationId)
+        StudentJob studentJob = studentJobRepository.findByIdAndNationId(jobId, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        if (job.getCreditRating() < student.getCreditRating()) {
+        if (studentJob.getCreditRating() < student.getCreditRating()) {
             throw new CustomException(ErrorCode.INVALID_CREDIT_RATING);
         }
         log.info("자격요건 통과");
@@ -68,7 +68,7 @@ public class ResumeServiceImpl implements ResumeService {
     public List<ResumeResDto> findResume(Long jobId, HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
-        jobRepository.findById(jobId)
+        studentJobRepository.findById(jobId)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
         List<Resume> resumeList = resumeMongoRepository.findAllByJobIdAndNationId(jobId, nationId);
         List<ResumeResDto> dtoList = new ArrayList<>();
@@ -88,21 +88,21 @@ public class ResumeServiceImpl implements ResumeService {
 
         Resume resume = findAndValidateResume(resumeId, nationId);
         Student student = findAndValidateStudent(resume);
-        Job job = findAndValidateJob(resume);
+        StudentJob studentJob = findAndValidateJob(resume);
 
-        if (student.getJob() != null) {
+        if (student.getStudentJob() != null) {
             log.info("[assignResume] 이미 해당 학생의 직업이 존재하는 경우");
             deleteResume(resume);
             throw new CustomException(ErrorCode.ALREADY_HAS_JOB);
         }
 
-        if (job.getCount() == job.getTotal()) {
+        if (studentJob.getCount() == studentJob.getTotal()) {
             log.info("[assignResume] 직업 정원이 다 찬 경우");
             deleteResume(resume);
             throw new CustomException(ErrorCode.ALREADY_FULL_JOB);
         }
 
-        assignJobToStudent(job, student);
+        assignJobToStudent(studentJob, student);
         deleteAllResumesByStudentId(student.getId());
     }
 
@@ -169,8 +169,8 @@ public class ResumeServiceImpl implements ResumeService {
      * @param resume
      * @return job
      */
-    private Job findAndValidateJob(Resume resume) {
-        return jobRepository.findById(resume.getJobId())
+    private StudentJob findAndValidateJob(Resume resume) {
+        return studentJobRepository.findById(resume.getJobId())
                 .orElseThrow(() -> {
                     log.info("[assignResume] 신청한 직업이 존재하지 않는 경우");
                     deleteResume(resume);
@@ -201,15 +201,15 @@ public class ResumeServiceImpl implements ResumeService {
     /**
      * 학생에게 직업 배정
      *
-     * @param job
+     * @param studentJob
      * @param student
      */
-    private void assignJobToStudent(Job job, Student student) {
-        job.setCount((byte) (job.getCount() + 1));
-        job.setStudentNames(job.getStudentNames() + student.getName() + ",");
-        jobRepository.save(job);
+    private void assignJobToStudent(StudentJob studentJob, Student student) {
+        studentJob.setCount((byte) (studentJob.getCount() + 1));
+        studentJob.setStudentNames(studentJob.getStudentNames() + student.getName() + ",");
+        studentJobRepository.save(studentJob);
         log.info("[assignResume] 직업 배정 인원 추가");
-        student.setJob(job);
+        student.setStudentJob(studentJob);
         studentRepository.save(student);
         log.info("[assignResume] 학생 직업 배정");
     }
