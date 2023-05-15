@@ -45,14 +45,14 @@ public class JobAvailableResDto {
      * @param studentJob
      * @return
      */
-    public JobAvailableResDto of(StudentJob studentJob) {
+    public JobAvailableResDto of(StudentJob studentJob, String image) {
         return JobAvailableResDto.builder()
                 .id(studentJob.getId())
                 .title(studentJob.getTitle())
                 .creditRating(studentJob.getCreditRating())
                 .count(studentJob.getCount())
                 .total(studentJob.getTotal())
-                .image(studentJob.getImage())
+                .image(image)
                 .color(studentJob.getColor())
                 .build();
     }

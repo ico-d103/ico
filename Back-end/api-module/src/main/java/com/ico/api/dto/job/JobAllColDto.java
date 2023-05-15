@@ -55,11 +55,11 @@ public class JobAllColDto {
      * @param studentJob
      * @return JobAllResDto
      */
-    public JobAllColDto of(StudentJob studentJob, String salary) {
+    public JobAllColDto of(StudentJob studentJob, String salary, String image) {
         return JobAllColDto.builder()
                 .id(studentJob.getId())
                 .title(studentJob.getTitle())
-                .image(studentJob.getImage())
+                .image(image)
                 .color(studentJob.getColor())
                 .creditRating(studentJob.getCreditRating())
                 .total(studentJob.getTotal())
