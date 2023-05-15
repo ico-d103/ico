@@ -201,7 +201,7 @@ public class StudentServiceImpl implements StudentService{
             investAmount = invest.get().getAmount();
         }
 
-        return new StudentMyPageResDto().of(student, student.getNation(), student.getJob(), depositAmount, investAmount);
+        return new StudentMyPageResDto().of(student, student.getNation(), student.getStudentJob(), depositAmount, investAmount);
     }
 
     @Override
@@ -263,7 +263,7 @@ public class StudentServiceImpl implements StudentService{
         List<Student> studentList = studentRepository.findAllByNationId(nationId);
         List<StudentAllResDto> dtoList = new ArrayList<>();
         for (Student student : studentList) {
-            dtoList.add(new StudentAllResDto().of(student, student.getJob()));
+            dtoList.add(new StudentAllResDto().of(student, student.getStudentJob()));
         }
         return dtoList;
     }

@@ -49,7 +49,7 @@ public class StudentListResDto {
                 .number(student.getNumber())
                 .amount(student.getAccount())
                 .creditRating(student.getCreditRating())
-                .job(student.getJob() == null ? null : student.getJob().getTitle())
+                .job(student.getStudentJob() == null ? null : student.getStudentJob().getTitle())
                 .build();
     }
 }

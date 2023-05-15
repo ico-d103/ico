@@ -47,7 +47,7 @@ public class Student {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id")
-    private Job job;
+    private StudentJob studentJob;
 
     @Column(nullable = false, unique = true)
     private String identity;

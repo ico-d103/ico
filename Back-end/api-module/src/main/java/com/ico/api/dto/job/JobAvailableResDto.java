@@ -1,6 +1,6 @@
 package com.ico.api.dto.job;
 
-import com.ico.core.entity.Job;
+import com.ico.core.entity.StudentJob;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,18 +42,18 @@ public class JobAvailableResDto {
     /**
      * repository에서 불러온 Job을 JobAvailableResDto로 생성
      *
-     * @param job
+     * @param studentJob
      * @return
      */
-    public JobAvailableResDto of(Job job) {
+    public JobAvailableResDto of(StudentJob studentJob) {
         return JobAvailableResDto.builder()
-                .id(job.getId())
-                .title(job.getTitle())
-                .creditRating(job.getCreditRating())
-                .count(job.getCount())
-                .total(job.getTotal())
-                .image(job.getImage())
-                .color(job.getColor())
+                .id(studentJob.getId())
+                .title(studentJob.getTitle())
+                .creditRating(studentJob.getCreditRating())
+                .count(studentJob.getCount())
+                .total(studentJob.getTotal())
+                .image(studentJob.getImage())
+                .color(studentJob.getColor())
                 .build();
     }
 }
