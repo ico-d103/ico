@@ -154,7 +154,7 @@ export type jobListType = {
 	creditRating: number
 	total: number
 	salary: string
-	recruitStudent: number
+	count: number
 	studentNames: string[] | string
 }
 
