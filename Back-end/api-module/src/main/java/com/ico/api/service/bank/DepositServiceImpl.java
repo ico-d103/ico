@@ -77,7 +77,8 @@ public class DepositServiceImpl implements DepositService{
             }
             // 적용 이자율
             interestRate = interest.getLongPeriod();
-            endDate = LocalDateTime.now().plusDays(21);
+//            endDate = LocalDateTime.now().plusDays(21);
+            endDate = LocalDateTime.now().plusHours(1);
         }
         else {
             if(interest.getShortPeriod() <= 0){
@@ -85,7 +86,8 @@ public class DepositServiceImpl implements DepositService{
             }
             // 적용 이자율
             interestRate = interest.getShortPeriod();
-            endDate = LocalDateTime.now().plusDays(7);
+//            endDate = LocalDateTime.now().plusDays(7);
+            endDate = LocalDateTime.now().plusMinutes(30);
         }
 
         // 예금 가격 출금
