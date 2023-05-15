@@ -5,7 +5,7 @@ type CarouselProps = {
 	content: any
 	identifier: string
 	scrollToRecent?: boolean
-	css: SerializedStyles
+	css?: SerializedStyles
 }
 
 function Carousel({ content, identifier, scrollToRecent, ...props }: CarouselProps) {
