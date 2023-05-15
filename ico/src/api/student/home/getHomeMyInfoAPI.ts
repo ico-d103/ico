@@ -12,6 +12,7 @@ type responseType = {
 export const getHomeMyInfoAPI = async ({}: paramsType) => {
     try {
         const response: responseType = await tokenInstance.get(`/student/student/my-page`)
+        console.log(response.data)
         return response.data
     } catch (error) {
         throw error

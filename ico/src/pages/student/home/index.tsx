@@ -42,7 +42,7 @@ function index() {
 							name={data.name}
 							credit={data.creditRating}
 							backgroundColor={"#634AFF"}
-							imgUrl={data.jobImage !== null ? data.jobImage : "/assets/job/firefighter.png"}
+							imgUrl={data.jobImage !== null ? data.jobImage : "https://d3bkfkkihwj5ql.cloudfront.net/worker_male.png"}
 						/>
 					)}
 				</ContentWrapper>
@@ -59,11 +59,11 @@ function index() {
 	)
 }
 
-export async function getServerSideProps() {
-	return {
-	  props: {},
-	};
-  }
+// export async function getServerSideProps() {
+// 	return {
+// 	  props: {},
+// 	};
+//   }
 
 
 
