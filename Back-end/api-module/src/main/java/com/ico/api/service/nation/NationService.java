@@ -32,7 +32,13 @@ public interface NationService {
      */
     Nation getNation(HttpServletRequest request);
 
-//    Nation updateNation(NationReqDto reqDto, HttpServletRequest request);
+    /**
+     * 교사가 자신이 생성한 나라 수정
+     * @param reqDto
+     * @param request
+     * @return Nation
+     */
+    Nation updateNation(NationReqDto reqDto, HttpServletRequest request);
 
     /**
      * 투자 종목 등록

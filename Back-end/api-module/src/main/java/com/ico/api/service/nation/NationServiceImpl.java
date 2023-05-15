@@ -167,29 +167,25 @@ public class NationServiceImpl implements NationService {
 
     }
 
-//    @Override
-//    public Nation updateNation(NationReqDto reqDto, HttpServletRequest request) {
-        // TODO : 나라 수정 때 사용할 것
-//        String token = jwtTokenProvider.parseJwt(request);
-//        Long id = jwtTokenProvider.getId(token);
-//
-//        if (id != null) {
-//            Long nationId = teacherRepository.findById(id).get().getNation().getId();
-//            Nation nation = nationRepository.findById(nationId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
-//            nation.setSchool(reqDto.getSchool());
-//            nation.setGrade((byte) reqDto.getGrade());
-//            nation.setRoom((byte) reqDto.getRoom());
-//            nation.setTitle(reqDto.getTitle());
-//            nation.setCurrency(reqDto.getCurrency());
-//            nation.setTrading_start(reqDto.getTrading_start());
-//            nation.setTrading_end(reqDto.getTrading_end());
-//            nationRepository.save(nation);
-//            return nation;
-//        }
-//        else {
-//            throw new CustomException(ErrorCode.NOT_FOUND_NATION);
-//        }
-//    }
+    @Override
+    public Nation updateNation(NationReqDto reqDto, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
+        nation.setSchool(reqDto.getSchool());
+        nation.setGrade((byte) reqDto.getGrade());
+        nation.setRoom((byte) reqDto.getRoom());
+        nation.setCurrency(reqDto.getCurrency());
+        String title = reqDto.getTitle();
+        // 나라 이름이 같지 않거나 현재 나라이름 일때만 수정 가능
+        if (nationRepository.findByTitle(title).isEmpty() || title.equals(nation.getTitle())) {
+            nation.setTitle(title);
+        } else {
+            throw new CustomException(ErrorCode.DUPLICATED_NATION_NAME);
+        }
+        nationRepository.save(nation);
+        return nation;
+    }
 
 
     /**
