@@ -3,16 +3,16 @@ import { CLASS_APPLY_APPROVE, CLASS_APPLY_DENY } from "../ClassIcons"
 import { postJobAcceptAPI } from "@/api/teacher/class/postJobAcceptAPI"
 import { deleteJobDenyAPI } from "@/api/teacher/class/deleteJobDenyAPI"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { getJobApplierType } from "@/types/teacher/apiReturnTypes"
+import { getJobApplierType, jobListType } from "@/types/teacher/apiReturnTypes"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 type ClassJobSearchListApplyListItemPropsType = {
 	student: getJobApplierType
-	jobId: number
+	job: jobListType
 }
 
-function ClassJobSearchListApplyListItem({ student, jobId }: ClassJobSearchListApplyListItemPropsType) {
+function ClassJobSearchListApplyListItem({ student, job }: ClassJobSearchListApplyListItemPropsType) {
 	const noti = useNotification()
 	const queryClient = useQueryClient()
 	const acceptMutation = useMutation((id: string) => postJobAcceptAPI({ id }))
@@ -20,6 +20,16 @@ function ClassJobSearchListApplyListItem({ student, jobId }: ClassJobSearchListA
 
 	const approveHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
 		e.stopPropagation() // 이벤트 버블링 방지
+
+		// 이미 인원이 다 차면 return
+		if (job.count >= job.total) {
+			noti({
+				content: <NotiTemplate type={"alert"} content={`이미 인원이 모두 배정되었습니다.`} />,
+				duration: 3000,
+			})
+
+			return
+		}
 
 		acceptMutation.mutate(student.resumeId, {
 			onSuccess: () => {
@@ -29,7 +39,7 @@ function ClassJobSearchListApplyListItem({ student, jobId }: ClassJobSearchListA
 				})
 
 				queryClient.invalidateQueries(["jobList"])
-				queryClient.invalidateQueries(["jobApplier", jobId])
+				queryClient.invalidateQueries(["jobApplier", job.id])
 			},
 			onError: () => {
 				noti({
@@ -51,7 +61,7 @@ function ClassJobSearchListApplyListItem({ student, jobId }: ClassJobSearchListA
 				})
 
 				queryClient.invalidateQueries(["jobList"])
-				queryClient.invalidateQueries(["jobApplier", jobId])
+				queryClient.invalidateQueries(["jobApplier", job.id])
 			},
 			onError: () => {
 				noti({
