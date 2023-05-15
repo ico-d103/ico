@@ -1,14 +1,14 @@
 import { tokenInstance } from "@/api/instance"
-// import { getNationType } from "@/types/common/apiReturnTypes"
+import { interstType } from "@/types/teacher/apiReturnTypes"
 
-// type responseType = {
-// 	status: number
-// 	data: getNationType
-// }
+type responseType = {
+	status: number
+	data: interstType
+}
 
 export const getDepositInterestListAPI = async () => {
 	try {
-		const response = await tokenInstance.get("/interest")
+		const response: responseType = await tokenInstance.get("/interest")
 
 		return response.data
 	} catch (error) {

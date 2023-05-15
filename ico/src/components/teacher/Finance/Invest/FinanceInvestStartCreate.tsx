@@ -1,26 +1,49 @@
-import { postInvestItemAPI } from "@/api/teacher/finanace/postInvestItemAPI"
 import { css } from "@emotion/react"
 import FinanceInvestToggleButton from "./FinanceInvestToggleButton"
+import { postInvestIssueAPI } from "@/api/teacher/finanace/postInvestIssueAPI"
+import useGetNation from "@/hooks/useGetNation"
 
 function FinanceInvestCreate({
 	subInputChangeHandler,
 	inputState,
 	buttons,
+	stock,
+	tradingStart,
+	tradingEnd,
 }: {
 	subInputChangeHandler?: any
 	inputState?: any
 	buttons?: any
+	stock: any
+	tradingStart: any
+	tradingEnd: any
 }) {
-	const pushInvestIssue = () => {
-		postInvestItemAPI().then((res) => console.log(res))
+	const [nation] = useGetNation()
+
+	const pushInvestItem = async () => {
+		postInvestIssueAPI({
+			body: {
+				stock: stock,
+				tradingStart: tradingStart,
+				tradingEnd: tradingEnd,
+				amount: inputState?.sub.value,
+				content: inputState?.content,
+			},
+		})
+			.then((res) => {
+				console.log(res)
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 	}
 
 	const submitHandler = () => {
-		// 제출 함수
+		pushInvestItem()
 	}
 
 	const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-		if (inputState?.sub.taxation === 0 && Number(event.target.value) <= 20) {
+		if (inputState?.sub.taxation === 0) {
 			subInputChangeHandler && subInputChangeHandler({ key: "value", event })
 		}
 	}
@@ -29,6 +52,9 @@ function FinanceInvestCreate({
 		<>
 			<div css={footerWrapperCSS}>
 				<div css={addInfoWrapperCSS}>
+					<div css={taxValueInputWrapperCSS} style={{ width: "190px" }}>
+						시작 가격을 입력해주세요.
+					</div>
 					<div css={taxValueInputWrapperCSS}>
 						<input
 							value={inputState?.sub.value}
@@ -36,14 +62,11 @@ function FinanceInvestCreate({
 								inputHandler(event)
 							}}
 							type={"number"}
-							min={1}
-							max={20}
 							css={taxInputCSS}
 						/>
-						%
+						{nation.currency}
 					</div>
 				</div>
-				<FinanceInvestToggleButton leftLabel="상승" rightLabel="하락" />
 			</div>
 			{buttons(submitHandler)}
 		</>
@@ -72,6 +95,7 @@ const taxValueInputWrapperCSS = css`
 	&:hover {
 		background-color: rgba(255, 255, 255, 0.2);
 	}
+	margin-right: 5px;
 `
 
 const taxInputCSS = css`
