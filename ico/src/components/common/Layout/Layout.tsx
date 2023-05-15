@@ -9,6 +9,7 @@ import { nationData } from "@/store/store"
 import { useAtom } from "jotai"
 import { getCookie } from "@/api/cookie"
 import { useQueryClient } from "@tanstack/react-query"
+import { getTokenStatusAPI } from "@/api/common/getTokenStatusAPI"
 
 type LayoutProps = {
 	children: any
@@ -18,9 +19,35 @@ function Layout({ children }: LayoutProps) {
 	const [nationDataAtom, setNationDataAtom] = useAtom(nationData)
 	const queryClient = useQueryClient()
 
+	const router = useRouter()
+
 	useEffect(() => {
 		queryClient.clear()
 	}, [])
+
+	
+	useEffect(() => {
+		getTokenStatusAPI()
+			.then((res) => {
+				if (res.role == "STUDENT") {
+					if (res.status == "require_submit_code") {
+						router.push("/student/enter")
+					}
+					if (res.status == "waiting") {
+						router.push("/student/check")
+					}
+					if (res.status == "require_refresh_token") {
+						router.push("/student/check")
+					}
+					if (res.status == "approved") {
+						router.push("/student/home")
+					}
+				}
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+	}, [getTokenStatusAPI])
 
 	useEffect(() => {
 		const accessToken = getCookie("Authorization")

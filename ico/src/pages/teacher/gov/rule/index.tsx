@@ -1,15 +1,10 @@
-import React, {useEffect} from "react"
+import React, { useEffect } from "react"
 import { css } from "@emotion/react"
 import GovRuleCredit from "@/components/teacher/Gov/Rule/GovRuleCredit"
 import GovRuleClass from "@/components/teacher/Gov/Rule/GovRuleClass"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 
-
 function index() {
-
-
-
-
 	return (
 		<React.Fragment>
 			<GovRuleCredit />
@@ -20,9 +15,8 @@ function index() {
 
 export async function getServerSideProps() {
 	return {
-	  props: {},
-	};
-  }
-
+		props: {},
+	}
+}
 
 export default index
