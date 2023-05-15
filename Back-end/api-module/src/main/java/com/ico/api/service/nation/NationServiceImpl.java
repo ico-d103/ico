@@ -13,7 +13,7 @@ import com.ico.core.data.Default_job;
 import com.ico.core.data.Default_rule;
 import com.ico.core.data.Default_tax;
 import com.ico.core.dto.StockReqDto;
-import com.ico.core.data.DefaultNation;
+import com.ico.core.entity.DefaultNation;
 import com.ico.core.entity.Interest;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Rule;
@@ -24,6 +24,7 @@ import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.DefaultNationRepository;
+import com.ico.core.repository.InterestRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.RuleRepository;
 import com.ico.core.repository.StockRepository;
@@ -47,11 +48,14 @@ import java.util.Random;
  * 나라 관련 Service
  *
  * @author 강교철
+ * @author 변윤경
+ * @author 서재건
  */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class NationServiceImpl implements NationService {
+    private final InterestRepository interestRepository;
     private final RuleRepository ruleRepository;
     private final StudentJobRepository studentJobRepository;
     private final TaxRepository taxRepository;
@@ -258,20 +262,20 @@ public class NationServiceImpl implements NationService {
         nationRepository.save(nation);
     }
 
-    @Override
-    public DefaultNation findDefaultNation() {
-        return defaultNationRepository.findById("1").get();
-    }
-
     /**
      * 나라 생성 후 기본 데이터 추가
      *
      * @param nation
      */
     private void createDefaultData(Nation nation) {
+        // 나라 생성 시 사용하는 기본 데이터 Document
         DefaultNation defaultNation = defaultNationRepository.findById("1")
-                .orElseThrow(() -> new CustomException(ErrorCode.CHECK_DB));
-        List<Default_tax> taxList = defaultNation.getDefault_tax();
+                .orElseThrow(() -> {
+                    log.info("[createDefaultData] _id 값에서 1이 존재하지 않는 에러 발생, default_nation 확인 필요");
+                    throw new CustomException(ErrorCode.CHECK_DB);
+                });
+        // 세금
+        List<Default_tax> taxList = defaultNation.getDefault_taxes();
         for (Default_tax data : taxList) {
             Tax tax = Tax.builder()
                     .nation(nation)
@@ -282,8 +286,8 @@ public class NationServiceImpl implements NationService {
                     .build();
             taxRepository.save(tax);
         }
-
-        List<Default_interest> interestList = defaultNation.getDefault_interest();
+        // 예금 이자율
+        List<Default_interest> interestList = defaultNation.getDefault_interests();
         for (Default_interest data : interestList) {
             Interest interest = Interest.builder()
                     .nation(nation)
@@ -291,10 +295,11 @@ public class NationServiceImpl implements NationService {
                     .shortPeriod((byte) data.getShort_period())
                     .longPeriod((byte) data.getLong_period())
                     .build();
+            interestRepository.save(interest);
         }
-
-        List<Default_job> jobList = defaultNation.getDefault_job();
-        for (Default_job data : jobList) {
+        // 직업
+        List<Default_job> studentJobList = defaultNation.getDefault_jobs();
+        for (Default_job data : studentJobList) {
             StudentJob job = StudentJob.builder()
                     .nation(nation)
                     .title(data.getTitle())
@@ -309,8 +314,8 @@ public class NationServiceImpl implements NationService {
                     .build();
             studentJobRepository.save(job);
         }
-
-        List<Default_rule> ruleList = defaultNation.getDefault_rule();
+        // 학급규칙
+        List<Default_rule> ruleList = defaultNation.getDefault_rules();
         for (Default_rule data : ruleList) {
             Rule rule = Rule.builder()
                     .nation(nation)
