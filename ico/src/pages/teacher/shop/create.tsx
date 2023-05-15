@@ -119,7 +119,9 @@ function create() {
 }
 
 const shopCreateWrapperCSS = css`
+	flex: 1;
 	display: grid;
+	grid-template-columns: 1;
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
 	padding: 30px;

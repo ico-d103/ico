@@ -4,41 +4,34 @@ import { useRouter } from "next/router"
 import React, { useState, useEffect, useRef } from "react"
 import { getTeacherProductDetailAPI } from "@/api/common/shop/getTeacherProductDetailAPI"
 import { getTeacherProductDetailType } from "@/types/teacher/apiReturnTypes"
+import { useQuery } from "@tanstack/react-query"
+import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWrapper"
 
 function product() {
 	const router = useRouter()
 	const { pid } = router.query
 
-	const [product, setProduct] = useState<getTeacherProductDetailType>({
-		id: 0,
-		title: "",
-		amount: 0,
-		images: [],
-		count: 0,
-		sold: 0,
-		date: "",
-		rental: true,
-		detail: "",
-	})
+	const productId = typeof pid === "string" ? pid : ""
 
-	useEffect(() => {
-		if (typeof pid === "string") {
-			getTeacherProductDetailAPI({ pid: pid })
-				.then((res) => {
-					setProduct(res)
-				})
-				.catch((error) => {
-					console.log(error)
-				})
-		}
-	}, [pid])
+	const { data } = useQuery<getTeacherProductDetailType>(["product", productId], () =>
+		getTeacherProductDetailAPI({ pid: productId }),
+	)
 
 	return (
 		<div>
 			<PageHeader title={"상점"} />
-			{product?.title}
+
+			<div css={shopWrapperCSS}>
+				<ContentWrapper>{data?.amount}</ContentWrapper>
+			</div>
 		</div>
 	)
 }
+
+const shopWrapperCSS = css`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`
 
 export default product

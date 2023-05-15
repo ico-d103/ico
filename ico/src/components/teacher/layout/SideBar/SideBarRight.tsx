@@ -3,7 +3,6 @@ import { css } from "@emotion/react"
 import { MAIN_SIGNOUT } from "./SideBarIcons"
 import { getNationType } from "@/types/common/apiReturnTypes"
 
-
 type SideBarRightProps = {
 	element: {
 		[prop: string]: {
@@ -21,8 +20,6 @@ type SideBarRightProps = {
 }
 
 function SideBarRight({ element, selectHandler, selected, title, nationData }: SideBarRightProps) {
-	
-
 	const renderElement = Object.keys(element).map((el, idx) => {
 		if (typeof element[el].for !== "number") {
 			return (
@@ -50,7 +47,9 @@ function SideBarRight({ element, selectHandler, selected, title, nationData }: S
 			<div css={footerWrapperCSS}>
 				<div>
 					<div css={userNameCSS}>반 코드 : {nationData.code}</div>
-					<div css={userEmailCSS}>example@google.com</div>
+					<div css={userEmailCSS}>
+						{nationData.school} {nationData.grade}학년 {nationData.room}반
+					</div>
 				</div>
 			</div>
 		</div>
