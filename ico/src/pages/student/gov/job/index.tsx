@@ -38,7 +38,7 @@ function index() {
 	const { data } = useQuery<getGovJobType[]>(["govJobList"], getGovJobAPI)
 
 	return (
-		<>
+		<div css={mainWrapperCSS}>
 			<PageHeader title={"직업 목록"} addComp={<TabMenu menus={GovTabMenus()} selected={2} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
@@ -53,9 +53,13 @@ function index() {
 					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	)
 }
+
+const mainWrapperCSS = css`
+	padding-bottom: 30px;
+`
 
 const wrapperCSS = css`
 	width: 100%;
