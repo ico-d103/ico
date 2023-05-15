@@ -236,6 +236,12 @@ const contentWrapperCSS = css`
   box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   overflow: hidden;
+
+  @media all and (max-width: 480px) {
+      max-width: 90vw;
+  }
+  
+
 `
 
 const contentCSS = css`
