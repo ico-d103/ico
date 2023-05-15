@@ -6,6 +6,7 @@ import com.ico.api.dto.nation.TradingTimeReqDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.code.Role;
+import com.ico.core.code.Status;
 import com.ico.core.dto.StockReqDto;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Stock;
@@ -57,7 +58,7 @@ public class NationServiceImpl implements NationService {
                 Teacher teacher = teacherRepository.findById(teacherId)
                         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
                 // 교사 인증 여부
-                if (teacher.getIsAssigned()){
+                if (teacher.getStatus().equals(Status.APPROVED)){
                     // 교사가 만든 나라의 여부
                     if (teacher.getNation() == null) {
                         Nation nation = Nation.builder()
