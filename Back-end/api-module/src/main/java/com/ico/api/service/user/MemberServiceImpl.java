@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -58,42 +59,47 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String returnStatus(HttpServletRequest request) {
+    public Map<String, Object> returnStatus(HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
-        if (token != null) {
-            Role role = jwtTokenProvider.getRole(token);
-            Long memberId = jwtTokenProvider.getId(token);
-            if (role.equals(Role.STUDENT)) {
-                if (jwtTokenProvider.getNation(token) != null) {
-                    return "home";
+        Role role = jwtTokenProvider.getRole(token);
+        Long memberId = jwtTokenProvider.getId(token);
+        if (role.equals(Role.STUDENT)) {
+            if (jwtTokenProvider.getNation(token) != null) {
+                // 학생의 토큰에 NationId 값이 있을 때
+                return Map.of("status", "home", "role", role);
+            } else {
+                Student student = studentRepository.findById(memberId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                if (student.getNation() != null) {
+                    // 학생이 반 코드 요청을 보냈고 교사에게 승인 받은 후
+                    return Map.of("status", "check", "role", role);
                 } else {
-                    Student student = studentRepository.findById(memberId)
-                            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-                    if (student.getNation() != null) {
-                        return "check";
-                    } else {
-                        if (immigrationRepository.findByStudentId(memberId) != null) {
-                            return "wait";
-                        }
-                        return "enter";
+                    if (immigrationRepository.findByStudentId(memberId) != null) {
+                        // 학생이 반 코드 요청을 보냈고 교사에게 승인 받기 전
+                        return Map.of("status", "wait", "role", role);
                     }
+                    // 학생이 로그인 후에 아무것도 안했을 때
+                    return Map.of("status", "enter", "role", role);
                 }
-            } else if (role.equals(Role.TEACHER)) {
-                if (jwtTokenProvider.getNation(token) != null) {
-                    return "class/students";
-                } else {
-                    Teacher teacher = teacherRepository.findById(memberId)
-                            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-                    if (teacher.getIsAssigned() != null) {
-                        return "create";
-                    }
-                    return "wait";
-                }
-
             }
-            return "admin";
+        } else if (role.equals(Role.TEACHER)) {
+            if (jwtTokenProvider.getNation(token) != null) {
+                // 교사 토큰에 NationId가 있을 때
+                return Map.of("status", "class/students", "role", role);
+            } else {
+                Teacher teacher = teacherRepository.findById(memberId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                if (teacher.getIsAssigned()) {
+                    // 교사가 교사 인증서 승인 받은 후
+                    return Map.of("status", "create", "role", role);
+                }
+                // 교사가 교사 인증서 승인 받기 전
+                return Map.of("status", "wait", "role", role);
+            }
+
         }
-        return "login";
+        // Admin 계정이 로그인했을 때
+        return Map.of("status", "admin", "role", role);
     }
 }
 

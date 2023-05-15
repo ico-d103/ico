@@ -23,11 +23,11 @@ import javax.persistence.ManyToOne;
  *
  * @author 서재건
  */
-@Entity
+@Entity(name = "student_job")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)  // 외부에서 인스턴스 생성하는 것 방지
-public class Job {
+public class StudentJob {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,7 +60,7 @@ public class Job {
     private String studentNames;
 
     @Builder
-    public Job(Long id, Nation nation, String title, String detail, String image, int wage, byte creditRating, byte count, byte total, String color, String studentNames) {
+    public StudentJob(Long id, Nation nation, String title, String detail, String image, int wage, byte creditRating, byte count, byte total, String color, String studentNames) {
         this.id = id;
         this.nation = nation;
         this.title = title;

@@ -1,6 +1,6 @@
 package com.ico.api.dto.job;
 
-import com.ico.core.entity.Job;
+import com.ico.core.entity.StudentJob;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,20 +48,20 @@ public class JobResDto {
     /**
      * 직업 명함 조회 dto 반환
      *
-     * @param job
+     * @param studentJob
      * @return
      */
-    public JobResDto of(Job job) {
+    public JobResDto of(StudentJob studentJob) {
         return JobResDto.builder()
-                .id(job.getId())
-                .title(job.getTitle())
-                .detail(job.getDetail())
-                .creditRating(job.getCreditRating())
-                .wage(job.getWage())
-                .image(job.getImage())
-                .color(job.getColor())
-                .total(job.getTotal())
-                .count(job.getCount())
+                .id(studentJob.getId())
+                .title(studentJob.getTitle())
+                .detail(studentJob.getDetail())
+                .creditRating(studentJob.getCreditRating())
+                .wage(studentJob.getWage())
+                .image(studentJob.getImage())
+                .color(studentJob.getColor())
+                .total(studentJob.getTotal())
+                .count(studentJob.getCount())
                 .build();
     }
 }
