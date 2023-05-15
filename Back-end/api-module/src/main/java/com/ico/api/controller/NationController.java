@@ -5,6 +5,7 @@ import com.ico.api.dto.nation.NationReqDto;
 import com.ico.api.dto.nation.TradingTimeReqDto;
 import com.ico.core.dto.StockReqDto;
 import com.ico.api.service.nation.NationService;
+import com.ico.core.data.DefaultNation;
 import com.ico.core.entity.Nation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -94,5 +95,10 @@ public class NationController {
     public ResponseEntity<HttpStatus> updateTradingTime(HttpServletRequest request, @Valid @RequestBody TradingTimeReqDto dto){
         nationService.updateTradingTime(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<DefaultNation> findDefaultNation() {
+        return ResponseEntity.ok(nationService.findDefaultNation());
     }
 }

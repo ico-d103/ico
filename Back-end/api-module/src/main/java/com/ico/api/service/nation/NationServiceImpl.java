@@ -7,14 +7,28 @@ import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.code.Role;
 import com.ico.core.code.Status;
+import com.ico.core.code.TaxType;
+import com.ico.core.data.Default_interest;
+import com.ico.core.data.Default_job;
+import com.ico.core.data.Default_rule;
+import com.ico.core.data.Default_tax;
 import com.ico.core.dto.StockReqDto;
+import com.ico.core.data.DefaultNation;
+import com.ico.core.entity.Interest;
 import com.ico.core.entity.Nation;
+import com.ico.core.entity.Rule;
 import com.ico.core.entity.Stock;
+import com.ico.core.entity.StudentJob;
+import com.ico.core.entity.Tax;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.DefaultNationRepository;
 import com.ico.core.repository.NationRepository;
+import com.ico.core.repository.RuleRepository;
 import com.ico.core.repository.StockRepository;
+import com.ico.core.repository.StudentJobRepository;
+import com.ico.core.repository.TaxRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
@@ -37,11 +52,16 @@ import java.util.Random;
 @RequiredArgsConstructor
 @Slf4j
 public class NationServiceImpl implements NationService {
+    private final RuleRepository ruleRepository;
+    private final StudentJobRepository studentJobRepository;
+    private final TaxRepository taxRepository;
 
     private final NationRepository nationRepository;
     private final TeacherRepository teacherRepository;
     private final StockRepository stockRepository;
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final DefaultNationRepository defaultNationRepository;
 
     @Override
     @Transactional
@@ -77,6 +97,9 @@ public class NationServiceImpl implements NationService {
                         // 반을 생성했을 때 교사 테이블의 Nation 업데이트
                         teacher.setNation(nation);
                         teacherRepository.save(teacher);
+
+                        // 나라의 기본 데이터 생성
+                        createDefaultData(nation);
                         // 반을 생성했을 때 교사의 토큰 업데이트 / 학생은 직접 확인 버튼을 눌러서 도메인/api/token 으로 직접 요청해야한다.
                         return jwtTokenProvider.updateTokenCookie(request);
                     }
@@ -233,6 +256,69 @@ public class NationServiceImpl implements NationService {
         nation.setTrading_start(dto.getTradingStart());
         nation.setTrading_end(dto.getTradingEnd());
         nationRepository.save(nation);
+    }
+
+    @Override
+    public DefaultNation findDefaultNation() {
+        return defaultNationRepository.findById("1").get();
+    }
+
+    /**
+     * 나라 생성 후 기본 데이터 추가
+     *
+     * @param nation
+     */
+    private void createDefaultData(Nation nation) {
+        DefaultNation defaultNation = defaultNationRepository.findById("1")
+                .orElseThrow(() -> new CustomException(ErrorCode.CHECK_DB));
+        List<Default_tax> taxList = defaultNation.getDefault_tax();
+        for (Default_tax data : taxList) {
+            Tax tax = Tax.builder()
+                    .nation(nation)
+                    .title(data.getTitle())
+                    .detail(data.getDetail())
+                    .amount(data.getAmount())
+                    .type(TaxType.valueOf(data.getType()))
+                    .build();
+            taxRepository.save(tax);
+        }
+
+        List<Default_interest> interestList = defaultNation.getDefault_interest();
+        for (Default_interest data : interestList) {
+            Interest interest = Interest.builder()
+                    .nation(nation)
+                    .creditRating((byte) data.getCredit_rating())
+                    .shortPeriod((byte) data.getShort_period())
+                    .longPeriod((byte) data.getLong_period())
+                    .build();
+        }
+
+        List<Default_job> jobList = defaultNation.getDefault_job();
+        for (Default_job data : jobList) {
+            StudentJob job = StudentJob.builder()
+                    .nation(nation)
+                    .title(data.getTitle())
+                    .detail(data.getDetail())
+                    .image(data.getImage())
+                    .wage(data.getWage())
+                    .creditRating((byte) data.getCredit_rating())
+                    .count((byte) data.getCount())
+                    .total((byte) data.getTotal())
+                    .color(data.getColor())
+                    .studentNames("")
+                    .build();
+            studentJobRepository.save(job);
+        }
+
+        List<Default_rule> ruleList = defaultNation.getDefault_rule();
+        for (Default_rule data : ruleList) {
+            Rule rule = Rule.builder()
+                    .nation(nation)
+                    .title(data.getTitle())
+                    .detail(data.getDetail())
+                    .build();
+            ruleRepository.save(rule);
+        }
     }
 
 }

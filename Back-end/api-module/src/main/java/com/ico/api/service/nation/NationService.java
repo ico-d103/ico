@@ -4,6 +4,7 @@ import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
 import com.ico.api.dto.nation.TradingTimeReqDto;
 import com.ico.core.dto.StockReqDto;
+import com.ico.core.data.DefaultNation;
 import com.ico.core.entity.Nation;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,4 +62,6 @@ public interface NationService {
      * @param dto 거래 시작 시간, 종료 시간
      */
     void updateTradingTime(HttpServletRequest request, TradingTimeReqDto dto);
+
+    DefaultNation findDefaultNation();
 }
