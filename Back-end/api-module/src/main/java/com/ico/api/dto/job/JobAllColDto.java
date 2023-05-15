@@ -32,12 +32,12 @@ public class JobAllColDto {
 
     private String salary;
 
-    private int recruitStudent;
+    private int count;
 
     private List<String> studentNames;
 
     @Builder
-    public JobAllColDto(Long id, String title, String image, String color, int creditRating, int total, String salary, int recruitStudent, List<String> studentNames) {
+    public JobAllColDto(Long id, String title, String image, String color, int creditRating, int total, String salary, int count, List<String> studentNames) {
         this.id = id;
         this.title = title;
         this.image = image;
@@ -45,7 +45,7 @@ public class JobAllColDto {
         this.creditRating = creditRating;
         this.total = total;
         this.salary = salary;
-        this.recruitStudent = recruitStudent;
+        this.count = count;
         this.studentNames = studentNames;
     }
 
@@ -64,7 +64,7 @@ public class JobAllColDto {
                 .creditRating(studentJob.getCreditRating())
                 .total(studentJob.getTotal())
                 .salary(salary)
-                .recruitStudent(studentJob.getTotal() - studentJob.getCount())
+                .count(studentJob.getCount())
                 .studentNames(studentJob.getStudentNames().equals("") || studentJob.getStudentNames() == null
                         ? new ArrayList<>() : List.of(studentJob.getStudentNames().split(",")))
                 .build();
