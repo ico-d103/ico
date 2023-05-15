@@ -5,11 +5,12 @@ import { css } from "@emotion/react"
 import UseAnimations from "react-useanimations"
 import loading from "react-useanimations/lib/loading"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
+import useNavigate from "@/hooks/useNavigate"
 
 const QRScanner: React.FC = () => {
 	const videoRef = useRef<HTMLVideoElement>(null)
 	const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [isError, setIsError] = useState<boolean>(false)
+	const [isError, setIsError] = useState<boolean>(false)
 
 	useEffect(() => {
 		const codeReader = new BrowserQRCodeReader()
@@ -49,7 +50,6 @@ const QRScanner: React.FC = () => {
 		showCamera().then(() => {
 			setIsLoading(() => false)
 		})
- 
 
 		return () => {
 			codeReader.reset()
@@ -73,21 +73,21 @@ const QRScanner: React.FC = () => {
 				</div>
 			)}
 
-      {isError && (
-        <div css={loadingWrapperCSS}>
-        <UseAnimations animation={alertTriangle} size={96} />
-        <div
-          css={css`
-            margin-top: 16px;
-            font-size: var(--student-h1);
-            font-weight: 700;
-          `}
-        >
-          오류가 발생하였습니다.
-        </div>
-      </div>
-      )}
-
+			{isError && (
+				<div css={loadingWrapperCSS}>
+					<UseAnimations animation={alertTriangle} size={96} />
+					<div
+						css={css`
+							margin-top: 16px;
+							font-size: var(--student-h1);
+							font-weight: 700;
+						`}
+					>
+						오류가 발생하였습니다.
+					</div>
+				</div>
+			)}
+      <div css={gradientCSS}/>
 			<video ref={videoRef} css={videoCSS} />
 		</div>
 	)
@@ -112,6 +112,14 @@ const videoCSS = css`
 	width: 100%;
 	margin-bottom: 24px;
 	/* height: 70vh; */
+`
+
+const gradientCSS = css`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  /* background-color: red; */
+  background: linear-gradient( to bottom, rgba(0, 0, 0, 0) 50%, #ffffff 90% );
 `
 
 export default QRScanner
