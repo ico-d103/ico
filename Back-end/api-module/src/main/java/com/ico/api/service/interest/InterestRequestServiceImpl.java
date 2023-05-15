@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author 강교철
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -22,16 +25,18 @@ public class InterestRequestServiceImpl implements InterestRequestService{
     @Override
     public void createInterest(Nation nation) {
         List<InterestRequest> interests = interestRequestRepository.findAll();
-
+        // TODO : 값을 불러오는거 부터 안됨
         for (InterestRequest interest : interests) {
+            log.info("id : {}" ,interest.getId());
+            log.info("creditRating : {}" ,interest.getCreditRating());
             Interest result = Interest.builder()
                     .nation(nation)
                     .creditRating((byte) interest.getCreditRating())
                     .shortPeriod((byte) interest.getShortPeriod())
                     .longPeriod((byte) interest.getLongPeriod())
                     .build();
-        interestRepository.save(result);
-        log.info("이자율 생성");
+            interestRepository.save(result);
+            log.info("job 생성");
         }
     }
 }

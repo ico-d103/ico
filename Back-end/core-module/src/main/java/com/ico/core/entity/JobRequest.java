@@ -1,9 +1,8 @@
 package com.ico.core.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ico.core.dto.JobReqDto;
-import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
@@ -26,12 +25,6 @@ public class JobRequest {
     private String image;
 
     private int wage;
-
-    private byte creditRating;
-
-    private byte count;
-
-    private byte total;
 
     private String color;
 }
