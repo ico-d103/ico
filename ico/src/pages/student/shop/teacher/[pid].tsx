@@ -23,7 +23,7 @@ function product() {
 
 	return (
 		<div>
-			<Modal compState={compState} closeComp={closeComp} transition={"scale"} content={<QRScannerModal />} />
+			<Modal compState={compState} closeComp={closeComp} transition={"scale"} content={<QRScannerModal compState={compState} />} />
 			<PageHeader title={"상점"} />
 
 			<button onClick={openComp}>qr 카메라</button>

@@ -15,6 +15,10 @@ import ModalContent from "@/components/common/Modal/ModalContent"
 import FinanceInvestApplyModal from "@/components/student/Finance/Invest/Modal/FinanceInvestApplyModal"
 import useCompHandler from "@/hooks/useCompHandler"
 import FinanceInvestDeleteModal from "@/components/student/Finance/Invest/Modal/FinanceInvestDeleteModal"
+import UseAnimations from "react-useanimations"
+import alertCircle from "react-useanimations/lib/alertCircle"
+import { isNavigating } from "@/store/store"
+import { useAtom } from "jotai"
 
 type chartData = {
 	id: string
@@ -44,6 +48,8 @@ function index() {
 	const [nation] = useGetNation()
 	const [openApplyComp, closeApplyComp, compApplyState] = useCompHandler()
 	const [openDeleteComp, closeDeleteComp, compDeleteState] = useCompHandler()
+	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
+
 	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceInvestType>(
 		["student", "financeInvest"],
 		getFinanceInvestAPI,
@@ -67,10 +73,8 @@ function index() {
 						const mfDate: string = `${date.getMonth() + 1}.${date.getDate()}`
 						temp[0].data.push({ x: mfDate, y: data.issue[i].amount })
 					}
-					
 				}
 			}
-			
 
 			//   data.issue.forEach((el, idx) => {
 			//     temp[0].data.push({x: el.date, y: el.amount})
@@ -162,45 +166,60 @@ function index() {
 				</React.Fragment>
 			)}
 
-			{data && isTimeBetween(data.tradingStart, data.tradingEnd) &&  (
+			{data && isTimeBetween(data.tradingStart, data.tradingEnd) && (
 				<div css={navBarOverlayCSS}>
-					
-						{data.myStock.amount === 0 ? (
-								<Button
-									text={"매수하기"}
-									fontSize={`var(--student-h3)`}
-									width={"90%"}
-									theme={"mobileNormal"}
-									onClick={() => {
-										openApplyComp()
-									}}
-								/>
-							) : (
-								<Button
-									text={"매도하기"}
-									fontSize={`var(--student-h3)`}
-									width={"90%"}
-									theme={"mobileSoft"}
-									onClick={() => {
-										openDeleteComp()
-									}}
-								/>
-							)
-						}
+					{data.myStock.amount === 0 ? (
+						<Button
+							text={"매수하기"}
+							fontSize={`var(--student-h3)`}
+							width={"90%"}
+							theme={"mobileNormal"}
+							onClick={() => {
+								openApplyComp()
+							}}
+						/>
+					) : (
+						<Button
+							text={"매도하기"}
+							fontSize={`var(--student-h3)`}
+							width={"90%"}
+							theme={"mobileSoft"}
+							onClick={() => {
+								openDeleteComp()
+							}}
+						/>
+					)}
 				</div>
 			)}
 			<PageHeader title={"투자"} />
 
+			
+
 			<div css={contentWrapperCSS}>
+
+			{!data && (
+				<ContentWrapper>
+					<div css={alertWrapperCSS}>
+						<div
+							css={css`
+								width: 128px;
+								height: 128px;
+							`}
+						>
+							{isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={128} />}
+						</div>
+						<div css={labelCSS}>투자 종목이 없어요!</div>
+					</div>
+				</ContentWrapper>
+			)}
+			
 				{chartData && <FinanceInvestChart data={chartData} />}
 				{data && (
 					<div css={stockMentWrapperCSS}>
 						현재 종목은 <span>“{data.stock}”</span> 입니다!
 					</div>
-					
 				)}
 
-				
 				{data && data?.myStock.price !== 0 && (
 					<ContentWrapper>
 						<div css={lSizeFontCSS}>
@@ -215,12 +234,20 @@ function index() {
 				{data && (
 					<ContentWrapper>
 						<div css={mSizeFontCSS}>뉴스</div>
-						{data && !isTimeBetween(data.tradingStart, data.tradingEnd) && <div css={css`display: flex; flex-direction: column; align-items: center;`}>
-							지금은 거래 시간이 아니에요!
-							<div css={sSizeFontCSS}>
-								{data.tradingStart} ~ {data.tradingEnd}
+						{data && !isTimeBetween(data.tradingStart, data.tradingEnd) && (
+							<div
+								css={css`
+									display: flex;
+									flex-direction: column;
+									align-items: center;
+								`}
+							>
+								지금은 거래 시간이 아니에요!
+								<div css={sSizeFontCSS}>
+									{data.tradingStart} ~ {data.tradingEnd}
+								</div>
 							</div>
-						</div>}
+						)}
 						<FinanceInvestIssueList issueList={data.issue} />
 					</ContentWrapper>
 				)}
@@ -295,6 +322,23 @@ const mSizeFontCSS = css`
 	font-size: var(--student-h2);
 	font-weight: 700;
 	line-height: 150%;
+`
+
+const alertWrapperCSS = css`
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 16px;
+`
+
+const labelCSS = css`
+	margin-top: 12px;
+	font-size: 24px;
+	font-weight: 500;
+	color: rgba(0, 0, 0, 0.6);
 `
 
 export default index

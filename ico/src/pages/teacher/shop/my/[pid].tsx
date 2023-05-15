@@ -45,8 +45,8 @@ function product() {
 					)}
 				</div>
 				<div css={QRcss}>
-					<QRCode value={`${new Date()}`} />
-
+					<QRCode value={`/student/teacher/buy/${new Date().getTime()}`} />
+					{}
 					{/* <Image src={"https://placehold.it/150x150"} alt={"QR"} width={150} height={150} /> */}
 				</div>
 			</div>
