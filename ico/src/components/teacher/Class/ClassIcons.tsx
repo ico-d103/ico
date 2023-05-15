@@ -109,7 +109,7 @@ export const CLASS_JOB_SEARCH = (
 )
 
 export const CLASS_APPLY_APPROVE = (
-	<svg width="23" height="23" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg width="25" height="25" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 		<circle cx="10" cy="10" r="9.5" fill="white" stroke="#D9D9D9" />
 		<path
 			fillRule="evenodd"
@@ -121,7 +121,7 @@ export const CLASS_APPLY_APPROVE = (
 )
 
 export const CLASS_APPLY_DENY = (
-	<svg width="23" height="23" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<svg width="25" height="25" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 		<circle cx="10" cy="10" r="9.5" fill="white" stroke="#D9D9D9" />
 		<path
 			fillRule="evenodd"

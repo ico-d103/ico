@@ -1,10 +1,10 @@
 // 투자 이슈 조회(교사)
 import { tokenInstance } from "@/api/instance"
-import { getNationType } from "@/types/common/apiReturnTypes"
+import { getFinanceInvestIssueType } from "@/types/student/apiReturnTypes"
 
 type responseType = {
 	status: number
-	data: getNationType
+	data: getFinanceInvestIssueType
 }
 
 export const getInvestItemAPI = async () => {

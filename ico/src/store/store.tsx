@@ -35,8 +35,6 @@ const nationData = atom<getNationType>({
 	credit_down: 0,
 })
 
-const loginRole = atom("")
-
 export {
 	navTo,
 	navBeforeScroll,
@@ -46,5 +44,4 @@ export {
 	stackNotification,
 	selectedPage,
 	nationData,
-	loginRole,
 }

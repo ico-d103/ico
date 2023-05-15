@@ -4,6 +4,8 @@ import CouponList from "@/components/teacher/Class/Coupon/ClassCouponList"
 import { useQuery } from "@tanstack/react-query"
 import { getCouponListAPI } from "@/api/teacher/class/getCouponListAPI"
 import { getCouponListType } from "@/types/teacher/apiReturnTypes"
+import UseAnimations from "react-useanimations"
+import alertCircle from "react-useanimations/lib/alertCircle"
 
 function coupons() {
 	const { data } = useQuery<getCouponListType[]>(["couponList"], getCouponListAPI)
@@ -17,7 +19,14 @@ function coupons() {
 					<b>{data?.length}개</b>의 쿠폰 사용 요청 목록이 있습니다.
 				</div>
 			</div>
-			<CouponList list={data ? data : []} />
+			{data?.length === 0 ? (
+				<div css={noneWrapperCSS}>
+					<UseAnimations animation={alertCircle} size={300} strokeColor={"rgba(0,0,0,0.4)"} />
+					<h1>쿠폰 사용 요청 내역이 없습니다.</h1>
+				</div>
+			) : (
+				<CouponList list={data ? data : []} />
+			)}
 		</div>
 	)
 }
@@ -33,6 +42,18 @@ const wrapperCSS = css`
 	> h1 {
 		font-size: var(--teacher-h1);
 		font-weight: bold;
+	}
+`
+
+const noneWrapperCSS = css`
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	> h1 {
+		font-size: var(--teacher-h2);
 	}
 `
 

@@ -66,7 +66,7 @@ function ClassJobSearchListApplyListItem({ student, jobId }: ClassJobSearchListA
 		<div css={wrapperCSS}>
 			<div>
 				<div css={numberCSS}>{student.number}</div>
-				<h5 css={nameCSS}>{student.name}</h5>
+				<h4 css={nameCSS}>{student.name}</h4>
 			</div>
 			<div css={buttonWrapperCSS}>
 				<div onClick={approveHandler}>{CLASS_APPLY_APPROVE}</div>
@@ -84,8 +84,8 @@ const wrapperCSS = css`
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 	padding: 10px 0;
 
-	h5 {
-		font-size: var(--teacher-h5);
+	h4 {
+		font-size: var(--teacher-h4);
 	}
 
 	h6 {
@@ -100,16 +100,16 @@ const wrapperCSS = css`
 `
 
 const numberCSS = css`
-	width: 20px;
-	height: 20px;
+	width: 25px;
+	height: 25px;
 	border-radius: 100%;
 	background-color: var(--teacher-main-color);
-	font-size: var(--teacher-h6);
+	font-size: var(--teacher-h5);
 	color: var(--common-back-color-2);
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin-right: 5px;
+	margin-right: 8px;
 `
 
 const nameCSS = css`
@@ -118,7 +118,7 @@ const nameCSS = css`
 
 const buttonWrapperCSS = css`
 	gap: 10px;
-	margin-right: 3px;
+	margin-right: 4px;
 
 	> div {
 		transition: all 0.2s;

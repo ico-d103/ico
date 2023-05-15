@@ -154,7 +154,7 @@ export type jobListType = {
 	creditRating: number
 	total: number
 	salary: string
-	recruitStudent: number
+	count: number
 	studentNames: string[] | string
 }
 
@@ -167,4 +167,9 @@ export type getJobApplierType = {
 	resumeId: string
 	name: string
 	number: number
+}
+
+export type interstType = {
+	longPeriod: string[]
+	shortPeriod: string[]
 }

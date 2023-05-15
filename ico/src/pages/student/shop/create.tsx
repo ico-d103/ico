@@ -154,13 +154,12 @@ const imageWrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-items: center; /* 가운데 정렬을 위해 추가 */
 
 	height: 30vh;
 	width: 100%;
 	margin-bottom: 10px;
-
-	padding: 10px 20px;
+	overflow: hidden;
+	/* padding: 10px 20px; */
 	border-radius: 10px;
 
 	background-color: var(--student-main-color-2);
