@@ -7,7 +7,7 @@ import QRCode from "react-qr-code"
 
 import { getTeacherProductDetailAPI } from "@/api/common/shop/getTeacherProductDetailAPI"
 import { getTeacherProductDetailType } from "@/types/teacher/apiReturnTypes"
-import QRScanner from "@/components/student/Shop/QRScanner"
+import QRScanner from "@/components/student/Shop/QRScanner/QRScanner"
 
 function product() {
 	const router = useRouter()
@@ -45,8 +45,8 @@ function product() {
 					)}
 				</div>
 				<div css={QRcss}>
-				<QRCode value={`${new Date()}`} />
-				<QRScanner/>
+					<QRCode value={`${new Date()}`} />
+
 					{/* <Image src={"https://placehold.it/150x150"} alt={"QR"} width={150} height={150} /> */}
 				</div>
 			</div>
