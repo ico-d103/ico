@@ -4,6 +4,7 @@ import com.ico.api.dto.certification.CertificationResDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Role;
+import com.ico.core.code.Status;
 import com.ico.core.entity.Certification;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
@@ -39,69 +40,56 @@ public class CertificationServiceImpl implements CertificationService{
     @Override
     @Transactional
     public void approveCertification(HttpServletRequest request, Long id) {
-        String token = jwtTokenProvider.parseJwt(request);
-        if (token != null){
-            if (jwtTokenProvider.getRole(token).equals(Role.ADMIN)) {
-                // Certification 객체 가져오기
-                Optional<Certification> optionalCertification = certificationRepository.findById(id);
-                if (optionalCertification.isPresent()) {
-                    Certification certification = optionalCertification.get();
+        if (jwtTokenProvider.getRole(jwtTokenProvider.parseJwt(request)).equals(Role.ADMIN)) {
+            // Certification 객체 가져오기
+            Certification certification = certificationRepository.findById(id)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_IMAGE));
 
-                    // S3 서버에서 파일 삭제
-                    s3.deleteFile(certification.getImage());
+            // S3 서버에서 파일 삭제
+            s3.deleteFile(certification.getImage());
 
-                    Teacher teacher = certification.getTeacher();
-                    teacher.setIsAssigned(true);
-                    teacherRepository.save(teacher);
+            // 승인 상태 변경
+            Teacher teacher = certification.getTeacher();
+            teacher.setStatus(Status.APPROVED);
+            teacherRepository.save(teacher);
 
-                    // Certification 삭제
-                    certificationRepository.delete(certification);
-                } else {
-                    throw new CustomException(ErrorCode.NOT_FOUND_IMAGE);
-                }
-            }
-            else {
-                throw new CustomException(ErrorCode.WRONG_ROLE);
-            }
+            // Certification 삭제
+            certificationRepository.delete(certification);
         }
         else {
-            throw new CustomException(ErrorCode.NOT_FOUND_TOKEN);
+            throw new CustomException(ErrorCode.WRONG_ROLE);
         }
     }
 
     @Override
     @Transactional
     public void deleteCertification(HttpServletRequest request, Long id) {
-        String token = jwtTokenProvider.parseJwt(request);
-        if (token != null) {
-            if (jwtTokenProvider.getRole(token).equals(Role.ADMIN)) {
-                // Certification 객체 가져오기
-                Optional<Certification> optionalCertification = certificationRepository.findById(id);
-                if (optionalCertification.isPresent()) {
-                    Certification certification = optionalCertification.get();
-                    // S3 서버에서 파일 삭제
-                    s3.deleteFile(certification.getImage());
-                    // Certification 삭제
-                    certificationRepository.delete(certification);
-                }
-            }
-            else {
-                throw new CustomException(ErrorCode.NOT_FOUND_IMAGE);
-            }
+        if (jwtTokenProvider.getRole(jwtTokenProvider.parseJwt(request)).equals(Role.ADMIN)) {
+            // Certification 객체 가져오기
+            Certification certification = certificationRepository.findById(id)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_IMAGE));
+            // S3 서버에서 파일 삭제
+            s3.deleteFile(certification.getImage());
+
+            // 승인 상태 변경
+            Teacher teacher = certification.getTeacher();
+            teacher.setStatus(Status.COMPANION);
+            teacherRepository.save(teacher);
+
+            // Certification 삭제
+            certificationRepository.delete(certification);
         }
         else {
-            throw new CustomException(ErrorCode.NOT_FOUND_TOKEN);
+            throw new CustomException(ErrorCode.WRONG_ROLE);
         }
     }
+
 
     @Override
     @Transactional
     public Page<CertificationResDto> pageCertification(HttpServletRequest request, Pageable pageable) {
         String token = jwtTokenProvider.parseJwt(request);
-        if (token == null) {
-            throw new CustomException(ErrorCode.NOT_FOUND_TOKEN);
-        }
-        else if (!jwtTokenProvider.getRole(token).equals(Role.ADMIN)) {
+        if (!jwtTokenProvider.getRole(token).equals(Role.ADMIN)) {
             throw new CustomException(ErrorCode.WRONG_ROLE);
         }
 
