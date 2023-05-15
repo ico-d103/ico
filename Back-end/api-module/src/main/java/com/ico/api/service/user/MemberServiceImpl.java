@@ -66,35 +66,35 @@ public class MemberServiceImpl implements MemberService {
         if (role.equals(Role.STUDENT)) {
             if (jwtTokenProvider.getNation(token) != null) {
                 // 학생의 토큰에 NationId 값이 있을 때
-                return Map.of("status", "home", "role", role);
+                return Map.of("status", "approved", "role", role);
             } else {
                 Student student = studentRepository.findById(memberId)
                         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
                 if (student.getNation() != null) {
                     // 학생이 반 코드 요청을 보냈고 교사에게 승인 받은 후
-                    return Map.of("status", "check", "role", role);
+                    return Map.of("status", "require_refresh_token", "role", role);
                 } else {
                     if (immigrationRepository.findByStudentId(memberId) != null) {
                         // 학생이 반 코드 요청을 보냈고 교사에게 승인 받기 전
-                        return Map.of("status", "wait", "role", role);
+                        return Map.of("status", "waiting", "role", role);
                     }
                     // 학생이 로그인 후에 아무것도 안했을 때
-                    return Map.of("status", "enter", "role", role);
+                    return Map.of("status", "require_submit_code", "role", role);
                 }
             }
         } else if (role.equals(Role.TEACHER)) {
             if (jwtTokenProvider.getNation(token) != null) {
                 // 교사 토큰에 NationId가 있을 때
-                return Map.of("status", "class/students", "role", role);
+                return Map.of("status", "approved", "role", role);
             } else {
                 Teacher teacher = teacherRepository.findById(memberId)
                         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
                 if (teacher.getIsAssigned()) {
                     // 교사가 교사 인증서 승인 받은 후
-                    return Map.of("status", "create", "role", role);
+                    return Map.of("status", "require_create_nation", "role", role);
                 }
                 // 교사가 교사 인증서 승인 받기 전
-                return Map.of("status", "wait", "role", role);
+                return Map.of("status", "waiting", "role", role);
             }
 
         }
