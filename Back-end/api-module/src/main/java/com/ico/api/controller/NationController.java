@@ -3,14 +3,18 @@ package com.ico.api.controller;
 import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
 import com.ico.api.dto.nation.TradingTimeReqDto;
-import com.ico.core.dto.StockReqDto;
 import com.ico.api.service.nation.NationService;
-import com.ico.core.data.DefaultNation;
+import com.ico.core.dto.StockReqDto;
 import com.ico.core.entity.Nation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -97,8 +101,4 @@ public class NationController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<DefaultNation> findDefaultNation() {
-        return ResponseEntity.ok(nationService.findDefaultNation());
-    }
 }
