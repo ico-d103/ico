@@ -7,7 +7,7 @@ type paramsType = {
 
 type responseType = {
 	status: number
-	data: getTeacherProductDetailType[]
+	data: getTeacherProductDetailType
 }
 
 export const getTeacherProductDetailAPI = async ({ pid }: paramsType) => {

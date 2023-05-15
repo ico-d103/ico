@@ -4,7 +4,6 @@ import { useRouter } from "next/router"
 import { useQuery } from "@tanstack/react-query"
 import Carousel from "@/components/common/Carousel/Carousel"
 
-import Button from "@/components/common/Button/Button"
 import { getTeacherProductDetailAPI } from "@/api/common/shop/getTeacherProductDetailAPI"
 import { getTeacherProductDetailType } from "@/types/teacher/apiReturnTypes"
 
@@ -13,7 +12,7 @@ function product() {
 	const { pid } = router.query
 	const productId = typeof pid === "string" ? pid : ""
 
-	const { data } = useQuery<getTeacherProductDetailType[]>(["product", productId], () =>
+	const { data } = useQuery<getTeacherProductDetailType>(["product", productId], () =>
 		getTeacherProductDetailAPI({ pid: productId }),
 	)
 
@@ -36,10 +35,12 @@ function product() {
 					<div>{data?.title}</div>
 					{/* 이름 getnation으로 선생님이름 받아올까 생각중 */}
 					<hr />
-					<div>
-						<div>{data?.amount}미소</div>
-						<div>현재 상품이 {data?.count - data?.sold}개 남았습니다.</div>
-					</div>
+					{data && (
+						<div>
+							<div>{data?.amount}미소</div>
+							<div>현재 상품이 {data?.count - data?.sold}개 남았습니다.</div>
+						</div>
+					)}
 				</div>
 				<div css={QRcss}>
 					<Image src={"https://placehold.it/150x150"} alt={"QR"} width={150} height={150} />
@@ -47,14 +48,14 @@ function product() {
 			</div>
 
 			<div css={parentCSS}>
-				<Carousel content={imageElements} />
+				<Carousel content={imageElements} identifier={"teacher"} />
 			</div>
 
 			<div css={footerCSS}>
 				<div>
 					<div>상품 상세 설명</div>
 					<div>{data?.detail}</div>
-				</div>	
+				</div>
 			</div>
 		</div>
 	)
