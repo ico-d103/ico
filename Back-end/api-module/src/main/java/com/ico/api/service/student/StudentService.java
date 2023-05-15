@@ -80,4 +80,12 @@ public interface StudentService {
      * @return
      */
     List<StudentAllResDto> findListStudent(HttpServletRequest request);
+
+    /**
+     * 학생의 신용등급 조회
+     *
+     * @param request
+     * @return
+     */
+    Byte findStudentCreditRating(HttpServletRequest request);
 }
