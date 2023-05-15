@@ -57,30 +57,30 @@ function login() {
 					localStorage.setItem("currency", res.currency)
 				})
 
-				getTokenStatusAPI().then((res) => {
-					if (res.role === "TEACHER") {
-						// 교사인증 O -> nation ID가 있을 때
-						if (res.status === "approved") {
-							router.push("/teacher/class/students")
-						}
-						// 교사인증 O -> nation ID가 없을 때
-						if (res.status === "require_create_nation") {
-							router.push("/teacher/create")
-						}
-						// 교사인증 X -> 인증 대기 상태
-						if (res.status === "waiting") {
-							// 인증 대기 모달 띄우기
-							setIsDenied(false)
-							openComp()
-						}
-						// 교사인증 X -> 인증 거부 상태
-						if (res.status === "require_submit_certification") {
-							// 인증 거부 모달 띄우고 정보수정 페이지로 이동시키기
-							setIsDenied(true)
-							openComp()
-						}
-					}
-				})
+				// getTokenStatusAPI().then((res) => {
+				// 	if (res.role === "TEACHER") {
+				// 		// 교사인증 O -> nation ID가 있을 때
+				// 		if (res.status === "approved") {
+				// 			router.push("/teacher/class/students")
+				// 		}
+				// 		// 교사인증 O -> nation ID가 없을 때
+				// 		if (res.status === "require_create_nation") {
+				// 			router.push("/teacher/create")
+				// 		}
+				// 		// 교사인증 X -> 인증 대기 상태
+				// 		if (res.status === "waiting") {
+				// 			// 인증 대기 모달 띄우기
+				// 			setIsDenied(false)
+				// 			openComp()
+				// 		}
+				// 		// 교사인증 X -> 인증 거부 상태
+				// 		if (res.status === "require_submit_certification") {
+				// 			// 인증 거부 모달 띄우고 정보수정 페이지로 이동시키기
+				// 			setIsDenied(true)
+				// 			openComp()
+				// 		}
+				// 	}
+				// })
 			})
 			.catch((error) => {
 				setAlarm(error.response.data.message)
@@ -98,6 +98,7 @@ function login() {
 	}
 
 	const modifyTeacherInfoHandler = () => {
+		// 교사 정보 수정페이지로 이동
 		noti({
 			content: <NotiTemplate type={"alert"} content={`준비 중인 서비스입니다.`} />,
 			duration: 3000,

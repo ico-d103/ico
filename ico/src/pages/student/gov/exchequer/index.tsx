@@ -18,7 +18,7 @@ function index() {
 	}, [])
 
 	return (
-		<>
+		<div css={mainWrapperCSS}>
 			<PageHeader title={"세금 목록"} addComp={<TabMenu menus={GovTabMenus()} selected={1} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
@@ -34,9 +34,13 @@ function index() {
 					))}
 				</div>
 			</div>
-		</>
+		</div>
 	)
 }
+
+const mainWrapperCSS = css`
+	padding-bottom: 30px;
+`
 
 const wrapperCSS = css`
 	width: 100%;

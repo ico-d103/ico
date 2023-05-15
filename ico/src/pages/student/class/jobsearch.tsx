@@ -24,7 +24,7 @@ function jobsearch() {
 	}, [])
 
 	return (
-		<>
+		<div css={mainWrapperCSS}>
 			<PageHeader title={"일자리 찾기"} addComp={<TabMenu menus={ClassTabMenus()} selected={1} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
@@ -46,9 +46,13 @@ function jobsearch() {
 					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	)
 }
+
+const mainWrapperCSS = css`
+	padding-bottom: 30px;
+`
 
 const wrapperCSS = css`
 	width: 100%;
