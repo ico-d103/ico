@@ -42,7 +42,7 @@ function login() {
 			body: { identity: inputState.id, password: inputState.password },
 		})
 			.then((res) => {
-				setCookie("Authorization", res)
+				setCookie("Authorization", res, { path: "/", maxAge: 30 * 24 * 60 * 60 })
 
 				getTokenStatusAPI().then((res) => {
 					if (res.status == "enter") {
