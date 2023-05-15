@@ -11,11 +11,6 @@ import FinanceInvestCreate from "./FinanceInvestCreate"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getInvestItemAPI } from "@/api/teacher/finanace/getInvestItemAPI"
 
-import dayjs from "dayjs"
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
-import { MultiSectionDigitalClock } from "@mui/x-date-pickers/MultiSectionDigitalClock"
-
 function FinanceInvestStartForm() {
 	const [openComp, closeComp, compState] = useCompHandler()
 
@@ -35,16 +30,12 @@ function FinanceInvestStartForm() {
 			</div>
 
 			<div style={{ display: "flex" }}>
-				<LocalizationProvider dateAdapter={AdapterDayjs}>
-					<div>
-						<div>거래 시작 시간</div>
-						<MultiSectionDigitalClock defaultValue={dayjs("2022-04-17T00:00")} ampm />
-					</div>
-					<div>
-						<div>거래 종료 시간</div>
-						<MultiSectionDigitalClock defaultValue={dayjs("2022-04-17T00:00")} ampm />
-					</div>
-				</LocalizationProvider>
+				<div>
+					<div>거래 시작 시간</div>
+				</div>
+				<div>
+					<div>거래 종료 시간</div>
+				</div>
 			</div>
 
 			<FormCreator
