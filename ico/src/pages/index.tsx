@@ -3,13 +3,11 @@ import LoadImage from "@/components/common/LoadImage/LoadImage"
 import Button from "@/components/common/Button/Button"
 import { useRouter } from "next/router"
 import useMediaQuery from "@/hooks/useMediaQuery"
-import QRScanner from "@/components/student/Shop/QRScanner"
+import QRScanner from "@/components/student/Shop/QRScanner/QRScanner"
 
 export default function Home() {
-
 	const router = useRouter()
-	const isMobile = useMediaQuery('(max-width: 768px')
-	
+	const isMobile = useMediaQuery("(max-width: 768px")
 
 	return (
 		<div css={guideWrapperCSS}>
@@ -17,29 +15,41 @@ export default function Home() {
 				<div css={scene1InnerCSS}>
 					<div css={mainLabelCSS}>교실 속 작은 경제, 아이코</div>
 					<div css={subLabelCSS}>무슨 말을 할까~ 뿡빵아 도와줘~!</div>
-					<div css={lineCSS}/>
-					<div css={buttonWrapperCSS}>	
-					<Button
-						theme={"cancelLight"}
-						width={"240px"}
-						height={"84px"}
-						text={"학생 로그인"}
-						fontSize={"var(--teacher-h2)"}
-						onClick={() => {router.push('/student/login')}}
-					></Button>
-					{!isMobile && 
-					<Button
-						theme={"highlighted"}
-						width={"240px"}
-						height={"84px"}
-						text={"교사 로그인"}
-						fontSize={"var(--teacher-h2)"}
-						onClick={() => {router.push('/teacher/login')}}
-					></Button>
-				}
+					<div css={lineCSS} />
+					<div css={buttonWrapperCSS}>
+						<Button
+							theme={"cancelLight"}
+							width={"240px"}
+							height={"84px"}
+							text={"학생 로그인"}
+							fontSize={"var(--teacher-h2)"}
+							onClick={() => {
+								router.push("/student/login")
+							}}
+						></Button>
+						{!isMobile && (
+							<Button
+								theme={"highlighted"}
+								width={"240px"}
+								height={"84px"}
+								text={"교사 로그인"}
+								fontSize={"var(--teacher-h2)"}
+								onClick={() => {
+									router.push("/teacher/login")
+								}}
+							></Button>
+						)}
 					</div>
-					<QRScanner/>
-					<img src={'/assets/guide/14.jpg'} css={css`width: 200px; height: auto; position: absolute; top: 70%; visibility: hidden;`}/>
+					<img
+						src={"/assets/guide/14.jpg"}
+						css={css`
+							width: 200px;
+							height: auto;
+							position: absolute;
+							top: 70%;
+							visibility: hidden;
+						`}
+					/>
 				</div>
 			</div>
 		</div>
@@ -50,7 +60,7 @@ const guideWrapperCSS = css``
 
 const scene1CSS = css`
 	position: relative;
-	
+
 	&::before {
 		content: "";
 		position: absolute;
@@ -76,14 +86,13 @@ const scene1InnerCSS = css`
 	color: white;
 
 	@font-face {
-		font-family: 'NEXON Lv1 Gothic OTF';
-		src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+		font-family: "NEXON Lv1 Gothic OTF";
+		src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff") format("woff");
 		font-weight: normal;
 		font-style: normal;
 	}
-	font-family: 'NEXON Lv1 Gothic OTF';
-	
-	`
+	font-family: "NEXON Lv1 Gothic OTF";
+`
 
 const mainLabelCSS = css`
 	font-size: 5vw;
@@ -136,7 +145,6 @@ const lineCSS = css`
 	height: 1px;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 `
-
 
 const buttonWrapperCSS = css`
 	display: flex;
