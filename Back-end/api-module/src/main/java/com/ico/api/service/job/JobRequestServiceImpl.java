@@ -33,7 +33,7 @@ public class JobRequestServiceImpl implements JobRequestService{
                     .detail(job.getDetail())
                     .image(job.getImage())
                     .wage(job.getWage())
-                    .creditRating(job.getCreditRating())
+                    .creditRating((byte) 6)
                     .count((byte) 0)
                     .total((byte) 0)
                     .color(job.getColor())

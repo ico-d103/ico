@@ -1,6 +1,5 @@
 package com.ico.api.service.interest;
 
-import com.ico.api.service.bank.InterestService;
 import com.ico.core.entity.Interest;
 import com.ico.core.entity.InterestRequest;
 import com.ico.core.entity.Nation;
@@ -27,9 +26,9 @@ public class InterestRequestServiceImpl implements InterestRequestService{
         for (InterestRequest interest : interests) {
             Interest result = Interest.builder()
                     .nation(nation)
-//                    .creditRating(interest.getCreditRating())   // Integer 형식으로밖에 못 가져옴..
-//                    .shortPeriod(interest.getShortPeriod())
-//                    .longPeriod(interest.getLongPeriod())
+                    .creditRating((byte) interest.getCreditRating())
+                    .shortPeriod((byte) interest.getShortPeriod())
+                    .longPeriod((byte) interest.getLongPeriod())
                     .build();
         interestRepository.save(result);
         log.info("이자율 생성");

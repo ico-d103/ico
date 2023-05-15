@@ -16,10 +16,10 @@ public class InterestRequest {
     @Id
     private String id;
 
-    private Integer creditRating;
+    private int creditRating;
 
-    private Integer shortPeriod;
+    private int shortPeriod;
 
-    private Integer longPeriod;
+    private int longPeriod;
 
 }
