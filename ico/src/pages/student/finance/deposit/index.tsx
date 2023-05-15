@@ -26,19 +26,27 @@ function index() {
 			{data && data.myDeposit.interest !== 0 && <DetailPage data={data} refetch={refetch} />}
 
 			{!data && (
-				<ContentWrapper>
-					<div css={alertWrapperCSS}>
-						<div
-							css={css`
-								width: 128px;
-								height: 128px;
-							`}
-						>
-							{isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={128} />}
+				<div
+					css={css`
+						width: 100%;
+						display: flex;
+						justify-content: center;
+					`}
+				>
+					<ContentWrapper>
+						<div css={alertWrapperCSS}>
+							<div
+								css={css`
+									width: 128px;
+									height: 128px;
+								`}
+							>
+								{isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={128} />}
+							</div>
+							<div css={labelCSS}>은행이 아직 열리지 않았어요!</div>
 						</div>
-						<div css={labelCSS}>은행이 아직 열리지 않았어요!</div>
-					</div>
-				</ContentWrapper>
+					</ContentWrapper>
+				</div>
 			)}
 		</div>
 	)
