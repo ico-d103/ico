@@ -107,7 +107,7 @@ function GovJobDetail({ job, description, wage, backgroundColor, imgUrl, credit,
 
 
 	return (
-		<div ref={wrapperRef} css={outerWrapperCSS} >
+		<div ref={wrapperRef} css={outerWrapperCSS({total})} >
 			<Modal compState={deleteModalState} closeComp={closeDeleteModal} transition={'scale'} content={<ModalAlert title={'직업을 삭제합니다.'} titleSize={'var(--teacher-h2)'} proceed={deleteHandler} width={'480px'} content={['학생들이 더이상 해당 직업을 조회할 수 없습니다!', '학생들이 더이상 해당 직업을 가질 수 없습니다!']} />}/>
 			<FormCreator subComp={<GovJobCreate idx={actualIdx} count={count}/>} frontComp={<GovJobCardCreate />} showIdx={0} compState={compState} closeComp={closeEditHandler} mainInit={{title: job, content: description}} subInit={{wage, backgroundColor, imgUrl, credit, total }} initHeight={`${wrapperRef.current && wrapperRef.current.clientHeight}px`} />
 			<div css={WrapperCSS({isEdit, backgroundColor})}>
@@ -116,7 +116,7 @@ function GovJobDetail({ job, description, wage, backgroundColor, imgUrl, credit,
 					<div css={contentWrapperCSS}>
 						<div css={headerCSS}>
 							<div css={jobTitleCSS}>
-								{job} ({count} / {total})
+								{job} ({count} / {total}{total === 0 && `, 비활성화`})
 							</div>
 							{buttonRender}
 						</div>
@@ -144,10 +144,20 @@ function GovJobDetail({ job, description, wage, backgroundColor, imgUrl, credit,
 
 }
 
-const outerWrapperCSS = css`
+const outerWrapperCSS = ({total}: {total: number}) => {
+	return css`
 	margin: 36px 0px 36px 0px;
 	min-width: 800px;
+	filter: ${total === 0 && 'brightness(70%)'};
+
+	transition-duration: 0.3s;
+	transition-property: filter;
+
+	& :hover {
+		filter: ${total === 0 && 'brightness(100%)'};
+	}
 `
+}
 
 const WrapperCSS = ({isEdit, backgroundColor}: {isEdit: boolean, backgroundColor: string}) => {
 	return css`

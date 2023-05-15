@@ -2,11 +2,11 @@ import React from "react"
 import useCompHandler from "@/hooks/useCompHandler"
 import { css } from "@emotion/react"
 import Dropdown from "@/components/common/Dropdown/Dropdown"
-import { useQueryClient } from '@tanstack/react-query';
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { postGovExchequerAPI } from "@/api/teacher/gov/postGovExchequerAPI";
-import { putGovExchequerAPI } from "@/api/teacher/gov/putGovExchequerAPI";
-import useGetNation from "@/hooks/useGetNation";
+import { useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { postGovExchequerAPI } from "@/api/teacher/gov/postGovExchequerAPI"
+import { putGovExchequerAPI } from "@/api/teacher/gov/putGovExchequerAPI"
+import useGetNation from "@/hooks/useGetNation"
 
 function GovExchequerCreate({
 	subInputChangeHandler,
@@ -23,30 +23,47 @@ function GovExchequerCreate({
 }) {
 	const [openDropdown, closeDropdown, dropdownState] = useCompHandler()
 
-	
-
 	const [nation] = useGetNation()
-	const queryClient = useQueryClient();
-	const createMutation = useMutation((a: number) => postGovExchequerAPI({body: {title: inputState.title, detail: inputState.content, type: inputState.sub.taxation, amount: inputState.sub.value}}));
-	const updateMutation = useMutation((idx: number) => putGovExchequerAPI({idx, body: {title: inputState.title, detail: inputState.content, type: inputState.sub.taxation, amount: inputState.sub.value}}));
-
+	const queryClient = useQueryClient()
+	const createMutation = useMutation((a: number) =>
+		postGovExchequerAPI({
+			body: {
+				title: inputState.title,
+				detail: inputState.content,
+				type: inputState.sub.taxation,
+				amount: inputState.sub.value,
+			},
+		}),
+	)
+	const updateMutation = useMutation((idx: number) =>
+		putGovExchequerAPI({
+			idx,
+			body: {
+				title: inputState.title,
+				detail: inputState.content,
+				type: inputState.sub.taxation,
+				amount: inputState.sub.value,
+			},
+		}),
+	)
 
 	const submitHandler = () => {
-		if (typeof idx === 'number') {
+		if (typeof idx === "number") {
 			updateMutation.mutate(idx, {
-				onSuccess: formData => {
+				onSuccess: (formData) => {
 					closeHandler && closeHandler()
-				  return queryClient.invalidateQueries(["teacher", "govExchequer"]); // 'return' wait for invalidate
-				}})
+					return queryClient.invalidateQueries(["teacher", "govExchequer"]) // 'return' wait for invalidate
+				},
+			})
 		} else {
 			createMutation.mutate(1, {
-				onSuccess: formData => {
+				onSuccess: (formData) => {
 					closeHandler && closeHandler()
-				  return queryClient.invalidateQueries(["teacher", "govExchequer"]); // 'return' wait for invalidate
-				}})
+					return queryClient.invalidateQueries(["teacher", "govExchequer"]) // 'return' wait for invalidate
+				},
+			})
 		}
 	}
-
 
 	const taxPercentIcon = (
 		<svg css={iconCSS} width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -146,9 +163,7 @@ function GovExchequerCreate({
 							max={20}
 							css={taxInputCSS}
 						/>
-						{inputState?.sub.taxation === 0 ? "%" : `${nation.currency}`}
 					</div>
-					
 				</div>
 			</div>
 			{buttons(submitHandler)}

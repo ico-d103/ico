@@ -95,7 +95,7 @@ function GovExchequerDetail({ title, content, taxAspect, taxValue, showIdx, actu
 					strokeLinejoin="round"
 				/>
 			</svg>
-			학생 월급에서 <span css={valueTextCSS}>&nbsp;{taxValue} {nation.currency}</span>{appendEulReul(nation.currency)} 세금으로 부과합니다.
+			학생 월급에서 <span css={valueTextCSS}>&nbsp;{taxValue} </span>{appendEulReul(nation.currency)} 세금으로 부과합니다.
 		</div>
 	)
 

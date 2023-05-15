@@ -21,13 +21,20 @@ function index() {
 
 	return (
 		<div>
-			
-
 			<div css={contentParentCSS}>
-			<div css={headerWrapperCSS}>
-				<LoadImage src={'/assets/children_icon.png'} alt={'icon'} wrapperCss={css`width: 36px; height: 36px; margin-right: 12px;`} sizes={'128px'} />
-				아이코
-			</div>
+				<div css={headerWrapperCSS}>
+					<LoadImage
+						src={"/assets/children_icon.png"}
+						alt={"icon"}
+						wrapperCss={css`
+							width: 36px;
+							height: 36px;
+							margin-right: 12px;
+						`}
+						sizes={"128px"}
+					/>
+					아이코
+				</div>
 				<ContentWrapper>
 					<div css={contentTitleCSS}>내 프로필</div>
 					{data && (
@@ -52,7 +59,14 @@ function index() {
 	)
 }
 
-const header = css``
+export async function getServerSideProps() {
+	return {
+	  props: {},
+	};
+  }
+
+
+
 
 const contentTitleCSS = css`
 	font-size: var(--student-h2);
@@ -66,13 +80,11 @@ const contentParentCSS = css`
 `
 
 const headerWrapperCSS = css`
-
 	width: 90%;
 	height: 64px;
 	font-size: var(--student-h1);
 	font-weight: 500;
 	display: flex;
 	align-items: center;
-
 `
 export default index

@@ -10,6 +10,7 @@ import { useAtom } from "jotai"
 import { getCookie } from "@/api/cookie"
 import { getTokenStatusAPI } from "@/api/common/getTokenStatusAPI"
 import tokenStatusBranch from "./tokenStatusBranch"
+import { useQueryClient } from "@tanstack/react-query"
 
 type LayoutProps = {
 	children: any
@@ -19,6 +20,11 @@ function Layout({ children }: LayoutProps) {
 	const router = useRouter()
 	const [nationDataAtom, setNationDataAtom] = useAtom(nationData)
 	const [loginRoleAtom, setLoginRoleAtom] = useAtom(loginRole)
+	const queryClient = useQueryClient()
+
+	useEffect(() => {
+		queryClient.clear();
+	}, [])
 
 	useEffect(() => {
 		const accessToken = getCookie("Authorization")

@@ -168,3 +168,8 @@ export type getJobApplierType = {
 	name: string
 	number: number
 }
+
+export type interstType = {
+	longPeriod: string[]
+	shortPeriod: string[]
+}

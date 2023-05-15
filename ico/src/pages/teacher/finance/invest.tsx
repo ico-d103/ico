@@ -1,11 +1,13 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 import FinanceInvestStartForm from "@/components/teacher/Finance/Invest/FinanceInvestStartForm"
-import FinanceInvestChart from "@/components/teacher/Finance/Invest/FinanceInvestChart"
 import FinanceInvestIssueForm from "@/components/teacher/Finance/Invest/FinanceInvestIssueForm"
+import useGetNation from "@/hooks/useGetNation"
 
 function invest() {
+	const [nation, setNation] = useGetNation()
+
 	const deleteInvest = () => {
 		alert("투자 종목 삭제!!!")
 	}
@@ -14,19 +16,17 @@ function invest() {
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
 				<div css={titleCSS}>투자</div>
-				<Button
+				{/* <Button
 					text={"투자 종목 삭제"}
 					fontSize={`var(--teacher-h4)`}
 					width={"190px"}
 					theme={"normal"}
 					onClick={deleteInvest}
-				/>
+				/> */}
 			</div>
 			<div css={subTitleCSS}>투자 종목 설정을 설정하고 이슈를 등록해 투자 상품을 관리할 수 있습니다.</div>
-
-			<FinanceInvestStartForm />
-			{/* <FinanceInvestChart /> */}
-			{/* <FinanceInvestIssueForm /> */}
+			{!nation.stock && <FinanceInvestStartForm />}
+			{nation.stock && <FinanceInvestIssueForm />}
 		</div>
 	)
 }
