@@ -193,26 +193,23 @@ function index() {
 			)}
 			<PageHeader title={"투자"} />
 
-			
-
 			<div css={contentWrapperCSS}>
-
-			{!data && (
-				<ContentWrapper>
-					<div css={alertWrapperCSS}>
-						<div
-							css={css`
-								width: 128px;
-								height: 128px;
-							`}
-						>
-							{isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={128} />}
+				{!data && (
+					<ContentWrapper>
+						<div css={alertWrapperCSS}>
+							<div
+								css={css`
+									width: 128px;
+									height: 128px;
+								`}
+							>
+								{isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={128} />}
+							</div>
+							<div css={labelCSS}>투자 종목이 없어요!</div>
 						</div>
-						<div css={labelCSS}>투자 종목이 없어요!</div>
-					</div>
-				</ContentWrapper>
-			)}
-			
+					</ContentWrapper>
+				)}
+
 				{chartData && <FinanceInvestChart data={chartData} />}
 				{data && (
 					<div css={stockMentWrapperCSS}>

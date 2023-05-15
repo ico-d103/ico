@@ -45,18 +45,22 @@ function login() {
 				setCookie("Authorization", res, { path: "/", maxAge: 30 * 24 * 60 * 60 })
 
 				getTokenStatusAPI().then((res) => {
-					if (res.status == "enter") {
-						router.push("/student/enter")
-					}
-					if (res.status == "wait") {
-						console.log("/student/check")
-					}
-					if (res.status == "check") {
-						router.push("/student/check")
-					}
-					if (res.status == "home") {
-						console.log("홈이다!")
-						router.push("/student/home")
+					console.log(res)
+
+					if (res.role == "STUDENT") {
+						if (res.status == "require_submit_code") {
+							router.push("/student/enter")
+						}
+						if (res.status == "waiting") {
+							router.push("/student/check")
+						}
+						if (res.status == "require_refresh_token") {
+							// 	console.log("홈이다!")
+							router.push("/student/check")
+						}
+						if (res.status == "approved") {
+							router.push("/student/home")
+						}
 					}
 				})
 			})

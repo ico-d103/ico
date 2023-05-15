@@ -31,6 +31,29 @@ function Layout({ children }: LayoutProps) {
 	}, [])
 
 	useEffect(() => {
+		getTokenStatusAPI()
+			.then((res) => {
+				if (res.role == "STUDENT") {
+					if (res.status == "require_submit_code") {
+						router.push("/student/enter")
+					}
+					if (res.status == "waiting") {
+						router.push("/student/check")
+					}
+					if (res.status == "require_refresh_token") {
+						router.push("/student/check")
+					}
+					if (res.status == "approved") {
+						router.push("/student/home")
+					}
+				}
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+	}, [getTokenStatusAPI])
+
+	useEffect(() => {
 		if (accessToken) {
 			getNationAPI().then((res) => {
 				if (res) {
