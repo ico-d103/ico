@@ -3,11 +3,11 @@ import { successReturnType, errorReturnType } from "@/types/common/apiReturnType
 
 type paramsType = {
 	body: {
-		"school" : string
-		"grade" : number
-		"room" : number
-		"title" : string
-		"currency" : string
+		school: string
+		grade: number
+		room: number
+		title: string
+		currency: string
 	}
 }
 

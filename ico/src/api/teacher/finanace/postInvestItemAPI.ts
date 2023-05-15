@@ -1,14 +1,22 @@
 import { tokenInstance } from "@/api/instance"
-import { getNationType } from "@/types/common/apiReturnTypes"
+import { successReturnType } from "@/types/common/apiReturnTypes"
+
+type paramsType = {
+	body: {
+		amount: number
+		content: string
+		price: number
+	}
+}
 
 type responseType = {
 	status: number
-	data: getNationType
+	data: successReturnType
 }
 
-export const postInvestItemAPI = async () => {
+export const postInvestItemAPI = async ({ body }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.post("/nation/teacher/stock")
+		const response: responseType = await tokenInstance.post("/stock/teacher/upload", body)
 		return response.data
 	} catch (error) {
 		throw error
