@@ -14,7 +14,6 @@ function SideBarLeft({ element, logo, selectHandler, selected }: SideBarLeftProp
 	const router = useRouter()
 
 	const signoutHandler = () => {
-		localStorage.clear()
 		removeCookie("Authorization", { path: "/" })
 		router.push("/teacher/login")
 	}

@@ -8,6 +8,7 @@ import { postAccountAPI } from "@/api/teacher/class/postAccountAPI"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import useGetNation from "@/hooks/useGetNation"
 
 const inputReducer = (state: { title: string; amount: string }, action: { type: string; value: string }) => {
 	switch (action.type) {
@@ -27,7 +28,7 @@ type ClassStudentDetailMoneyContentPropsType = {
 function ClassStudentDetailMoneyContent({ refetch }: ClassStudentDetailMoneyContentPropsType) {
 	const noti = useNotification()
 	const queryClient = useQueryClient()
-	const currency = localStorage.getItem("currency")
+	const [nation] = useGetNation()
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 
 	const [inputState, dispatchInput] = useReducer(inputReducer, { title: "", amount: "" })
@@ -91,7 +92,7 @@ function ClassStudentDetailMoneyContent({ refetch }: ClassStudentDetailMoneyCont
 			<div>
 				<div css={moneyInputCSS}>
 					<input type="text" placeholder="금액 입력" onChange={changeAmountHandler} />
-					<span>{currency}</span>
+					<span>{nation.currency}</span>
 				</div>
 				<div css={buttonWrapperCSS}>
 					<Button

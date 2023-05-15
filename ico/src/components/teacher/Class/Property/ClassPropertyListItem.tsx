@@ -1,3 +1,4 @@
+import useGetNation from "@/hooks/useGetNation"
 import { css } from "@emotion/react"
 
 type PropertyListItemPropsType = {
@@ -11,7 +12,7 @@ type PropertyListItemPropsType = {
 }
 
 function PropertyListItem({ property, showDate }: PropertyListItemPropsType) {
-	const currency = localStorage.getItem("currency")
+	const [nation] = useGetNation()
 
 	return (
 		<tr css={wrapperCSS}>
@@ -19,11 +20,11 @@ function PropertyListItem({ property, showDate }: PropertyListItemPropsType) {
 			<td css={moneyCSS}>
 				{property.amount.includes("-") ? (
 					<h3 css={minusMoneyCSS}>
-						{property.amount} {currency}
+						{property.amount} {nation.currency}
 					</h3>
 				) : (
 					<h3 css={plusMoneyCSS}>
-						{property.amount} {currency}
+						{property.amount} {nation.currency}
 					</h3>
 				)}
 			</td>
