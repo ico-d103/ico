@@ -7,14 +7,19 @@ import { ClassTabMenus } from "@/components/student/Class/ClassTabMenus"
 import { getJobListAPI } from "@/api/student/class/getJobListAPI"
 import { useEffect, useState } from "react"
 import { getJobListType } from "@/types/student/apiReturnTypes"
+import { getMyGradeAPI } from "@/api/student/class/getMyGradeAPI"
 
 function jobsearch() {
 	const navigate = useNavigate()
 	const [jobList, setJobList] = useState<getJobListType[]>([])
+	const [myGrade, setMyGrade] = useState<number>(-1)
 
 	useEffect(() => {
 		getJobListAPI().then((res) => {
 			setJobList(res)
+		})
+		getMyGradeAPI().then((res) => {
+			setMyGrade(res)
 		})
 	}, [])
 
@@ -28,7 +33,7 @@ function jobsearch() {
 					</span>
 					<div css={jobListCSS}>
 						{jobList.map((job, idx) => (
-							<ClassJobSearchCard key={idx} job={job} />
+							<ClassJobSearchCard key={idx} job={job} myGrade={myGrade} />
 						))}
 					</div>
 					<div
