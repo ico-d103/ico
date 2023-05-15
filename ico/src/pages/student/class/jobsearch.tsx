@@ -7,17 +7,20 @@ import { ClassTabMenus } from "@/components/student/Class/ClassTabMenus"
 import { getJobListAPI } from "@/api/student/class/getJobListAPI"
 import { useEffect, useState } from "react"
 import { getJobListType } from "@/types/student/apiReturnTypes"
+import { getMyGradeAPI } from "@/api/student/class/getMyGradeAPI"
 
 function jobsearch() {
 	const navigate = useNavigate()
 	const [jobList, setJobList] = useState<getJobListType[]>([])
-	const [myGrade, setMyGrade] = useState<number>(4)
+	const [myGrade, setMyGrade] = useState<number>(-1)
 
 	useEffect(() => {
 		getJobListAPI().then((res) => {
 			setJobList(res)
 		})
-		// 내 신용등급 불러오는 api 연결 후 setMyGrade에 저장
+		getMyGradeAPI().then((res) => {
+			setMyGrade(res)
+		})
 	}, [])
 
 	return (

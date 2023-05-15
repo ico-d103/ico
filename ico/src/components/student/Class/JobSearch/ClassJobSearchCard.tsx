@@ -6,6 +6,7 @@ import ClassJobSearchModal from "./ClassJobSearchModal"
 import { getJobListType } from "@/types/student/apiReturnTypes"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import { getCheckApplyFlagAPI } from "@/api/student/class/getCheckApplyFlagAPI"
 
 type ClassJobSearchCardPropsType = {
 	job: getJobListType
@@ -26,12 +27,16 @@ function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 			return
 		}
 
-		// 학생이 이미 이 직업을 신청했는지 여부를 알기
-
-		// 이미 신청했다면 notification 알림
-
-		// 신청하지 않았다면 모달 오픈
-		openComp()
+		getCheckApplyFlagAPI({ jobId: job.id }).then((res) => {
+			if (res) {
+				noti({
+					content: <NotiTemplate type={"alert"} content={`이미 신청하였습니다.`} />,
+					duration: 3000,
+				})
+			} else {
+				openComp()
+			}
+		})
 	}
 
 	return (
