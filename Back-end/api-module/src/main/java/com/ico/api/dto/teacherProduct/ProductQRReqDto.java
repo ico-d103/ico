@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 
 /**
  * QR 상품 구매 dto
+ *
+ * @author 변윤경
  */
 @Setter
 @Getter
