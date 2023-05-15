@@ -101,4 +101,14 @@ public class NationController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    /**
+     * 교사가 자신이 생성한 나라 수정
+     * @param reqDto
+     * @param request
+     * @return Nation
+     */
+    @PutMapping("/teacher")
+    public ResponseEntity<Nation> updateNation(@Valid @RequestBody NationReqDto reqDto, HttpServletRequest request) {
+        return ResponseEntity.ok(nationService.updateNation(reqDto, request));
+    }
 }
