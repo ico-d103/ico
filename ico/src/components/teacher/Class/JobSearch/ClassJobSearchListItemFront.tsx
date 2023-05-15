@@ -1,12 +1,15 @@
 import { css } from "@emotion/react"
 import { jobListType } from "@/types/teacher/apiReturnTypes"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
+import useGetNation from "@/hooks/useGetNation"
 
 type ClassJobSearchListItemFrontPropsType = {
 	job: jobListType
 }
 
 function ClassJobSearchListItemFront({ job }: ClassJobSearchListItemFrontPropsType) {
+	const [nation] = useGetNation()
+
 	return (
 		<>
 			<div css={imageWrapperCSS(job.color)}>
@@ -23,7 +26,7 @@ function ClassJobSearchListItemFront({ job }: ClassJobSearchListItemFrontPropsTy
 				<div css={secondContentCSS}>
 					<h5>{job.creditRating}등급 이상</h5>
 					<h5>
-						월급 약 {job.salary} {localStorage.getItem("currency")}
+						월급 약 {job.salary} {nation.currency}
 					</h5>
 				</div>
 			</div>

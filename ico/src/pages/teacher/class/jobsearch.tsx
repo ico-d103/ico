@@ -8,7 +8,7 @@ import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
 
 function jobsearch() {
-	const { data } = useQuery<getJobListType>(["jobList"], getJobListAPI)
+	const { data, isLoading } = useQuery<getJobListType>(["jobList"], getJobListAPI)
 
 	return (
 		<div css={wrapperCSS}>
@@ -19,10 +19,10 @@ function jobsearch() {
 					현재 구직 중인 직업은 <b>{data?.restJobCount}개</b>입니다.
 				</div>
 			</div>
-			{data?.jobList.length === 0 ? (
+			{isLoading || data?.jobList.length === 0 ? (
 				<div css={noneWrapperCSS}>
 					<UseAnimations animation={alertCircle} size={300} strokeColor={"rgba(0,0,0,0.4)"} />
-					<h1>입출금 내역이 없습니다.</h1>
+					<h1>현재 구직 중인 직업이 없습니다.</h1>
 				</div>
 			) : (
 				<ClassJobSearchList jobList={data ? data.jobList : []} />

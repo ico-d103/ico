@@ -2,6 +2,7 @@ import { css } from "@emotion/react"
 import { getStudentListType } from "@/types/teacher/apiReturnTypes"
 import { useSetAtom } from "jotai"
 import { selectedStudent } from "@/store/store"
+import useGetNation from "@/hooks/useGetNation"
 
 type StudentEnteredListItemPropsType = {
 	student: getStudentListType
@@ -9,6 +10,7 @@ type StudentEnteredListItemPropsType = {
 }
 
 function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsType) {
+	const [nation] = useGetNation()
 	const setSelectedStudentAtom = useSetAtom(selectedStudent)
 
 	const openStudentDetailHandler = (id: number) => {
@@ -25,7 +27,7 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 			<div css={rightWrapperCSS}>
 				<div css={currencyWrapperCSS}>
 					<div css={amountWrapperCSS}>{student.amount}</div>
-					{localStorage.getItem("currency")}
+					{nation.currency}
 				</div>
 				<div css={creditWrapperCSS}>{student.creditRating}등급</div>
 			</div>
