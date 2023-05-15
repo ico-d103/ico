@@ -128,7 +128,7 @@ public class JobServiceImpl implements JobService{
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
         }
 
-        List<StudentJob> studentJobList = studentJobRepository.findAllByNationId(nationId);
+        List<StudentJob> studentJobList = studentJobRepository.findAllByNationIdOrderByTotalDesc(nationId);
         List<JobResDto> dtoList = new ArrayList<>();
         for (StudentJob studentJob : studentJobList) {
             dtoList.add(new JobResDto().of(studentJob, s3UploadService.getFileURL(studentJob.getImage())));
