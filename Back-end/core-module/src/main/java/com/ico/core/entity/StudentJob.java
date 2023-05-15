@@ -56,7 +56,6 @@ public class StudentJob {
 
     private String color;
 
-    @ColumnDefault("")
     private String studentNames;
 
     @Builder
