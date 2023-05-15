@@ -101,7 +101,8 @@ function Layout({ children }: LayoutProps) {
 						} else if (res.status == "require_refresh_token") {
 							router.push("/student/check")
 						} else if (res.status == "approved") {
-							router.push("/student/home")
+							// router.push("/student/home")
+							return
 						}
 					} else if (separator === "teacher" || separator === "admin") {
 						router.push("/")
