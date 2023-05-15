@@ -27,7 +27,7 @@ function product() {
 			<PageHeader title={"상점"} />
 
 			<button onClick={openComp}>qr 카메라</button>
-			{product?.title}
+
 
 
 			<div css={shopWrapperCSS}>
