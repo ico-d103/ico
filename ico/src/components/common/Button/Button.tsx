@@ -118,6 +118,12 @@ const buttonCSS = ({ theme }: { theme: string }) => {
 			color: var(--common-back-color-2);
 			background-color: var(--teacher-blue-color);
 		`,
+		vividPositive: css`
+		border: none;
+		border-radius: 10px;
+		color: var(--common-back-color-2);
+		background-color: #1e7bff;
+		`,
 		RadialPositive: css`
 			border: none;
 			border-radius: 10px;

@@ -148,7 +148,7 @@ const indicatorBtn = css`
 	align-items: center;
 	font-size: 48px;
 	font-weight: 700;
-	color: var(--text-color);
+	color: rgba(0, 0, 0, 0.6);
 	padding-left: 8px;
 	padding-right: 8px;
 

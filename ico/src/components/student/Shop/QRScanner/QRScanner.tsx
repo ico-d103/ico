@@ -87,7 +87,7 @@ const QRScanner: React.FC = () => {
 					</div>
 				</div>
 			)}
-      <div css={gradientCSS}/>
+			{!isLoading && <div css={gradientCSS} />}
 			<video ref={videoRef} css={videoCSS} />
 		</div>
 	)
@@ -115,11 +115,11 @@ const videoCSS = css`
 `
 
 const gradientCSS = css`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  /* background-color: red; */
-  background: linear-gradient( to bottom, rgba(0, 0, 0, 0) 50%, #ffffff 90% );
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	/* background-color: red; */
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, #ffffff 90%);
 `
 
 export default QRScanner
