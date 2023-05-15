@@ -3,6 +3,7 @@ package com.ico.api.service.user;
 import com.ico.api.dto.user.LoginDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Role;
+import com.ico.core.code.Status;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
@@ -89,14 +90,16 @@ public class MemberServiceImpl implements MemberService {
             } else {
                 Teacher teacher = teacherRepository.findById(memberId)
                         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-                if (teacher.getIsAssigned()) {
+                if (teacher.getStatus().equals(Status.APPROVED)) {
                     // 교사가 교사 인증서 승인 받은 후
                     return Map.of("status", "require_create_nation", "role", role);
+                } else if (teacher.getStatus().equals(Status.COMPANION)) {
+                    // 교사인증서 반려당했을 때
+                    return Map.of("status", "require_submit_certification", "role", role);
                 }
                 // 교사가 교사 인증서 승인 받기 전
                 return Map.of("status", "waiting", "role", role);
             }
-
         }
         // Admin 계정이 로그인했을 때
         return Map.of("status", "admin", "role", role);

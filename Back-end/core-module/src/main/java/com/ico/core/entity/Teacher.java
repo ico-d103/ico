@@ -1,6 +1,7 @@
 package com.ico.core.entity;
 
 import com.ico.core.code.Role;
+import com.ico.core.code.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +19,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-
+/**
+ * @author 강교철
+ */
 @Entity
 @Getter
 @Setter
@@ -37,7 +40,8 @@ public class Teacher {
     @Column(nullable = false)
     private String password;
     private String name;
-    private Boolean isAssigned;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     @Enumerated(EnumType.STRING)
     private Role role;
 

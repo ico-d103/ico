@@ -3,6 +3,7 @@ package com.ico.api.service.teacher;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.core.code.Role;
+import com.ico.core.code.Status;
 import com.ico.core.entity.Certification;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
@@ -49,7 +50,7 @@ public class TeacherServiceImpl implements TeacherService {
                 .identity(requestDto.getIdentity())
                 .password(requestDto.getPassword())
                 .name(requestDto.getName())
-                .isAssigned(false)
+                .status(Status.WAITING)
                 .role(Role.TEACHER)
                 .build();
 
