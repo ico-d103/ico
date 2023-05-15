@@ -1,83 +1,60 @@
 import { css } from "@emotion/react"
 import Image from "next/image"
 import { useRouter } from "next/router"
-import React, { useState, useEffect, useRef } from "react"
+import { useQuery } from "@tanstack/react-query"
+import Carousel from "@/components/common/Carousel/Carousel"
 
-import ShopCarousel from "@/components/teacher/Shop/ShopCarousel"
-import Button from "@/components/common/Button/Button"
 import { getTeacherProductDetailAPI } from "@/api/common/shop/getTeacherProductDetailAPI"
 import { getTeacherProductDetailType } from "@/types/teacher/apiReturnTypes"
 
 function product() {
 	const router = useRouter()
 	const { pid } = router.query
+	const productId = typeof pid === "string" ? pid : ""
 
-	const [product, setProduct] = useState<getTeacherProductDetailType>({
-		id: 0,
-		title: "",
-		amount: 0,
-		images: [],
-		count: 0,
-		sold: 0,
-		date: "",
-		rental: true,
-		detail: "",
-	})
+	const { data } = useQuery<getTeacherProductDetailType>(["product", productId], () =>
+		getTeacherProductDetailAPI({ pid: productId }),
+	)
 
-	useEffect(() => {
-		if (typeof pid === "string") {
-			getTeacherProductDetailAPI({ body: { pid: pid } })
-				.then((res) => {
-					setProduct(res)
-				})
-				.catch((error) => {
-					console.log(error)
-				})
-		}
-	}, [pid])
+	const imageElements = data?.images?.map((imageUrl: any) => (
+		<img
+			src={imageUrl}
+			css={css`
+				width: auto;
+				height: 40vh;
+			`}
+		/>
+	))
+
+	console.log(imageElements)
 
 	return (
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
 				<div css={productCSS}>
-					<div>{product?.title}</div>
-					{/* <div>{product?.name}</div>  */}
+					<div>{data?.title}</div>
 					{/* 이름 getnation으로 선생님이름 받아올까 생각중 */}
 					<hr />
-					<div>
-						<div>{product.amount}미소</div>
-						<div>현재 상품이 {product?.count - product?.sold}개 남았습니다.</div>
-					</div>
+					{data && (
+						<div>
+							<div>{data?.amount}미소</div>
+							<div>현재 상품이 {data?.count - data?.sold}개 남았습니다.</div>
+						</div>
+					)}
 				</div>
 				<div css={QRcss}>
 					<Image src={"https://placehold.it/150x150"} alt={"QR"} width={150} height={150} />
 				</div>
 			</div>
 
-			<div css={parentCSS}>{/* <ShopCarousel /> */}</div>
+			<div css={parentCSS}>
+				<Carousel content={imageElements} identifier={"teacher"} />
+			</div>
 
 			<div css={footerCSS}>
 				<div>
 					<div>상품 상세 설명</div>
-					<div>{product.detail}</div>
-				</div>
-				<div>
-					<Button
-						text={"상품 승인하기"}
-						fontSize={`var(--teacher-h5)`}
-						width={"190px"}
-						height={"30px"}
-						theme={"positive"}
-						onClick={() => {}}
-					/>
-					<Button
-						text={"상품 반려하기"}
-						fontSize={`var(--teacher-h5)`}
-						width={"190px"}
-						height={"30px"}
-						theme={"warning"}
-						onClick={() => {}}
-					/>
+					<div>{data?.detail}</div>
 				</div>
 			</div>
 		</div>

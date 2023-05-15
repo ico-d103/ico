@@ -4,8 +4,8 @@ import { SerializedStyles, css } from "@emotion/react"
 type CarouselProps = {
 	content: any
 	identifier: string
-    scrollToRecent?: boolean
-	css: SerializedStyles
+	scrollToRecent?: boolean
+	css?: SerializedStyles
 }
 
 function Carousel({ content, identifier, scrollToRecent, ...props }: CarouselProps) {
@@ -13,7 +13,7 @@ function Carousel({ content, identifier, scrollToRecent, ...props }: CarouselPro
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
 	const [standard, setStandard] = useState<number>(0)
 
-	const renderContent = content.map((el: any, idx: number) => {
+	const renderContent = content?.map((el: any, idx: number) => {
 		return (
 			<div id={`${idx}`} key={`${identifier}-${idx}`} ref={(el) => (contentsRef.current[idx] = el)}>
 				{el}
@@ -31,26 +31,23 @@ function Carousel({ content, identifier, scrollToRecent, ...props }: CarouselPro
 				getVisibleContent.observe(item)
 			}
 		})
-
-        
 	}, [content])
 
-    useEffect(() => {
-        if (scrollToRecent === true) {
-            if (contentWrapperRef.current) {
-                contentWrapperRef.current.scrollTo({
-                    left: 99999999,
-                    top: 0,
-                    behavior: "smooth",
-                })
-            }
-            
-        }
-    }, [contentsRef.current.length])
+	useEffect(() => {
+		if (scrollToRecent === true) {
+			if (contentWrapperRef.current) {
+				contentWrapperRef.current.scrollTo({
+					left: 99999999,
+					top: 0,
+					behavior: "smooth",
+				})
+			}
+		}
+	}, [contentsRef.current.length])
 
-    const options = {
-        threshold: 0.1
-      };
+	const options = {
+		threshold: 0.1,
+	}
 
 	const getVisibleContent = new IntersectionObserver((entries) => {
 		entries.forEach((entry: any) => {
@@ -66,11 +63,9 @@ function Carousel({ content, identifier, scrollToRecent, ...props }: CarouselPro
 		if (contentWrapperRef.current) {
 			const visibleContents = document.querySelectorAll(`.${identifier}-visible`)
 			const getWrapperCalc = contentWrapperRef.current.offsetLeft + contentWrapperRef.current.clientWidth
-            const target = visibleContents.length <= 1
-            ? Number(visibleContents[0].id)
-            : Number(visibleContents[0].id) + 1
+			const target = visibleContents.length <= 1 ? Number(visibleContents[0].id) : Number(visibleContents[0].id) + 1
 
-            contentWrapperRef.current.scrollTo({
+			contentWrapperRef.current.scrollTo({
 				left: contentsRef.current[target]?.offsetLeft - getWrapperCalc,
 				top: 0,
 				behavior: "smooth",

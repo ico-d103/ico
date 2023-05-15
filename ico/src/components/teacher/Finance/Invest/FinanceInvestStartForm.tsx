@@ -1,21 +1,24 @@
-import React from "react"
+import * as React from "react"
+import { useEffect, useState } from "react"
+
 import { css } from "@emotion/react"
-import Form from "@/components/teacher/common/Form/Form"
-import Test from "@/components/teacher/common/Form/Test"
-import Button from "@/components/common/Button/Button"
 
-import Modal from "@/components/common/Modal/Modal"
-import ModalContent from "@/components/common/Modal/ModalContent"
 import useCompHandler from "@/hooks/useCompHandler"
-
-import { FinanceInvestChartIcon } from "./FinanceInvestIcons"
-import FinanceInvestUseModalContent from "@/components/teacher/Finance/Invest/FinanceInvestUseModalContent"
 
 import FormCreator from "../../common/Form/FormCreator"
 import FinanceInvestCreate from "./FinanceInvestCreate"
 
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { getInvestItemAPI } from "@/api/teacher/finanace/getInvestItemAPI"
+
 function FinanceInvestStartForm() {
 	const [openComp, closeComp, compState] = useCompHandler()
+
+	useEffect(() => {
+		getInvestItemAPI().then((res) => {
+			console.log(res)
+		})
+	}, [])
 
 	return (
 		<>
@@ -23,46 +26,25 @@ function FinanceInvestStartForm() {
 			<input css={inputCSS} />
 
 			<div css={contentCSS} style={{ marginBottom: "5px" }}>
-				거래 가능 시간
+				거래 시간 설정
 			</div>
-			<div css={buttonsCSS}>
-				<Button
-					text={"시작 시간 선택"}
-					fontSize={`var(--teacher-h4)`}
-					width={"190px"}
-					theme={"normal"}
-					onClick={openComp}
-				/>
-				<Button
-					text={"종료 시간 선택"}
-					fontSize={`var(--teacher-h4)`}
-					width={"190px"}
-					theme={"normal"}
-					onClick={openComp}
-				/>
+
+			<div style={{ display: "flex" }}>
+				<div>
+					<div>거래 시작 시간</div>
+				</div>
+				<div>
+					<div>거래 종료 시간</div>
+				</div>
 			</div>
 
 			<FormCreator
 				subComp={<FinanceInvestCreate />}
 				showIdx={0}
-				subInit={{ taxation: 0, value: 100 }}
+				subInit={{ taxation: 0, value: 0 }}
+				titlePlaceHolder={"투자 주제를 입력해주세요."}
+				contentPlaceHolder={"오늘의 이슈를 입력해주세요."}
 				compState={compState}
-				isNoTitle={true}
-			/>
-
-			<Modal
-				compState={compState}
-				closeComp={closeComp}
-				transition={"scale"}
-				content={
-					<ModalContent
-						width={"500px"}
-						icon={FinanceInvestChartIcon}
-						title={"시간 설정하기"}
-						titleSize={"var(--teacher-h2)"}
-						content={FinanceInvestUseModalContent()}
-					/>
-				}
 			/>
 		</>
 	)

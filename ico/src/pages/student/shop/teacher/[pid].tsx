@@ -23,7 +23,7 @@ function product() {
 
 	useEffect(() => {
 		if (typeof pid === "string") {
-			getTeacherProductDetailAPI({ body: { pid: pid } })
+			getTeacherProductDetailAPI({ pid: pid })
 				.then((res) => {
 					setProduct(res)
 				})

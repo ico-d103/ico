@@ -1,20 +1,18 @@
 import { tokenInstance } from "@/api/instance"
-import { getTeacherProductDetailType } from "@/types/teacher/apiReturnTypes"
+import { getStudentProductDetailType } from "@/types/teacher/apiReturnTypes"
 
 type paramsType = {
-	body: {
-		pid: string
-	}
+	pid: string
 }
 
 type responseType = {
 	status: number
-	data: getTeacherProductDetailType
+	data: getStudentProductDetailType
 }
 
-export const getTeacherProductDetailAPI = async ({ body }: paramsType) => {
+export const getStudentProductDetailAPI = async ({ pid }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.get(`/student-product/${body.pid}`)
+		const response: responseType = await tokenInstance.get(`/student-product/${pid}`)
 		return response.data
 	} catch (error) {
 		throw error
