@@ -1,13 +1,17 @@
 import { useState, useEffect, useRef } from "react"
 import { css } from "@emotion/react"
 import { postImmigrationAPI } from "@/api/student/user/postImmigrationAPI"
+import { useRouter } from "next/router"
 
 import Button from "@/components/common/Button/Button"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import { ENG_NUM_ONLY } from "@/util/regex"
+import { getTokenStatusAPI } from "@/api/common/getTokenStatusAPI"
 
 function enter() {
+	const router = useRouter()
+
 	const [phase, setPhase] = useState<number>(0)
 
 	const passFirstPhaseHandler = () => {
@@ -17,7 +21,7 @@ function enter() {
 	const inputRefs = useRef<(HTMLInputElement | null)[]>([])
 
 	// const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-		
+
 	// 	const inputLength = e.target.value.length
 	// 	const nextIndex = index + 1
 	// 	const prevIndex = index - 1
@@ -31,8 +35,7 @@ function enter() {
 	// }
 
 	const handleChange = (e: any, index: number) => {
-		
-			const inputLength = e.target.value.length
+		const inputLength = e.target.value.length
 		const nextIndex = index + 1
 		const prevIndex = index - 1
 
@@ -43,7 +46,6 @@ function enter() {
 			inputRefs.current[prevIndex]?.focus()
 		}
 	}
-
 
 	let submitCode = ""
 
@@ -63,6 +65,7 @@ function enter() {
 		})
 			.then((res) => {
 				console.log(res)
+				router.push("/student/check")
 			})
 			.catch((error) => {
 				console.log(error)
@@ -85,11 +88,10 @@ function enter() {
 				<input
 					css={inputWrapperCSS}
 					value={code[key]}
-	
 					onChange={(e) => {
-						const inputValue = e.target.value;
-    					const filteredValue = inputValue.toUpperCase().replace(/[^A-Z0-9]/g, '');
-						
+						const inputValue = e.target.value
+						const filteredValue = inputValue.toUpperCase().replace(/[^A-Z0-9]/g, "")
+
 						if (e.target.value.length < 2) {
 							setCode((prevCode) => {
 								const updatedCode = {
@@ -100,10 +102,10 @@ function enter() {
 							})
 							// handleChange(e, i - 1)
 						}
-						
-						
 					}}
-					onKeyUp={(e) => {handleChange(e, i - 1)}}
+					onKeyUp={(e) => {
+						handleChange(e, i - 1)
+					}}
 					maxLength={1}
 					ref={(el) => (inputRefs.current[i - 1] = el)}
 					key={i}
@@ -113,6 +115,24 @@ function enter() {
 
 		return inputs
 	}
+
+	useEffect(() => {
+		getTokenStatusAPI().then((res) => {
+			console.log(res.status)
+
+			if (res.status == "waiting") {
+				router.push("/student/check")
+			}
+
+			if (res.status == "require_refresh_token") {
+				router.push("student/check")
+			}
+
+			if (res.status == "approved") {
+				router.push("/student/home")
+			}
+		})
+	}, [])
 
 	return (
 		<div css={enterWrapperCSS}>
@@ -137,21 +157,35 @@ function enter() {
 							wrapperCss={imageWrapper}
 							dev={false}
 						/>
-						<div css={css`margin-top: 12px; font-weight: 700; font-size: 8vw;`}>반 입장</div>
-						<div css={css`margin-top: 12px; font-weight: 500; font-size: 5vw;`}>코드를 입력해주세요.</div>
-						
-							<div css={inputOuterWrapperCSS}>{renderInput(code)}</div>
-						
-							<Button
-								text={"입장할래요!"}
-								fontSize={`5vw`}
-								width={"60%"}
-								height={"15vw"}
-								theme={"mobileNormal"}
-								onClick={submitCodeFunction}
-							/>
-		
-						
+						<div
+							css={css`
+								margin-top: 12px;
+								font-weight: 700;
+								font-size: 8vw;
+							`}
+						>
+							반 입장
+						</div>
+						<div
+							css={css`
+								margin-top: 12px;
+								font-weight: 500;
+								font-size: 5vw;
+							`}
+						>
+							코드를 입력해주세요.
+						</div>
+
+						<div css={inputOuterWrapperCSS}>{renderInput(code)}</div>
+
+						<Button
+							text={"입장할래요!"}
+							fontSize={`5vw`}
+							width={"60%"}
+							height={"15vw"}
+							theme={"mobileNormal"}
+							onClick={submitCodeFunction}
+						/>
 					</div>
 				</div>
 			</div>
@@ -192,7 +226,6 @@ const WrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	
 `
 
 const imageWrapper = css`
@@ -215,7 +248,7 @@ const inputWrapperCSS = css`
 	text-align: center;
 	transition-property: border-bottom background-color;
 	transition-duration: 0.3s;
-	
+
 	& :focus {
 		outline: none;
 		background-color: var(--student-main-color-2);
