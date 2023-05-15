@@ -3,6 +3,7 @@ import LoadImage from "@/components/common/LoadImage/LoadImage"
 import Button from "@/components/common/Button/Button"
 import { useRouter } from "next/router"
 import useMediaQuery from "@/hooks/useMediaQuery"
+import QRScanner from "@/components/student/Shop/QRScanner"
 
 export default function Home() {
 
@@ -37,7 +38,7 @@ export default function Home() {
 					></Button>
 				}
 					</div>
-					
+					<QRScanner/>
 					<img src={'/assets/guide/14.jpg'} css={css`width: 200px; height: auto; position: absolute; top: 70%; visibility: hidden;`}/>
 				</div>
 			</div>

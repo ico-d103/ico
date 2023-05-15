@@ -8,6 +8,7 @@ import { selectedPage } from "@/store/store"
 import { useAtomValue } from "jotai"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import useGetNation from "@/hooks/useGetNation"
 
 type ClassPropertyUseModalPropsType = {
 	closeComp: () => void
@@ -31,10 +32,10 @@ const inputReducer = (
 }
 
 function ClassPropertyUseModal({ closeComp, isDepositMenuOpenAtom }: ClassPropertyUseModalPropsType) {
+	const [nation] = useGetNation()
 	const noti = useNotification()
 	const queryClient = useQueryClient()
 	const selectedPageAtom = useAtomValue(selectedPage)
-	const currency = localStorage.getItem("currency")
 	const [inputState, dispatchInput] = useReducer(inputReducer, { title: "", source: "", amount: "" })
 
 	const postTreasuryMutation = useMutation((body: { title: string; source: string; amount: number }) =>
@@ -94,7 +95,9 @@ function ClassPropertyUseModal({ closeComp, isDepositMenuOpenAtom }: ClassProper
 				<input
 					type="text"
 					placeholder={
-						isDepositMenuOpenAtom ? `입금할 ${currency}를 입력해주세요.` : `출금할 ${currency}를 입력해주세요.`
+						isDepositMenuOpenAtom
+							? `입금할 ${nation.currency}를 입력해주세요.`
+							: `출금할 ${nation.currency}를 입력해주세요.`
 					}
 					onChange={changeAmountHandler}
 				/>

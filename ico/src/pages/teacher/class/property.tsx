@@ -15,8 +15,12 @@ import { isDepositMenuOpen } from "@/store/store"
 import { useAtom, useAtomValue } from "jotai"
 import { getTreasuryHistoryAPI } from "@/api/teacher/class/getTreasuryHistoryAPI"
 import { selectedPage } from "@/store/store"
+import UseAnimations from "react-useanimations"
+import alertCircle from "react-useanimations/lib/alertCircle"
+import useGetNation from "@/hooks/useGetNation"
 
 function property() {
+	const [nation] = useGetNation()
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [isDepositMenuOpenAtom, setIsDepositMenuOpenAtom] = useAtom(isDepositMenuOpen)
 	const selectedPageAtom = useAtomValue(selectedPage)
@@ -60,7 +64,7 @@ function property() {
 				<div>
 					현재{" "}
 					<b>
-						{treasury.data?.treasury} {localStorage.getItem("currency")}
+						{treasury.data?.treasury} {nation.currency}
 					</b>
 					가 국고에 있어요.
 				</div>
@@ -69,7 +73,14 @@ function property() {
 				<div>
 					<h3 css={contentTitleCSS}>국고 입출금 내역</h3>
 				</div>
-				<PropertyList propertyList={treasuryList.data?.page ? treasuryList.data.page : []} />
+				{treasuryList.data?.page.length === 0 ? (
+					<div css={noneWrapperCSS}>
+						<UseAnimations animation={alertCircle} size={300} strokeColor={"rgba(0,0,0,0.4)"} />
+						<h1>입출금 내역이 없습니다.</h1>
+					</div>
+				) : (
+					<PropertyList propertyList={treasuryList.data?.page ? treasuryList.data.page : []} />
+				)}
 			</div>
 			<Pagination size={treasuryList.data?.size ? treasuryList.data.size : 1} />
 			<Modal
@@ -99,6 +110,18 @@ const wrapperCSS = css`
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
 	padding: 30px;
+`
+
+const noneWrapperCSS = css`
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	> h1 {
+		font-size: var(--teacher-h2);
+	}
 `
 
 const headerCSS = css`
