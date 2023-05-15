@@ -1,6 +1,6 @@
 package com.ico.api.dto.student;
 
-import com.ico.core.entity.Job;
+import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.Student;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,14 +35,14 @@ public class StudentAllResDto {
      * 학생의 반 친구 목록 조회 반환 dto 생성
      *
      * @param student
-     * @param job
+     * @param studentJob
      * @return
      */
-    public StudentAllResDto of(Student student, Job job) {
+    public StudentAllResDto of(Student student, StudentJob studentJob) {
         return StudentAllResDto.builder()
                 .number(student.getNumber())
                 .name(student.getName())
-                .jobName(job == null ? null : job.getTitle())
+                .jobName(studentJob == null ? null : studentJob.getTitle())
                 .creditRating(student.getCreditRating())
                 .build();
     }

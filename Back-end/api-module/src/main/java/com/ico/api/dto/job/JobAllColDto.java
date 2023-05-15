@@ -1,7 +1,7 @@
 package com.ico.api.dto.job;
 
 
-import com.ico.core.entity.Job;
+import com.ico.core.entity.StudentJob;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,20 +52,20 @@ public class JobAllColDto {
     /**
      * repository에서 불러온 Job을 JobAllColDto로 생성
      *
-     * @param job
+     * @param studentJob
      * @return JobAllResDto
      */
-    public JobAllColDto of(Job job, String salary) {
+    public JobAllColDto of(StudentJob studentJob, String salary) {
         return JobAllColDto.builder()
-                .id(job.getId())
-                .title(job.getTitle())
-                .image(job.getImage())
-                .color(job.getColor())
-                .creditRating(job.getCreditRating())
-                .total(job.getTotal())
+                .id(studentJob.getId())
+                .title(studentJob.getTitle())
+                .image(studentJob.getImage())
+                .color(studentJob.getColor())
+                .creditRating(studentJob.getCreditRating())
+                .total(studentJob.getTotal())
                 .salary(salary)
-                .recruitStudent(job.getTotal() - job.getCount())
-                .studentNames(job.getStudentNames().equals("") ? new ArrayList<>() : List.of(job.getStudentNames().split(",")))
+                .recruitStudent(studentJob.getTotal() - studentJob.getCount())
+                .studentNames(studentJob.getStudentNames().equals("") ? new ArrayList<>() : List.of(studentJob.getStudentNames().split(",")))
                 .build();
 
     }

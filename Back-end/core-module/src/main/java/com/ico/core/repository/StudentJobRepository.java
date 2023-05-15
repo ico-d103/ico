@@ -1,6 +1,6 @@
 package com.ico.core.repository;
 
-import com.ico.core.entity.Job;
+import com.ico.core.entity.StudentJob;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Optional;
  *
  * @author 서재건
  */
-public interface JobRepository extends JpaRepository<Job, Long> {
+public interface StudentJobRepository extends JpaRepository<StudentJob, Long> {
 
     /**
      * 학급의 모든 직업 조히
@@ -19,7 +19,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
      * @param nationId
      * @return
      */
-    List<Job> findAllByNationId(Long nationId);
+    List<StudentJob> findAllByNationId(Long nationId);
 
     /**
      * 학급의 특정 직업 조회
@@ -28,7 +28,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
      * @param nationId
      * @return
      */
-    Optional<Job> findByIdAndNationId(Long id, Long nationId);
+    Optional<StudentJob> findByIdAndNationId(Long id, Long nationId);
 
     /**
      * 학급 내에 중복된 직업 이름 검사
@@ -38,6 +38,6 @@ public interface JobRepository extends JpaRepository<Job, Long> {
      * @param nationId
      * @return
      */
-    Optional<Job> findByIdNotAndTitleAndNationId(Long id, String title, Long nationId);
+    Optional<StudentJob> findByIdNotAndTitleAndNationId(Long id, String title, Long nationId);
 
 }
