@@ -56,7 +56,6 @@ public class StudentJob {
 
     private String color;
 
-    @ColumnDefault("")
     private String studentNames;
 
     @Builder
@@ -80,11 +79,12 @@ public class StudentJob {
      * @param dto
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public void updateJob(JobReqDto dto) {
+    public void updateJob(JobReqDto dto, String fileName) {
         this.title = dto.getTitle();
         this.detail = dto.getDetail();
         this.total = dto.getTotal().byteValue();
         this.wage = dto.getWage();
         this.color = dto.getColor();
+        this.image = fileName;
     }
 }

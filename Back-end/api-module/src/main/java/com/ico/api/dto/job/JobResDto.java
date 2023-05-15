@@ -51,14 +51,14 @@ public class JobResDto {
      * @param studentJob
      * @return
      */
-    public JobResDto of(StudentJob studentJob) {
+    public JobResDto of(StudentJob studentJob, String image) {
         return JobResDto.builder()
                 .id(studentJob.getId())
                 .title(studentJob.getTitle())
                 .detail(studentJob.getDetail())
                 .creditRating(studentJob.getCreditRating())
                 .wage(studentJob.getWage())
-                .image(studentJob.getImage())
+                .image(image)
                 .color(studentJob.getColor())
                 .total(studentJob.getTotal())
                 .count(studentJob.getCount())
