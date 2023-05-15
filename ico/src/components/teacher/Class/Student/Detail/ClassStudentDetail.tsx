@@ -51,6 +51,7 @@ const wrapperCSS = css`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	
 
 	> h1 {
 		font-size: var(--teacher-h2);

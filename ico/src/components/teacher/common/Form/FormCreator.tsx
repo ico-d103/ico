@@ -102,7 +102,7 @@ const Buttons = (submitLabel = '작성', closeHandler: any, isNoCancel = false, 
 					<Button
 						text={"취소"}
 						fontSize={"var(--teacher-h5)"}
-						width={"110px"}
+						width={"100px"}
 						theme={"cancelLight"}
 						margin={"0px 8px 0px 0px"}
 						onClick={() => {
@@ -110,7 +110,7 @@ const Buttons = (submitLabel = '작성', closeHandler: any, isNoCancel = false, 
 						}}
 					/>
 					}
-					<Button text={`${submitLabel}`} fontSize={"var(--teacher-h5)"} width={"110px"} theme={"highlighted"} onClick={() => {submit()}} />
+					<Button text={`${submitLabel}`} fontSize={"var(--teacher-h5)"} width={"100px"} theme={"highlighted"} onClick={() => {submit()}} />
 				</div>
 	)
 }

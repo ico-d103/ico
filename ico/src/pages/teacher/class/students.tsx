@@ -38,6 +38,7 @@ function students() {
 		<div css={wrapperCSS}>
 			<div css={leftWrapperCSS}>
 				<StudentList />
+				
 			</div>
 
 			{isDeskTop ? (
@@ -71,10 +72,13 @@ const leftWrapperCSS = css`
 
 const rightWrapperCSS = css`
 	flex: 1;
+	/* height: 70vh; */
+	
 	width: 50%;
 	display: flex;
 	flex-direction: column;
-	position: relative;
+	/* top: 0;
+	position: sticky; */
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
 `
@@ -83,7 +87,8 @@ const detailWrapperCSS = css`
 	position: sticky;
 	top: 0;
 	padding: 30px;
-	height: 100%;
+	/* height: 100%; */
+	min-height: 70vh;
 `
 
 const modalWrapperCSS = css`

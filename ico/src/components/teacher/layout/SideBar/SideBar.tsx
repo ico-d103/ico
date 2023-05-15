@@ -24,12 +24,15 @@ import {
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react"
 import "overlayscrollbars/overlayscrollbars.css"
 import { number } from "prop-types"
+import { useAtom } from "jotai"
+import { nationData } from "@/store/store"
 
 type SideBarProps = {
 	children: any
 }
 
 function SideBar({ children }: SideBarProps) {
+	const [nationDataAtom, setNationDataAtom] = useAtom(nationData)
 	const [selectedMain, setSelectedMain] = useState<number>(-1)
 	const [selectedSub, setSelectedSub] = useState<number>(-1)
 	const router = useRouter()
@@ -206,6 +209,7 @@ function SideBar({ children }: SideBarProps) {
 					selected={selectedMain}
 				/>
 				<SideBarRight
+					nationData={nationDataAtom}
 					element={SUB_ELEMENT[selectedMain]}
 					selectHandler={selectSubHandler}
 					selected={selectedSub}
