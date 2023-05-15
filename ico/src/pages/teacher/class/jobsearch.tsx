@@ -4,11 +4,11 @@ import ClassJobSearchList from "@/components/teacher/Class/JobSearch/ClassJobSea
 import { getJobListAPI } from "@/api/teacher/class/getJobListAPI"
 import { useQuery } from "@tanstack/react-query"
 import { getJobListType } from "@/types/teacher/apiReturnTypes"
+import UseAnimations from "react-useanimations"
+import alertCircle from "react-useanimations/lib/alertCircle"
 
 function jobsearch() {
 	const { data } = useQuery<getJobListType>(["jobList"], getJobListAPI)
-
-	console.log(data)
 
 	return (
 		<div css={wrapperCSS}>
@@ -19,7 +19,14 @@ function jobsearch() {
 					현재 구직 중인 직업은 <b>{data?.restJobCount}개</b>입니다.
 				</div>
 			</div>
-			<ClassJobSearchList jobList={data ? data.jobList : []} />
+			{data?.jobList.length === 0 ? (
+				<div css={noneWrapperCSS}>
+					<UseAnimations animation={alertCircle} size={300} strokeColor={"rgba(0,0,0,0.4)"} />
+					<h1>입출금 내역이 없습니다.</h1>
+				</div>
+			) : (
+				<ClassJobSearchList jobList={data ? data.jobList : []} />
+			)}
 		</div>
 	)
 }
@@ -35,6 +42,18 @@ const wrapperCSS = css`
 	> h1 {
 		font-size: var(--teacher-h1);
 		font-weight: bold;
+	}
+`
+
+const noneWrapperCSS = css`
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	> h1 {
+		font-size: var(--teacher-h2);
 	}
 `
 

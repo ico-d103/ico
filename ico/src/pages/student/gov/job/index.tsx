@@ -8,33 +8,6 @@ import { useQuery } from "@tanstack/react-query"
 import { getGovJobType } from "@/types/teacher/apiReturnTypes"
 
 function index() {
-	const mockList = [
-		{
-			id: 0,
-			student: "사공지은",
-			name: "기상 캐스터",
-			content: "학생들의 의견을 수렴하여 에어컨/히터의 온도를 조절하고 다음날 날씨를 알려주는 직업",
-			grade: 6,
-			money: 17000,
-		},
-		{
-			id: 1,
-			student: "담당자 미정",
-			name: "소방관",
-			content: "교실 내 소화기를 주기적으로 관리하는 직업",
-			grade: 3,
-			money: 20000,
-		},
-		{
-			id: 2,
-			student: "사공지은",
-			name: "기상 캐스터",
-			content: "학생들의 의견을 수렴하여 에어컨/히터의 온도를 조절하고 다음날 날씨를 알려주는 직업",
-			grade: 6,
-			money: 17000,
-		},
-	]
-
 	const { data } = useQuery<getGovJobType[]>(["govJobList"], getGovJobAPI)
 
 	return (

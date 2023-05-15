@@ -1,6 +1,7 @@
 import { css } from "@emotion/react"
 import { MAIN_SETTING, MAIN_SIGNOUT } from "./SideBarIcons"
 import { removeCookie } from "@/api/cookie"
+import { useRouter } from "next/router"
 
 type SideBarLeftProps = {
 	element: { [prop: number]: { name: string; label: string; content: any } }
@@ -10,9 +11,12 @@ type SideBarLeftProps = {
 }
 
 function SideBarLeft({ element, logo, selectHandler, selected }: SideBarLeftProps) {
+	const router = useRouter()
+
 	const signoutHandler = () => {
-		removeCookie("Authorization")
-		window.location.href = "/teacher/login"
+		localStorage.clear()
+		removeCookie("Authorization", { path: "/" })
+		router.push("/teacher/login")
 	}
 
 	const renderElement = Object.keys(element).map((el: any, idx) => {
