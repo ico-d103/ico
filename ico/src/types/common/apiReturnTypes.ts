@@ -29,6 +29,7 @@ export type getNationType = {
 export type getTokenStatusType = {
 	status: tokenStatusIndividual | null
 	role: tokenRoleIndividual | null
+	showMessage: boolean
 }
 
 export type layoutTokenStatusType = {

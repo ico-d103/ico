@@ -5,13 +5,13 @@ import { useSetAtom, useAtom } from "jotai"
 import { getTokenStatusType } from '@/types/common/apiReturnTypes'
 
 
-function useGetTokenStatus(): [getTokenStatusType, () => Promise<void | getTokenStatusType>] {
+function useGetTokenStatus(): [getTokenStatusType, ({showMessage}: {showMessage: boolean}) => Promise<void | getTokenStatusType>] {
     const [tokenStatusAtom, setTokenStatusAtom] = useAtom(tokenStatus)
-    const refresh = () => {
+    const refresh = ({showMessage = true}) => {
         return getTokenStatusAPI()
         .then((res) => {
             if (res) {
-                setTokenStatusAtom(() => res)
+                setTokenStatusAtom(() => { return {...res, showMessage}})
             }
             return(res)
         })
@@ -20,6 +20,7 @@ function useGetTokenStatus(): [getTokenStatusType, () => Promise<void | getToken
                 return {
                     status: "require_login",
                     role: "GUEST",
+                    showMessage
                 }
             })
         })

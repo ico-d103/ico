@@ -21,7 +21,7 @@ function enter() {
 			if (res.status == "require_refresh_token") {
 				postStudentTokenUpdateAPI().then((res) => {
 
-					setTokenStatus().then((res) => {
+					setTokenStatus({showMessage: false}).then((res) => {
 						console.log('여기에 할일')
 					})
 					// router.push("/student/home")
