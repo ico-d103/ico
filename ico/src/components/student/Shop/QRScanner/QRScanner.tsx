@@ -6,11 +6,20 @@ import UseAnimations from "react-useanimations"
 import loading from "react-useanimations/lib/loading"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
 import useNavigate from "@/hooks/useNavigate"
+import { postRentalProductsAPI } from "@/api/student/shop/postRentalProductsAPI"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
-const QRScanner: React.FC = () => {
+type QRScannerProps = {
+	closeComp: any
+	type: "ico_rental" | "ico_purchase"
+	id: number
+}
+const QRScanner = ({ closeComp, type, id }: QRScannerProps) => {
 	const videoRef = useRef<HTMLVideoElement>(null)
 	const [isLoading, setIsLoading] = useState<boolean>(true)
 	const [isError, setIsError] = useState<boolean>(false)
+	const noti = useNotification()
 
 	useEffect(() => {
 		const codeReader = new BrowserQRCodeReader()
@@ -40,10 +49,35 @@ const QRScanner: React.FC = () => {
 
 		const handleQrCodeScan = (result: Result | null, error?: any) => {
 			if (result) {
+				const bodyData = result.getText().split(",")
+				if (bodyData[0] !== type || Number(bodyData[1]) !== id) {
+					noti({ content: <NotiTemplate type={"alert"} content={"다른 상품의 QR코드예요!"} />, duration: 5000 })
+					closeComp && closeComp()
+					return
+				}
+				if (bodyData[0] === "ico_rental") {
+					postRentalProductsAPI({ body: { id: Number(bodyData[1]), unixTime: Number(bodyData[2]) } })
+						.then((res) => {
+							noti({ content: <NotiTemplate type={"ok"} content={"물건을 빌렸어요!"} />, duration: 5000 })
+							closeComp && closeComp()
+						})
+						.catch((error) => {
+							if (error.response.data.code === "621") {
+								noti({
+									content: <NotiTemplate type={"alert"} content={"QR 코드의 유효기간이 지났어요!"} />,
+									duration: 5000,
+								})
+								closeComp && closeComp()
+							}
+						})
+				}
+
 				console.log("QR code detected:", result.getText())
 			}
 			if (error && !(error instanceof NotFoundException)) {
 				console.error(error)
+				noti({ content: <NotiTemplate type={"alert"} content={"오류가 발생했습니다!"} />, duration: 5000 })
+				closeComp && closeComp()
 			}
 		}
 
