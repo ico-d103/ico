@@ -36,7 +36,8 @@ const titleCSS = css`
 const subTitleCSS = css`
 	font-size: 0.95rem;
 	margin-top: 12px;
-	margin-bottom: 20px;
+	/* margin-bottom: 20px; */
+	margin-bottom: 36px;
 `
 const depositTableCSS = css`
 	margin-top: 20px;
