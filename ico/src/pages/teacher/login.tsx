@@ -15,6 +15,7 @@ import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 
 const initialState = { id: "", password: "" }
 
@@ -36,6 +37,7 @@ function login() {
 	const [inputState, dispatchInput] = useReducer(inputReducer, initialState)
 	const [isDenied, setIsDenied] = useState<boolean>(true)
 	const router = useRouter()
+	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
 	const loginHandler = () => {
 		if (inputState.id === "" || inputState.password === "") {
@@ -52,16 +54,9 @@ function login() {
 			.then((res) => {
 				setCookie("Authorization", res, { path: "/", maxAge: 30 * 24 * 60 * 60 })
 
-				getTokenStatusAPI().then((res) => {
-					if (res.role === "TEACHER") {
-						// 교사인증 O -> nation ID가 있을 때
-						if (res.status === "approved") {
-							router.push("/teacher/class/students")
-						}
-						// 교사인증 O -> nation ID가 없을 때
-						if (res.status === "require_create_nation") {
-							router.push("/teacher/create")
-						}
+				setTokenStatus({showMessage: false}).then((res) => {
+					if (res && res.role === "TEACHER") {
+
 						// 교사인증 X -> 인증 대기 상태
 						if (res.status === "require_approval") {
 							// 인증 대기 모달 띄우기
@@ -76,6 +71,34 @@ function login() {
 						}
 					}
 				})
+				
+				
+				// getTokenStatusAPI().then((res) => {
+				// 	if (res.role === "TEACHER") {
+				// 		// 교사인증 O -> nation ID가 있을 때
+				// 		if (res.status === "approved") {
+				// 			router.push("/teacher/class/students")
+				// 		}
+				// 		// 교사인증 O -> nation ID가 없을 때
+				// 		if (res.status === "require_create_nation") {
+				// 			router.push("/teacher/create")
+				// 		}
+				// 		// 교사인증 X -> 인증 대기 상태
+				// 		if (res.status === "require_approval") {
+				// 			// 인증 대기 모달 띄우기
+				// 			setIsDenied(false)
+				// 			openComp()
+				// 		}
+				// 		// 교사인증 X -> 인증 거부 상태
+				// 		if (res.status === "require_submit_certification") {
+				// 			// 인증 거부 모달 띄우고 정보수정 페이지로 이동시키기
+				// 			setIsDenied(true)
+				// 			openComp()
+				// 		}
+				// 	}
+				// })
+
+
 			})
 			.catch((error) => {
 				setAlarm(error.response.data.message)
