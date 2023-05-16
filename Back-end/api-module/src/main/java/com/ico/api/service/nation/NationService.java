@@ -70,4 +70,5 @@ public interface NationService {
      */
     void updateTradingTime(HttpServletRequest request, TradingTimeReqDto dto);
 
+    void deleteNation(HttpServletRequest request);
 }
