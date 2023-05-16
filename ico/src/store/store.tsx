@@ -21,7 +21,8 @@ const selectedPage = atom(1)
 
 const tokenStatus = atom<getTokenStatusType>({
 	status: null,
-	role: null
+	role: null,
+	showMessage: false
 })
 
 const nationData = atom<getNationType>({
