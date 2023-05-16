@@ -10,12 +10,18 @@ import { getTeacherProductDetailType } from "@/types/teacher/apiReturnTypes"
 import QRScanner from "@/components/student/Shop/QRScanner/QRScanner"
 import useGetNation from "@/hooks/useGetNation"
 import Button from "@/components/common/Button/Button"
+import useCompHandler from "@/hooks/useCompHandler"
+import Modal from "@/components/common/Modal/Modal"
+import ShowQR from "@/components/common/ShowQR/ShowQR"
+import { useState } from "react"
 
 function product() {
 	const router = useRouter()
 	const { pid } = router.query
 	const productId = typeof pid === "string" ? pid : ""
 	const [nation] = useGetNation()
+	const [openComp, closeComp, compState] = useCompHandler()
+	const [time, setTime] = useState<number>(0)
 
 	const { data } = useQuery<getTeacherProductDetailType>(["product", productId], () =>
 		getTeacherProductDetailAPI({ pid: productId }),
@@ -32,27 +38,34 @@ function product() {
 		/>
 	))
 
+	const generateTime = () => {
+		setTime(() => new Date().getTime())
+	}
+
 	console.log(imageElements)
 
 	return (
 		<div css={wrapperCSS}>
+			{data && (
+				<Modal closeComp={closeComp} compState={compState} transition={"scale"} content={<ShowQR id={data?.id} time={time} />} />
+			)}
 			<div css={headerCSS}>
 				<div css={productCSS}>
 					<div css={titleWrapperCSS}>
-						<div>
-						{data?.title}
-						</div>
-						<Button text={"QR코드 생성"} fontSize={"var(--teacher-h5)"} width={"140px"} theme={"vividPositive"} onClick={() => {}}  />
+						<div>{data?.title}</div>
+						<Button
+							text={"QR코드 생성"}
+							fontSize={"var(--teacher-h5)"}
+							width={"140px"}
+							theme={"vividPositive"}
+							onClick={() => {generateTime(); openComp()}}
+						/>
 					</div>
 					{/* 이름 getnation으로 선생님이름 받아올까 생각중 */}
 					<hr />
 					{/* <div css={css`width: 100%; height: 1px; border-bottom: 1px solid rgba(0, 0, 0, 0.2);`}/> */}
-					
 				</div>
-				<div css={QRcss}>
-					{/* <QRCode value={`/student/teacher/buy/${new Date().getTime()}`} size={128} /> */}
-					
-				</div>
+				<div css={QRcss}>{/* <QRCode value={`/student/teacher/buy/${new Date().getTime()}`} size={128} /> */}</div>
 			</div>
 
 			<div css={parentCSS}>
@@ -60,27 +73,32 @@ function product() {
 			</div>
 
 			<div css={footerCSS}>
-		
 				{data && (
-						<div css={adinfoWrapperCSS}>
-							<div css={amountWrapperCSS}><div css={decoCSS}/>상품 정보</div>
+					<div css={adinfoWrapperCSS}>
+						<div css={amountWrapperCSS}>
+							<div css={decoCSS} />
+							상품 정보
+						</div>
 
-
-							<div css={priceCSS}>{data?.amount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {nation.currency}</div>
-							<div css={css`display: flex;`}>
+						<div css={priceCSS}>
+							{data?.amount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {nation.currency}
+						</div>
+						<div
+							css={css`
+								display: flex;
+							`}
+						>
 							<div css={leftWrapperCSS}>{data?.count - data?.sold}개 남음 </div>
 							<div css={leftWrapperCSS}>&nbsp; · {data.date}에 등록된 상품입니다.</div>
-								</div>
-							
 						</div>
-					)}
-					<div css={lineCSS}/>
-					<div css={detailLabelWrapperCSS}>
-						<div css={decoCSS}/>
-						상품 상세 설명
 					</div>
-					<div>{data?.detail}</div>
-				
+				)}
+				<div css={lineCSS} />
+				<div css={detailLabelWrapperCSS}>
+					<div css={decoCSS} />
+					상품 상세 설명
+				</div>
+				<div>{data?.detail}</div>
 			</div>
 		</div>
 	)
@@ -96,7 +114,6 @@ const wrapperCSS = css`
 
 	grid-gap: 0;
 `
-
 
 const headerCSS = css`
 	display: flex;
@@ -199,7 +216,7 @@ const amountWrapperCSS = css`
 `
 
 const priceCSS = css`
-font-size: 1.2rem;
+	font-size: 1.2rem;
 	font-weight: 700;
 	color: var(--teacher-highlight-color);
 
@@ -222,7 +239,6 @@ const leftWrapperCSS = css`
 	font-size: var(--teacher-h5);
 	font-weight: 500;
 	margin-bottom: 4px;
-	
 `
 
 const titleWrapperCSS = css`
@@ -245,6 +261,5 @@ const lineCSS = css`
 	margin-top: 24px;
 	margin-bottom: 24px;
 `
-
 
 export default product

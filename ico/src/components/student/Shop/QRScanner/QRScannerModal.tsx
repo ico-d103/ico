@@ -18,7 +18,7 @@ function QRScannerModal({ closeComp, compState }: { closeComp?: Function; compSt
 
 	return (
 		<div css={wrapperCSS}>
-			{unmount === false && <QRScanner />}
+			{unmount === false && <QRScanner closeComp={closeComp} />}
 			<div css={buttonWrapperCSS}>
 				<Button
 					text={"취소"}
