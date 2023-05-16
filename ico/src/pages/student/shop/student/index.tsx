@@ -33,13 +33,13 @@ function index() {
 			<PageHeader title={"상점"} addComp={<TabMenu menus={ShopTabMenus()} selected={1} />} />
 			<div css={wrapperCSS}>
 				<div css={contentWrapperCSS}>
-					<div>나도 내 상품을 팔고 싶어요!</div>
+					<div style={{ fontSize: "0.95rem", fontWeight: "500" }}>내 물건을 팔고 싶다면?</div>
 					<Button
-						text={"판매 신청서 작성"}
+						text={"판매 신청서 작성하기"}
 						fontSize={`var(--teacher-h5)`}
-						width={"125px"}
+						width={"150px"}
 						height={"30px"}
-						theme={"mobileNormal"}
+						theme={"mobileSoft"}
 						onClick={createProduct}
 					/>
 				</div>
@@ -91,7 +91,7 @@ const contentWrapperCSS = css`
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
 	box-sizing: border-box;
-	padding: 25px 20px;
+	padding: 20px;
 
 	justify-content: space-between;
 	align-items: center;
@@ -101,7 +101,6 @@ const contentWrapperCSS = css`
 		font-size: 0.95rem;
 	}
 `
-// 오민준
 const cardWrapperCSS = css`
 	margin-top: 15px;
 

@@ -24,8 +24,6 @@ function FinanceInvestIssueForm() {
 		getInvestItemAPI,
 	)
 
-	console.log(data)
-
 	const price = data?.issue[0].amount
 
 	useEffect(() => {

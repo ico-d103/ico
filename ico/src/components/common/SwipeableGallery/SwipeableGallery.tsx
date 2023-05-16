@@ -151,7 +151,11 @@ const SwipeableGallery = ({ parentRef, content }: any) => {
 					<div className={styles.moveable} ref={movingDiv}>
 						{content.map((el: any, idx: number) => {
 							return (
-								<div key={`banner-${idx}`} className={styles.content} style={{ width: width + "px", height: height + 'px' }}>
+								<div
+									key={`banner-${idx}`}
+									className={styles.content}
+									style={{ width: width + "px", height: height + "px" }}
+								>
 									{el}
 								</div>
 							) //, height: height + 'px'

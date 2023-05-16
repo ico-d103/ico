@@ -68,6 +68,8 @@ const ShopCreateImage = ({ sendImageList }: ShopCreateImageProps) => {
 		</div>
 	)
 
+	console.log(imageList)
+
 	return (
 		<div>
 			{imageList.length == 0 && (
@@ -95,16 +97,6 @@ const ShopCreateImage = ({ sendImageList }: ShopCreateImageProps) => {
 
 			{imageList.length > 0 && (
 				<div ref={galleryWrapperRef} css={parentCSS}>
-					{/* <Carousel
-						content={[...imageElements, post]}
-						identifier={"createImages"}
-						css={css`
-							width: 100%;
-							height: 20vh;
-							overflow: hidden;
-						`}
-						scrollToRecent={true}
-					/> */}
 					<SwipeableGallery parentRef={galleryWrapperRef} content={[...imageElements, post]} />
 				</div>
 			)}
