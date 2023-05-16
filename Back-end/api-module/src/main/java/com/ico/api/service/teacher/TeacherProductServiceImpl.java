@@ -27,11 +27,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * @author 변윤경
+ * @author 서재건
  */
 @Slf4j
 @Service
@@ -251,5 +253,15 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 .sold(product.getSold())
                 .date(product.getDate().format(Formatter.date))
                 .build();
+    }
+
+    @Override
+    public void deleteTeacherProduct(Long teacherProductId) {
+        TeacherProduct teacherProduct = teacherProductRepository.findById(teacherProductId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        Arrays.stream(teacherProduct.getImages().split(","))
+                .forEach(s3UploadService::deleteFile);
+        teacherProductRepository.delete(teacherProduct);
     }
 }

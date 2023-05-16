@@ -13,6 +13,7 @@ import java.util.List;
  * 교사 상품 관련 Service
  *
  * @author 변윤경
+ * @author 서재건
  */
 public interface TeacherProductService {
     /**
@@ -52,4 +53,11 @@ public interface TeacherProductService {
      * @return
      */
     TeacherProductDetailResDto detailProduct(HttpServletRequest request, Long id);
+
+    /**
+     * 교사 상품 삭제
+     *
+     * @param teacherProductId
+     */
+    void deleteTeacherProduct(Long teacherProductId);
 }

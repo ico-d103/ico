@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ import java.util.List;
  * 교사 상품 Controller
  *
  * @author 변윤경
+ * @author 서재건
  */
 @RestController
 @RequiredArgsConstructor
@@ -90,5 +92,17 @@ public class TeacherProductController {
     @GetMapping("/{teacherProductId}")
     public ResponseEntity<TeacherProductDetailResDto> detailProduct(HttpServletRequest request, @PathVariable Long teacherProductId){
         return ResponseEntity.ok(teacherProductService.detailProduct(request, teacherProductId));
+    }
+
+    /**
+     * 교사 상품 삭제
+     *
+     * @param teacherProductId
+     * @return
+     */
+    @DeleteMapping("/teacher/{teacherProductId}")
+    public ResponseEntity<HttpStatus> deleteTeacherProduct(@PathVariable Long teacherProductId) {
+        teacherProductService.deleteTeacherProduct(teacherProductId);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }
