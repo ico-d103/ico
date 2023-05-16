@@ -4,6 +4,7 @@ import { successReturnType, errorReturnType } from "@/types/common/apiReturnType
 type paramsType = {
 	body: {
 		code: string
+		number: number
 	}
 }
 type responseType = {
