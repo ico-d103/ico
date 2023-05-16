@@ -9,16 +9,22 @@ import LoadImage from "@/components/common/LoadImage/LoadImage"
 
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 
 function enter() {
 	const router = useRouter()
 	const noti = useNotification()
+	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
 	const refreshToken = async () => {
 		getTokenStatusAPI().then((res) => {
 			if (res.status == "require_refresh_token") {
 				postStudentTokenUpdateAPI().then((res) => {
-					router.push("/student/home")
+
+					setTokenStatus({showMessage: false}).then((res) => {
+						console.log('여기에 할일')
+					})
+					// router.push("/student/home")
 				})
 			} else {
 				noti({

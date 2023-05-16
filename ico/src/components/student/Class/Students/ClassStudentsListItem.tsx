@@ -8,9 +8,11 @@ type ClassStudentsListItemPropsType = {
 function ClassStudentsListItem({ student }: ClassStudentsListItemPropsType) {
 	return (
 		<div css={wrapperCSS}>
-			<span css={numberCSS}>{student.number}</span>
-			<span css={nameCSS}>{student.name}</span>
-			<span css={jobCSS}>{student.jobName ? student.jobName : "직업이 없어요"}</span>
+			<div>
+				<span css={numberCSS}>{student.number}번</span>
+				<span css={nameCSS}>{student.name}</span>
+			</div>
+			<span css={jobCSS}>{student.jobName ? student.jobName : "아직 직업이 없어요"}</span>
 		</div>
 	)
 }
@@ -19,20 +21,26 @@ const wrapperCSS = css`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	justify-content: space-between;
 
-	> span {
+	span {
 		font-size: var(--student-h3);
+	}
+
+	> div {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
 	}
 `
 
 const numberCSS = css`
-	width: 25px;
+	width: 40px;
 	font-weight: bold;
 	color: var(--student-main-color-5);
 `
 
 const nameCSS = css`
-	width: 70px;
 	font-weight: bold;
 `
 

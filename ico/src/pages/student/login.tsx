@@ -10,6 +10,8 @@ import { setCookie } from "@/api/cookie"
 import { postLoginAPI } from "@/api/common/postLoginAPI"
 import { getTokenStatusAPI } from "@/api/common/getTokenStatusAPI"
 
+import useGetTokenStatus from "@/hooks/useGetTokenStatus"
+
 const initialState = { id: "", password: "" }
 
 const inputReducer = (state: { id: string; password: string }, action: { type: string; value: string }) => {
@@ -28,6 +30,7 @@ function login() {
 	const [inputState, dispatchInput] = useReducer(inputReducer, initialState)
 	const navigate = useNavigate()
 	const router = useRouter()
+	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
 	const loginHandler = async () => {
 		if (inputState.id === "" || inputState.password === "") {
@@ -43,26 +46,44 @@ function login() {
 		})
 			.then((res) => {
 				setCookie("Authorization", res, { path: "/", maxAge: 30 * 24 * 60 * 60 })
+				
+				// getTokenStatusAPI()
+				// .then((res) => {
+				// 	if (res) {
+				// 		setTokenStatusAtom(() => res)
+				// 	}
+				// })
+				// .catch((error) => {
+				// 	setTokenStatusAtom(() => {
+				// 		return {
+				// 			status: "require_login",
+				// 			role: "GUEST",
+				// 		}
+				// 	})
+				// })
 
-				getTokenStatusAPI().then((res) => {
-					console.log(res)
-
-					if (res.role == "STUDENT") {
-						if (res.status == "require_submit_code") {
-							router.push("/student/enter")
-						}
-						if (res.status == "waiting") {
-							router.push("/student/check")
-						}
-						if (res.status == "require_refresh_token") {
-							// 	console.log("홈이다!")
-							router.push("/student/check")
-						}
-						if (res.status == "approved") {
-							router.push("/student/home")
-						}
-					}
+				setTokenStatus({showMessage: false}).then((res) => {
+					console.log('여기에 할일')
 				})
+				// getTokenStatusAPI().then((res) => {
+				// 	console.log(res)
+
+				// 	if (res.role == "STUDENT") {
+				// 		if (res.status == "require_submit_code") {
+				// 			router.push("/student/enter")
+				// 		}
+				// 		if (res.status == "waiting") {
+				// 			router.push("/student/check")
+				// 		}
+				// 		if (res.status == "require_refresh_token") {
+				// 			// 	console.log("홈이다!")
+				// 			router.push("/student/check")
+				// 		}
+				// 		if (res.status == "approved") {
+				// 			router.push("/student/home")
+				// 		}
+				// 	}
+				// })
 			})
 
 			.catch((error) => {

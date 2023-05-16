@@ -2,6 +2,7 @@ import { css } from "@emotion/react"
 import { MAIN_SETTING, MAIN_SIGNOUT } from "./SideBarIcons"
 import { removeCookie } from "@/api/cookie"
 import { useRouter } from "next/router"
+import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 
 type SideBarLeftProps = {
 	element: { [prop: number]: { name: string; label: string; content: any } }
@@ -12,10 +13,14 @@ type SideBarLeftProps = {
 
 function SideBarLeft({ element, logo, selectHandler, selected }: SideBarLeftProps) {
 	const router = useRouter()
+	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
 	const signoutHandler = () => {
 		removeCookie("Authorization", { path: "/" })
-		router.push("/teacher/login")
+		setTokenStatus({showMessage: false}).then((res) => {
+            console.log('여기에 할일')
+        })
+		// router.push("/teacher/login")
 	}
 
 	const renderElement = Object.keys(element).map((el: any, idx) => {

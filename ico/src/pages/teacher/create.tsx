@@ -8,6 +8,7 @@ import alertCircle from "react-useanimations/lib/alertCircle"
 import { KOREAN_ONLY, GRADE_ONLY, CLASS_ONLY } from "@/util/regex"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 import { postCreateNationAPI } from "@/api/teacher/user/postCreateNationAPI"
+import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 
 const inputReducer = (
 	state: { school: string; grade: string; class: string; nation: string; currency: string },
@@ -72,11 +73,13 @@ const validMessageReducer = (
 function create() {
 	const [phase, setPhase] = useState<number>(0)
 	const router = useRouter()
+	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
 	useEffect(() => {
 		if (phase === 2) {
 			setTimeout(() => {
-				router.push("/teacher/class/students")
+				setTokenStatus({showMessage: false})
+				// router.push("/teacher/class/students")
 			}, 2000)
 		}
 	}, [phase])
@@ -273,7 +276,7 @@ function create() {
 							theme={"default"}
 							// customCss={inputCSS}
 							type="text"
-							placeholder="학교명을 입력해 주세요."
+							placeholder="예) 부산송수초등학교"
 							onChange={(e) => {
 								dispatchInput({ type: "CHANGE_SCHOOL_NAME", value: e.target.value })
 							}}
@@ -288,7 +291,7 @@ function create() {
 							theme={"default"}
 							// customCss={inputCSS}
 							type="text"
-							placeholder="학년을 입력해 주세요."
+							placeholder="숫자만 입력해주세요."
 							onChange={(e) => {
 								dispatchInput({ type: "CHANGE_GRADE", value: e.target.value })
 							}}
@@ -303,7 +306,7 @@ function create() {
 							theme={"default"}
 							// customCss={inputCSS}
 							type="text"
-							placeholder="반을 입력해 주세요."
+							placeholder="숫자만 입력해주세요."
 							onChange={(e) => {
 								dispatchInput({ type: "CHANGE_CLASS", value: e.target.value })
 							}}

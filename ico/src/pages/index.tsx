@@ -14,7 +14,7 @@ export default function Home() {
 			<div css={scene1CSS}>
 				<div css={scene1InnerCSS}>
 					<div css={mainLabelCSS}>교실 속 작은 경제, 아이코</div>
-					<div css={subLabelCSS}>무슨 말을 할까~ 뿡빵아 도와줘~!</div>
+					<div css={subLabelCSS}>함께 성장하는 우리 교실의 작은 경제를 체험해 보세요!</div>
 					<div css={lineCSS} />
 					<div css={buttonWrapperCSS}>
 						<Button

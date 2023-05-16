@@ -27,6 +27,15 @@ export type getNationType = {
 }
 
 export type getTokenStatusType = {
-	status: 'require_submit_code' | 'require_refresh_token' | 'require_submit_certification' | 'require_create_nation' | 'waiting' | 'approved'
-	role: 'STUDENT' | 'TEACHER'
+	status: tokenStatusIndividual | null
+	role: tokenRoleIndividual | null
+	showMessage: boolean
 }
+
+export type layoutTokenStatusType = {
+	status: tokenStatusIndividual[]
+	role: tokenRoleIndividual[]
+}
+
+export type tokenRoleIndividual = 'STUDENT' | 'TEACHER' | 'GUEST' | 'ADMIN'
+export type tokenStatusIndividual = 'admin' | 'require_login' | 'require_submit_code' | 'require_refresh_token' | 'require_submit_certification' | 'require_create_nation' | 'require_approval' | 'approved'

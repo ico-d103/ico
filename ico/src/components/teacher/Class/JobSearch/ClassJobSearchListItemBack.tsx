@@ -31,6 +31,12 @@ function ClassJobSearchListItemBack({ job }: ClassJobSearchListItemBackPropsType
 	)
 }
 
+export async function getServerSideProps() {
+	return {
+		props: {},
+	}
+}
+
 const wrapperCSS = css`
 	padding: 25px 20px;
 `

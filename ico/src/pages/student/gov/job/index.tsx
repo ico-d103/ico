@@ -6,6 +6,8 @@ import { GovTabMenus } from "@/components/student/Gov/GovTabMenus"
 import { getGovJobAPI } from "@/api/teacher/gov/getGovJobAPI"
 import { useQuery } from "@tanstack/react-query"
 import { getGovJobType } from "@/types/teacher/apiReturnTypes"
+import UseAnimations from "react-useanimations"
+import alertCircle from "react-useanimations/lib/alertCircle"
 
 function index() {
 	const { data } = useQuery<getGovJobType[]>(["govJobList"], getGovJobAPI)
@@ -19,15 +21,28 @@ function index() {
 						우리반에는
 						<b>&nbsp;{data?.length ? data.length : 0}개</b>의 직업이 있어요
 					</span>
-					<div css={jobListCSS}>
-						{data?.map((job) => (
-							<GovJobCard key={job.id} job={job} />
-						))}
-					</div>
+					{data?.length === 0 ? (
+						<div css={noneWrapperCSS}>
+							<UseAnimations animation={alertCircle} size={200} strokeColor={"rgba(0,0,0,0.4)"} />
+							<h3>등록된 세금 목록이 없어요</h3>
+						</div>
+					) : (
+						<div css={jobListCSS}>
+							{data?.map((job) => (
+								<GovJobCard key={job.id} job={job} />
+							))}
+						</div>
+					)}
 				</div>
 			</div>
 		</div>
 	)
+}
+
+export async function getServerSideProps() {
+	return {
+		props: {},
+	}
 }
 
 const mainWrapperCSS = css`
@@ -72,6 +87,18 @@ const jobListCSS = css`
 	flex-direction: column;
 	align-items: center;
 	gap: 30px; */
+`
+
+const noneWrapperCSS = css`
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	> h3 {
+		font-size: 1.1rem;
+	}
 `
 
 export default index

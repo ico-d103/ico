@@ -31,6 +31,12 @@ function coupons() {
 	)
 }
 
+export async function getServerSideProps() {
+	return {
+		props: {},
+	}
+}
+
 const wrapperCSS = css`
 	flex: 1;
 	display: flex;

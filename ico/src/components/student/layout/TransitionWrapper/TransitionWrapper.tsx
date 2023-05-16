@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react"
 import html2canvas from "html2canvas"
-import { navTo, isNavigating } from "@/store/store"
+import { navTo, isNavigating, modalHandler } from "@/store/store"
 import { useAtom } from "jotai"
 import { css } from "@emotion/react"
 import { useRouter } from "next/router"
@@ -12,6 +12,7 @@ type TransitionWrapperProps = {
 }
 
 function TransitionWrapper({ children }: TransitionWrapperProps) {
+	const [modalHandlerAtom, setModalHandlerAtom] = useAtom(modalHandler)
 	const [screenshot, setScreenshot] = useState("")
 	const [navToAtom, setNavToAtom] = useAtom(navTo)
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
@@ -26,6 +27,16 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	const navigate = useNavigate()
 	// const [isPrev, setIsPrev] = useState<boolean>(false)
 	// const [trgScroll, setTrgScroll] = useState<boolean>(false)
+
+
+	// TransitionWrapper를 쓰지 않는 페이지로 뒤로가기 시 NavTo의 값이 그대로 남아있는 것을 방지하는 코드
+	useEffect(() => {
+		return () => {
+			setNavToAtom(() => {
+				return { url: "", transition: "" }
+			})
+		}
+	}, [])
 
 	const isIos = () => {
 		let isIos = false
@@ -57,6 +68,15 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		window.history.scrollRestoration = "manual"
 
 		router.beforePopState(({ url, as, options }) => {
+
+			if (modalHandlerAtom) {
+				console.log("모달 핸들러")
+				modalHandlerAtom()
+				window.history.pushState("", "")
+				router.push(router.asPath)
+				return false
+			}
+
 			if (isIos() === true) {
 				setIsNavigatingAtom(() => true)
 				setNavToAtom(() => {
@@ -67,20 +87,23 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				return true
 			} else {
 				setIsNavigatingAtom(() => true)
+
 				setNavToAtom(() => {
 					return { url: url, transition: "beforeScale" }
 				})
+
 				// navigate(url, "beforeScale")
 
 				// setIsPrev(() => true)
 				return false
 			}
+			return false
 		})
 
 		return () => {
 			router.beforePopState(() => true)
 		}
-	}, [])
+	}, [modalHandlerAtom])
 
 	const handleScreenshot = () => {
 		if (contentInnerWrapperRef.current) {
