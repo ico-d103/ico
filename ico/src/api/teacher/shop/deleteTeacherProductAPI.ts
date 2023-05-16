@@ -2,7 +2,7 @@ import { tokenInstance } from "@/api/instance"
 import { successReturnType, errorReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
-	pid: number
+	pid: string
 }
 
 type responseType = {
@@ -10,9 +10,9 @@ type responseType = {
 	data: successReturnType | errorReturnType
 }
 
-export const deleteStudentProposalAPI = async ({ pid }: paramsType) => {
+export const deleteTeacherProductAPI = async ({ pid }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.delete(`student-product/teacher/${pid}`)
+		const response: responseType = await tokenInstance.delete(`teacher-product/teacher/${pid}`)
 		return response.data
 	} catch (error) {
 		throw error

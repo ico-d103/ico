@@ -14,6 +14,7 @@ import useCompHandler from "@/hooks/useCompHandler"
 import Modal from "@/components/common/Modal/Modal"
 import ShowQR from "@/components/common/ShowQR/ShowQR"
 import { useState } from "react"
+import { deleteTeacherProductAPI } from "@/api/teacher/shop/deleteTeacherProductAPI"
 
 function product() {
 	const router = useRouter()
@@ -26,6 +27,19 @@ function product() {
 	const { data } = useQuery<getTeacherProductDetailType>(["product", productId], () =>
 		getTeacherProductDetailAPI({ pid: productId }),
 	)
+
+	console.log(data)
+
+	const deleteTeacherProduct = async () => {
+		deleteTeacherProductAPI({ pid: productId })
+			.then((res) => {
+				console.log(res)
+				router.push("/teacher/shop/my")
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+	}
 
 	const imageElements = data?.images?.map((imageUrl: any) => (
 		<img
@@ -47,19 +61,38 @@ function product() {
 	return (
 		<div css={wrapperCSS}>
 			{data && (
-				<Modal closeComp={closeComp} compState={compState} transition={"scale"} content={<ShowQR type={"ico_rental"} id={data?.id} time={time} />} />
+				<Modal
+					closeComp={closeComp}
+					compState={compState}
+					transition={"scale"}
+					content={<ShowQR type={"ico_rental"} id={data?.id} time={time} />}
+				/>
 			)}
 			<div css={headerCSS}>
 				<div css={productCSS}>
 					<div css={titleWrapperCSS}>
 						<div>{data?.title}</div>
-						<Button
-							text={"QR코드 생성"}
-							fontSize={"var(--teacher-h5)"}
-							width={"140px"}
-							theme={"vividPositive"}
-							onClick={() => {generateTime(); openComp()}}
-						/>
+						<div style={{ display: "flex", gap: "8px" }}>
+							<Button
+								text={"상품 삭제"}
+								fontSize={"var(--teacher-h5)"}
+								width={"140px"}
+								theme={"vividNegative"}
+								onClick={deleteTeacherProduct}
+							/>
+							{data?.rental && (
+								<Button
+									text={"QR코드 생성"}
+									fontSize={"var(--teacher-h5)"}
+									width={"140px"}
+									theme={"vividPositive"}
+									onClick={() => {
+										generateTime()
+										openComp()
+									}}
+								/>
+							)}
+						</div>
 					</div>
 					{/* 이름 getnation으로 선생님이름 받아올까 생각중 */}
 					<hr />
@@ -81,7 +114,7 @@ function product() {
 						</div>
 
 						<div css={priceCSS}>
-							{data?.amount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {nation.currency}
+							{data?.amount?.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {nation.currency}
 						</div>
 						<div
 							css={css`
