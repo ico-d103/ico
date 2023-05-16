@@ -9,7 +9,7 @@ import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
 import { ShopTabMenus } from "@/components/student/Shop/ShopTabMenus"
 
 import ShopCreateImage from "@/components/student/Shop/ShopCreate/ShopCreateImage"
-import { postStudentProposalAPI } from "@/api/teacher/shop/postStudentProposalAPI"
+import { postStudentProductsAPI } from "@/api/student/shop/postStudentProductsAPI"
 
 function create() {
 	const router = useRouter()
@@ -62,9 +62,10 @@ function create() {
 	}
 
 	const proposalProduct = () => {
-		postStudentProposalAPI({ body: formData })
-			.then(() => {
+		postStudentProductsAPI({ body: formData })
+			.then((res) => {
 				router.push("/student/shop/student")
+				console.log(res)
 			})
 			.catch((err) => {
 				console.log(err)

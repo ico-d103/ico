@@ -13,9 +13,14 @@ function enter() {
 	const router = useRouter()
 
 	const [phase, setPhase] = useState<number>(0)
+	const [number, setNumber] = useState<number>(0)
 
 	const passFirstPhaseHandler = () => {
 		setPhase(() => 1)
+	}
+
+	const handleClassChange = (event: any) => {
+		setNumber(event.target.value)
 	}
 
 	const inputRefs = useRef<(HTMLInputElement | null)[]>([])
@@ -61,6 +66,7 @@ function enter() {
 		postImmigrationAPI({
 			body: {
 				code: submitCode,
+				number: number,
 			},
 		})
 			.then((res) => {
@@ -134,29 +140,59 @@ function enter() {
 		})
 	}, [])
 
+	console.log(submitCode)
+	console.log(number)
+
 	return (
 		<div css={enterWrapperCSS}>
 			<div css={gridCSS({ phase })}>
-				{/* <div css={phaseWrapperCSS}>
-					<PageHeader title={"우리반 입장하기"} />
-					<Button
-						text={"입장 코드를 선생님에게 물어보세요"}
-						fontSize={`var(--teacher-h5)`}
-						width={"100%"}
-						theme={"mobileNormal"}
-						onClick={passFirstPhaseHandler}
-					/>
-				</div> */}
-
 				<div css={phaseWrapperCSS}>
-					{/* <PageHeader title={"우리반 입장하기"} /> */}
-					<div css={WrapperCSS}>
+					<div>
 						<LoadImage
 							src={"/assets/enter/enter_image.png"}
 							alt={"signup_illust"}
 							wrapperCss={imageWrapper}
 							dev={false}
 						/>
+					</div>
+
+					<div css={WrapperCSS}>
+						<div
+							css={css`
+								margin-top: 12px;
+								font-weight: 700;
+								font-size: 8vw;
+							`}
+						>
+							반 입장
+						</div>
+						<div
+							css={css`
+								margin-top: 12px;
+								font-weight: 500;
+								font-size: 5vw;
+							`}
+						>
+							나의 반 번호를 입력해주세요.
+						</div>
+
+						<div css={inputOuterWrapperCSS}>
+							<input css={inputWrapperCSS} style={{ width: "20vw" }} type={"number"} onChange={handleClassChange} />
+						</div>
+
+						<Button
+							text={"다음으로!"}
+							fontSize={`5vw`}
+							width={"60%"}
+							height={"15vw"}
+							theme={"mobileNormal"}
+							onClick={passFirstPhaseHandler}
+						/>
+					</div>
+				</div>
+
+				<div css={phaseWrapperCSS}>
+					<div css={WrapperCSS} style={{ marginTop: "100vw" }}>
 						<div
 							css={css`
 								margin-top: 12px;
@@ -203,7 +239,7 @@ const gridCSS = ({ phase }: { phase: number }) => {
 	return css`
 		height: 100%;
 		display: grid;
-		grid-template-columns: 100% 100% 100%;
+		grid-template-columns: 100% 100%;
 		transition-property: transform;
 		transition-duration: 0.5s;
 
@@ -212,7 +248,7 @@ const gridCSS = ({ phase }: { phase: number }) => {
 }
 
 const phaseWrapperCSS = css`
-	width: 100%;
+	width: 100vw;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
@@ -221,16 +257,16 @@ const phaseWrapperCSS = css`
 `
 
 const WrapperCSS = css`
-	width: 100%;
-	height: 100%;
+	flex: 1;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 `
 
 const imageWrapper = css`
-	width: 150%;
-	height: 75vw;
+	width: 200%;
+	height: 100vw;
+	overflow: visible;
 `
 
 const inputOuterWrapperCSS = css`
