@@ -20,6 +20,6 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 
     Optional<Teacher> findById(Long id);
 
-    Teacher findByNationId(Long nationId);
+    Optional<Teacher> findByNationId(Long nationId);
 
 }

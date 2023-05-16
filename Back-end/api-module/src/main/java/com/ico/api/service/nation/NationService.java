@@ -70,5 +70,9 @@ public interface NationService {
      */
     void updateTradingTime(HttpServletRequest request, TradingTimeReqDto dto);
 
+    /**
+     * 교사의 나라 삭제
+     * @param request
+     */
     void deleteNation(HttpServletRequest request);
 }

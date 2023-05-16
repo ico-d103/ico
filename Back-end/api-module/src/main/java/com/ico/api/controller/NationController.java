@@ -113,6 +113,11 @@ public class NationController {
         return ResponseEntity.ok(nationService.updateNation(reqDto, request));
     }
 
+    /**
+     * 교사의 나라 삭제
+     * @param request
+     * @return
+     */
     @DeleteMapping("/teacher")
     public ResponseEntity<HttpStatus> deleteNation(HttpServletRequest request) {
         nationService.deleteNation(request);

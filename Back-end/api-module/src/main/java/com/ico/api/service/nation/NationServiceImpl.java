@@ -349,7 +349,8 @@ public class NationServiceImpl implements NationService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
         // Teacher
-        Teacher teacher = teacherRepository.findByNationId(nationId);
+        Teacher teacher = teacherRepository.findByNationId(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         teacher.setNation(null);
         teacherRepository.save(teacher);
 
