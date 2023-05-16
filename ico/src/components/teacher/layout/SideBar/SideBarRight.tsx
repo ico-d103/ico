@@ -43,9 +43,9 @@ function SideBarRight({ element, selectHandler, selected, title, nationData }: S
 				<div css={titleWrapperCSS}>{title}</div>
 				{renderElement}
 			</div>
-
 			<div css={footerWrapperCSS}>
 				<div>
+					{/* <div css={ballonCSS}>학생들에게 코드를 알려주세요!</div> */}
 					<div css={userNameCSS}>반 코드 : {nationData.code}</div>
 					<div css={userEmailCSS}>
 						{nationData.school} {nationData.grade}학년 {nationData.room}반
@@ -104,6 +104,15 @@ const footerWrapperCSS = css`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+`
+
+const ballonCSS = css`
+	padding: 12px;
+	background: var(--teacher-highlight-color);
+	color: black;
+	border-radius: 5px;
+	margin-bottom: 15px;
+	cursor: pointer;
 `
 
 const userNameCSS = css`
