@@ -9,6 +9,7 @@ import com.ico.core.entity.Nation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -110,5 +111,16 @@ public class NationController {
     @PutMapping("/teacher")
     public ResponseEntity<Nation> updateNation(@Valid @RequestBody NationReqDto reqDto, HttpServletRequest request) {
         return ResponseEntity.ok(nationService.updateNation(reqDto, request));
+    }
+
+    /**
+     * 교사의 나라 삭제
+     * @param request
+     * @return
+     */
+    @DeleteMapping("/teacher")
+    public ResponseEntity<HttpStatus> deleteNation(HttpServletRequest request) {
+        nationService.deleteNation(request);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

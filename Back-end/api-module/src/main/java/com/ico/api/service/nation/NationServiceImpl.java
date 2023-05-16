@@ -14,23 +14,35 @@ import com.ico.core.data.Default_rule;
 import com.ico.core.data.Default_tax;
 import com.ico.core.dto.StockReqDto;
 import com.ico.core.entity.DefaultNation;
+import com.ico.core.entity.Immigration;
 import com.ico.core.entity.Interest;
+import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Rule;
 import com.ico.core.entity.Stock;
+import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentJob;
+import com.ico.core.entity.StudentProduct;
 import com.ico.core.entity.Tax;
 import com.ico.core.entity.Teacher;
+import com.ico.core.entity.TeacherProduct;
+import com.ico.core.entity.TreasuryHistory;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.DefaultNationRepository;
+import com.ico.core.repository.ImmigrationRepository;
 import com.ico.core.repository.InterestRepository;
+import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.RuleRepository;
 import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.StudentJobRepository;
+import com.ico.core.repository.StudentProductRepository;
+import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TaxRepository;
+import com.ico.core.repository.TeacherProductRepository;
 import com.ico.core.repository.TeacherRepository;
+import com.ico.core.repository.TreasuryHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -58,10 +70,15 @@ public class NationServiceImpl implements NationService {
     private final InterestRepository interestRepository;
     private final RuleRepository ruleRepository;
     private final StudentJobRepository studentJobRepository;
+    private final StudentProductRepository studentProductRepository;
+    private final TeacherProductRepository teacherProductRepository;
+    private final ImmigrationRepository immigrationRepository;
     private final TaxRepository taxRepository;
-
+    private final InvestRepository investRepository;
+    private final TreasuryHistoryRepository treasuryHistoryRepository;
     private final NationRepository nationRepository;
     private final TeacherRepository teacherRepository;
+    private final StudentRepository studentRepository;
     private final StockRepository stockRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -322,4 +339,89 @@ public class NationServiceImpl implements NationService {
         }
     }
 
+    @Override
+    @Transactional
+    public void deleteNation(HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+
+        Long nationId = jwtTokenProvider.getNation(token);
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        // Teacher
+        Teacher teacher = teacherRepository.findByNationId(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        teacher.setNation(null);
+        teacherRepository.save(teacher);
+
+        // Student
+        List<Student> students = studentRepository.findAllByNationId(nationId);
+        for (Student student : students) {
+            student.setNation(null);
+            studentRepository.save(student);
+        }
+
+        // Immigration
+        List<Immigration> immigrations = immigrationRepository.findAllByNationId(nationId);
+        if (!immigrations.isEmpty()) {
+            immigrationRepository.deleteAll(immigrations);
+        }
+
+        // Rule
+        List<Rule> rules = ruleRepository.findAllByNationId(nationId);
+        if (!rules.isEmpty()) {
+            ruleRepository.deleteAll(rules);
+        }
+
+        // Stock
+        List<Stock> stocks = stockRepository.findAllByNationId(nationId);
+        if (!stocks.isEmpty()) {
+            stockRepository.deleteAll(stocks);
+        }
+
+        // StudentJob
+        List<StudentJob> jobs = studentJobRepository.findAllByNationId(nationId);
+        if (!jobs.isEmpty()) {
+            studentJobRepository.deleteAll(jobs);
+        }
+
+        // StudentProduct
+        List<StudentProduct> studentProducts = studentProductRepository.findAllByNationId(nationId);
+        if (!studentProducts.isEmpty()) {
+            studentProductRepository.deleteAll(studentProducts);
+        }
+
+        // Tax
+        List<Tax> taxes = taxRepository.findAllByNationId(nationId);
+        if (!taxes.isEmpty()) {
+            taxRepository.deleteAll(taxes);
+        }
+
+        // TeacherProduct
+        List<TeacherProduct> teacherProducts = teacherProductRepository.findAllByNationId(nationId);
+        if (!teacherProducts.isEmpty()) {
+            teacherProductRepository.deleteAll(teacherProducts);
+        }
+
+        // Invest
+        List<Invest> invests = investRepository.findAllByNationId(nationId);
+        if (!invests.isEmpty()) {
+            investRepository.deleteAll(invests);
+        }
+
+        // Interest
+        List<Interest> interests = interestRepository.findAllByNationId(nationId);
+        if (!interests.isEmpty()) {
+            interestRepository.deleteAll(interests);
+        }
+
+        // TreasuryHistory(MongoDB)
+        List<TreasuryHistory> treasuryHistories = treasuryHistoryRepository.findAllByNationId(nationId);
+        if (!treasuryHistories.isEmpty()) {
+            treasuryHistoryRepository.deleteAll(treasuryHistories);
+        }
+
+        // 연관관계 매핑을 모두 끊고 마지막에 삭제
+        nationRepository.delete(nation);
+    }
 }

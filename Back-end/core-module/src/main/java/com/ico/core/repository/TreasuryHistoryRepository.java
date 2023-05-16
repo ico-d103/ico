@@ -11,6 +11,7 @@ import java.util.List;
  * 국고 사용 내역 관련 Repository
  *
  * @author 서재건
+ * @author 강교철
  */
 public interface TreasuryHistoryRepository extends MongoRepository<TreasuryHistory, String> {
 
@@ -39,4 +40,10 @@ public interface TreasuryHistoryRepository extends MongoRepository<TreasuryHisto
      */
     Long countByNationId(Long nationId);
 
+    /**
+     * 나라 삭제 시에 사용
+     * @param nationId
+     * @return
+     */
+    List<TreasuryHistory> findAllByNationId(Long nationId);
 }
