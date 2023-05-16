@@ -42,7 +42,7 @@ public class StudentProductController {
      * @return httpstauts
      */
     @PostMapping(value = "/student/proposal", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<HttpStatus> uploadProposal(@Valid @RequestPart("proposal") StudentProductReqDto proposal, @RequestPart("files") List<MultipartFile> files, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> uploadProposal(@RequestPart("files") List<MultipartFile> files, @Valid @RequestPart("proposal") StudentProductReqDto proposal, HttpServletRequest request) {
         studentProductService.createProduct(request, files, proposal);
         return ResponseEntity.ok(HttpStatus.OK);
     }
