@@ -151,6 +151,8 @@ const inputCSS = css`
 	background-color: var(--common-back-color);
 	height: 45px;
 	border-radius: 10px;
+	outline: none;
+	padding: 0 15px;
 `
 const productCSS = css`
 	display: grid;
