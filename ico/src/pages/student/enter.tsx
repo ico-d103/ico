@@ -73,7 +73,8 @@ function enter() {
 			.then((res) => {
 				console.log(res)
 
-				setTokenStatus().then((res) => {
+				setTokenStatus({showMessage: false}).then((res) => {
+					console.log(res)
 					console.log('여기에 할일')
 				})
 

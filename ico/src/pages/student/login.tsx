@@ -62,7 +62,7 @@ function login() {
 				// 	})
 				// })
 
-				setTokenStatus().then((res) => {
+				setTokenStatus({showMessage: false}).then((res) => {
 					console.log('여기에 할일')
 				})
 				// getTokenStatusAPI().then((res) => {

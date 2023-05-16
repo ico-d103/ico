@@ -19,6 +19,7 @@ import {
 	tokenStatusIndividual,
 } from "@/types/common/apiReturnTypes"
 import PageLoading from "@/components/student/layout/PageLoading/PageLoading"
+import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 
 type LayoutProps = {
 	children: any
@@ -34,6 +35,7 @@ function Layout({ children }: LayoutProps) {
 	const separator: string = useRouter().pathname.split("/")[1]
 	const accessToken = getCookie("Authorization")
 	const [isValidChecked, setIsValidChecked] = useState<boolean>(false)
+	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
 	useEffect(() => {
 		queryClient.clear()
@@ -71,109 +73,82 @@ function Layout({ children }: LayoutProps) {
 			})
 		}
 
-		getTokenStatusAPI()
-			.then((res) => {
-				if (res) {
-					setTokenStatusAtom(() => res)
-				}
-			})
-			.catch((error) => {
-				setTokenStatusAtom(() => {
-					return {
-						status: "require_login",
-						role: "GUEST",
-					}
-				})
-			})
+		setTokenStatus({ showMessage: true })
 	}, [accessToken])
 
-
-
-
-
-
-	const TARGET_URL: { [prop: string]: { [prop: string]: string } } = {
+	const TARGET_URL: { [prop: string]: { [prop: string]: { url: string; message: string } } } = {
 		GUEST: {
-			require_login: "/",
+			require_login: { url: "/", message: "로그인이 필요한 서비스입니다." },
 		},
 		STUDENT: {
-			require_submit_code: "/student/enter",
-			require_refresh_token: "/student/check",
-			require_approval: "/student/check",
-			approved: "/student/home",
+			require_submit_code: { url: "/student/enter", message: "반 코드를 입력해 주세요!" },
+			require_refresh_token: { url: "/student/check", message: "입국 심사를 기다리고 있어요!" },
+			require_approval: { url: "/student/check", message: "입국 심사를 기다리고 있어요!" },
+			approved: { url: "/student/home", message: "잘못된 요청입니다." },
 		},
 		TEACHER: {
-			require_approval: "/teacher/login",
-			require_create_nation: "/teacher/create",
-			require_submit_certification: "/teacher/login",
-			approved: "/teacher/class/students",
+			require_approval: { url: "/teacher/login", message: "교사 인증서 승인 대기중입니다." },
+			require_create_nation: { url: "/teacher/create", message: "국가를 생성하는 페이지로 이동합니다." },
+			require_submit_certification: { url: "/teacher/login", message: "교사 인증서를 다시 제출해야 합니다." },
+			approved: { url: "/teacher/class/students", message: "잘못된 요청입니다." },
 		},
 	}
 
-
 	const ROUTES: { [prop: string]: layoutTokenStatusType } = {
-		"/": {role: ["GUEST", "TEACHER", "STUDENT"], status: ["require_login", "require_submit_code", "require_refresh_token", "require_submit_certification", "require_create_nation", "require_approval", "approved",]},
+		"/": {
+			role: ["GUEST", "TEACHER", "STUDENT"],
+			status: [
+				"require_login",
+				"require_submit_code",
+				"require_refresh_token",
+				"require_submit_certification",
+				"require_create_nation",
+				"require_approval",
+				"approved",
+			],
+		},
 		"/student/login": { role: ["GUEST"], status: ["require_login"] },
 		"/student/signup": { role: ["GUEST"], status: ["require_login"] },
-		"/teacher/login": {role: ["GUEST", "TEACHER"], status: ["require_login", "require_approval", "require_submit_certification"],}, // 교사 로그인 role에 TEACHER가 있는 이유는 교사 승인을 기다리고 있는 경우, require_submit_certification는 교사 승인 제출폼이 따로 생기기 전까지 임시로 사용
+		"/teacher/login": {
+			role: ["GUEST", "TEACHER"],
+			status: ["require_login", "require_approval", "require_submit_certification"],
+		},
 		"/student/enter": { role: ["STUDENT"], status: ["require_submit_code"] },
 		"/student/check": { role: ["STUDENT"], status: ["require_refresh_token", "require_approval"] },
 		"/teacher/create": { role: ["TEACHER"], status: ["require_create_nation"] },
-		// "/student/home": { role: ["STUDENT"], status: ["approved"] },
-		// "/teacher/class/students": { role: ["TEACHER"], status: ["approved"] },
-		// '/teacher/승인서제출폼': {role: ['GUEST'], status: 'require_submit_certification'},
 	}
-
-
-
-
 
 	useEffect(() => {
 		if (tokenStatusAtom.role !== null && tokenStatusAtom.status !== null) {
-			
-			const isRoleMatch = ROUTES[router.pathname]?.role.includes(tokenStatusAtom.role)
-			const isStatusMatch = ROUTES[router.pathname]?.status.includes(tokenStatusAtom.status)
-			
-			if (Object.keys(ROUTES).includes(router.pathname)) {
-				if (!isRoleMatch || !isStatusMatch) {
-					noti({
-						content: (
-							<NotiTemplate
-								type={"alert"}
-								content={`잘못된 접근입니다.`}
-							/>
-						),
-						duration: 5000,
-					})
-					router.push(TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status])
-				} else {
-					setIsValidChecked(() => true)
-				}
-				
-				
+			const isValidRequest =
+				ROUTES[router.pathname]?.role.includes(tokenStatusAtom.role) &&
+				ROUTES[router.pathname]?.status.includes(tokenStatusAtom.status)
+			const allowByStatus =
+				tokenStatusAtom.status === "approved" &&
+				(Object.keys(ROUTES).includes(router.pathname) ? ROUTES[router.pathname]?.status.includes("approved") : true)
+			const allowByRole =
+				router.pathname === "/" ||
+				(tokenStatusAtom.role === "STUDENT" && separator === "student") ||
+				(tokenStatusAtom.role === "TEACHER" && separator === "teacher")
+
+			if (isValidRequest || (allowByRole && allowByStatus)) {
+				setIsValidChecked(() => true)
 			} else {
-
-				if (router.pathname === '/' || tokenStatusAtom.role === "STUDENT" && separator === 'student' || tokenStatusAtom.role === "TEACHER" && separator === 'teacher' ) {
-					setIsValidChecked(() => true)
-				} else {
+				if (tokenStatusAtom.showMessage === true) {
 					noti({
 						content: (
 							<NotiTemplate
 								type={"alert"}
-								content={`잘못된 접근입니다. ${JSON.stringify(tokenStatusAtom)}, ${isRoleMatch}, ${isStatusMatch}`}
+								content={`${TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status].message}`}
 							/>
 						),
 						duration: 5000,
 					})
-					router.push(TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status])
 				}
-				
+				router.push(TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status].url)
 			}
-		} 
+		}
 	}, [tokenStatusAtom, router.pathname])
-
-
-
 
 	// useEffect(() => {
 	// 	queryClient.clear()
@@ -257,7 +232,7 @@ function Layout({ children }: LayoutProps) {
 	// 	}
 	// }, [pathname])
 	if (!isValidChecked) {
-		return <PageLoading/>
+		return <PageLoading />
 	} else if (separator === "teacher") {
 		return (
 			<OverlayScrollbarsComponent defer>
