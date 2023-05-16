@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 입국심사 관련 Service 로직
@@ -126,6 +125,7 @@ public class ImmigrationServiceImpl implements ImmigrationService {
     }
 
     @Override
+    @Transactional
     public void companionImmigration(Long immigrationId, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Role role = jwtTokenProvider.getRole(token);
