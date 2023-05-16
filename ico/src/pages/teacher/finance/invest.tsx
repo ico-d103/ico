@@ -53,6 +53,7 @@ const titleCSS = css`
 const subTitleCSS = css`
 	font-size: 0.95rem;
 	margin-top: 12px;
+	margin-bottom: 30px;
 `
 
 export default invest

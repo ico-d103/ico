@@ -64,6 +64,7 @@ const contentCSS = css`
 	margin-top: 20px;
 	display: flex;
 	justify-content: space-between;
+	margin-bottom: 15px;
 
 	div:nth-child(1) {
 		flex-grow: 3;
@@ -93,6 +94,8 @@ const inputCSS = css`
 	border-radius: 10px;
 	text-align: center;
 	font-size: 1.1rem;
+	outline: none;
+	padding: 0 15px;
 `
 
 export default FinanceInvestStartForm

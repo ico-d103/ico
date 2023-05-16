@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react"
 import { css } from "@emotion/react"
 import StudentEnteredList from "./ClassStudentEnteredList"
 import StudentWaitingList from "./ClassStudentWaitingList"
@@ -20,7 +19,6 @@ function StudentList() {
 					</>
 				)}
 				<StudentEnteredList />
-
 			</div>
 		</>
 	)
