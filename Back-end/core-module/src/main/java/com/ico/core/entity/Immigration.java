@@ -18,8 +18,8 @@ public class Immigration {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Nation nation;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Student student;
 }
