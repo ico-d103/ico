@@ -8,10 +8,11 @@ import LoadImage from "@/components/common/LoadImage/LoadImage"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import { ENG_NUM_ONLY } from "@/util/regex"
 import { getTokenStatusAPI } from "@/api/common/getTokenStatusAPI"
+import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 
 function enter() {
 	const router = useRouter()
-
+	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 	const [phase, setPhase] = useState<number>(0)
 	const [number, setNumber] = useState<number>(0)
 
@@ -71,7 +72,12 @@ function enter() {
 		})
 			.then((res) => {
 				console.log(res)
-				router.push("/student/check")
+
+				setTokenStatus().then((res) => {
+					console.log('여기에 할일')
+				})
+
+				// router.push("/student/check")
 			})
 			.catch((error) => {
 				console.log(error)
@@ -122,23 +128,23 @@ function enter() {
 		return inputs
 	}
 
-	useEffect(() => {
-		getTokenStatusAPI().then((res) => {
-			console.log(res.status)
+	// useEffect(() => {
+	// 	getTokenStatusAPI().then((res) => {
+	// 		console.log(res.status)
 
-			if (res.status == "waiting") {
-				router.push("/student/check")
-			}
+	// 		if (res.status == "waiting") {
+	// 			router.push("/student/check")
+	// 		}
 
-			if (res.status == "require_refresh_token") {
-				router.push("student/check")
-			}
+	// 		if (res.status == "require_refresh_token") {
+	// 			router.push("student/check")
+	// 		}
 
-			if (res.status == "approved") {
-				router.push("/student/home")
-			}
-		})
-	}, [])
+	// 		if (res.status == "approved") {
+	// 			router.push("/student/home")
+	// 		}
+	// 	})
+	// }, [])
 
 	console.log(submitCode)
 	console.log(number)
