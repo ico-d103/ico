@@ -133,36 +133,40 @@ function Layout({ children }: LayoutProps) {
 			
 			const isRoleMatch = ROUTES[router.pathname]?.role.includes(tokenStatusAtom.role)
 			const isStatusMatch = ROUTES[router.pathname]?.status.includes(tokenStatusAtom.status)
-
-			if ((ROUTES[router.pathname]?.role) && (!isRoleMatch || !isStatusMatch)) {
-				noti({
-					content: (
-						<NotiTemplate
-							type={"alert"}
-							content={`잘못된 접근입니다.`}
-						/>
-					),
-					duration: 5000,
-				})
-				router.push(TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status])
+			
+			if (Object.keys(ROUTES).includes(router.pathname)) {
+				if (!isRoleMatch || !isStatusMatch) {
+					noti({
+						content: (
+							<NotiTemplate
+								type={"alert"}
+								content={`잘못된 접근입니다.`}
+							/>
+						),
+						duration: 5000,
+					})
+					router.push(TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status])
+				} else {
+					setIsValidChecked(() => true)
+				}
+				
 				
 			} else {
 
-				// if (tokenStatusAtom.role === "STUDENT" && separator === 'student' || tokenStatusAtom.role === "TEACHER" && separator === 'TEACHER' ) {
-				// 	setIsValidChecked(() => true)
-				// } else {
-				// 	noti({
-				// 		content: (
-				// 			<NotiTemplate
-				// 				type={"alert"}
-				// 				content={`잘못된 접근입니다. ${JSON.stringify(tokenStatusAtom)}, ${isRoleMatch}, ${isStatusMatch}`}
-				// 			/>
-				// 		),
-				// 		duration: 5000,
-				// 	})
-				// 	router.push(TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status])
-				// }
-				router.push(TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status])
+				if (router.pathname === '/' || tokenStatusAtom.role === "STUDENT" && separator === 'student' || tokenStatusAtom.role === "TEACHER" && separator === 'TEACHER' ) {
+					setIsValidChecked(() => true)
+				} else {
+					noti({
+						content: (
+							<NotiTemplate
+								type={"alert"}
+								content={`잘못된 접근입니다. ${JSON.stringify(tokenStatusAtom)}, ${isRoleMatch}, ${isStatusMatch}`}
+							/>
+						),
+						duration: 5000,
+					})
+					router.push(TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status])
+				}
 				
 			}
 		} 
