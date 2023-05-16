@@ -191,9 +191,9 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // QR코드 유효 시간 내인지 확인
-        long now = System.currentTimeMillis() / 1000;
-        log.info("[rentalProduct] : now_{}, qr_valid_{}", now, dto.getUnixTime() + (3 * 60));
-        if(dto.getUnixTime() + (3 * 60) < now || dto.getUnixTime() > now){
+        long now = System.currentTimeMillis();
+        log.info("[rentalProduct] : now_{}, qr_valid_{}", now, dto.getUnixTime() + (3 * 60 * 1000));
+        if(dto.getUnixTime() + (3 * 60 * 1000) < now || dto.getUnixTime() > now){
             throw new CustomException(ErrorCode.TIME_OUT_QR);
         }
 

@@ -78,12 +78,14 @@ public class InvestServiceImpl implements InvestService{
         student.setAccount(student.getAccount() - amount);
         studentRepository.save(student);
 
+        log.info("[nation] : {}", nation.getId());
         // 투자 내역 저장
         Invest invest = Invest.builder()
                 .amount(amount)
                 .price(price)
                 .date(LocalDateTime.now())
                 .student(student)
+                .nation(nation)
                 .build();
         investRepository.save(invest);
 
