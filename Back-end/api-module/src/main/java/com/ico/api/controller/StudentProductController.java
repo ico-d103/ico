@@ -3,6 +3,7 @@ package com.ico.api.controller;
 import com.ico.api.dto.studentProduct.StudentProductAllResDto;
 import com.ico.api.dto.studentProduct.StudentProductDetailResDto;
 import com.ico.api.dto.studentProduct.StudentProductReqDto;
+import com.ico.api.dto.teacherProduct.ProductQRReqDto;
 import com.ico.api.service.student.StudentProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -92,14 +94,14 @@ public class StudentProductController {
     }
 
     /**
-     * 학생 상품 구매
      *
-     * @param studentProductId 구매 상품 ID
-     * @return Httpstatus
+     * @param request
+     * @param dto 구매 상품 ID, QR 코드 시작 시간
+     * @return
      */
-    @PostMapping("/student/{studentProductId}")
-    public ResponseEntity<HttpStatus> buyProduct(@PathVariable Long studentProductId){
-        studentProductService.buyProduct(studentProductId);
+    @PostMapping("/student")
+    public ResponseEntity<HttpStatus> buyProduct(HttpServletRequest request, @Valid @RequestBody ProductQRReqDto dto){
+        studentProductService.buyProduct(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

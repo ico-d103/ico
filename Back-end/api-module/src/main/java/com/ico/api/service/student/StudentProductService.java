@@ -3,6 +3,7 @@ package com.ico.api.service.student;
 import com.ico.api.dto.studentProduct.StudentProductAllResDto;
 import com.ico.api.dto.studentProduct.StudentProductDetailResDto;
 import com.ico.api.dto.studentProduct.StudentProductReqDto;
+import com.ico.api.dto.teacherProduct.ProductQRReqDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,7 +51,8 @@ public interface StudentProductService {
     /**
      * 학생 상품 구매
      *
-     * @param studentProductId 상품 id
+     * @param request
+     * @param dto
      */
-    void buyProduct(Long studentProductId);
+    void buyProduct(HttpServletRequest request, ProductQRReqDto dto);
 }
