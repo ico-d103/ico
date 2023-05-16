@@ -187,9 +187,9 @@ public class StudentProductServiceImpl implements StudentProductService {
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
         // QR 코드 유효시간 검사
-        long now = System.currentTimeMillis() / 1000;
-        log.info("[rentalProduct] : now_{}, qr_valid_{}", now, dto.getUnixTime() + (3 * 60));
-        if (dto.getUnixTime() + (3 * 60) < now || dto.getUnixTime() > now) {
+        long now = System.currentTimeMillis();
+        log.info("[rentalProduct] : now_{}, qr_valid_{}", now, dto.getUnixTime() + (3 * 60 * 1000));
+        if (dto.getUnixTime() + (3 * 60 * 1000) < now || dto.getUnixTime() > now) {
             throw new CustomException(ErrorCode.TIME_OUT_QR);
         }
 

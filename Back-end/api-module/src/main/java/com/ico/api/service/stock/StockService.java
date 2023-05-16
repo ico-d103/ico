@@ -30,4 +30,11 @@ public interface StockService {
      */
     void uploadIssue(HttpServletRequest request, StockUploadReqDto dto);
 
+    /**
+     * 투자 종목 삭제
+     *
+     * @param request
+     */
+    void deleteStock(HttpServletRequest request);
+
 }
