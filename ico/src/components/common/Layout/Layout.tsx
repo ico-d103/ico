@@ -153,7 +153,7 @@ function Layout({ children }: LayoutProps) {
 				
 			} else {
 
-				if (router.pathname === '/' || tokenStatusAtom.role === "STUDENT" && separator === 'student' || tokenStatusAtom.role === "TEACHER" && separator === 'TEACHER' ) {
+				if (router.pathname === '/' || tokenStatusAtom.role === "STUDENT" && separator === 'student' || tokenStatusAtom.role === "TEACHER" && separator === 'teacher' ) {
 					setIsValidChecked(() => true)
 				} else {
 					noti({
