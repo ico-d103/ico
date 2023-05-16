@@ -2,18 +2,21 @@ import React, {useMemo} from "react"
 import QRCode from "react-qr-code"
 import { css } from "@emotion/react"
 import useMediaQuery from "@/hooks/useMediaQuery"
+import Timer from "./Timer"
 
 type ShowQRProps = {
+    type: 'ico_rental' | 'ico_purchase'
 	id: number
     time: number
 }
 
-function ShowQR({ id, time }: ShowQRProps) {
+function ShowQR({type, id, time }: ShowQRProps) {
 	const isMobile = useMediaQuery("(max-width: 768px")
 
 	return (
 		<div css={modalWrapperCSS({ isMobile })}>
-			<QRCode value={`ico_rental,${id},${time}`} />
+			<QRCode value={`${type},${id},${time}`} />
+            <Timer/>
 		</div>
 	)
 }

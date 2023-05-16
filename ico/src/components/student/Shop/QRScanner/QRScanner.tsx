@@ -6,9 +6,10 @@ import UseAnimations from "react-useanimations"
 import loading from "react-useanimations/lib/loading"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
 import useNavigate from "@/hooks/useNavigate"
-import { postRentalProductsAPI } from "@/api/student/shop/postRentalProductsAPI"
+import { postRentalTeacherProductsAPI } from "@/api/student/shop/postRentalTeacherProductsAPI"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import { postPurchaseStudentProductsAPI } from "@/api/student/shop/postPurchaseStudentProductsAPI"
 
 type QRScannerProps = {
 	closeComp: any
@@ -56,7 +57,7 @@ const QRScanner = ({ closeComp, type, id }: QRScannerProps) => {
 					return
 				}
 				if (bodyData[0] === "ico_rental") {
-					postRentalProductsAPI({ body: { id: Number(bodyData[1]), unixTime: Number(bodyData[2]) } })
+					postRentalTeacherProductsAPI({ body: { id: Number(bodyData[1]), unixTime: Number(bodyData[2]) } })
 						.then((res) => {
 							noti({ content: <NotiTemplate type={"ok"} content={"물건을 빌렸어요!"} />, duration: 5000 })
 							closeComp && closeComp()
@@ -65,6 +66,38 @@ const QRScanner = ({ closeComp, type, id }: QRScannerProps) => {
 							if (error.response.data.code === "621") {
 								noti({
 									content: <NotiTemplate type={"alert"} content={"QR 코드의 유효기간이 지났어요!"} />,
+									duration: 5000,
+								})
+								closeComp && closeComp()
+							}
+							if (error.response.data.code === "616") {
+								noti({
+									content: <NotiTemplate type={"alert"} content={"남은 물건이 없어요!"} />,
+									duration: 5000,
+								})
+								closeComp && closeComp()
+							}
+						})
+				}
+
+
+				if (bodyData[0] === "ico_purchase") {
+					postPurchaseStudentProductsAPI({ body: { id: Number(bodyData[1]), unixTime: Number(bodyData[2]) } })
+						.then((res) => {
+							noti({ content: <NotiTemplate type={"ok"} content={"물건을 빌렸어요!"} />, duration: 5000 })
+							closeComp && closeComp()
+						})
+						.catch((error) => {
+							if (error.response.data.code === "621") {
+								noti({
+									content: <NotiTemplate type={"alert"} content={"QR 코드의 유효기간이 지났어요!"} />,
+									duration: 5000,
+								})
+								closeComp && closeComp()
+							}
+							if (error.response.data.code === "616") {
+								noti({
+									content: <NotiTemplate type={"alert"} content={"남은 물건이 없어요!"} />,
 									duration: 5000,
 								})
 								closeComp && closeComp()
