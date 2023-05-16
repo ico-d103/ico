@@ -7,6 +7,7 @@ import { GOV_JOB } from "../GovIcons"
 import GovJobCardModalContent from "./GovJobCardModalContent"
 import useGetNation from "@/hooks/useGetNation"
 import { getGovJobType } from "@/types/teacher/apiReturnTypes"
+import { appendEiGa } from "@/util/isEndWithConsonant"
 
 type GovJobCardPropsType = {
 	job: getGovJobType
@@ -32,7 +33,7 @@ function GovJobCard({ job }: GovJobCardPropsType) {
 					<div css={conditionWrapperCSS}>
 						<h4>월급</h4>
 						<h3>
-							{(job.wage * 30).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} {nation.currency}
+							{(job.wage * 30).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {nation.currency}
 						</h3>
 					</div>
 				</div>
@@ -45,7 +46,7 @@ function GovJobCard({ job }: GovJobCardPropsType) {
 					<ModalContent
 						width={"320px"}
 						icon={GOV_JOB}
-						title={`${job.title}의 업무`}
+						title={`${appendEiGa(job.title)} 하는일`}
 						titleSize={"var(--student-h2)"}
 						content={<GovJobCardModalContent content={job.detail} closeComp={closeComp} />}
 						forChild={true}

@@ -1,7 +1,7 @@
 import { css } from "@emotion/react"
 
 function GovRuleGrade() {
-	const mockList = [
+	const gradeScore = [
 		[901, 1000],
 		[801, 900],
 		[701, 800],
@@ -24,11 +24,11 @@ function GovRuleGrade() {
 				</tr>
 			</thead>
 			<tbody>
-				{mockList.map((mock, idx) => (
+				{gradeScore.map((grade, idx) => (
 					<tr key={idx}>
 						<td css={tdCSS}>{idx + 1} 등급</td>
-						<td>{mock[0]}</td>
-						<td>{mock[1]}</td>
+						<td>{grade[0]} 점</td>
+						<td>{grade[1]} 점</td>
 					</tr>
 				))}
 			</tbody>
@@ -47,7 +47,6 @@ const tableCSS = css`
 
 const thCSS = css`
 	padding: 10px 0;
-	/* background: var(--student-main-color-2); */
 	border-radius: 20px;
 	color: var(--student-main-color-5);
 	font-weight: bold;

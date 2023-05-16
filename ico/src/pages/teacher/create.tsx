@@ -273,7 +273,7 @@ function create() {
 							theme={"default"}
 							// customCss={inputCSS}
 							type="text"
-							placeholder="학교명을 입력해 주세요."
+							placeholder="예) 부산송수초등학교"
 							onChange={(e) => {
 								dispatchInput({ type: "CHANGE_SCHOOL_NAME", value: e.target.value })
 							}}
@@ -288,7 +288,7 @@ function create() {
 							theme={"default"}
 							// customCss={inputCSS}
 							type="text"
-							placeholder="학년을 입력해 주세요."
+							placeholder="숫자만 입력해주세요."
 							onChange={(e) => {
 								dispatchInput({ type: "CHANGE_GRADE", value: e.target.value })
 							}}
@@ -303,7 +303,7 @@ function create() {
 							theme={"default"}
 							// customCss={inputCSS}
 							type="text"
-							placeholder="반을 입력해 주세요."
+							placeholder="숫자만 입력해주세요."
 							onChange={(e) => {
 								dispatchInput({ type: "CHANGE_CLASS", value: e.target.value })
 							}}
