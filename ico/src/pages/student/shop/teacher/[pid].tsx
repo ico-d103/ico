@@ -23,12 +23,19 @@ function product() {
 
 	return (
 		<div>
-			<Modal compState={compState} closeComp={closeComp} transition={"scale"} content={<QRScannerModal compState={compState} />} />
+			{data && (
+				<Modal
+					compState={compState}
+					closeComp={closeComp}
+					transition={"scale"}
+					content={
+						<QRScannerModal compState={compState} type={data.rental ? "ico_rental" : "ico_purchase"} id={data.id} />
+					}
+				/>
+			)}
 			<PageHeader title={"상점"} />
 
 			<button onClick={openComp}>qr 카메라</button>
-
-
 
 			<div css={shopWrapperCSS}>
 				<ContentWrapper>{data?.amount}</ContentWrapper>
