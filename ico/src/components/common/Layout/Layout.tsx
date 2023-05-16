@@ -99,25 +99,25 @@ function Layout({ children }: LayoutProps) {
 		STUDENT: {
 			require_submit_code: "/student/enter",
 			require_refresh_token: "/student/check",
-			waiting: "/student/check",
+			require_approval: "/student/check",
 			approved: "/student/home",
 		},
 		TEACHER: {
-			waiting: "/teacher/login",
+			require_approval: "/teacher/login",
 			require_create_nation: "/teacher/create",
-			approved: "/teacher/class/students",
 			require_submit_certification: "/teacher/login",
+			approved: "/teacher/class/students",
 		},
 	}
 
 
 	const ROUTES: { [prop: string]: layoutTokenStatusType } = {
-		"/": {role: ["GUEST", "TEACHER", "STUDENT"], status: ["require_login", "require_submit_code", "require_refresh_token", "require_submit_certification", "require_create_nation", "waiting", "approved",]},
+		"/": {role: ["GUEST", "TEACHER", "STUDENT"], status: ["require_login", "require_submit_code", "require_refresh_token", "require_submit_certification", "require_create_nation", "require_approval", "approved",]},
 		"/student/login": { role: ["GUEST"], status: ["require_login"] },
 		"/student/signup": { role: ["GUEST"], status: ["require_login"] },
-		"/teacher/login": {role: ["GUEST", "TEACHER"], status: ["require_login", "waiting", "require_submit_certification"],}, // 교사 로그인 role에 TEACHER가 있는 이유는 교사 승인을 기다리고 있는 경우, require_submit_certification는 교사 승인 제출폼이 따로 생기기 전까지 임시로 사용
+		"/teacher/login": {role: ["GUEST", "TEACHER"], status: ["require_login", "require_approval", "require_submit_certification"],}, // 교사 로그인 role에 TEACHER가 있는 이유는 교사 승인을 기다리고 있는 경우, require_submit_certification는 교사 승인 제출폼이 따로 생기기 전까지 임시로 사용
 		"/student/enter": { role: ["STUDENT"], status: ["require_submit_code"] },
-		"/student/check": { role: ["STUDENT"], status: ["require_refresh_token", "waiting"] },
+		"/student/check": { role: ["STUDENT"], status: ["require_refresh_token", "require_approval"] },
 		"/teacher/create": { role: ["TEACHER"], status: ["require_create_nation"] },
 		// "/student/home": { role: ["STUDENT"], status: ["approved"] },
 		// "/teacher/class/students": { role: ["TEACHER"], status: ["approved"] },
