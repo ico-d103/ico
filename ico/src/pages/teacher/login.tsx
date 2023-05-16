@@ -63,7 +63,7 @@ function login() {
 							router.push("/teacher/create")
 						}
 						// 교사인증 X -> 인증 대기 상태
-						if (res.status === "waiting") {
+						if (res.status === "require_approval") {
 							// 인증 대기 모달 띄우기
 							setIsDenied(false)
 							openComp()
