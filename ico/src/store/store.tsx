@@ -1,5 +1,5 @@
 import { createStore, atom } from "jotai"
-import { getNationType } from "@/types/common/apiReturnTypes"
+import { getNationType, getTokenStatusType } from "@/types/common/apiReturnTypes"
 
 export const mainStore = createStore()
 
@@ -19,7 +19,10 @@ const stackNotification = atom<{ [prop: number]: { width: string; height: string
 
 const selectedPage = atom(1)
 
-const tokenStatus = atom
+const tokenStatus = atom<getTokenStatusType>({
+	status: null,
+	role: null
+})
 
 const nationData = atom<getNationType>({
 	id: 0,
@@ -46,4 +49,5 @@ export {
 	stackNotification,
 	selectedPage,
 	nationData,
+	tokenStatus,
 }
