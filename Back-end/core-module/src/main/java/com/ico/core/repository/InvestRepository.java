@@ -3,6 +3,7 @@ package com.ico.core.repository;
 import com.ico.core.entity.Invest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -15,4 +16,12 @@ public interface InvestRepository extends JpaRepository<Invest, Long> {
      * @return 매수 내역
      */
     Optional<Invest> findByStudentId(Long id);
+
+    /**
+     * 나라의 학생 주식 매수 내역
+     *
+     * @param nationId
+     * @return
+     */
+    List<Invest> findAllByNationId(Long nationId);
 }

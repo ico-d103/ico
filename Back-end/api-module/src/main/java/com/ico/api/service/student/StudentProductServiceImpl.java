@@ -3,10 +3,11 @@ package com.ico.api.service.student;
 import com.ico.api.dto.studentProduct.StudentProductAllResDto;
 import com.ico.api.dto.studentProduct.StudentProductDetailResDto;
 import com.ico.api.dto.studentProduct.StudentProductReqDto;
+import com.ico.api.dto.teacherProduct.ProductQRReqDto;
 import com.ico.api.service.S3UploadService;
-import com.ico.api.util.Formatter;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.api.util.Formatter;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentProduct;
@@ -23,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -170,19 +170,28 @@ public class StudentProductServiceImpl implements StudentProductService {
     /**
      * 학생 상품 구매
      *
-     * @param studentProductId 상품 id
+     * @param request
+     * @param dto
      */
     @Transactional
     @Override
-    public void buyProduct(Long studentProductId) {
-        long studentId = 1;
-        long nationId = 99;
+    public void buyProduct(HttpServletRequest request, ProductQRReqDto dto) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        StudentProduct product = studentProductRepository.findByIdAndNationId(studentProductId, nationId)
+        StudentProduct product = studentProductRepository.findByIdAndNationId(dto.getId(), nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        // QR 코드 유효시간 검사
+        long now = System.currentTimeMillis();
+        log.info("[rentalProduct] : now_{}, qr_valid_{}", now, dto.getUnixTime() + (3 * 60 * 1000));
+        if (dto.getUnixTime() + (3 * 60 * 1000) < now || dto.getUnixTime() > now) {
+            throw new CustomException(ErrorCode.TIME_OUT_QR);
+        }
 
         // 판매자 유효 검사
         if (studentRepository.findById(product.getStudent().getId()).isEmpty()) {

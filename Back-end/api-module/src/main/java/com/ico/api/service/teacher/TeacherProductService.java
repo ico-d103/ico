@@ -1,5 +1,6 @@
 package com.ico.api.service.teacher;
 
+import com.ico.api.dto.teacherProduct.ProductQRReqDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.core.dto.TeacherProductReqDto;
@@ -12,6 +13,7 @@ import java.util.List;
  * 교사 상품 관련 Service
  *
  * @author 변윤경
+ * @author 서재건
  */
 public interface TeacherProductService {
     /**
@@ -36,6 +38,14 @@ public interface TeacherProductService {
     void buyProduct(HttpServletRequest request, Long id);
 
     /**
+     * QR스캔을 통한 교사 상품 대여
+     *
+     * @param request
+     * @param dto qr 시작 시간, 상품 id
+     */
+    void rentalProduct(HttpServletRequest request, ProductQRReqDto dto);
+
+    /**
      * 교사 상품 상세정보 조회
      *
      * @param request
@@ -43,4 +53,11 @@ public interface TeacherProductService {
      * @return
      */
     TeacherProductDetailResDto detailProduct(HttpServletRequest request, Long id);
+
+    /**
+     * 교사 상품 삭제
+     *
+     * @param teacherProductId
+     */
+    void deleteTeacherProduct(Long teacherProductId);
 }

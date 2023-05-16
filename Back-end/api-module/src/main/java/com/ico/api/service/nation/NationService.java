@@ -11,6 +11,8 @@ import java.util.Map;
 
 /**
  * @author 강교철
+ * @author 변윤경
+ * @author 서재건
  */
 public interface NationService {
 
@@ -30,7 +32,13 @@ public interface NationService {
      */
     Nation getNation(HttpServletRequest request);
 
-//    Nation updateNation(NationReqDto reqDto, HttpServletRequest request);
+    /**
+     * 교사가 자신이 생성한 나라 수정
+     * @param reqDto
+     * @param request
+     * @return Nation
+     */
+    Nation updateNation(NationReqDto reqDto, HttpServletRequest request);
 
     /**
      * 투자 종목 등록
@@ -61,4 +69,5 @@ public interface NationService {
      * @param dto 거래 시작 시간, 종료 시간
      */
     void updateTradingTime(HttpServletRequest request, TradingTimeReqDto dto);
+
 }

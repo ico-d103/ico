@@ -49,6 +49,8 @@ public enum ErrorCode{
 
     INVALID_FILE_URL(HttpStatus.BAD_REQUEST, "30", "유효하지 않은 파일 URL입니다."),
 
+    CHECK_DB(HttpStatus.BAD_REQUEST, "31", "default nation db 확인이 필요합니다."),
+
     NOT_FOUND_NUMBER(HttpStatus.BAD_REQUEST,"32", "반 번호를 입력해주세요"),
 
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
@@ -122,6 +124,8 @@ public enum ErrorCode{
     PRODUCT_NOT_FOUND(HttpStatus.BAD_REQUEST, "617", "해당 상품은 없는 상품입니다."),
 
     IS_SELLER(HttpStatus.BAD_REQUEST, "618", "판매자는 구매를 할 수 없습니다."),
+
+    TIME_OUT_QR(HttpStatus.BAD_REQUEST, "621", "QR 유효시간이 지났습니다."),
 
     NOT_TRADING_TIME(HttpStatus.BAD_REQUEST, "701", "거래시간이 아닙니다."),
 

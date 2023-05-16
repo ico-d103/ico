@@ -1,11 +1,12 @@
 package com.ico.api.service.teacher;
 
+import com.ico.api.dto.teacherProduct.ProductQRReqDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.service.transaction.TransactionService;
-import com.ico.api.util.Formatter;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.api.util.Formatter;
 import com.ico.core.dto.TeacherProductReqDto;
 import com.ico.core.entity.Coupon;
 import com.ico.core.entity.Nation;
@@ -18,20 +19,23 @@ import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherProductRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * @author 변윤경
+ * @author 서재건
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -153,24 +157,75 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         // 재고 개수 수정
         product.setSold((byte) (product.getSold() + 1));
 
-        // 쿠폰일 때
-        if (!product.getRental()) {
-            // 인벤토리에 추가
-            Optional<Coupon> couponOptional = couponRepository.findByTeacherProductIdAndStudentId(id, studentId);
-            Coupon coupon;
-            if (couponOptional.isPresent()) {
-                coupon = couponOptional.get();
-                coupon.setCount((byte) (coupon.getCount() + 1));
-            } else {
-                coupon = Coupon.builder()
-                        .student(student)
-                        .teacherProduct(product)
-                        .title(product.getTitle())
-                        .isAssigned(false)
-                        .build();
-            }
-            couponRepository.save(coupon);
+        // 인벤토리에 추가
+        Optional<Coupon> couponOptional = couponRepository.findByTeacherProductIdAndStudentId(id, studentId);
+        Coupon coupon;
+        if (couponOptional.isPresent()) {
+            coupon = couponOptional.get();
+            coupon.setCount((byte) (coupon.getCount() + 1));
+        } else {
+            coupon = Coupon.builder()
+                    .student(student)
+                    .teacherProduct(product)
+                    .title(product.getTitle())
+                    .isAssigned(false)
+                    .build();
         }
+        couponRepository.save(coupon);
+
+    }
+
+    /**
+     * QR스캔을 통한 교사 상품 대여
+     *
+     * @param request
+     * @param dto qr 시작 시간, 상품 id
+     */
+    @Override
+    public void rentalProduct(HttpServletRequest request, ProductQRReqDto dto) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // QR코드 유효 시간 내인지 확인
+        long now = System.currentTimeMillis();
+        log.info("[rentalProduct] : now_{}, qr_valid_{}", now, dto.getUnixTime() + (3 * 60 * 1000));
+        if(dto.getUnixTime() + (3 * 60 * 1000) < now || dto.getUnixTime() > now){
+            throw new CustomException(ErrorCode.TIME_OUT_QR);
+        }
+
+
+        // 타입이 일치하는지 확인
+        TeacherProduct product = teacherProductRepository.findByIdAndNationId(dto.getId(), nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
+        if (!product.getRental()) {
+            throw new CustomException(ErrorCode.NOT_RENTAL);
+        }
+
+        // 재고 있는지 확인
+        if (product.getCount() == product.getSold()) {
+            throw new CustomException(ErrorCode.SOLD_OUT);
+        }
+
+        // 잔고가 충분한지 확인
+        int amount = product.getAmount();
+        int account = student.getAccount();
+        if (amount > account) {
+            throw new CustomException(ErrorCode.LOW_BALANCE);
+        }
+
+        // 상품 가격 지불
+        student.setAccount(account - amount);
+        studentRepository.save(student);
+
+        // 거래 내역 추가
+        transactionService.addTransactionWithdraw("교사 상점", studentId, amount, product.getTitle());
+
+        // 재고 개수 수정
+        product.setSold((byte) (product.getSold() + 1));
     }
 
     /**
@@ -198,5 +253,15 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 .sold(product.getSold())
                 .date(product.getDate().format(Formatter.date))
                 .build();
+    }
+
+    @Override
+    public void deleteTeacherProduct(Long teacherProductId) {
+        TeacherProduct teacherProduct = teacherProductRepository.findById(teacherProductId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        Arrays.stream(teacherProduct.getImages().split(","))
+                .forEach(s3UploadService::deleteFile);
+        teacherProductRepository.delete(teacherProduct);
     }
 }

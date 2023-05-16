@@ -3,13 +3,18 @@ package com.ico.api.controller;
 import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
 import com.ico.api.dto.nation.TradingTimeReqDto;
-import com.ico.core.dto.StockReqDto;
 import com.ico.api.service.nation.NationService;
+import com.ico.core.dto.StockReqDto;
 import com.ico.core.entity.Nation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -90,9 +95,20 @@ public class NationController {
      * @param dto 거래 시작 시간, 거래 종료 시간
      * @return Httpstatus
      */
-    @PutMapping("teacher/trading-time")
+    @PutMapping("/teacher/trading-time")
     public ResponseEntity<HttpStatus> updateTradingTime(HttpServletRequest request, @Valid @RequestBody TradingTimeReqDto dto){
         nationService.updateTradingTime(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 교사가 자신이 생성한 나라 수정
+     * @param reqDto
+     * @param request
+     * @return Nation
+     */
+    @PutMapping("/teacher")
+    public ResponseEntity<Nation> updateNation(@Valid @RequestBody NationReqDto reqDto, HttpServletRequest request) {
+        return ResponseEntity.ok(nationService.updateNation(reqDto, request));
     }
 }
