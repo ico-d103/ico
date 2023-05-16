@@ -4,6 +4,8 @@ import { getHomeCouponType } from "@/types/student/apiReturnTypes"
 import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
 import { css } from "@emotion/react"
+import { useAtom } from "jotai"
+import { isNavigating } from "@/store/store"
 
 
 type HomeCouponListProps = {
@@ -11,6 +13,8 @@ type HomeCouponListProps = {
 }
 
 function HomeCouponList({couponList}: HomeCouponListProps) {
+	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
+
     const renderList = couponList.map((el) => {
         return <HomeCouponListItem {...el} />
     })
@@ -19,7 +23,10 @@ function HomeCouponList({couponList}: HomeCouponListProps) {
     <div>
         {couponList.length === 0 ? (
 				<div css={alertWrapperCSS}>
-					<UseAnimations animation={alertCircle} size={128} />
+					<div css={css`width: 128px; height: 128px;`}>
+						{isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={128} />}
+					</div>
+					
 					<div css={labelCSS}>쿠폰이 없어요!</div>
 				</div>
 			) : (

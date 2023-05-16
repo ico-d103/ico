@@ -10,6 +10,8 @@ import UseAnimations from "react-useanimations"
 import loading from "react-useanimations/lib/loading"
 import Loading from "@/components/student/common/Loading/Loading"
 import useGetNation from "@/hooks/useGetNation"
+import { useAtom } from "jotai"
+import { isNavigating } from "@/store/store"
 
 function asset() {
 	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getHomeTransactionHistoryType>(
@@ -19,7 +21,7 @@ function asset() {
 	)
 
 	const [nation] = useGetNation()
-	
+	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 
 	return (
 		<div>
@@ -37,12 +39,21 @@ function asset() {
 				</ContentWrapper>
 				<ContentWrapper>
 					{isLoading && (
-						<Loading
-							size={96}
-							labelSize={18}
-							labelMargin={"24px 0px 16px 0px"}
-							label={"거래 내역을 불러오는 중이에요!"}
-						/>
+						<div
+							css={css`
+								width: 128px;
+								height: 128px;
+							`}
+						>
+							{isNavigatingAtom === false && (
+								<Loading
+									size={96}
+									labelSize={18}
+									labelMargin={"24px 0px 16px 0px"}
+									label={"거래 내역을 불러오는 중이에요!"}
+								/>
+							)}
+						</div>
 					)}
 					{data && <HomeAssetDetail tradeHistory={data} />}
 				</ContentWrapper>
@@ -53,10 +64,9 @@ function asset() {
 
 export async function getServerSideProps() {
 	return {
-	  props: {},
-	};
-  }
-
+		props: {},
+	}
+}
 
 const assetWrapperCSS = css`
 	display: flex;
