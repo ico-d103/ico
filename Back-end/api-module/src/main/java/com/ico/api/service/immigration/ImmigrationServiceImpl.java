@@ -71,6 +71,7 @@ public class ImmigrationServiceImpl implements ImmigrationService {
         sseEmitters.send(findStudentSseList(nation.getId()));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Immigration getImmigration(HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
@@ -83,6 +84,7 @@ public class ImmigrationServiceImpl implements ImmigrationService {
         }
     }
 
+    @Transactional
     @Override
     public void deleteImmigration(HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
@@ -144,6 +146,7 @@ public class ImmigrationServiceImpl implements ImmigrationService {
         sseEmitters.send(findStudentSseList(jwtTokenProvider.getNation(token)));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<StudentSseDto> findAllImmigrationStudent(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -157,7 +160,7 @@ public class ImmigrationServiceImpl implements ImmigrationService {
      * @param nationId
      * @return 입국 요청 목록
      */
-    private List<StudentSseDto> findStudentSseList(Long nationId) {
+    List<StudentSseDto> findStudentSseList(Long nationId) {
         List<Immigration> immigrationList = immigrationRepository.findAllByNationId(nationId);
         List<StudentSseDto> dtoList = new ArrayList<>();
         for (Immigration immigration : immigrationList) {
