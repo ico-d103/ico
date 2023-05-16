@@ -46,7 +46,7 @@ public class Student {
     private Nation nation;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_id")
+    @JoinColumn(name = "student_job_id")
     private StudentJob studentJob;
 
     @Column(nullable = false, unique = true)

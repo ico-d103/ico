@@ -1,6 +1,8 @@
 package com.ico.core.repository;
 
 import com.ico.core.entity.Student;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -37,6 +39,16 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
      * @return
      */
     List<Student> findAllByNationId(Long nationId);
+
+//    Page<Student> findAllByStudentJobIdIsNotNull(Pageable pageable);
+//
+//    Page<Student> findByNationId(Long nationId, Pageable pageable);
+//
+//    Page<Student> findByStudentJobId(Long studentJobId, Pageable pageable);
+
+    Page<Student> findByStudentJobIsNotNull(Pageable pageable);
+
+    Page<Student> findBySalaryGreaterThan(Integer salary, Pageable pageable);
 
 
 }
