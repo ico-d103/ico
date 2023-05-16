@@ -46,12 +46,17 @@ function StudentDetail() {
 	)
 }
 
+export async function getServerSideProps() {
+	return {
+		props: {},
+	}
+}
+
 const wrapperCSS = css`
 	height: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	
 
 	> h1 {
 		font-size: var(--teacher-h2);

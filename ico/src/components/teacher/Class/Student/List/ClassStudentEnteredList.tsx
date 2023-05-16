@@ -54,6 +54,12 @@ function StudentEnteredList() {
 	)
 }
 
+export async function getServerSideProps() {
+	return {
+		props: {},
+	}
+}
+
 const wrapperCSS = css`
 	flex: 1;
 `

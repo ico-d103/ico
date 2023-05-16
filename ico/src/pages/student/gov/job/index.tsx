@@ -30,6 +30,12 @@ function index() {
 	)
 }
 
+export async function getServerSideProps() {
+	return {
+		props: {},
+	}
+}
+
 const mainWrapperCSS = css`
 	padding-bottom: 30px;
 `

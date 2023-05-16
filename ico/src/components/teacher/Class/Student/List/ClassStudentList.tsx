@@ -24,6 +24,12 @@ function StudentList() {
 	)
 }
 
+export async function getServerSideProps() {
+	return {
+		props: {},
+	}
+}
+
 const headerCSS = css`
 	font-size: var(--teacher-h1);
 	font-weight: bold;
