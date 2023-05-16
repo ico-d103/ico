@@ -149,16 +149,40 @@ const buttonCSS = ({ theme }: { theme: string }) => {
 			color: var(--student-main-color-5);
 		`,
 		mobileSoft3: css`
-		border: none;
-		border-radius: 20px;
-		background-color: var(--student-main-color-7);
-		color: var(--student-main-color-6);
+			border: none;
+			border-radius: 20px;
+			background-color: var(--student-main-color-7);
+			color: var(--student-main-color-6);
 		`,
 		mobileCancel: css`
 			border: none;
 			border-radius: 20px;
 			background-color: rgba(199, 199, 199, 0.4);
 			color: #828282;
+		`,
+		mobileRadial: css`
+			border: none;
+			border-radius: 100%;
+			color: #3d2f21;
+			background-color: #ffcd00;
+			animation-name: first;
+			animation-duration: 1s;
+			animation-iteration-count: infinite;
+			/* animation-delay: 0s, 0.3s; */
+			animation-direction: alternate;
+			position: relative;
+
+			background: linear-gradient(45deg, #fa709a, #fee140);
+			@keyframes first {
+				from {
+					transform: scale(70%);
+				}
+
+				to {
+					transform: scale(100%);
+					box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.5);
+				}
+			}
 		`,
 	}
 
