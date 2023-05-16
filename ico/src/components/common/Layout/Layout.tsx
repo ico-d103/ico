@@ -148,20 +148,21 @@ function Layout({ children }: LayoutProps) {
 				
 			} else {
 
-				if (tokenStatusAtom.role === "STUDENT" && separator === 'student' || tokenStatusAtom.role === "TEACHER" && separator === 'TEACHER' ) {
-					setIsValidChecked(() => true)
-				} else {
-					noti({
-						content: (
-							<NotiTemplate
-								type={"alert"}
-								content={`잘못된 접근입니다. ${JSON.stringify(tokenStatusAtom)}, ${isRoleMatch}, ${isStatusMatch}`}
-							/>
-						),
-						duration: 5000,
-					})
-					router.push(TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status])
-				}
+				// if (tokenStatusAtom.role === "STUDENT" && separator === 'student' || tokenStatusAtom.role === "TEACHER" && separator === 'TEACHER' ) {
+				// 	setIsValidChecked(() => true)
+				// } else {
+				// 	noti({
+				// 		content: (
+				// 			<NotiTemplate
+				// 				type={"alert"}
+				// 				content={`잘못된 접근입니다. ${JSON.stringify(tokenStatusAtom)}, ${isRoleMatch}, ${isStatusMatch}`}
+				// 			/>
+				// 		),
+				// 		duration: 5000,
+				// 	})
+				// 	router.push(TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status])
+				// }
+				router.push(TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status])
 				
 			}
 		} 
