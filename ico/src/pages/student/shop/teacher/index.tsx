@@ -23,13 +23,14 @@ function index() {
 	return (
 		<div css={mainWrapperCSS}>
 			<PageHeader title={"상점"} addComp={<TabMenu menus={ShopTabMenus()} selected={0} />} />
+			{cardData?.length === 0 && (
+				<div css={noneWrapperCSS}>
+					<UseAnimations animation={alertCircle} size={200} strokeColor={"rgba(0,0,0,0.4)"} />
+					<h3>등록된 상품이 없어요</h3>
+				</div>
+			)}
 			<div css={cardWrapperCSS}>
-				{cardData?.length === 0 ? (
-					<div css={noneWrapperCSS}>
-						<UseAnimations animation={alertCircle} size={200} strokeColor={"rgba(0,0,0,0.4)"} />
-						<h3>등록된 상품이 없어요</h3>
-					</div>
-				) : (
+				{cardData?.length !== 0 && (
 					<>
 						{cardData?.map((card) => (
 							<Card
