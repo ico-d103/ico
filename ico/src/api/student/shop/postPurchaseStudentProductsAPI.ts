@@ -12,11 +12,12 @@ type responseType = {
 	data: successReturnType | errorReturnType
 }
 
-export const postRentalProductsAPI = async ({ body }: paramsType) => {
+export const postPurchaseStudentProductsAPI = async ({ body }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.post("/teacher-product/student/rental", body)
+		const response: responseType = await tokenInstance.post("/student-product/student/buy", body)
 		return response.data
 	} catch (error) {
+        console.log(error)
 		throw error
 	}
 }
