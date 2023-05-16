@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react"
 import Portal from "../Portal/Portal"
 import { css } from "@emotion/react"
+import { useRouter } from "next/router"
+import { modalHandler } from "@/store/store"
+import { useAtom } from "jotai"
 
 // transition : 아래 transitions css의 객체에 키값을 참조할 것. 0426 기준 fadeIn, scale, rightToLeft, bottomToTop, flip 사용 가능
 // content: 모달로 띄우고자 하는 컴포넌트 - 자동으로 props에 모달창을 끄는 closeComp 함수를 컴포넌트의 props로 넘겨주기 때문에 해당 컴포넌트의 props에 closeComp를 선언, 타입은 closeComp?: () => void로 사용하면 된다.
@@ -16,15 +19,25 @@ type ModalProps = {
 
 function Modal({ compState, closeComp, transition, content }: ModalProps) {
 	const [modalState, setModalState] = useState<boolean>(false)
+	const [modalHandlerAtom, setModalHandlerAtom] = useAtom(modalHandler)
+	const router = useRouter()
+
+
+
+
 
 	useEffect(() => {
+		
 		if (compState) {
+			
 			setTimeout(() => {
+				setModalHandlerAtom(() => closeComp)
 				setModalState(() => true)
 			}, 30)
 		} else {
 			setTimeout(() => {
 				setModalState(() => false)
+				setModalHandlerAtom(() =>  null)
 			}, 300)
 		}
 	}, [compState])
@@ -55,8 +68,8 @@ const backdropCSS = ({ compState, modalState }: { compState: boolean; modalState
 	return css`
 		
 		position: fixed;
-		width: 100%;
-		height: 100%;
+		width: 100vw;
+		height: 100vh;
 		background-color: rgba(0, 0, 0, 0.2);
 		opacity: ${compState ? (modalState ? "100%" : "0%") : "0%"};
 		transition-duration: 0.3s;

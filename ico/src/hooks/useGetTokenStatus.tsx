@@ -7,7 +7,7 @@ import { getTokenStatusType } from '@/types/common/apiReturnTypes'
 
 function useGetTokenStatus(): [getTokenStatusType, ({showMessage}: {showMessage: boolean}) => Promise<void | getTokenStatusType>] {
     const [tokenStatusAtom, setTokenStatusAtom] = useAtom(tokenStatus)
-    const refresh = ({showMessage = true}) => {
+    const refresh = ({showMessage}: {showMessage: boolean}) => {
         return getTokenStatusAPI()
         .then((res) => {
             if (res) {

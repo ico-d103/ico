@@ -72,11 +72,16 @@ function Layout({ children }: LayoutProps) {
 				}
 			})
 		}
-
-		setTokenStatus({ showMessage: true })
 	}, [accessToken])
 
+	useEffect(() => {
+		setTokenStatus({ showMessage: true })
+	}, [])
+
 	const TARGET_URL: { [prop: string]: { [prop: string]: { url: string; message: string } } } = {
+		ADMIN: {
+			admin: { url: "/admin/confirm", message: "" },
+		},
 		GUEST: {
 			require_login: { url: "/", message: "로그인이 필요한 서비스입니다." },
 		},
@@ -107,12 +112,27 @@ function Layout({ children }: LayoutProps) {
 				"approved",
 			],
 		},
+		"/404": {
+			role: ["GUEST", "TEACHER", "STUDENT"],
+			status: [
+				"require_login",
+				"require_submit_code",
+				"require_refresh_token",
+				"require_submit_certification",
+				"require_create_nation",
+				"require_approval",
+				"approved",
+			],
+		},
+		"/admin/login": { role: ["GUEST"], status: ["require_login"] },
+		"/admin/confirm": { role: ["ADMIN"], status: ["admin"] },
 		"/student/login": { role: ["GUEST"], status: ["require_login"] },
 		"/student/signup": { role: ["GUEST"], status: ["require_login"] },
 		"/teacher/login": {
 			role: ["GUEST", "TEACHER"],
 			status: ["require_login", "require_approval", "require_submit_certification"],
 		},
+		"/teacher/signup": { role: ["GUEST"], status: ["require_login"] },
 		"/student/enter": { role: ["STUDENT"], status: ["require_submit_code"] },
 		"/student/check": { role: ["STUDENT"], status: ["require_refresh_token", "require_approval"] },
 		"/teacher/create": { role: ["TEACHER"], status: ["require_create_nation"] },
@@ -134,6 +154,7 @@ function Layout({ children }: LayoutProps) {
 			if (isValidRequest || (allowByRole && allowByStatus)) {
 				setIsValidChecked(() => true)
 			} else {
+				console.log("접근!")
 				if (tokenStatusAtom.showMessage === true) {
 					noti({
 						content: (
