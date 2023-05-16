@@ -7,6 +7,8 @@ import { GovTabMenus } from "@/components/student/Gov/GovTabMenus"
 import { getGovExchequerAPI } from "@/api/teacher/gov/getGovExchequerAPI"
 import { useEffect, useState } from "react"
 import { getGovExchequerType } from "@/types/teacher/apiReturnTypes"
+import UseAnimations from "react-useanimations"
+import alertCircle from "react-useanimations/lib/alertCircle"
 
 function index() {
 	const [exchequerList, setExchequerList] = useState<getGovExchequerType[]>([])
@@ -22,16 +24,25 @@ function index() {
 			<PageHeader title={"세금 목록"} addComp={<TabMenu menus={GovTabMenus()} selected={1} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
-					{exchequerList.map((exchequer, idx) => (
-						<CollapseMenu
-							key={exchequer.id}
-							title={<ListNumbering number={idx + 1} text={exchequer.title} />}
-							fontSize={`var(--student-h3)`}
-							bracketSize={"10px"}
-							children={<div>{exchequer.detail}</div>}
-							marginBottom={"10px"}
-						/>
-					))}
+					{exchequerList.length === 0 ? (
+						<div css={noneWrapperCSS}>
+							<UseAnimations animation={alertCircle} size={200} strokeColor={"rgba(0,0,0,0.4)"} />
+							<h3>등록된 세금 목록이 없어요</h3>
+						</div>
+					) : (
+						<>
+							{exchequerList.map((exchequer, idx) => (
+								<CollapseMenu
+									key={exchequer.id}
+									title={<ListNumbering number={idx + 1} text={exchequer.title} />}
+									fontSize={`var(--student-h3)`}
+									bracketSize={"10px"}
+									children={<div>{exchequer.detail}</div>}
+									marginBottom={"10px"}
+								/>
+							))}
+						</>
+					)}
 				</div>
 			</div>
 		</div>
@@ -51,6 +62,18 @@ const wrapperCSS = css`
 
 const contentCSS = css`
 	width: 95%;
+`
+
+const noneWrapperCSS = css`
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	> h3 {
+		font-size: 1.1rem;
+	}
 `
 
 export default index
