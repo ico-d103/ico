@@ -13,6 +13,7 @@ import { getTokenStatusAPI } from "@/api/common/getTokenStatusAPI"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "../StackNotification/NotiTemplate"
 
+
 type LayoutProps = {
 	children: any
 }
@@ -62,6 +63,44 @@ function Layout({ children }: LayoutProps) {
 			})
 		}
 	}, [accessToken])
+
+
+
+	const ROUTES = {
+		'/student/login': {role: 'STUDENT', status: 'require_login'},
+
+	}
+
+
+	// useEffect(() => {
+	// 	queryClient.clear()
+	// }, [])
+
+
+	// useEffect(() => {
+	// 	getTokenStatusAPI()
+	// 		.then((res) => {
+	// 			if (res.role == "STUDENT") {
+	// 				if (res.status == "require_submit_code") {
+	// 					router.push("/student/enter")
+	// 				}
+	// 				if (res.status == "waiting") {
+	// 					router.push("/student/check")
+	// 				}
+	// 				if (res.status == "require_refresh_token") {
+	// 					router.push("/student/check")
+	// 				}
+	// 				if (res.status == "approved") {
+	// 					router.push("/student/home")
+	// 				}
+	// 			}
+	// 		})
+	// 		.catch((err) => {
+	// 			console.log(err)
+	// 		})
+	// }, [getTokenStatusAPI])
+
+	
 
 	// useEffect(() => {
 	// 	if (accessToken) {
