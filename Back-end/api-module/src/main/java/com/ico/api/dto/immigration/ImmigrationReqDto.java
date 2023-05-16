@@ -14,4 +14,8 @@ import javax.validation.constraints.NotNull;
 public class ImmigrationReqDto {
     @NotBlank(message = "20")
     String code;
+
+    // 학생의 반 번호
+    @NotNull(message = "32")
+    Integer number;
 }

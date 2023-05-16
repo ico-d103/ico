@@ -51,6 +51,8 @@ public enum ErrorCode{
 
     CHECK_DB(HttpStatus.BAD_REQUEST, "31", "default nation db 확인이 필요합니다."),
 
+    NOT_FOUND_NUMBER(HttpStatus.BAD_REQUEST,"32", "반 번호를 입력해주세요"),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, "104", "비밀번호 입력 칸이 비었습니다."),
