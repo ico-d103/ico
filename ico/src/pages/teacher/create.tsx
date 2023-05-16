@@ -8,6 +8,7 @@ import alertCircle from "react-useanimations/lib/alertCircle"
 import { KOREAN_ONLY, GRADE_ONLY, CLASS_ONLY } from "@/util/regex"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 import { postCreateNationAPI } from "@/api/teacher/user/postCreateNationAPI"
+import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 
 const inputReducer = (
 	state: { school: string; grade: string; class: string; nation: string; currency: string },
@@ -72,11 +73,13 @@ const validMessageReducer = (
 function create() {
 	const [phase, setPhase] = useState<number>(0)
 	const router = useRouter()
+	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
 	useEffect(() => {
 		if (phase === 2) {
 			setTimeout(() => {
-				router.push("/teacher/class/students")
+				setTokenStatus({showMessage: false})
+				// router.push("/teacher/class/students")
 			}, 2000)
 		}
 	}, [phase])

@@ -6,6 +6,8 @@ import { getAdminTeacherCertAPI } from "@/api/admin/getAdminTeacherCertAPI"
 import { getAdminTeacherCertType } from "@/types/admin/apiReturnTypes"
 import { deleteAdminTeacherCertApproveAPI } from "@/api/admin/deleteAdminTeacherCertApproveAPI"
 import { deleteAdminTeacherCertDenyAPI } from "@/api/admin/deleteAdminTeacherCertDenyAPI"
+import { removeCookie } from "@/api/cookie"
+import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 
 function index() {
 	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getAdminTeacherCertType[]>(
@@ -14,6 +16,7 @@ function index() {
 		// { staleTime: 200000 },
 	)
 
+	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 	const queryClient = useQueryClient()
 
 	const approveMutation = useMutation((idx: number) => deleteAdminTeacherCertApproveAPI({ idx }))
@@ -34,6 +37,16 @@ function index() {
 			},
 		})
 	}
+
+
+	const signoutHandler = () => {
+		removeCookie("Authorization", { path: "/" })
+        setTokenStatus({showMessage: false}).then((res) => {
+            console.log('여기에 할일')
+        })
+		// navigate("/teacher/login")
+	}
+
 
 	const indivRender =
 		data &&
@@ -68,7 +81,10 @@ function index() {
 			)
 		})
 
-	return <div>{data && indivRender}</div>
+	return (<div>
+		<button onClick={signoutHandler}>로그아웃</button>
+		{data && indivRender}
+		</div>)
 }
 
 const individualCSS = css`

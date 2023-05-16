@@ -1,25 +1,38 @@
-import React, {useState, useEffect} from 'react'
+import { useEffect, useState } from 'react';
 
-function Timer() {
-    const [startTime, setStartTime] = useState<any>(null)
-    useEffect(() => {
-        const now = Date.now()
-        setStartTime(() => now)
-        console.log(now)
-
-        const timer = setInterval(() => {
-            
-        }, 1000)
-
-        return () => {
-            clearInterval(timer)
-        }
-    }, [])
-  return (
-    <div>
-
-    </div>
-  )
+type TimerProps = {
+  targetTime: number;
+  funcHandler?: Function;
 }
 
-export default Timer
+function Timer({ targetTime, funcHandler }: TimerProps) {
+  const [remainingTime, setRemainingTime] = useState<number>(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const currentTime = Date.now();
+      const timeDifference = targetTime - currentTime;
+
+      if (timeDifference <= 0) {
+        console.log('타이머 종료');
+        funcHandler && funcHandler()
+        clearInterval(intervalId);
+      } else {
+        setRemainingTime(timeDifference);
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [targetTime]);
+
+  const formatTime = (time: number): string => {
+    const minutes = Math.floor(time / 60000);
+    const seconds = Math.floor((time % 60000) / 1000);
+
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  return <div>{formatTime(remainingTime)} 남음</div>;
+};
+
+export default Timer;

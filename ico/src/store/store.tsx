@@ -19,6 +19,9 @@ const stackNotification = atom<{ [prop: number]: { width: string; height: string
 
 const selectedPage = atom(1)
 
+
+const modalHandler = atom<Function | null>(null)
+
 const tokenStatus = atom<getTokenStatusType>({
 	status: null,
 	role: null,
@@ -51,4 +54,5 @@ export {
 	selectedPage,
 	nationData,
 	tokenStatus,
+	modalHandler,
 }
