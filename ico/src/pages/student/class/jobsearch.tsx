@@ -29,7 +29,7 @@ function jobsearch() {
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					<span css={titleCSS}>
-						현재 <b>&nbsp;{jobList.length}개</b>의 직업을 구인하고 있어요
+						현재 <b>&nbsp;{jobList.length}개</b>의 직업이 사람을 구해요
 					</span>
 					<div css={jobListCSS}>
 						{jobList.map((job, idx) => (
