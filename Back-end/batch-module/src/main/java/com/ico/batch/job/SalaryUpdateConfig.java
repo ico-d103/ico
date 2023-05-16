@@ -23,6 +23,11 @@ import org.springframework.data.domain.Sort;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * 매일 일급을 Student Salary에 더해주는 JobConfig
+ *
+ * @author 변윤경
+ */
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
@@ -45,7 +50,7 @@ public class SalaryUpdateConfig {
 
     @Bean
     @JobScope
-    public Step salaryUpdateStep(RepositoryItemReader salaryUpdateReader, ItemProcessor salaryUpdateProcessor, ItemWriter salaryUpdateWriter){
+    public Step salaryUpdateStep(RepositoryItemReader salaryUpdateReader, ItemProcessor salaryUpdateProcessor, ItemWriter salaryUpdateWriter) {
         log.info(">>>>>> salaryUpdateStep");
         return stepBuilderFactory.get("salaryUpdateStep")
                 .<Student, Student>chunk(10)
@@ -57,7 +62,7 @@ public class SalaryUpdateConfig {
 
     @Bean
     @StepScope
-    public RepositoryItemReader<Student> salaryUpdateReader(){
+    public RepositoryItemReader<Student> salaryUpdateReader() {
         log.info(">>>>>> salaryUpdateReader");
         return new RepositoryItemReaderBuilder<Student>()
                 .name("salaryUpdateReader")
@@ -71,7 +76,7 @@ public class SalaryUpdateConfig {
 
     @Bean
     @StepScope
-    public ItemProcessor<Student, Student> salaryUpdateProcessor(){
+    public ItemProcessor<Student, Student> salaryUpdateProcessor() {
         log.info(">>>>>> salaryUpdateProcessor");
         return student -> {
             log.info("student name : {}", student.getName());
@@ -83,12 +88,12 @@ public class SalaryUpdateConfig {
 
     @Bean
     @StepScope
-    public ItemWriter<Student> salaryUpdateWriter(){
+    public ItemWriter<Student> salaryUpdateWriter() {
         log.info(">>>>>> salaryUpdateWriter");
         return new ItemWriter<Student>() {
             @Override
             public void write(List<? extends Student> items) throws Exception {
-                for(Student student : items){
+                for (Student student : items) {
                     log.info("[SalaryUpdateWriter] 직업있는 학생 : {}", student.getName());
                 }
             }

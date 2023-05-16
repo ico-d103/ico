@@ -11,6 +11,9 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+/**
+ * @author 변윤경
+ */
 @EnableScheduling
 @EnableBatchProcessing
 @EnableJpaAuditing

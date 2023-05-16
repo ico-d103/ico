@@ -24,8 +24,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * 15일에 월급 일괄 지금하는 JobConfig
+ *
+ * @author 변윤경
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -52,7 +59,7 @@ public class DepositSalaryConfig {
 
     @Bean
     @JobScope
-    public Step depositSalaryStep(RepositoryItemReader depositSalaryReader, ItemProcessor depositSalaryProcessor, ItemWriter depositSalaryWriter){
+    public Step depositSalaryStep(RepositoryItemReader depositSalaryReader, ItemProcessor depositSalaryProcessor, ItemWriter depositSalaryWriter) {
         log.info(">>>>>> depositSalaryStep");
         return stepBuilderFactory.get("depositSalaryStep")
                 .<Student, Student>chunk(10)
@@ -64,7 +71,7 @@ public class DepositSalaryConfig {
 
     @Bean
     @StepScope
-    public RepositoryItemReader<Student> depositSalaryReader(){
+    public RepositoryItemReader<Student> depositSalaryReader() {
         log.info(">>>>>> depositSalaryReader");
         return new RepositoryItemReaderBuilder<Student>()
                 .name("depositSalaryReader")
@@ -78,31 +85,38 @@ public class DepositSalaryConfig {
 
     @Bean
     @StepScope
-    public ItemProcessor<Student, Student> depositSalaryProcessor(){
+    public ItemProcessor<Student, Student> depositSalaryProcessor() {
         log.info(">>>>>> depositSalaryProcessor");
         return student -> {
+            long nationId = student.getNation().getId();
+            long studentId = student.getId();
+
             log.info("student name : {}", student.getName());
+
             // 거래 내역 기록
-            depositSalaryService.addTransactionDeposit(student.getId(), student.getSalary());
+            depositSalaryService.addTransactionDeposit(studentId, student.getSalary());
 
             // 세금 출금 내역 기록
             int totalTax = 0;
-            List<Tax> taxes = taxRepository.findAllByNationId(student.getNation().getId());
-            for(Tax tax : taxes){
+            // 나라의 세금 항목들
+            List<Tax> taxes = taxRepository.findAllByNationId(nationId);
+            for (Tax tax : taxes) {
                 int amount;
-                if(tax.getType() == TaxType.PERCENT){
+                if (tax.getType() == TaxType.PERCENT) {
                     amount = student.getSalary() * tax.getAmount() / 100;
-                }
-                else{
+                } else {
                     amount = tax.getAmount();
                 }
-                log.info("title : {}, amount : {}, type : {}", tax.getTitle(), amount, tax.getType());
 
-                // 총 세금 계산
+                // 세금 항목별 금액에 학생의 세근 더하기
+                log.info("title : {}, amount : {}, type : {}", tax.getTitle(), amount, tax.getType());
+                DepositSalaryService.addTax((HashMap<Long, Map<String, Integer>>) DepositSalaryService.nationTax, nationId, amount, tax.getTitle());
+
+                // 학생의 총 세금 계산
                 totalTax += amount;
 
                 // 세금 기록
-                depositSalaryService.addTransactionWithdraw(student.getId(), amount, tax.getTitle());
+                depositSalaryService.addTransactionWithdraw(studentId, amount, tax.getTitle());
             }
 
             // 세후 월급 계산
@@ -120,12 +134,12 @@ public class DepositSalaryConfig {
 
     @Bean
     @StepScope
-    public ItemWriter<Student> depositSalaryWriter(){
+    public ItemWriter<Student> depositSalaryWriter() {
         log.info(">>>>>> depositSalaryWriter");
         return new ItemWriter<Student>() {
             @Override
             public void write(List<? extends Student> items) throws Exception {
-                for(Student student : items){
+                for (Student student : items) {
                     log.info("[depositSalaryWriter] 월급을 받을 학생 : {}", student.getName());
                 }
             }
