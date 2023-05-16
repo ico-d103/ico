@@ -2,6 +2,8 @@ import { css } from "@emotion/react"
 import FinanceInvestToggleButton from "./FinanceInvestToggleButton"
 import { postInvestIssueAPI } from "@/api/teacher/finanace/postInvestIssueAPI"
 import useGetNation from "@/hooks/useGetNation"
+import { useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
 function FinanceInvestCreate({
 	subInputChangeHandler,
@@ -19,8 +21,9 @@ function FinanceInvestCreate({
 	tradingEnd: any
 }) {
 	const [nation] = useGetNation()
+	const queryClient = useQueryClient()
 
-	const pushInvestItem = async () => {
+	const createMutation = useMutation((a: number) =>
 		postInvestIssueAPI({
 			body: {
 				stock: stock,
@@ -29,17 +32,37 @@ function FinanceInvestCreate({
 				amount: inputState?.sub.value,
 				content: inputState?.content,
 			},
-		})
-			.then((res) => {
-				console.log(res)
-			})
-			.catch((err) => {
-				console.log(err)
-			})
-	}
+		}),
+	)
+
+	// const pushInvestItem = async () => {
+	// 	postInvestIssueAPI({
+	// 		body: {
+	// 			stock: stock,
+	// 			tradingStart: tradingStart,
+	// 			tradingEnd: tradingEnd,
+	// 			amount: inputState?.sub.value,
+	// 			content: inputState?.content,
+	// 		},
+	// 	})
+	// 		.then((res) => {
+	// 			console.log(res)
+	// 		})
+	// 		.catch((err) => {
+	// 			console.log(err)
+	// 		})
+	// }
+
+	// const submitHandler = () => {
+	// 	pushInvestItem()
+	// }
 
 	const submitHandler = () => {
-		pushInvestItem()
+		createMutation.mutate(1, {
+			onSuccess: () => {
+				return queryClient.invalidateQueries(["teacher", "financeInvest"])
+			},
+		})
 	}
 
 	const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -72,22 +72,40 @@ function product() {
 				<div css={productCSS}>
 					<div css={titleWrapperCSS}>
 						<div>{data?.title}</div>
-						<div css={css`display: flex; gap: 8px;`}>
+
+						{data?.assigned && (
 							<Button
-								text={"상품 승인"}
-								fontSize={"var(--teacher-h5)"}
-								width={"140px"}
-								theme={"vividPositive"}
-								onClick={allowedProposal}
-							/>
-							<Button
-								text={"상품 반려"}
+								text={"상품 삭제"}
 								fontSize={"var(--teacher-h5)"}
 								width={"140px"}
 								theme={"warning"}
 								onClick={deniedProposal}
 							/>
-						</div>
+						)}
+
+						{!data?.assigned && (
+							<div
+								css={css`
+									display: flex;
+									gap: 8px;
+								`}
+							>
+								<Button
+									text={"상품 승인"}
+									fontSize={"var(--teacher-h5)"}
+									width={"140px"}
+									theme={"vividPositive"}
+									onClick={allowedProposal}
+								/>
+								<Button
+									text={"상품 반려"}
+									fontSize={"var(--teacher-h5)"}
+									width={"140px"}
+									theme={"warning"}
+									onClick={deniedProposal}
+								/>
+							</div>
+						)}
 					</div>
 					{/* 이름 getnation으로 선생님이름 받아올까 생각중 */}
 					<hr />
@@ -109,14 +127,14 @@ function product() {
 						</div>
 
 						<div css={priceCSS}>
-							{data?.amount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {nation.currency}
+							{data?.amount?.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {nation.currency}
 						</div>
 						<div
 							css={css`
 								display: flex;
 							`}
 						>
-							<div css={leftWrapperCSS}>{data?.count}개 남음 </div>
+							<div css={leftWrapperCSS}>{data?.count - data?.sold}개 남음 </div>
 							<div css={leftWrapperCSS}>&nbsp; · {data.date}에 등록된 상품입니다.</div>
 						</div>
 					</div>
