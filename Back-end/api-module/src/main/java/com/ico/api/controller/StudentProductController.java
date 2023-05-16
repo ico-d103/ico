@@ -99,7 +99,7 @@ public class StudentProductController {
      * @param dto 구매 상품 ID, QR 코드 시작 시간
      * @return
      */
-    @PostMapping("/student")
+    @PostMapping("/student/buy")
     public ResponseEntity<HttpStatus> buyProduct(HttpServletRequest request, @Valid @RequestBody ProductQRReqDto dto){
         studentProductService.buyProduct(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
