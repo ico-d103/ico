@@ -19,6 +19,8 @@ const stackNotification = atom<{ [prop: number]: { width: string; height: string
 
 const selectedPage = atom(1)
 
+const tokenStatus = atom
+
 const nationData = atom<getNationType>({
 	id: 0,
 	school: "초등학교",

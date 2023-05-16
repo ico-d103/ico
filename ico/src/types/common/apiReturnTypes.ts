@@ -27,6 +27,6 @@ export type getNationType = {
 }
 
 export type getTokenStatusType = {
-	status: string
-	role: string
+	status: 'require_submit_code' | 'require_refresh_token' | 'require_submit_certification' | 'require_create_nation' | 'waiting' | 'approved'
+	role: 'STUDENT' | 'TEACHER'
 }
