@@ -15,16 +15,27 @@ import { LineSvgProps } from "@nivo/line"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getFinanceInvestIssueType } from "@/types/student/apiReturnTypes"
 import { dateFormatter } from "@/util/dateFormatter"
+import Input from "@/components/common/Input/Input"
 
-function FinanceInvestIssueForm() {
+import { putInvestTimeAPI } from "@/api/teacher/finanace/putInvestTimeAPI"
+
+type FinanceInvestIssueFormProps = {
+	data: getFinanceInvestIssueType
+}
+
+function FinanceInvestIssueForm({ data }: FinanceInvestIssueFormProps) {
 	const [chartData, setChartData] = useState<LineSvgProps["data"] | null>(null)
 
-	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceInvestIssueType>(
-		["teacher", "financeInvest"],
-		getInvestItemAPI,
-	)
+	const [tradingStart, setTradingStart] = useState(data.tradingStart)
+	const [tradingEnd, setTradingEnd] = useState(data.tradingEnd)
 
 	const price = data?.issue[0].amount
+
+	const pushInvestTime = () => {
+		putInvestTimeAPI({ body: { tradingStart: tradingStart, tradingEnd: tradingEnd } }).then((res) => {
+			console.log(res)
+		})
+	}
 
 	useEffect(() => {
 		if (data) {
@@ -58,27 +69,84 @@ function FinanceInvestIssueForm() {
 			return <FinanceInvestIssueDetail showIdx={idx} date={el.date} amount={el.amount} content={el.content} />
 		})
 
+	const handleTradingStartChange = (event: any) => {
+		setTradingStart(event.target.value)
+	}
+
+	const handleTradingEndChange = (event: any) => {
+		setTradingEnd(event.target.value)
+	}
+
 	return (
 		<>
+			<div css={titleCSS}>
+				현재 투자 종목은&nbsp;<div style={{ fontWeight: "700" }}>{data.stock}</div>&nbsp;입니다.
+			</div>
+
 			{chartData && <FinanceInvestChart data={chartData} />}
 
-			{!compState && (
-				<Button
-					text={"이슈 추가 등록"}
-					fontSize={"var(--teacher-h5)"}
-					width={"110px"}
-					theme={"normal"}
-					onClick={() => {
-						openComp()
-					}}
-				/>
-			)}
+			<div css={setTradeTimeCSS}>
+				현재 거래 시간
+				<div style={{ display: "flex", justifyContent: "space-between" }}>
+					<div style={{ display: "flex", width: "80%", gap: "12px" }}>
+						<Input
+							type="time"
+							customCss={[
+								css`
+									width: 25%;
+									text-align: left;
+								`,
+							]}
+							theme={"greenDefault"}
+							value={tradingStart}
+							onChange={handleTradingStartChange}
+						/>
+						<Input
+							type="time"
+							customCss={[
+								css`
+									width: 25%;
+									text-align: left;
+								`,
+							]}
+							theme={"greenDefault"}
+							value={tradingEnd}
+							onChange={handleTradingEndChange}
+						/>
+						<Button
+							text={"거래 시간 변경"}
+							fontSize={"var(--teacher-h5)"}
+							width={"120px"}
+							height={"45px"}
+							theme={"normal"}
+							onClick={pushInvestTime}
+						/>
+					</div>
+					<div>
+						{!compState && (
+							<div>
+								<Button
+									text={"이슈 추가 등록"}
+									fontSize={"var(--teacher-h5)"}
+									width={"120px"}
+									height={"45px"}
+									theme={"normal"}
+									onClick={() => {
+										openComp()
+									}}
+								/>
+							</div>
+						)}
+					</div>
+				</div>
+				<div></div>
+			</div>
 
 			<FormCreator
 				subComp={<FinanceInvestIssueCreate price={price} />}
 				showIdx={1}
 				subInit={{ taxation: 0, value: 0 }}
-				titlePlaceHolder={"투자 주제를 입력해주세요."}
+				// titlePlaceHolder={"투자 주제를 입력해주세요."}
 				contentPlaceHolder={"오늘의 이슈를 입력해주세요."}
 				isNoTitle={true}
 				compState={compState}
@@ -88,6 +156,15 @@ function FinanceInvestIssueForm() {
 			{renderRule}
 		</>
 	)
+}
+
+const titleCSS = {
+	display: "flex",
+	fontSize: "1.3rem",
+}
+
+const setTradeTimeCSS = {
+	gap: "16px",
 }
 
 export default FinanceInvestIssueForm

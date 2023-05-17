@@ -5,12 +5,28 @@ import FinanceInvestStartForm from "@/components/teacher/Finance/Invest/FinanceI
 import FinanceInvestIssueForm from "@/components/teacher/Finance/Invest/FinanceInvestIssueForm"
 import useGetNation from "@/hooks/useGetNation"
 import { deleteInvestAPI } from "@/api/teacher/finanace/deleteInvestAPI"
+import { getInvestItemAPI } from "@/api/teacher/finanace/getInvestItemAPI"
+import { useQuery } from "@tanstack/react-query"
+import { getFinanceInvestIssueType } from "@/types/student/apiReturnTypes"
+import { useMutation } from "@tanstack/react-query"
+import { useQueryClient } from "@tanstack/react-query"
 
 function invest() {
-	const [nation, setNation] = useGetNation()
+	const queryClient = useQueryClient()
+	const createMutation = useMutation((a: number) => deleteInvestAPI())
+
+	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceInvestIssueType>(
+		["teacher", "financeInvest"],
+		getInvestItemAPI,
+	)
 
 	const deleteInvest = () => {
-		deleteInvestAPI()
+		createMutation.mutate(1, {
+			onSuccess: () => {
+				queryClient.removeQueries(["teacher", "financeInvest"]);
+				return queryClient.invalidateQueries(["teacher", "financeInvest"])
+			},
+		})
 	}
 
 	return (
@@ -26,8 +42,8 @@ function invest() {
 				/>
 			</div>
 			<div css={subTitleCSS}>투자 종목 설정을 설정하고 이슈를 등록해 투자 상품을 관리할 수 있습니다.</div>
-			{!nation.stock && <FinanceInvestStartForm />}
-			{nation.stock && <FinanceInvestIssueForm />}
+			{!data && <FinanceInvestStartForm />}
+			{data && <FinanceInvestIssueForm data={data} />}
 		</div>
 	)
 }

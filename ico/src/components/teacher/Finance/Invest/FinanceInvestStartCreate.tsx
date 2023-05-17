@@ -35,28 +35,6 @@ function FinanceInvestCreate({
 		}),
 	)
 
-	// const pushInvestItem = async () => {
-	// 	postInvestIssueAPI({
-	// 		body: {
-	// 			stock: stock,
-	// 			tradingStart: tradingStart,
-	// 			tradingEnd: tradingEnd,
-	// 			amount: inputState?.sub.value,
-	// 			content: inputState?.content,
-	// 		},
-	// 	})
-	// 		.then((res) => {
-	// 			console.log(res)
-	// 		})
-	// 		.catch((err) => {
-	// 			console.log(err)
-	// 		})
-	// }
-
-	// const submitHandler = () => {
-	// 	pushInvestItem()
-	// }
-
 	const submitHandler = () => {
 		createMutation.mutate(1, {
 			onSuccess: () => {

@@ -79,7 +79,8 @@ function product() {
 			)}
 			<PageHeader title={"상점"} />
 			<div ref={galleryWrapperRef} css={parentCSS}>
-				<SwipeableGallery parentRef={galleryWrapperRef} content={[imageElements]} />
+				{imageElements &&
+				<SwipeableGallery parentRef={galleryWrapperRef} content={[...imageElements]} />}
 			</div>
 
 			<div css={shopWrapperCSS}>
