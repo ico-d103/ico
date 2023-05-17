@@ -121,7 +121,7 @@ function index() {
 	}
 
 	return (
-		<div>
+		<React.Fragment>
 			{data && (
 				<React.Fragment>
 					<Modal
@@ -195,7 +195,7 @@ function index() {
 
 			<div css={contentWrapperCSS}>
 				{!data && (
-					<ContentWrapper>
+					<ContentWrapper cssProps={css`flex: 1; display: flex;`}>
 						<div css={alertWrapperCSS}>
 							<div
 								css={css`
@@ -220,11 +220,11 @@ function index() {
 				{data && data?.myStock.price !== 0 && (
 					<ContentWrapper>
 						<div css={lSizeFontCSS}>
-							{calcStock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {nation?.currency}
+							{calcStock.toLocaleString('ko-KR')} {nation?.currency}
 						</div>
 						<div css={diffLabelCSS({ calcDiff })}>
 							{calcDiff > 0 && "+"}
-							{calcDiff.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {nation?.currency}
+							{calcDiff.toLocaleString('ko-KR')} {nation?.currency}
 						</div>
 					</ContentWrapper>
 				)}
@@ -249,7 +249,7 @@ function index() {
 					</ContentWrapper>
 				)}
 			</div>
-		</div>
+		</React.Fragment>
 	)
 }
 
@@ -257,6 +257,7 @@ const contentWrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	flex: 1;
 `
 
 const lSizeFontCSS = css`
@@ -322,13 +323,14 @@ const mSizeFontCSS = css`
 `
 
 const alertWrapperCSS = css`
-	width: 100%;
-	height: 100%;
+	/* width: 100%;
+	height: 100%; */
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	margin-bottom: 16px;
+	flex: 1;
 `
 
 const labelCSS = css`

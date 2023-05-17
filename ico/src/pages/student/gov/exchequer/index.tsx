@@ -39,6 +39,7 @@ function index() {
 									bracketSize={"10px"}
 									children={<div>{exchequer.detail}</div>}
 									marginBottom={"10px"}
+									reverse={true}
 								/>
 							))}
 						</>
@@ -50,7 +51,11 @@ function index() {
 }
 
 const mainWrapperCSS = css`
-	padding-bottom: 30px;
+	padding-bottom: 6px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+
 `
 
 const wrapperCSS = css`
@@ -58,10 +63,14 @@ const wrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	flex: 1;
 `
 
 const contentCSS = css`
 	width: 95%;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 `
 
 const noneWrapperCSS = css`
@@ -70,6 +79,7 @@ const noneWrapperCSS = css`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	flex: 1;
 
 	> h3 {
 		font-size: 1.1rem;

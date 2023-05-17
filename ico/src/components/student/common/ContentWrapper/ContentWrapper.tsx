@@ -15,6 +15,7 @@ function ContentWrapper({children, cssProps}: ContentWrapperProps) {
   )
 }
 const contentWrapperCSS = css`
+    max-width: 95%;
     width: 95%;
     padding: 24px;
     border-radius: 20px;

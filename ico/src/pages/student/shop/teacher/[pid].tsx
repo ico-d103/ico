@@ -45,7 +45,7 @@ function product() {
 	))
 
 	return (
-		<div>
+		<div css={wrapperCSS}>
 			<PageHeader title={"상점"} />
 
 			<div ref={galleryWrapperRef} css={parentCSS}>
@@ -55,29 +55,25 @@ function product() {
 			</div>
 
 			<div css={shopWrapperCSS}>
-				<ContentWrapper
-					cssProps={css`
-						min-height: 48vh;
-					`}
-				>
+	
 					<div css={shopUpperCSS}>
 						{data?.title}
 						{data && (
-							<div>
+							<div css={css`font-weight: 500;`}>
 								상품이&nbsp;<div style={{ fontWeight: "700" }}>{data?.count - data?.sold}개</div>&nbsp;남았어요!
 							</div>
 						)}
 					</div>
 
 					<div css={priceTagCSS}>
-						{data?.amount}
+						{data?.amount}&nbsp;
 						{nation.currency}
 					</div>
 
-					<hr />
+					<div css={css`width: 100%; height: 1px; border-bottom: 1px solid rgba(0, 0, 0, 0.1); margin: 8px 0px;`}/>
 					<div css={dateCSS}>{data?.date}</div>
 					<div css={detailCSS}>{data?.detail}</div>
-				</ContentWrapper>
+		
 			</div>
 
 			{/* <button onClick={openComp}>qr 카메라</button> */}
@@ -111,18 +107,29 @@ function product() {
 	)
 }
 
-const shopWrapperCSS = css`
+const wrapperCSS = css`
+	/* margin-bottom: 60px; */
+	flex: 1;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	margin-top: 20px;
+
+`
+
+const shopWrapperCSS = css`
+	/* display: flex;
+	flex-direction: column;
+	align-items: center; */
+	margin-top: 14px;
+	flex: 1;
+	background-color: white;
+	padding: 16px;
 `
 
 const parentCSS = css`
 	/* display: grid;
 	grid-template-columns: 1; */
 	width: 100%;
-	height: 30vh;
+	height: 40vh;
 
 	::-webkit-scrollbar {
 		width: 0px;
@@ -147,14 +154,19 @@ const shopUpperCSS = css`
 `
 
 const priceTagCSS = css`
-	color: red;
+	color: #CB1400;
 
-	margin-top: 5px;
-	font-weight: 700;
+	margin-top: 10px;
+	font-weight: 500;
 	font-size: var(--student-h2);
 `
 
-const dateCSS = css``
+const dateCSS = css`
+	font-size: var(--student-h4);
+	color: rgba(0, 0, 0, 0.6);
+
+	margin-bottom: 16px;
+`
 
 const detailCSS = css`
 	margin-top: 5px;

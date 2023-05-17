@@ -84,7 +84,7 @@ function FinanceDepositApplyModal({ term, data, unit, closeComp, refetch }: Fina
 				textAlign={"right"}
 				rightContent={
 					<div css={balanceLabelCSS}>
-						/ {data.account.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {unit}
+						/ {data.account.toLocaleString('ko-KR')} {unit}
 					</div>
 				}
 				customCss={inputCSS}

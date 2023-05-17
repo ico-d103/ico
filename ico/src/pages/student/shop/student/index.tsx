@@ -76,7 +76,7 @@ function index() {
 }
 
 const mainWrapperCSS = css`
-	padding-bottom: 30px;
+	padding-bottom: 16px;
 `
 
 const wrapperCSS = css`
