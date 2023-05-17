@@ -88,4 +88,11 @@ public interface StudentService {
      * @return
      */
     Byte findStudentCreditRating(HttpServletRequest request);
+
+    /**
+     * 신용등급 평점 일괄 부여
+     *
+     * @param request
+     */
+    void postAllCreditScore(CreditScoreReqDto dto, HttpServletRequest request);
 }
