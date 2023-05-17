@@ -30,7 +30,6 @@
 		"jotai": "^2.0.4",
 		"next": "13.3.1",
 		"next-pwa": "^5.6.0",
-		"next-ssl-redirect-middleware": "^0.1.4",
 		"overlayscrollbars": "^2.1.1",
 		"overlayscrollbars-react": "^0.5.0",
 		"prop-types": "^15.8.1",
@@ -39,7 +38,6 @@
 		"react-cookie": "^4.1.1",
 		"react-dom": "18.2.0",
 		"react-easy-swipe": "^0.0.23",
-		"react-https-redirect": "^1.1.0",
 		"react-qr-code": "^2.0.11",
 		"react-useanimations": "^2.10.0",
 		"typescript": "5.0.4"
