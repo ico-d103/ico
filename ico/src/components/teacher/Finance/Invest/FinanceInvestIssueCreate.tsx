@@ -13,12 +13,14 @@ function FinanceInvestIssueCreate({
 	buttons,
 	closeHandler,
 	price,
+	amount,
 }: {
 	subInputChangeHandler?: any
 	inputState?: any
 	buttons?: any
 	closeHandler?: Function
 	price?: any
+	amount?: any
 }) {
 	const queryClient = useQueryClient()
 	const createMutation = useMutation((a: number) =>
@@ -28,6 +30,10 @@ function FinanceInvestIssueCreate({
 	const [openDropdown, closeDropdown, dropdownState] = useCompHandler()
 
 	const submitHandler = () => {
+		if (inputState?.sub.taxation === 1) {
+			subInputChangeHandler && subInputChangeHandler({ key: "value", value: -inputState?.sub.value })
+		}
+
 		createMutation.mutate(1, {
 			onSuccess: () => {
 				closeHandler && closeHandler()
@@ -39,30 +45,88 @@ function FinanceInvestIssueCreate({
 	const setTaxPercent = () => {
 		subInputChangeHandler && subInputChangeHandler({ key: "taxation", value: 0 })
 		subInputChangeHandler && subInputChangeHandler({ key: "value", value: 0 })
+		console.log("상승")
+
+		console.log(inputState?.sub.value)
 	}
 
 	const setTaxAbsolute = () => {
 		subInputChangeHandler && subInputChangeHandler({ key: "taxation", value: 1 })
 		subInputChangeHandler && subInputChangeHandler({ key: "value", value: 0 })
+		console.log("하락")
 	}
 
 	const dropdownList = [
 		{
 			name: "edit",
-			content: <div css={iconBlackWrapperCSS}>icon</div>,
+			content: (
+				<div css={iconBlackWrapperCSS}>
+					<svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M5.8 19C5.51997 19 5.37996 19 5.273 18.9455C5.17892 18.8976 5.10243 18.8211 5.0545 18.727C5 18.62 5 18.48 5 18.2V8H1L8 1L15 8H11V18.2C11 18.48 11 18.62 10.9455 18.727C10.8976 18.8211 10.8211 18.8976 10.727 18.9455C10.62 19 10.48 19 10.2 19H5.8Z"
+							stroke="#D94A4A"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+					&nbsp;
+				</div>
+			),
 			label: "상승",
 			function: setTaxPercent,
 		},
 		{
 			name: "delete",
-			content: <div css={iconBlackWrapperCSS}>icon</div>,
+			content: (
+				<div css={iconBlackWrapperCSS}>
+					<svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M5 1.8C5 1.51997 5 1.37996 5.0545 1.273C5.10243 1.17892 5.17892 1.10243 5.273 1.0545C5.37996 1 5.51997 1 5.8 1H10.2C10.48 1 10.62 1 10.727 1.0545C10.8211 1.10243 10.8976 1.17892 10.9455 1.273C11 1.37996 11 1.51997 11 1.8V12H15L8 19L1 12H5V1.8Z"
+							stroke="#1e7bff"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+					&nbsp;
+				</div>
+			),
 			label: "하락",
 			function: setTaxAbsolute,
 		},
 	]
 
-	const taxPercent = <div css={taxationSelectCSS}>상승</div>
-	const taxAbsolute = <div css={taxationSelectCSS}>하락</div>
+	const taxPercent = (
+		<div css={taxationSelectCSS}>
+			<svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path
+					d="M5.8 19C5.51997 19 5.37996 19 5.273 18.9455C5.17892 18.8976 5.10243 18.8211 5.0545 18.727C5 18.62 5 18.48 5 18.2V8H1L8 1L15 8H11V18.2C11 18.48 11 18.62 10.9455 18.727C10.8976 18.8211 10.8211 18.8976 10.727 18.9455C10.62 19 10.48 19 10.2 19H5.8Z"
+					fill="#D94A4A"
+					stroke="rgba(255, 255, 255, 0.4	)"
+					stroke-width="1"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				/>
+			</svg>
+			&nbsp; 상승
+		</div>
+	)
+	const taxAbsolute = (
+		<div css={taxationSelectCSS}>
+			<svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path
+					d="M5 1.8C5 1.51997 5 1.37996 5.0545 1.273C5.10243 1.17892 5.17892 1.10243 5.273 1.0545C5.37996 1 5.51997 1 5.8 1H10.2C10.48 1 10.62 1 10.727 1.0545C10.8211 1.10243 10.8976 1.17892 10.9455 1.273C11 1.37996 11 1.51997 11 1.8V12H15L8 19L1 12H5V1.8Z"
+					fill="#1e7bff"
+					stroke="rgba(255, 255, 255, 0.4	)"
+					stroke-width="1"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				/>
+			</svg>
+			&nbsp; 하락
+		</div>
+	)
 
 	const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (
@@ -185,9 +249,7 @@ const iconCSS = css`
 `
 
 const iconBlackWrapperCSS = css`
-	& path {
-		stroke: rgba(0, 0, 0, 0.8);
-	}
+	stroke: rgba(0, 0, 0, 0.8);
 `
 
 export default FinanceInvestIssueCreate

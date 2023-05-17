@@ -49,9 +49,7 @@ function product() {
 			<PageHeader title={"상점"} />
 
 			<div ref={galleryWrapperRef} css={parentCSS}>
-				{imageElements && 
-				<SwipeableGallery parentRef={galleryWrapperRef} content={[...imageElements]} />
-			}
+				{imageElements && <SwipeableGallery parentRef={galleryWrapperRef} content={[...imageElements]} />}
 			</div>
 
 			<div css={shopWrapperCSS}>
@@ -145,7 +143,7 @@ const shopUpperCSS = css`
 	font-size: var(--student-h1);
 	font-weight: 700;
 
-	div:nth-child(1) {
+	div:nth-of-type(1) {
 		display: flex;
 		color: var(--teacher-gray-color);
 

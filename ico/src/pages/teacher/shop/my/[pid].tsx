@@ -15,7 +15,7 @@ import Modal from "@/components/common/Modal/Modal"
 import ShowQR from "@/components/common/ShowQR/ShowQR"
 import { useState } from "react"
 import { deleteTeacherProductAPI } from "@/api/teacher/shop/deleteTeacherProductAPI"
-
+	
 function product() {
 	const router = useRouter()
 	const { pid } = router.query
