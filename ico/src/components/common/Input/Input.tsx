@@ -6,8 +6,8 @@ type InputProps = {
 	theme: string
 	leftContent?: any
 	rightContent?: any
-	customCss?: SerializedStyles
-	textAlign?: "left" | "right" | "center"
+	customCss?: SerializedStyles | SerializedStyles[]
+	textAlign?: 'left' | 'right' | 'center'
 	isFile?: boolean
 	css?: null
 	isTextarea?: boolean

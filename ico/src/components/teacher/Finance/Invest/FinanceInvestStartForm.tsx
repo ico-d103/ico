@@ -6,8 +6,19 @@ import useCompHandler from "@/hooks/useCompHandler"
 
 import FormCreator from "../../common/Form/FormCreator"
 import FinanceInvestCreate from "./FinanceInvestStartCreate"
+import Input from "@/components/common/Input/Input"
+import { useQuery } from "@tanstack/react-query"
+import { getFinanceInvestIssueType } from "@/types/student/apiReturnTypes"
+import { useMutation } from "@tanstack/react-query"
+import { useQueryClient } from "@tanstack/react-query"
+import { getInvestItemAPI } from "@/api/teacher/finanace/getInvestItemAPI"
 
 function FinanceInvestStartForm() {
+	// const { data, isLoading, isError, error } = useQuery<getFinanceInvestIssueType>(
+	// 	["teacher", "financeInvest"],
+	// 	getInvestItemAPI,
+	// )
+
 	const [openComp, closeComp, compState] = useCompHandler()
 
 	const [stock, setStock] = useState("")
@@ -34,15 +45,28 @@ function FinanceInvestStartForm() {
 			<div css={contentCSS}>
 				<div>
 					<div css={titleCSS}>투자 종목 주제</div>
-					<input css={inputCSS} style={{ textAlign: "left" }} value={stock} onChange={handleStockChange} />
+					<Input
+						customCss={[
+							css`
+								width: 100%;
+								text-align: left;
+							`,
+						]}
+						theme={"greenDefault"}
+						value={stock}
+						onChange={handleStockChange}
+					/>
+					{/* <input css={inputCSS} style={{ textAlign: "left" }} value={stock} onChange={handleStockChange} /> */}
 				</div>
 				<div>
 					<div css={titleCSS}>거래 시작 시간</div>
-					<input type="time" css={inputCSS} value={tradingStart} onChange={handleTradingStartChange} />
+					<Input type="time" theme={"greenDefault"} onChange={handleTradingStartChange} />
+					{/* <input type="time" css={inputCSS} value={tradingStart} onChange={handleTradingStartChange} /> */}
 				</div>
 				<div>
 					<div css={titleCSS}>거래 종료 시간</div>
-					<input type="time" css={inputCSS} value={tradingEnd} onChange={handleTradingEndChange} />
+					<Input type="time" theme={"greenDefault"} onChange={handleTradingEndChange} />
+					{/* <input type="time" css={inputCSS} value={tradingEnd} onChange={handleTradingEndChange} /> */}
 				</div>
 			</div>
 
@@ -65,23 +89,21 @@ const contentCSS = css`
 	display: flex;
 	justify-content: space-between;
 	margin-bottom: 15px;
+	gap: 16px;
 
-	div:nth-child(1) {
+	div:nth-of-type(1) {
 		flex-grow: 3;
-		margin-right: 10px;
 	}
-	div:nth-child(2) {
+	div:nth-of-type(2) {
 		flex-grow: 1;
-		margin-right: 10px;
-		margin-left: 10px;
 	}
-	div:nth-child(3) {
+	div:nth-of-type(3) {
 		flex-grow: 1;
-		margin-left: 10px;
 	}
 `
 
 const titleCSS = css`
+	color: rgba(0, 0, 0, 0.6);
 	margin-bottom: 10px;
 `
 
