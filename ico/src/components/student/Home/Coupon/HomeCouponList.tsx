@@ -20,7 +20,7 @@ function HomeCouponList({couponList}: HomeCouponListProps) {
     })
 
 	return (
-    <div>
+    <React.Fragment>
         {couponList.length === 0 ? (
 				<div css={alertWrapperCSS}>
 					<div css={css`width: 128px; height: 128px;`}>
@@ -33,7 +33,7 @@ function HomeCouponList({couponList}: HomeCouponListProps) {
 				renderList
 			)}
   
-    </div>
+    </React.Fragment>
         )
 }
 
@@ -47,11 +47,13 @@ const labelCSS = css`
 const alertWrapperCSS = css`
 	width: 100%;
 	height: 100%;
+	flex: 1;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	margin-bottom: 16px;
+	
 `
 
 export default HomeCouponList

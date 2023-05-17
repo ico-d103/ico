@@ -20,7 +20,13 @@ function index() {
 		// { staleTime: 200000 },
 	)
 	return (
-		<div>
+		<div
+			css={css`
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+			`}
+		>
 			<PageHeader title={"예금"} />
 			{data && data.myDeposit.interest === 0 && <GuidePage data={data} refetch={refetch} />}
 			{data && data.myDeposit.interest !== 0 && <DetailPage data={data} refetch={refetch} />}
@@ -28,12 +34,18 @@ function index() {
 			{!data && (
 				<div
 					css={css`
-						width: 100%;
 						display: flex;
 						justify-content: center;
+						flex: 1;
+
+						/* background-color: red; */
 					`}
 				>
-					<ContentWrapper>
+					<ContentWrapper
+						cssProps={css`
+							flex: 1;
+						`}
+					>
 						<div css={alertWrapperCSS}>
 							<div
 								css={css`
@@ -55,6 +67,7 @@ function index() {
 const alertWrapperCSS = css`
 	width: 100%;
 	height: 100%;
+	flex: 1;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;

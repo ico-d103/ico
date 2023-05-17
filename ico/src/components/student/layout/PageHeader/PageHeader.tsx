@@ -78,7 +78,7 @@ function PageHeader({ title, addComp }: PageHeaderProps) {
 const headerOuterWrapperCSS = ({ compHeight, hasComp }: { compHeight: number, hasComp: boolean }) => {
 	return css`
 		height: ${compHeight + 70}px;
-		margin-bottom: ${hasComp && '30px'};
+		margin-bottom: ${hasComp && '16px'};
 		/* margin-bottom: 16px; */
 	`
 }
