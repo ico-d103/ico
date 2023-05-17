@@ -8,6 +8,7 @@ import com.ico.api.dto.student.StudentResDto;
 import com.ico.api.dto.transaction.TransactionColDto;
 import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.user.StudentSignUpRequestDto;
+import com.ico.api.service.S3UploadService;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
@@ -16,6 +17,7 @@ import com.ico.core.entity.Deposit;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
+import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.Transaction;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
@@ -68,6 +70,8 @@ public class StudentServiceImpl implements StudentService{
     private final InvestRepository investRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final S3UploadService s3UploadService;
 
     @Override
     public Long signUp(StudentSignUpRequestDto requestDto) {
@@ -201,7 +205,13 @@ public class StudentServiceImpl implements StudentService{
             investAmount = invest.get().getAmount();
         }
 
-        return new StudentMyPageResDto().of(student, student.getNation(), student.getStudentJob(), depositAmount, investAmount);
+        String imgUrl = null;
+        StudentJob job;
+        if ((job = student.getStudentJob()) != null) {
+            imgUrl = s3UploadService.getFileURL(job.getImage());
+        }
+
+        return new StudentMyPageResDto().of(student, student.getNation(), student.getStudentJob(), depositAmount, investAmount, imgUrl);
     }
 
     @Override

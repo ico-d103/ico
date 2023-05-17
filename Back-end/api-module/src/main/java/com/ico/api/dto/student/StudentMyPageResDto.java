@@ -61,7 +61,7 @@ public class StudentMyPageResDto {
      * @param studentJob
      * @return
      */
-    public StudentMyPageResDto of(Student student, Nation nation, StudentJob studentJob, int depositAmount, int investAmount) {
+    public StudentMyPageResDto of(Student student, Nation nation, StudentJob studentJob, int depositAmount, int investAmount, String imgUrl) {
         return StudentMyPageResDto.builder()
                 .school(nation.getSchool())
                 .room(nation.getRoom())
@@ -69,8 +69,7 @@ public class StudentMyPageResDto {
                 .name(student.getName())
                 .account(student.getAccount())
                 .creditRating(student.getCreditRating())
-                // TODO: 학생의 직업이 엾을 경우 추후에 학생 기본 이미지 반환
-                .jobImage(studentJob == null ? null : studentJob.getImage())
+                .jobImage(imgUrl)
                 .jobName(studentJob == null ? null : studentJob.getTitle())
                 .color(studentJob == null ? null : studentJob.getColor())
                 .deposit(depositAmount)
