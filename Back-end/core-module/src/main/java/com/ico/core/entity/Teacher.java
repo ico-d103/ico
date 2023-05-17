@@ -44,6 +44,7 @@ public class Teacher {
     private Status status;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private String phoneNum;
 
     public void encodeTeacherPassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);
