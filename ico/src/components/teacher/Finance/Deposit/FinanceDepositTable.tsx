@@ -5,10 +5,16 @@ import Button from "@/components/common/Button/Button"
 
 import { getDepositInterestListAPI } from "@/api/teacher/finanace/getDepositInterestListAPI"
 import { putDepositInterestListAPI } from "@/api/teacher/finanace/putDepositInterestListAPI"
+import Input from "@/components/common/Input/Input"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 function FinanceDepositTable() {
 	const [longPeriod, setLongPeriod] = useState<string[]>([])
 	const [shortPeriod, setShortPeriod] = useState<string[]>([])
+	const [longInitValue, setLongInitValue] = useState<string[]>([])
+	const [shortInitValue, setShortInitValue] = useState<string[]>([])
+	const noti = useNotification()
 
 	useEffect(() => {
 		getDepositInterestListAPI().then((res) => {
@@ -16,6 +22,12 @@ function FinanceDepositTable() {
 			setShortPeriod(res.shortPeriod)
 		})
 	}, [])
+
+
+	useEffect(() => {
+		setLongInitValue(longPeriod)
+		setShortInitValue(shortPeriod)
+	}, [longPeriod.length === 0 && shortPeriod.length === 0])
 
 	const handleShortPeriodChange = (index: number, value: string) => {
 		const newShortPeriod = [...shortPeriod]
@@ -34,11 +46,12 @@ function FinanceDepositTable() {
 		[
 			"7일",
 			...shortPeriod.map((value, index) => (
+	
 				<input
-					css={inputCSS}
-					type="text"
-					value={value}
-					onChange={(e) => handleShortPeriodChange(index, e.target.value)}
+				css={inputCSS}
+				type="text"
+				value={value}
+				onChange={(e) => handleShortPeriodChange(index, e.target.value)}
 				/>
 			)),
 		],
@@ -52,13 +65,20 @@ function FinanceDepositTable() {
 					value={value}
 					onChange={(e) => handleLongPeriodChange(index, e.target.value)}
 				/>
+		
 			)),
 		],
 	]
 
 	const pushInterst = () => {
 		putDepositInterestListAPI({ body: { shortPeriod: shortPeriod, longPeriod: longPeriod } }).then((res) => {
+			noti({content: <NotiTemplate type={'ok'} content={`이자율 수정이 완료되었습니다!`}/>, duration: 3000})
+			setLongInitValue(longPeriod)
+			setShortInitValue(shortPeriod)
 			console.log(res)
+		})
+		.catch((error) => {
+			noti({content: <NotiTemplate type={'alert'} content={`${error.response.data.message}`}/>, duration: 5000})
 		})
 	}
 
@@ -66,7 +86,10 @@ function FinanceDepositTable() {
 
 	return (
 		<>
+	
 			<TableGenerator table={creditRating} perHeight={"48px"} />
+	
+			
 			<div css={buttonCSS}>
 				<Button
 					text={"이자율 저장"}
@@ -74,6 +97,7 @@ function FinanceDepositTable() {
 					width={"190px"}
 					theme={"normal"}
 					onClick={pushInterst}
+					disabled={(longInitValue === longPeriod && shortInitValue === shortPeriod) &&  true}
 				/>
 			</div>
 		</>
@@ -81,11 +105,22 @@ function FinanceDepositTable() {
 }
 
 const inputCSS = css`
-	width: 95%;
-	height: 95%;
+	width: 100%;
+	height: 100%;
 	border: none;
 	font-size: 1rem;
 	text-align: center;
+	background-color: rgba(0, 0, 0, 0);
+	
+	transition-property: background-color box-shadow font-weight;
+	transition-duration: 0.3s;
+
+	& :focus {
+		outline: none;
+		background-color: rgba(0, 0, 0, 0.05);
+		box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.4);
+		font-weight: 700;
+	}
 `
 
 const buttonCSS = css`
