@@ -25,12 +25,15 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 학생 상품 Service
  *
  * @author 변윤경
+ * @author 강교철
  */
 @Slf4j
 @Service
@@ -149,10 +152,15 @@ public class StudentProductServiceImpl implements StudentProductService {
      */
     @Override
     public StudentProductDetailResDto detailProduct(HttpServletRequest request, Long id) {
-        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
 
         StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
+
+        // 자신의 상품인지 체크
+        boolean check = studentId.equals(product.getStudent().getId());
 
         return StudentProductDetailResDto.builder()
                 .id(id)
@@ -164,6 +172,7 @@ public class StudentProductServiceImpl implements StudentProductService {
                 .isAssigned(product.isAssigned())
                 .sold(product.getSold())
                 .date(product.getDate().format(Formatter.date))
+                .isSeller(check)
                 .build();
     }
 
