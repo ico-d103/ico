@@ -205,6 +205,8 @@ public class StockServiceImpl implements StockService{
             investRepository.delete(invest);
         }
 
+        stockRepository.deleteAll(stockList);
+
         // 나라의 투자 정보 삭제
         nation.setTrading_end(null);
         nation.setTrading_start(null);
