@@ -110,8 +110,8 @@ public class NationServiceImpl implements NationService {
                                 .code(randomCode())
                                 .currency(reqDto.getCurrency())
                                 .treasury(0)
-                                .credit_up((byte) 20)
-                                .credit_down((byte) 50)
+                                .credit_up((byte) 50)
+                                .credit_down((byte) 20)
                                 .build();
                         nationRepository.save(nation);
 
