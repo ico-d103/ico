@@ -24,10 +24,10 @@ function coupon() {
 
 
 	return (
-		<div>
+		<React.Fragment>
 			<PageHeader title={"쿠폰함"} />
 			<div css={couponWrapperCSS}>
-				<ContentWrapper>
+				<ContentWrapper cssProps={css`flex: 1; display: flex; flex-direction: column;`}>
 					{isLoading && (
 						<Loading
 							size={96}
@@ -39,7 +39,7 @@ function coupon() {
 					{data && <HomeCouponList couponList={data}/>}
 				</ContentWrapper>
 			</div>
-		</div>
+		</React.Fragment>
 	)
 }
 
@@ -54,6 +54,7 @@ const couponWrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	flex: 1;
 `
 
 const lSizeFontCSS = css`

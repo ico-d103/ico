@@ -33,7 +33,7 @@ function GovJobCard({ job }: GovJobCardPropsType) {
 					<div css={conditionWrapperCSS}>
 						<h4>월급</h4>
 						<h3>
-							{(job.wage * 30).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {nation.currency}
+							{(job.wage * 30).toLocaleString('ko-KR')} {nation.currency}
 						</h3>
 					</div>
 				</div>

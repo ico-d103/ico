@@ -114,7 +114,7 @@ function product() {
 						</div>
 
 						<div css={priceCSS}>
-							{data?.amount?.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {nation.currency}
+							{data?.amount?.toLocaleString('ko-KR')} {nation.currency}
 						</div>
 						<div
 							css={css`

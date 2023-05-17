@@ -8,11 +8,16 @@ import { getJobListAPI } from "@/api/student/class/getJobListAPI"
 import { useEffect, useState } from "react"
 import { getJobListType } from "@/types/student/apiReturnTypes"
 import { getMyGradeAPI } from "@/api/student/class/getMyGradeAPI"
+import UseAnimations from "react-useanimations"
+import alertCircle from "react-useanimations/lib/alertCircle"
+import { useAtom } from "jotai"
+import { isNavigating } from "@/store/store"
 
 function jobsearch() {
 	const navigate = useNavigate()
 	const [jobList, setJobList] = useState<getJobListType[]>([])
 	const [myGrade, setMyGrade] = useState<number>(-1)
+	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 
 	useEffect(() => {
 		getJobListAPI().then((res) => {
@@ -28,9 +33,27 @@ function jobsearch() {
 			<PageHeader title={"일자리 찾기"} addComp={<TabMenu menus={ClassTabMenus()} selected={1} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
-					<span css={titleCSS}>
-						현재 <b>&nbsp;{jobList.length}개</b>의 직업이 사람을 구해요
-					</span>
+					{jobList.length !== 0 && (
+						<span
+							css={[
+								titleCSS,
+								css`
+									margin-top: 24px;
+								`,
+							]}
+						>
+							현재 <b>&nbsp;{jobList.length}개</b>의 직업이 사람을 구해요
+						</span>
+					)}
+					{jobList.length === 0 && (
+						<div css={noneWrapperCSS}>
+							<UseAnimations animation={alertCircle} size={200} strokeColor={"rgba(0,0,0,0.4)"} />
+							<span css={titleCSS}>
+								현재 사람을 구하는 <b>&nbsp;직업</b>이 없어요!
+							</span>
+						</div>
+					)}
+
 					<div css={jobListCSS}>
 						{jobList.map((job, idx) => (
 							<ClassJobSearchCard key={idx} job={job} myGrade={myGrade} />
@@ -42,7 +65,7 @@ function jobsearch() {
 							navigate("/student/gov/job")
 						}}
 					>
-						<div css={floatingCSS}>직업 설명 자세히 볼래요</div>
+						{isNavigatingAtom === false && <div css={floatingCSS}>직업 설명 자세히 볼래요</div>}
 					</div>
 				</div>
 			</div>
@@ -52,6 +75,9 @@ function jobsearch() {
 
 const mainWrapperCSS = css`
 	padding-bottom: 30px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 `
 
 const wrapperCSS = css`
@@ -59,10 +85,14 @@ const wrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	flex: 1;
 `
 
 const contentCSS = css`
 	width: 95%;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 `
 
 const titleCSS = css`
@@ -101,8 +131,22 @@ const floatingCSS = css`
 	border-radius: 20px;
 	position: fixed;
 	bottom: 90px;
-	background-color: var(--student-main-color-3);
-	color: var(--student-font-color);
+	background-color: var(--student-main-color);
+	color: var(--student-main-color-5);
+	box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.1);
+`
+
+const noneWrapperCSS = css`
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	flex: 1;
+
+	> h3 {
+		font-size: 1.1rem;
+	}
 `
 
 export default jobsearch

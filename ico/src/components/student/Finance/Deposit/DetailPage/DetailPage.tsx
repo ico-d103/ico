@@ -73,10 +73,10 @@ function DetailPage({ data, refetch }: DetailPageProps) {
 <div css={wrapperCSS}>
 			<ContentWrapper>
 				<div css={lSizeFontCSS}>
-					{data.myDeposit.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {nation?.currency}
+					{data.myDeposit.amount.toLocaleString('ko-KR')} {nation?.currency}
 				</div>
 				<div css={diffLabelCSS}>
-					+{data.myDeposit.depositAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {nation?.currency}
+					+{data.myDeposit.depositAmount.toLocaleString('ko-KR')} {nation?.currency}
 				</div>
 			</ContentWrapper>
       <ContentWrapper>

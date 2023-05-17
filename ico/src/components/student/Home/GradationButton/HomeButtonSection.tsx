@@ -35,7 +35,7 @@ function HomeButtonSection() {
                     우리나라의 국고에
                 </div>
                 <div css={lsizeFontCSS}>
-                    {nation.treasury} {appendEiGa(nation.currency)}
+                    {nation.treasury.toLocaleString('ko-KR')} {appendEiGa(nation.currency)}
                 </div>
                 <div css={msizeFontCSS}>
                     남아있어요!
