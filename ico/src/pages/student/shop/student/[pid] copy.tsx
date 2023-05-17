@@ -58,7 +58,7 @@ function product() {
 	))
 
 	return (
-		<div css={wrapperCSS}>
+		<div>
 			{data && (
 				<React.Fragment>
 					<Modal
@@ -80,49 +80,53 @@ function product() {
 				</React.Fragment>
 			)}
 			<PageHeader title={"상점"} />
-
 			<div ref={galleryWrapperRef} css={parentCSS}>
 				{imageElements && <SwipeableGallery parentRef={galleryWrapperRef} content={[...imageElements]} />}
 			</div>
 
 			<div css={shopWrapperCSS}>
-	
+				<ContentWrapper
+					cssProps={css`
+						min-height: 48vh;
+					`}
+				>
 					<div css={shopUpperCSS}>
 						{data?.title}
 						{data && (
-							<div css={css`font-weight: 500;`}>
+							<div>
 								상품이&nbsp;<div style={{ fontWeight: "700" }}>{data?.count - data?.sold}개</div>&nbsp;남았어요!
 							</div>
 						)}
 					</div>
 
 					<div css={priceTagCSS}>
-						{data?.amount}&nbsp;
+						{data?.amount}
 						{nation.currency}
 					</div>
 
-					<div css={css`width: 100%; height: 1px; border-bottom: 1px solid rgba(0, 0, 0, 0.1); margin: 8px 0px;`}/>
+					<hr />
 					<div css={dateCSS}>{data?.date}</div>
 					<div css={detailCSS}>{data?.detail}</div>
-		
+
+					<button onClick={openScanQR}>qr 카메라</button>
+					<button
+						onClick={() => {
+							generateTime()
+							openShowQR()
+						}}
+					>
+						qr 코드
+					</button>
+				</ContentWrapper>
 			</div>
 
 			{/* <button onClick={openComp}>qr 카메라</button> */}
 
-			{isNavigatingAtom === false && (
+			{/* {isNavigatingAtom === false && data?.assigned === false && (
 				<div css={navBarOverlayCSS}>
-					<Button
-						text={"이 상품 구매할래요!"}
-						fontSize={`var(--student-h3)`}
-						width={"100%"}
-						theme={"mobileSoft"}
-						onClick={() => {
-							setTerm(() => 0)
-							openComp()
-						}}
-					/>
+					<div>선생님이 아직 승인하지 않은 상품이에요.</div>
 				</div>
-			)}
+			)} */}
 
 			{/* 구매자라는 로직 추가 해야 함*/}
 			{isNavigatingAtom === false && data?.assigned === true && data.seller === false && (
@@ -151,33 +155,37 @@ function product() {
 					/>
 				</div>
 			)}
+
+			{/* {isNavigatingAtom === false && (
+				<div css={navBarOverlayCSS}>
+					<Button
+						text={"이 상품 구매할래요!"}
+						fontSize={`var(--student-h3)`}
+						width={"100%"}
+						theme={"mobileSoft"}
+						onClick={() => {
+							setTerm(() => 0)
+							openComp()
+						}}
+					/>
+				</div>
+			)} */}
 		</div>
 	)
 }
 
-const wrapperCSS = css`
-	/* margin-bottom: 60px; */
-	flex: 1;
+const shopWrapperCSS = css`
 	display: flex;
 	flex-direction: column;
-
-`
-
-const shopWrapperCSS = css`
-	/* display: flex;
-	flex-direction: column;
-	align-items: center; */
-	margin-top: 14px;
-	flex: 1;
-	background-color: white;
-	padding: 16px;
+	align-items: center;
+	margin-top: 20px;
 `
 
 const parentCSS = css`
 	/* display: grid;
 	grid-template-columns: 1; */
 	width: 100%;
-	height: 40vh;
+	height: 30vh;
 
 	::-webkit-scrollbar {
 		width: 0px;
@@ -202,19 +210,14 @@ const shopUpperCSS = css`
 `
 
 const priceTagCSS = css`
-	color: #CB1400;
+	color: red;
 
-	margin-top: 10px;
-	font-weight: 500;
+	margin-top: 5px;
+	font-weight: 700;
 	font-size: var(--student-h2);
 `
 
-const dateCSS = css`
-	font-size: var(--student-h4);
-	color: rgba(0, 0, 0, 0.6);
-
-	margin-bottom: 16px;
-`
+const dateCSS = css``
 
 const detailCSS = css`
 	margin-top: 5px;

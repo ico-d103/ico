@@ -30,7 +30,7 @@ function GovRuleClass() {
 		data.map((el, idx) => {
 			const date = dateFormatter(el.dateTime)
 
-			return <GovRuleClassDetail showIdx={idx} actualIdx={el.id} title={el.title} content={el.detail} date={date} />
+			return <GovRuleClassDetail showIdx={idx + 1} actualIdx={el.id} title={el.title} content={el.detail} date={date} />
 		})
 
 	const rule = `
