@@ -121,6 +121,7 @@ export type getStudentProductDetailType = {
 	rental: boolean
 	detail: string
 	assigned: boolean
+	seller: boolean
 }
 
 export type getNationTreasuryType = {

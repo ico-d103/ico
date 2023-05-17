@@ -19,12 +19,15 @@ import Input from "@/components/common/Input/Input"
 
 import { putInvestTimeAPI } from "@/api/teacher/finanace/putInvestTimeAPI"
 
+
 type FinanceInvestIssueFormProps = {
 	data: getFinanceInvestIssueType
 }
 
 function FinanceInvestIssueForm({ data }: FinanceInvestIssueFormProps) {
 	const [chartData, setChartData] = useState<LineSvgProps["data"] | null>(null)
+
+	console.log(data)
 
 	const [tradingStart, setTradingStart] = useState(data.tradingStart)
 	const [tradingEnd, setTradingEnd] = useState(data.tradingEnd)
@@ -86,7 +89,7 @@ function FinanceInvestIssueForm({ data }: FinanceInvestIssueFormProps) {
 			{chartData && <FinanceInvestChart data={chartData} />}
 
 			<div css={setTradeTimeCSS}>
-				현재 거래 시간
+				<div style={{ marginBottom: "10px" }}>현재 거래 시간</div>
 				<div style={{ display: "flex", justifyContent: "space-between" }}>
 					<div style={{ display: "flex", width: "80%", gap: "12px" }}>
 						<Input
