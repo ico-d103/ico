@@ -3,7 +3,7 @@
 	"name": "ICO",
 	"start_url": "/student/test",
 	"display": "standalone",
-	"theme_color": "#000000",
+	"theme_color": "#fffae2",
 	"background_color": "#ffffff",
 	"icons": [
 		{
