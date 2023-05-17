@@ -48,7 +48,7 @@ public interface StudentProductService {
      * @param id 상품 아이디
      * @return 상품디테일 정보 and isSeller
      */
-    Map<String, Object> detailProduct(HttpServletRequest request, Long id);
+    StudentProductDetailResDto detailProduct(HttpServletRequest request, Long id);
 
     /**
      * 학생 상품 구매

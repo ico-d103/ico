@@ -25,7 +25,6 @@ import java.util.List;
 
 /**
  * @author 변윤경
- * @author 강교철
  */
 @RestController
 @RequiredArgsConstructor
@@ -90,7 +89,7 @@ public class StudentProductController {
      * @return 학생상품 상세 정보
      */
     @GetMapping("/{studentProductId}")
-    public ResponseEntity<?> detailProduct(HttpServletRequest request, @PathVariable Long studentProductId){
+    public ResponseEntity<StudentProductDetailResDto> detailProduct(HttpServletRequest request, @PathVariable Long studentProductId){
         return ResponseEntity.ok(studentProductService.detailProduct(request, studentProductId));
     }
 
