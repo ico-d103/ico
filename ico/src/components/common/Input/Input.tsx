@@ -71,6 +71,7 @@ const Input = React.forwardRef(
 
 const initTextAreaCSS = css`
 	padding: 8px;
+	resize: none;
 `
 
 const initInputCSS = ({ isFile, textAlign }: { isFile?: boolean; textAlign?: "left" | "right" | "center" }) => {
@@ -177,6 +178,26 @@ const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
 				color: #9b6f00c9;
 			}
 		`,
+		mobileSoft: css`
+		/* border: 2px solid rgba(0, 0, 0, 0.1); */
+		border: none;
+		background-color: var(--student-main-color-soft);
+		border-radius: 10px;
+		height: 42px;
+		outline: ${isFocusing ? "4px solid var(--student-main-color-2)" : "2px solid rgba(0, 0, 0, 0.1)"};
+		transition-duration: 0.15s;
+		transition-property: outline ease;
+
+		& input {
+			font-size: var(--student-h3);
+		}
+		& div path {
+			stroke: #9b6f007d;
+		}
+		& input::placeholder {
+			color: #9b6f00c9;
+		}
+	`,
 	}
 
 	return themes

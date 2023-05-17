@@ -261,6 +261,7 @@ const imgWrapperCSS = css`
 	position: Fixed;
 	z-index: -1;
 	overflow: hidden;
+	background-color: #ffecc4;
 `
 
 const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
@@ -308,6 +309,7 @@ const contentInnerWrapperCSS = ({
 		/* min-height: calc(100vh - 64px); */
 		min-height: calc(100vh - 64px);
 		/* background-color: var(--student-back-color); */
+		
 		background: linear-gradient(to bottom, var(--student-main-color), #ffecc4);
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
 		width: ${isTransitioning && "100vw"};

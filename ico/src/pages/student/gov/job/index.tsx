@@ -14,7 +14,7 @@ function index() {
 
 	return (
 		<div css={mainWrapperCSS}>
-			<PageHeader title={"직업 목록"} addComp={<TabMenu menus={GovTabMenus()} selected={2} />} />
+			<PageHeader title={"정부"} addComp={<TabMenu menus={GovTabMenus()} selected={2} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					<span css={titleCSS}>

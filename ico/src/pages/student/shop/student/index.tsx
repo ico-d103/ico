@@ -10,9 +10,13 @@ import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
 import { ShopTabMenus } from "@/components/student/Shop/ShopTabMenus"
 import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
+import useNavigate from "@/hooks/useNavigate"
+import useMediaQuery from "@/hooks/useMediaQuery"
 
 function index() {
 	const router = useRouter()
+	const navigate = useNavigate()
+	const isMobile = useMediaQuery("(max-width: 768px")
 
 	const {
 		data: cardData,
@@ -25,7 +29,7 @@ function index() {
 	} = useQuery<getStudentProductsType[]>(["studentProducts"], getStudentProductsAPI)
 
 	const createProduct = () => {
-		router.push("/student/shop/create")
+		navigate("/student/shop/create", "bottomToTop")
 	}
 
 	return (
@@ -51,7 +55,7 @@ function index() {
 					<h3>등록된 상품이 없어요</h3>
 				</div>
 			)}
-			<div css={cardWrapperCSS}>
+			<div css={cardWrapperCSS({ isMobile })}>
 				{cardData?.length !== 0 && (
 					<>
 						{cardData?.map((card) => (
@@ -77,6 +81,9 @@ function index() {
 
 const mainWrapperCSS = css`
 	padding-bottom: 16px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 `
 
 const wrapperCSS = css`
@@ -92,7 +99,7 @@ const contentWrapperCSS = css`
 	border-radius: 10px;
 	box-sizing: border-box;
 	padding: 20px;
-
+	flex: 1;
 	justify-content: space-between;
 	align-items: center;
 	display: flex;
@@ -101,25 +108,35 @@ const contentWrapperCSS = css`
 		font-size: 0.95rem;
 	}
 `
-const cardWrapperCSS = css`
-	margin-top: 15px;
+const cardWrapperCSS = ({ isMobile }: { isMobile: boolean | null }) => {
+	return css`
+		/* margin-top: 15px;
 
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(45vw, 1fr));
 
 	place-items: center;
 
-	grid-row-gap: 10px;
-`
+	grid-row-gap: 10px; */
+
+	margin-top: ${isMobile ? "16px" : "32px"};
+		display: grid;
+		grid-template-columns: ${isMobile
+			? "repeat(auto-fill, minmax(45vw, 1fr))"
+			: "repeat(auto-fill, minmax(260px, 1fr))"};
+		place-items: center;
+		grid-row-gap: ${isMobile ? "16px" : "32px"};
+	`
+}
 
 const noneWrapperCSS = css`
 	width: 100%;
-	height: 100%;
+	/* height: 100%; */
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-
+	flex: 1;
 	> h3 {
 		font-size: 1.1rem;
 	}
