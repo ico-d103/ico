@@ -10,6 +10,7 @@ import { postRentalTeacherProductsAPI } from "@/api/student/shop/postRentalTeach
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { postPurchaseStudentProductsAPI } from "@/api/student/shop/postPurchaseStudentProductsAPI"
+import { useRouter } from "next/router"
 
 type QRScannerProps = {
 	closeComp: any
@@ -21,6 +22,11 @@ const QRScanner = ({ closeComp, type, id }: QRScannerProps) => {
 	const [isLoading, setIsLoading] = useState<boolean>(true)
 	const [isError, setIsError] = useState<boolean>(false)
 	const noti = useNotification()
+	const router = useRouter()
+
+	useEffect(() => {
+		console.log(router)
+	}, [])
 
 	useEffect(() => {
 		const codeReader = new BrowserQRCodeReader()
