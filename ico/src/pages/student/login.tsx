@@ -161,7 +161,7 @@ const wrapperCSS = css`
 
 	/* flex-direction: column; */
 	width: 100%;
-	height: 100%;
+	height: 100vh;
 	/* background-color: red; */
 
 	@media (max-width: 1440px) {
