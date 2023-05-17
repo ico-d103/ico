@@ -257,7 +257,7 @@ const indicatorCSS = ({duration}: {duration: number}) => {
       height: 3px;
     width: 100%;
     /* background-color: rgba(154, 76, 249, 0.7); */
-    background-color: var(--teacher-main-color);
+    background-color: var(--teacher-highlight-color);
 
 
 			animation: exec ${duration}ms ease forwards;

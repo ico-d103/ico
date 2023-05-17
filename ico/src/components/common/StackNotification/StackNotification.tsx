@@ -53,7 +53,7 @@ const backdropCSS = css`
 	left: 0;
 	width: 100%;
 	height: 100vh;
-	z-index: 999999;
+	z-index: 99999999999;
 	pointer-events: none;
 	display: flex;
 	justify-content: flex-end;
@@ -64,7 +64,7 @@ const notificationPlace = css`
 	position: fixed;
 	display: flex;
 	flex-direction: column;
-	z-index: 999999;
+	z-index: 99999999999;
 	align-items: flex-end;
 	width: 100vw;
 	height: 100%;
