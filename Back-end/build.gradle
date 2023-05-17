@@ -32,15 +32,17 @@ subprojects {
 	repositories {
 		mavenCentral()
 
-//		flatDir {
-//			dirs 'libs'
-//		}
+		flatDir {
+			dirs 'libs'
+		}
 	}
 
 	// 관리하는 모듈에 공통 dependencies
 	dependencies {
-//		implementation fileTree(dir: 'libs', include: ['*.jar'])
+		implementation 'org.springframework.boot:spring-boot-starter-web'
 		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
 		compileOnly 'org.projectlombok:lombok'
 		developmentOnly 'org.springframework.boot:spring-boot-devtools'
 		runtimeOnly 'com.h2database:h2'
@@ -50,6 +52,16 @@ subprojects {
 		testImplementation 'junit:junit:4.13.1'
 		testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
 		testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+		implementation 'mysql:mysql-connector-java:8.0.29'
+		// Spring Security v-5.6.4
+		implementation 'org.springframework.boot:spring-boot-starter-security'
+		// JWT
+		implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+		runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+		runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+		// https://mvnrepository.com/artifact/net.nurigo/sdk
+		implementation group: 'net.nurigo', name: 'sdk', version: '4.2.7'
+
 	}
 
 	test {
@@ -57,48 +69,29 @@ subprojects {
 	}
 }
 
-
-//dependencies {
-//	implementation 'org.springframework.boot:spring-boot-starter-batch'
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
-//	implementation 'org.springframework.boot:spring-boot-starter-validation'
-//	implementation 'org.springframework.boot:spring-boot-starter-web'
-//	compileOnly 'org.projectlombok:lombok'
-//	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//	runtimeOnly 'com.h2database:h2'
-//	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-//	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-//	annotationProcessor 'org.projectlombok:lombok'
-//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//	testImplementation 'org.springframework.batch:spring-batch-test'
-//	testImplementation 'org.springframework.security:spring-security-test'
-//}
-
 project(":core-module") {
 	bootJar.enabled = false
 	jar.enabled = true
 
 	dependencies {
-//		implementation fileTree(dir: 'libs', include: ['*.jar'])
-		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-		implementation 'org.springframework.boot:spring-boot-starter-validation'
-		implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 		runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+		// 테스트형 내장형 몽고DB 의존성
+		testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
 	}
 }
 
 project(":api-module") {
 
 	bootJar {
-		archiveBaseName = 'ico'
-		archiveFileName = "ico-api-module-0.0.1.jar"
-		archiveVersion = "0.0.1"
+		archiveBaseName.set('ico')
+		archiveFileName.set("ico-api-module-0.0.1.jar")
+		archiveVersion.set("0.0.1")
 	}
 
 	dependencies {
-		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation fileTree(dir: 'libs', include: ['*.jar'])
+		// AWS
+		implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 		implementation project(':core-module')
 	}
 }
@@ -106,12 +99,13 @@ project(":api-module") {
 project(":batch-module") {
 
 	bootJar {
-		archiveBaseName = 'ico'
-		archiveFileName = "ico-batch-module-0.0.1.jar"
-		archiveVersion = "0.0.1"
+		archiveBaseName.set('ico')
+		archiveFileName.set("ico-batch-module-0.0.1.jar")
+		archiveVersion.set("0.0.1")
 	}
 
 	dependencies {
+		implementation fileTree(dir: 'libs', include: ['*.jar'])
 		implementation 'org.springframework.boot:spring-boot-starter-batch'
 		testImplementation 'org.springframework.batch:spring-batch-test'
 		implementation project(':core-module')
