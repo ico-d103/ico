@@ -14,6 +14,7 @@ import useGetNation from "@/hooks/useGetNation"
 import Button from "@/components/common/Button/Button"
 import { useAtom } from "jotai"
 import { isNavigating } from "@/store/store"
+import { postPurchaseTeacherProductsAPI } from "@/api/student/shop/postPurchaseTeacherProductsAPI"
 
 function product() {
 	const router = useRouter()
@@ -31,6 +32,21 @@ function product() {
 	const { data } = useQuery<getTeacherProductDetailType>(["product", productId], () =>
 		getTeacherProductDetailAPI({ pid: productId }),
 	)
+
+	// const deniedProposal = () => {
+	// 	deleteDeniedStudentProposalAPI({ pid: productId }).then((res) => {
+	// 		router.push("/teacher/shop/student")
+	// 	})
+	// }
+
+	const purchaseProduct = () => {
+		postPurchaseTeacherProductsAPI({ pid: productId }).then((res) => {
+			console.log(res)
+			router.push("/student/shop/teacher")
+		})
+	}
+
+	console.log(data)
 
 	const imageElements = data?.images.map((img) => (
 		<img
@@ -53,30 +69,55 @@ function product() {
 			</div>
 
 			<div css={shopWrapperCSS}>
-	
-					<div css={shopUpperCSS}>
-						{data?.title}
-						{data && (
-							<div css={css`font-weight: 500;`}>
-								상품이&nbsp;<div style={{ fontWeight: "700" }}>{data?.count - data?.sold}개</div>&nbsp;남았어요!
-							</div>
-						)}
-					</div>
+				<div css={shopUpperCSS}>
+					{data?.title}
+					{data && (
+						<div
+							css={css`
+								font-weight: 500;
+							`}
+						>
+							상품이&nbsp;<div style={{ fontWeight: "700" }}>{data?.count - data?.sold}개</div>&nbsp;남았어요!
+						</div>
+					)}
+				</div>
 
-					<div css={priceTagCSS}>
-						{data?.amount}&nbsp;
-						{nation.currency}
-					</div>
+				<div css={priceTagCSS}>
+					{data?.amount}&nbsp;
+					{nation.currency}
+				</div>
 
-					<div css={css`width: 100%; height: 1px; border-bottom: 1px solid rgba(0, 0, 0, 0.1); margin: 8px 0px;`}/>
-					<div css={dateCSS}>{data?.date}</div>
-					<div css={detailCSS}>{data?.detail}</div>
-		
+				<div
+					css={css`
+						width: 100%;
+						height: 1px;
+						border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+						margin: 8px 0px;
+					`}
+				/>
+				<div css={dateCSS}>{data?.date}</div>
+				<div css={detailCSS}>{data?.detail}</div>
 			</div>
 
 			{/* <button onClick={openComp}>qr 카메라</button> */}
 
-			{isNavigatingAtom === false && (
+			{/* rental이 false : 구매 상품이므로 QR 스캔할 카메라가 필요하지 않다.. */}
+
+			{isNavigatingAtom === false && data?.rental === false && (
+				<div css={navBarOverlayCSS}>
+					<Button
+						text={"이 상품 구매할래요!"}
+						fontSize={`var(--student-h3)`}
+						width={"100%"}
+						theme={"mobileSoft"}
+						onClick={purchaseProduct}
+					/>
+				</div>
+			)}
+
+			{/* rental이 true : 대여 상품이므로 QR 스캔할 카메라가 반드시 필요하다. */}
+
+			{isNavigatingAtom === false && data?.rental === true && (
 				<div css={navBarOverlayCSS}>
 					<Button
 						text={"이 상품 구매할래요!"}
@@ -110,7 +151,6 @@ const wrapperCSS = css`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-
 `
 
 const shopWrapperCSS = css`
@@ -152,7 +192,7 @@ const shopUpperCSS = css`
 `
 
 const priceTagCSS = css`
-	color: #CB1400;
+	color: #cb1400;
 
 	margin-top: 10px;
 	font-weight: 500;

@@ -19,7 +19,6 @@ import Input from "@/components/common/Input/Input"
 
 import { putInvestTimeAPI } from "@/api/teacher/finanace/putInvestTimeAPI"
 
-
 type FinanceInvestIssueFormProps = {
 	data: getFinanceInvestIssueType
 }
@@ -86,7 +85,9 @@ function FinanceInvestIssueForm({ data }: FinanceInvestIssueFormProps) {
 				현재 투자 종목은&nbsp;<div style={{ fontWeight: "700" }}>{data.stock}</div>&nbsp;입니다.
 			</div>
 
-			{chartData && <FinanceInvestChart data={chartData} />}
+			<div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "10px" }}>
+				{chartData && <FinanceInvestChart data={chartData} />}
+			</div>
 
 			<div css={setTradeTimeCSS}>
 				<div style={{ marginBottom: "10px" }}>현재 거래 시간</div>
