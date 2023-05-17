@@ -49,13 +49,13 @@ function FinanceInvestIssueCreate({
 	const dropdownList = [
 		{
 			name: "edit",
-			content: <div css={iconBlackWrapperCSS}>사과</div>,
+			content: <div css={iconBlackWrapperCSS}>icon</div>,
 			label: "상승",
 			function: setTaxPercent,
 		},
 		{
 			name: "delete",
-			content: <div css={iconBlackWrapperCSS}>사과</div>,
+			content: <div css={iconBlackWrapperCSS}>icon</div>,
 			label: "하락",
 			function: setTaxAbsolute,
 		},
