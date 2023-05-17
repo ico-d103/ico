@@ -167,6 +167,11 @@ const wrapperCSS = css`
 	@media (max-width: 1440px) {
 		flex-direction: column;
 	}
+
+	@media (min-width: 1441px) {
+		height: 100vh;
+		
+	}
 `
 
 const loginSectionCSS = css`
@@ -177,8 +182,9 @@ const loginSectionCSS = css`
 		margin: 36px 0px 36px 0px;
 	}
 	@media (min-width: 1441px) {
-		height: 100%;
+		height: 100vh;
 		width: 25vw;
+		
 	}
 
 	min-width: 360px;
