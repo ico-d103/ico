@@ -89,7 +89,7 @@ public class StudentProductController {
      * @return 학생상품 상세 정보
      */
     @GetMapping("/{studentProductId}")
-    public ResponseEntity<StudentProductDetailResDto> detailProduct(HttpServletRequest request, @PathVariable Long studentProductId){
+    public ResponseEntity<?> detailProduct(HttpServletRequest request, @PathVariable Long studentProductId){
         return ResponseEntity.ok(studentProductService.detailProduct(request, studentProductId));
     }
 

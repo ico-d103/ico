@@ -25,12 +25,15 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 학생 상품 Service
  *
  * @author 변윤경
+ * @author 강교철
  */
 @Slf4j
 @Service
@@ -148,23 +151,30 @@ public class StudentProductServiceImpl implements StudentProductService {
      * @return 학생 상품 상세 정보
      */
     @Override
-    public StudentProductDetailResDto detailProduct(HttpServletRequest request, Long id) {
-        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+    public Map<String, Object> detailProduct(HttpServletRequest request, Long id) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
 
         StudentProduct product = studentProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
 
-        return StudentProductDetailResDto.builder()
-                .id(id)
-                .title(product.getTitle())
-                .amount(product.getAmount())
-                .images(s3UploadService.getImageURLs(product.getImages()))
-                .detail(product.getDetail())
-                .count(product.getCount())
-                .isAssigned(product.isAssigned())
-                .sold(product.getSold())
-                .date(product.getDate().format(Formatter.date))
-                .build();
+        // 자신의 상품인지 체크
+        boolean check = studentId.equals(product.getStudent().getId());
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", id);
+        result.put("title", product.getTitle());
+        result.put("amount", product.getAmount());
+        result.put("images", s3UploadService.getImageURLs(product.getImages()));
+        result.put("detail", product.getDetail());
+        result.put("count", product.getCount());
+        result.put("isAssigned", product.isAssigned());
+        result.put("sold", product.getSold());
+        result.put("date", product.getDate().format(Formatter.date));
+        result.put("isSeller", check);
+
+        return result;
     }
 
     /**

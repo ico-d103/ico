@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 변윤경
@@ -46,7 +47,7 @@ public interface StudentProductService {
      * @param id 상품 아이디
      * @return 상품디테일 정보
      */
-    StudentProductDetailResDto detailProduct(HttpServletRequest request, Long id);
+    Map<String, Object> detailProduct(HttpServletRequest request, Long id);
 
     /**
      * 학생 상품 구매
