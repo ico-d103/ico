@@ -5,5 +5,5 @@ package com.ico.core.code;
  * 대기중, 반려, 승인
  */
 public enum Status {
-    WAITING, COMPANION, APPROVED
+    WAITING, REJECT, APPROVED
 }

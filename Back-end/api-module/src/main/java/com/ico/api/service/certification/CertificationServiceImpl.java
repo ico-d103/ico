@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -73,7 +72,7 @@ public class CertificationServiceImpl implements CertificationService{
 
             // 승인 상태 변경
             Teacher teacher = certification.getTeacher();
-            teacher.setStatus(Status.COMPANION);
+            teacher.setStatus(Status.REJECT);
             teacherRepository.save(teacher);
 
             // Certification 삭제
