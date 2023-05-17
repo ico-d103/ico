@@ -27,11 +27,14 @@ public class TeacherSignUpRequestDto {
     @NotBlank(message = "112")
     private String name;
     private Role role;
+    @NotBlank(message = "113")
+    private String phoneNum;
 
     public TeacherSignUpRequestDto(Teacher teacher) {
         this.identity = teacher.getIdentity();
         this.password = teacher.getPassword();
         this.name = teacher.getName();
         this.role = Role.TEACHER;
+        this.phoneNum = teacher.getPhoneNum();
     }
 }
