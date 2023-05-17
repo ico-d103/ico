@@ -25,6 +25,7 @@ import java.util.List;
 
 /**
  * @author 변윤경
+ * @author 강교철
  */
 @RestController
 @RequiredArgsConstructor

@@ -12,6 +12,7 @@ import java.util.Map;
 
 /**
  * @author 변윤경
+ * @author 강교철
  */
 public interface StudentProductService {
 
@@ -45,7 +46,7 @@ public interface StudentProductService {
      * 학생상품 상세보기
      *
      * @param id 상품 아이디
-     * @return 상품디테일 정보
+     * @return 상품디테일 정보 and isSeller
      */
     Map<String, Object> detailProduct(HttpServletRequest request, Long id);
 
