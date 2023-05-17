@@ -39,6 +39,8 @@ function product() {
 	)
 
 	console.log(data)
+
+	console.log(data)
 	const generateTime = () => {
 		setTime(() => new Date().getTime())
 	}
@@ -79,8 +81,7 @@ function product() {
 			)}
 			<PageHeader title={"상점"} />
 			<div ref={galleryWrapperRef} css={parentCSS}>
-				{imageElements &&
-				<SwipeableGallery parentRef={galleryWrapperRef} content={[...imageElements]} />}
+				{imageElements && <SwipeableGallery parentRef={galleryWrapperRef} content={[...imageElements]} />}
 			</div>
 
 			<div css={shopWrapperCSS}>
@@ -121,21 +122,39 @@ function product() {
 
 			{/* <button onClick={openComp}>qr 카메라</button> */}
 
-			{isNavigatingAtom === false && data?.assigned === false && (
+			{/* {isNavigatingAtom === false && data?.assigned === false && (
 				<div css={navBarOverlayCSS}>
 					<div>선생님이 아직 승인하지 않은 상품이에요.</div>
 				</div>
-			)}
+			)} */}
 
 			{/* 구매자라는 로직 추가 해야 함*/}
-			{/* {isNavigatingAtom === false && data?.assigned === false && (
-				<div css={navBarOverlayCSS}>이 상품 구매할래요!</div>
-			)} */}
+			{isNavigatingAtom === false && data?.assigned === true && data.seller === false && (
+				<div css={navBarOverlayCSS}>
+					<Button
+						text={"이 상품 구매할래요!"}
+						fontSize={`var(--student-h3)`}
+						width={"100%"}
+						theme={"mobileSoft"}
+						onClick={openScanQR}
+					/>
+				</div>
+			)}
 
-			{/* 판매자라는 로직 추가 해야 함*/}
-			{/* {isNavigatingAtom === false && data?.assigned === false && (
-				<div css={navBarOverlayCSS}>내 상품을 팔거에요!</div>
-			)} */}
+			{isNavigatingAtom === false && data?.assigned === true && data.seller === true && (
+				<div css={navBarOverlayCSS}>
+					<Button
+						text={"내 상품을 팔거에요!"}
+						fontSize={`var(--student-h3)`}
+						width={"100%"}
+						theme={"mobileSoft"}
+						onClick={() => {
+							generateTime()
+							openShowQR()
+						}}
+					/>
+				</div>
+			)}
 
 			{/* {isNavigatingAtom === false && (
 				<div css={navBarOverlayCSS}>
@@ -182,7 +201,7 @@ const shopUpperCSS = css`
 	font-size: var(--student-h1);
 	font-weight: 700;
 
-	div:nth-child(1) {
+	div:nth-of-type(1) {
 		display: flex;
 		color: var(--teacher-gray-color);
 
