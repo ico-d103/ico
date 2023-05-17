@@ -8,10 +8,11 @@ type CollapseMenuProps = {
 	bracketSize: string
 	border?: string
 	marginBottom?: string
+	reverse?: boolean
 }
 
-function CollapseMenu({ children, title, fontSize, bracketSize, border, marginBottom }: CollapseMenuProps) {
-	const [isOpened, setIsOpened] = useState<boolean>(false)
+function CollapseMenu({ children, title, fontSize, bracketSize, border, marginBottom, reverse }: CollapseMenuProps) {
+	const [isOpened, setIsOpened] = useState<boolean>(reverse ? true : false)
 	const [refresh, setRefresh] = useState<boolean>(false)
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
 

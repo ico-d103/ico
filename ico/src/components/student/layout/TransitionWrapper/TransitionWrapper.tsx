@@ -292,7 +292,7 @@ const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 		}
 
 		/* min-height: calc(100vh - 64px); */
-		min-height: 100vh;
+		min-height: calc(100vh - 64px);;
 		overflow: hidden;
 	`
 }
@@ -306,7 +306,7 @@ const contentInnerWrapperCSS = ({
 }) => {
 	return css`
 		/* min-height: calc(100vh - 64px); */
-		min-height: 100vh;
+		min-height: calc(100vh - 64px);
 		/* background-color: var(--student-back-color); */
 		background: linear-gradient(to bottom, var(--student-main-color), #ffecc4);
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
@@ -315,6 +315,9 @@ const contentInnerWrapperCSS = ({
 		/* height: ${isTransitioning && "100vh"}; */
 		/* overflow: ${isTransitioning && "hidden"}; */
 		visibility: ${beforeTransition && "hidden"};
+
+		display: flex;
+		flex-direction: column;
 	`
 }
 

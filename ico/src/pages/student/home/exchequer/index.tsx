@@ -21,52 +21,67 @@ function asset() {
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 
 	return (
-		<div>
+		<React.Fragment>
 			<PageHeader title={"국고"} />
 			<div css={assetWrapperCSS}>
 				<ContentWrapper>
-					<div css={sSizeFontCSS}>남은 예산</div>
+					<div css={sSizeFontCSS}>남은 세금</div>
 					<div css={lSizeFontCSS}>
 						{data
 							? Object.keys(data).length === 0
 								? `0 ${nation?.currency}`
 								: `${data[Object.keys(data)[0]][0].balance} ${nation?.currency}`
-							: "금액을 조회중이에요."}
+							: "잔액을 조회중이에요."}
 					</div>
 				</ContentWrapper>
-				<ContentWrapper>
-
-
-				
-
+				<ContentWrapper
+					cssProps={css`
+						flex: 1;
+						display: flex;
+						flex-direction: column;
+						
+					`}
+				>
 					{isLoading && (
-						<div css={css`width: 128px; height: 128px;`}>
-						{isNavigatingAtom === false && <Loading
-							size={96}
-							labelSize={18}
-							labelMargin={"24px 0px 16px 0px"}
-							label={"거래 내역을 불러오는 중이에요!"}
-						/>}
+						<div
+							css={css`
+								flex: 1;
+								display: flex;
+								justify-content: center;
+								align-items: center;
+								
+							`}
+						>
+			
+								{isNavigatingAtom === false && (
+									<Loading
+										size={96}
+										labelSize={18}
+										labelMargin={"24px 0px 16px 0px"}
+										label={"세금 내역을 불러오는 중이에요!"}
+									/>
+								)}
+				
 						</div>
 					)}
 					{data && <HomeAssetDetail tradeHistory={data} />}
 				</ContentWrapper>
 			</div>
-		</div>
+		</React.Fragment>
 	)
 }
 
 export async function getServerSideProps() {
 	return {
-	  props: {},
-	};
-  }
-
+		props: {},
+	}
+}
 
 const assetWrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	flex: 1;
 `
 
 const lSizeFontCSS = css`
@@ -79,5 +94,4 @@ const sSizeFontCSS = css`
 	font-size: var(--student-h4);
 	color: rgba(0, 0, 0, 0.6);
 `
-
 export default asset

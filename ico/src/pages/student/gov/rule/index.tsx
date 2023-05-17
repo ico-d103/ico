@@ -47,7 +47,7 @@ function index() {
 }
 
 const mainWrapperCSS = css`
-	padding-bottom: 30px;
+	padding-bottom: 6px;
 `
 
 const wrapperCSS = css`
