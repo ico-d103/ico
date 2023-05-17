@@ -1,5 +1,6 @@
 import React from "react"
 import { css } from "@emotion/react"
+import { SerializedStyles } from "@emotion/react"
 
 type ButtonPropsType = {
 	text: string // 버튼 텍스트
@@ -10,6 +11,7 @@ type ButtonPropsType = {
 	margin?: string
 	onClick: () => void // 버튼의 onClick 메서드
 	disabled?: boolean
+	cssProps?: SerializedStyles
 }
 
 type themeType = {
@@ -19,13 +21,13 @@ type themeType = {
 	backgroundColor: string // 테마의 background-color
 }
 
-function Button({ text, fontSize, width, height, theme, margin, onClick, disabled }: ButtonPropsType) {
+function Button({ text, fontSize, width, height, theme, margin, onClick, disabled, cssProps }: ButtonPropsType) {
 	// 원하는 버튼 테마 추가
 
 	return (
 		<button
 			disabled={disabled}
-			css={[initCSS({ fontSize, width, height, margin }), buttonCSS({ theme })]}
+			css={[initCSS({ fontSize, width, height, margin }), buttonCSS({ theme }), cssProps ]}
 			onClick={onClick}
 		>
 			{/* <button disabled={disabled} css={buttonCSS({ fontSize, width, height, themes, theme, margin })} onClick={onClick}></button> */}
@@ -165,6 +167,7 @@ const buttonCSS = ({ theme }: { theme: string }) => {
 			border-radius: 20px;
 			background-color: var(--student-main-color-7);
 			color: var(--student-main-color-6);
+			
 		`,
 		mobileCancel: css`
 			border: none;

@@ -35,7 +35,7 @@ function login() {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [alarm, setAlarm] = useState<string>("")
 	const [inputState, dispatchInput] = useReducer(inputReducer, initialState)
-	const [isDenied, setIsDenied] = useState<boolean>(true)
+	// const [isDenied, setIsDenied] = useState<boolean>(true)
 	const router = useRouter()
 	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
@@ -55,21 +55,21 @@ function login() {
 				setCookie("Authorization", res, { path: "/", maxAge: 30 * 24 * 60 * 60 })
 
 				setTokenStatus({showMessage: false}).then((res) => {
-					if (res && res.role === "TEACHER") {
+					// if (res && res.role === "TEACHER") {
 
-						// 교사인증 X -> 인증 대기 상태
-						if (res.status === "require_approval") {
-							// 인증 대기 모달 띄우기
-							setIsDenied(false)
-							openComp()
-						}
-						// 교사인증 X -> 인증 거부 상태
-						if (res.status === "require_submit_certification") {
-							// 인증 거부 모달 띄우고 정보수정 페이지로 이동시키기
-							setIsDenied(true)
-							openComp()
-						}
-					}
+					// 	// 교사인증 X -> 인증 대기 상태
+					// 	if (res.status === "require_approval") {
+					// 		// 인증 대기 모달 띄우기
+					// 		setIsDenied(false)
+					// 		openComp()
+					// 	}
+					// 	// 교사인증 X -> 인증 거부 상태
+					// 	if (res.status === "require_submit_certification") {
+					// 		// 인증 거부 모달 띄우고 정보수정 페이지로 이동시키기
+					// 		setIsDenied(true)
+					// 		openComp()
+					// 	}
+					// }
 				})
 				
 				
@@ -172,7 +172,7 @@ function login() {
 					</div>
 				</div>
 			</div>
-			<Modal
+			{/* <Modal
 				compState={compState}
 				closeComp={closeComp}
 				transition={"scale"}
@@ -203,7 +203,7 @@ function login() {
 						}
 					/>
 				}
-			/>
+			/> */}
 		</>
 	)
 }

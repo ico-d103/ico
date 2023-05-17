@@ -24,7 +24,7 @@ function students() {
 
 	return (
 		<div css={mainWrapperCSS}>
-			<PageHeader title={"반 친구들"} addComp={<TabMenu menus={ClassTabMenus()} selected={0} />} />
+			<PageHeader title={"우리반"} addComp={<TabMenu menus={ClassTabMenus()} selected={0} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					<div css={searchWrapperCSS}>

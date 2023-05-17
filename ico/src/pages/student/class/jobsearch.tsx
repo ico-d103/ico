@@ -30,7 +30,7 @@ function jobsearch() {
 
 	return (
 		<div css={mainWrapperCSS}>
-			<PageHeader title={"일자리 찾기"} addComp={<TabMenu menus={ClassTabMenus()} selected={1} />} />
+			<PageHeader title={"우리반"} addComp={<TabMenu menus={ClassTabMenus()} selected={1} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					{jobList.length !== 0 && (

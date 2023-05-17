@@ -24,7 +24,7 @@ function index() {
 	const renderExchequerList = data?.map((el, idx) => {
 		return (
 			<GovExchequerDetail
-				showIdx={idx}
+				showIdx={idx + 1}
 				actualIdx={el.id}
 				title={el.title}
 				content={el.detail}
