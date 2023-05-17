@@ -21,10 +21,10 @@ import com.ico.core.repository.TeacherProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -256,6 +256,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
     }
 
     @Override
+    @Transactional
     public void deleteTeacherProduct(Long teacherProductId) {
         TeacherProduct teacherProduct = teacherProductRepository.findById(teacherProductId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
