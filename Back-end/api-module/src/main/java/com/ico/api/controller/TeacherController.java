@@ -45,9 +45,26 @@ public class TeacherController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    /**
+     * 휴대폰 인증
+     * @param req
+     * @return ok
+     */
     @PostMapping("/phone")
     @ResponseBody
     public ResponseEntity<?> certifiedPhone(@RequestBody Map<String, String> req) {
         return new ResponseEntity<>(teacherService.certifiedPhoneNum(req.get("phoneNum")), HttpStatus.OK);
+    }
+
+    /**
+     * 회원가입 후 교사인증서 반려 당했을 때 or 다시 교사인증서를 보낼 때
+     * @param request
+     * @param file
+     * @return ok
+     */
+    @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<HttpStatus> certifiedImage(HttpServletRequest request, @RequestPart("file") MultipartFile file) {
+        teacherService.certifiedImage(request, file);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

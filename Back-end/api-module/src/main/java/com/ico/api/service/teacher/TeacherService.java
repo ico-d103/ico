@@ -1,9 +1,10 @@
 package com.ico.api.service.teacher;
 
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
-import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import com.ico.core.entity.Teacher;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
@@ -29,4 +30,10 @@ public interface TeacherService {
      */
     String certifiedPhoneNum(String phoneNum);
 
+    /**
+     * 회원가입 후 교사인증서 반려 당했을 때 or 다시 교사인증서를 보낼 때
+     * @param request
+     * @param file
+     */
+    void certifiedImage(HttpServletRequest request, MultipartFile file);
 }
