@@ -56,6 +56,7 @@ public class TeacherServiceImpl implements TeacherService {
                 .name(requestDto.getName())
                 .status(Status.WAITING)
                 .role(Role.TEACHER)
+                .phoneNum(requestDto.getPhoneNum())
                 .build();
 
         if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()

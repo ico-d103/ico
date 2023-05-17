@@ -13,6 +13,11 @@ import com.ico.core.repository.CertificationRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.service.DefaultMessageService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +41,15 @@ public class CertificationServiceImpl implements CertificationService{
     private final JwtTokenProvider jwtTokenProvider;
     private final S3UploadService s3;
 
+    @Value("${coolsms.apiKey}")
+    private String apiKey;
+
+    @Value("${coolsms.apiSecret}")
+    private String apiSecret;
+
+    @Value("${coolsms.fromPhoneNum}")
+    private String fromPhoneNum;
+
     @Override
     @Transactional
     public void approveCertification(HttpServletRequest request, Long id) {
@@ -51,6 +65,20 @@ public class CertificationServiceImpl implements CertificationService{
             Teacher teacher = certification.getTeacher();
             teacher.setStatus(Status.APPROVED);
             teacherRepository.save(teacher);
+
+            // 문자로 보내주기
+            String phoneNum = certification.getTeacher().getPhoneNum();
+            if (phoneNum.isEmpty()) {
+                throw new CustomException(ErrorCode.NOT_FOUND_PHONE_NUMBER);
+            }
+            Message message = new Message();
+            message.setFrom(fromPhoneNum);
+            message.setTo(phoneNum);
+            message.setText("[아이코]\n교사인증서가 승인되었습니다.");
+
+            // 메세지 전송
+            final DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecret, "https://api.coolsms.co.kr");
+            messageService.sendOne(new SingleMessageSendingRequest(message));
 
             // Certification 삭제
             certificationRepository.delete(certification);
@@ -75,6 +103,20 @@ public class CertificationServiceImpl implements CertificationService{
             teacher.setStatus(Status.REJECT);
             teacherRepository.save(teacher);
 
+            // 문자로 보내주기
+            String phoneNum = certification.getTeacher().getPhoneNum();
+            if (phoneNum.isEmpty()) {
+                throw new CustomException(ErrorCode.NOT_FOUND_PHONE_NUMBER);
+            }
+            Message message = new Message();
+            message.setFrom(fromPhoneNum);
+            message.setTo(phoneNum);
+            message.setText("[아이코]\n교사인증서가 반려되었습니다.");
+
+            // 메세지 전송
+            final DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecret, "https://api.coolsms.co.kr");
+            messageService.sendOne(new SingleMessageSendingRequest(message));
+
             // Certification 삭제
             certificationRepository.delete(certification);
         }
@@ -82,7 +124,6 @@ public class CertificationServiceImpl implements CertificationService{
             throw new CustomException(ErrorCode.WRONG_ROLE);
         }
     }
-
 
     @Override
     @Transactional
