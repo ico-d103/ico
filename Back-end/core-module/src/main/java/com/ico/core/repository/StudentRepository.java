@@ -40,14 +40,21 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
      */
     List<Student> findAllByNationId(Long nationId);
 
-//    Page<Student> findAllByStudentJobIdIsNotNull(Pageable pageable);
-//
-//    Page<Student> findByNationId(Long nationId, Pageable pageable);
-//
-//    Page<Student> findByStudentJobId(Long studentJobId, Pageable pageable);
-
+    /**
+     * 직업이 배정된 학생 목록 조회
+     *
+     * @param pageable
+     * @return
+     */
     Page<Student> findByStudentJobIsNotNull(Pageable pageable);
 
+    /**
+     * 15일에 월급을 지급받을 금액이 있는 학생들의 목록 조회
+     *
+     * @param salary
+     * @param pageable
+     * @return
+     */
     Page<Student> findBySalaryGreaterThan(Integer salary, Pageable pageable);
 
 

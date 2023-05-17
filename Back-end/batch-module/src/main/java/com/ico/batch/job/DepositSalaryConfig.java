@@ -108,7 +108,7 @@ public class DepositSalaryConfig {
                     amount = tax.getAmount();
                 }
 
-                // 세금 항목별 금액에 학생의 세근 더하기
+                // 세금 항목별 금액에 학생의 세금 더하기
                 log.info("title : {}, amount : {}, type : {}", tax.getTitle(), amount, tax.getType());
                 DepositSalaryService.addTax((HashMap<Long, Map<String, Integer>>) DepositSalaryService.nationTax, nationId, amount, tax.getTitle());
 
