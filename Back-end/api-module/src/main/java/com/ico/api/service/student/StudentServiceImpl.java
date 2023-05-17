@@ -276,6 +276,34 @@ public class StudentServiceImpl implements StudentService{
         return student.getCreditRating();
     }
 
+    @Transactional
+    @Override
+    public void postAllCreditScore(CreditScoreReqDto dto, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        List<Student> studentList = studentRepository.findAllByNationId(nationId);
+        if (studentList.isEmpty()) {
+            // 나라 id 에 해당하는 학생이 없는 경우
+            throw new CustomException(ErrorCode.NATION_NOT_FOUNT_STUDENT);
+        }
+
+        for (Student student : studentList) {
+            // 나라의 신용점수 등락폭에 맞게 신용점수 부여
+            if (dto.getType()) {
+                student.setCreditScore(getTotalCreditScore(student.getCreditScore(), nation.getCredit_up()));
+            } else {
+                student.setCreditScore(getTotalCreditScore(student.getCreditScore(),  -1 * nation.getCredit_down()));
+            }
+
+            // 신용점수에 맞는 신용등급 부여
+            student.setCreditRating(checkCreditRating(student.getCreditScore()));
+
+            studentRepository.save(student);
+        }
+    }
+
     /**
      * 신용점수 부여 시 올바른 범위 내의 신용점수 부여
      *
