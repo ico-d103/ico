@@ -1,0 +1,21 @@
+.wrapper {
+  /* width: 300px;
+    height: 300px; */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+}
+
+.moveable {
+  display: flex;
+  transition-property: transform;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(250, 250, 250);
+  box-sizing: border-box;
+}
