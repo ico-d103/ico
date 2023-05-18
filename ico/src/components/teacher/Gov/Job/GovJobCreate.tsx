@@ -52,10 +52,25 @@ function GovJobCreate({
 	]
 
 	const ILLUST = [
-		"https://d3bkfkkihwj5ql.cloudfront.net/firefighter.png",
-		"https://d3bkfkkihwj5ql.cloudfront.net/weather_caster.png",
-		"https://d3bkfkkihwj5ql.cloudfront.net/worker_female.png",
 		"https://d3bkfkkihwj5ql.cloudfront.net/worker_male.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/worker_female.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/Student1.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/Student2.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/Student3.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/Student4.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/Student5.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/Student6.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/cleaner.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/chef.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/designer.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/garbage_collector.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/reporter.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/repairman.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/firefighter.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/police.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/doctor.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/weather_caster.png",
+		"https://d3bkfkkihwj5ql.cloudfront.net/postman.png",
 	]
 
 	const [nation] = useGetNation()
