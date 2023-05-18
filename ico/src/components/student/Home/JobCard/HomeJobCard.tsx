@@ -5,7 +5,7 @@ import LoadImage from "@/components/common/LoadImage/LoadImage"
 
 type HomeJobCardProps = {
   name: string
-	job?: string
+	job?: string | null
 	wage?: number
   credit: number
 	backgroundColor: string
