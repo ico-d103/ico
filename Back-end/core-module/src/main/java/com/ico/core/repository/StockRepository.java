@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * @author 변윤경
+ * @author 강교철
  */
 public interface StockRepository extends JpaRepository<Stock, Long> {
     /**
@@ -16,4 +17,6 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
      * @return 투자 이슈 최신순 목록
      */
     List<Stock> findAllByNationIdOrderByIdDesc(Long nationId);
+
+    List<Stock> findAllByNationId(Long nationId);
 }

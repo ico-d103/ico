@@ -4,7 +4,6 @@ import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
 import com.ico.api.dto.nation.TradingTimeReqDto;
 import com.ico.core.dto.StockReqDto;
-import com.ico.core.data.DefaultNation;
 import com.ico.core.entity.Nation;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +11,8 @@ import java.util.Map;
 
 /**
  * @author 강교철
+ * @author 변윤경
+ * @author 서재건
  */
 public interface NationService {
 
@@ -31,7 +32,13 @@ public interface NationService {
      */
     Nation getNation(HttpServletRequest request);
 
-//    Nation updateNation(NationReqDto reqDto, HttpServletRequest request);
+    /**
+     * 교사가 자신이 생성한 나라 수정
+     * @param reqDto
+     * @param request
+     * @return Nation
+     */
+    Nation updateNation(NationReqDto reqDto, HttpServletRequest request);
 
     /**
      * 투자 종목 등록
@@ -63,5 +70,9 @@ public interface NationService {
      */
     void updateTradingTime(HttpServletRequest request, TradingTimeReqDto dto);
 
-    DefaultNation findDefaultNation();
+    /**
+     * 교사의 나라 삭제
+     * @param request
+     */
+    void deleteNation(HttpServletRequest request);
 }

@@ -77,7 +77,7 @@ public class MemberServiceImpl implements MemberService {
                 } else {
                     if (immigrationRepository.findByStudentId(memberId) != null) {
                         // 학생이 반 코드 요청을 보냈고 교사에게 승인 받기 전
-                        return Map.of("status", "waiting", "role", role);
+                        return Map.of("status", "require_approval", "role", role);
                     }
                     // 학생이 로그인 후에 아무것도 안했을 때
                     return Map.of("status", "require_submit_code", "role", role);
@@ -93,12 +93,12 @@ public class MemberServiceImpl implements MemberService {
                 if (teacher.getStatus().equals(Status.APPROVED)) {
                     // 교사가 교사 인증서 승인 받은 후
                     return Map.of("status", "require_create_nation", "role", role);
-                } else if (teacher.getStatus().equals(Status.COMPANION)) {
+                } else if (teacher.getStatus().equals(Status.REJECT)) {
                     // 교사인증서 반려당했을 때
                     return Map.of("status", "require_submit_certification", "role", role);
                 }
                 // 교사가 교사 인증서 승인 받기 전
-                return Map.of("status", "waiting", "role", role);
+                return Map.of("status", "require_approval", "role", role);
             }
         }
         // Admin 계정이 로그인했을 때

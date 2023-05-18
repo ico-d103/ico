@@ -2,6 +2,7 @@ package com.ico.api.service.teacher;
 
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import com.ico.api.service.S3UploadService;
+import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Role;
 import com.ico.core.code.Status;
 import com.ico.core.entity.Certification;
@@ -24,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -37,6 +40,7 @@ import java.util.Random;
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
+    private final JwtTokenProvider jwtTokenProvider;
     private final StudentRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
     private final CertificationRepository certificationRepository;
@@ -52,6 +56,7 @@ public class TeacherServiceImpl implements TeacherService {
                 .name(requestDto.getName())
                 .status(Status.WAITING)
                 .role(Role.TEACHER)
+                .phoneNum(requestDto.getPhoneNum())
                 .build();
 
         if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()
@@ -67,18 +72,15 @@ public class TeacherServiceImpl implements TeacherService {
         teacherRepository.save(teacher);
 
         // 교사 인증서 저장
-        if (!file.isEmpty()) {
-            String image = s3.upload(file);
-            log.info(image);
-            Certification certification = Certification.builder()
-                    .teacher(teacher)
-                    .image(image)
-                    .build();
-            certificationRepository.save(certification);
-        }
-        else {
+        if (file.isEmpty()) {
             throw new CustomException(ErrorCode.NOT_FOUND_IMAGE);
         }
+        String image = s3.upload(file);
+        Certification certification = Certification.builder()
+                .teacher(teacher)
+                .image(image)
+                .build();
+        certificationRepository.save(certification);
 
         return teacher.getId();
     }
@@ -115,5 +117,37 @@ public class TeacherServiceImpl implements TeacherService {
         messageService.sendOne(new SingleMessageSendingRequest(message));
 
         return randomNum;
+    }
+
+    @Override
+    @Transactional
+    public void certifiedImage(HttpServletRequest request, MultipartFile file) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long teacherId = jwtTokenProvider.getId(token);
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Optional<Certification> optionalCertification = certificationRepository.findByTeacherId(teacherId);
+        // 교사인증서를 보낸 사람이 요청하면 전에 보낸 교사인증서를 삭제해줌
+        if (optionalCertification.isPresent()) {
+            // S3 서버에서 파일 삭제
+            s3.deleteFile(optionalCertification.get().getImage());
+
+            // 승인 상태 변경
+            teacher.setStatus(Status.WAITING);
+            teacherRepository.save(teacher);
+
+            // Certification 삭제
+            certificationRepository.delete(optionalCertification.get());
+        }
+        // 교사 인증서 저장
+        if (file.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_IMAGE);
+        }
+        String image = s3.upload(file);
+        Certification certification = Certification.builder()
+                .teacher(teacher)
+                .image(image)
+                .build();
+        certificationRepository.save(certification);
     }
 }

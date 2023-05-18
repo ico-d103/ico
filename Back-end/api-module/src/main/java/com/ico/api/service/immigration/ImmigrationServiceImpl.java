@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 입국심사 관련 Service 로직
@@ -57,6 +56,10 @@ public class ImmigrationServiceImpl implements ImmigrationService {
                         .student(student)
                         .build();
                 immigrationRepository.save(immigration);
+
+                // 학생의 번호 저장
+                student.setNumber(reqDto.getNumber().byteValue());
+                studentRepository.save(student);
             } else {
                 throw new CustomException(ErrorCode.WRONG_IMMIGRATION);
             }
@@ -68,6 +71,7 @@ public class ImmigrationServiceImpl implements ImmigrationService {
         sseEmitters.send(findStudentSseList(nation.getId()));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Immigration getImmigration(HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
@@ -80,6 +84,7 @@ public class ImmigrationServiceImpl implements ImmigrationService {
         }
     }
 
+    @Transactional
     @Override
     public void deleteImmigration(HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
@@ -106,41 +111,42 @@ public class ImmigrationServiceImpl implements ImmigrationService {
         String token = jwtTokenProvider.parseJwt(request);
         Role role = jwtTokenProvider.getRole(token);
         if (role.equals(Role.TEACHER)) {
-            Optional<Immigration> immigration = immigrationRepository.findById(immigrationId);
-            if (immigration.isPresent()) {
-                Student student = immigration.get().getStudent();
-                if (student != null) {
-                    student.setNation(immigration.get().getNation());
-                    studentRepository.save(student);
+            Immigration immigration = immigrationRepository.findById(immigrationId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION_USER));
 
-                    immigrationRepository.delete(immigration.get());
-                } else {
-                    throw new CustomException(ErrorCode.USER_NOT_FOUND);
-                }
-            }
+            Student student = immigration.getStudent();
+
+            student.setNation(immigration.getNation());
+            studentRepository.save(student);
+
+            immigrationRepository.delete(immigration);
+
         }
-
-        // 입국심사 요청 삭제 시 SSE로 요청 목록 전송
+        // 입국심사 요청 승인 시 SSE로 요청 목록 전송
         sseEmitters.send(findStudentSseList(jwtTokenProvider.getNation(token)));
     }
 
     @Override
+    @Transactional
     public void companionImmigration(Long immigrationId, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Role role = jwtTokenProvider.getRole(token);
         if (role.equals(Role.TEACHER)) {
-            Optional<Immigration> immigration = immigrationRepository.findById(immigrationId);
-            if (immigration.isPresent()) {
-                immigrationRepository.delete(immigration.get());
-            } else {
-                throw new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION_USER);
-            }
+            Immigration immigration = immigrationRepository.findById(immigrationId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION_USER));
+            immigrationRepository.delete(immigration);
+
+            // 학생의 number 초기화
+            Student student = immigration.getStudent();
+            student.setNumber((byte) 0);
+            studentRepository.save(student);
         }
 
         // 입국심사 요청 삭제 시 SSE로 요청 목록 전송
         sseEmitters.send(findStudentSseList(jwtTokenProvider.getNation(token)));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<StudentSseDto> findAllImmigrationStudent(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -154,7 +160,7 @@ public class ImmigrationServiceImpl implements ImmigrationService {
      * @param nationId
      * @return 입국 요청 목록
      */
-    private List<StudentSseDto> findStudentSseList(Long nationId) {
+    List<StudentSseDto> findStudentSseList(Long nationId) {
         List<Immigration> immigrationList = immigrationRepository.findAllByNationId(nationId);
         List<StudentSseDto> dtoList = new ArrayList<>();
         for (Immigration immigration : immigrationList) {

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.List;
 
@@ -58,6 +59,21 @@ public class ErrorResponseEntity {
                         .code(fieldError.getDefaultMessage())
                         .message(fieldName + " 필드의 입력값[ " + rejectedValue + " ]이 유효하지 않습니다.")
                         .build());
+    }
+
+    /**
+     * max file size를 넘겼을 때 에러 코드 반환
+     *
+     * @param e
+     * @return
+     */
+    public static ResponseEntity<ErrorResponseEntity> toReponseEntity(MaxUploadSizeExceededException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_GATEWAY)
+                        .body(ErrorResponseEntity.builder()
+                                .code("34")
+                                .message("업로드 가능한 최대 사진 크기는 " + e.getMaxUploadSize() + "MB 입니다.")
+                                .build());
     }
 
 }

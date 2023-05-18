@@ -8,9 +8,12 @@ import java.util.Optional;
 
 /**
  * @author 변윤경
+ * @author 강교철
  */
 public interface InterestRepository extends JpaRepository<Interest, Long> {
     Optional<Interest> findByNationIdAndCreditRating(Long nationId, Byte creditRating);
 
     List<Interest> findAllByNationIdOrderByCreditRating(Long nationId);
+
+    List<Interest> findAllByNationId(Long nationId);
 }

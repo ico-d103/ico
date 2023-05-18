@@ -13,23 +13,36 @@ import com.ico.core.data.Default_job;
 import com.ico.core.data.Default_rule;
 import com.ico.core.data.Default_tax;
 import com.ico.core.dto.StockReqDto;
-import com.ico.core.data.DefaultNation;
+import com.ico.core.entity.DefaultNation;
+import com.ico.core.entity.Immigration;
 import com.ico.core.entity.Interest;
+import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Rule;
 import com.ico.core.entity.Stock;
+import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentJob;
+import com.ico.core.entity.StudentProduct;
 import com.ico.core.entity.Tax;
 import com.ico.core.entity.Teacher;
+import com.ico.core.entity.TeacherProduct;
+import com.ico.core.entity.TreasuryHistory;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.DefaultNationRepository;
+import com.ico.core.repository.ImmigrationRepository;
+import com.ico.core.repository.InterestRepository;
+import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.RuleRepository;
 import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.StudentJobRepository;
+import com.ico.core.repository.StudentProductRepository;
+import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TaxRepository;
+import com.ico.core.repository.TeacherProductRepository;
 import com.ico.core.repository.TeacherRepository;
+import com.ico.core.repository.TreasuryHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -47,17 +60,25 @@ import java.util.Random;
  * 나라 관련 Service
  *
  * @author 강교철
+ * @author 변윤경
+ * @author 서재건
  */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class NationServiceImpl implements NationService {
+    private final InterestRepository interestRepository;
     private final RuleRepository ruleRepository;
     private final StudentJobRepository studentJobRepository;
+    private final StudentProductRepository studentProductRepository;
+    private final TeacherProductRepository teacherProductRepository;
+    private final ImmigrationRepository immigrationRepository;
     private final TaxRepository taxRepository;
-
+    private final InvestRepository investRepository;
+    private final TreasuryHistoryRepository treasuryHistoryRepository;
     private final NationRepository nationRepository;
     private final TeacherRepository teacherRepository;
+    private final StudentRepository studentRepository;
     private final StockRepository stockRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -89,8 +110,8 @@ public class NationServiceImpl implements NationService {
                                 .code(randomCode())
                                 .currency(reqDto.getCurrency())
                                 .treasury(0)
-                                .credit_up((byte) 20)
-                                .credit_down((byte) 50)
+                                .credit_up((byte) 50)
+                                .credit_down((byte) 20)
                                 .build();
                         nationRepository.save(nation);
 
@@ -163,29 +184,25 @@ public class NationServiceImpl implements NationService {
 
     }
 
-//    @Override
-//    public Nation updateNation(NationReqDto reqDto, HttpServletRequest request) {
-        // TODO : 나라 수정 때 사용할 것
-//        String token = jwtTokenProvider.parseJwt(request);
-//        Long id = jwtTokenProvider.getId(token);
-//
-//        if (id != null) {
-//            Long nationId = teacherRepository.findById(id).get().getNation().getId();
-//            Nation nation = nationRepository.findById(nationId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
-//            nation.setSchool(reqDto.getSchool());
-//            nation.setGrade((byte) reqDto.getGrade());
-//            nation.setRoom((byte) reqDto.getRoom());
-//            nation.setTitle(reqDto.getTitle());
-//            nation.setCurrency(reqDto.getCurrency());
-//            nation.setTrading_start(reqDto.getTrading_start());
-//            nation.setTrading_end(reqDto.getTrading_end());
-//            nationRepository.save(nation);
-//            return nation;
-//        }
-//        else {
-//            throw new CustomException(ErrorCode.NOT_FOUND_NATION);
-//        }
-//    }
+    @Override
+    public Nation updateNation(NationReqDto reqDto, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
+        nation.setSchool(reqDto.getSchool());
+        nation.setGrade((byte) reqDto.getGrade());
+        nation.setRoom((byte) reqDto.getRoom());
+        nation.setCurrency(reqDto.getCurrency());
+        String title = reqDto.getTitle();
+        // 나라 이름이 같지 않거나 현재 나라이름 일때만 수정 가능
+        if (nationRepository.findByTitle(title).isEmpty() || title.equals(nation.getTitle())) {
+            nation.setTitle(title);
+        } else {
+            throw new CustomException(ErrorCode.DUPLICATED_NATION_NAME);
+        }
+        nationRepository.save(nation);
+        return nation;
+    }
 
 
     /**
@@ -258,20 +275,20 @@ public class NationServiceImpl implements NationService {
         nationRepository.save(nation);
     }
 
-    @Override
-    public DefaultNation findDefaultNation() {
-        return defaultNationRepository.findById("1").get();
-    }
-
     /**
      * 나라 생성 후 기본 데이터 추가
      *
      * @param nation
      */
     private void createDefaultData(Nation nation) {
+        // 나라 생성 시 사용하는 기본 데이터 Document
         DefaultNation defaultNation = defaultNationRepository.findById("1")
-                .orElseThrow(() -> new CustomException(ErrorCode.CHECK_DB));
-        List<Default_tax> taxList = defaultNation.getDefault_tax();
+                .orElseThrow(() -> {
+                    log.info("[createDefaultData] _id 값에서 1이 존재하지 않는 에러 발생, default_nation 확인 필요");
+                    throw new CustomException(ErrorCode.CHECK_DB);
+                });
+        // 세금
+        List<Default_tax> taxList = defaultNation.getDefault_taxes();
         for (Default_tax data : taxList) {
             Tax tax = Tax.builder()
                     .nation(nation)
@@ -282,8 +299,8 @@ public class NationServiceImpl implements NationService {
                     .build();
             taxRepository.save(tax);
         }
-
-        List<Default_interest> interestList = defaultNation.getDefault_interest();
+        // 예금 이자율
+        List<Default_interest> interestList = defaultNation.getDefault_interests();
         for (Default_interest data : interestList) {
             Interest interest = Interest.builder()
                     .nation(nation)
@@ -291,10 +308,11 @@ public class NationServiceImpl implements NationService {
                     .shortPeriod((byte) data.getShort_period())
                     .longPeriod((byte) data.getLong_period())
                     .build();
+            interestRepository.save(interest);
         }
-
-        List<Default_job> jobList = defaultNation.getDefault_job();
-        for (Default_job data : jobList) {
+        // 직업
+        List<Default_job> studentJobList = defaultNation.getDefault_jobs();
+        for (Default_job data : studentJobList) {
             StudentJob job = StudentJob.builder()
                     .nation(nation)
                     .title(data.getTitle())
@@ -309,8 +327,8 @@ public class NationServiceImpl implements NationService {
                     .build();
             studentJobRepository.save(job);
         }
-
-        List<Default_rule> ruleList = defaultNation.getDefault_rule();
+        // 학급규칙
+        List<Default_rule> ruleList = defaultNation.getDefault_rules();
         for (Default_rule data : ruleList) {
             Rule rule = Rule.builder()
                     .nation(nation)
@@ -321,4 +339,89 @@ public class NationServiceImpl implements NationService {
         }
     }
 
+    @Override
+    @Transactional
+    public void deleteNation(HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+
+        Long nationId = jwtTokenProvider.getNation(token);
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        // Teacher
+        Teacher teacher = teacherRepository.findByNationId(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        teacher.setNation(null);
+        teacherRepository.save(teacher);
+
+        // Student
+        List<Student> students = studentRepository.findAllByNationId(nationId);
+        for (Student student : students) {
+            student.setNation(null);
+            studentRepository.save(student);
+        }
+
+        // Immigration
+        List<Immigration> immigrations = immigrationRepository.findAllByNationId(nationId);
+        if (!immigrations.isEmpty()) {
+            immigrationRepository.deleteAll(immigrations);
+        }
+
+        // Rule
+        List<Rule> rules = ruleRepository.findAllByNationId(nationId);
+        if (!rules.isEmpty()) {
+            ruleRepository.deleteAll(rules);
+        }
+
+        // Stock
+        List<Stock> stocks = stockRepository.findAllByNationId(nationId);
+        if (!stocks.isEmpty()) {
+            stockRepository.deleteAll(stocks);
+        }
+
+        // StudentJob
+        List<StudentJob> jobs = studentJobRepository.findAllByNationId(nationId);
+        if (!jobs.isEmpty()) {
+            studentJobRepository.deleteAll(jobs);
+        }
+
+        // StudentProduct
+        List<StudentProduct> studentProducts = studentProductRepository.findAllByNationId(nationId);
+        if (!studentProducts.isEmpty()) {
+            studentProductRepository.deleteAll(studentProducts);
+        }
+
+        // Tax
+        List<Tax> taxes = taxRepository.findAllByNationId(nationId);
+        if (!taxes.isEmpty()) {
+            taxRepository.deleteAll(taxes);
+        }
+
+        // TeacherProduct
+        List<TeacherProduct> teacherProducts = teacherProductRepository.findAllByNationId(nationId);
+        if (!teacherProducts.isEmpty()) {
+            teacherProductRepository.deleteAll(teacherProducts);
+        }
+
+        // Invest
+        List<Invest> invests = investRepository.findAllByNationId(nationId);
+        if (!invests.isEmpty()) {
+            investRepository.deleteAll(invests);
+        }
+
+        // Interest
+        List<Interest> interests = interestRepository.findAllByNationId(nationId);
+        if (!interests.isEmpty()) {
+            interestRepository.deleteAll(interests);
+        }
+
+        // TreasuryHistory(MongoDB)
+        List<TreasuryHistory> treasuryHistories = treasuryHistoryRepository.findAllByNationId(nationId);
+        if (!treasuryHistories.isEmpty()) {
+            treasuryHistoryRepository.deleteAll(treasuryHistories);
+        }
+
+        // 연관관계 매핑을 모두 끊고 마지막에 삭제
+        nationRepository.delete(nation);
+    }
 }

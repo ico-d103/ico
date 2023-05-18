@@ -1,12 +1,13 @@
 package com.ico.api.service.stock;
 
-import com.ico.api.dto.stock.StockMyResDto;
 import com.ico.api.dto.stock.StockColDto;
+import com.ico.api.dto.stock.StockMyResDto;
 import com.ico.api.dto.stock.StockStudentResDto;
 import com.ico.api.dto.stock.StockTeacherResDto;
 import com.ico.api.dto.stock.StockUploadReqDto;
-import com.ico.api.util.Formatter;
+import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.api.util.Formatter;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Stock;
@@ -23,8 +24,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,11 +38,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StockServiceImpl implements StockService{
     private final StudentRepository studentRepository;
-
     private final NationRepository nationRepository;
     private final StockRepository stockRepository;
     private final InvestRepository investRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final TransactionService transactionService;
 
     /**
      * 교사 투자 이슈 목록 조회
@@ -126,10 +125,10 @@ public class StockServiceImpl implements StockService{
             throw new CustomException(ErrorCode.NOT_FOUND_STOCK);
         }
 
-        if(nation.getTrading_start().isAfter(LocalTime.now()) && nation.getTrading_end().isBefore(LocalTime.now())){
-            log.info("거래시간에는 투자 이슈 등록이 불가능합니다.");
-            throw new CustomException(ErrorCode.NOT_UPLOAD_TIME);
-        }
+//        if(nation.getTrading_start().isAfter(LocalTime.now()) && nation.getTrading_end().isBefore(LocalTime.now())){
+//            log.info("거래시간에는 투자 이슈 등록이 불가능합니다.");
+//            throw new CustomException(ErrorCode.NOT_UPLOAD_TIME);
+//        }
 
         double value = dto.getPrice();
 
@@ -150,6 +149,69 @@ public class StockServiceImpl implements StockService{
                 .build();
         stockRepository.save(stock);
 
+    }
+
+    /**
+     * 투자 종목 삭제
+     *
+     * @param request
+     */
+    @Override
+    public void deleteStock(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        //국가 유효성 확인 & 주식 존재 여부 확인
+        Nation nation = validCheckNationStock(nationId);
+
+        // 학생들의 투자 내역
+        List<Invest> invests = investRepository.findAllByNationId(nationId);
+
+        // 가장 최신 주식 데이터 구하기
+        List<Stock> stockList = stockRepository.findAllByNationIdOrderByIdDesc(nationId);
+        if(stockList.isEmpty()){
+            throw new CustomException(ErrorCode.NOT_FOUND_STOCK);
+        }
+
+        // 최신 지수
+        double price = stockList.get(0).getAmount();
+        log.info("매도지수 : " + price);
+
+        // 학생들 매도 일괄 처리
+        for(Invest invest : invests){
+            long studentId = invest.getStudent().getId();
+            Student student = studentRepository.findById(studentId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+            double purchasePrice = invest.getPrice();
+            log.info("매수지수 : " + purchasePrice);
+
+            double changeRate = (price - purchasePrice) / purchasePrice;
+            log.info("수익률 : " + changeRate);
+
+            int amount = invest.getAmount();
+            int salePrice = (int) (amount + amount * changeRate);
+            log.info("매도 이익 : " + salePrice);
+
+            // 매도 금액 입금
+            student.setAccount(student.getAccount() + salePrice);
+            studentRepository.save(student);
+
+            // 거래 내역 기록
+            StringBuilder title = new StringBuilder("수익률 : ");
+            title.append((int)(changeRate * 100)).append("%");
+            transactionService.addTransactionDeposit(studentId, nation.getTitle()+" 증권", salePrice, String.valueOf(title));
+
+            // 매수 이력 삭제
+            investRepository.delete(invest);
+        }
+
+        stockRepository.deleteAll(stockList);
+
+        // 나라의 투자 정보 삭제
+        nation.setTrading_end(null);
+        nation.setTrading_start(null);
+        nation.setStock(null);
+        nationRepository.save(nation);
     }
 
     /**

@@ -152,5 +152,16 @@ public class StudentController {
         return ResponseEntity.ok(studentService.findStudentCreditRating(request));
     }
 
-
+    /**
+     * 신용등급 평점 일괄 부여
+     *
+     * @param dto
+     * @param request
+     * @return
+     */
+    @PostMapping("/teacher/credit-score")
+    public ResponseEntity<HttpStatus> postAllCreditScore(@Valid @RequestBody CreditScoreReqDto dto, HttpServletRequest request) {
+        studentService.postAllCreditScore(dto, request);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 }
