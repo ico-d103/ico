@@ -33,7 +33,6 @@ public class Nation {
 
     private byte room;
 
-    @Column(unique = true)
     private String title;
 
     @Column(unique = true)

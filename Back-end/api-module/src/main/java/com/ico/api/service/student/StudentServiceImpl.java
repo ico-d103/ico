@@ -8,6 +8,7 @@ import com.ico.api.dto.student.StudentResDto;
 import com.ico.api.dto.transaction.TransactionColDto;
 import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.user.StudentSignUpRequestDto;
+import com.ico.api.service.S3UploadService;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
@@ -16,6 +17,7 @@ import com.ico.core.entity.Deposit;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
+import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.Transaction;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
@@ -69,6 +71,8 @@ public class StudentServiceImpl implements StudentService{
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final S3UploadService s3UploadService;
+
     @Override
     public Long signUp(StudentSignUpRequestDto requestDto) {
 
@@ -76,7 +80,7 @@ public class StudentServiceImpl implements StudentService{
                 .identity(requestDto.getIdentity())
                 .password(requestDto.getPassword())
                 .name(requestDto.getName())
-                .account(0)
+                .account(1000)
                 .isFrozen(false)
                 .creditScore((short) 700)
                 .creditRating((byte) 6)
@@ -145,7 +149,7 @@ public class StudentServiceImpl implements StudentService{
     public List<StudentListResDto> findAllStudent(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
-        List<Student> studentList = studentRepository.findAllByNationId(nationId);
+        List<Student> studentList = studentRepository.findAllByNationIdOrderByNumberAsc(nationId);
         List<StudentListResDto> resList = new ArrayList<>();
         for (Student student : studentList) {
             resList.add(new StudentListResDto().of(student));
@@ -201,7 +205,13 @@ public class StudentServiceImpl implements StudentService{
             investAmount = invest.get().getAmount();
         }
 
-        return new StudentMyPageResDto().of(student, student.getNation(), student.getStudentJob(), depositAmount, investAmount);
+        String imgUrl = null;
+        StudentJob job;
+        if ((job = student.getStudentJob()) != null) {
+            imgUrl = s3UploadService.getFileURL(job.getImage());
+        }
+
+        return new StudentMyPageResDto().of(student, student.getNation(), student.getStudentJob(), depositAmount, investAmount, imgUrl);
     }
 
     @Override
@@ -260,7 +270,7 @@ public class StudentServiceImpl implements StudentService{
     public List<StudentAllResDto> findListStudent(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
-        List<Student> studentList = studentRepository.findAllByNationId(nationId);
+        List<Student> studentList = studentRepository.findAllByNationIdOrderByNumberAsc(nationId);
         List<StudentAllResDto> dtoList = new ArrayList<>();
         for (Student student : studentList) {
             dtoList.add(new StudentAllResDto().of(student, student.getStudentJob()));
@@ -274,6 +284,34 @@ public class StudentServiceImpl implements StudentService{
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return student.getCreditRating();
+    }
+
+    @Transactional
+    @Override
+    public void postAllCreditScore(CreditScoreReqDto dto, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        List<Student> studentList = studentRepository.findAllByNationId(nationId);
+        if (studentList.isEmpty()) {
+            // 나라 id 에 해당하는 학생이 없는 경우
+            throw new CustomException(ErrorCode.NATION_NOT_FOUNT_STUDENT);
+        }
+
+        for (Student student : studentList) {
+            // 나라의 신용점수 등락폭에 맞게 신용점수 부여
+            if (dto.getType()) {
+                student.setCreditScore(getTotalCreditScore(student.getCreditScore(), nation.getCredit_up()));
+            } else {
+                student.setCreditScore(getTotalCreditScore(student.getCreditScore(),  -1 * nation.getCredit_down()));
+            }
+
+            // 신용점수에 맞는 신용등급 부여
+            student.setCreditRating(checkCreditRating(student.getCreditScore()));
+
+            studentRepository.save(student);
+        }
     }
 
     /**

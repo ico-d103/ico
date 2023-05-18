@@ -110,8 +110,8 @@ public class NationServiceImpl implements NationService {
                                 .code(randomCode())
                                 .currency(reqDto.getCurrency())
                                 .treasury(0)
-                                .credit_up((byte) 20)
-                                .credit_down((byte) 50)
+                                .credit_up((byte) 50)
+                                .credit_down((byte) 20)
                                 .build();
                         nationRepository.save(nation);
 
@@ -345,6 +345,9 @@ public class NationServiceImpl implements NationService {
         String token = jwtTokenProvider.parseJwt(request);
 
         Long nationId = jwtTokenProvider.getNation(token);
+        if (nationId == null) {
+            throw new CustomException(ErrorCode.NATION_NOT_FOUND);
+        }
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 

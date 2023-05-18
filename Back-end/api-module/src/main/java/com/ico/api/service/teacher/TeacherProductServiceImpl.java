@@ -1,6 +1,7 @@
 package com.ico.api.service.teacher;
 
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
+import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.api.service.S3UploadService;
@@ -21,10 +22,10 @@ import com.ico.core.repository.TeacherProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -168,6 +169,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                     .student(student)
                     .teacherProduct(product)
                     .title(product.getTitle())
+                    .count((byte) 1)
                     .isAssigned(false)
                     .build();
         }
@@ -181,8 +183,9 @@ public class TeacherProductServiceImpl implements TeacherProductService {
      * @param request
      * @param dto qr 시작 시간, 상품 id
      */
+    @Transactional
     @Override
-    public void rentalProduct(HttpServletRequest request, ProductQRReqDto dto) {
+    public ProductQRResDto rentalProduct(HttpServletRequest request, ProductQRReqDto dto) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
         Long studentId = jwtTokenProvider.getId(token);
@@ -226,6 +229,14 @@ public class TeacherProductServiceImpl implements TeacherProductService {
 
         // 재고 개수 수정
         product.setSold((byte) (product.getSold() + 1));
+        teacherProductRepository.save(product);
+
+        return ProductQRResDto.builder()
+                .title(product.getTitle())
+                .seller("선생님")
+                .type(product.getRental())
+                .date(LocalDateTime.now().format(Formatter.date))
+                .build();
     }
 
     /**
@@ -256,6 +267,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
     }
 
     @Override
+    @Transactional
     public void deleteTeacherProduct(Long teacherProductId) {
         TeacherProduct teacherProduct = teacherProductRepository.findById(teacherProductId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
