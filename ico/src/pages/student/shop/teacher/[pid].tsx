@@ -19,6 +19,7 @@ import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import ModalContent from "@/components/common/Modal/ModalContent"
 import ConfirmModal from "@/components/student/Shop/Modal/ConfirmModal"
+import useNavigate from "@/hooks/useNavigate"
 
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,6 +41,7 @@ function product() {
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 	const [term, setTerm] = useState<0 | 1>(0)
 	const noti = useNotification()
+	const navigate = useNavigate()
 
 	const productId = typeof pid === "string" ? pid : ""
 
@@ -66,6 +68,7 @@ function product() {
 					height: "120px",
 					duration: 3000,
 				})
+				navigate("/student/shop/teacher_purchase", "bottomToTop")
 				closeConfirm()
 			})
 			.catch((err) => {
