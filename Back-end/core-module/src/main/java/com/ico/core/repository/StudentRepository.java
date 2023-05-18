@@ -13,6 +13,7 @@ import java.util.Optional;
  *
  * @author 강교철
  * @author 서재건
+ * @author 변윤경
  */
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
@@ -34,6 +35,14 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     /**
      * 나라의 학생 목록 조회
+     *
+     * @param nationId
+     * @return
+     */
+    List<Student> findAllByNationIdOrderByNumberAsc(Long nationId);
+
+    /**
+     * 나라의 학생 조회
      *
      * @param nationId
      * @return

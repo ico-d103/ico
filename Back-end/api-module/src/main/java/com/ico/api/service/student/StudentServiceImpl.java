@@ -149,7 +149,7 @@ public class StudentServiceImpl implements StudentService{
     public List<StudentListResDto> findAllStudent(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
-        List<Student> studentList = studentRepository.findAllByNationId(nationId);
+        List<Student> studentList = studentRepository.findAllByNationIdOrderByNumberAsc(nationId);
         List<StudentListResDto> resList = new ArrayList<>();
         for (Student student : studentList) {
             resList.add(new StudentListResDto().of(student));
@@ -270,7 +270,7 @@ public class StudentServiceImpl implements StudentService{
     public List<StudentAllResDto> findListStudent(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
-        List<Student> studentList = studentRepository.findAllByNationId(nationId);
+        List<Student> studentList = studentRepository.findAllByNationIdOrderByNumberAsc(nationId);
         List<StudentAllResDto> dtoList = new ArrayList<>();
         for (Student student : studentList) {
             dtoList.add(new StudentAllResDto().of(student, student.getStudentJob()));
