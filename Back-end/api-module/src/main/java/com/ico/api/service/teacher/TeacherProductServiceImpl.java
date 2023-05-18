@@ -1,6 +1,7 @@
 package com.ico.api.service.teacher;
 
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
+import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.api.service.S3UploadService;
@@ -182,8 +183,9 @@ public class TeacherProductServiceImpl implements TeacherProductService {
      * @param request
      * @param dto qr 시작 시간, 상품 id
      */
+    @Transactional
     @Override
-    public void rentalProduct(HttpServletRequest request, ProductQRReqDto dto) {
+    public ProductQRResDto rentalProduct(HttpServletRequest request, ProductQRReqDto dto) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
         Long studentId = jwtTokenProvider.getId(token);
@@ -228,6 +230,13 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         // 재고 개수 수정
         product.setSold((byte) (product.getSold() + 1));
         teacherProductRepository.save(product);
+
+        return ProductQRResDto.builder()
+                .title(product.getTitle())
+                .seller("선생님")
+                .type(product.getRental())
+                .date(LocalDateTime.now().format(Formatter.date))
+                .build();
     }
 
     /**

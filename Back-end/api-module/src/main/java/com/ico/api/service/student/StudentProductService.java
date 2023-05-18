@@ -4,15 +4,16 @@ import com.ico.api.dto.studentProduct.StudentProductAllResDto;
 import com.ico.api.dto.studentProduct.StudentProductDetailResDto;
 import com.ico.api.dto.studentProduct.StudentProductReqDto;
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
+import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author 변윤경
  * @author 강교철
+ * @author 서재건
  */
 public interface StudentProductService {
 
@@ -56,5 +57,5 @@ public interface StudentProductService {
      * @param request
      * @param dto
      */
-    void buyProduct(HttpServletRequest request, ProductQRReqDto dto);
+    ProductQRResDto buyProduct(HttpServletRequest request, ProductQRReqDto dto);
 }
