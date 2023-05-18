@@ -23,6 +23,20 @@ module.exports = withPWA({
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        source: '/(.*)',
+        destination: `https://http://k8d103.p.ssafy.io/`,
+        has: [
+          {
+            type: 'host',
+            value: 'k8d103.p.ssafy.io',
+          },
+        ],
+      },
+    ];
+  },
 })
 
 module.exports = {
@@ -36,6 +50,20 @@ module.exports = {
       {
         source: "/api/:path*",
         destination: "https://k8d103.p.ssafy.io/api/:path*",
+      },
+    ];
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/(.*)',
+        destination: `https://http://k8d103.p.ssafy.io/`,
+        has: [
+          {
+            type: 'host',
+            value: 'k8d103.p.ssafy.io',
+          },
+        ],
       },
     ];
   },
