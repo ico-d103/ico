@@ -12,6 +12,8 @@ import StackNotification from "@/components/common/StackNotification/StackNotifi
 export default function App({ Component, pageProps }: AppProps) {
 	const queryClient = new QueryClient()
 
+	
+
 	return (
 		<CookiesProvider>
 			<QueryClientProvider client={queryClient}>
