@@ -79,6 +79,96 @@ public class MongoDefaultNationLoader implements CommandLineRunner {
                     put("count", 0);
                     put("total", 0);
                     put("color", "#4AB6A9");
+                }},
+                new HashMap<String, Object>() {{
+                    put("title", "교실 청소부");
+                    put("detail", "교실을 깨끗히 하는 교실 청소부");
+                    put("image", "clear.png");
+                    put("wage", 2000);
+                    put("credit_rating", 6);
+                    put("count", 0);
+                    put("total", 0);
+                    put("color", "#FF4A4A");
+                }},
+                new HashMap<String, Object>() {{
+                    put("title", "인테리어 디자이너");
+                    put("detail", "선생님을 도와 학급을 꾸미는 디자이너");
+                    put("image", "designer.png");
+                    put("wage", 2000);
+                    put("credit_rating", 6);
+                    put("count", 0);
+                    put("total", 0);
+                    put("color", "#A6D953");
+                }},
+                new HashMap<String, Object>() {{
+                    put("title", "쓰레기 분리업체");
+                    put("detail", "매주 금요일 아침 분리수거 및 평소 분리수거함 정리");
+                    put("image", "garbage_collector.png");
+                    put("wage", 2000);
+                    put("credit_rating", 6);
+                    put("count", 0);
+                    put("total", 0);
+                    put("color", "#4AB6A9");
+                }},
+                new HashMap<String, Object>() {{
+                    put("title", "신문기자");
+                    put("detail", "각종 게시물 게시 및 시간표 관리");
+                    put("image", "reporter.png");
+                    put("wage", 2000);
+                    put("credit_rating", 6);
+                    put("count", 0);
+                    put("total", 0);
+                    put("color", "#FF165C");
+                }},
+                new HashMap<String, Object>() {{
+                    put("title", "우체부");
+                    put("detail", "가정 통신문 나눠주기 및 반 친구들 숙제 걷어서 제출하기");
+                    put("image", "postman.png");
+                    put("wage", 2000);
+                    put("credit_rating", 6);
+                    put("count", 0);
+                    put("total", 0);
+                    put("color", "#634AFF");
+                }},
+                new HashMap<String, Object>() {{
+                    put("title", "수리공");
+                    put("detail", "학급에 고장난 물건이 있으면 선생님께 알리기");
+                    put("image", "repairman.png");
+                    put("wage", 2000);
+                    put("credit_rating", 6);
+                    put("count", 0);
+                    put("total", 0);
+                    put("color", "#FFA234");
+                }},
+                new HashMap<String, Object>() {{
+                    put("title", "경찰");
+                    put("detail", "벌금 기록하기 및 싸움 발생시 선생님께 알리기");
+                    put("image", "police.png");
+                    put("wage", 2000);
+                    put("credit_rating", 6);
+                    put("count", 0);
+                    put("total", 0);
+                    put("color", "#4A87FF");
+                }},
+                new HashMap<String, Object>() {{
+                    put("title", "급식 배식원");
+                    put("detail", "점심시간에 친구들에게 급식을 나눠주는 역할");
+                    put("image", "chef.png");
+                    put("wage", 2000);
+                    put("credit_rating", 6);
+                    put("count", 0);
+                    put("total", 0);
+                    put("color", "#FAC91D");
+                }},
+                new HashMap<String, Object>() {{
+                    put("title", "의사");
+                    put("detail", "반에 상비약 관리 및 보건실 함께 가주기");
+                    put("image", "doctor.png");
+                    put("wage", 2000);
+                    put("credit_rating", 6);
+                    put("count", 0);
+                    put("total", 0);
+                    put("color", "#7BD979");
                 }}
         ));
 
