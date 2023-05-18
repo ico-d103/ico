@@ -1,5 +1,5 @@
 import axios from "axios"
-import { getCookie } from "./cookie"
+import { getCookie, removeCookie } from "./cookie"
 
 /**
  * 인증이 필요 없는 기본 요청
@@ -35,24 +35,28 @@ tokenInstance.interceptors.request.use(
 tokenInstance.interceptors.response.use(
 	(response) => response,
 	async (error) => {
-		// accesstoken 만료 시
-		if (error.response.status === 401) {
-			// 1. refreshtoken으로 accesstoken 갱신하는 http 요청
-			const response = ""
+		// // accesstoken 만료 시
+		// if (error.response.status === 401) {
+		// 	// 1. refreshtoken으로 accesstoken 갱신하는 http 요청
+		// 	const response = ""
 
-			// 2. 갱신된 accesstoken을 받으면
-			if (response) {
-				// 2-1. 자동으로 쿠키의 token 갱신
+		// 	// 2. 갱신된 accesstoken을 받으면
+		// 	if (response) {
+		// 		// 2-1. 자동으로 쿠키의 token 갱신
 
-				// 2-2. 원래 하려던 http 요청 수행
-				const originalResponse = await tokenInstance.request(error.config)
-				return originalResponse
-			}
-			// 3. refreshtoken도 만료됐다면
-			else {
-				// 3-1. 로그인 페이지로 이동
-			}
-		}
+		// 		// 2-2. 원래 하려던 http 요청 수행
+		// 		const originalResponse = await tokenInstance.request(error.config)
+		// 		return originalResponse
+		// 	}
+		// 	// 3. refreshtoken도 만료됐다면
+		// 	else {
+		// 		// 3-1. 로그인 페이지로 이동
+		// 	}
+		// }
+
+
+
+
 		throw error
 	},
 )

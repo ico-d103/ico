@@ -10,6 +10,7 @@ import Button from "@/components/common/Button/Button"
 import { postCertificationAPI } from "@/api/teacher/user/postCertificationAPI"
 import { useSetAtom, useAtom } from "jotai"
 import { nationData, tokenStatus } from "@/store/store"
+import { removeCookie } from "@/api/cookie"
 
 function cert() {
 	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
@@ -40,6 +41,14 @@ function cert() {
 		postCertificationAPI({ body: formData }).then((res) => {
 			setTokenStatusAtom(() => {return {role: 'TEACHER', status: 'require_approval', showMessage: false}})
 		})
+	}
+
+	const signoutHandler = () => {
+		removeCookie("Authorization", { path: "/" })
+		setTokenStatus({ showMessage: false }).then((res) => {
+			console.log("여기에 할일")
+		})
+		// navigate("/teacher/login")
 	}
 
 	const renderInput = (
@@ -115,6 +124,8 @@ function cert() {
 			)}
 
 			{(getTokenStatus.status === "require_submit_certification" || rePost) && renderInput}
+
+			<div onClick={signoutHandler} css={css`margin-top: 12px; cursor: pointer;`}>로그아웃</div>
 		</div>
 	)
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { css } from "@emotion/react"
 import { postStudentTokenUpdateAPI } from "@/api/student/user/postStudentTokenUpdateAPI"
-import { setCookie } from "@/api/cookie"
+import { removeCookie, setCookie } from "@/api/cookie"
 import { useRouter } from "next/router"
 import { getTokenStatusAPI } from "@/api/common/getTokenStatusAPI"
 import Button from "@/components/common/Button/Button"
@@ -20,9 +20,8 @@ function enter() {
 		getTokenStatusAPI().then((res) => {
 			if (res.status == "require_refresh_token") {
 				postStudentTokenUpdateAPI().then((res) => {
-
-					setTokenStatus({showMessage: false}).then((res) => {
-						console.log('여기에 할일')
+					setTokenStatus({ showMessage: false }).then((res) => {
+						console.log("여기에 할일")
 					})
 					// router.push("/student/home")
 				})
@@ -57,17 +56,28 @@ function enter() {
 		})
 	}, [])
 
+	const signoutHandler = () => {
+		removeCookie("Authorization", { path: "/" })
+		setTokenStatus({ showMessage: false }).then((res) => {
+			console.log("여기에 할일")
+		})
+		// navigate("/teacher/login")
+	}
+
 	return (
 		<div css={checkWrapperCSS}>
-			<LoadImage src={"/assets/check/check_image.png"} alt={"check_image"} wrapperCss={imageWrapper} dev={false} />
+			<div css={logoutWrapperCSS}>
+				<div onClick={signoutHandler}>로그아웃</div>
+			</div>
+			<LoadImage src={"/assets/check/check_image_1.png"} alt={"check_image"} wrapperCss={imageWrapper} dev={false} />
 
 			<div
 				css={css`
-					margin-top: 5px;
+					/* margin-top: 24px; */
 					font-weight: 700;
 					font-size: 5.5vw;
 
-					margin-bottom: 10vh;
+					/* margin-bottom: 24px; */
 				`}
 			>
 				입국 심사를 통과할 때까지 기다려주세요.
@@ -80,6 +90,9 @@ function enter() {
 				height={"70vw"}
 				theme={"mobileRadial"}
 				onClick={refreshToken}
+				cssProps={css`
+					margin-bottom: 36px;
+				`}
 			></Button>
 		</div>
 	)
@@ -91,12 +104,23 @@ const checkWrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: space-between;
+	flex: 1;
 `
 
 const imageWrapper = css`
 	width: 200%;
-	height: 125vw;
+	height: 80vw;
 	overflow: visible;
+`
+
+const logoutWrapperCSS = css`
+	width: 100%;
+	display: flex;
+	justify-content: flex-end;
+	padding: 16px;
+	position: absolute;
+	z-index: 200;
 `
 
 export default enter

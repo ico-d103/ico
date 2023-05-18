@@ -9,6 +9,7 @@ import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import { ENG_NUM_ONLY } from "@/util/regex"
 import { getTokenStatusAPI } from "@/api/common/getTokenStatusAPI"
 import useGetTokenStatus from "@/hooks/useGetTokenStatus"
+import { removeCookie } from "@/api/cookie"
 
 function enter() {
 	const router = useRouter()
@@ -73,9 +74,9 @@ function enter() {
 			.then((res) => {
 				console.log(res)
 
-				setTokenStatus({showMessage: false}).then((res) => {
+				setTokenStatus({ showMessage: false }).then((res) => {
 					console.log(res)
-					console.log('여기에 할일')
+					console.log("여기에 할일")
 				})
 
 				// router.push("/student/check")
@@ -147,13 +148,21 @@ function enter() {
 	// 	})
 	// }, [])
 
-	console.log(submitCode)
-	console.log(number)
+	const signoutHandler = () => {
+		removeCookie("Authorization", { path: "/" })
+		setTokenStatus({ showMessage: false }).then((res) => {
+			console.log("여기에 할일")
+		})
+		// navigate("/teacher/login")
+	}
 
 	return (
 		<div css={enterWrapperCSS}>
 			<div css={gridCSS({ phase })}>
 				<div css={phaseWrapperCSS}>
+					<div css={logoutWrapperCSS}>
+						<div onClick={signoutHandler}>로그아웃</div>
+					</div>
 					<div>
 						<LoadImage
 							src={"/assets/enter/enter_image.png"}
@@ -183,22 +192,27 @@ function enter() {
 							나의 반 번호를 입력해주세요.
 						</div>
 
-						<div css={inputOuterWrapperCSS}>
-							<input css={inputWrapperCSS} style={{ width: "20vw" }} type={"number"} onChange={handleClassChange} />
-						</div>
+						<div css={bottomWrapperCSS}>
+							<div css={inputOuterWrapperCSS}>
+								<input css={inputWrapperCSS} style={{ width: "20vw" }} type={"number"} onChange={handleClassChange} />
+							</div>
 
-						<Button
-							text={"다음으로!"}
-							fontSize={`5vw`}
-							width={"60%"}
-							height={"15vw"}
-							theme={"mobileNormal"}
-							onClick={passFirstPhaseHandler}
-						/>
+							<Button
+								text={"다음으로!"}
+								fontSize={`5vw`}
+								width={"60%"}
+								height={"15vw"}
+								theme={"mobileNormal"}
+								onClick={passFirstPhaseHandler}
+							/>
+						</div>
 					</div>
 				</div>
 
 				<div css={phaseWrapperCSS}>
+					<div css={logoutWrapperCSS}>
+						<div onClick={signoutHandler}>로그아웃</div>
+					</div>
 					<div css={WrapperCSS} style={{ marginTop: "100vw" }}>
 						<div
 							css={css`
@@ -218,17 +232,18 @@ function enter() {
 						>
 							코드를 입력해주세요.
 						</div>
+						<div css={bottomWrapperCSS}>
+							<div css={inputOuterWrapperCSS}>{renderInput(code)}</div>
 
-						<div css={inputOuterWrapperCSS}>{renderInput(code)}</div>
-
-						<Button
-							text={"입장할래요!"}
-							fontSize={`5vw`}
-							width={"60%"}
-							height={"15vw"}
-							theme={"mobileNormal"}
-							onClick={submitCodeFunction}
-						/>
+							<Button
+								text={"입장할래요!"}
+								fontSize={`5vw`}
+								width={"60%"}
+								height={"15vw"}
+								theme={"mobileNormal"}
+								onClick={submitCodeFunction}
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -238,27 +253,38 @@ function enter() {
 
 const enterWrapperCSS = css`
 	width: 100%;
-	height: 100%;
+	/* height: 100% inherit; */
+	min-height: 70vh;
 	overflow: hidden;
+	flex: 1;
+	display: flex;
 `
 
 const gridCSS = ({ phase }: { phase: number }) => {
 	return css`
-		height: 100%;
+		/* height: 100%; */
+		/* height: auto; */
 		display: grid;
 		grid-template-columns: 100% 100%;
+		/* width: 200vw; */
+		/* height: 1; */
+		/* background-color: blue; */
 		transition-property: transform;
 		transition-duration: 0.5s;
-
+		flex: 1;
 		transform: translate(calc(-${phase} * 100%), 0px);
 	`
 }
 
 const phaseWrapperCSS = css`
-	width: 100vw;
-	height: 100%;
+	max-width: 100vw;
+	/* height: 100%; */
 	display: flex;
+	flex: 1;
 	flex-direction: column;
+	/* justify-content: space-between; */
+	/* background-color: red; */
+
 	/* justify-content: center; */
 	/* align-items: center; */
 `
@@ -268,9 +294,12 @@ const WrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: space-between;
+	padding-bottom: 36px;
 `
 
 const imageWrapper = css`
+	margin-top: 8px;
 	width: 200%;
 	height: 100vw;
 	overflow: visible;
@@ -278,7 +307,7 @@ const imageWrapper = css`
 
 const inputOuterWrapperCSS = css`
 	height: 22vw;
-	margin: 40% 0px 10% 0px;
+	margin: 24px 0px 24px 0px;
 `
 const inputWrapperCSS = css`
 	width: 15vw;
@@ -299,4 +328,19 @@ const inputWrapperCSS = css`
 	}
 `
 
+const bottomWrapperCSS = css`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`
+
+const logoutWrapperCSS = css`
+	width: 100%;
+	display: flex;
+	justify-content: flex-end;
+	padding: 16px;
+	position: absolute;
+	z-index: 200;
+`
 export default enter
