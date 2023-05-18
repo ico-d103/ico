@@ -45,26 +45,6 @@
 
 
 <details>
-<summary>Back-end Tech 상세 보기</summary>
-<div markdown="1">
-
-  <br>
-
-```
-- Java: 11
-- SpringBoot: 2.7.11
-- MySQL: 8.0.29
-- MongoDB: 5.0.17
-- Docker: 23.0.4
-- Docker-compose: 1.29.2
-- Jenkins: 2.387.2
-- Nginx: 1.18.0
-```
-</div>
-</details>
-
-
-<details>
 <summary>Front-end Tech 상세 보기</summary>
 <div markdown="1">
 
@@ -80,6 +60,26 @@
 - jotai: ^2.0.4
 - axios: ^1.3.6
 - @emotion/react: ^11.10.6
+```
+</div>
+</details>
+
+
+<details>
+<summary>Back-end Tech 상세 보기</summary>
+<div markdown="1">
+
+  <br>
+
+```
+- Java: 11
+- SpringBoot: 2.7.11
+- MySQL: 8.0.29
+- MongoDB: 5.0.17
+- Docker: 23.0.4
+- Docker-compose: 1.29.2
+- Jenkins: 2.387.2
+- Nginx: 1.18.0
 ```
 </div>
 </details>
