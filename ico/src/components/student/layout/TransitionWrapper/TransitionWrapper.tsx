@@ -320,6 +320,7 @@ const contentInnerWrapperCSS = ({
 
 		display: flex;
 		flex-direction: column;
+		user-select: none;
 	`
 }
 
