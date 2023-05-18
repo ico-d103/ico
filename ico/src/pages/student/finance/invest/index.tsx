@@ -88,7 +88,7 @@ function index() {
 
 	useEffect(() => {
 		console.log(data)
-		if (data) {
+		if (data && data.issue.length !== 0) {
 			const range = data.issue[0].amount / data.myStock.price
 			const stock = data.myStock.amount * range
 			const diff = stock - data.myStock.amount
@@ -122,7 +122,7 @@ function index() {
 
 	return (
 		<React.Fragment>
-			{data && (
+			{data && data.issue.length !== 0 && (
 				<React.Fragment>
 					<Modal
 						content={
