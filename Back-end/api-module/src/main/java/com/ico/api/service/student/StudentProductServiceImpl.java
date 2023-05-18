@@ -4,6 +4,7 @@ import com.ico.api.dto.studentProduct.StudentProductAllResDto;
 import com.ico.api.dto.studentProduct.StudentProductDetailResDto;
 import com.ico.api.dto.studentProduct.StudentProductReqDto;
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
+import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
@@ -25,15 +26,14 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 학생 상품 Service
  *
  * @author 변윤경
  * @author 강교철
+ * @author 서재건
  */
 @Slf4j
 @Service
@@ -184,7 +184,7 @@ public class StudentProductServiceImpl implements StudentProductService {
      */
     @Transactional
     @Override
-    public void buyProduct(HttpServletRequest request, ProductQRReqDto dto) {
+    public ProductQRResDto buyProduct(HttpServletRequest request, ProductQRReqDto dto) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
         Long studentId = jwtTokenProvider.getId(token);
@@ -202,13 +202,15 @@ public class StudentProductServiceImpl implements StudentProductService {
             throw new CustomException(ErrorCode.TIME_OUT_QR);
         }
 
+        Student seller = product.getStudent();
+
         // 판매자 유효 검사
-        if (studentRepository.findById(product.getStudent().getId()).isEmpty()) {
+        if (studentRepository.findById(seller.getId()).isEmpty()) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
         // 판매자와 구매자 일치 여부 확인
-        if (product.getStudent().getId() == studentId) {
+        if (seller.getId() == studentId) {
             throw new CustomException(ErrorCode.IS_SELLER);
         }
 
@@ -230,7 +232,13 @@ public class StudentProductServiceImpl implements StudentProductService {
         studentRepository.save(student);
 
         // 거래 내역 기록
-        transactionService.addTransaction(product.getStudent().getId(), student.getId(), product.getAmount(), product.getTitle());
+        transactionService.addTransaction(seller.getId(), student.getId(), product.getAmount(), product.getTitle());
 
+        return ProductQRResDto.builder()
+                .title(product.getTitle())
+                .seller(seller.getName())
+                .type(false)
+                .date(LocalDateTime.now().format(Formatter.date))
+                .build();
     }
 }

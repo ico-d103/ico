@@ -1,6 +1,7 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
+import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.api.service.teacher.TeacherProductService;
@@ -78,9 +79,8 @@ public class TeacherProductController {
      * @return
      */
     @PostMapping("/student/rental")
-    public ResponseEntity<HttpStatus> rentalProduct(HttpServletRequest request, @Valid @RequestBody ProductQRReqDto dto){
-        teacherProductService.rentalProduct(request, dto);
-        return ResponseEntity.ok(HttpStatus.OK);
+    public ResponseEntity<ProductQRResDto> rentalProduct(HttpServletRequest request, @Valid @RequestBody ProductQRReqDto dto){
+        return ResponseEntity.ok(teacherProductService.rentalProduct(request, dto));
     }
 
     /**
