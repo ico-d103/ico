@@ -83,7 +83,7 @@ public class MongoDefaultNationLoader implements CommandLineRunner {
                 new HashMap<String, Object>() {{
                     put("title", "교실 청소부");
                     put("detail", "교실을 깨끗히 하는 교실 청소부");
-                    put("image", "clear.png");
+                    put("image", "cleaner.png");
                     put("wage", 2000);
                     put("credit_rating", 6);
                     put("count", 0);
