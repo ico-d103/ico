@@ -220,11 +220,11 @@ function index() {
 				{data && data?.myStock.price !== 0 && (
 					<ContentWrapper>
 						<div css={lSizeFontCSS}>
-							{calcStock.toLocaleString('ko-KR')} {nation?.currency}
+							{Math.floor(calcStock).toLocaleString('ko-KR')} {nation?.currency}
 						</div>
 						<div css={diffLabelCSS({ calcDiff })}>
 							{calcDiff > 0 && "+"}
-							{calcDiff.toLocaleString('ko-KR')} {nation?.currency}
+							{Math.floor(calcDiff).toLocaleString('ko-KR')} {nation?.currency}
 						</div>
 					</ContentWrapper>
 				)}
