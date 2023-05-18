@@ -112,7 +112,8 @@ const contentWrapperCSS = css`
   margin-top: 30px;
   padding-right: 24px;
   flex: 1;
-
+  position: relative;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
 `

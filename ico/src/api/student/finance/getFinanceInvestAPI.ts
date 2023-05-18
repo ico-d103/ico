@@ -12,6 +12,7 @@ type responseType = {
 export const getFinanceInvestAPI = async ({}: paramsType) => {
     try {
         const response: responseType = await tokenInstance.get(`/stock/student`)
+        console.log(response)
         return response.data
     } catch (error) {
         console.log(error)
