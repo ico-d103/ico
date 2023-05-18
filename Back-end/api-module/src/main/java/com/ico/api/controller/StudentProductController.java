@@ -4,6 +4,7 @@ import com.ico.api.dto.studentProduct.StudentProductAllResDto;
 import com.ico.api.dto.studentProduct.StudentProductDetailResDto;
 import com.ico.api.dto.studentProduct.StudentProductReqDto;
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
+import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.service.student.StudentProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -59,7 +60,7 @@ public class StudentProductController {
 
 
     /**
-     * 판매 제안서 승인
+     * 판매 제안서 승인student_product
      *
      * @param studentProductId 학생 상품 id
      * @return httpstauts
@@ -100,8 +101,7 @@ public class StudentProductController {
      * @return
      */
     @PostMapping("/student/buy")
-    public ResponseEntity<HttpStatus> buyProduct(HttpServletRequest request, @Valid @RequestBody ProductQRReqDto dto){
-        studentProductService.buyProduct(request, dto);
-        return ResponseEntity.ok(HttpStatus.OK);
+    public ResponseEntity<ProductQRResDto> buyProduct(HttpServletRequest request, @Valid @RequestBody ProductQRReqDto dto){
+        return ResponseEntity.ok(studentProductService.buyProduct(request, dto));
     }
 }
