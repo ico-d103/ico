@@ -227,6 +227,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
 
         // 재고 개수 수정
         product.setSold((byte) (product.getSold() + 1));
+        teacherProductRepository.save(product);
     }
 
     /**
