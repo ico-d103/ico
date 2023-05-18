@@ -168,6 +168,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                     .student(student)
                     .teacherProduct(product)
                     .title(product.getTitle())
+                    .count((byte) 1)
                     .isAssigned(false)
                     .build();
         }
