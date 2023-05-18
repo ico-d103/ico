@@ -158,14 +158,20 @@ function login() {
 // 임시 값
 const wrapperCSS = css`
 	display: flex;
+	flex: 1;
 
 	/* flex-direction: column; */
 	width: 100%;
-	height: 100%;
+	/* height: 100vh; */
 	/* background-color: red; */
 
 	@media (max-width: 1440px) {
 		flex-direction: column;
+	}
+
+	@media (min-width: 1441px) {
+		height: 100vh;
+		
 	}
 `
 
@@ -174,11 +180,12 @@ const loginSectionCSS = css`
 		/* height: 40%; */
 		width: 100%;
 		flex: 1;
-		margin: 36px 0px 36px 0px;
+		/* margin: 36px 0px 0px 0px; */
 	}
 	@media (min-width: 1441px) {
-		height: 100%;
+		height: 100vh;
 		width: 25vw;
+		
 	}
 
 	min-width: 360px;
@@ -200,6 +207,10 @@ const imageSectionCSS = css`
 		display: flex;
 		justify-content: center;
 	} */
+
+	@media (max-width: 1440px) {
+		height: 40vh;
+	}
 
 	@media (min-width: 1441px) {
 		flex: 1;

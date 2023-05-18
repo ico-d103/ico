@@ -4,8 +4,8 @@ import HomeAssetDetailItem from "./HomeAssetDetailItem"
 import { getHomeTransactionHistoryType } from "@/types/student/apiReturnTypes"
 import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
-import { isNavigating } from '@/store/store'
-import { useAtom } from 'jotai'
+import { isNavigating } from "@/store/store"
+import { useAtom } from "jotai"
 import useGetNation from "@/hooks/useGetNation"
 
 type HomeAssetDetailProps = {
@@ -34,23 +34,29 @@ function HomeAssetDetail({ tradeHistory }: HomeAssetDetailProps) {
 	})
 
 	return (
-		<div css={historyWrapperCSS}>
+		<React.Fragment>
 			{Object.keys(tradeHistory).length === 0 ? (
 				<div css={alertWrapperCSS}>
-					<div css={css`width: 128px; height: 128px;`}>
-					{isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={128} />}
+					<div
+						css={css`
+							width: 128px;
+							height: 128px;
+						`}
+					>
+						{isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={128} />}
 					</div>
 					<div css={labelCSS}>거래 내역이 없어요!</div>
 				</div>
 			) : (
-				renderHistory
+				<div css={historyWrapperCSS}>{renderHistory}</div>
 			)}
-		</div>
+		</React.Fragment>
 	)
 }
 
 const historyWrapperCSS = css`
 	width: 100%;
+	flex: 1;
 `
 
 const sSizeFontCSS = css`
@@ -74,6 +80,7 @@ const labelCSS = css`
 const alertWrapperCSS = css`
 	width: 100%;
 	height: 100%;
+	flex: 1;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;

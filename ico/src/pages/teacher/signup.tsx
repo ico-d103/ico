@@ -384,6 +384,7 @@ function signup() {
 						identity: inputState.id,
 						password: inputState.password,
 						checkedPassword: inputState.password,
+						phoneNum: inputState.phone
 					}),
 				],
 				{ type: "application/json" },

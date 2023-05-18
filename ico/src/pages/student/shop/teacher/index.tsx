@@ -8,6 +8,7 @@ import { getTeacherProductsAPI } from "@/api/common/shop/getTeacherProductsAPI"
 import { getTeacherProductsType } from "@/types/teacher/apiReturnTypes"
 import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
+import useMediaQuery from "@/hooks/useMediaQuery"
 
 function index() {
 	const {
@@ -20,6 +21,8 @@ function index() {
 		refetch,
 	} = useQuery<getTeacherProductsType[]>(["teacherProducts"], getTeacherProductsAPI)
 
+	const isMobile = useMediaQuery("(max-width: 768px")
+
 	return (
 		<div css={mainWrapperCSS}>
 			<PageHeader title={"상점"} addComp={<TabMenu menus={ShopTabMenus()} selected={0} />} />
@@ -29,7 +32,7 @@ function index() {
 					<h3>등록된 상품이 없어요</h3>
 				</div>
 			)}
-			<div css={cardWrapperCSS}>
+			<div css={cardWrapperCSS({isMobile})}>
 				{cardData?.length !== 0 && (
 					<>
 						{cardData?.map((card) => (
@@ -54,16 +57,29 @@ function index() {
 }
 
 const mainWrapperCSS = css`
-	padding-bottom: 30px;
+	padding-bottom: 16px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 `
 
-const cardWrapperCSS = css`
-	margin-top: 15px;
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(45vw, 1fr));
+const cardWrapperCSS = ({isMobile}: {isMobile: boolean | null}) => {
+
+	return css`
+	/* margin-top: 15px; */
+	/* display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
 	place-items: center;
-	grid-row-gap: 10px;
+	grid-row-gap: 10px; */
+
+	margin-top: ${isMobile ? "0px" : "16px"};
+	display: grid;
+	grid-template-columns: ${isMobile ? 'repeat(auto-fill, minmax(45vw, 1fr))' : 'repeat(auto-fill, minmax(260px, 1fr))'};
+	place-items: center;
+	grid-row-gap: ${isMobile ? '16px' : '32px'};
+	
 `
+} 
 
 const noneWrapperCSS = css`
 	height: 100%;
@@ -71,6 +87,7 @@ const noneWrapperCSS = css`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	flex: 1;
 
 	> h3 {
 		font-size: 1.1rem;

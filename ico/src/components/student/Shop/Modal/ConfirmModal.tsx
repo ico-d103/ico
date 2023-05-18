@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import Input from "@/components/common/Input/Input"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
-import { postFinanceInvestAPI } from "@/api/student/finance/postFinanceInvestAPI"
+import { deleteFinanceInvestAPI } from "@/api/student/finance/deleteFinanceInvestAPI"
 import useNotification from "@/hooks/useNotification"
 import UseAnimations from "react-useanimations"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
@@ -32,69 +32,52 @@ const CHECK_ICON = (
 	</svg>
 )
 
-type FinanceInvestApplyModalProps = {
-	price: number
-	account: number
-	unit: string
+type ConfirmModalProps = {
 	closeComp: Function
-	refetch: Function
+	fetchFunction: Function
 }
 
-function FinanceInvestApplyModal({ price, account, unit, closeComp, refetch }: FinanceInvestApplyModalProps) {
+function ConfirmModal({closeComp, fetchFunction }: ConfirmModalProps) {
 	const noti = useNotification()
-	const [value, setValue] = useState<number>(0)
 
-	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (Number(e.target.value) <= account) {
-			setValue(() => Number(e.target.value))
-		}
-	}
 
-	const submitHandler = () => {
-		postFinanceInvestAPI({body: {price, amount: value}}).then((res) => {
-			refetch()
-			noti({content: <NotiTemplate type={'ok'} content="투자 매수에 성공했어요!"/>, width: '300px', height: '120px', duration: 3000})
-			closeComp()
-		})
-		.catch((err) => {
-			console.log(err)
-			noti({content: <NotiTemplate type={'alert'} content="투자 매수에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
-		})
-	}
+
+	// const submitHandler = () => {
+	// 	deleteFinanceInvestAPI({}).then((res) => {
+	// 		refetch()
+	// 		noti({content: <NotiTemplate type={'ok'} content="투자 매도에 성공했어요!"/>, width: '300px', height: '120px', duration: 3000})
+	// 		closeComp()
+	// 	})
+	// 	.catch((err) => {
+	// 		console.log(err)
+	// 		noti({content: <NotiTemplate type={'alert'} content="투자 매도에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
+	// 	})
+	// }
 	return (
 		<div css={wrapperCSS}>
-			<div css={grayLabelCSS}>원하는 액수를 입력해 주세요!</div>
-			<Input
-				value={value}
-				onChange={onChangeHandler}
-				theme={"mobileWhite"}
-				textAlign={"right"}
-				rightContent={
-					<div css={balanceLabelCSS}>
-						/ {account.toLocaleString('ko-KR')} {unit}
-					</div>
-				}
-				customCss={inputCSS}
-			/>
-			<div css={mentWrapperCSS}>
-				<div css={iconWrapperCSS}>{ALERT_ICON}</div>
+			
 
-				<span css={mentCSS}>이번에 매수하면 반드시 매도해야만 해요!</span>
+
+			<div css={mentWrapperCSS}>
+				<div css={iconWrapperCSS}>{CHECK_ICON}</div>
+
+				<span css={mentCSS}>물건을 얻을 수 있어요!</span>
 			</div>
+
 			<div css={mentWrapperCSS}>
 				<div css={iconWrapperCSS}>{ALERT_ICON}</div>
 
-				<span css={mentCSS}>하루에 한번만 매도/매수할 수 있어요!</span>
+				<span css={mentCSS}>구매하면 환불할 수 없어요!</span>
 			</div>
 
 			<div css={buttonWrapperCSS}>
 				<Button
-					text={"매수"}
+					text={"구매"}
 					fontSize={"var(--student-h3)"}
 					width={"47%"}
 					theme={"mobileSoft2"}
 					onClick={() => {
-						submitHandler()
+						fetchFunction()
 					}}
 				/>
 				<Button
@@ -123,12 +106,12 @@ const grayLabelCSS = css`
 
 const inputCSS = css`
 	width: 100%;
-	margin-bottom: 16px;
+	margin-bottom: 12px;
 `
 
 const mentWrapperCSS = css`
 	display: flex;
-	margin-bottom: 8px;
+	margin-bottom: 12px;
 `
 
 const iconWrapperCSS = css`
@@ -158,4 +141,4 @@ const balanceLabelCSS = css`
 	white-space: nowrap;
 `
 
-export default FinanceInvestApplyModal
+export default ConfirmModal

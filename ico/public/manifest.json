@@ -1,9 +1,9 @@
 {
 	"short_name": "ICO",
 	"name": "ICO",
-	"start_url": "/student/test",
+	"start_url": "/student/home",
 	"display": "standalone",
-	"theme_color": "#000000",
+	"theme_color": "#fffae2",
 	"background_color": "#ffffff",
 	"icons": [
 		{

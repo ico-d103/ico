@@ -1,9 +1,7 @@
 import { css } from "@emotion/react"
 import Image from "next/image"
 import { useRouter } from "next/router"
-// 상품 갯수가 0개면 sold out
-// 승인 대기중인 상품은 boolean으로 관리한다.
-import LoadImage from "../LoadImage/LoadImage"
+import useGetNation from "@/hooks/useGetNation"
 
 type CardProps = {
 	id: number
@@ -19,6 +17,8 @@ type CardProps = {
 
 function Card({ id, title, amount, image, count, sold, name, date, assigned }: CardProps) {
 	const router = useRouter()
+
+	const [nation] = useGetNation()
 
 	const handleClickCard = () => {
 		const currentPath = router.asPath
@@ -56,7 +56,11 @@ function Card({ id, title, amount, image, count, sold, name, date, assigned }: C
 				<div css={cardFirstContentCSS}>
 					<div>{title}</div>
 					<div>
-						<div>{amount}미소</div>/<div>{count - sold}EA</div>
+						<div>
+							{amount}
+							{nation.currency}
+						</div>
+						/<div>{count - sold}EA</div>
 					</div>
 				</div>
 				<hr />

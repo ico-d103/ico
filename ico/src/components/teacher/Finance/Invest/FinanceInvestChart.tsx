@@ -4,6 +4,7 @@ import { css } from "@emotion/react"
 import React, { useEffect, useState } from "react"
 
 const FinanceInvestChart = ({ data }: LineSvgProps) => {
+	console.log(data[0].data)
 	return (
 		<div
 			css={css`
@@ -57,6 +58,18 @@ const FinanceInvestChart = ({ data }: LineSvgProps) => {
 				gridYValues={5}
 				// enableGridX={false}
 				// enableGridY={false}
+
+				// tooltip={({data[0].data }) => (
+				// 	<div
+				// 		style={{
+				// 			borderRadius: 25,
+				// 			padding: 12,
+				// 			background: "#333333",
+				// 		}}
+				// 	>
+				// 		<strong>{x}</strong>
+				// 	</div>
+				// )}
 			/>
 		</div>
 	)

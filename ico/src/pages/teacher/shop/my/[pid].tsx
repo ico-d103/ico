@@ -15,7 +15,7 @@ import Modal from "@/components/common/Modal/Modal"
 import ShowQR from "@/components/common/ShowQR/ShowQR"
 import { useState } from "react"
 import { deleteTeacherProductAPI } from "@/api/teacher/shop/deleteTeacherProductAPI"
-
+	
 function product() {
 	const router = useRouter()
 	const { pid } = router.query
@@ -114,7 +114,7 @@ function product() {
 						</div>
 
 						<div css={priceCSS}>
-							{data?.amount?.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {nation.currency}
+							{data?.amount?.toLocaleString('ko-KR')} {nation.currency}
 						</div>
 						<div
 							css={css`

@@ -5,7 +5,7 @@ import LoadImage from "@/components/common/LoadImage/LoadImage"
 
 type HomeJobCardProps = {
   name: string
-	job?: string
+	job?: string | null
 	wage?: number
   credit: number
 	backgroundColor: string
@@ -112,7 +112,8 @@ const contentWrapperCSS = css`
   margin-top: 30px;
   padding-right: 24px;
   flex: 1;
-
+  position: relative;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
 `

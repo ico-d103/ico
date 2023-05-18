@@ -14,7 +14,7 @@ function index() {
 
 	return (
 		<div css={mainWrapperCSS}>
-			<PageHeader title={"직업 목록"} addComp={<TabMenu menus={GovTabMenus()} selected={2} />} />
+			<PageHeader title={"정부"} addComp={<TabMenu menus={GovTabMenus()} selected={2} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
 					<span css={titleCSS}>
@@ -24,7 +24,7 @@ function index() {
 					{data?.length === 0 ? (
 						<div css={noneWrapperCSS}>
 							<UseAnimations animation={alertCircle} size={200} strokeColor={"rgba(0,0,0,0.4)"} />
-							<h3>등록된 세금 목록이 없어요</h3>
+							<h3>등록된 직업 목록이 없어요</h3>
 						</div>
 					) : (
 						<div css={jobListCSS}>
@@ -46,7 +46,10 @@ export async function getServerSideProps() {
 }
 
 const mainWrapperCSS = css`
-	padding-bottom: 30px;
+	padding-bottom: 16px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 `
 
 const wrapperCSS = css`
@@ -54,10 +57,14 @@ const wrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	flex: 1;
 `
 
 const contentCSS = css`
 	width: 95%;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 `
 
 const titleCSS = css`
@@ -65,7 +72,7 @@ const titleCSS = css`
 	justify-content: center;
 	align-items: center;
 	font-size: 1.1rem;
-
+	margin-top: 24px;
 	> b {
 		font-weight: bold;
 		color: var(--student-main-color-5);
@@ -95,6 +102,7 @@ const noneWrapperCSS = css`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	flex: 1;
 
 	> h3 {
 		font-size: 1.1rem;

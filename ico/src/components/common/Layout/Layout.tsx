@@ -92,9 +92,9 @@ function Layout({ children }: LayoutProps) {
 			approved: { url: "/student/home", message: "잘못된 요청입니다." },
 		},
 		TEACHER: {
-			require_approval: { url: "/teacher/login", message: "교사 인증서 승인 대기중입니다." },
+			require_approval: { url: "/teacher/cert", message: "교사 인증서 승인 대기중입니다." },
 			require_create_nation: { url: "/teacher/create", message: "국가를 생성하는 페이지로 이동합니다." },
-			require_submit_certification: { url: "/teacher/login", message: "교사 인증서를 다시 제출해야 합니다." },
+			require_submit_certification: { url: "/teacher/cert", message: "교사 인증서를 다시 제출해야 합니다." },
 			approved: { url: "/teacher/class/students", message: "잘못된 요청입니다." },
 		},
 	}
@@ -128,10 +128,8 @@ function Layout({ children }: LayoutProps) {
 		"/admin/confirm": { role: ["ADMIN"], status: ["admin"] },
 		"/student/login": { role: ["GUEST"], status: ["require_login"] },
 		"/student/signup": { role: ["GUEST"], status: ["require_login"] },
-		"/teacher/login": {
-			role: ["GUEST", "TEACHER"],
-			status: ["require_login", "require_approval", "require_submit_certification"],
-		},
+		"/teacher/login": { role: ["GUEST"], status: ["require_login"] },
+		"/teacher/cert": { role: ["TEACHER"], status: ["require_approval", "require_submit_certification"] },
 		"/teacher/signup": { role: ["GUEST"], status: ["require_login"] },
 		"/student/enter": { role: ["STUDENT"], status: ["require_submit_code"] },
 		"/student/check": { role: ["STUDENT"], status: ["require_refresh_token", "require_approval"] },

@@ -231,6 +231,9 @@ const jobTitleCSS = css`
 
 const descriptionCSS = css`
 	font-weight: 500;
+	line-height: 130%;
+	word-break: normal;
+	white-space: pre;
 `
 
 const bodyCSS = css`

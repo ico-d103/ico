@@ -8,6 +8,9 @@ import Modal from "@/components/common/Modal/Modal"
 import ModalContent from "@/components/common/Modal/ModalContent"
 import FinanceDepositDeleteModal from "../Modal/FinanceDepositDeleteModal"
 import useCompHandler from "@/hooks/useCompHandler"
+import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import useNotification from "@/hooks/useNotification"
 
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -30,6 +33,7 @@ type DetailPageProps = {
 function DetailPage({ data, refetch }: DetailPageProps) {
 	const [nation] = useGetNation()
   const [openComp, closeComp, compState] = useCompHandler()
+  const noti = useNotification()
 
   const getDateDiff = (d1: string, d2: null | string) => {
     const date1 = new Date(d1);
@@ -49,6 +53,19 @@ function DetailPage({ data, refetch }: DetailPageProps) {
   const rangeDate = getDateDiff(data.myDeposit.endDate, data.myDeposit.startDate)
   const restDate = getDateDiff(data.myDeposit.endDate, null)
 
+
+  const submitHandler = () => {
+		deleteFinanceDepositAPI({}).then((res) => {
+			refetch()
+			noti({content: <NotiTemplate type={'ok'} content="예금 만기 수령을 했어요!"/>, width: '300px', height: '120px', duration: 3000})
+			closeComp()
+		})
+		.catch((err) => {
+			console.log(err)
+			noti({content: <NotiTemplate type={'alert'} content="예금 만기 수령에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
+		})
+	}
+
 	return (
     <React.Fragment>
       {data && (
@@ -56,7 +73,7 @@ function DetailPage({ data, refetch }: DetailPageProps) {
 					content={
 						<ModalContent
 							width={"90vw"}
-							title={"정기 예금 신청"}
+							title={"예금 중도 해지"}
 							titleSize={"var(--student-h1)"}
 							icon={APPLY_ICON}
 							content={<FinanceDepositDeleteModal refetch={refetch} closeComp={closeComp}/>}
@@ -73,10 +90,10 @@ function DetailPage({ data, refetch }: DetailPageProps) {
 <div css={wrapperCSS}>
 			<ContentWrapper>
 				<div css={lSizeFontCSS}>
-					{data.myDeposit.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {nation?.currency}
+					{data.myDeposit.amount.toLocaleString('ko-KR')} {nation?.currency}
 				</div>
 				<div css={diffLabelCSS}>
-					+{data.myDeposit.depositAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {nation?.currency}
+					+{data.myDeposit.depositAmount.toLocaleString('ko-KR')} {nation?.currency}
 				</div>
 			</ContentWrapper>
       <ContentWrapper>
@@ -110,7 +127,20 @@ function DetailPage({ data, refetch }: DetailPageProps) {
       </div>
       </ContentWrapper>
 
-      <Button
+      {data.myDeposit.startDate === data.myDeposit.endDate ?
+              <Button
+					text={"만기 수령"}
+					fontSize={`var(--student-h3)`}
+					width={"48%"}
+					theme={"vividPositive"}
+          margin={'24px 0px 0px 0px'}
+					onClick={() => {
+            submitHandler()
+						
+					}}
+				/>
+        :
+        <Button
 					text={"중도 해지"}
 					fontSize={`var(--student-h3)`}
 					width={"48%"}
@@ -121,6 +151,8 @@ function DetailPage({ data, refetch }: DetailPageProps) {
 						
 					}}
 				/>
+
+      }
 		</div>
     </React.Fragment>
 		

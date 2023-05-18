@@ -10,6 +10,11 @@ import { getStudentListType } from "@/types/student/apiReturnTypes"
 
 function students() {
 	const [studentList, setStudentList] = useState<getStudentListType[]>([])
+	const [searchValue, setSearchValue] = useState<string>("")
+
+	const searchInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchValue(() => e.target.value)
+	}
 
 	useEffect(() => {
 		getStudentListAPI().then((res) => {
@@ -19,18 +24,25 @@ function students() {
 
 	return (
 		<div css={mainWrapperCSS}>
-			<PageHeader title={"반 친구들"} addComp={<TabMenu menus={ClassTabMenus()} selected={0} />} />
+			<PageHeader title={"우리반"} addComp={<TabMenu menus={ClassTabMenus()} selected={0} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
-					{/* <div css={searchWrapperCSS}>
+					<div css={searchWrapperCSS}>
 						<div>{CLASS_SEARCH}</div>
-						<input placeholder="친구 이름을 검색해봐요" spellCheck="false" />
-					</div> */}
-					<div css={contentWrapperCSS}>
+						<input
+							placeholder="친구 이름을 검색해봐요"
+							spellCheck="false"
+							value={searchValue}
+							onChange={searchInputHandler}
+						/>
+					</div>
+					<div key={searchValue} css={contentWrapperCSS}>
 						<span>전체 {studentList.length} 명</span>
-						{studentList.map((student) => (
-							<ClassStudentsListItem key={student.number} student={student} />
-						))}
+						{studentList.map((student) => {
+							if (student.name.includes(searchValue)) {
+								return <ClassStudentsListItem key={student.number} student={student} />
+							}
+						})}
 					</div>
 				</div>
 			</div>
@@ -39,7 +51,10 @@ function students() {
 }
 
 const mainWrapperCSS = css`
-	padding-bottom: 30px;
+	padding-bottom: 16px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 `
 
 const wrapperCSS = css`
@@ -47,10 +62,14 @@ const wrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	flex: 1;
 `
 
 const contentCSS = css`
 	width: 95%;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 `
 
 const searchWrapperCSS = css`
@@ -58,8 +77,8 @@ const searchWrapperCSS = css`
 	height: 44px;
 	background-color: var(--student-wrapper-color);
 	border-radius: 10px;
-	margin-bottom: 20px;
-
+	margin-bottom: 16px;
+	height: 48px;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -68,6 +87,7 @@ const searchWrapperCSS = css`
 
 	> input {
 		width: 100%;
+		
 		border: none;
 		outline: none;
 		background: none;
@@ -83,6 +103,7 @@ const contentWrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
+	flex: 1;
 
 	> span {
 		font-size: var(--student-h3);

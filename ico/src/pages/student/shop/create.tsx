@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWrapper"
@@ -10,6 +10,8 @@ import { ShopTabMenus } from "@/components/student/Shop/ShopTabMenus"
 
 import ShopCreateImage from "@/components/student/Shop/ShopCreate/ShopCreateImage"
 import { postStudentProductsAPI } from "@/api/student/shop/postStudentProductsAPI"
+import Input from "@/components/common/Input/Input"
+import Button from "@/components/common/Button/Button"
 
 function create() {
 	const router = useRouter()
@@ -75,27 +77,48 @@ function create() {
 	console.log(formData)
 
 	return (
-		<div>
-			<PageHeader title={"상점"} addComp={<TabMenu menus={ShopTabMenus()} selected={1} />} />
-			<div css={contentWrapperCSS}>
-				<ContentWrapper>
+		<React.Fragment>
+			<PageHeader title={"판매 신청서 작성"} />
+			<div
+				css={css`
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					flex: 1;
+					margin-top: 16px;
+				`}
+			>
+				<div css={contentWrapperCSS}>
 					<div css={inputWrapperCSS}>
-						<input css={inputCSS} placeholder="상품의 이름이 뭔가요?" value={title} onChange={handleTitleChange} />
+						<Input
+							customCss={inputCSS}
+							theme={"mobileSoft"}
+							placeholder="상품의 이름이 뭔가요?"
+							value={title}
+							onChange={handleTitleChange}
+						/>
 					</div>
 
 					<div css={inputWrapperCSS}>
-						<input
-							css={inputCSS}
+						<Input
+							customCss={inputCSS}
+							theme={"mobileSoft"}
 							placeholder="상품의 가격은 얼마인가요?"
 							value={amount}
 							onChange={handleAmountChange}
+							rightContent={<div css={unitCSS}>원</div>}
 						/>
-						<div css={unitCSS}>원</div>
 					</div>
 
 					<div css={inputWrapperCSS}>
-						<input css={inputCSS} placeholder="상품은 총 몇 개인가요?" value={count} onChange={handleCountChange} />
-						<div css={unitCSS}>개</div>
+						<Input
+							customCss={inputCSS}
+							theme={"mobileSoft"}
+							placeholder="상품은 총 몇 개인가요?"
+							value={count}
+							onChange={handleCountChange}
+							rightContent={<div css={unitCSS}>개</div>}
+						/>
 					</div>
 
 					<div css={imageWrapperCSS}>
@@ -103,52 +126,64 @@ function create() {
 					</div>
 
 					<div css={explainWrapperCSS}>
-						<textarea
+					<Input
+							customCss={inputCSS}
+							theme={"mobileSoft"}
+							placeholder="선생님에게 상품을 설명해주세요."
+							value={detail}
+							onChange={handleDetailChange}
+							isTextarea={true}
+						/>
+						{/* <textarea
 							css={textareaCSS}
 							placeholder="선생님에게 상품을 설명해주세요."
 							value={detail}
 							onChange={handleDetailChange}
-						/>
+						/> */}
 					</div>
-				</ContentWrapper>
+				</div>
+				<Button
+					text={"제출하기!"}
+					fontSize={`var(--student-h3)`}
+					width={"48%"}
+					theme={"mobileSoft3"}
+					onClick={proposalProduct}
+					cssProps={css`box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.1);`}
+				/>
+				{/* <button onClick={proposalProduct}>gogo</button> */}
 			</div>
-			<button onClick={proposalProduct}>gogo</button>
-		</div>
+		</React.Fragment>
 	)
 }
 
 const inputWrapperCSS = css`
-	height: 40px;
+	/* height: 40px; */
 	width: 100%;
-	margin-bottom: 10px;
+	margin-bottom: 16px;
 
-	display: flex;
+	/* display: flex;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: space-between; */
 
-	padding: 0px 20px;
-	border-radius: 10px;
-
-	background-color: var(--student-main-color-2);
-	font-size: var(--student-h4);
+	/* border-radius: 10px; */
 `
 
 const unitCSS = css`
-	font-size: var(--student-h4);
+	font-size: var(--student-h3);
+	margin-right: 16px;
+	color: var(--student-main-color-6);
 `
 
 const contentWrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	width: 95%;
+	
 `
 
 const inputCSS = css`
-	width: 80%;
-
-	background-color: var(--student-main-color-2);
-	outline: none;
-	border: none;
+	width: 100%;
 `
 
 const imageWrapperCSS = css`
@@ -158,12 +193,12 @@ const imageWrapperCSS = css`
 
 	height: 30vh;
 	width: 100%;
-	margin-bottom: 10px;
+	margin-bottom: 16px;
 	overflow: hidden;
 	/* padding: 10px 20px; */
 	border-radius: 10px;
-
-	background-color: var(--student-main-color-2);
+	outline: 2px solid rgba(0, 0, 0, 0.1);
+	background-color: var(--student-main-color-soft);
 	font-size: var(--student-h4);
 
 	svg {
@@ -173,16 +208,16 @@ const imageWrapperCSS = css`
 
 const explainWrapperCSS = css`
 	width: 100%;
-	margin-bottom: 10px;
+	margin-bottom: 24px;
 
-	display: flex;
+	/* display: flex;
 	align-items: center;
 	justify-content: space-between;
 
-	border-radius: 10px;
+	border-radius: 10px; */
 
-	background-color: var(--student-main-color-2);
-	font-size: var(--student-h4);
+	/* background-color: var(--student-main-color-2);
+	font-size: var(--student-h4); */
 `
 
 const textareaCSS = css`

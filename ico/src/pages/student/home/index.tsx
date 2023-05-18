@@ -63,6 +63,7 @@ function index() {
 					{data && (
 						<HomeJobCard
 							name={data.name}
+							job={data.jobName}
 							credit={data.creditRating}
 							backgroundColor={"#634AFF"}
 							imgUrl={data.jobImage !== null ? data.jobImage : "https://d3bkfkkihwj5ql.cloudfront.net/worker_male.png"}

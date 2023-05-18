@@ -23,6 +23,7 @@ module.exports = withPWA({
       },
     ];
   },
+  
 })
 
 module.exports = {
@@ -39,4 +40,5 @@ module.exports = {
       },
     ];
   },
+  
 }
