@@ -23,12 +23,7 @@
 <br>
 
 ## ​:one: Introduction
-> 한 줄 소개?
-
-### 💻 기능 영상 소개
-
-~
-
+[시연 시나리오](https://lab.ssafy.com/s08-final/S08P31D103/-/raw/main/exec/D103_ICO_%EC%8B%9C%EC%97%B0_%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4.pdf?inline=false)
 
 <br>
 
