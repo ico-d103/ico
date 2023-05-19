@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.11'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id "org.sonarqube" version "3.0"
 }
 
 repositories {
@@ -15,6 +16,12 @@ subprojects {
 	version = '0.0.1-SNAPSHOT'
 	sourceCompatibility = '11'
 	compileJava.options.encoding = 'UTF-8'
+
+	sonarqube {
+		properties {
+			property "sonar.sourceEncoding", "UTF-8"
+		}
+	}
 
 	apply plugin: 'java'
 	// build.gradle에서 api() 를 사용하려면 java-library 사용
