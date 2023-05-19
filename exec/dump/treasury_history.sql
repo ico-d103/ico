@@ -1,0 +1,13 @@
+insert into MY_TABLE (_id, amount, date, nationId, source, title) values ('646225882097f40075118811', 100, 2023-05-15T12:28:56.827Z, 127, '경제부총리', '소득세');
+insert into MY_TABLE (_id, amount, date, nationId, source, title) values ('646225b42097f40075118812', 2543, 2023-05-15T12:29:40.259Z, 127, '소득세', '소득세수입');
+insert into MY_TABLE (_id, amount, date, nationId, source, title) values ('646238b82097f40075118815', -3000, 2023-05-15T13:50:48.017Z, 127, '대통령', '세금 사용');
+insert into MY_TABLE (_id, amount, date, nationId, source, title) values ('6462ce1f389dae7c1e15276c', -1351, 2023-05-16T00:28:15.332Z, 127, '대통령', '세금 잔액 조정');
+insert into MY_TABLE (_id, amount, date, nationId, source, title) values ('6465be70954700584eb99ab5', 1, 2023-05-18T05:58:08.340Z, 420, '1', '1');
+insert into MY_TABLE (_id, amount, date, nationId, source, title) values ('6465c2140791d83ff051bb50', 2000, 2023-05-15T06:13:40.105Z, 404, '국세청', '전기세');
+insert into MY_TABLE (_id, amount, date, nationId, source, title) values ('6465c2230791d83ff051bb51', 3450, 2023-05-15T06:13:55.020Z, 404, '국세청', '자리세');
+insert into MY_TABLE (_id, amount, date, nationId, source, title) values ('6465c2ca0791d83ff051bb53', 7114, 2023-05-15T06:16:42.042Z, 404, '국세청', '소득세');
+insert into MY_TABLE (_id, amount, date, nationId, source, title) values ('6465c2ea0791d83ff051bb54', -2200, 2023-05-16T06:17:14.112Z, 404, '선생님', '쓰레기 봉투');
+insert into MY_TABLE (_id, amount, date, nationId, source, title) values ('6465c2f40791d83ff051bb55', -1000, 2023-05-18T06:17:24.915Z, 404, '선생님', '손 소독제');
+insert into MY_TABLE (_id, amount, date, nationId, source, title) values ('6465c32c0791d83ff051bb56', 3000, 2023-05-18T06:18:20.058Z, 404, '교육청', '교육 지원금');
+insert into MY_TABLE (_id, amount, date, nationId, source, title) values ('6465c3790791d83ff051bb57', -2000, 2023-05-18T06:19:37.663Z, 404, '선생님', '비밀');
+insert into MY_TABLE (_id, amount, date, nationId, source, title) values ('6466d699ac15932f02150c0e', 100000000, 2023-05-19T01:53:29.628Z, 554, '멀티캠퍼스', '용돈');
