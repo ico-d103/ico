@@ -33,7 +33,7 @@
 | ------------ | -------------------------------------- |
 | **Language** | Java, TypeScript                       |
 | **Back-end**  | SpringBoot, JWT |
-| **Front-end** | React.js, tailwind, Recoil                  |
+| **Front-end** | Next.js, PWA, react-query, jotai, emotion                  |
 | **Database** | MySQL, MongoDB, S3                                |
 | **Server**   | AWS EC2, Nginx                         |
 | **DevOps**   | Git, Docker, Jenkins                            |
