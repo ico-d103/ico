@@ -2,8 +2,9 @@ import React from "react"
 import { css } from "@emotion/react"
 import { getHomeCouponType } from "@/types/student/apiReturnTypes"
 import { postHomeCouponAPI } from "@/api/student/home/postHomeCouponAPI"
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { useQueryClient } from "@tanstack/react-query"
+import useMediaQuery from "@/hooks/useMediaQuery"
 // import { CLASS_ACCEPT, CLASS_DENY } from "../ClassIcons"
 
 type HomeCouponListItemPropsType = getHomeCouponType
@@ -20,19 +21,21 @@ const SEND_ICON = (
 	</svg>
 )
 
-function HomeCouponListItem({id, title, count, assigned }: HomeCouponListItemPropsType) {
-	const updateMutation = useMutation((idx: number) => postHomeCouponAPI({idx}));
-	const queryClient = useQueryClient();
+function HomeCouponListItem({ id, title, count, assigned }: HomeCouponListItemPropsType) {
+	const updateMutation = useMutation((idx: number) => postHomeCouponAPI({ idx }))
+	const isMobile = useMediaQuery("(max-width: 420px")
+	const queryClient = useQueryClient()
 	const assignOnClickHandler = () => {
 		updateMutation.mutate(id, {
-			onSuccess: formData => {
-			  return queryClient.invalidateQueries(["student", "homeCouponList"]); // 'return' wait for invalidate
-			}})
+			onSuccess: (formData) => {
+				return queryClient.invalidateQueries(["student", "homeCouponList"]) // 'return' wait for invalidate
+			},
+		})
 	}
 
 	const waitingLabel = <div css={sSizeFontCSS}>승인을 기다리는 중이에요!</div>
 	return (
-		<div css={wrapperCSS}>
+		<div css={wrapperCSS({ isMobile })}>
 			<div css={leftWrapperCSS}>
 				<div css={leftCSS}>
 					<div
@@ -55,7 +58,7 @@ function HomeCouponListItem({id, title, count, assigned }: HomeCouponListItemPro
 					</div>
 				</div> */}
 			</div>
-			<div css={rightWrapperCSS}>
+			<div css={rightWrapperCSS} className={"right"}>
 				<div css={circleCSS}></div>
 				<div css={buttonWrapperCSS}>
 					<button onClick={assignOnClickHandler}>{SEND_ICON}</button>
@@ -68,19 +71,23 @@ function HomeCouponListItem({id, title, count, assigned }: HomeCouponListItemPro
 	)
 }
 
-const wrapperCSS = css`
-	width: 100%;
-	height: 150px;
-	background: var(--common-back-color-2);
-	border: 1px solid rgba(0, 0, 0, 0.1);
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-	border-radius: 10px;
+const wrapperCSS = ({ isMobile }: { isMobile: boolean | null }) => {
+	return css`
+		/* width: ${isMobile ? "100%" : "350px"}; */
+		width: 100%;
+		height: 150px;
+		background: var(--common-back-color-2);
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		border-radius: 10px;
 
-	display: flex;
-	flex-direction: row;
-	overflow: hidden;
-	margin: 16px 0px;
-`
+		display: flex;
+		justify-content: space-between;
+		flex-direction: row;
+		overflow: hidden;
+		/* margin: 16px 0px; */
+	`
+}
 
 const leftWrapperCSS = css`
 	width: 270px;
