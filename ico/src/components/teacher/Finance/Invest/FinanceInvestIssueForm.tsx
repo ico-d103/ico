@@ -18,6 +18,8 @@ import { dateFormatter } from "@/util/dateFormatter"
 import Input from "@/components/common/Input/Input"
 
 import { putInvestTimeAPI } from "@/api/teacher/finanace/putInvestTimeAPI"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 type FinanceInvestIssueFormProps = {
 	data: getFinanceInvestIssueType
@@ -26,16 +28,24 @@ type FinanceInvestIssueFormProps = {
 function FinanceInvestIssueForm({ data }: FinanceInvestIssueFormProps) {
 	const [chartData, setChartData] = useState<LineSvgProps["data"] | null>(null)
 
-	console.log(data)
+	const noti = useNotification()
 
 	const [tradingStart, setTradingStart] = useState(data.tradingStart)
 	const [tradingEnd, setTradingEnd] = useState(data.tradingEnd)
+	const [initTradingStart, setInitTradingStart] = useState(data.tradingStart)
+	const [initTradingEnd, setInitTradingEnd] = useState(data.tradingEnd)
 
 	const price = data?.issue[0].amount
 
 	const pushInvestTime = () => {
 		putInvestTimeAPI({ body: { tradingStart: tradingStart, tradingEnd: tradingEnd } }).then((res) => {
+			setInitTradingStart(() => initTradingStart)
+			setInitTradingEnd(() => tradingEnd)
+			noti({content: <NotiTemplate type={'ok'} content={'투자 시간 변경이 완료되었습니다!'}/>, duration: 5000})
 			console.log(res)
+		})
+		.catch((err) => {
+			noti({content: <NotiTemplate type={'alert'} content={'투자 시간 변경에 실패하였습니다!'}/>, duration: 5000})
 		})
 	}
 
@@ -124,6 +134,7 @@ function FinanceInvestIssueForm({ data }: FinanceInvestIssueFormProps) {
 							height={"45px"}
 							theme={"normal"}
 							onClick={pushInvestTime}
+							disabled={tradingStart === initTradingStart && tradingEnd === initTradingEnd && true}
 						/>
 					</div>
 					<div>
