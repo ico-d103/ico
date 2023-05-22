@@ -123,6 +123,9 @@ const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
 			& input::placeholder {
 				color: rgba(0, 20, 50, 0.5);
 			}
+			& textarea::placeholder {
+				color: rgba(0, 20, 50, 0.5);
+			}
 		`,
 		greenDefault: css`
 			/* border: 2px solid rgba(0, 0, 0, 0.1); */
@@ -135,6 +138,9 @@ const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
 			transition-property: outline ease;
 
 			& input::placeholder {
+				color: rgba(0, 50, 20, 0.5);
+			}
+			& textarea::placeholder {
 				color: rgba(0, 50, 20, 0.5);
 			}
 		`,
@@ -157,6 +163,12 @@ const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
 			& input::placeholder {
 				color: #9b6f00c9;
 			}
+			& textarea {
+				font-size: var(--student-h3);
+			}
+			& textarea::placeholder {
+				color: #9b6f00c9;
+			}
 		`,
 		mobileWhite: css`
 			/* border: 2px solid rgba(0, 0, 0, 0.1); */
@@ -177,6 +189,12 @@ const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
 			& input::placeholder {
 				color: #9b6f00c9;
 			}
+			& textarea {
+				font-size: var(--student-h3);
+			}
+			& textarea::placeholder {
+				color: #9b6f00c9;
+			}
 		`,
 		mobileSoft: css`
 		/* border: 2px solid rgba(0, 0, 0, 0.1); */
@@ -195,6 +213,12 @@ const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
 			stroke: #9b6f007d;
 		}
 		& input::placeholder {
+			color: #9b6f00c9;
+		}
+		& textarea {
+			font-size: var(--student-h3);
+		}
+		& textarea::placeholder {
 			color: #9b6f00c9;
 		}
 	`,

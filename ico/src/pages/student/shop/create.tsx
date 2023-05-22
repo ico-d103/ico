@@ -12,6 +12,7 @@ import ShopCreateImage from "@/components/student/Shop/ShopCreate/ShopCreateImag
 import { postStudentProductsAPI } from "@/api/student/shop/postStudentProductsAPI"
 import Input from "@/components/common/Input/Input"
 import Button from "@/components/common/Button/Button"
+import useGetNation from "@/hooks/useGetNation"
 
 function create() {
 	const router = useRouter()
@@ -23,6 +24,7 @@ function create() {
 	const [count, setCount] = useState("")
 	const [imageList, setImageList] = useState([])
 	const [detail, setDetail] = useState("")
+	const [nation] = useGetNation()
 
 	const handleTitleChange = (event: any) => {
 		setTitle(event.target.value)
@@ -106,7 +108,7 @@ function create() {
 							placeholder="상품의 가격은 얼마인가요?"
 							value={amount}
 							onChange={handleAmountChange}
-							rightContent={<div css={unitCSS}>원</div>}
+							rightContent={<div css={unitCSS}>{nation.currency}</div>}
 						/>
 					</div>
 
