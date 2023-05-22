@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -40,6 +42,9 @@ public class TransactionServiceImpl implements TransactionService{
     private final StudentRepository studentRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    // 시간 설정
+
 
     /**
      * 상점 거래
@@ -108,6 +113,8 @@ public class TransactionServiceImpl implements TransactionService{
     @Transactional(readOnly = true)
     @Override
     public Map<String, List<TransactionResDto>> findTransaction(HttpServletRequest request) {
+        // 시간 설정
+        ZoneId koreaZoneId = ZoneId.of("Asia/Seoul");
         Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
 
         Student student = studentRepository.findById(studentId).orElseThrow(() -> {
@@ -123,6 +130,11 @@ public class TransactionServiceImpl implements TransactionService{
         int curAccount = student.getAccount();
 
         for (Transaction transaction : transactions) {
+            // 시간 설정
+            ZoneOffset koreaOffset = ZoneOffset.ofHours(9);
+            LocalDateTime utcDateTime = transaction.getDate();
+            LocalDateTime koreaDateTime = utcDateTime.atZone(ZoneOffset.UTC).withZoneSameInstant(koreaZoneId).toLocalDateTime();
+
             String[] dateTime = transaction.getDate().format(Formatter.dateTime).split("-");
 
             int amount = transaction.getFrom().equals(String.valueOf(studentId)) ? -1 * transaction.getAmount() : transaction.getAmount();
@@ -137,6 +149,7 @@ public class TransactionServiceImpl implements TransactionService{
                             .amount(Formatter.number.format(amount))
                             .source(source)
                             .balance(Formatter.number.format(balance))
+                            .koreaDateTime(koreaDateTime)  // 한국 시간 정보 추가
                     .build());
         }
         return map;
