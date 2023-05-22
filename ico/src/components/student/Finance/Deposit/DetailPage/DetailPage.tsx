@@ -57,7 +57,7 @@ function DetailPage({ data, refetch }: DetailPageProps) {
   const submitHandler = () => {
 		deleteFinanceDepositAPI({}).then((res) => {
 			refetch()
-			noti({content: <NotiTemplate type={'ok'} content="예금 만기 수령을 했어요!"/>, width: '300px', height: '120px', duration: 3000})
+			noti({content: <NotiTemplate type={'ok'} content="예금 만기 수령을 했어요!" buttons={[{label: '내역 보기', function: () => {}}]}/>, width: '300px', height: '120px', duration: 3000})
 			closeComp()
 		})
 		.catch((err) => {
