@@ -12,6 +12,10 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
+/**
+ *
+ * @author 서재건
+ */
 @EnableJpaAuditing
 @EnableMongoAuditing
 @ComponentScan({"com.ico.core", "com.ico.api"})
@@ -26,6 +30,9 @@ public class ApiModuleApplication {
         SpringApplication.run(ApiModuleApplication.class, args);
     }
 
+    /**
+     * JVM 기본 시간대 설정
+     */
     @PostConstruct
     void started() {
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
