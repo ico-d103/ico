@@ -162,7 +162,7 @@ function FinanceInvestIssueForm({ data }: FinanceInvestIssueFormProps) {
 				showIdx={1}
 				subInit={{ taxation: 0, value: 0 }}
 				// titlePlaceHolder={"투자 주제를 입력해주세요."}
-				contentPlaceHolder={"오늘의 이슈를 입력해주세요."}
+				contentPlaceHolder={"내일의 이슈를 입력해주세요."}
 				isNoTitle={true}
 				compState={compState}
 				closeComp={closeComp}
