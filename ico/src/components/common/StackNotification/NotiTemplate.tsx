@@ -7,12 +7,13 @@ import Button from "../Button/Button";
 
 
 function NotiTemplate({type, content, buttons}: {type: string; content: string; buttons?: {label: string, function: Function}[]}) {
-	const renderButtons = buttons?.map((el, idx) => {
+	const renderButtons = (<div css={css`flex: 1; display: flex; gap: 8px; padding-top: 16px;`}>{buttons?.map((el, idx) => {
         return (
             <Button
 					text={el.label}
 					fontSize={`var(--student-h3)`}
-					width={"48%"}
+					width={"auto"}
+                    cssProps={css`flex: 1; margin-right: 8px;`}
 					theme={"cancelDark"}
 					onClick={() => {
 						el.function()
@@ -20,7 +21,7 @@ function NotiTemplate({type, content, buttons}: {type: string; content: string; 
 					}}
 				/>
         )
-    })
+    }) }</div>)
     
     const data: {[prop: string]: any} = {
         alert: (
@@ -34,10 +35,7 @@ function NotiTemplate({type, content, buttons}: {type: string; content: string; 
                 <UseAnimations animation={alertTriangle} size={82} />
                 <div css={css`flex: 1; margin-right: 16px; display: flex; flex-direction: column;`}>
                     {content}
-                    <div css={css`flex: 1; display: flex; gap: 8px; padding-top: 16px;`}>
-                        {renderButtons}
-                    </div>
-                    
+                    {buttons && renderButtons}
                 </div>
                 
             </div>
@@ -54,9 +52,8 @@ function NotiTemplate({type, content, buttons}: {type: string; content: string; 
                 <UseAnimations animation={radioButton} reverse={true} size={48} css={css`margin: 0px 16px 0px 0px;`} />
                 <div css={css`flex: 1; margin-right: 16px; display: flex; flex-direction: column;`}>
                     {content}
-                    <div css={css`flex: 1; display: flex; gap: 8px; padding-top: 16px;`}>
-                        {renderButtons}
-                    </div>
+                    {buttons && renderButtons}
+
                 </div>
                 
             </div>
