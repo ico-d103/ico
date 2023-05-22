@@ -11,6 +11,7 @@ import useCompHandler from "@/hooks/useCompHandler"
 import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import useNotification from "@/hooks/useNotification"
+import useNavigate from "@/hooks/useNavigate"
 
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,6 +35,7 @@ function DetailPage({ data, refetch }: DetailPageProps) {
 	const [nation] = useGetNation()
   const [openComp, closeComp, compState] = useCompHandler()
   const noti = useNotification()
+  const navigate = useNavigate()
 
   const getDateDiff = (d1: string, d2: null | string) => {
     const date1 = new Date(d1);
@@ -57,7 +59,7 @@ function DetailPage({ data, refetch }: DetailPageProps) {
   const submitHandler = () => {
 		deleteFinanceDepositAPI({}).then((res) => {
 			refetch()
-			noti({content: <NotiTemplate type={'ok'} content="예금 만기 수령을 했어요!" buttons={[{label: '내역 보기', function: () => {}}]}/>, width: '300px', height: '120px', duration: 3000})
+			noti({content: <NotiTemplate type={'ok'} content="예금 만기 수령을 했어요!" buttons={[{label: '내역 보기', function: () => {navigate('/student/home/asset', 'bottomToTop')}}]}/>, width: '300px', height: '120px', duration: 3000})
 			closeComp()
 		})
 		.catch((err) => {
