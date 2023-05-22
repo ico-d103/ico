@@ -78,13 +78,14 @@ const QRScanner = ({ closeComp, type, id }: QRScannerProps) => {
 								})
 								closeComp && closeComp()
 							}
-							if (error.response.data.code === "616") {
+							if (error.response.data.code === "616" || error.response.data.code === "11") {
 								noti({
 									content: <NotiTemplate type={"alert"} content={"남은 물건이 없어요!"} />,
 									duration: 5000,
 								})
 								closeComp && closeComp()
 							}
+							
 						})
 				}
 
@@ -104,7 +105,7 @@ const QRScanner = ({ closeComp, type, id }: QRScannerProps) => {
 								})
 								closeComp && closeComp()
 							}
-							if (error.response.data.code === "616") {
+							if (error.response.data.code === "616" || error.response.data.code === "11") {
 								noti({
 									content: <NotiTemplate type={"alert"} content={"남은 물건이 없어요!"} />,
 									duration: 5000,
