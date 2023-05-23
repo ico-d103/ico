@@ -12,19 +12,11 @@ import Loading from "@/components/student/common/Loading/Loading"
 import useGetNation from "@/hooks/useGetNation"
 import { useAtom } from "jotai"
 import { isNavigating } from "@/store/store"
-import { getHomeAccountAPI } from "@/api/student/home/getHomeAccountAPI"
-import { getHomeAccountType } from "@/types/student/apiReturnTypes"
 
 function asset() {
-	const tradeHistory = useQuery<getHomeTransactionHistoryType>(
-		["student", "asset", "homeTransactionHistory"],
+	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getHomeTransactionHistoryType>(
+		["student", "homeTransactionHistory"],
 		getHomeTransactionHistoryAPI,
-		// { staleTime: 200000 },
-	)
-
-	const account = useQuery<getHomeAccountType>(
-		["student", "asset", "homeAccount"],
-		getHomeAccountAPI,
 		// { staleTime: 200000 },
 	)
 
@@ -38,15 +30,10 @@ function asset() {
 				<ContentWrapper>
 					<div css={sSizeFontCSS}>일반 계좌</div>
 					<div css={lSizeFontCSS}>
-						{/* {data
+						{data
 							? Object.keys(data).length === 0
 								? `0 ${nation?.currency}`
 								: `${data[Object.keys(data)[0]][0].balance} ${nation?.currency}`
-							: "잔액을 조회중이에요."} */}
-							{account.data
-							? account.data.account
-								? `0 ${nation?.currency}`
-								: `${account.data.account} ${nation?.currency}`
 							: "잔액을 조회중이에요."}
 					</div>
 				</ContentWrapper>
@@ -58,7 +45,7 @@ function asset() {
 						
 					`}
 				>
-					{tradeHistory.isLoading && (
+					{isLoading && (
 						<div
 							css={css`
 								flex: 1;
@@ -80,7 +67,7 @@ function asset() {
 				
 						</div>
 					)}
-					{tradeHistory.data && <HomeAssetDetail tradeHistory={tradeHistory.data} />}
+					{data && <HomeAssetDetail tradeHistory={data} />}
 				</ContentWrapper>
 			</div>
 		</React.Fragment>
