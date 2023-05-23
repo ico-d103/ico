@@ -19,6 +19,7 @@ import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -107,7 +108,7 @@ public class TransactionServiceImpl implements TransactionService{
 
     @Transactional(readOnly = true)
     @Override
-    public Map<String, List<TransactionResDto>> findTransaction(HttpServletRequest request) {
+    public Map<String, Object> findTransaction(HttpServletRequest request) {
         Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
 
         Student student = studentRepository.findById(studentId).orElseThrow(() -> {
@@ -139,7 +140,16 @@ public class TransactionServiceImpl implements TransactionService{
                             .balance(Formatter.number.format(balance))
                     .build());
         }
-        return map;
+//        return map;
+
+        // totalAccount 계산
+        int account = student.getAccount();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("transactions", map);
+        response.put("account", account);
+
+        return response;
     }
 
     /**

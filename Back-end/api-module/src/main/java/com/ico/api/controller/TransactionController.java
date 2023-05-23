@@ -33,7 +33,7 @@ public class TransactionController {
      * @return
      */
     @GetMapping("/student")
-    public ResponseEntity<Map<String, List<TransactionResDto>>> findTransaction(HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> findTransaction(HttpServletRequest request) {
         return ResponseEntity.ok(transactionService.findTransaction(request));
     }
 

@@ -50,6 +50,6 @@ public interface TransactionService {
      *
      * @return 날짜별 입출금 내역
      */
-    Map<String, List<TransactionResDto>> findTransaction(HttpServletRequest request);
+    Map<String, Object> findTransaction(HttpServletRequest request);
 
 }
