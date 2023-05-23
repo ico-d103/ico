@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Student Controller
@@ -163,5 +164,15 @@ public class StudentController {
     public ResponseEntity<HttpStatus> postAllCreditScore(@Valid @RequestBody CreditScoreReqDto dto, HttpServletRequest request) {
         studentService.postAllCreditScore(dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 학생의 자산을 조회
+     * @param request
+     * @return
+     */
+    @GetMapping("/account")
+    public ResponseEntity<Map<String, String>> getAccount(HttpServletRequest request) {
+        return ResponseEntity.ok(studentService.findAccount(request));
     }
 }
