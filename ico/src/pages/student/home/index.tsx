@@ -43,10 +43,13 @@ function index() {
 								width: 36px;
 								height: 36px;
 								margin-right: 12px;
+								
+								/* filter: hue-rotate(300deg);
+								opacity: 0.7; */
 							`}
 							sizes={"128px"}
 						/>
-						아이코
+						ICO
 					</div>
 					<div onClick={openComp} css={sideMenuButtonWrapperCSS}>
 						<img
@@ -110,9 +113,10 @@ const headerWrapperCSS = css`
 
 const logoWrapperCSS = css`
 	font-size: var(--student-h1);
-	font-weight: 500;
+	font-weight: 700;
 	display: flex;
 	align-items: center;
+	color: #5aa9006a;
 `
 
 const sideMenuButtonWrapperCSS = css`
