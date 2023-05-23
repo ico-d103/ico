@@ -80,7 +80,7 @@ public class StudentServiceImpl implements StudentService{
                 .identity(requestDto.getIdentity())
                 .password(requestDto.getPassword())
                 .name(requestDto.getName())
-                .account(1000)
+                .account(0)
                 .isFrozen(false)
                 .creditScore((short) 700)
                 .creditRating((byte) 6)
