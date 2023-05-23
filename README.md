@@ -23,7 +23,7 @@
 <br>
 
 ## ​:one: Introduction
-[1. 아이코(ICO) 시연 시나리오](https://lab.ssafy.com/s08-final/S08P31D103/-/blob/main/exec/D103_ICO_%EC%8B%9C%EC%97%B0_%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4.pdf)
+[1. 아이코(ICO) 시연 시나리오](https://github.com/ico-d103/.github/blob/main/exec/D103_ICO_%EC%8B%9C%EC%97%B0_%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4.pdf)
 
 [2. 아이코(ICO) UCC 영상](https://youtu.be/-vTEErIri4U)
 
