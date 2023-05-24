@@ -10,6 +10,7 @@ import com.ico.api.dto.user.StudentSignUpRequestDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Student Service
@@ -95,4 +96,11 @@ public interface StudentService {
      * @param request
      */
     void postAllCreditScore(CreditScoreReqDto dto, HttpServletRequest request);
+
+    /**
+     * 학생의 account 조회
+     * @param request
+     * @return 자산
+     */
+    Map<String, String> findAccount(HttpServletRequest request);
 }

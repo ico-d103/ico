@@ -9,6 +9,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+import javax.annotation.PostConstruct;
+import java.util.TimeZone;
+
+/**
+ *
+ * @author 서재건
+ */
 @EnableJpaAuditing
 @EnableMongoAuditing
 @ComponentScan({"com.ico.core", "com.ico.api"})
@@ -21,6 +28,14 @@ public class ApiModuleApplication {
     public static void main(String[] args) {
         System.setProperty("spring.config.name", "application,application-db,application-login,application-aws");
         SpringApplication.run(ApiModuleApplication.class, args);
+    }
+
+    /**
+     * JVM 기본 시간대 설정
+     */
+    @PostConstruct
+    void started() {
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
     }
 
 }

@@ -20,6 +20,7 @@ import com.ico.core.repository.ResumeMongoRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,7 +81,7 @@ public class JobServiceImpl implements JobService{
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
         }
 
-        List<StudentJob> studentJobList = studentJobRepository.findAllByNationId(nationId);
+        List<StudentJob> studentJobList = studentJobRepository.findAllByNationIdAndTotalGreaterThan(nationId, (byte) 0, Sort.by(Sort.Order.asc("count"), Sort.Order.desc("total")));
         List<JobAllColDto> colJobList = new ArrayList<>();
 
         int restJobCount = 0;

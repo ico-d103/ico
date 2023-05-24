@@ -1,6 +1,7 @@
 package com.ico.core.repository;
 
 import com.ico.core.entity.StudentJob;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -14,12 +15,22 @@ import java.util.Optional;
 public interface StudentJobRepository extends JpaRepository<StudentJob, Long> {
 
     /**
-     * 학급의 모든 직업 조히
+     * 학급의 모든 직업 조회
      *
      * @param nationId
      * @return
      */
     List<StudentJob> findAllByNationId(Long nationId);
+
+    /**
+     * 교사가 학급의 신청 가능한 직업 조회
+     *
+     * @param nationId
+     * @param total
+     * @param sort
+     * @return
+     */
+    List<StudentJob> findAllByNationIdAndTotalGreaterThan(Long nationId, byte total, Sort sort);
 
     /**
      * 학급의 특정 직업 조회

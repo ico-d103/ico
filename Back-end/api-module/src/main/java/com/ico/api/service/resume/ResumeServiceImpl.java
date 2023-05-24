@@ -53,6 +53,9 @@ public class ResumeServiceImpl implements ResumeService {
         if (studentJob.getCreditRating() < student.getCreditRating()) {
             throw new CustomException(ErrorCode.INVALID_CREDIT_RATING);
         }
+        if (student.getStudentJob() != null) {
+            throw new CustomException(ErrorCode.ALREADY_HAS_JOB);
+        }
         log.info("자격요건 통과");
 
         Resume resume = Resume.builder()
