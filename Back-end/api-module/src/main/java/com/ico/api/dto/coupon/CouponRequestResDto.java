@@ -1,6 +1,6 @@
 package com.ico.api.dto.coupon;
 
-import com.ico.core.entity.CouponRequest;
+import com.ico.core.document.CouponRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

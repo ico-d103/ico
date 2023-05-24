@@ -1,4 +1,4 @@
-package com.ico.core.entity;
+package com.ico.core.document;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -7,44 +7,44 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.Column;
 import java.time.LocalDateTime;
 
+
 /**
- * 국고 사용 내역 Document
+ * 쿠폰 사용 신청 Document
  *
  * @author 서재건
  */
-@Document(collection = "treasury_history")
+@Document(collection = "coupon_request")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TreasuryHistory {
+public class CouponRequest {
 
     @Id
     private String id;
 
-    @Column(name = "nation_id")
     private Long nationId;
+
+    private Long couponId;
 
     private String title;
 
-    private String source;
+    private String name;
 
-    private int amount;
+    private byte number;
 
-    @Field
     @CreatedDate
     private LocalDateTime date;
 
     @Builder
-    public TreasuryHistory(String id, Long nationId, String title, String source, int amount, LocalDateTime date) {
+    public CouponRequest(String id, Long nationId, Long couponId, String title, String name, byte number, LocalDateTime date) {
         this.id = id;
         this.nationId = nationId;
+        this.couponId = couponId;
         this.title = title;
-        this.source = source;
-        this.amount = amount;
+        this.name = name;
+        this.number = number;
         this.date = date;
     }
 }

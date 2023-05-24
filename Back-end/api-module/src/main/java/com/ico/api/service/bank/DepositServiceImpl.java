@@ -3,7 +3,7 @@ package com.ico.api.service.bank;
 import com.ico.api.dto.bank.DepositReqDto;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
-import com.ico.core.entity.Deposit;
+import com.ico.core.document.Deposit;
 import com.ico.core.entity.Interest;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;

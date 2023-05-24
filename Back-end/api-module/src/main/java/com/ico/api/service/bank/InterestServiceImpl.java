@@ -5,7 +5,7 @@ import com.ico.api.dto.bank.InterestAllDto;
 import com.ico.api.dto.bank.InterestStudentResDto;
 import com.ico.api.util.Formatter;
 import com.ico.api.user.JwtTokenProvider;
-import com.ico.core.entity.Deposit;
+import com.ico.core.document.Deposit;
 import com.ico.core.entity.Interest;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;

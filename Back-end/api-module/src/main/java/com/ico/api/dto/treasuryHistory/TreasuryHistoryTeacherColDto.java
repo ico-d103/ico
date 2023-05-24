@@ -1,6 +1,6 @@
 package com.ico.api.dto.treasuryHistory;
 
-import com.ico.core.entity.TreasuryHistory;
+import com.ico.core.document.TreasuryHistory;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

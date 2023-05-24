@@ -1,4 +1,4 @@
-package com.ico.core.entity;
+package com.ico.core.document;
 
 import com.ico.core.data.Default_interest;
 import com.ico.core.data.Default_job;

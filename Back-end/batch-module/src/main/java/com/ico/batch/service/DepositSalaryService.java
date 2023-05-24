@@ -1,8 +1,8 @@
 package com.ico.batch.service;
 
 import com.ico.core.entity.Nation;
-import com.ico.core.entity.Transaction;
-import com.ico.core.entity.TreasuryHistory;
+import com.ico.core.document.Transaction;
+import com.ico.core.document.TreasuryHistory;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.NationRepository;
