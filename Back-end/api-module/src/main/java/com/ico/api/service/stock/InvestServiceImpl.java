@@ -62,6 +62,9 @@ public class InvestServiceImpl implements InvestService{
 //        }
 //        log.info("거래 가능 시간");
 
+        log.info("[buyStock] 주식 매수 시간 LocalTime : {}", currentTime);
+        log.info("[buyStock] 주식 매수 시간 LocalDateTime : {}", LocalDateTime.now());
+
         // 매수 여부 확인
         investRepository.findByStudentId(studentId).ifPresent(i -> {
             throw new CustomException(ErrorCode.ALREADY_HAVE_STOCK);

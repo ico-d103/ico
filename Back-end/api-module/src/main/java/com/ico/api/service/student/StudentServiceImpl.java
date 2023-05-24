@@ -36,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,7 +81,7 @@ public class StudentServiceImpl implements StudentService{
                 .identity(requestDto.getIdentity())
                 .password(requestDto.getPassword())
                 .name(requestDto.getName())
-                .account(1000)
+                .account(0)
                 .isFrozen(false)
                 .creditScore((short) 700)
                 .creditRating((byte) 6)
@@ -312,6 +313,17 @@ public class StudentServiceImpl implements StudentService{
 
             studentRepository.save(student);
         }
+    }
+
+    @Override
+    public Map<String, String> findAccount(HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Student student = studentRepository.findById(jwtTokenProvider.getId(token))
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        Map<String, String> map = new HashMap<>();
+        map.put("account", Formatter.number.format(student.getAccount()));
+
+        return map;
     }
 
     /**

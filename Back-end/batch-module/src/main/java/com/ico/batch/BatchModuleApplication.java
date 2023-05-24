@@ -11,8 +11,12 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import javax.annotation.PostConstruct;
+import java.util.TimeZone;
+
 /**
  * @author 변윤경
+ * @author 서재건
  */
 @EnableScheduling
 @EnableBatchProcessing
@@ -28,6 +32,14 @@ public class BatchModuleApplication {
     public static void main(String[] args) {
         System.setProperty("spring.config.name", "application,application-db,application-login");
         SpringApplication.run(BatchModuleApplication.class, args);
+    }
+
+    /**
+     * JVM 기본 시간대 설정
+     */
+    @PostConstruct
+    void started() {
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
     }
 
 }

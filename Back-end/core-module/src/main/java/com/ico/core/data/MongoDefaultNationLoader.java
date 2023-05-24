@@ -91,7 +91,7 @@ public class MongoDefaultNationLoader implements CommandLineRunner {
                     put("color", "#FF4A4A");
                 }},
                 new HashMap<String, Object>() {{
-                    put("title", "인테리어 디자이너");
+                    put("title", "디자이너");
                     put("detail", "선생님을 도와 학급을 꾸미는 디자이너");
                     put("image", "designer.png");
                     put("wage", 2000);
