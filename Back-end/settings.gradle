@@ -1,0 +1,4 @@
+rootProject.name = 'ICo'
+include 'api-module'
+include 'batch-module'
+include 'core-module'
