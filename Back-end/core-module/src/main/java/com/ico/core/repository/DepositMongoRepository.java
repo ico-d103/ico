@@ -1,6 +1,6 @@
 package com.ico.core.repository;
 
-import com.ico.core.entity.Deposit;
+import com.ico.core.document.Deposit;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;

@@ -7,7 +7,7 @@ import com.ico.api.dto.treasuryHistory.TreasuryHistoryTeacherResDto;
 import com.ico.api.util.Formatter;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Nation;
-import com.ico.core.entity.TreasuryHistory;
+import com.ico.core.document.TreasuryHistory;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.NationRepository;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;

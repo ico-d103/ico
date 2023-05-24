@@ -1,6 +1,6 @@
 package com.ico.core.repository;
 
-import com.ico.core.entity.CouponRequest;
+import com.ico.core.document.CouponRequest;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

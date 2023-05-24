@@ -1,4 +1,4 @@
-package com.ico.core.entity;
+package com.ico.core.document;
 
 import lombok.AccessLevel;
 import lombok.Builder;
