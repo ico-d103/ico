@@ -1,6 +1,6 @@
 package com.ico.core.repository;
 
-import com.ico.core.entity.DefaultNation;
+import com.ico.core.document.DefaultNation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

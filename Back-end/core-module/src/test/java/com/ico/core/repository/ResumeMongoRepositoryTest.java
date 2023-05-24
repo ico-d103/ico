@@ -1,6 +1,6 @@
 //package com.ico.core.repository;
 //
-//import com.ico.core.entity.Resume;
+//import com.ico.core.document.Resume;
 //import org.junit.jupiter.api.Assertions;
 //import org.junit.jupiter.api.DisplayName;
 //import org.junit.jupiter.api.Test;

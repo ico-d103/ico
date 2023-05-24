@@ -1,6 +1,6 @@
 package com.ico.core.repository;
 
-import com.ico.core.entity.TreasuryHistory;
+import com.ico.core.document.TreasuryHistory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
