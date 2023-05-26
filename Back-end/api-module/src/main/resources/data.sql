@@ -2,6 +2,7 @@
 insert into nation(id, code, credit_down, credit_up, currency, grade, room, school, stock, title, trading_end, trading_start, treasury)
 VALUES (99, 'code', 0, 0, '미소', 6, 1, '싸피 초등학교', '몸무게', '활명수국', '11:22:59', '11:22:59', 0);
 
+
 INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (1, 1, 40, 15, 99);
 INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (2, 2, 35, 12, 99);
 INSERT INTO ico.interest (id, credit_rating, long_period, short_period, nation_id) VALUES (3, 3, 30, 10, 99);
