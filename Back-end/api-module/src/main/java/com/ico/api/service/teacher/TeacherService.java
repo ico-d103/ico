@@ -36,4 +36,11 @@ public interface TeacherService {
      * @param file
      */
     void certifiedImage(HttpServletRequest request, MultipartFile file);
+
+    /**
+     * 교사가 학생의 비밀번호를 난수로 초기화 해줌
+     * @param studentId
+     * @param request
+     */
+    String resetStudentPassword(Long studentId, HttpServletRequest request);
 }

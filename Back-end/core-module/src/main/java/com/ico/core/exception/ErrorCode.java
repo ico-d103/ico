@@ -69,6 +69,8 @@ public enum ErrorCode{
 
     WRONG_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "114", "휴대폰 번호 양식이 틀렸습니다."),
 
+    NOT_EQUAL_NATION(HttpStatus.BAD_REQUEST, "115", "교사와 학생의 나라가 일치하지 않습니다."),
+
     WRONG_CODE(HttpStatus.BAD_REQUEST, "200", "일치하는 반 코드가 없습니다."),
 
     WRONG_IMMIGRATION(HttpStatus.BAD_REQUEST, "201", "입국 심사를 기다리고 있는 나라가 있습니다."),
