@@ -7,6 +7,7 @@ import useNotification from "@/hooks/useNotification"
 import UseAnimations from "react-useanimations"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import useNavigate from "@/hooks/useNavigate"
 
 const ALERT_ICON = (
 	<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -41,13 +42,13 @@ type FinanceInvestDeleteModalProps = {
 function FinanceInvestDeleteModal({diff, closeComp, refetch }: FinanceInvestDeleteModalProps) {
 	const noti = useNotification()
 	const [value, setValue] = useState<number>(0)
-
+	const navigate = useNavigate()
 
 
 	const submitHandler = () => {
 		deleteFinanceInvestAPI({}).then((res) => {
 			refetch()
-			noti({content: <NotiTemplate type={'ok'} content="투자 매도에 성공했어요!"/>, width: '300px', height: '120px', duration: 3000})
+			noti({content: <NotiTemplate type={'ok'} content="투자 매도에 성공했어요!" buttons={[{label: '내역 보기', function: () => {navigate('/student/home/asset', 'bottomToTop')}}]}/>, width: '300px', height: '120px', duration: 3000})
 			closeComp()
 		})
 		.catch((err) => {

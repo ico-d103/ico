@@ -21,7 +21,7 @@ function FinanceInvestIssueList({ issueList }: FinanceInvestIssueListProps) {
                         {el.content}
                     </div>
                 </div>
-                {date.getMonth() === today.getMonth() && date.getDate() === today.getDate() &&
+                {date.getMonth() === today.getMonth() && date.getDate() === today.getDate() && idx === 0 &&
                 <div css={lineWrapperCSS}>
                     
                     <div css={lineCSS}/>

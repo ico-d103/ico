@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react"
+import React, { useRef, useEffect, useState } from "react"
 import styles from "./Notification.module.css"
 import { stackNotification } from "@/store/store"
 import { useAtom } from "jotai"
@@ -13,7 +13,7 @@ const Notification = (props: any) => {
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
 	const [stackNotificationAtom, setStackNotificationAtom] = useAtom(stackNotification)
 	const duration = props.duration
-
+  const [isClicked, setIsClicked] = useState<boolean>(false)
 
 	useEffect(() => {
 		// if (indicatorRef.current) {
@@ -93,11 +93,11 @@ const Notification = (props: any) => {
 	}, [])
 
 	const notiHandler = () => {
-		
+		setIsClicked(() => true)
 	}
 
 	return (
-		<div ref={popUpRef} onClick={() => notiHandler()} css={initCSS({width: props.width, height: props.height, duration: props.duration})}>
+		<div ref={popUpRef} onClick={() => notiHandler()} css={initCSS({width: props.width, height: props.height, duration: props.duration, isClicked})}>
 			<div ref={contentWrapperRef}  className={`content-wrapper`} css={contentWrapperCSS}>
 				<div css={contentCSS}>{props.content}</div>
 				<div ref={indicatorRef}  css={indicatorCSS({duration})}/>
@@ -106,7 +106,7 @@ const Notification = (props: any) => {
 	)
 }
 
-const initCSS = ({width, height, duration}: {width: number, height: number, duration: number}) => {
+const initCSS = ({width, height, duration, isClicked}: {width: number, height: number, duration: number, isClicked: boolean}) => {
   return css`
 
 position: relative;
@@ -132,8 +132,10 @@ position: relative;
     transform: translate(100vw, 0px);
 		animation-fill-mode: forwards;
     animation-name: step1, step2, step3;
-    animation-delay: 0s, ${duration}ms, ${duration + 300}ms;
+    animation-delay: ${isClicked ? `0ms, 300ms, 600ms` : `0s, ${duration}ms, ${duration + 300}ms`};
     animation-duration: 0.3s, 0.3s, 0.3s;
+
+
     @keyframes step1 {
       from {
         transform: translate(100vw, 0px);
@@ -185,8 +187,10 @@ position: relative;
     transform: translate(100vw, 0px);
 		animation-fill-mode: forwards;
     animation-name: step1, step2, step3;
-    animation-delay: 0s, ${duration}ms, ${duration + 300}ms;
+    animation-delay: ${isClicked ? `0ms, 300ms, 600ms` : `0s, ${duration}ms, ${duration + 300}ms`};
     animation-duration: 0.3s, 0.3s, 0.3s;
+
+
     @keyframes step1 {
       from {
         transform: translate(100vw, 0px);
