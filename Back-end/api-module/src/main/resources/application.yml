@@ -47,6 +47,7 @@ spring:
           time_zone: Asia/Seoul
     open-in-view: false
     defer-datasource-initialization: true
+    
   sql:
     init:
       mode: always
