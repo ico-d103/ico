@@ -1,3 +1,7 @@
+export type getHomeAccountType = {
+	account: number
+}
+
 export type getHomeTransactionHistoryType = {
 	[prop: string]: TransactionIndividualType[]
 }
