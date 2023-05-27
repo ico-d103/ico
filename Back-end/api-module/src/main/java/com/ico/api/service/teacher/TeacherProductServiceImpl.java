@@ -5,6 +5,7 @@ import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.api.service.S3UploadService;
+import com.ico.api.service.inflation.ShopTransactionService;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
@@ -48,6 +49,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
     private final CouponRepository couponRepository;
     private final S3UploadService s3UploadService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final ShopTransactionService shopTransactionService;
 
     /**
      * 교사 상품 등록
@@ -155,6 +157,9 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         // 거래 내역 추가
         transactionService.addTransactionWithdraw("교사 상점", studentId, amount, product.getTitle());
 
+        // 상점 거래 내역 기록
+        shopTransactionService.addShopTransaction(nationId, amount);
+
         // 재고 개수 수정
         product.setSold((byte) (product.getSold() + 1));
 
@@ -226,6 +231,9 @@ public class TeacherProductServiceImpl implements TeacherProductService {
 
         // 거래 내역 추가
         transactionService.addTransactionWithdraw("교사 상점", studentId, amount, product.getTitle());
+
+        // 상점 거래 내역 기록
+        shopTransactionService.addShopTransaction(nationId, amount);
 
         // 재고 개수 수정
         product.setSold((byte) (product.getSold() + 1));
