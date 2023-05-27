@@ -1,6 +1,7 @@
 package com.ico.api.service.user;
 
 import com.ico.api.dto.user.LoginDto;
+import com.ico.api.dto.user.PasswordReqDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -33,4 +34,11 @@ public interface MemberService {
      * @return status
      */
     Map<String, Object> returnStatus(HttpServletRequest request);
+
+    /**
+     * 비밀번호 변경
+     * @param request
+     * @param dto
+     */
+    void changePassword(HttpServletRequest request, PasswordReqDto dto);
 }

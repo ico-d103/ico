@@ -71,6 +71,12 @@ public enum ErrorCode{
 
     NOT_EQUAL_NATION(HttpStatus.BAD_REQUEST, "115", "교사와 학생의 나라가 일치하지 않습니다."),
 
+    WRONG_CHECKED_PW(HttpStatus.BAD_REQUEST, "116", "입력한 비밀번호와 체크 비밀번호가 다릅니다."),
+
+    NOT_FOUND_CHECKED_PW(HttpStatus.BAD_REQUEST, "117", "체크 비밀번호 입력 칸이 비었습니다."),
+
+    DUPLICATED_PASSWORD(HttpStatus.BAD_REQUEST, "118", "현재 비밀번호와 같은 비밀번호입니다."),
+
     WRONG_CODE(HttpStatus.BAD_REQUEST, "200", "일치하는 반 코드가 없습니다."),
 
     WRONG_IMMIGRATION(HttpStatus.BAD_REQUEST, "201", "입국 심사를 기다리고 있는 나라가 있습니다."),

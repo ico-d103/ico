@@ -1,6 +1,7 @@
 package com.ico.api.service.user;
 
 import com.ico.api.dto.user.LoginDto;
+import com.ico.api.dto.user.PasswordReqDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Role;
 import com.ico.core.code.Status;
@@ -103,6 +104,45 @@ public class MemberServiceImpl implements MemberService {
         }
         // Admin 계정이 로그인했을 때
         return Map.of("status", "admin", "role", role);
+    }
+
+    @Override
+    public void changePassword(HttpServletRequest request, PasswordReqDto dto) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Role role = jwtTokenProvider.getRole(token);
+        // 학생일 때 학생의 비밀번호를 변경
+        if (role.equals(Role.STUDENT)) {
+            Student student = studentRepository.findById(jwtTokenProvider.getId(token))
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            // 현재 비밀번호와 입력한 비밀번호의 일치 여부
+            if (passwordEncoder.matches(dto.getPassword(), student.getPassword())) {
+                throw new CustomException(ErrorCode.DUPLICATED_PASSWORD);
+            }
+            // 바꾸는 비밀번호와 체크할 비밀번호의 일치 여부
+            if (!dto.getPassword().equals(dto.getCheckedPassword())) {
+                throw new CustomException(ErrorCode.WRONG_CHECKED_PW);
+            }
+            // 입력한 비밀번호로 교체
+            student.setPassword(dto.getPassword());
+            student.encodeStudentPassword(passwordEncoder);
+            studentRepository.save(student);
+        // 교사일 때 교사의 비밀번호를 변경
+        } else if (role.equals(Role.TEACHER)) {
+            Teacher teacher = teacherRepository.findById(jwtTokenProvider.getId(token))
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            // 현재 비밀번호와 입력한 비밀번호의 일치 여부
+            if (passwordEncoder.matches(dto.getPassword(), teacher.getPassword())) {
+                throw new CustomException(ErrorCode.DUPLICATED_PASSWORD);
+            }
+            // 바꾸는 비밀번호와 체크할 비밀번호의 일치 여부
+            if (!dto.getPassword().equals(dto.getCheckedPassword())) {
+                throw new CustomException(ErrorCode.WRONG_CHECKED_PW);
+            }
+            // 입력한 비밀번호로 교체
+            teacher.setPassword(dto.getPassword());
+            teacher.encodeTeacherPassword(passwordEncoder);
+            teacherRepository.save(teacher);
+        }
     }
 }
 

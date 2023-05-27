@@ -39,6 +39,7 @@ public interface TeacherService {
 
     /**
      * 교사가 학생의 비밀번호를 난수로 초기화 해줌
+     * 발표 끝나고 status 어떻게 보내줄지 고민해보기
      * @param studentId
      * @param request
      */
