@@ -7,15 +7,23 @@ import Button from "@/components/common/Button/Button"
 import { useRouter } from "next/router"
 import useNavigate from "@/hooks/useNavigate"
 
-function purchased() {
+type PurchaseSuccessProps = {
+    purchaseType: 'TEACHER_RENTAL' | 'TEACHER_PURCHASE' | 'STUDENT_PURCHASE'
+    productName: string
+    productSeller: string
+    
+}
+
+
+function PurchaseSuccess({purchaseType, productName, productSeller}: PurchaseSuccessProps) {
 	const router = useRouter()
 	const { purchased } = router.query
 	const navigate = useNavigate()
 
 	const toShop = () => {
-		if (purchased === "teacher_rental" || purchased === "teacher_purchase") {
+		if (purchaseType === "TEACHER_RENTAL" || purchaseType === "TEACHER_PURCHASE") {
 			navigate("/student/shop/teacher", "bottomToTop")
-		} else if (purchased === "student_purchase") {
+		} else if (purchaseType === "STUDENT_PURCHASE") {
 			navigate("/student/shop/student", "bottomToTop")
 		}
 	}
@@ -25,7 +33,7 @@ function purchased() {
 	}
 
 	return (
-		<React.Fragment>
+		<div css={css`width: 100vw; height: 100vh;`}>
 			<PageHeader title={"결제 완료"} />
 			<div css={wrapperCSS}>
 				<div css={topContentWrapperCSS}>
@@ -52,7 +60,7 @@ function purchased() {
 					)}
 				</div>
 			</div>
-		</React.Fragment>
+		</div>
 	)
 }
 
@@ -79,4 +87,4 @@ const buttonWrapperCSS = css`
 	justify-content: space-around;
 `
 
-export default purchased
+export default PurchaseSuccess

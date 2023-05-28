@@ -5,6 +5,7 @@ import { ResponsiveLine } from "@nivo/line"
 import { LineSvgProps } from "@nivo/line"
 import React from "react"
 import { css } from "@emotion/react"
+import useGetNation from "@/hooks/useGetNation"
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
@@ -13,13 +14,19 @@ import { css } from "@emotion/react"
 // you'll often use just a few of them.
 
 const FinanceInvestChart = ({ data }: LineSvgProps) => {
+	const [nation] = useGetNation()
+	const formatXAxisValue = (value:any) => {
+		const date = new Date(value)
+		return `${date.getMonth() + 1}월 ${date.getDate()}일`
+	};
+    const formatYAxisValue = (value:any) => `${value.toLocaleString('ko-KR')}`;
 
     
 	return (
 		<div css={css`width: 100vw; height: 40vh; overflow: hidden; margin-bottom: 16px;`}>
 			<ResponsiveLine
 				data={data}
-				margin={{ top: 4, right: 15, bottom: 30, left: 30 }}
+				margin={{ top: 10, right: 25, bottom: 30, left: 40 }}
 				xScale={{ type: "point" }}
 				yScale={{
 					type: "linear",
@@ -31,6 +38,12 @@ const FinanceInvestChart = ({ data }: LineSvgProps) => {
 				yFormat=" >-.2f"
 				axisTop={null}
 				axisRight={null}
+				axisLeft={{
+					format: formatYAxisValue, // 축 서식화 함수 적용
+				  }}
+				axisBottom={{
+					format: formatXAxisValue, // 축 서식화 함수 적용
+				}}
 				// axisBottom={{
 				// 	// orient: "bottom",
 				// 	tickSize: 5,

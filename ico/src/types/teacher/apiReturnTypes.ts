@@ -175,3 +175,11 @@ export type interstType = {
 	longPeriod: string[]
 	shortPeriod: string[]
 }
+
+
+
+export type getGovEconomyType = {
+	date: string
+	totalAccount: number
+	totalAmount: number
+}

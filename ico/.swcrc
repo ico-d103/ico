@@ -3,6 +3,7 @@
 		"experimental": {
 			"plugins": [["@swc-jotai/react-refresh", {}]]
 		}
+		
+		
 	},
-
 }
