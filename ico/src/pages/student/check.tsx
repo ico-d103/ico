@@ -10,6 +10,7 @@ import LoadImage from "@/components/common/LoadImage/LoadImage"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import useGetTokenStatus from "@/hooks/useGetTokenStatus"
+import { deleteImmigrationAPI } from "@/api/student/user/deleteImmigrationAPI"
 
 function enter() {
 	const router = useRouter()
@@ -64,6 +65,13 @@ function enter() {
 		// navigate("/teacher/login")
 	}
 
+	const deleteImmigrationHandler = () => {
+		deleteImmigrationAPI({})
+		.then((res) => {
+			setTokenStatus({showMessage: false})
+		})
+	}
+
 	return (
 		<div css={checkWrapperCSS}>
 			<div css={logoutWrapperCSS}>
@@ -108,7 +116,7 @@ function enter() {
 			</div>
 			
 
-			<div>코드 다시 입력하기</div>
+			<div onClick={deleteImmigrationHandler} css={delImmiCSS}>코드 다시 입력하기</div>
 		</div>
 	)
 }
@@ -228,6 +236,11 @@ const radialButtonLabelCSS = css`
 	color: white;
 	/* text-shadow: 2px 2px 2px gray; */
 	
+`
+
+const delImmiCSS = css`
+	color: rgba(0, 0, 0, 0.6);
+	font-size: var(--student-h3);
 `
 
 export default enter

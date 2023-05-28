@@ -16,6 +16,7 @@ import {
 	SUB_GOVERNMENT_EXCHEQUER,
 	SUB_GOVERNMENT_JOB,
 	SUB_GOVERNMENT_RULE,
+	SUB_GOVERNMENT_ECONOMY,
 	SUB_FINANCE_DEPOSIT,
 	SUB_FINANCE_STOCK,
 	SUB_STORE_STUDENT,
@@ -163,6 +164,7 @@ function SideBar({ children }: SideBarProps) {
 				menuIndex: 1,
 			},
 			"/teacher/gov/job": { name: "set_job", label: "직업 관리", content: SUB_GOVERNMENT_JOB, menuIndex: 2 },
+			"/teacher/gov/economy": { name: "view_economy", label: "경제 현황", content: SUB_GOVERNMENT_ECONOMY, menuIndex: 3 },
 		},
 		2: {
 			"/teacher/finance/deposit": { name: "set_deposit", label: "예금", content: SUB_FINANCE_DEPOSIT, menuIndex: 0 },
