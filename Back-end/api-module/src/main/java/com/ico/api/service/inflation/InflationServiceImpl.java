@@ -30,7 +30,7 @@ public class InflationServiceImpl implements InflationService{
     @Override
     public List<InflationResDto> findInflation(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
-        List<Inflation> inflationList = inflationRepository.findAllByNationId(nationId);
+        List<Inflation> inflationList = inflationRepository.findAllByNationIdOrderByIdDesc(nationId);
 
         List<InflationResDto> dtoList = new ArrayList<>();
         for (Inflation inflation : inflationList) {

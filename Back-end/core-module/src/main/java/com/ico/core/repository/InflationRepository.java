@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface InflationRepository extends MongoRepository<Inflation, String> {
 
-    List<Inflation> findAllByNationId(Long nationId);
+    List<Inflation> findAllByNationIdOrderByIdDesc(Long nationId);
 
 }
