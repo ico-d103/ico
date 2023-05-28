@@ -12,7 +12,7 @@ const Notification = (props: any) => {
 	const popUpRef = useRef<HTMLDivElement>(null)
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
 	const [stackNotificationAtom, setStackNotificationAtom] = useAtom(stackNotification)
-	const duration = props.duration
+	const [duration, setDuration] = useState<number>(props.duration)
   const [isClicked, setIsClicked] = useState<boolean>(false)
 
 	useEffect(() => {
@@ -94,10 +94,11 @@ const Notification = (props: any) => {
 
 	const notiHandler = () => {
 		setIsClicked(() => true)
+    setDuration(() => 0)
 	}
 
 	return (
-		<div ref={popUpRef} onClick={() => notiHandler()} css={initCSS({width: props.width, height: props.height, duration: props.duration, isClicked})}>
+		<div ref={popUpRef} key={`noti-${props.id}-${duration}`} onClick={() => notiHandler()} css={initCSS({width: props.width, height: props.height, duration: duration, isClicked})}>
 			<div ref={contentWrapperRef}  className={`content-wrapper`} css={contentWrapperCSS}>
 				<div css={contentCSS}>{props.content}</div>
 				<div ref={indicatorRef}  css={indicatorCSS({duration})}/>
@@ -132,7 +133,7 @@ position: relative;
     transform: translate(100vw, 0px);
 		animation-fill-mode: forwards;
     animation-name: step1, step2, step3;
-    animation-delay: ${isClicked ? `0ms, 300ms, 600ms` : `0s, ${duration}ms, ${duration + 300}ms`};
+    animation-delay: 0s, ${duration}ms, ${duration + 300}ms;
     animation-duration: 0.3s, 0.3s, 0.3s;
 
 
@@ -187,7 +188,7 @@ position: relative;
     transform: translate(100vw, 0px);
 		animation-fill-mode: forwards;
     animation-name: step1, step2, step3;
-    animation-delay: ${isClicked ? `0ms, 300ms, 600ms` : `0s, ${duration}ms, ${duration + 300}ms`};
+    animation-delay: 0s, ${duration}ms, ${duration + 300}ms;
     animation-duration: 0.3s, 0.3s, 0.3s;
 
 

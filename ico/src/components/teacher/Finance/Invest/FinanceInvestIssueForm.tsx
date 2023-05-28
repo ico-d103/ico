@@ -39,7 +39,7 @@ function FinanceInvestIssueForm({ data }: FinanceInvestIssueFormProps) {
 
 	const pushInvestTime = () => {
 		putInvestTimeAPI({ body: { tradingStart: tradingStart, tradingEnd: tradingEnd } }).then((res) => {
-			setInitTradingStart(() => initTradingStart)
+			setInitTradingStart(() => tradingStart)
 			setInitTradingEnd(() => tradingEnd)
 			noti({content: <NotiTemplate type={'ok'} content={'투자 시간 변경이 완료되었습니다!'}/>, duration: 5000})
 			console.log(res)

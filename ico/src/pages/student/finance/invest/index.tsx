@@ -43,6 +43,7 @@ const APPLY_ICON = (
 
 function index() {
 	const [chartData, setChartData] = useState<LineSvgProps["data"] | null>(null)
+	const [calcRange, setCalcRange] = useState<number>(0)
 	const [calcStock, setCalcStock] = useState<number>(0)
 	const [calcDiff, setCalcDiff] = useState<number>(0)
 	const [nation] = useGetNation()
@@ -95,6 +96,7 @@ function index() {
 
 			setCalcStock(() => stock)
 			setCalcDiff(() => diff)
+			setCalcRange(() => range)
 		}
 	}, [data])
 
@@ -225,7 +227,10 @@ function index() {
 						<div css={diffLabelCSS({ calcDiff })}>
 							{calcDiff > 0 && "+"}
 							{Math.floor(calcDiff).toLocaleString('ko-KR')} {nation?.currency}
+							&nbsp;
+							({calcDiff > 0 && "+"}{((calcRange - 1) * 100).toFixed(2)}%)
 						</div>
+
 					</ContentWrapper>
 				)}
 				{data && (

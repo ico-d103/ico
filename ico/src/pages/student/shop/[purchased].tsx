@@ -78,4 +78,5 @@ const buttonWrapperCSS = css`
 	display: flex;
 	justify-content: space-around;
 `
+
 export default purchased
