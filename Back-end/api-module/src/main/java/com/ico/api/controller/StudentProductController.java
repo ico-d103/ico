@@ -98,10 +98,21 @@ public class StudentProductController {
      *
      * @param request
      * @param dto 구매 상품 ID, QR 코드 시작 시간
-     * @return
+     * @return 상품 id
      */
     @PostMapping("/student/buy")
-    public ResponseEntity<ProductQRResDto> buyProduct(HttpServletRequest request, @Valid @RequestBody ProductQRReqDto dto){
+    public ResponseEntity<Long> buyProduct(HttpServletRequest request, @Valid @RequestBody ProductQRReqDto dto){
         return ResponseEntity.ok(studentProductService.buyProduct(request, dto));
+    }
+
+    /**
+     * 구매 완료 후 구매 내역 반환
+     *
+     * @param studentProductId
+     * @return
+     */
+    @GetMapping("/student/transaction/{studentProductId}")
+    public ResponseEntity<ProductQRResDto> findBuyTransaction(@PathVariable Long studentProductId) {
+        return ResponseEntity.ok(studentProductService.findBuyTransaction(studentProductId));
     }
 }

@@ -35,16 +35,18 @@ public interface TeacherProductService {
      * 쿠폰 유형의 교사 상품을 구매합니다.
      *
      * @param id 상품 id
+     * @return 상품 id
      */
-    void buyProduct(HttpServletRequest request, Long id);
+    Long buyProduct(HttpServletRequest request, Long id);
 
     /**
      * QR스캔을 통한 교사 상품 대여
      *
      * @param request
      * @param dto qr 시작 시간, 상품 id
+     * @return 상품 id
      */
-    ProductQRResDto rentalProduct(HttpServletRequest request, ProductQRReqDto dto);
+    Long rentalProduct(HttpServletRequest request, ProductQRReqDto dto);
 
     /**
      * 교사 상품 상세정보 조회
@@ -61,4 +63,12 @@ public interface TeacherProductService {
      * @param teacherProductId
      */
     void deleteTeacherProduct(Long teacherProductId);
+
+    /**
+     * 구매 완료 후 구매 내역 반환
+     *
+     * @param teacherProductId
+     * @return
+     */
+    ProductQRResDto findBuyTransaction(Long teacherProductId);
 }
