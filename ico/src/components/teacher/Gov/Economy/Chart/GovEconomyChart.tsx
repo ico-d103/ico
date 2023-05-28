@@ -19,13 +19,13 @@ const GovEconomyChart = ({ data }: LineSvgProps) => {
 		const date = new Date(value)
 		return `${date.getMonth() + 1}월 ${date.getDate()}일`
 	};
-    const formatYAxisValue = (value:any, space=true) => `${Number(value).toLocaleString('ko-KR')} ${nation.currency}${space ? `\u00A0 \u00A0` : ''}`;
+    const formatYAxisValue = (value:any, space=true) => `${Number(value).toLocaleString('ko-KR')} ${nation.currency}${space ? `\u00A0 \u00A0 \u00A0 \u00A0 \u00A0` : ''}`;
 
 	return (
 		<div css={css`width: 100%; height: 40vh; overflow: hidden; margin-bottom: 16px;`}>
 			<ResponsiveLine
 				data={data}
-				margin={{ top: 50, right: 120, bottom: 30, left: 120 }}
+				margin={{ top: 50, right: 140, bottom: 30, left: 140 }}
 				xScale={{ type: "point" }}
 				yScale={{
 					type: "linear",
@@ -65,6 +65,7 @@ const GovEconomyChart = ({ data }: LineSvgProps) => {
 				pointColor={{ theme: "background" }}
 				pointBorderWidth={2}
 				pointBorderColor={{ from: "serieColor" }}
+				
 				pointLabelYOffset={-12}
 				useMesh={true}
                 curve={'monotoneX'}
@@ -72,6 +73,9 @@ const GovEconomyChart = ({ data }: LineSvgProps) => {
                 // areaBaselineValue={4}
                 gridYValues={5}
 				enablePointLabel={true}
+				pointLabel={(data) => {
+					return formatYAxisValue(data.y, false)
+				}}
                 // enableGridX={false}
                 // enableGridY={false}
 				legends={[

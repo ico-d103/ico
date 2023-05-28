@@ -11,14 +11,14 @@ const FinanceInvestChart = ({ data }: LineSvgProps) => {
 		const date = new Date(value)
 		return `${date.getMonth() + 1}월 ${date.getDate()}일`
 	};
-    const formatYAxisValue = (value:any, space=true) => `${Number(value).toLocaleString('ko-KR')} ${nation.currency}${space ? `\u00A0 \u00A0` : ''}`;
+    const formatYAxisValue = (value:any, space=true) => `${Number(value).toLocaleString('ko-KR')} ${nation.currency}${space ? `\u00A0 \u00A0 \u00A0 \u00A0 \u00A0` : ''}`;
 
 
 	console.log(data[0].data)
 	return (
 		<div
 			css={css`
-				width: 65vw;
+				width: 100%;
 				height: 40vh;
 				overflow: hidden;
 				margin-bottom: 16px;
@@ -26,7 +26,7 @@ const FinanceInvestChart = ({ data }: LineSvgProps) => {
 		>
 			<ResponsiveLine
 				data={data}
-				margin={{ top: 60, right: 120, bottom: 30, left: 120 }}
+				margin={{ top: 60, right: 140, bottom: 30, left: 140 }}
 				xScale={{ type: "point" }}
 				yScale={{
 					type: "linear",
@@ -63,6 +63,9 @@ const FinanceInvestChart = ({ data }: LineSvgProps) => {
 				// 	legendPosition: "middle",
 				// }}
 				enablePointLabel={true}
+				pointLabel={(data) => {
+					return formatYAxisValue(data.y, false)
+				}}
 				pointSize={10}
 				pointColor={{ theme: "background" }}
 				pointBorderWidth={2}
