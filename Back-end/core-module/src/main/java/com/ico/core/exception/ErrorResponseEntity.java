@@ -30,7 +30,7 @@ public class ErrorResponseEntity {
      * @param e
      * @return CustomException Response
      */
-    public static ResponseEntity<ErrorResponseEntity> toReponseEntity(ErrorCode e) {
+    public static ResponseEntity<ErrorResponseEntity> toResponseEntity(ErrorCode e) {
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(ErrorResponseEntity.builder()
@@ -46,7 +46,7 @@ public class ErrorResponseEntity {
      * @param e
      * @return Validation Exception Response
      */
-    public static ResponseEntity<ErrorResponseEntity> toReponseEntity(MethodArgumentNotValidException e) {
+    public static ResponseEntity<ErrorResponseEntity> toResponseEntity(MethodArgumentNotValidException e) {
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
         FieldError fieldError = fieldErrors.get(fieldErrors.size()-1);  // 가장 첫 번째 에러 필드
         String fieldName = fieldError.getField();   // 필드명
@@ -67,7 +67,7 @@ public class ErrorResponseEntity {
      * @param e
      * @return
      */
-    public static ResponseEntity<ErrorResponseEntity> toReponseEntity(MaxUploadSizeExceededException e) {
+    public static ResponseEntity<ErrorResponseEntity> toResponseEntity(MaxUploadSizeExceededException e) {
         return ResponseEntity
                 .status(HttpStatus.BAD_GATEWAY)
                         .body(ErrorResponseEntity.builder()
