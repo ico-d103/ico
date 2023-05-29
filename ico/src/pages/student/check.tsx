@@ -66,9 +66,8 @@ function enter() {
 	}
 
 	const deleteImmigrationHandler = () => {
-		deleteImmigrationAPI({})
-		.then((res) => {
-			setTokenStatus({showMessage: false})
+		deleteImmigrationAPI({}).then((res) => {
+			setTokenStatus({ showMessage: false })
 		})
 	}
 
@@ -102,21 +101,15 @@ function enter() {
 					margin-bottom: 36px;
 				`}
 			></Button> */}
-			<div css={radialButtonOuterCSS}>
-				
-			<div css={radialButtonInner1CSS}>
+			<div css={radialButtonOuterCSS} onClick={refreshToken}>
+				<div css={radialButtonInner1CSS}></div>
+				<div css={radialButtonInner2CSS}></div>
+				<div css={radialButtonLabelCSS}>입장</div>
+			</div>
 
+			<div onClick={deleteImmigrationHandler} css={delImmiCSS}>
+				코드 다시 입력하기
 			</div>
-			<div css={radialButtonInner2CSS}>
-
-			</div>
-			<div css={radialButtonLabelCSS}>
-				입장
-			</div>
-			</div>
-			
-
-			<div onClick={deleteImmigrationHandler} css={delImmiCSS}>코드 다시 입력하기</div>
 		</div>
 	)
 }
@@ -156,7 +149,6 @@ const radialButtonOuterCSS = css`
 	height: 70vw;
 
 	background: linear-gradient(90deg, #7080fa, #40fef1);
-
 `
 
 const radialButtonInner1CSS = css`
@@ -187,7 +179,6 @@ const radialButtonInner1CSS = css`
 	}
 `
 
-
 const radialButtonInner2CSS = css`
 	border: none;
 	border-radius: 100%;
@@ -217,8 +208,6 @@ const radialButtonInner2CSS = css`
 	}
 `
 
-
-
 const radialButtonLabelCSS = css`
 	position: absolute;
 	z-index: 10;
@@ -231,11 +220,10 @@ const radialButtonLabelCSS = css`
 	font-weight: 500;
 	opacity: 100%;
 
-	border-radius:100%;
+	border-radius: 100%;
 	overflow: hidden;
 	color: white;
 	/* text-shadow: 2px 2px 2px gray; */
-	
 `
 
 const delImmiCSS = css`
