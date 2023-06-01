@@ -30,8 +30,6 @@ public class TeacherController {
 
     private final TeacherService teacherService;
 
-
-
     /**
      * 교사 회원가입
      *
@@ -66,5 +64,16 @@ public class TeacherController {
     public ResponseEntity<HttpStatus> certifiedImage(HttpServletRequest request, @RequestPart("file") MultipartFile file) {
         teacherService.certifiedImage(request, file);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 교사가 학생의 비밀번호를 초기화
+     * @param studentId
+     * @param request
+     * @return random password
+     */
+    @PutMapping("/teacher/{studentId}")     // token 이 있을 때 3번째에 teacher 이어야지 role 통과 가능
+    public ResponseEntity<String> resetPassword(@PathVariable Long studentId, HttpServletRequest request) {
+        return ResponseEntity.ok(teacherService.resetStudentPassword(studentId, request));
     }
 }

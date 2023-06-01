@@ -1,6 +1,7 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.user.LoginDto;
+import com.ico.api.dto.user.PasswordReqDto;
 import com.ico.api.service.user.MemberService;
 import com.ico.api.user.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -8,9 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -57,7 +60,7 @@ public class MemberController {
      * 교사와 학생의 정보가 업데이트 될 때 토큰을 업데이트 하는 것
      *
      * @param request
-     * @return
+     * @return token
      */
     @PostMapping("/token")
     public ResponseEntity<?> updateToken(HttpServletRequest request) {
@@ -73,5 +76,28 @@ public class MemberController {
     @GetMapping("/status")
     public ResponseEntity<Map<String, Object>> getStatus(HttpServletRequest request) {
         return ResponseEntity.ok(memberService.returnStatus(request));
+    }
+
+    /**
+     * 비밀번호 변경(공통)
+     * @param request
+     * @param dto
+     * @return ok
+     */
+    @PutMapping("/change-pw")
+    public ResponseEntity<HttpStatus> changePassword(HttpServletRequest request, @RequestBody PasswordReqDto dto) {
+        memberService.changePassword(request, dto);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 비밀번호 변경안하기(공통)
+     * @param request
+     * @return ok
+     */
+    @PutMapping("/not-change-pw")
+    public ResponseEntity<HttpStatus> changePassword(HttpServletRequest request) {
+        memberService.notChangePassword(request);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

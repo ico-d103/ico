@@ -13,6 +13,7 @@ import com.ico.api.service.S3UploadService;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
+import com.ico.core.code.Password;
 import com.ico.core.code.Role;
 import com.ico.core.document.Deposit;
 import com.ico.core.document.Transaction;
@@ -88,6 +89,7 @@ public class StudentServiceImpl implements StudentService{
                 .creditRating((byte) 6)
                 .role(Role.STUDENT)
                 .salary(0)
+                .pwStatus(Password.OK)
                 .build();
 
         if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()

@@ -3,9 +3,11 @@ package com.ico.api.service.teacher;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.core.code.Password;
 import com.ico.core.code.Role;
 import com.ico.core.code.Status;
 import com.ico.core.entity.Certification;
+import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
@@ -149,5 +151,34 @@ public class TeacherServiceImpl implements TeacherService {
                 .image(image)
                 .build();
         certificationRepository.save(certification);
+    }
+
+    @Override
+    public String resetStudentPassword(Long studentId, HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        // 같은 반의 학생인지 체크
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        boolean isNation = jwtTokenProvider.getNation(token).equals(student.getNation().getId());
+        if (!isNation) {
+            throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
+        }
+        // 8자리의 난수 코드 생성
+        String randomNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!";
+        StringBuilder pwBuilder = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 8; i++) {
+            int digit = random.nextInt(randomNum.length());
+            pwBuilder.append(randomNum.charAt(digit));
+        }
+        String password = pwBuilder.toString();
+        // 학생의 패스워드 수정
+        student.setPassword(password);
+        // 암호화
+        student.encodeStudentPassword(passwordEncoder);
+        student.setPwStatus(Password.RESET);
+        studentRepository.save(student);
+
+        return password;
     }
 }
