@@ -157,15 +157,12 @@ public class TeacherServiceImpl implements TeacherService {
     public String resetStudentPassword(Long studentId, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         // 교사인지 체크
-        boolean role = jwtTokenProvider.getRole(token).equals(Role.TEACHER);
-        if (!role) {
-            throw new CustomException(ErrorCode.WRONG_ROLE);
-        }
+        boolean isTeacher = jwtTokenProvider.getRole(token).equals(Role.TEACHER);
         // 같은 반의 학생인지 체크
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        boolean nation = jwtTokenProvider.getNation(token).equals(student.getNation().getId());
-        if (!nation) {
+        boolean isNation = jwtTokenProvider.getNation(token).equals(student.getNation().getId());
+        if (!isNation) {
             throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
         }
         // 8자리의 난수 코드 생성

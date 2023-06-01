@@ -77,6 +77,7 @@ public class Student {
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "pw_status")
     private Password pwStatus;
 
     public void encodeStudentPassword(PasswordEncoder passwordEncoder){
