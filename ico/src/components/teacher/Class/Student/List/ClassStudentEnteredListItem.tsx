@@ -107,6 +107,12 @@ const leftWrapperCSS = css`
 	> h5 {
 		font-size: var(--teacher-h5);
 	}
+
+	> input {
+		width: 20px;
+		height: 20px;
+		cursor: pointer;
+	}
 `
 
 const numberCSS = css`
