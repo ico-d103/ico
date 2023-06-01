@@ -50,6 +50,14 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Student> findAllByNationId(Long nationId);
 
     /**
+     * 신용점수 체크 학생에게 일괄 부여
+     *
+     * @param studentIds
+     * @return
+     */
+    List<Student> findAllByIdIn(List<Long> studentIds);
+
+    /**
      * 직업이 배정된 학생 목록 조회
      *
      * @param pageable
