@@ -3,12 +3,14 @@ package com.ico.api.service.user;
 import com.ico.api.dto.user.LoginDto;
 import com.ico.api.dto.user.PasswordReqDto;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.core.code.Password;
 import com.ico.core.code.Role;
 import com.ico.core.code.Status;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.CertificationRepository;
 import com.ico.core.repository.ImmigrationRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
@@ -34,6 +36,7 @@ public class MemberServiceImpl implements MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final ImmigrationRepository immigrationRepository;
+    private final CertificationRepository certificationRepository;
 
     @Override
     public String login(LoginDto members) {
@@ -66,12 +69,16 @@ public class MemberServiceImpl implements MemberService {
         Role role = jwtTokenProvider.getRole(token);
         Long memberId = jwtTokenProvider.getId(token);
         if (role.equals(Role.STUDENT)) {
+            Student student = studentRepository.findById(memberId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            // 학생의 비밀번호가 초기화 되었을 때
+            if (student.getPwStatus().equals(Password.RESET)) {
+                return Map.of("status", "require_change_password", "role", role);
+            }
             if (jwtTokenProvider.getNation(token) != null) {
                 // 학생의 토큰에 NationId 값이 있을 때
                 return Map.of("status", "approved", "role", role);
             } else {
-                Student student = studentRepository.findById(memberId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
                 if (student.getNation() != null) {
                     // 학생이 반 코드 요청을 보냈고 교사에게 승인 받은 후
                     return Map.of("status", "require_refresh_token", "role", role);
@@ -125,6 +132,8 @@ public class MemberServiceImpl implements MemberService {
             // 입력한 비밀번호로 교체
             student.setPassword(dto.getPassword());
             student.encodeStudentPassword(passwordEncoder);
+            // 상태를 초기화
+            student.setPwStatus(Password.OK);
             studentRepository.save(student);
         // 교사일 때 교사의 비밀번호를 변경
         } else if (role.equals(Role.TEACHER)) {
@@ -143,6 +152,20 @@ public class MemberServiceImpl implements MemberService {
             teacher.encodeTeacherPassword(passwordEncoder);
             teacherRepository.save(teacher);
         }
+    }
+
+    @Override
+    public void notChangePassword(HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Role role = jwtTokenProvider.getRole(token);
+        // 비밀번호를 변경하지 않고 싶을 때 상태 업데이트
+        if (role.equals(Role.STUDENT)) {
+            Student student = studentRepository.findById(jwtTokenProvider.getId(token))
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            student.setPwStatus(Password.OK);
+            studentRepository.save(student);
+        }
+        // TODO : 교사는 나중에 추가
     }
 }
 

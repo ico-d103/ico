@@ -3,6 +3,7 @@ package com.ico.api.service.teacher;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.core.code.Password;
 import com.ico.core.code.Role;
 import com.ico.core.code.Status;
 import com.ico.core.entity.Certification;
@@ -154,7 +155,6 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public String resetStudentPassword(Long studentId, HttpServletRequest request) {
-        // 체크 후 학생의 비밀번호를 난수로 변경하고 교사에게 보여주기, 변경 된 사람들은 비밀번호 변경하기 탭으로 이동할 수 있는 모달 띄워주기
         String token = jwtTokenProvider.parseJwt(request);
         // 교사인지 체크
         boolean role = jwtTokenProvider.getRole(token).equals(Role.TEACHER);
@@ -181,6 +181,7 @@ public class TeacherServiceImpl implements TeacherService {
         student.setPassword(password);
         // 암호화
         student.encodeStudentPassword(passwordEncoder);
+        student.setPwStatus(Password.RESET);
         studentRepository.save(student);
 
         return password;

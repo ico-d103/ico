@@ -89,4 +89,15 @@ public class MemberController {
         memberService.changePassword(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    /**
+     * 비밀번호 변경안하기(공통)
+     * @param request
+     * @return ok
+     */
+    @PutMapping("/not-change-pw")
+    public ResponseEntity<HttpStatus> changePassword(HttpServletRequest request) {
+        memberService.notChangePassword(request);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 }
