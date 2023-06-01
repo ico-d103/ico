@@ -156,8 +156,6 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public String resetStudentPassword(Long studentId, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
-        // 교사인지 체크
-        boolean isTeacher = jwtTokenProvider.getRole(token).equals(Role.TEACHER);
         // 같은 반의 학생인지 체크
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
