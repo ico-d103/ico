@@ -6,6 +6,7 @@ import useGetNation from "@/hooks/useGetNation"
 import { CLASS_GRADE_DOWN, CLASS_GRADE_UP } from "../../ClassIcons"
 import Button from "@/components/common/Button/Button"
 import Input from "@/components/common/Input/Input"
+import CollapseMenuStudentDetail from "@/components/teacher/common/CollapseMenu/CollapseMenuStudentDetail"
 
 type StudentEnteredListItemPropsType = {
 	student: getStudentListType
@@ -21,55 +22,60 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 	}
 
 	return (
-		<div css={wrapperCSS(idx)} onClick={() => openStudentDetailHandler(student.id)}>
-			<div css={leftWrapperCSS}>
-				<input type="checkbox" />
-				<h5 css={numberCSS}>{student.number}</h5>
-				<h5 css={nameCSS}>{student.name}</h5>
-				<h5 css={jobCSS}>{student.job ? student.job : "무직"}</h5>
-			</div>
-			<div css={divideCSS}></div>
-			<div css={middleWrapperCSS}>
-				<h5 css={creditCSS}>{student.creditRating}등급</h5>
-				<div css={buttonWrapperCSS}>
-					<div>{CLASS_GRADE_UP}</div>
-					<h4>{student.creditRating} 점</h4>
-					<div>{CLASS_GRADE_DOWN}</div>
-				</div>
-			</div>
-			<div css={divideCSS}></div>
-			<div css={rightWrapperCSS}>
-				<h5 css={amountCSS}>
-					{student.amount} {nation.currency}
-				</h5>
-				<Input theme={"greenDefault"} placeholder="사유를 입력해 주세요" customCss={reasonCSS} />
-				<Input theme={"greenDefault"} placeholder={nation.currency} customCss={moneyCSS} />
-				<Button
-					text={"지급"}
-					fontSize={`var(--teacher-h6)`}
-					width={"50px"}
-					height={"30px"}
-					theme={"managePlus"}
-					margin={"0 10px 0 0"}
-					onClick={() => {}}
-				/>
-				<Button
-					text={"차감"}
-					fontSize={`var(--teacher-h6)`}
-					width={"50px"}
-					height={"30px"}
-					theme={"manageMinus"}
-					onClick={() => {}}
-				/>
-			</div>
-			{/* <div css={rightWrapperCSS}>
+		<CollapseMenuStudentDetail
+			titleChildren={
+				<div css={wrapperCSS(idx)} onClick={() => openStudentDetailHandler(student.id)}>
+					<div css={leftWrapperCSS}>
+						<input type="checkbox" />
+						<h5 css={numberCSS}>{student.number}</h5>
+						<h5 css={nameCSS}>{student.name}</h5>
+						<h5 css={jobCSS}>{student.job ? student.job : "무직"}</h5>
+					</div>
+					<div css={divideCSS}></div>
+					<div css={middleWrapperCSS}>
+						<h5 css={creditCSS}>{student.creditRating}등급</h5>
+						<div css={buttonWrapperCSS}>
+							<div>{CLASS_GRADE_UP}</div>
+							<h4>{student.creditRating} 점</h4>
+							<div>{CLASS_GRADE_DOWN}</div>
+						</div>
+					</div>
+					<div css={divideCSS}></div>
+					<div css={rightWrapperCSS}>
+						<h5 css={amountCSS}>
+							{student.amount} {nation.currency}
+						</h5>
+						<Input theme={"greenDefault"} placeholder="사유를 입력해 주세요" customCss={reasonCSS} />
+						<Input theme={"greenDefault"} placeholder={nation.currency} customCss={moneyCSS} />
+						<Button
+							text={"지급"}
+							fontSize={`var(--teacher-h6)`}
+							width={"50px"}
+							height={"30px"}
+							theme={"managePlus"}
+							margin={"0 10px 0 0"}
+							onClick={() => {}}
+						/>
+						<Button
+							text={"차감"}
+							fontSize={`var(--teacher-h6)`}
+							width={"50px"}
+							height={"30px"}
+							theme={"manageMinus"}
+							onClick={() => {}}
+						/>
+					</div>
+					{/* <div css={rightWrapperCSS}>
 				<div css={currencyWrapperCSS}>
 					<div css={amountWrapperCSS}>{student.amount}</div>
 					{nation.currency}
 				</div>
 				<div css={creditWrapperCSS}>{student.creditRating}등급</div>
 			</div> */}
-		</div>
+				</div>
+			}
+			contentChildren={<></>}
+		></CollapseMenuStudentDetail>
 	)
 }
 
@@ -77,7 +83,8 @@ const wrapperCSS = (idx: number) => {
 	return css`
 		width: 100%;
 		padding: 15px 15px;
-		background-color: ${idx % 2 === 0 ? `var(--teacher-main-color-op-2)` : `var(--common-back-color-2)`};
+		/* background-color: ${idx % 2 === 0 ? `var(--teacher-main-color-op-2)` : `var(--common-back-color-2)`}; */
+		background-color: var(--common-back-color-2);
 		border-radius: 10px;
 
 		display: flex;
