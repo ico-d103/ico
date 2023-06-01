@@ -1,5 +1,6 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.nation.CreditScoreAllReqDto;
 import com.ico.api.dto.nation.CreditScoreReqDto;
 import com.ico.api.dto.student.StudentAllResDto;
 import com.ico.api.dto.student.StudentListResDto;
@@ -161,7 +162,7 @@ public class StudentController {
      * @return
      */
     @PostMapping("/teacher/credit-score")
-    public ResponseEntity<HttpStatus> postAllCreditScore(@Valid @RequestBody CreditScoreReqDto dto, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> postAllCreditScore(@Valid @RequestBody CreditScoreAllReqDto dto, HttpServletRequest request) {
         studentService.postAllCreditScore(dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
