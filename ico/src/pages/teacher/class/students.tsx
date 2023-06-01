@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import { css } from "@emotion/react"
 import StudentList from "@/components/teacher/Class/Student/List/ClassStudentList"
 import StudentDetail from "@/components/teacher/Class/Student/Detail/ClassStudentDetail"
@@ -8,10 +8,9 @@ import Modal from "@/components/common/Modal/Modal"
 import { useAtom } from "jotai"
 import { selectedStudent } from "@/store/store"
 
-
 function students() {
 	const [openComp, closeComp, compState] = useCompHandler()
-	const isDeskTop = useMediaQuery('(min-width: 1440px')
+	const isDeskTop = useMediaQuery("(min-width: 1440px")
 	const [selectedStudentAtom, setSelectedStudentAtom] = useAtom(selectedStudent)
 
 	useEffect(() => {
@@ -26,11 +25,20 @@ function students() {
 	}
 
 	const modalContent = (
-		<div  css={modalWrapperCSS} onClick={() => {closeModalHandler()}}>
-			<div css={modalInnerWrapperCSS} onClick={(e) => {e.stopPropagation()}}>
+		<div
+			css={modalWrapperCSS}
+			onClick={() => {
+				closeModalHandler()
+			}}
+		>
+			<div
+				css={modalInnerWrapperCSS}
+				onClick={(e) => {
+					e.stopPropagation()
+				}}
+			>
 				<StudentDetail />
 			</div>
-			
 		</div>
 	)
 
@@ -38,10 +46,9 @@ function students() {
 		<div css={wrapperCSS}>
 			<div css={leftWrapperCSS}>
 				<StudentList />
-				
 			</div>
 
-			{isDeskTop ? (
+			{/* {isDeskTop ? (
 				<div css={rightWrapperCSS}>
 					<div css={detailWrapperCSS}>
 						<StudentDetail />
@@ -49,7 +56,7 @@ function students() {
 				</div>
 			) : (
 				<Modal closeComp={closeComp} compState={compState} transition={"rightToLeft"} content={modalContent} />
-			)}
+			)} */}
 		</div>
 	)
 }
@@ -73,7 +80,7 @@ const leftWrapperCSS = css`
 const rightWrapperCSS = css`
 	flex: 1;
 	/* height: 70vh; */
-	
+
 	width: 50%;
 	display: flex;
 	flex-direction: column;
@@ -98,7 +105,6 @@ const modalWrapperCSS = css`
 	display: flex;
 	justify-content: flex-end;
 	padding: 64px 64px;
-
 `
 
 const modalInnerWrapperCSS = css`
@@ -112,22 +118,16 @@ const modalInnerWrapperCSS = css`
 	overflow-x: hidden;
 
 	&::-webkit-scrollbar {
+	}
 
-	
-}
+	&::-webkit-scrollbar-thumb {
+		background: rgba(0, 0, 0, 0.1);
+	}
 
-&::-webkit-scrollbar-thumb {
-
-	background: rgba(0, 0, 0, 0.1);
-}
-
-
-&::-webkit-scrollbar-track {
-	margin-top: 6px;
-	margin-bottom: 6px;
-	
-	
-}
+	&::-webkit-scrollbar-track {
+		margin-top: 6px;
+		margin-bottom: 6px;
+	}
 `
 
 export default students

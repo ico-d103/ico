@@ -3,6 +3,9 @@ import { getStudentListType } from "@/types/teacher/apiReturnTypes"
 import { useSetAtom } from "jotai"
 import { selectedStudent } from "@/store/store"
 import useGetNation from "@/hooks/useGetNation"
+import { CLASS_GRADE_DOWN, CLASS_GRADE_UP } from "../../ClassIcons"
+import Button from "@/components/common/Button/Button"
+import Input from "@/components/common/Input/Input"
 
 type StudentEnteredListItemPropsType = {
 	student: getStudentListType
@@ -20,17 +23,52 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 	return (
 		<div css={wrapperCSS(idx)} onClick={() => openStudentDetailHandler(student.id)}>
 			<div css={leftWrapperCSS}>
-				<h4>{student.number}</h4>
-				<h4>{student.name}</h4>
-				<h4>{student.job}</h4>
+				<input type="checkbox" />
+				<h5 css={numberCSS}>{student.number}</h5>
+				<h5 css={nameCSS}>{student.name}</h5>
+				<h5 css={jobCSS}>{student.job ? student.job : "무직"}</h5>
 			</div>
+			<div css={divideCSS}></div>
+			<div css={middleWrapperCSS}>
+				<h5 css={creditCSS}>{student.creditRating}등급</h5>
+				<div css={buttonWrapperCSS}>
+					<div>{CLASS_GRADE_UP}</div>
+					<h4>{student.creditRating} 점</h4>
+					<div>{CLASS_GRADE_DOWN}</div>
+				</div>
+			</div>
+			<div css={divideCSS}></div>
 			<div css={rightWrapperCSS}>
+				<h5 css={amountCSS}>
+					{student.amount} {nation.currency}
+				</h5>
+				<Input theme={"greenDefault"} placeholder="사유를 입력해 주세요" customCss={reasonCSS} />
+				<Input theme={"greenDefault"} placeholder={nation.currency} customCss={moneyCSS} />
+				<Button
+					text={"지급"}
+					fontSize={`var(--teacher-h6)`}
+					width={"50px"}
+					height={"30px"}
+					theme={"managePlus"}
+					margin={"0 10px 0 0"}
+					onClick={() => {}}
+				/>
+				<Button
+					text={"차감"}
+					fontSize={`var(--teacher-h6)`}
+					width={"50px"}
+					height={"30px"}
+					theme={"manageMinus"}
+					onClick={() => {}}
+				/>
+			</div>
+			{/* <div css={rightWrapperCSS}>
 				<div css={currencyWrapperCSS}>
 					<div css={amountWrapperCSS}>{student.amount}</div>
 					{nation.currency}
 				</div>
 				<div css={creditWrapperCSS}>{student.creditRating}등급</div>
-			</div>
+			</div> */}
 		</div>
 	)
 }
@@ -38,7 +76,7 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 const wrapperCSS = (idx: number) => {
 	return css`
 		width: 100%;
-		padding: 10px 15px;
+		padding: 15px 15px;
 		background-color: ${idx % 2 === 0 ? `var(--teacher-main-color-op-2)` : `var(--common-back-color-2)`};
 		border-radius: 10px;
 
@@ -55,61 +93,88 @@ const wrapperCSS = (idx: number) => {
 	`
 }
 
+const divideCSS = css`
+	height: 40px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+`
+
 const leftWrapperCSS = css`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	gap: 15px;
 
-	> h4 {
-		font-size: var(--teacher-h4);
+	> h5 {
+		font-size: var(--teacher-h5);
 	}
+`
 
-	> h4:nth-of-type(1) {
-		font-weight: bold;
-	}
+const numberCSS = css`
+	min-width: 20px;
+`
 
-	> h4:nth-of-type(2) {
-		min-width: 70px;
+const nameCSS = css`
+	font-weight: bold;
+	min-width: 55px;
+`
+
+const jobCSS = css`
+	min-width: 110px;
+	color: var(--teacher-gray-color);
+`
+
+const creditCSS = css`
+	min-width: 30px;
+	font-weight: bold;
+`
+
+const amountCSS = css`
+	min-width: 100px;
+	font-weight: bold;
+`
+
+const middleWrapperCSS = css`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 20px;
+`
+
+const buttonWrapperCSS = css`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	min-width: 130px;
+
+	> div {
+		cursor: pointer;
+		transition: all 0.2s;
+
+		:hover {
+			transform: scale(1.2);
+		}
 	}
 `
 
 const rightWrapperCSS = css`
-	padding: 3px 3px 3px 0px;
-	background-color: var(--teacher-main-color);
-	border-radius: 5px;
-	/* width: 200px; */
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-
-	> div {
-		padding: 10px;
-	}
-
-	> div:nth-of-type(1) {
-		color: var(--common-back-color-2);
-	}
-
-	> div:nth-of-type(2) {
-		background-color: var(--common-back-color-2);
-		border-radius: 3px 3px 3px 3px;
-	}
+	justify-content: space-between;
 `
 
-const currencyWrapperCSS = css`
-	display: flex;
+const reasonCSS = css`
+	width: 300px;
+	height: 30px;
+	margin-right: 20px;
 `
 
-const amountWrapperCSS = css`
-	/* width: 70px; */
-	text-align: right;
-`
-
-const creditWrapperCSS = css`
-	width: 65px;
-	display: flex;
-	justify-content: center;
+const moneyCSS = css`
+	width: 100px;
+	height: 30px;
+	margin-right: 20px;
 `
 
 export default StudentEnteredListItem

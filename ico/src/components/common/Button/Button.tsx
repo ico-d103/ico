@@ -27,7 +27,7 @@ function Button({ text, fontSize, width, height, theme, margin, onClick, disable
 	return (
 		<button
 			disabled={disabled}
-			css={[initCSS({ fontSize, width, height, margin }), buttonCSS({ theme }), cssProps ]}
+			css={[initCSS({ fontSize, width, height, margin }), buttonCSS({ theme }), cssProps]}
 			onClick={onClick}
 		>
 			{/* <button disabled={disabled} css={buttonCSS({ fontSize, width, height, themes, theme, margin })} onClick={onClick}></button> */}
@@ -167,7 +167,6 @@ const buttonCSS = ({ theme }: { theme: string }) => {
 			border-radius: 20px;
 			background-color: var(--student-main-color-7);
 			color: var(--student-main-color-6);
-			
 		`,
 		mobileCancel: css`
 			border: none;
@@ -198,6 +197,18 @@ const buttonCSS = ({ theme }: { theme: string }) => {
 					box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.5);
 				}
 			}
+		`,
+		managePlus: css`
+			border: none;
+			border-radius: 20px;
+			background-color: var(--teacher-main-color-2);
+			color: #ffffff;
+		`,
+		manageMinus: css`
+			border: none;
+			border-radius: 20px;
+			background-color: var(--teacher-gray2-color);
+			color: var(--teacher-gray-color);
 		`,
 	}
 

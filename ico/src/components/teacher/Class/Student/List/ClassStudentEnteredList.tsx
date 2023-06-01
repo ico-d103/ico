@@ -16,59 +16,69 @@ function StudentEnteredList() {
 	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
 	const [openDeleteModal, closeDeleteModal, deleteModalState] = useCompHandler()
 
-	const queryClient = useQueryClient();
-	const resetStudentsJobMutation = useMutation((a:number) => putResetStudentsJobAPI());
-
+	const queryClient = useQueryClient()
+	const resetStudentsJobMutation = useMutation((a: number) => putResetStudentsJobAPI())
 
 	const resetStudentsJob = () => {
 		resetStudentsJobMutation.mutate(0, {
-			onSuccess: formData => {
+			onSuccess: () => {
 				noti({
 					content: <NotiTemplate type={"ok"} content={"직업을 초기화했습니다."} />,
 					duration: 3000,
 				})
-			  return queryClient.invalidateQueries(["studentList", "entered"]); // 'return' wait for invalidate
-				
+
+				return queryClient.invalidateQueries(["studentList", "entered"])
 			},
-			
-			onError: err => 
+			onError: () => {
 				noti({
 					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
 					duration: 3000,
-				}),
-				 
-			
-		
+				})
+			},
 		})
-
-
-		// putResetStudentsJobAPI()
-		// 	.then(() => {
-		// 		noti({
-		// 			content: <NotiTemplate type={"ok"} content={"직업을 초기화했습니다."} />,
-		// 			duration: 3000,
-		// 		})
-		// 	})
-		// 	.catch(() =>
-		// 		noti({
-		// 			content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
-		// 			duration: 3000,
-		// 		}),
-		// 	)
 	}
 
 	const dropdownList = [
 		{
-			name: "reset",
+			name: "resetJob",
 			content: null,
 			label: "직업 초기화",
+			function: openDeleteModal,
+		},
+		{
+			name: "resetPW",
+			content: null,
+			label: "비번 초기화",
+			function: openDeleteModal,
+		},
+		{
+			name: "resetAccount",
+			content: null,
+			label: "계좌 정지",
 			function: openDeleteModal,
 		},
 	]
 
 	return (
 		<div css={wrapperCSS}>
-			<Modal compState={deleteModalState} closeComp={closeDeleteModal} transition={'scale'} content={<ModalAlert title={'모든 학생들의 직업을 초기화합니다.'} titleSize={'var(--teacher-h2)'} proceed={resetStudentsJob} width={'480px'} content={['모든 학생들의 직업이 초기화됩니다!', '더이상 학생들이 직업 활동을 할 수 없습니다!', '월급 날에 해지일까지 일한 날짜만큼 보수를 받습니다.']} />}/>
+			<Modal
+				compState={deleteModalState}
+				closeComp={closeDeleteModal}
+				transition={"scale"}
+				content={
+					<ModalAlert
+						title={"모든 학생들의 직업을 초기화합니다."}
+						titleSize={"var(--teacher-h2)"}
+						proceed={resetStudentsJob}
+						width={"480px"}
+						content={[
+							"모든 학생들의 직업이 초기화됩니다!",
+							"더이상 학생들이 직업 활동을 할 수 없습니다!",
+							"월급 날에 해지일까지 일한 날짜만큼 보수를 받습니다.",
+						]}
+					/>
+				}
+			/>
 			<div css={contentTitleCSS}>
 				<div css={titleCSS}>
 					학생들 <small>({data && data.length > 0 ? data.length : 0})</small>

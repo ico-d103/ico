@@ -67,7 +67,7 @@ export const CLASS_DENY = (
 
 export const CLASS_GRADE_UP = (
 	<svg width="23" height="23" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-		<rect width="20" height="20" rx="10" fill="#0057FF" />
+		<rect width="20" height="20" rx="10" fill="#38735a" />
 		<path
 			fillRule="evenodd"
 			clipRule="evenodd"
@@ -85,7 +85,7 @@ export const CLASS_GRADE_UP = (
 
 export const CLASS_GRADE_DOWN = (
 	<svg width="23" height="23" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-		<rect width="20" height="20" rx="10" fill="#E32F2F" />
+		<rect width="20" height="20" rx="10" fill="#d9d9d9" />
 		<path
 			fillRule="evenodd"
 			clipRule="evenodd"
