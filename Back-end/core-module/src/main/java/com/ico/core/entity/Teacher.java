@@ -1,5 +1,6 @@
 package com.ico.core.entity;
 
+import com.ico.core.code.Password;
 import com.ico.core.code.Role;
 import com.ico.core.code.Status;
 import lombok.AllArgsConstructor;
@@ -45,6 +46,9 @@ public class Teacher {
     @Enumerated(EnumType.STRING)
     private Role role;
     private String phoneNum;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "pw_status")
+    private Password pwStatus;
 
     public void encodeTeacherPassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);

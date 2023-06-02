@@ -43,4 +43,11 @@ public interface TeacherService {
      * @param request
      */
     String resetStudentPassword(Long studentId, HttpServletRequest request);
+
+    /**
+     * 교사의 휴대폰 번호로 비밀번호 초기화
+     * @param phoneNum
+     * @return password
+     */
+    String findPassword(String phoneNum);
 }
