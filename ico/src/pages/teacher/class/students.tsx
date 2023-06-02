@@ -9,45 +9,44 @@ import { useAtom } from "jotai"
 import { selectedStudent } from "@/store/store"
 
 function students() {
-	const [openComp, closeComp, compState] = useCompHandler()
-	const isDeskTop = useMediaQuery("(min-width: 1440px")
-	const [selectedStudentAtom, setSelectedStudentAtom] = useAtom(selectedStudent)
+	// const [openComp, closeComp, compState] = useCompHandler()
+	// const isDeskTop = useMediaQuery("(min-width: 1440px")
+	// const [selectedStudentAtom, setSelectedStudentAtom] = useAtom(selectedStudent)
 
-	useEffect(() => {
-		if (selectedStudentAtom !== -1) {
-			openComp()
-		}
-	}, [selectedStudentAtom])
+	// useEffect(() => {
+	// 	if (selectedStudentAtom !== -1) {
+	// 		openComp()
+	// 	}
+	// }, [selectedStudentAtom])
 
-	const closeModalHandler = () => {
-		closeComp()
-		setSelectedStudentAtom(() => -1)
-	}
+	// const closeModalHandler = () => {
+	// 	closeComp()
+	// 	setSelectedStudentAtom(() => -1)
+	// }
 
-	const modalContent = (
-		<div
-			css={modalWrapperCSS}
-			onClick={() => {
-				closeModalHandler()
-			}}
-		>
-			<div
-				css={modalInnerWrapperCSS}
-				onClick={(e) => {
-					e.stopPropagation()
-				}}
-			>
-				<StudentDetail />
-			</div>
-		</div>
-	)
+	// const modalContent = (
+	// 	<div
+	// 		css={modalWrapperCSS}
+	// 		onClick={() => {
+	// 			closeModalHandler()
+	// 		}}
+	// 	>
+	// 		<div
+	// 			css={modalInnerWrapperCSS}
+	// 			onClick={(e) => {
+	// 				e.stopPropagation()
+	// 			}}
+	// 		>
+	// 			<StudentDetail />
+	// 		</div>
+	// 	</div>
+	// )
 
 	return (
 		<div css={wrapperCSS}>
-			<div css={leftWrapperCSS}>
+			<div css={studentListWrapperCSS}>
 				<StudentList />
 			</div>
-
 			{/* {isDeskTop ? (
 				<div css={rightWrapperCSS}>
 					<div css={detailWrapperCSS}>
@@ -68,7 +67,7 @@ const wrapperCSS = css`
 	gap: 30px;
 `
 
-const leftWrapperCSS = css`
+const studentListWrapperCSS = css`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
