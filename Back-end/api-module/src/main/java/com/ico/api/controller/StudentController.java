@@ -43,7 +43,6 @@ public class StudentController {
      *
      * @param requestDto
      * @return id
-     * @throws Exception
      */
     @PostMapping
     public ResponseEntity<HttpStatus> studentSignUp(@Valid @RequestBody StudentSignUpRequestDto requestDto) {
@@ -81,8 +80,8 @@ public class StudentController {
      * @return
      */
     @GetMapping("/teacher/{studentId}")
-    public ResponseEntity<StudentResDto> findStudent(@PathVariable Long studentId) {
-        return ResponseEntity.ok(studentService.findStudent(studentId));
+    public ResponseEntity<StudentResDto> findStudent(@PathVariable Long studentId, HttpServletRequest request) {
+        return ResponseEntity.ok(studentService.findStudent(studentId, request));
     }
 
     /**

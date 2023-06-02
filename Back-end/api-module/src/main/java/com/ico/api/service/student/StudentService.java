@@ -44,7 +44,7 @@ public interface StudentService {
      *
      * @return
      */
-    StudentResDto findStudent(Long studentId);
+    StudentResDto findStudent(Long studentId, HttpServletRequest request);
 
     /**
      * 학생 내 정보 조회

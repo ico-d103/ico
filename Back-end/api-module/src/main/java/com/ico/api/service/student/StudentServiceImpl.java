@@ -163,11 +163,19 @@ public class StudentServiceImpl implements StudentService{
 
     @Transactional(readOnly = true)
     @Override
-    public StudentResDto findStudent(Long studentId) {
+    public StudentResDto findStudent(Long studentId, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
         Student student = studentRepository.findById(studentId).orElseThrow(() -> {
             log.info("[findStudent] studentId[{}]에 해당하는 학생이 없습니다.", studentId);
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
+
+        // 나라가 등록 안 되어 있거나 다른 나라 학생을 조회하는 경우
+        if (student.getNation() == null || !student.getNation().getId().equals(nationId)) {
+            throw new CustomException(ErrorCode.WRONG_USER);
+        }
+
         // 최신순으로 조회
         List<Transaction> transactions = transactionMongoRepository.findAllByFromOrToOrderByIdDesc(String.valueOf(studentId), String.valueOf(studentId));
 
