@@ -63,12 +63,11 @@ public class TeacherProductController {
      * 교사상품 구매
      *
      * @param teacherProductId 상품 ID
-     * @return Httpstatus
+     * @return 상품 id
      */
     @PostMapping("/student/{teacherProductId}")
-    public ResponseEntity<HttpStatus> buyProduct(HttpServletRequest request, @PathVariable Long teacherProductId) {
-        teacherProductService.buyProduct(request, teacherProductId);
-        return ResponseEntity.ok(HttpStatus.OK);
+    public ResponseEntity<Long> buyProduct(HttpServletRequest request, @PathVariable Long teacherProductId) {
+        return ResponseEntity.ok(teacherProductService.buyProduct(request, teacherProductId));
     }
 
     /**
@@ -76,10 +75,10 @@ public class TeacherProductController {
      *
      * @param request
      * @param dto
-     * @return
+     * @return 상품 id
      */
     @PostMapping("/student/rental")
-    public ResponseEntity<ProductQRResDto> rentalProduct(HttpServletRequest request, @Valid @RequestBody ProductQRReqDto dto){
+    public ResponseEntity<Long> rentalProduct(HttpServletRequest request, @Valid @RequestBody ProductQRReqDto dto){
         return ResponseEntity.ok(teacherProductService.rentalProduct(request, dto));
     }
 
@@ -104,5 +103,16 @@ public class TeacherProductController {
     public ResponseEntity<HttpStatus> deleteTeacherProduct(@PathVariable Long teacherProductId) {
         teacherProductService.deleteTeacherProduct(teacherProductId);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 구매 완료 후 구매 내역 반환
+     *
+     * @param teacherProductId
+     * @return
+     */
+    @GetMapping("/student/transaction/{teacherProductId}")
+    public ResponseEntity<ProductQRResDto> findBuyTransaction(@PathVariable Long teacherProductId) {
+        return ResponseEntity.ok(teacherProductService.findBuyTransaction(teacherProductId));
     }
 }

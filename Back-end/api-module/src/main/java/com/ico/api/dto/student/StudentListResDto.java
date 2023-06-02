@@ -24,15 +24,18 @@ public class StudentListResDto {
 
     private int creditRating;
 
+    private int creditScore;
+
     private String job;
 
     @Builder
-    public StudentListResDto(Long id, String name, int number, int amount, int creditRating, String job) {
+    public StudentListResDto(Long id, String name, int number, int amount, int creditRating, int creditScore, String job) {
         this.id = id;
         this.name = name;
         this.number = number;
         this.amount = amount;
         this.creditRating = creditRating;
+        this.creditScore = creditScore;
         this.job = job;
     }
 
@@ -49,6 +52,7 @@ public class StudentListResDto {
                 .number(student.getNumber())
                 .amount(student.getAccount())
                 .creditRating(student.getCreditRating())
+                .creditScore(student.getCreditScore())
                 .job(student.getStudentJob() == null ? null : student.getStudentJob().getTitle())
                 .build();
     }

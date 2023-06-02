@@ -1,7 +1,7 @@
 package com.ico.api.service.teacher;
 
+import com.ico.api.dto.teacher.TeacherResDto;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
-import com.ico.core.entity.Teacher;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +43,13 @@ public interface TeacherService {
      * @param request
      */
     String resetStudentPassword(Long studentId, HttpServletRequest request);
+
+    /**
+     * 교사가 자신의 아이디와 휴대폰 번호 조회
+     * @param request
+     * @return TeacherResDto
+     */
+    TeacherResDto getTeacher(HttpServletRequest request);
 
     /**
      * 교사가 자신의 비밀번호 초기화

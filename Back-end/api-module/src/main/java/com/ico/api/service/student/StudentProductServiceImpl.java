@@ -6,6 +6,7 @@ import com.ico.api.dto.studentProduct.StudentProductReqDto;
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
 import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.service.S3UploadService;
+import com.ico.api.service.inflation.ShopTransactionService;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
@@ -46,6 +47,7 @@ public class StudentProductServiceImpl implements StudentProductService {
     private final StudentProductRepository studentProductRepository;
     private final S3UploadService s3UploadService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final ShopTransactionService shopTransactionService;
 
     /**
      * 학생의 상품 판매 제안서를 학생 상품 테이블에 추가합니다.
@@ -181,10 +183,11 @@ public class StudentProductServiceImpl implements StudentProductService {
      *
      * @param request
      * @param dto
+     * @return 상품 id
      */
     @Transactional
     @Override
-    public ProductQRResDto buyProduct(HttpServletRequest request, ProductQRReqDto dto) {
+    public Long buyProduct(HttpServletRequest request, ProductQRReqDto dto) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
         Long studentId = jwtTokenProvider.getId(token);
@@ -234,9 +237,19 @@ public class StudentProductServiceImpl implements StudentProductService {
         // 거래 내역 기록
         transactionService.addTransaction(seller.getId(), student.getId(), product.getAmount(), product.getTitle());
 
+        // 상점 거래 내역 기록
+        shopTransactionService.addShopTransaction(nationId, product.getAmount());
+
+        return product.getId();
+    }
+
+    @Override
+    public ProductQRResDto findBuyTransaction(Long studentProductId) {
+        StudentProduct product = studentProductRepository.findById(studentProductId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         return ProductQRResDto.builder()
                 .title(product.getTitle())
-                .seller(seller.getName())
+                .seller(product.getStudent().getName())
                 .type(false)
                 .date(LocalDateTime.now().format(Formatter.date))
                 .build();

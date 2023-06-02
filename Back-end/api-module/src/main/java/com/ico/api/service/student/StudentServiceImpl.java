@@ -1,5 +1,6 @@
 package com.ico.api.service.student;
 
+import com.ico.api.dto.nation.CreditScoreAllReqDto;
 import com.ico.api.dto.nation.CreditScoreReqDto;
 import com.ico.api.dto.student.StudentAllResDto;
 import com.ico.api.dto.student.StudentListResDto;
@@ -15,11 +16,11 @@ import com.ico.api.util.Formatter;
 import com.ico.core.code.Password;
 import com.ico.core.code.Role;
 import com.ico.core.document.Deposit;
+import com.ico.core.document.Transaction;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentJob;
-import com.ico.core.document.Transaction;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.DepositMongoRepository;
@@ -162,11 +163,23 @@ public class StudentServiceImpl implements StudentService{
 
     @Transactional(readOnly = true)
     @Override
-    public StudentResDto findStudent(Long studentId) {
+    public StudentResDto findStudent(Long studentId, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
         Student student = studentRepository.findById(studentId).orElseThrow(() -> {
             log.info("[findStudent] studentId[{}]에 해당하는 학생이 없습니다.", studentId);
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
+
+        // 아직 나라에 등록하지 않은 학생인 경우
+        if (student.getNation() == null) {
+            throw new CustomException(ErrorCode.EMPTY_NATION);
+        }
+        // 다른 나라 학생인 경우
+        if (!student.getNation().getId().equals(nationId)) {
+            throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
+        }
+
         // 최신순으로 조회
         List<Transaction> transactions = transactionMongoRepository.findAllByFromOrToOrderByIdDesc(String.valueOf(studentId), String.valueOf(studentId));
 
@@ -291,12 +304,12 @@ public class StudentServiceImpl implements StudentService{
 
     @Transactional
     @Override
-    public void postAllCreditScore(CreditScoreReqDto dto, HttpServletRequest request) {
+    public void postAllCreditScore(CreditScoreAllReqDto dto, HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
-        List<Student> studentList = studentRepository.findAllByNationId(nationId);
+        List<Student> studentList = studentRepository.findAllByIdIn(dto.getStudentIds());
         if (studentList.isEmpty()) {
             // 나라 id 에 해당하는 학생이 없는 경우
             throw new CustomException(ErrorCode.NATION_NOT_FOUNT_STUDENT);

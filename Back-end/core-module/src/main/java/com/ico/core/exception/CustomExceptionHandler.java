@@ -21,7 +21,7 @@ public class CustomExceptionHandler {
      */
     @ExceptionHandler(CustomException.class)
     ResponseEntity<ErrorResponseEntity> handleCustomException(CustomException e) {
-        return ErrorResponseEntity.toReponseEntity(e.getErrorCode());
+        return ErrorResponseEntity.toResponseEntity(e.getErrorCode());
     }
 
     /**
@@ -32,7 +32,7 @@ public class CustomExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ErrorResponseEntity> handleValidationException(MethodArgumentNotValidException e) {
-        return ErrorResponseEntity.toReponseEntity(e);
+        return ErrorResponseEntity.toResponseEntity(e);
     }
 
     /**
@@ -43,6 +43,6 @@ public class CustomExceptionHandler {
      */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     ResponseEntity<ErrorResponseEntity> handleMaxSizeException(MaxUploadSizeExceededException e) {
-        return ErrorResponseEntity.toReponseEntity(e);
+        return ErrorResponseEntity.toResponseEntity(e);
     }
 }

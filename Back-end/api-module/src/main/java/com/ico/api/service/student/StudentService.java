@@ -1,5 +1,6 @@
 package com.ico.api.service.student;
 
+import com.ico.api.dto.nation.CreditScoreAllReqDto;
 import com.ico.api.dto.nation.CreditScoreReqDto;
 import com.ico.api.dto.student.StudentAllResDto;
 import com.ico.api.dto.student.StudentListResDto;
@@ -43,7 +44,7 @@ public interface StudentService {
      *
      * @return
      */
-    StudentResDto findStudent(Long studentId);
+    StudentResDto findStudent(Long studentId, HttpServletRequest request);
 
     /**
      * 학생 내 정보 조회
@@ -95,7 +96,7 @@ public interface StudentService {
      *
      * @param request
      */
-    void postAllCreditScore(CreditScoreReqDto dto, HttpServletRequest request);
+    void postAllCreditScore(CreditScoreAllReqDto dto, HttpServletRequest request);
 
     /**
      * 학생의 account 조회

@@ -5,6 +5,7 @@ import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.api.service.S3UploadService;
+import com.ico.api.service.inflation.ShopTransactionService;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
@@ -48,6 +49,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
     private final CouponRepository couponRepository;
     private final S3UploadService s3UploadService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final ShopTransactionService shopTransactionService;
 
     /**
      * 교사 상품 등록
@@ -117,11 +119,13 @@ public class TeacherProductServiceImpl implements TeacherProductService {
     /**
      * 쿠폰 유형의 교사 상품을 구매합니다.
      *
+     * @param request
      * @param id 상품 id
+     * @return 상품 id
      */
     @Transactional
     @Override
-    public void buyProduct(HttpServletRequest request, Long id) {
+    public Long buyProduct(HttpServletRequest request, Long id) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
         Long studentId = jwtTokenProvider.getId(token);
@@ -155,6 +159,9 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         // 거래 내역 추가
         transactionService.addTransactionWithdraw("교사 상점", studentId, amount, product.getTitle());
 
+        // 상점 거래 내역 기록
+        shopTransactionService.addShopTransaction(nationId, amount);
+
         // 재고 개수 수정
         product.setSold((byte) (product.getSold() + 1));
 
@@ -174,7 +181,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                     .build();
         }
         couponRepository.save(coupon);
-
+        return id;
     }
 
     /**
@@ -182,10 +189,11 @@ public class TeacherProductServiceImpl implements TeacherProductService {
      *
      * @param request
      * @param dto qr 시작 시간, 상품 id
+     * @return 상품 id
      */
     @Transactional
     @Override
-    public ProductQRResDto rentalProduct(HttpServletRequest request, ProductQRReqDto dto) {
+    public Long rentalProduct(HttpServletRequest request, ProductQRReqDto dto) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
         Long studentId = jwtTokenProvider.getId(token);
@@ -227,16 +235,14 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         // 거래 내역 추가
         transactionService.addTransactionWithdraw("교사 상점", studentId, amount, product.getTitle());
 
+        // 상점 거래 내역 기록
+        shopTransactionService.addShopTransaction(nationId, amount);
+
         // 재고 개수 수정
         product.setSold((byte) (product.getSold() + 1));
         teacherProductRepository.save(product);
 
-        return ProductQRResDto.builder()
-                .title(product.getTitle())
-                .seller("선생님")
-                .type(product.getRental())
-                .date(LocalDateTime.now().format(Formatter.date))
-                .build();
+        return product.getId();
     }
 
     /**
@@ -275,5 +281,17 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         Arrays.stream(teacherProduct.getImages().split(","))
                 .forEach(s3UploadService::deleteFile);
         teacherProductRepository.delete(teacherProduct);
+    }
+
+    @Override
+    public ProductQRResDto findBuyTransaction(Long teacherProductId) {
+        TeacherProduct product = teacherProductRepository.findById(teacherProductId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        return ProductQRResDto.builder()
+                .title(product.getTitle())
+                .seller("선생님")
+                .type(product.getRental())
+                .date(LocalDateTime.now().format(Formatter.date))
+                .build();
     }
 }

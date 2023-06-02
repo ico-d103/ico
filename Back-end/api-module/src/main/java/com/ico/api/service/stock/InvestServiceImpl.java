@@ -93,7 +93,7 @@ public class InvestServiceImpl implements InvestService{
         investRepository.save(invest);
 
         // 거래 내역 추가
-        transactionService.addTransactionWithdraw(nation.getTitle() + " 증권", studentId, amount, nation.getStock() + " 지수 " + price);
+        transactionService.addTransactionWithdraw(nation.getTitle() + " 증권", studentId, amount, nation.getStock() + " 지수");
 
     }
 

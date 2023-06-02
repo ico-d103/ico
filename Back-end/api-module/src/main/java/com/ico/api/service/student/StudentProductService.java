@@ -56,6 +56,15 @@ public interface StudentProductService {
      *
      * @param request
      * @param dto
+     * @return 상품 id
      */
-    ProductQRResDto buyProduct(HttpServletRequest request, ProductQRReqDto dto);
+    Long buyProduct(HttpServletRequest request, ProductQRReqDto dto);
+
+    /**
+     * 구매 완료 후 구매 내역 반환
+     *
+     * @param studentProductId
+     * @return
+     */
+    ProductQRResDto findBuyTransaction(Long studentProductId);
 }

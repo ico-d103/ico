@@ -1,6 +1,9 @@
 package com.ico.batch.scheduler;
 
+import com.ico.batch.job.InflationConfig;
 import com.ico.batch.service.DepositSalaryService;
+import com.ico.batch.service.InflationService;
+import com.ico.core.repository.ShopTransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobParameter;
@@ -33,6 +36,8 @@ public class JobScheduler {
     private final JobLauncher jobLauncher;
     private final JobRegistry jobRegistry;
     private final DepositSalaryService depositSalaryService;
+    private final ShopTransactionRepository shopTransactionRepository;
+    private final InflationService inflationService;
 
     @Bean
     public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor() {
@@ -119,5 +124,34 @@ public class JobScheduler {
             log.info("soldOutTeacherProductJob을 찾을 수 없습니다.");
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 매월 15일(원급 분기일) 07시에 인플레이션 계산
+     */
+    @Scheduled(cron = "0 0 7 15 * *")
+    public void inflationJobScheduled()
+            throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        JobParameters jobParameters = new JobParameters(
+                Collections.singletonMap("requestTime", new JobParameter(System.currentTimeMillis()))
+        );
+
+        try {
+            log.info("[inflationJobScheduled] 거래 현황 Job 시작");
+            InflationConfig.map = new HashMap<>();
+
+            jobLauncher.run(jobRegistry.getJob("inflationJob"), jobParameters);
+            log.info("[inflationJobScheduled] 거래 현황 Job 정상 종료");
+
+            inflationService.addInflation(InflationConfig.map);
+            log.info("[inflationJobScheduled] 인플레이션 추가 완료");
+
+            shopTransactionRepository.deleteAll();
+            log.info("[inflationJobScheduled] 상점 거래 내역 전체 삭제 완료");
+        } catch (NoSuchJobException e) {
+            log.info("[inflationJobScheduled] inflationJob 을 찾을 수 없습니다.");
+            throw new RuntimeException(e);
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 package com.ico.api.service.teacher;
 
+import com.ico.api.dto.teacher.TeacherResDto;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.user.JwtTokenProvider;
@@ -114,7 +115,6 @@ public class TeacherServiceImpl implements TeacherService {
         if (matcher.find()) {
             throw new CustomException(ErrorCode.WRONG_PHONE_NUMBER);
         }
-
         // 인증번호 생성 및 메시지에 포함
         String randomNum = String.format("%06d", new Random().nextInt(999999));
         log.info(phoneNum);
@@ -233,5 +233,16 @@ public class TeacherServiceImpl implements TeacherService {
         teacherRepository.save(teacher);
 
         return password;
+    }
+
+    @Override
+    public TeacherResDto getTeacher(HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Teacher teacher = teacherRepository.findById(jwtTokenProvider.getId(token))
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return TeacherResDto.builder()
+                .identity(teacher.getIdentity())
+                .phoneNum(teacher.getPhoneNum())
+                .build();
     }
 }

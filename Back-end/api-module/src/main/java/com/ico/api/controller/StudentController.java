@@ -1,5 +1,6 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.nation.CreditScoreAllReqDto;
 import com.ico.api.dto.nation.CreditScoreReqDto;
 import com.ico.api.dto.student.StudentAllResDto;
 import com.ico.api.dto.student.StudentListResDto;
@@ -42,7 +43,6 @@ public class StudentController {
      *
      * @param requestDto
      * @return id
-     * @throws Exception
      */
     @PostMapping
     public ResponseEntity<HttpStatus> studentSignUp(@Valid @RequestBody StudentSignUpRequestDto requestDto) {
@@ -80,8 +80,8 @@ public class StudentController {
      * @return
      */
     @GetMapping("/teacher/{studentId}")
-    public ResponseEntity<StudentResDto> findStudent(@PathVariable Long studentId) {
-        return ResponseEntity.ok(studentService.findStudent(studentId));
+    public ResponseEntity<StudentResDto> findStudent(@PathVariable Long studentId, HttpServletRequest request) {
+        return ResponseEntity.ok(studentService.findStudent(studentId, request));
     }
 
     /**
@@ -161,7 +161,7 @@ public class StudentController {
      * @return
      */
     @PostMapping("/teacher/credit-score")
-    public ResponseEntity<HttpStatus> postAllCreditScore(@Valid @RequestBody CreditScoreReqDto dto, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> postAllCreditScore(@Valid @RequestBody CreditScoreAllReqDto dto, HttpServletRequest request) {
         studentService.postAllCreditScore(dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
