@@ -32,17 +32,27 @@ function SideMenu({closeComp, data}: {closeComp?: Function; data: getHomeMyInfoT
     <div css={wrapperCSS} onClick={() => {closeComp && closeComp()}}>
         <div css={menuWrapperCSS} onClick={(e) => {e.stopPropagation()}}>
             <div css={menuHeaderCSS}>
-                <div>
-                <div css={css`font-size: var(--student-h2);`}>
-                    {data.name}님 환영해요!
+                <div css={welcomeSectionCSS}>
+                    <div>
+                    <div css={css`font-size: var(--student-h2);`}>
+                        {data.name}님 환영해요!
+                    </div>
+                    <div css={css`margin-top: 8px;`}>
+                        {data.school} {data.room}반 {data.number}번
+                    </div>
+                    
+                    </div>
+                    <LoadImage src={"/assets/dock/dock_gov.png"} alt={'deco'} wrapperCss={css`width: 64px; height: 64px;`} />
                 </div>
-                <div css={css`margin-top: 8px;`}>
-                    {data.school} {data.room}반 {data.number}번
+            
+                <div css={css`display: flex; gap: 16px; margin-top: 16px;`}>
+                    <div css={labelButtonCSS} onClick={() => {navigate("/student/password", 'bottomToTop')}} >
+                        비밀번호 변경
+                    </div>
                 </div>
-                </div>
-                <LoadImage src={"/assets/dock/dock_gov.png"} alt={'deco'} wrapperCss={css`width: 64px; height: 64px;`} />
-                
+
             </div>
+            
             <div>
                 {renderMenu}
             </div>
@@ -95,8 +105,22 @@ background-color: var(--student-main-color);
 border-bottom: 1px solid var(--student-main-color-2);
 padding: 32px;
 display: flex;
-align-items: center;
+flex-direction: column;
+/* align-items: center; */
+/* justify-content: space-between; */
+`
+
+const welcomeSectionCSS = css`
+    display: flex;
+    align-items: center;
 justify-content: space-between;
+width: 100%;
+
+`
+
+const labelButtonCSS = css`
+font-size: var(--student-h4);
+color: rgba(0, 0, 0, 0.6);
 `
 
 
