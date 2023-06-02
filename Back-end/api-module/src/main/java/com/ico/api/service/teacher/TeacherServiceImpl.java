@@ -69,6 +69,10 @@ public class TeacherServiceImpl implements TeacherService {
         if (!requestDto.getPassword().equals(requestDto.getCheckedPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_WRONG);
         }
+        // 핸드폰 번호 중복 막기
+        if (teacherRepository.findByPhoneNum(requestDto.getPhoneNum()).isPresent()) {
+            throw new CustomException(ErrorCode.DUPLICATED_PHONE_NUM);
+        }
 
         teacher.encodeTeacherPassword(passwordEncoder);
         teacherRepository.save(teacher);
@@ -106,6 +110,7 @@ public class TeacherServiceImpl implements TeacherService {
         if (phoneNum.contains("-") || phoneNum.length() > 11) {
             throw new CustomException(ErrorCode.WRONG_PHONE_NUMBER);
         }
+
         // 인증번호 생성 및 메시지에 포함
         String randomNum = String.format("%06d", new Random().nextInt(999999));
         log.info(phoneNum);
