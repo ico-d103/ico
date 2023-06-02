@@ -70,7 +70,7 @@ public class TeacherController {
      * @return random password
      */
     @PutMapping("/teacher/{studentId}")     // token 이 있을 때 3번째에 teacher 이어야지 role 통과 가능
-    public ResponseEntity<String> resetPassword(@PathVariable Long studentId, HttpServletRequest request) {
+    public ResponseEntity<String> resetStudentPassword(@PathVariable Long studentId, HttpServletRequest request) {
         return ResponseEntity.ok(teacherService.resetStudentPassword(studentId, request));
     }
 
@@ -79,8 +79,8 @@ public class TeacherController {
      * @param req
      * @return ok
      */
-    @PostMapping("/find-pw")
-    public ResponseEntity<String> findPassword(@RequestBody Map<String, String> req) {
+    @PostMapping("/reset-pw")
+    public ResponseEntity<String> resetTeacherPassword(@RequestBody Map<String, String> req) {
         return ResponseEntity.ok(teacherService.findPassword(req.get("phoneNum")));
     }
 }

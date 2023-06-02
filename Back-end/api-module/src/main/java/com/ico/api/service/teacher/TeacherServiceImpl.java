@@ -25,6 +25,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -106,8 +108,10 @@ public class TeacherServiceImpl implements TeacherService {
         if (phoneNum.isBlank()) {
             throw new CustomException(ErrorCode.NOT_FOUND_PHONE_NUMBER);
         }
-        // 하이픈이 있을 때와 휴대폰 번호 자리가 11개가 넘을 때 에러
-        if (phoneNum.contains("-") || phoneNum.length() > 11) {
+        // 하이픈이 있을 때와 휴대폰 번호 자리가 11개가 넘을 때 에러(정규식)
+        Pattern pattern = Pattern.compile("^(?=.*-)|(?=.{12,})");
+        Matcher matcher = pattern.matcher(phoneNum);
+        if (matcher.find()) {
             throw new CustomException(ErrorCode.WRONG_PHONE_NUMBER);
         }
 
@@ -194,8 +198,10 @@ public class TeacherServiceImpl implements TeacherService {
         if (phoneNum.isBlank()) {
             throw new CustomException(ErrorCode.NOT_FOUND_PHONE_NUMBER);
         }
-        // 하이픈이 있을 때와 휴대폰 번호 자리가 11개가 넘을 때 에러
-        if (phoneNum.contains("-") || phoneNum.length() > 11) {
+        // 하이픈이 있을 때와 휴대폰 번호 자리가 11개가 넘을 때 에러(정규식)
+        Pattern pattern = Pattern.compile("^(?=.*-)|(?=.{12,})");
+        Matcher matcher = pattern.matcher(phoneNum);
+        if (matcher.find()) {
             throw new CustomException(ErrorCode.WRONG_PHONE_NUMBER);
         }
 
