@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Optional;
 
+
 /**
  * Member ServiceImpl
  *
@@ -92,12 +93,16 @@ public class MemberServiceImpl implements MemberService {
                 }
             }
         } else if (role.equals(Role.TEACHER)) {
+            Teacher teacher = teacherRepository.findById(memberId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            // 교사의 비밀번호가 초기화 되었을 때
+            if (teacher.getPwStatus().equals(Password.RESET)) {
+                return Map.of("status", "require_change_password", "role", role);
+            }
             if (jwtTokenProvider.getNation(token) != null) {
                 // 교사 토큰에 NationId가 있을 때
                 return Map.of("status", "approved", "role", role);
             } else {
-                Teacher teacher = teacherRepository.findById(memberId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
                 if (teacher.getStatus().equals(Status.APPROVED)) {
                     // 교사가 교사 인증서 승인 받은 후
                     return Map.of("status", "require_create_nation", "role", role);
@@ -150,6 +155,8 @@ public class MemberServiceImpl implements MemberService {
             // 입력한 비밀번호로 교체
             teacher.setPassword(dto.getPassword());
             teacher.encodeTeacherPassword(passwordEncoder);
+            // 상태를 초기화
+            teacher.setPwStatus(Password.OK);
             teacherRepository.save(teacher);
         }
     }
@@ -164,8 +171,12 @@ public class MemberServiceImpl implements MemberService {
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
             student.setPwStatus(Password.OK);
             studentRepository.save(student);
+        } else if (role.equals(Role.TEACHER)) {
+            Teacher teacher = teacherRepository.findById(jwtTokenProvider.getId(token))
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            teacher.setPwStatus(Password.OK);
+            teacherRepository.save(teacher);
         }
-        // TODO : 교사는 나중에 추가
     }
 }
 

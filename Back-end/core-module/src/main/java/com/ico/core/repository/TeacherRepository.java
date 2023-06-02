@@ -22,4 +22,6 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 
     Optional<Teacher> findByNationId(Long nationId);
 
+    Optional<Teacher> findByPhoneNum(String phoneNum);
+
 }

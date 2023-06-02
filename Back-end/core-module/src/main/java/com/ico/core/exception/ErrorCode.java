@@ -77,6 +77,10 @@ public enum ErrorCode{
 
     DUPLICATED_PASSWORD(HttpStatus.BAD_REQUEST, "118", "현재 비밀번호와 같은 비밀번호입니다."),
 
+    NOT_FOUND_TEACHER_PHONE_NUMBER(HttpStatus.NOT_FOUND, "119", "휴대폰 번호와 일치하는 교사가 없습니다."),
+
+    DUPLICATED_PHONE_NUM(HttpStatus.BAD_REQUEST, "120", "이미 가입된 핸드폰 번호입니다."),
+
     WRONG_CODE(HttpStatus.BAD_REQUEST, "200", "일치하는 반 코드가 없습니다."),
 
     WRONG_IMMIGRATION(HttpStatus.BAD_REQUEST, "201", "입국 심사를 기다리고 있는 나라가 있습니다."),

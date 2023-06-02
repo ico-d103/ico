@@ -4,8 +4,6 @@ import com.ico.api.dto.teacher.TeacherResDto;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import com.ico.api.service.teacher.TeacherService;
 import lombok.RequiredArgsConstructor;
-import net.nurigo.sdk.message.service.DefaultMessageService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -74,7 +71,7 @@ public class TeacherController {
      * @return random password
      */
     @PutMapping("/teacher/{studentId}")     // token 이 있을 때 3번째에 teacher 이어야지 role 통과 가능
-    public ResponseEntity<String> resetPassword(@PathVariable Long studentId, HttpServletRequest request) {
+    public ResponseEntity<String> resetStudentPassword(@PathVariable Long studentId, HttpServletRequest request) {
         return ResponseEntity.ok(teacherService.resetStudentPassword(studentId, request));
     }
 
@@ -86,5 +83,15 @@ public class TeacherController {
     @GetMapping("/teacher")
     public ResponseEntity<TeacherResDto> getTeacher(HttpServletRequest request) {
         return ResponseEntity.ok(teacherService.getTeacher(request));
+    }
+
+    /**
+     * 교사 자신의 비밀번호 초기화
+     * @param req
+     * @return ok
+     */
+    @PostMapping("/reset-pw")
+    public ResponseEntity<String> resetTeacherPassword(@RequestBody Map<String, String> req) {
+        return ResponseEntity.ok(teacherService.findPassword(req.get("phoneNum")));
     }
 }
