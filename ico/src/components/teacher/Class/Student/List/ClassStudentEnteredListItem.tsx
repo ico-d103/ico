@@ -1,5 +1,5 @@
 import { css } from "@emotion/react"
-import { getStudentListType } from "@/types/teacher/apiReturnTypes"
+import { getStudentDetailType, getStudentListType } from "@/types/teacher/apiReturnTypes"
 import { useSetAtom } from "jotai"
 import { selectedStudent } from "@/store/store"
 import useGetNation from "@/hooks/useGetNation"
@@ -7,6 +7,10 @@ import { CLASS_GRADE_DOWN, CLASS_GRADE_UP } from "../../ClassIcons"
 import Button from "@/components/common/Button/Button"
 import Input from "@/components/common/Input/Input"
 import CollapseMenuStudentDetail from "@/components/teacher/common/CollapseMenu/CollapseMenuStudentDetail"
+import ClassStudentDetailAccountList from "../Detail/ClassStudentDetailAccountList"
+import { useQuery } from "@tanstack/react-query"
+import { getStudentDetailAPI } from "@/api/teacher/class/getStudentDetailAPI"
+import ClassStudentDetailCertificate from "../Detail/ClassStudentDetailCertificate"
 
 type StudentEnteredListItemPropsType = {
 	student: getStudentListType
@@ -20,6 +24,12 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 	const openStudentDetailHandler = (id: number) => {
 		setSelectedStudentAtom(id)
 	}
+
+	const { data, refetch } = useQuery<getStudentDetailType>(
+		["enteredStudentDetail", student.id],
+		() => getStudentDetailAPI({ id: student.id }),
+		{ enabled: false },
+	)
 
 	return (
 		<CollapseMenuStudentDetail
@@ -55,19 +65,39 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 							onClick={() => {}}
 						/>
 						<div css={divideCSS}></div>
-						<h5 css={creditCSS}>{student.creditRating}등급</h5>
+						<h5 css={creditRatingCSS}>{student.creditRating}등급</h5>
 						<div css={buttonWrapperCSS}>
 							<div>{CLASS_GRADE_DOWN}</div>
-							<h4>{student.creditRating} 점</h4>
+							<h4 css={creditScoreCSS}>{student.creditScore} 점</h4>
 							<div>{CLASS_GRADE_UP}</div>
 						</div>
 					</div>
 				</div>
 			}
-			contentChildren={<></>}
+			contentChildren={
+				<div css={contentChildrenCSS}>
+					<ClassStudentDetailAccountList transactions={data?.transactions} />
+					<ClassStudentDetailCertificate />
+				</div>
+			}
 		></CollapseMenuStudentDetail>
 	)
 }
+
+const contentChildrenCSS = css`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 30px;
+
+	> div:nth-of-type(1) {
+		width: 45%;
+	}
+
+	> div:nth-of-type(2) {
+		width: 55%;
+	}
+`
 
 const wrapperCSS = (idx: number) => {
 	return css`
@@ -126,13 +156,17 @@ const jobCSS = css`
 	color: var(--teacher-gray-color);
 `
 
-const creditCSS = css`
-	min-width: 30px;
+const creditRatingCSS = css`
+	min-width: 40px;
 	font-weight: bold;
 `
 
+const creditScoreCSS = css`
+	min-width: 40px;
+`
+
 const amountCSS = css`
-	min-width: 100px;
+	min-width: 110px;
 	font-weight: bold;
 `
 

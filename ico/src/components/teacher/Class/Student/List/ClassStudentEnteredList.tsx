@@ -10,6 +10,7 @@ import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
 import useCompHandler from "@/hooks/useCompHandler"
 import Modal from "@/components/common/Modal/Modal"
+import { useEffect } from "react"
 
 function StudentEnteredList() {
 	const noti = useNotification()

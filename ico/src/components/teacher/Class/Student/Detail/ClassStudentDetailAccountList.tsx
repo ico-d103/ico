@@ -3,7 +3,7 @@ import ClassStudentDetailAccountListItem from "./ClassStudentDetailAccountListIt
 import { transactionsType } from "@/types/teacher/apiReturnTypes"
 
 type ClassStudentDetailAccountListPropsType = {
-	transactions: transactionsType
+	transactions: transactionsType | undefined
 }
 
 function ClassStudentDetailAccountList({ transactions }: ClassStudentDetailAccountListPropsType) {
@@ -34,7 +34,7 @@ function ClassStudentDetailAccountList({ transactions }: ClassStudentDetailAccou
 				})
 			) : (
 				<div css={noneWrapperCSS}>
-					<h1>거래 내역이 없습니다.</h1>
+					<h5>거래 내역이 없습니다.</h5>
 				</div>
 			)}
 		</div>
@@ -44,10 +44,10 @@ function ClassStudentDetailAccountList({ transactions }: ClassStudentDetailAccou
 const wrapperCSS = css`
 	width: 100%;
 	padding: 30px;
-	margin-top: 30px;
 	border: 1px solid #dde3ea;
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
+	margin-bottom: 30px;
 
 	> h4 {
 		font-size: var(--teacher-h4);
@@ -60,6 +60,10 @@ const noneWrapperCSS = css`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+
+	> h5 {
+		font-size: var(--teacher-h5);
+	}
 `
 
 export default ClassStudentDetailAccountList

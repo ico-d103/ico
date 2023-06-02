@@ -47,6 +47,7 @@ export type getStudentListType = {
 	number: number
 	amount: number
 	creditRating: number
+	creditScore: number
 	job: null | string
 }
 
@@ -175,8 +176,6 @@ export type interstType = {
 	longPeriod: string[]
 	shortPeriod: string[]
 }
-
-
 
 export type getGovEconomyType = {
 	date: string
