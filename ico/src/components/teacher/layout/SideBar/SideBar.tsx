@@ -27,6 +27,7 @@ import "overlayscrollbars/overlayscrollbars.css"
 import { number } from "prop-types"
 import { useAtom } from "jotai"
 import { nationData } from "@/store/store"
+import useGetNation from "@/hooks/useGetNation"
 
 type SideBarProps = {
 	children: any
