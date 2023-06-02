@@ -121,7 +121,7 @@ public enum ErrorCode{
 
     HAS_NOT_JOB(HttpStatus.NOT_FOUND, "510", "해당 학생은 직업이 없습니다."),
 
-    WRONG_USER(HttpStatus.NOT_FOUND, "511", "같은 반 학생이 아닙니다."),
+    EMPTY_NATION(HttpStatus.BAD_REQUEST, "511", "아직 나라가 없는 학생입니다."),
 
     NO_PRODUCT_IMAGE(HttpStatus.NOT_FOUND, "608", "상품 이미지를 입력해주세요"),
 

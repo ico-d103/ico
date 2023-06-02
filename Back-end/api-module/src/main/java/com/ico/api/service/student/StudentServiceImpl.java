@@ -171,9 +171,13 @@ public class StudentServiceImpl implements StudentService{
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
 
-        // 나라가 등록 안 되어 있거나 다른 나라 학생을 조회하는 경우
-        if (student.getNation() == null || !student.getNation().getId().equals(nationId)) {
-            throw new CustomException(ErrorCode.WRONG_USER);
+        // 아직 나라에 등록하지 않은 학생인 경우
+        if (student.getNation() == null) {
+            throw new CustomException(ErrorCode.EMPTY_NATION);
+        }
+        // 다른 나라 학생인 경우
+        if (!student.getNation().getId().equals(nationId)) {
+            throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
         }
 
         // 최신순으로 조회
