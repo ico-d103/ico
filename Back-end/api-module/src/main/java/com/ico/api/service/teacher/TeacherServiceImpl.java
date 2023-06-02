@@ -1,5 +1,6 @@
 package com.ico.api.service.teacher;
 
+import com.ico.api.dto.teacher.TeacherResDto;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.user.JwtTokenProvider;
@@ -19,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
-import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -180,5 +180,16 @@ public class TeacherServiceImpl implements TeacherService {
         studentRepository.save(student);
 
         return password;
+    }
+
+    @Override
+    public TeacherResDto getTeacher(HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Teacher teacher = teacherRepository.findById(jwtTokenProvider.getId(token))
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return TeacherResDto.builder()
+                .identity(teacher.getIdentity())
+                .phoneNum(teacher.getPhoneNum())
+                .build();
     }
 }

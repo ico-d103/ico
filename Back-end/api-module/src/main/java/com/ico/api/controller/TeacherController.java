@@ -1,5 +1,6 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.teacher.TeacherResDto;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import com.ico.api.service.teacher.TeacherService;
 import lombok.RequiredArgsConstructor;
@@ -75,5 +76,15 @@ public class TeacherController {
     @PutMapping("/teacher/{studentId}")     // token 이 있을 때 3번째에 teacher 이어야지 role 통과 가능
     public ResponseEntity<String> resetPassword(@PathVariable Long studentId, HttpServletRequest request) {
         return ResponseEntity.ok(teacherService.resetStudentPassword(studentId, request));
+    }
+
+    /**
+     * 교사가 자신의 아이디와 휴대폰 번호 조회
+     * @param request
+     * @return
+     */
+    @GetMapping("/teacher")
+    public ResponseEntity<TeacherResDto> getTeacher(HttpServletRequest request) {
+        return ResponseEntity.ok(teacherService.getTeacher(request));
     }
 }
