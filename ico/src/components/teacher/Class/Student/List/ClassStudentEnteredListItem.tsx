@@ -31,16 +31,6 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 						<h5 css={nameCSS}>{student.name}</h5>
 						<h5 css={jobCSS}>{student.job ? student.job : "무직"}</h5>
 					</div>
-					<div css={divideCSS}></div>
-					<div css={middleWrapperCSS}>
-						<h5 css={creditCSS}>{student.creditRating}등급</h5>
-						<div css={buttonWrapperCSS}>
-							<div>{CLASS_GRADE_UP}</div>
-							<h4>{student.creditRating} 점</h4>
-							<div>{CLASS_GRADE_DOWN}</div>
-						</div>
-					</div>
-					<div css={divideCSS}></div>
 					<div css={rightWrapperCSS}>
 						<h5 css={amountCSS}>
 							{student.amount} {nation.currency}
@@ -64,14 +54,14 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 							theme={"manageMinus"}
 							onClick={() => {}}
 						/>
+						<div css={divideCSS}></div>
+						<h5 css={creditCSS}>{student.creditRating}등급</h5>
+						<div css={buttonWrapperCSS}>
+							<div>{CLASS_GRADE_DOWN}</div>
+							<h4>{student.creditRating} 점</h4>
+							<div>{CLASS_GRADE_UP}</div>
+						</div>
 					</div>
-					{/* <div css={rightWrapperCSS}>
-				<div css={currencyWrapperCSS}>
-					<div css={amountWrapperCSS}>{student.amount}</div>
-					{nation.currency}
-				</div>
-				<div css={creditWrapperCSS}>{student.creditRating}등급</div>
-			</div> */}
 				</div>
 			}
 			contentChildren={<></>}
@@ -83,7 +73,6 @@ const wrapperCSS = (idx: number) => {
 	return css`
 		width: 100%;
 		padding: 15px 15px;
-		/* background-color: ${idx % 2 === 0 ? `var(--teacher-main-color-op-2)` : `var(--common-back-color-2)`}; */
 		background-color: var(--common-back-color-2);
 		border-radius: 10px;
 
@@ -103,6 +92,7 @@ const wrapperCSS = (idx: number) => {
 const divideCSS = css`
 	height: 40px;
 	border: 1px solid rgba(0, 0, 0, 0.1);
+	margin: 0 20px;
 `
 
 const leftWrapperCSS = css`
@@ -132,7 +122,7 @@ const nameCSS = css`
 `
 
 const jobCSS = css`
-	min-width: 110px;
+	min-width: 100px;
 	color: var(--teacher-gray-color);
 `
 
@@ -144,13 +134,6 @@ const creditCSS = css`
 const amountCSS = css`
 	min-width: 100px;
 	font-weight: bold;
-`
-
-const middleWrapperCSS = css`
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	gap: 20px;
 `
 
 const buttonWrapperCSS = css`
@@ -179,13 +162,13 @@ const rightWrapperCSS = css`
 `
 
 const reasonCSS = css`
-	width: 300px;
+	width: 200px;
 	height: 30px;
 	margin-right: 20px;
 `
 
 const moneyCSS = css`
-	width: 100px;
+	width: 80px;
 	height: 30px;
 	margin-right: 20px;
 `
