@@ -24,16 +24,13 @@ public class StudentResDto {
 
     private boolean isFrozen;
 
-    private int creditScore;
-
     private Map<String, List<TransactionColDto>> transactions;
 
     @Builder
-    public StudentResDto(Long studentId, String studentName, boolean isFrozen, int creditScore, Map<String, List<TransactionColDto>> transactions) {
+    public StudentResDto(Long studentId, String studentName, boolean isFrozen, Map<String, List<TransactionColDto>> transactions) {
         this.studentId = studentId;
         this.studentName = studentName;
         this.isFrozen = isFrozen;
-        this.creditScore = creditScore;
         this.transactions = transactions;
     }
 
@@ -49,7 +46,6 @@ public class StudentResDto {
                 .studentId(student.getId())
                 .studentName(student.getName())
                 .isFrozen(student.isFrozen())
-                .creditScore(student.getCreditScore())
                 .transactions(map)
                 .build();
     }
