@@ -171,11 +171,15 @@ public enum ErrorCode{
 
     INTEREST_NOT_DESCENDING(HttpStatus.BAD_REQUEST, "721", "이자율은 신용등급이 낮을수록 작아져야 합니다."),
 
-    NOT_FOUND_INVESET(HttpStatus.BAD_REQUEST, "722", "매수 이력이 없습니다."),
+    NOT_FOUND_INVEST(HttpStatus.BAD_REQUEST, "722", "매수 이력이 없습니다."),
 
     ALREADY_EXIST_DEPOSIT(HttpStatus.BAD_REQUEST, "724", "예금은 1개만 신청이 가능합니다."),
 
     NOT_FOUNT_DEPOSIT(HttpStatus.BAD_REQUEST, "725", "예금 신청 내역이 없습니다."),
+
+    NOT_FOUND_SUBJECT(HttpStatus.NOT_FOUND, "800", "과목명이 비었습니다."),
+
+    NOT_FOUND_RATING(HttpStatus.NOT_FOUND, "801", "등급이 비었습니다."),
     ;
 
     private final HttpStatus httpStatus;

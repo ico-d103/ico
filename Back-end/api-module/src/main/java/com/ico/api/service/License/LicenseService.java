@@ -2,6 +2,7 @@ package com.ico.api.service.License;
 
 import com.ico.api.dto.license.NationLicenseResDto;
 import com.ico.api.dto.license.StudentLicenseResDto;
+import com.ico.api.dto.license.StudentLicenseUpdateReqDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -39,4 +40,27 @@ public interface LicenseService {
      * @return
      */
     List<StudentLicenseResDto> getStudentLicense(HttpServletRequest request);
+
+    /**
+     * 교사가 나라의 자격증을 삭제
+     * @param request
+     * @param nationLicenseId
+     */
+    void deleteNationLicense(HttpServletRequest request, Long nationLicenseId);
+
+    /**
+     * 교사가 나라의 자격증을 생성
+     * @param request
+     * @param subject
+     */
+    String createNationLicense(HttpServletRequest request, String subject);
+
+    /**
+     * 학생들의 자격증 등급을 입력받은 수치로 업데이트
+     * @param request
+     * @param reqDto
+     */
+    void updateStudentLicense(HttpServletRequest request, StudentLicenseUpdateReqDto reqDto);
+
+    void updateStudentDetailLicense(HttpServletRequest request, Integer rating, Long studentLicenseId);
 }

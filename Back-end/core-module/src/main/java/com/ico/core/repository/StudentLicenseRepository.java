@@ -1,6 +1,5 @@
 package com.ico.core.repository;
 
-import com.ico.core.entity.NationLicense;
 import com.ico.core.entity.StudentLicense;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,4 +11,6 @@ import java.util.List;
 public interface StudentLicenseRepository extends JpaRepository<StudentLicense, Long> {
 
     List<StudentLicense> findAllByStudentId(Long studentId);
+
+    List<StudentLicense> findAllBySubjectAndNationId(String subject, Long nationId);
 }
