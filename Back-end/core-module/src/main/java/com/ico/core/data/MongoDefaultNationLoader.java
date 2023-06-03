@@ -243,43 +243,33 @@ public class MongoDefaultNationLoader implements CommandLineRunner {
         document.put("default_licenses", Arrays.asList(
                 new HashMap<String, Object>() {{
                     put("subject", "수학");
-                    put("rating", -1);
                 }},
                 new HashMap<String, Object>() {{
                     put("subject", "과학");
-                    put("rating", -1);
                 }},
                 new HashMap<String, Object>() {{
                     put("subject", "사회");
-                    put("rating", -1);
                 }},
                 new HashMap<String, Object>() {{
                     put("subject", "독서");
-                    put("rating", -1);
                 }},
                 new HashMap<String, Object>() {{
                     put("subject", "바른 글씨");
-                    put("rating", -1);
                 }},
                 new HashMap<String, Object>() {{
                     put("subject", "정리 정돈");
-                    put("rating", -1);
                 }},
                 new HashMap<String, Object>() {{
                     put("subject", "체력");
-                    put("rating", -1);
                 }},
                 new HashMap<String, Object>() {{
-                    put("subject", "디자인");
-                    put("rating", -1);
+                        put("subject", "디자인");
                 }},
                 new HashMap<String, Object>() {{
                     put("subject", "저축");
-                    put("rating", -1);
                 }},
                 new HashMap<String, Object>() {{
                     put("subject", "운전면허");
-                    put("rating", -1);
                 }}
         ));
 

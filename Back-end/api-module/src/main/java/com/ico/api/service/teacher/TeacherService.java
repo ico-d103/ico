@@ -1,11 +1,13 @@
 package com.ico.api.service.teacher;
 
+import com.ico.api.dto.license.StudentLicenseResDto;
 import com.ico.api.dto.teacher.TeacherResDto;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Teacher Service
@@ -57,4 +59,12 @@ public interface TeacherService {
      * @return password
      */
     String findPassword(String phoneNum);
+
+    /**
+     * 교사가 학생의 자격증 조회
+     * @param request
+     * @param studentId
+     * @return
+     */
+    List<StudentLicenseResDto> getStudentLicense(HttpServletRequest request, Long studentId);
 }

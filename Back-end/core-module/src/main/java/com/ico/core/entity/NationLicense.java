@@ -31,13 +31,11 @@ public class NationLicense {
 
     private String subject;
 
-    private Byte rating;
 
     @Builder
-    public NationLicense(Long id, Nation nation, String subject, Byte rating) {
+    public NationLicense(Long id, Nation nation, String subject) {
         this.id = id;
         this.nation = nation;
         this.subject = subject;
-        this.rating = rating;
     }
 }

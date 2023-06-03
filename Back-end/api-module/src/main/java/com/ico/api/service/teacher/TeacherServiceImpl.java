@@ -1,5 +1,6 @@
 package com.ico.api.service.teacher;
 
+import com.ico.api.dto.license.StudentLicenseResDto;
 import com.ico.api.dto.teacher.TeacherResDto;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import com.ico.api.service.S3UploadService;
@@ -9,10 +10,12 @@ import com.ico.core.code.Role;
 import com.ico.core.code.Status;
 import com.ico.core.entity.Certification;
 import com.ico.core.entity.Student;
+import com.ico.core.entity.StudentLicense;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.CertificationRepository;
+import com.ico.core.repository.StudentLicenseRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -48,6 +54,7 @@ public class TeacherServiceImpl implements TeacherService {
     private final StudentRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
     private final CertificationRepository certificationRepository;
+    private final StudentLicenseRepository studentLicenseRepository;
     private final S3UploadService s3;
 
     @Override
@@ -244,5 +251,31 @@ public class TeacherServiceImpl implements TeacherService {
                 .identity(teacher.getIdentity())
                 .phoneNum(teacher.getPhoneNum())
                 .build();
+    }
+
+    @Override
+    public List<StudentLicenseResDto> getStudentLicense(HttpServletRequest request, Long studentId) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        if (!nationId.equals(student.getNation().getId())) {
+            throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
+        }
+        List<StudentLicense> licenses = studentLicenseRepository.findAllByStudentId(studentId);
+        if (licenses.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
+        }
+        List<StudentLicenseResDto> result = new ArrayList<>();
+        for (StudentLicense license : licenses) {
+            StudentLicenseResDto dto = StudentLicenseResDto.builder()
+                    .id(license.getId())
+                    .subject(license.getSubject())
+                    .rating(license.getRating())
+                    .build();
+            result.add(dto);
+        }
+        return result;
     }
 }
