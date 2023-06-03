@@ -1,18 +1,31 @@
 import { useState, useRef, useEffect } from "react"
 import { css } from "@emotion/react"
+import { useSetAtom } from "jotai"
+import { selectedStudent } from "@/store/store"
 
 type CollapseMenuStudentDetailPropsType = {
+	studentId: number
 	titleChildren: JSX.Element
 	contentChildren: JSX.Element
 	reverse?: boolean
 }
 
-function CollapseMenuStudentDetail({ titleChildren, contentChildren, reverse }: CollapseMenuStudentDetailPropsType) {
+function CollapseMenuStudentDetail({
+	studentId,
+	titleChildren,
+	contentChildren,
+	reverse,
+}: CollapseMenuStudentDetailPropsType) {
 	const [isOpened, setIsOpened] = useState<boolean>(reverse ? true : false)
 	const [refresh, setRefresh] = useState<boolean>(false)
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
+	const setSelectedStudentAtom = useSetAtom(selectedStudent)
 
 	useEffect(() => {
+		if (isOpened) {
+			setSelectedStudentAtom(studentId)
+		}
+
 		setTimeout(() => {
 			setRefresh((prev) => !prev)
 		}, 400)

@@ -1,6 +1,6 @@
 import { css } from "@emotion/react"
 import { getStudentDetailType, getStudentListType } from "@/types/teacher/apiReturnTypes"
-import { useSetAtom } from "jotai"
+import { useAtomValue, useSetAtom } from "jotai"
 import { selectedStudent } from "@/store/store"
 import useGetNation from "@/hooks/useGetNation"
 import { CLASS_GRADE_DOWN, CLASS_GRADE_UP } from "../../ClassIcons"
@@ -11,6 +11,8 @@ import ClassStudentDetailAccountList from "../Detail/ClassStudentDetailAccountLi
 import { useQuery } from "@tanstack/react-query"
 import { getStudentDetailAPI } from "@/api/teacher/class/getStudentDetailAPI"
 import ClassStudentDetailCertificate from "../Detail/ClassStudentDetailCertificate"
+import { useEffect } from "react"
+import ClassStudentDetail from "../Detail/ClassStudentDetail"
 
 type StudentEnteredListItemPropsType = {
 	student: getStudentListType
@@ -19,22 +21,19 @@ type StudentEnteredListItemPropsType = {
 
 function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsType) {
 	const [nation] = useGetNation()
-	const setSelectedStudentAtom = useSetAtom(selectedStudent)
+	const selectedStudentAtom = useAtomValue(selectedStudent)
 
-	const openStudentDetailHandler = (id: number) => {
-		setSelectedStudentAtom(id)
-	}
-
-	const { data, refetch } = useQuery<getStudentDetailType>(
-		["enteredStudentDetail", student.id],
-		() => getStudentDetailAPI({ id: student.id }),
-		{ enabled: false },
-	)
+	// const { data, refetch } = useQuery<getStudentDetailType>(
+	// 	["enteredStudentDetail", selectedStudentAtom],
+	// 	() => getStudentDetailAPI({ id: selectedStudentAtom }),
+	// 	{ enabled: false },
+	// )
 
 	return (
 		<CollapseMenuStudentDetail
+			studentId={student.id}
 			titleChildren={
-				<div css={wrapperCSS(idx)} onClick={() => openStudentDetailHandler(student.id)}>
+				<div css={wrapperCSS(idx)}>
 					<div css={leftWrapperCSS}>
 						<input type="checkbox" />
 						<h5 css={numberCSS}>{student.number}</h5>
@@ -74,12 +73,7 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 					</div>
 				</div>
 			}
-			contentChildren={
-				<div css={contentChildrenCSS}>
-					<ClassStudentDetailAccountList transactions={data?.transactions} />
-					<ClassStudentDetailCertificate />
-				</div>
-			}
+			contentChildren={selectedStudentAtom === student.id ? <ClassStudentDetail /> : <></>}
 		></CollapseMenuStudentDetail>
 	)
 }
