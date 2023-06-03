@@ -59,6 +59,8 @@ public enum ErrorCode{
 
     NOT_FOUND_LICENSE(HttpStatus.NOT_FOUND, "36", "자격증이 없습니다."),
 
+    NOT_EQUAL_NATION(HttpStatus.BAD_REQUEST, "37", "나라가 다릅니다."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, "104", "비밀번호 입력 칸이 비었습니다."),
@@ -73,7 +75,7 @@ public enum ErrorCode{
 
     WRONG_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "114", "휴대폰 번호 양식이 틀렸습니다."),
 
-    NOT_EQUAL_NATION(HttpStatus.BAD_REQUEST, "115", "교사와 학생의 나라가 일치하지 않습니다."),
+    NOT_EQUAL_NATION_TEACHER_STUDENT(HttpStatus.BAD_REQUEST, "115", "교사와 학생의 나라가 일치하지 않습니다."),
 
     WRONG_CHECKED_PW(HttpStatus.BAD_REQUEST, "116", "입력한 비밀번호와 체크 비밀번호가 다릅니다."),
 

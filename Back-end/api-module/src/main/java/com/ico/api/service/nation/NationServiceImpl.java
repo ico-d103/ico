@@ -1,6 +1,5 @@
 package com.ico.api.service.nation;
 
-import com.ico.api.dto.license.NationLicenseResDto;
 import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
 import com.ico.api.dto.nation.TradingTimeReqDto;
@@ -56,7 +55,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -455,30 +453,5 @@ public class NationServiceImpl implements NationService {
 
         // 연관관계 매핑을 모두 끊고 마지막에 삭제
         nationRepository.delete(nation);
-    }
-
-    @Override
-    public List<NationLicenseResDto> getNationLicense(HttpServletRequest request) {
-        String token = jwtTokenProvider.parseJwt(request);
-        Long nationId = jwtTokenProvider.getNation(token);
-
-        List<NationLicense> licenses = nationLicenseRepository.findAllByNationId(nationId);
-        if (licenses.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
-        }
-        List<NationLicenseResDto> result = new ArrayList<>();
-        for (NationLicense license : licenses) {
-            NationLicenseResDto dto = NationLicenseResDto.builder()
-                    .id(license.getId())
-                    .subject(license.getSubject())
-                    .build();
-            result.add(dto);
-        }
-        return result;
-    }
-
-    @Override
-    public void updateNationLicense(HttpServletRequest request, Long nationLicenseId) {
-
     }
 }

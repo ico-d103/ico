@@ -77,19 +77,4 @@ public interface NationService {
      * @param request
      */
     void deleteNation(HttpServletRequest request);
-
-    /**
-     * 교사가 나라의 자격증 조회
-     * @param request
-     * @return NationLicenseResDto
-     */
-    List<NationLicenseResDto> getNationLicense(HttpServletRequest request);
-
-    /**
-     * 교사가 나라의 자격증 수정
-     * @param request
-     * @param nationLicenseId
-     */
-    void updateNationLicense(HttpServletRequest request, Long nationLicenseId);
-
 }

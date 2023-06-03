@@ -60,11 +60,4 @@ public interface TeacherService {
      */
     String findPassword(String phoneNum);
 
-    /**
-     * 교사가 학생의 자격증 조회
-     * @param request
-     * @param studentId
-     * @return
-     */
-    List<StudentLicenseResDto> getStudentLicense(HttpServletRequest request, Long studentId);
 }
