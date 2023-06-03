@@ -42,9 +42,12 @@ public interface StudentService {
     /**
      * 학생 상세보기 조회
      *
+     * @param studentId
+     * @param page
+     * @param request
      * @return
      */
-    StudentResDto findStudent(Long studentId, int page, int size, HttpServletRequest request);
+    StudentResDto findStudent(Long studentId, int page, HttpServletRequest request);
 
     /**
      * 학생 내 정보 조회

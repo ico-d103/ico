@@ -43,8 +43,11 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
     private final NationRepository nationRepository;
 
     @Override
-    public TreasuryHistoryTeacherResDto findAllTreasuryHistory(int page, int size, HttpServletRequest request) {
+    public TreasuryHistoryTeacherResDto findAllTreasuryHistory(int page, HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        // 페이지 size
+        int size = 10;
 
         // 페이지 번호 갯수
         // page 변수는 인덱스 값으로 적용

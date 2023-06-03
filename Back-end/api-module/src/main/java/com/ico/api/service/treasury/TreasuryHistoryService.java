@@ -21,7 +21,7 @@ public interface TreasuryHistoryService {
      * @param request
      * @return
      */
-    TreasuryHistoryTeacherResDto findAllTreasuryHistory(int page, int size, HttpServletRequest request);
+    TreasuryHistoryTeacherResDto findAllTreasuryHistory(int page, HttpServletRequest request);
 
     /**
      * 국고 사용 내역 입력

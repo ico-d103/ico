@@ -78,14 +78,15 @@ public class StudentController {
      * 학생 상세보기 조회
      *
      * @param studentId
+     * @param page
+     * @param request
      * @return
      */
     @GetMapping("/teacher/{studentId}")
     public ResponseEntity<StudentResDto> findStudent(@PathVariable Long studentId,
                                                      @RequestParam(value = "page", defaultValue = "1") int page,
-                                                     @RequestParam(value = "size", defaultValue = "5") int size,
                                                      HttpServletRequest request) {
-        return ResponseEntity.ok(studentService.findStudent(studentId, page - 1, size, request));
+        return ResponseEntity.ok(studentService.findStudent(studentId, page - 1, request));
     }
 
     /**
