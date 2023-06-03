@@ -1,6 +1,8 @@
 package com.ico.core.repository;
 
 import com.ico.core.document.Transaction;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -23,4 +25,8 @@ public interface TransactionMongoRepository extends MongoRepository<Transaction,
      * @return 거래 내역 목록
      */
     List<Transaction> findAllByFromOrToOrderByIdDesc(String from, String to);
+
+    Page<Transaction> findAllByFromOrTo(String from, String to, Pageable pageable);
+
+    Long countByFromOrTo(String from, String to);
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -80,8 +81,11 @@ public class StudentController {
      * @return
      */
     @GetMapping("/teacher/{studentId}")
-    public ResponseEntity<StudentResDto> findStudent(@PathVariable Long studentId, HttpServletRequest request) {
-        return ResponseEntity.ok(studentService.findStudent(studentId, request));
+    public ResponseEntity<StudentResDto> findStudent(@PathVariable Long studentId,
+                                                     @RequestParam(value = "page", defaultValue = "1") int page,
+                                                     @RequestParam(value = "size", defaultValue = "5") int size,
+                                                     HttpServletRequest request) {
+        return ResponseEntity.ok(studentService.findStudent(studentId, page - 1, size, request));
     }
 
     /**
