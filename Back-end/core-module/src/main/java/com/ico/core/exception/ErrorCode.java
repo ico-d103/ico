@@ -55,6 +55,8 @@ public enum ErrorCode{
 
     NATION_NOT_FOUNT_STUDENT(HttpStatus.NOT_FOUND, "33", "나라id에 해당하는 학생이 없습니다."),
 
+    CHECK_DEFAULT_STUDENT_DB(HttpStatus.BAD_REQUEST, "35", "default student db 확인이 필요합니다."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, "104", "비밀번호 입력 칸이 비었습니다."),

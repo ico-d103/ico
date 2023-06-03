@@ -5,12 +5,15 @@ import com.ico.api.dto.student.StudentSseDto;
 import com.ico.api.sse.SseEmitters;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Role;
+import com.ico.core.data.Default_license;
 import com.ico.core.entity.Immigration;
+import com.ico.core.entity.StudentLicense;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.ImmigrationRepository;
+import com.ico.core.repository.StudentLicenseRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -116,9 +119,11 @@ public class ImmigrationServiceImpl implements ImmigrationService {
 
             Student student = immigration.getStudent();
 
+            // 학생 요청 승인
             student.setNation(immigration.getNation());
             studentRepository.save(student);
 
+            // 학생 요청 삭제
             immigrationRepository.delete(immigration);
 
         }

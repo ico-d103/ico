@@ -2,6 +2,7 @@ package com.ico.core.document;
 
 import com.ico.core.data.Default_interest;
 import com.ico.core.data.Default_job;
+import com.ico.core.data.Default_license;
 import com.ico.core.data.Default_rule;
 import com.ico.core.data.Default_tax;
 import lombok.AccessLevel;
@@ -16,6 +17,7 @@ import java.util.List;
  * 나라의 기본 데이터 생성 관련 Document
  *
  * @author 서재건
+ * @author 강교철
  */
 @Document(collection = "default_nation")
 @Getter
@@ -32,5 +34,7 @@ public class DefaultNation {
     private List<Default_interest> default_interests;
 
     private List<Default_rule> default_rules;
+
+    private List<Default_license> default_licenses;
 
 }
