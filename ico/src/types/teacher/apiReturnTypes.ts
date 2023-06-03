@@ -183,3 +183,9 @@ export type getGovEconomyType = {
 	totalAccount: number
 	totalAmount: number
 }
+
+
+export type getTeacherInfoType = {
+    identity: string,
+    phoneNum: string
+}

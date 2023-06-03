@@ -1,8 +1,12 @@
+import React from 'react'
 import { css } from "@emotion/react"
 import { MAIN_SETTING, MAIN_SIGNOUT } from "./SideBarIcons"
 import { removeCookie } from "@/api/cookie"
 import { useRouter } from "next/router"
 import useGetTokenStatus from "@/hooks/useGetTokenStatus"
+import useCompHandler from '@/hooks/useCompHandler'
+import Modal from '@/components/common/Modal/Modal'
+import Account from '../../Account/Account'
 
 type SideBarLeftProps = {
 	element: { [prop: number]: { name: string; label: string; content: any } }
@@ -14,12 +18,13 @@ type SideBarLeftProps = {
 function SideBarLeft({ element, logo, selectHandler, selected }: SideBarLeftProps) {
 	const router = useRouter()
 	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
+	const [openComp, closeComp, compState] = useCompHandler()
 
 	const signoutHandler = () => {
 		removeCookie("Authorization", { path: "/" })
-		setTokenStatus({showMessage: false}).then((res) => {
-            console.log('여기에 할일')
-        })
+		setTokenStatus({ showMessage: false }).then((res) => {
+			console.log("여기에 할일")
+		})
 		// router.push("/teacher/login")
 	}
 
@@ -38,27 +43,30 @@ function SideBarLeft({ element, logo, selectHandler, selected }: SideBarLeftProp
 	})
 
 	return (
-		<div css={sideBarLeftWrapperCSS}>
-			<div css={topWrapperCSS}>
-				<div css={logoWrapperCSS}>{logo}</div>
-				{renderElement}
-			</div>
-			<div css={bottomWrapperCSS}>
-				<div
-					css={elementWrapperCSS({ target: -1, selected })}
-					onClick={() => {
-						signoutHandler()
-					}}
-				>
-					<div css={elementContentCSS}>{MAIN_SIGNOUT}</div>
+		<React.Fragment>
+			<Modal compState={compState} closeComp={closeComp} transition={'scale'} content={<Account/>}/>
+			<div css={sideBarLeftWrapperCSS}>
+				<div css={topWrapperCSS}>
+					<div css={logoWrapperCSS}>{logo}</div>
+					{renderElement}
 				</div>
-				<div css={elementWrapperCSS({ target: -1, selected })}>
-					<div css={elementContentCSS}>{MAIN_SETTING}</div>
+				<div css={bottomWrapperCSS}>
+					<div
+						css={elementWrapperCSS({ target: -1, selected })}
+						onClick={() => {
+							signoutHandler()
+						}}
+					>
+						<div css={elementContentCSS}>{MAIN_SIGNOUT}</div>
+					</div>
+					<div css={elementWrapperCSS({ target: -1, selected })}>
+						<div css={elementContentCSS}>{MAIN_SETTING}</div>
+					</div>
+					<div css={bottomLineCSS} />
+					<img css={userImgCSS} src={"/assets/account.png"} alt="" onClick={openComp} />
 				</div>
-				<div css={bottomLineCSS} />
-				<img css={userImgCSS} src={"/assets/account.png"} alt="" />
 			</div>
-		</div>
+		</React.Fragment>
 	)
 }
 

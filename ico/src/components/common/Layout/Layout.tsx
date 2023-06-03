@@ -102,18 +102,6 @@ function Layout({ children }: LayoutProps) {
 	}
 
 	const ROUTES: { [prop: string]: layoutTokenStatusType } = {
-		"/": {
-			role: ["GUEST", "TEACHER", "STUDENT"],
-			status: [
-				"require_login",
-				"require_submit_code",
-				"require_refresh_token",
-				"require_submit_certification",
-				"require_create_nation",
-				"require_approval",
-				"approved",
-			],
-		},
 		"/404": {
 			role: ["GUEST", "TEACHER", "STUDENT"],
 			status: [
@@ -126,6 +114,7 @@ function Layout({ children }: LayoutProps) {
 				"approved",
 			],
 		},
+		"/": { role: ["GUEST"], status: ["require_login"] },
 		"/admin/login": { role: ["GUEST"], status: ["require_login"] },
 		"/admin/confirm": { role: ["ADMIN"], status: ["admin"] },
 		"/student/login": { role: ["GUEST"], status: ["require_login"] },
