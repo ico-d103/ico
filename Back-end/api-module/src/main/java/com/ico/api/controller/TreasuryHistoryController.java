@@ -37,15 +37,13 @@ public class TreasuryHistoryController {
      * 교사용 국고 사용 내역 조회
      *
      * @param page
-     * @param size
      * @param request
      * @return
      */
     @GetMapping("/teacher")
     public ResponseEntity<TreasuryHistoryTeacherResDto> findAllTreasuryHistory(@RequestParam(value = "page", defaultValue = "1") int page,
-                                                                               @RequestParam(value = "size", defaultValue = "10") int size,
                                                                                HttpServletRequest request) {
-        return ResponseEntity.ok(treasuryHistoryService.findAllTreasuryHistory(page - 1, size, request));
+        return ResponseEntity.ok(treasuryHistoryService.findAllTreasuryHistory(page - 1, request));
     }
 
     /**

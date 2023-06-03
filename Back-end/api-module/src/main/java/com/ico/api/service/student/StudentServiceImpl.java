@@ -31,6 +31,9 @@ import com.ico.core.repository.TeacherRepository;
 import com.ico.core.repository.TransactionMongoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -163,8 +166,24 @@ public class StudentServiceImpl implements StudentService{
 
     @Transactional(readOnly = true)
     @Override
-    public StudentResDto findStudent(Long studentId, HttpServletRequest request) {
+    public StudentResDto findStudent(Long studentId, int page, HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        String studentIdx = String.valueOf(studentId);
+
+        // 페이지 size
+        int size = 5;
+
+        // 페이지 번호 갯수
+        // page 변수는 인덱스 값으로 적용
+        int totalPageNumber = (int) (((transactionMongoRepository.countByFromOrTo(studentIdx, studentIdx) - 1) / size) + 1);
+        if (page < 0) {
+            log.info("[findStudent] 1 미만의 페이지 번호를 넘겨받은 경우");
+            page = 0;
+        } else if (page >= totalPageNumber) {
+            log.info("[findStudent] 페이지 번호의 최댓값보다 큰 번호를 넘겨받은 경우");
+            page = totalPageNumber - 1;
+        }
 
         Student student = studentRepository.findById(studentId).orElseThrow(() -> {
             log.info("[findStudent] studentId[{}]에 해당하는 학생이 없습니다.", studentId);
@@ -181,14 +200,14 @@ public class StudentServiceImpl implements StudentService{
         }
 
         // 최신순으로 조회
-        List<Transaction> transactions = transactionMongoRepository.findAllByFromOrToOrderByIdDesc(String.valueOf(studentId), String.valueOf(studentId));
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+        Page<Transaction> transactions = transactionMongoRepository.findAllByFromOrTo(studentIdx, studentIdx, pageRequest);
 
         // 최신순 날짜 별로 묶어서 순서가 있는 Map 생성
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
         Map<String, List<TransactionColDto>> map = new LinkedHashMap<>();
 
         for (Transaction transaction : transactions) {
-
             String date = transaction.getDate().format(formatter);
             int amount = transaction.getFrom().equals(String.valueOf(studentId)) ? -1 * transaction.getAmount() : transaction.getAmount();
 
@@ -198,7 +217,7 @@ public class StudentServiceImpl implements StudentService{
                             .amount(Formatter.number.format(amount))
                     .build());
         }
-        return new StudentResDto().of(student, map);
+        return new StudentResDto().of(student, map, totalPageNumber);
     }
 
     @Transactional(readOnly = true)
