@@ -57,6 +57,8 @@ public enum ErrorCode{
 
     CHECK_DEFAULT_STUDENT_DB(HttpStatus.BAD_REQUEST, "35", "default student db 확인이 필요합니다."),
 
+    NOT_FOUND_LICENSE(HttpStatus.NOT_FOUND, "36", "나라에 자격증이 없습니다."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, "104", "비밀번호 입력 칸이 비었습니다."),
