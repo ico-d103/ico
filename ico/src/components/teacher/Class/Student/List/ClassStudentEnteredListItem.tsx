@@ -1,7 +1,8 @@
+import { useState, useEffect } from "react"
 import { css } from "@emotion/react"
 import { getStudentListType } from "@/types/teacher/apiReturnTypes"
-import { useAtomValue } from "jotai"
-import { selectedStudent } from "@/store/store"
+import { useAtomValue, useAtom } from "jotai"
+import { selectedStudent, checkedStudent } from "@/store/store"
 import useGetNation from "@/hooks/useGetNation"
 import { CLASS_GRADE_DOWN, CLASS_GRADE_UP } from "../../ClassIcons"
 import Button from "@/components/common/Button/Button"
@@ -17,6 +18,15 @@ type StudentEnteredListItemPropsType = {
 function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsType) {
 	const [nation] = useGetNation()
 	const selectedStudentAtom = useAtomValue(selectedStudent)
+	const [checkedStudentAtom, setCheckedStudentAtom] = useAtom(checkedStudent)
+
+	const changeToggleState = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.checked) {
+			setCheckedStudentAtom([...checkedStudentAtom, student.id])
+		} else {
+			setCheckedStudentAtom(checkedStudentAtom.filter((id) => id !== student.id))
+		}
+	}
 
 	return (
 		<CollapseMenuStudentDetail
@@ -29,6 +39,7 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 							onClick={(e) => {
 								e.stopPropagation()
 							}}
+							onChange={changeToggleState}
 						/>
 						<h5 css={numberCSS}>{student.number}</h5>
 						<h5 css={nameCSS}>{student.name}</h5>
