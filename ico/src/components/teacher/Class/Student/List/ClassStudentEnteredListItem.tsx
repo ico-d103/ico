@@ -1,17 +1,12 @@
 import { css } from "@emotion/react"
-import { getStudentDetailType, getStudentListType } from "@/types/teacher/apiReturnTypes"
-import { useAtomValue, useSetAtom } from "jotai"
+import { getStudentListType } from "@/types/teacher/apiReturnTypes"
+import { useAtomValue } from "jotai"
 import { selectedStudent } from "@/store/store"
 import useGetNation from "@/hooks/useGetNation"
 import { CLASS_GRADE_DOWN, CLASS_GRADE_UP } from "../../ClassIcons"
 import Button from "@/components/common/Button/Button"
 import Input from "@/components/common/Input/Input"
 import CollapseMenuStudentDetail from "@/components/teacher/common/CollapseMenu/CollapseMenuStudentDetail"
-import ClassStudentDetailAccountList from "../Detail/ClassStudentDetailAccountList"
-import { useQuery } from "@tanstack/react-query"
-import { getStudentDetailAPI } from "@/api/teacher/class/getStudentDetailAPI"
-import ClassStudentDetailCertificate from "../Detail/ClassStudentDetailCertificate"
-import { useEffect } from "react"
 import ClassStudentDetail from "../Detail/ClassStudentDetail"
 
 type StudentEnteredListItemPropsType = {
@@ -23,19 +18,18 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 	const [nation] = useGetNation()
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 
-	// const { data, refetch } = useQuery<getStudentDetailType>(
-	// 	["enteredStudentDetail", selectedStudentAtom],
-	// 	() => getStudentDetailAPI({ id: selectedStudentAtom }),
-	// 	{ enabled: false },
-	// )
-
 	return (
 		<CollapseMenuStudentDetail
 			studentId={student.id}
 			titleChildren={
-				<div css={wrapperCSS(idx)}>
+				<div css={wrapperCSS}>
 					<div css={leftWrapperCSS}>
-						<input type="checkbox" />
+						<input
+							type="checkbox"
+							onClick={(e) => {
+								e.stopPropagation()
+							}}
+						/>
 						<h5 css={numberCSS}>{student.number}</h5>
 						<h5 css={nameCSS}>{student.name}</h5>
 						<h5 css={jobCSS}>{student.job ? student.job : "무직"}</h5>
@@ -44,8 +38,20 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 						<h5 css={amountCSS}>
 							{student.amount} {nation.currency}
 						</h5>
-						<Input theme={"greenDefault"} placeholder="사유를 입력해 주세요" customCss={reasonCSS} />
-						<Input theme={"greenDefault"} placeholder={nation.currency} customCss={moneyCSS} />
+						<Input
+							theme={"greenDefault"}
+							placeholder="사유를 입력해 주세요"
+							customCss={reasonCSS}
+							isTextarea={false}
+							onClick={(e) => e.stopPropagation()}
+						/>
+						<Input
+							theme={"greenDefault"}
+							placeholder={nation.currency}
+							customCss={moneyCSS}
+							isTextarea={false}
+							onClick={(e) => e.stopPropagation()}
+						/>
 						<Button
 							text={"지급"}
 							fontSize={`var(--teacher-h6)`}
@@ -53,7 +59,7 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 							height={"30px"}
 							theme={"managePlus"}
 							margin={"0 10px 0 0"}
-							onClick={() => {}}
+							onClick={(e) => e.stopPropagation()}
 						/>
 						<Button
 							text={"차감"}
@@ -61,14 +67,14 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 							width={"50px"}
 							height={"30px"}
 							theme={"manageMinus"}
-							onClick={() => {}}
+							onClick={(e) => e.stopPropagation()}
 						/>
 						<div css={divideCSS}></div>
 						<h5 css={creditRatingCSS}>{student.creditRating}등급</h5>
 						<div css={buttonWrapperCSS}>
-							<div>{CLASS_GRADE_DOWN}</div>
+							<div onClick={(e) => e.stopPropagation()}>{CLASS_GRADE_DOWN}</div>
 							<h4 css={creditScoreCSS}>{student.creditScore} 점</h4>
-							<div>{CLASS_GRADE_UP}</div>
+							<div onClick={(e) => e.stopPropagation()}>{CLASS_GRADE_UP}</div>
 						</div>
 					</div>
 				</div>
@@ -78,40 +84,23 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 	)
 }
 
-const contentChildrenCSS = css`
+const wrapperCSS = css`
+	width: 100%;
+	padding: 15px 15px;
+	background-color: var(--common-back-color-2);
+	border-radius: 10px;
+
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	gap: 30px;
+	justify-content: space-between;
+	cursor: pointer;
+	transition: all 0.2s;
 
-	> div:nth-of-type(1) {
-		width: 45%;
-	}
-
-	> div:nth-of-type(2) {
-		width: 55%;
+	:hover {
+		filter: brightness(93%);
 	}
 `
-
-const wrapperCSS = (idx: number) => {
-	return css`
-		width: 100%;
-		padding: 15px 15px;
-		background-color: var(--common-back-color-2);
-		border-radius: 10px;
-
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: space-between;
-		cursor: pointer;
-		transition: all 0.2s;
-
-		:hover {
-			filter: brightness(93%);
-		}
-	`
-}
 
 const divideCSS = css`
 	height: 40px;
@@ -134,6 +123,13 @@ const leftWrapperCSS = css`
 		height: 20px;
 		cursor: pointer;
 	}
+`
+
+const rightWrapperCSS = css`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
 `
 
 const numberCSS = css`
@@ -180,13 +176,6 @@ const buttonWrapperCSS = css`
 			transform: scale(1.2);
 		}
 	}
-`
-
-const rightWrapperCSS = css`
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
 `
 
 const reasonCSS = css`
