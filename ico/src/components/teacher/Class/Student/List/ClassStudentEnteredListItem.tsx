@@ -144,9 +144,18 @@ const leftWrapperCSS = css`
 	}
 
 	> input {
-		width: 20px;
-		height: 20px;
+		width: 23px;
+		height: 23px;
 		cursor: pointer;
+		border-radius: 50%;
+		border: 1px solid #999;
+		appearance: none;
+		transition: background 0.2s;
+
+		:checked {
+			background: var(--teacher-main-color);
+			border: none;
+		}
 	}
 `
 
