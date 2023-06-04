@@ -18,7 +18,6 @@ function StudentEnteredList() {
 	const noti = useNotification()
 	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
 	const [openJobResetModal, closeJobResetModal, jobResetModalState] = useCompHandler()
-	const [openPasswordResetModal, closePasswordResetModal, passwordResetModalState] = useCompHandler()
 	const checkedStudentAtom = useAtomValue(checkedStudent)
 
 	useEffect(() => {
@@ -54,18 +53,6 @@ function StudentEnteredList() {
 			label: "직업 초기화",
 			function: openJobResetModal,
 		},
-		{
-			name: "resetPW",
-			content: null,
-			label: "비번 초기화",
-			function: openPasswordResetModal,
-		},
-		{
-			name: "resetAccount",
-			content: null,
-			label: "계좌 정지",
-			function: () => {}, // 체크박스로 선택된 학생들만 계좌 정지
-		},
 	]
 
 	return (
@@ -85,20 +72,6 @@ function StudentEnteredList() {
 							"더이상 학생들이 직업 활동을 할 수 없습니다!",
 							"월급 날에 해지일까지 일한 날짜만큼 보수를 받습니다.",
 						]}
-					/>
-				}
-			/>
-			<Modal
-				compState={passwordResetModalState}
-				closeComp={closePasswordResetModal}
-				transition={"scale"}
-				content={
-					<ModalAlert
-						title={"모든 학생들의 비밀번호를 초기화합니다."}
-						titleSize={"var(--teacher-h2)"}
-						proceed={resetStudentsJob}
-						width={"480px"}
-						content={["모든 학생들의 비밀번호가 초기화됩니다!"]}
 					/>
 				}
 			/>

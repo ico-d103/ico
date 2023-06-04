@@ -1,8 +1,5 @@
-import React, { useEffect, useReducer, useState } from "react"
+import { useEffect, useReducer, useState } from "react"
 import { css } from "@emotion/react"
-import ClassStudentDetailHead from "./ClassStudentDetailHead"
-import ClassStudentDetailMoney from "./ClassStudentDetailMoney"
-import ClassStudentDetailGrade from "./ClassStudentDetailGrade"
 import ClassStudentDetailAccountList from "./ClassStudentDetailAccountList"
 import { useAtomValue } from "jotai"
 import { selectedStudent } from "@/store/store"
@@ -10,6 +7,7 @@ import { getStudentDetailAPI } from "@/api/teacher/class/getStudentDetailAPI"
 import { getStudentDetailType } from "@/types/teacher/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
 import ClassStudentDetailCertificate from "./ClassStudentDetailCertificate"
+import Button from "@/components/common/Button/Button"
 
 function ClassStudentDetail() {
 	const selectedStudentAtom = useAtomValue(selectedStudent)
@@ -28,9 +26,41 @@ function ClassStudentDetail() {
 	}, [selectedStudentAtom])
 
 	return (
-		<div css={contentChildrenCSS}>
-			<ClassStudentDetailAccountList transactions={data?.transactions} />
-			<ClassStudentDetailCertificate />
+		<div css={wrapperCSS}>
+			<div css={topWrapperCSS}>
+				<ClassStudentDetailAccountList transactions={data?.transactions} />
+				<ClassStudentDetailCertificate />
+			</div>
+			<div css={bottomWrapperCSS}>
+				<Button
+					text={"계좌 정지"}
+					fontSize={`0.9rem`}
+					width={"90px"}
+					height={"33px"}
+					theme={"manageMinus"}
+					margin={"0 10px 0 0"}
+					onClick={() => {}}
+				/>
+				<Button
+					text={"비밀번호 초기화"}
+					fontSize={`0.9rem`}
+					width={"130px"}
+					height={"33px"}
+					theme={"manageMinus"}
+					margin={"0 10px 0 0"}
+					onClick={() => {}}
+				/>
+
+				<Button
+					text={"자격증 정보 수정"}
+					fontSize={`0.9rem`}
+					width={"130px"}
+					height={"33px"}
+					theme={"managePlus"}
+					margin={"0 0 0 0"}
+					onClick={() => {}}
+				/>
+			</div>
 		</div>
 		// <>
 		// 	{selectedStudentAtom === -1 ? (
@@ -58,7 +88,13 @@ export async function getServerSideProps() {
 	}
 }
 
-const contentChildrenCSS = css`
+const wrapperCSS = css`
+	display: flex;
+	flex-direction: column;
+	padding-bottom: 10px;
+`
+
+const topWrapperCSS = css`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -71,6 +107,13 @@ const contentChildrenCSS = css`
 	> div:nth-of-type(2) {
 		width: 55%;
 	}
+`
+
+const bottomWrapperCSS = css`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-end;
 `
 
 // const wrapperCSS = css`
