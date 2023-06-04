@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -77,11 +78,15 @@ public class StudentController {
      * 학생 상세보기 조회
      *
      * @param studentId
+     * @param page
+     * @param request
      * @return
      */
     @GetMapping("/teacher/{studentId}")
-    public ResponseEntity<StudentResDto> findStudent(@PathVariable Long studentId, HttpServletRequest request) {
-        return ResponseEntity.ok(studentService.findStudent(studentId, request));
+    public ResponseEntity<StudentResDto> findStudent(@PathVariable Long studentId,
+                                                     @RequestParam(value = "page", defaultValue = "1") int page,
+                                                     HttpServletRequest request) {
+        return ResponseEntity.ok(studentService.findStudent(studentId, page - 1, request));
     }
 
     /**
