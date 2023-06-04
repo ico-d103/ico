@@ -12,19 +12,19 @@ import { getPurchasedTeacherTransactionAPI } from "@/api/student/shop/getPurchas
 
 function purchased() {
 	const router = useRouter()
-	const { purchased, productId } = router.query
+	const { type, productId, productType } = router.query
 	const navigate = useNavigate()
 
 	const [data, setData] = useState<getPurchasedTransactionType>()
 
 	useEffect(() => {
-		if (purchased === "teacher") {
+		if (type === "teacher") {
 			getPurchasedTeacherTransactionAPI({idx: Number(productId)})
 			.then((res) => {
 				console.log(res)
 				setData(() => res)
 			})
-		} else if (purchased === "student") {
+		} else if (type === "student") {
 			getPurchasedStudentTransactionAPI({idx: Number(productId)})
 			.then((res) => {
 				setData(() => res)
@@ -33,9 +33,9 @@ function purchased() {
 	}, [])
 
 	const toShop = () => {
-		if (purchased === "teacher") {
+		if (type === "teacher") {
 			navigate("/student/shop/teacher", "bottomToTop")
-		} else if (purchased === "student") {
+		} else if (type === "student") {
 			navigate("/student/shop/student", "bottomToTop")
 		}
 	}
@@ -68,7 +68,7 @@ function purchased() {
 				
 				<div css={buttonWrapperCSS}>
 					<Button text={"확인"} fontSize={"var(--student-h3)"} width={"45%"} theme={"mobileSoft2"} onClick={toShop} />
-					{data?.type === true && (
+					{type === 'teacher' && productType === 'purchased' && (
 						<Button
 							text={"쿠폰함"}
 							fontSize={"var(--student-h3)"}
