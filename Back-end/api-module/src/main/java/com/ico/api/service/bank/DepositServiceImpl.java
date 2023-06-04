@@ -124,7 +124,7 @@ public class DepositServiceImpl implements DepositService{
 
         // 예금 신청 내역 확인
         Deposit deposit = depositMongoRepository.findByStudentId(studentId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUNT_DEPOSIT));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DEPOSIT));
 
         // 오늘 날짜
         LocalDateTime now = LocalDateTime.now();

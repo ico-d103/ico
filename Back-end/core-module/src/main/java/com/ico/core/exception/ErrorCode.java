@@ -169,7 +169,9 @@ public enum ErrorCode{
 
     ALREADY_EXIST_DEPOSIT(HttpStatus.BAD_REQUEST, "724", "예금은 1개만 신청이 가능합니다."),
 
-    NOT_FOUNT_DEPOSIT(HttpStatus.BAD_REQUEST, "725", "예금 신청 내역이 없습니다."),
+    NOT_FOUND_DEPOSIT(HttpStatus.BAD_REQUEST, "725", "예금 신청 내역이 없습니다."),
+
+    NOT_FOUND_DEPOSITPRODUCT(HttpStatus.NOT_FOUND, "726", "존재하지 않는 예금 상품입니다.")
     ;
 
     private final HttpStatus httpStatus;
