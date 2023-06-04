@@ -82,8 +82,8 @@ function StudentEnteredList() {
 				<KebabMenu dropdownList={dropdownList} />
 			</div>
 			<div css={contentCSS}>
-				{data?.map((student, idx) => (
-					<StudentEnteredListItem key={student.id} student={student} idx={idx} />
+				{data?.map((student) => (
+					<StudentEnteredListItem key={student.id} student={student} />
 				))}
 			</div>
 		</div>

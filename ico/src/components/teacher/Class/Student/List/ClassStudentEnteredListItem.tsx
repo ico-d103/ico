@@ -7,16 +7,24 @@ import { CLASS_GRADE_DOWN, CLASS_GRADE_UP } from "../../ClassIcons"
 import CollapseMenuStudentDetail from "@/components/teacher/common/CollapseMenu/CollapseMenuStudentDetail"
 import ClassStudentDetail from "../Detail/ClassStudentDetail"
 import ClassStudentDetailMoney from "../Detail/ClassStudentDetailMoney"
+import useNotification from "@/hooks/useNotification"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { postCreditScoreAPI } from "@/api/teacher/class/postCreditScoreAPI"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 type StudentEnteredListItemPropsType = {
 	student: getStudentListType
-	idx: number
 }
 
-function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsType) {
+function StudentEnteredListItem({ student }: StudentEnteredListItemPropsType) {
+	const noti = useNotification()
 	const [nation] = useGetNation()
+	const queryClient = useQueryClient()
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 	const [checkedStudentAtom, setCheckedStudentAtom] = useAtom(checkedStudent)
+	const postCreditScoreMutation = useMutation((args: { studentId: number; body: { type: boolean } }) =>
+		postCreditScoreAPI(args),
+	)
 
 	const changeToggleState = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.checked) {
@@ -24,6 +32,30 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 		} else {
 			setCheckedStudentAtom(checkedStudentAtom.filter((id) => id !== student.id))
 		}
+	}
+
+	const postCreditScore = (type: boolean) => {
+		const args = type
+			? { studentId: student.id, body: { type: true } }
+			: { studentId: student.id, body: { type: false } }
+
+		postCreditScoreMutation.mutate(args, {
+			onSuccess: () => {
+				noti({
+					content: <NotiTemplate type={"ok"} content={"성공적으로 수정되었습니다."} />,
+					duration: 3000,
+				})
+
+				queryClient.invalidateQueries(["studentList", "entered"])
+				queryClient.invalidateQueries(["enteredStudentDetail", student.id])
+			},
+			onError: () => {
+				noti({
+					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+					duration: 3000,
+				})
+			},
+		})
 	}
 
 	return (
@@ -51,9 +83,23 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 						<div css={divideCSS}></div>
 						<h5 css={creditRatingCSS}>{student.creditRating}등급</h5>
 						<div css={buttonWrapperCSS}>
-							<div onClick={(e) => e.stopPropagation()}>{CLASS_GRADE_DOWN}</div>
+							<div
+								onClick={(e) => {
+									e.stopPropagation()
+									postCreditScore(false)
+								}}
+							>
+								{CLASS_GRADE_DOWN}
+							</div>
 							<h4 css={creditScoreCSS}>{student.creditScore} 점</h4>
-							<div onClick={(e) => e.stopPropagation()}>{CLASS_GRADE_UP}</div>
+							<div
+								onClick={(e) => {
+									e.stopPropagation()
+									postCreditScore(true)
+								}}
+							>
+								{CLASS_GRADE_UP}
+							</div>
 						</div>
 					</div>
 				</div>
