@@ -13,10 +13,10 @@ public class StudentLicenseResDto {
 
     Long id;
     String subject;
-    Byte rating;
+    byte rating;
 
     @Builder
-    public StudentLicenseResDto(Long id, String subject, Byte rating) {
+    public StudentLicenseResDto(Long id, String subject, byte rating) {
         this.id = id;
         this.subject = subject;
         this.rating = rating;

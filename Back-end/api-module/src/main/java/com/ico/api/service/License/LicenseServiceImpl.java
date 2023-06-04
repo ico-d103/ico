@@ -1,6 +1,7 @@
 package com.ico.api.service.License;
 
 import com.ico.api.dto.license.NationLicenseResDto;
+import com.ico.api.dto.license.StudentDetailLicenseUpdateReqDto;
 import com.ico.api.dto.license.StudentLicenseResDto;
 import com.ico.api.dto.license.StudentLicenseUpdateReqDto;
 import com.ico.api.user.JwtTokenProvider;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 강교철
@@ -38,8 +40,7 @@ public class LicenseServiceImpl implements LicenseService{
 
     @Override
     public List<StudentLicenseResDto> getTeacherStudentLicense(HttpServletRequest request, Long studentId) {
-        String token = jwtTokenProvider.parseJwt(request);
-        Long nationId = jwtTokenProvider.getNation(token);
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -64,8 +65,7 @@ public class LicenseServiceImpl implements LicenseService{
 
     @Override
     public List<NationLicenseResDto> getTeacherNationLicense(HttpServletRequest request) {
-        String token = jwtTokenProvider.parseJwt(request);
-        Long nationId = jwtTokenProvider.getNation(token);
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         List<NationLicense> licenses = nationLicenseRepository.findAllByNationId(nationId);
         if (licenses.isEmpty()) {
@@ -84,8 +84,17 @@ public class LicenseServiceImpl implements LicenseService{
 
     @Override
     public void updateNationLicense(HttpServletRequest request, Long nationLicenseId, String subject) {
-        String token = jwtTokenProvider.parseJwt(request);
-        Long nationId = jwtTokenProvider.getNation(token);
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        // 과목명이 없을 때 에러
+        if (subject == null) {
+            throw new CustomException(ErrorCode.NOT_FOUND_SUBJECT);
+        }
+        // 과목명이 이미 있을 때 에러
+        boolean isSubject = nationLicenseRepository.findBySubject(subject).isPresent();
+        if (isSubject) {
+            throw new CustomException(ErrorCode.DUPLICATED_SUBJECT);
+        }
 
         NationLicense license = nationLicenseRepository.findById(nationLicenseId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
@@ -100,8 +109,7 @@ public class LicenseServiceImpl implements LicenseService{
 
     @Override
     public List<StudentLicenseResDto> getStudentLicense(HttpServletRequest request) {
-        String token = jwtTokenProvider.parseJwt(request);
-        Long studentId = jwtTokenProvider.getId(token);
+        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
 
         List<StudentLicense> licenses = studentLicenseRepository.findAllByStudentId(studentId);
         if (licenses.isEmpty()) {
@@ -121,8 +129,7 @@ public class LicenseServiceImpl implements LicenseService{
 
     @Override
     public void deleteNationLicense(HttpServletRequest request, Long nationLicenseId) {
-        String token = jwtTokenProvider.parseJwt(request);
-        Long nationId = jwtTokenProvider.getNation(token);
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         NationLicense license = nationLicenseRepository.findById(nationLicenseId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
@@ -137,11 +144,19 @@ public class LicenseServiceImpl implements LicenseService{
 
     @Override
     public String createNationLicense(HttpServletRequest request, String subject) {
-        String token = jwtTokenProvider.parseJwt(request);
-        Long nationId = jwtTokenProvider.getNation(token);
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
+        // 과목명이 없을 때 에러
+        if (subject == null) {
+            throw new CustomException(ErrorCode.NOT_FOUND_SUBJECT);
+        }
+        // 과목명이 이미 있을 때 에러
+        boolean isSubject = nationLicenseRepository.findBySubject(subject).isPresent();
+        if (isSubject) {
+            throw new CustomException(ErrorCode.DUPLICATED_SUBJECT);
+        }
         NationLicense license = NationLicense.builder()
                 .nation(nation)
                 .subject(subject)
@@ -150,37 +165,43 @@ public class LicenseServiceImpl implements LicenseService{
         return subject;
     }
 
-    @Override
-    public void updateStudentLicense(HttpServletRequest request, StudentLicenseUpdateReqDto reqDto) {
-        String token = jwtTokenProvider.parseJwt(request);
-        Long nationId = jwtTokenProvider.getNation(token);
+//    TODO : 나중에
+//    @Override
+//    public void updateStudentLicense(HttpServletRequest request, StudentLicenseUpdateReqDto reqDto) {
+//        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+//
+//        List<StudentLicense> licenses = studentLicenseRepository.findAllBySubjectAndNationId(reqDto.getSubject(), nationId);
+//        log.info("[SUBJECT] : {}", reqDto.getSubject());
+//        if (licenses.isEmpty()) {
+//            throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
+//        }
+//        // 학생들의 자격증 등급을 입력받은 수치로 업데이트
+//        for (StudentLicense license : licenses) {
+//            license.setRating((byte) reqDto.getRating().intValue());
+//            studentLicenseRepository.save(license);
+//        }
+//    }
 
-        List<StudentLicense> licenses = studentLicenseRepository.findAllBySubjectAndNationId(reqDto.getSubject(), nationId);
-        log.info("[SUBJECT] : {}", reqDto.getSubject());
-        if (licenses.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
-        }
-        // 학생들의 자격증 등급을 입력받은 수치로 업데이트
-        for (StudentLicense license : licenses) {
-            license.setRating((byte) reqDto.getRating().intValue());
+    @Override
+    public void updateStudentDetailLicense(HttpServletRequest request, Long studentId, StudentDetailLicenseUpdateReqDto dto) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        for (Map.Entry<Long, Integer> data : dto.getMap().entrySet()) {
+            Long studentLicenseId = data.getKey();
+            Integer rating = data.getValue();
+            StudentLicense license = studentLicenseRepository.findById(studentLicenseId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
+            // 교사와 자격증의 나라 일치 여부
+            if (!nationId.equals(license.getNation().getId())) {
+                throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
+            }
+            // 학생과 자격증을 가진 학생의 아이디 일치 여부
+            if (!studentId.equals(license.getStudent().getId())) {
+                throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
+            }
+
+            license.setRating((byte) rating.intValue());
             studentLicenseRepository.save(license);
         }
     }
-
-    @Override
-    public void updateStudentDetailLicense(HttpServletRequest request, Integer rating, Long studentLicenseId) {
-        String token = jwtTokenProvider.parseJwt(request);
-        Long nationId = jwtTokenProvider.getNation(token);
-
-        StudentLicense license = studentLicenseRepository.findById(studentLicenseId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
-
-        if (!nationId.equals(license.getNation().getId())) {
-            throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
-        }
-
-        license.setRating((byte) rating.intValue());
-        studentLicenseRepository.save(license);
-    }
-
 }

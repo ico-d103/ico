@@ -4,6 +4,7 @@ import com.ico.core.entity.NationLicense;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author 강교철
@@ -11,4 +12,6 @@ import java.util.List;
 public interface NationLicenseRepository extends JpaRepository<NationLicense, Long> {
 
     List<NationLicense> findAllByNationId(Long nationId);
+
+    Optional<NationLicense> findBySubject(String subject);
 }

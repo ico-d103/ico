@@ -1,6 +1,7 @@
 package com.ico.api.service.License;
 
 import com.ico.api.dto.license.NationLicenseResDto;
+import com.ico.api.dto.license.StudentDetailLicenseUpdateReqDto;
 import com.ico.api.dto.license.StudentLicenseResDto;
 import com.ico.api.dto.license.StudentLicenseUpdateReqDto;
 
@@ -55,12 +56,18 @@ public interface LicenseService {
      */
     String createNationLicense(HttpServletRequest request, String subject);
 
-    /**
-     * 학생들의 자격증 등급을 입력받은 수치로 업데이트
-     * @param request
-     * @param reqDto
-     */
-    void updateStudentLicense(HttpServletRequest request, StudentLicenseUpdateReqDto reqDto);
+//    TODO : 나중에
+//    /**
+//     * 학생들의 자격증 등급을 입력받은 수치로 업데이트
+//     * @param request
+//     * @param reqDto
+//     */
+//    void updateStudentLicense(HttpServletRequest request, StudentLicenseUpdateReqDto reqDto);
 
-    void updateStudentDetailLicense(HttpServletRequest request, Integer rating, Long studentLicenseId);
+    /**
+     * 교사가 학생 한명의 등급을 조정
+     * @param request
+     * @param dto
+     */
+    void updateStudentDetailLicense(HttpServletRequest request, Long studentId, StudentDetailLicenseUpdateReqDto dto);
 }
