@@ -7,10 +7,9 @@ import useCompHandler from "@/hooks/useCompHandler"
 import Modal from "@/components/common/Modal/Modal"
 import { useAtomValue } from "jotai"
 import { checkedStudent } from "@/store/store"
-import Input from "@/components/common/Input/Input"
 import Button from "@/components/common/Button/Button"
 import useGetNation from "@/hooks/useGetNation"
-import { CLASS_GRADE_DOWN, CLASS_GRADE_UP } from "@/components/teacher/Class/ClassIcons"
+import ClassStudentDetailMoney from "@/components/teacher/Class/Student/Detail/ClassStudentDetailMoney"
 
 function students() {
 	const checkedStudentAtom = useAtomValue(checkedStudent)
@@ -59,37 +58,8 @@ function students() {
 			<div css={modalWrapperCSS}>
 				<span>체크를 통해 여러 명의 학생을 한 번에 관리해 보세요 !</span>
 				<div css={modalContentCSS}>
-					<Input
-						theme={"greenDefault"}
-						placeholder="사유를 입력해 주세요"
-						customCss={reasonCSS}
-						isTextarea={false}
-						onClick={(e) => e.stopPropagation()}
-					/>
-					<Input
-						theme={"greenDefault"}
-						placeholder={nation.currency}
-						customCss={moneyCSS}
-						isTextarea={false}
-						onClick={(e) => e.stopPropagation()}
-					/>
-					<Button
-						text={"지급"}
-						fontSize={`var(--teacher-h6)`}
-						width={"50px"}
-						height={"30px"}
-						theme={"managePlus"}
-						margin={"0 10px 0 0"}
-						onClick={(e) => e.stopPropagation()}
-					/>
-					<Button
-						text={"차감"}
-						fontSize={`var(--teacher-h6)`}
-						width={"50px"}
-						height={"30px"}
-						theme={"manageMinus"}
-						onClick={(e) => e.stopPropagation()}
-					/>
+					{/* studentId는 임시 */}
+					<ClassStudentDetailMoney studentId={-1} />
 					<div css={divideCSS}></div>
 					<span>신용 점수를</span>
 					<Button
@@ -229,18 +199,6 @@ const modalContentCSS = css`
 		color: var(--teacher-gray-color);
 		margin-right: 15px;
 	}
-`
-
-const reasonCSS = css`
-	width: 200px;
-	height: 30px;
-	margin-right: 20px;
-`
-
-const moneyCSS = css`
-	width: 80px;
-	height: 30px;
-	margin-right: 20px;
 `
 
 const divideCSS = css`

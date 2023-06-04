@@ -1,14 +1,12 @@
-import { useState, useEffect } from "react"
 import { css } from "@emotion/react"
 import { getStudentListType } from "@/types/teacher/apiReturnTypes"
 import { useAtomValue, useAtom } from "jotai"
 import { selectedStudent, checkedStudent } from "@/store/store"
 import useGetNation from "@/hooks/useGetNation"
 import { CLASS_GRADE_DOWN, CLASS_GRADE_UP } from "../../ClassIcons"
-import Button from "@/components/common/Button/Button"
-import Input from "@/components/common/Input/Input"
 import CollapseMenuStudentDetail from "@/components/teacher/common/CollapseMenu/CollapseMenuStudentDetail"
 import ClassStudentDetail from "../Detail/ClassStudentDetail"
+import ClassStudentDetailMoney from "../Detail/ClassStudentDetailMoney"
 
 type StudentEnteredListItemPropsType = {
 	student: getStudentListType
@@ -49,37 +47,7 @@ function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsTyp
 						<h5 css={amountCSS}>
 							{student.amount} {nation.currency}
 						</h5>
-						<Input
-							theme={"greenDefault"}
-							placeholder="사유를 입력해 주세요"
-							customCss={reasonCSS}
-							isTextarea={false}
-							onClick={(e) => e.stopPropagation()}
-						/>
-						<Input
-							theme={"greenDefault"}
-							placeholder={nation.currency}
-							customCss={moneyCSS}
-							isTextarea={false}
-							onClick={(e) => e.stopPropagation()}
-						/>
-						<Button
-							text={"지급"}
-							fontSize={`var(--teacher-h6)`}
-							width={"50px"}
-							height={"30px"}
-							theme={"managePlus"}
-							margin={"0 10px 0 0"}
-							onClick={(e) => e.stopPropagation()}
-						/>
-						<Button
-							text={"차감"}
-							fontSize={`var(--teacher-h6)`}
-							width={"50px"}
-							height={"30px"}
-							theme={"manageMinus"}
-							onClick={(e) => e.stopPropagation()}
-						/>
+						<ClassStudentDetailMoney studentId={student.id} />
 						<div css={divideCSS}></div>
 						<h5 css={creditRatingCSS}>{student.creditRating}등급</h5>
 						<div css={buttonWrapperCSS}>
@@ -187,18 +155,6 @@ const buttonWrapperCSS = css`
 			transform: scale(1.2);
 		}
 	}
-`
-
-const reasonCSS = css`
-	width: 200px;
-	height: 30px;
-	margin-right: 20px;
-`
-
-const moneyCSS = css`
-	width: 80px;
-	height: 30px;
-	margin-right: 20px;
 `
 
 export default StudentEnteredListItem
