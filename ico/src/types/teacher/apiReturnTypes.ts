@@ -72,6 +72,7 @@ export type getStudentDetailType = {
 	creditScore: number
 	transactions: transactionsType
 	frozen: boolean
+	size: number
 }
 
 export type getTeacherProductsType = {

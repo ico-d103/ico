@@ -4,9 +4,10 @@ import { transactionsType } from "@/types/teacher/apiReturnTypes"
 
 type ClassStudentDetailAccountListPropsType = {
 	transactions: transactionsType | undefined
+	size: number | undefined
 }
 
-function ClassStudentDetailAccountList({ transactions }: ClassStudentDetailAccountListPropsType) {
+function ClassStudentDetailAccountList({ transactions, size }: ClassStudentDetailAccountListPropsType) {
 	let prevDate: string | null = null
 
 	return (

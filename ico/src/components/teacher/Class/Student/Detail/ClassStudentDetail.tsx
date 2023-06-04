@@ -11,6 +11,7 @@ import { putReleaseAccountAPI } from "@/api/teacher/class/putReleaseAccountAPI"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { putSuspendAccountAPI } from "@/api/teacher/class/putSuspendAccountAPI"
 import useNotification from "@/hooks/useNotification"
+import { useEffect } from "react"
 
 function ClassStudentDetail() {
 	const noti = useNotification()
@@ -53,10 +54,14 @@ function ClassStudentDetail() {
 		}
 	}
 
+	useEffect(() => {
+		console.log(data)
+	}, [data])
+
 	return (
 		<div css={wrapperCSS}>
 			<div css={topWrapperCSS}>
-				<ClassStudentDetailAccountList transactions={data?.transactions} />
+				<ClassStudentDetailAccountList transactions={data?.transactions} size={data?.size} />
 				<ClassStudentDetailCertificate />
 			</div>
 			<div css={bottomWrapperCSS}>
