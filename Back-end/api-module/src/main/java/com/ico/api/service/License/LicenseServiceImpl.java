@@ -1,9 +1,7 @@
 package com.ico.api.service.License;
 
 import com.ico.api.dto.license.NationLicenseResDto;
-import com.ico.api.dto.license.StudentDetailLicenseUpdateReqDto;
 import com.ico.api.dto.license.StudentLicenseResDto;
-import com.ico.api.dto.license.StudentLicenseUpdateReqDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.NationLicense;
@@ -86,12 +84,12 @@ public class LicenseServiceImpl implements LicenseService{
     public void updateNationLicense(HttpServletRequest request, Long nationLicenseId, String subject) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
-        // 과목명이 없을 때 에러
+        // 자격증명이 없을 때 에러
         if (subject == null) {
             throw new CustomException(ErrorCode.NOT_FOUND_SUBJECT);
         }
-        // 과목명이 이미 있을 때 에러
-        boolean isSubject = nationLicenseRepository.findBySubject(subject).isPresent();
+        // 자격증명이 이미 있을 때 에러
+        boolean isSubject = nationLicenseRepository.findBySubjectAndNationId(subject, nationId).isPresent();
         if (isSubject) {
             throw new CustomException(ErrorCode.DUPLICATED_SUBJECT);
         }
@@ -102,7 +100,7 @@ public class LicenseServiceImpl implements LicenseService{
         if (!nationId.equals(license.getNation().getId())) {
             throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
         }
-        // 과목명 수정
+        // 자격증명이 수정
         license.setSubject(subject);
         nationLicenseRepository.save(license);
     }
@@ -148,12 +146,12 @@ public class LicenseServiceImpl implements LicenseService{
 
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
-        // 과목명이 없을 때 에러
+        // 자격증명이 없을 때 에러
         if (subject == null) {
             throw new CustomException(ErrorCode.NOT_FOUND_SUBJECT);
         }
-        // 과목명이 이미 있을 때 에러
-        boolean isSubject = nationLicenseRepository.findBySubject(subject).isPresent();
+        // 자격증명이 이미 있을 때 에러
+        boolean isSubject = nationLicenseRepository.findBySubjectAndNationId(subject, nationId).isPresent();
         if (isSubject) {
             throw new CustomException(ErrorCode.DUPLICATED_SUBJECT);
         }
@@ -183,21 +181,22 @@ public class LicenseServiceImpl implements LicenseService{
 //    }
 
     @Override
-    public void updateStudentDetailLicense(HttpServletRequest request, Long studentId, StudentDetailLicenseUpdateReqDto dto) {
+    public void updateStudentDetailLicense(HttpServletRequest request, Long studentId, Map<Long, Integer> map) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
-        for (Map.Entry<Long, Integer> data : dto.getMap().entrySet()) {
-            Long studentLicenseId = data.getKey();
-            Integer rating = data.getValue();
-            StudentLicense license = studentLicenseRepository.findById(studentLicenseId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
-            // 교사와 자격증의 나라 일치 여부
-            if (!nationId.equals(license.getNation().getId())) {
-                throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
-            }
-            // 학생과 자격증을 가진 학생의 아이디 일치 여부
-            if (!studentId.equals(license.getStudent().getId())) {
-                throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        // 교사와 학생의 나라 일치 여부
+        if (!nationId.equals(student.getNation().getId())) {
+            throw new CustomException(ErrorCode.NOT_EQUAL_NATION_TEACHER_STUDENT);
+        }
+
+        List<StudentLicense> licenses = studentLicenseRepository.findAllByStudentId(studentId);
+        for (StudentLicense license : licenses) {
+            Integer rating = map.get(license.getId());
+
+            if (rating == null) {
+                continue;
             }
 
             license.setRating((byte) rating.intValue());

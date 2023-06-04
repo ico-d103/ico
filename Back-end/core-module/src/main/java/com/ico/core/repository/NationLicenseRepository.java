@@ -13,5 +13,5 @@ public interface NationLicenseRepository extends JpaRepository<NationLicense, Lo
 
     List<NationLicense> findAllByNationId(Long nationId);
 
-    Optional<NationLicense> findBySubject(String subject);
+    Optional<NationLicense> findBySubjectAndNationId(String subject, Long nationId);
 }

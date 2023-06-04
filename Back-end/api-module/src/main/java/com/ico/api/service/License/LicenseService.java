@@ -1,12 +1,11 @@
 package com.ico.api.service.License;
 
 import com.ico.api.dto.license.NationLicenseResDto;
-import com.ico.api.dto.license.StudentDetailLicenseUpdateReqDto;
 import com.ico.api.dto.license.StudentLicenseResDto;
-import com.ico.api.dto.license.StudentLicenseUpdateReqDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 강교철
@@ -67,7 +66,7 @@ public interface LicenseService {
     /**
      * 교사가 학생 한명의 등급을 조정
      * @param request
-     * @param dto
+     * @param map
      */
-    void updateStudentDetailLicense(HttpServletRequest request, Long studentId, StudentDetailLicenseUpdateReqDto dto);
+    void updateStudentDetailLicense(HttpServletRequest request, Long studentId, Map<Long, Integer> map);
 }

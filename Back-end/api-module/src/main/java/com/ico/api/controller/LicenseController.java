@@ -1,9 +1,7 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.license.NationLicenseResDto;
-import com.ico.api.dto.license.StudentDetailLicenseUpdateReqDto;
 import com.ico.api.dto.license.StudentLicenseResDto;
-import com.ico.api.dto.license.StudentLicenseUpdateReqDto;
 import com.ico.api.service.License.LicenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -120,9 +118,7 @@ public class LicenseController {
      */
     @PutMapping("/teacher/detail/{studentId}")
     public ResponseEntity<HttpStatus> updateStudentDetailLicense(HttpServletRequest request, @PathVariable Long studentId, @RequestBody Map<Long, Integer> map) {
-        StudentDetailLicenseUpdateReqDto dto = new StudentDetailLicenseUpdateReqDto();
-        dto.setMap(map);
-        licenseService.updateStudentDetailLicense(request, studentId, dto);
+        licenseService.updateStudentDetailLicense(request, studentId, map);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

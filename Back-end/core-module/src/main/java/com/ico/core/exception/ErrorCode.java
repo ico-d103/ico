@@ -177,7 +177,7 @@ public enum ErrorCode{
 
     NOT_FOUNT_DEPOSIT(HttpStatus.BAD_REQUEST, "725", "예금 신청 내역이 없습니다."),
 
-    NOT_FOUND_SUBJECT(HttpStatus.NOT_FOUND, "800", "과목명이 비었습니다."),
+    NOT_FOUND_SUBJECT(HttpStatus.NOT_FOUND, "800", "자격증명이 비었습니다."),
 
     NOT_FOUND_RATING(HttpStatus.NOT_FOUND, "801", "등급이 비었습니다."),
 
