@@ -42,72 +42,72 @@ public class DepositServiceImpl implements DepositService{
     @Transactional
     @Override
     public void createDeposit(HttpServletRequest request, DepositReqDto dto) {
-        String token = jwtTokenProvider.parseJwt(request);
-        Long nationId = jwtTokenProvider.getNation(token);
-        Long studentId = jwtTokenProvider.getId(token);
-
-        // 예금 기간
-        Boolean longPeriod = dto.getLongPeriod();
-
-        // 예치 금액
-        int amount = dto.getAmount();
-
-        if(depositMongoRepository.findByStudentId(studentId).isPresent()){
-            throw new CustomException(ErrorCode.ALREADY_EXIST_DEPOSIT);
-        }
-
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
-        // 신용 등급 확인
-        Interest interest = interestRepository.findByNationIdAndCreditRating(nationId, student.getCreditRating())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_INTEREST));
-
-        // 잔액 확인
-        if(student.getAccount() < amount){
-            throw new CustomException(ErrorCode.LOW_BALANCE);
-        }
-
-        // 이자율이 0이상인지 확인
-        byte interestRate;
-        LocalDateTime endDate;
-        if(longPeriod){
-            if(interest.getLongPeriod() <= 0){
-                throw new CustomException(ErrorCode.LOWER_INTEREST);
-            }
-            // 적용 이자율
-            interestRate = interest.getLongPeriod();
-            endDate = LocalDateTime.now().plusDays(21);
-//            endDate = LocalDateTime.now().plusHours(1);
-//            endDate = LocalDateTime.now().plusSeconds(5);
-        }
-        else {
-            if(interest.getShortPeriod() <= 0){
-                throw new CustomException(ErrorCode.LOWER_INTEREST);
-            }
-            // 적용 이자율
-            interestRate = interest.getShortPeriod();
-            endDate = LocalDateTime.now().plusDays(7);
-//            endDate = LocalDateTime.now().plusSeconds(5);
-        }
-
-        // 예금 가격 출금
-        student.setAccount(student.getAccount() - amount);
-        studentRepository.save(student);
-
-        // 예금 내역 db에 추가
-        Deposit deposit = Deposit.builder()
-                .studentId(student.getId())
-                .interest(interestRate)
-                .endDate(endDate)
-                .creditRating(student.getCreditRating())
-                .amount(dto.getAmount())
-                .build();
-        depositMongoRepository.insert(deposit);
-
-
-        // 거래 내역 기록
-        transactionService.addTransactionWithdraw("은행", studentId, amount, "예금");
+//        String token = jwtTokenProvider.parseJwt(request);
+//        Long nationId = jwtTokenProvider.getNation(token);
+//        Long studentId = jwtTokenProvider.getId(token);
+//
+//        // 예금 기간
+//        Boolean longPeriod = dto.getLongPeriod();
+//
+//        // 예치 금액
+//        int amount = dto.getAmount();
+//
+//        if(depositMongoRepository.findByStudentId(studentId).isPresent()){
+//            throw new CustomException(ErrorCode.ALREADY_EXIST_DEPOSIT);
+//        }
+//
+//        Student student = studentRepository.findById(studentId)
+//                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+//
+//        // 신용 등급 확인
+//        Interest interest = interestRepository.findByNationIdAndCreditRating(nationId, student.getCreditRating())
+//                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_INTEREST));
+//
+//        // 잔액 확인
+//        if(student.getAccount() < amount){
+//            throw new CustomException(ErrorCode.LOW_BALANCE);
+//        }
+//
+//        // 이자율이 0이상인지 확인
+//        byte interestRate;
+//        LocalDateTime endDate;
+//        if(longPeriod){
+//            if(interest.getLongPeriod() <= 0){
+//                throw new CustomException(ErrorCode.LOWER_INTEREST);
+//            }
+//            // 적용 이자율
+//            interestRate = interest.getLongPeriod();
+//            endDate = LocalDateTime.now().plusDays(21);
+////            endDate = LocalDateTime.now().plusHours(1);
+////            endDate = LocalDateTime.now().plusSeconds(5);
+//        }
+//        else {
+//            if(interest.getShortPeriod() <= 0){
+//                throw new CustomException(ErrorCode.LOWER_INTEREST);
+//            }
+//            // 적용 이자율
+//            interestRate = interest.getShortPeriod();
+//            endDate = LocalDateTime.now().plusDays(7);
+////            endDate = LocalDateTime.now().plusSeconds(5);
+//        }
+//
+//        // 예금 가격 출금
+//        student.setAccount(student.getAccount() - amount);
+//        studentRepository.save(student);
+//
+//        // 예금 내역 db에 추가
+//        Deposit deposit = Deposit.builder()
+//                .studentId(student.getId())
+//                .interest(interestRate)
+//                .endDate(endDate)
+//                .creditRating(student.getCreditRating())
+//                .amount(dto.getAmount())
+//                .build();
+//        depositMongoRepository.insert(deposit);
+//
+//
+//        // 거래 내역 기록
+//        transactionService.addTransactionWithdraw("은행", studentId, amount, "예금");
 
     }
 

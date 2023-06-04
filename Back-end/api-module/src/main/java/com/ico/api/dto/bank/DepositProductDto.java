@@ -1,4 +1,4 @@
-package com.ico.api.service.bank;
+package com.ico.api.dto.bank;
 
 import com.ico.core.entity.DepositProduct;
 import lombok.Builder;

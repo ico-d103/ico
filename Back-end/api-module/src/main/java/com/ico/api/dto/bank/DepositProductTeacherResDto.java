@@ -9,10 +9,15 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 교사의 예금 상품조회 Res
+ *
+ * @author 변윤경
+ */
 @Setter
 @Getter
 @NoArgsConstructor
-public class DepositProductResDto {
+public class DepositProductTeacherResDto {
     private Long id;
 
     private String title;
@@ -22,7 +27,7 @@ public class DepositProductResDto {
     private List<Byte> interest;
 
     @Builder
-    public DepositProductResDto(Long id, String title, Byte period, List<Byte> interest) {
+    public DepositProductTeacherResDto(Long id, String title, Byte period, List<Byte> interest) {
         this.id = id;
         this.title = title;
         this.period = period;
@@ -30,7 +35,7 @@ public class DepositProductResDto {
     }
 
 
-    public DepositProductResDto of(DepositProduct deposit){
+    public DepositProductTeacherResDto of(DepositProduct deposit){
         List<Byte> interest = new ArrayList<>();
         interest.add(deposit.getGrade_1());
         interest.add(deposit.getGrade_2());
@@ -43,7 +48,7 @@ public class DepositProductResDto {
         interest.add(deposit.getGrade_9());
         interest.add(deposit.getGrade_10());
 
-        return DepositProductResDto.builder()
+        return DepositProductTeacherResDto.builder()
                 .id(deposit.getId())
                 .title(deposit.getTitle())
                 .period(deposit.getPeriod())

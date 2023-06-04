@@ -1,22 +1,33 @@
 package com.ico.api.service.bank;
 
-import com.ico.api.dto.bank.DepositProductResDto;
+import com.ico.api.dto.bank.DepositProductDto;
+import com.ico.api.dto.bank.DepositProductStudentColResDto;
+import com.ico.api.dto.bank.DepositProductStudentResDto;
+import com.ico.api.dto.bank.DepositProductTeacherResDto;
+import com.ico.api.dto.bank.DepositStudentResDto;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.api.util.Formatter;
+import com.ico.core.document.Deposit;
 import com.ico.core.dto.DepositUpdatetDto;
 import com.ico.core.entity.DepositProduct;
 import com.ico.core.entity.Nation;
+import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.DepositMongoRepository;
 import com.ico.core.repository.DepositProductRepository;
 import com.ico.core.repository.NationRepository;
+import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author 변윤경
@@ -27,20 +38,80 @@ import java.util.List;
 public class DepositProductServiceImpl implements DepositProductService{
     private final JwtTokenProvider jwtTokenProvider;
     private final NationRepository nationRepository;
+    private final StudentRepository studentRepository;
     private final DepositProductRepository depositProductRepository;
+    private final DepositMongoRepository depositMongoRepository;
 
     @Override
-    public List<DepositProductResDto> findAllDeposit(HttpServletRequest request) {
+    public List<DepositProductTeacherResDto> findAllDepositTeacher(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
+        // 나라의 예금 상품 목록
         List<DepositProduct> depositProductList = depositProductRepository.findAllByNationId(nation.getId());
-        List<DepositProductResDto> colDepositList = new ArrayList<>();
+
+        // 예금 상품 목록의 col
+        List<DepositProductTeacherResDto> colDepositList = new ArrayList<>();
+
         for(DepositProduct deposit : depositProductList){
-            colDepositList.add(new DepositProductResDto().of(deposit));
+            colDepositList.add(new DepositProductTeacherResDto().of(deposit));
         }
         return colDepositList;
+    }
+
+    @Override
+    public DepositProductStudentResDto findAllDepositStudent(HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        // 나라의 예금 상품 목록
+        List<DepositProduct> depositProductList = depositProductRepository.findAllByNationId(nation.getId());
+
+        // (예금 상품 + 나의 예상 이자율) 목록
+        List<DepositProductStudentColResDto> depositList = new ArrayList<>();
+
+        for(DepositProduct deposit : depositProductList){
+            // 예금 상품 + 나의 예상 이자율
+            DepositProductStudentColResDto colDeposit = new DepositProductStudentColResDto();
+
+            colDeposit.setId(deposit.getId());
+            colDeposit.setTitle(deposit.getTitle());
+            colDeposit.setPeriod(deposit.getPeriod());
+            colDeposit.setInterest(myInterest(student.getCreditRating(), deposit));
+
+            depositList.add(colDeposit);
+        }
+
+        List<DepositStudentResDto> myDepositListReturn = new ArrayList<>();
+        List<Deposit> myDepositList = depositMongoRepository.findAllByStudentId(studentId);
+        for(Deposit deposit : myDepositList){
+            DepositStudentResDto myDeposit = new DepositStudentResDto();
+            boolean isEnd = !LocalDateTime.now().toLocalDate().isBefore(deposit.getEndDate().toLocalDate());
+            myDeposit = myDeposit.builder()
+                    .amount(deposit.getAmount())
+                    .depositAmount(deposit.getAmount() * deposit.getInterest() / 100)
+                    .interest(deposit.getInterest())
+                    .startDate(deposit.getStartDate().format(Formatter.date))
+                    .endDate(deposit.getEndDate().format(Formatter.date))
+                    .creditRating(deposit.getCreditRating())
+                    .end(isEnd)
+                    .build();
+            myDepositListReturn.add(myDeposit);
+        }
+
+        DepositProductStudentResDto dto = new DepositProductStudentResDto();
+        dto.setDepositProduct(depositList);
+        dto.setMyDeposit(myDepositListReturn);
+        return dto;
     }
 
     @Override
@@ -134,5 +205,21 @@ public class DepositProductServiceImpl implements DepositProductService{
         List<Byte> sortedList = new ArrayList<>(list);
         Collections.sort(sortedList, Collections.reverseOrder());
         return sortedList.equals(list);
+    }
+
+    private Byte myInterest(Byte creditRating, DepositProduct deposit){
+        switch (creditRating){
+            case 1: return deposit.getGrade_1();
+            case 2: return deposit.getGrade_2();
+            case 3: return deposit.getGrade_3();
+            case 4: return deposit.getGrade_4();
+            case 5: return deposit.getGrade_5();
+            case 6: return deposit.getGrade_6();
+            case 7: return deposit.getGrade_7();
+            case 8: return deposit.getGrade_8();
+            case 9: return deposit.getGrade_9();
+            case 10: return deposit.getGrade_10();
+        }
+        throw new CustomException(ErrorCode.NOT_FOUND_DEPOSITPRODUCT);
     }
 }
