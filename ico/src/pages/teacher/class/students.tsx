@@ -49,41 +49,40 @@ function students() {
 	const modalContent = <div css={modalWrapperCSS}></div>
 	const [nation] = useGetNation()
 
-	useEffect(() => {
-		console.log(checkedStudentAtom)
-	}, [checkedStudentAtom])
-
 	return (
 		<>
-			<div css={modalWrapperCSS}>
-				<span>
-					{checkedStudentAtom.map((obj) => Object.values(obj)[0]).join(", ")}{" "}
-					{checkedStudentAtom.length <= 1 ? "학생" : "학생들"}에 대해
-				</span>
-				<div css={modalContentCSS}>
-					{/* studentId는 임시 */}
-					<ClassStudentDetailMoney studentId={-1} />
-					<div css={divideCSS}></div>
-					<span>신용 점수를</span>
-					<Button
-						text={"올릴게요"}
-						fontSize={`var(--teacher-h6)`}
-						width={"80px"}
-						height={"30px"}
-						theme={"managePlus"}
-						margin={"0 10px 0 0"}
-						onClick={(e) => e.stopPropagation()}
-					/>
-					<Button
-						text={"내릴게요"}
-						fontSize={`var(--teacher-h6)`}
-						width={"80px"}
-						height={"30px"}
-						theme={"manageMinus"}
-						onClick={(e) => e.stopPropagation()}
-					/>
+			{checkedStudentAtom.length !== 0 && (
+				<div css={modalWrapperCSS}>
+					<span>
+						{checkedStudentAtom.map((obj) => Object.values(obj)[0]).join(", ")}{" "}
+						{checkedStudentAtom.length <= 1 ? "학생" : "학생들"}에 대해
+					</span>
+					<div css={modalContentCSS}>
+						{/* studentId는 임시 */}
+						<ClassStudentDetailMoney studentId={-1} />
+						<div css={divideCSS}></div>
+						<span>신용 점수를</span>
+						<Button
+							text={"올릴게요"}
+							fontSize={`var(--teacher-h6)`}
+							width={"80px"}
+							height={"30px"}
+							theme={"managePlus"}
+							margin={"0 10px 0 0"}
+							onClick={(e) => e.stopPropagation()}
+						/>
+						<Button
+							text={"내릴게요"}
+							fontSize={`var(--teacher-h6)`}
+							width={"80px"}
+							height={"30px"}
+							theme={"manageMinus"}
+							onClick={(e) => e.stopPropagation()}
+						/>
+					</div>
 				</div>
-			</div>
+			)}
+
 			{/* {checkedStudentAtom.length !== 0 && (
 				<Modal closeComp={closeComp} compState={compState} transition={"rightToLeft"} content={modalContent} />
 			)} */}

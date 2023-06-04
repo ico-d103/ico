@@ -47,6 +47,10 @@ function StudentEnteredList() {
 		},
 	]
 
+	const toggleStudentsAllCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+		// 전체선택 됐을 때 처리
+	}
+
 	return (
 		<div css={wrapperCSS}>
 			<Modal
@@ -68,8 +72,14 @@ function StudentEnteredList() {
 				}
 			/>
 			<div css={contentTitleCSS}>
-				<div css={titleCSS}>
-					학생들 <small>({data && data.length > 0 ? data.length : 0})</small>
+				<div>
+					<div css={titleCSS}>
+						학생들 <small>({data && data.length > 0 ? data.length : 0})</small>
+					</div>
+					<div css={checkCSS}>
+						<input type="checkbox" id="all-check" onChange={toggleStudentsAllCheck} />
+						<label htmlFor="all-check">학생 전체 선택</label>
+					</div>
 				</div>
 				<KebabMenu dropdownList={dropdownList} />
 			</div>
@@ -95,8 +105,15 @@ const wrapperCSS = css`
 const contentTitleCSS = css`
 	display: flex;
 	flex-direction: row;
-	/* align-items: center; */
+	align-items: center;
 	justify-content: space-between;
+
+	> div {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 15px;
+	}
 `
 
 const titleCSS = css`
@@ -106,10 +123,39 @@ const titleCSS = css`
 	padding: 10px;
 	border-bottom: 2px solid #064f32;
 	display: inline-block;
-	margin-bottom: 20px;
+	/* margin-bottom: 20px; */
 
 	> small {
 		font-size: var(--teacher-h4);
+	}
+`
+
+const checkCSS = css`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 15px;
+	margin-left: 15px;
+
+	> input {
+		width: 23px;
+		height: 23px;
+		cursor: pointer;
+		border-radius: 50%;
+		border: 1px solid #999;
+		appearance: none;
+		transition: background 0.2s;
+
+		:checked {
+			background: var(--teacher-main-color);
+			border: none;
+		}
+	}
+
+	> label {
+		font-size: var(--teacher-h5);
+		color: var(--teacher-gray-color);
+		cursor: pointer;
 	}
 `
 
