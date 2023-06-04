@@ -196,7 +196,7 @@ public class StudentServiceImpl implements StudentService{
         }
         // 다른 나라 학생인 경우
         if (!student.getNation().getId().equals(nationId)) {
-            throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
+            throw new CustomException(ErrorCode.NOT_EQUAL_NATION_TEACHER_STUDENT);
         }
 
         // 최신순으로 조회

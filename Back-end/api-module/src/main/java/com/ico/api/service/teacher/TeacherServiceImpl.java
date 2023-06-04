@@ -26,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -170,7 +171,7 @@ public class TeacherServiceImpl implements TeacherService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         boolean isNation = jwtTokenProvider.getNation(token).equals(student.getNation().getId());
         if (!isNation) {
-            throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
+            throw new CustomException(ErrorCode.NOT_EQUAL_NATION_TEACHER_STUDENT);
         }
         // 8자리의 난수 코드 생성
         String randomNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!";

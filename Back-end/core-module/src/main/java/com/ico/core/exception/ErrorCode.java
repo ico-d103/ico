@@ -55,6 +55,12 @@ public enum ErrorCode{
 
     NATION_NOT_FOUNT_STUDENT(HttpStatus.NOT_FOUND, "33", "나라id에 해당하는 학생이 없습니다."),
 
+    CHECK_DEFAULT_STUDENT_DB(HttpStatus.BAD_REQUEST, "35", "default student db 확인이 필요합니다."),
+
+    NOT_FOUND_LICENSE(HttpStatus.NOT_FOUND, "36", "자격증이 없습니다."),
+
+    NOT_EQUAL_NATION(HttpStatus.BAD_REQUEST, "37", "나라가 다릅니다."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, "104", "비밀번호 입력 칸이 비었습니다."),
@@ -69,7 +75,7 @@ public enum ErrorCode{
 
     WRONG_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "114", "휴대폰 번호 양식이 틀렸습니다."),
 
-    NOT_EQUAL_NATION(HttpStatus.BAD_REQUEST, "115", "교사와 학생의 나라가 일치하지 않습니다."),
+    NOT_EQUAL_NATION_TEACHER_STUDENT(HttpStatus.BAD_REQUEST, "115", "교사와 학생의 나라가 일치하지 않습니다."),
 
     WRONG_CHECKED_PW(HttpStatus.BAD_REQUEST, "116", "입력한 비밀번호와 체크 비밀번호가 다릅니다."),
 
@@ -165,13 +171,21 @@ public enum ErrorCode{
 
     INTEREST_NOT_DESCENDING(HttpStatus.BAD_REQUEST, "721", "이자율은 신용등급이 낮을수록 작아져야 합니다."),
 
-    NOT_FOUND_INVESET(HttpStatus.BAD_REQUEST, "722", "매수 이력이 없습니다."),
+    NOT_FOUND_INVEST(HttpStatus.BAD_REQUEST, "722", "매수 이력이 없습니다."),
 
     ALREADY_EXIST_DEPOSIT(HttpStatus.BAD_REQUEST, "724", "예금은 1개만 신청이 가능합니다."),
 
     NOT_FOUND_DEPOSIT(HttpStatus.BAD_REQUEST, "725", "예금 신청 내역이 없습니다."),
 
-    NOT_FOUND_DEPOSITPRODUCT(HttpStatus.NOT_FOUND, "726", "존재하지 않는 예금 상품입니다.")
+    NOT_FOUND_DEPOSITPRODUCT(HttpStatus.NOT_FOUND, "726", "존재하지 않는 예금 상품입니다."),
+
+    NOT_FOUNT_DEPOSIT(HttpStatus.BAD_REQUEST, "725", "예금 신청 내역이 없습니다."),
+
+    NOT_FOUND_SUBJECT(HttpStatus.NOT_FOUND, "800", "자격증명이 비었습니다."),
+
+    NOT_FOUND_RATING(HttpStatus.NOT_FOUND, "801", "등급이 비었습니다."),
+
+    DUPLICATED_SUBJECT(HttpStatus.BAD_REQUEST, "802", "존재하는 과목명이 있습니다."),
     ;
 
     private final HttpStatus httpStatus;

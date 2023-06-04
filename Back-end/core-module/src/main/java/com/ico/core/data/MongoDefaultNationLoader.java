@@ -15,6 +15,7 @@ import java.util.Map;
  * application 처음 실행 시 동작
  *
  * @author 서재건
+ * @author 강교철
  */
 @Component
 public class MongoDefaultNationLoader implements CommandLineRunner {
@@ -235,6 +236,40 @@ public class MongoDefaultNationLoader implements CommandLineRunner {
                 new HashMap<String, Object>() {{
                     put("title", "헌법 제 1조 2항");
                     put("detail", "대한민국의 주권은 국민에게 있고, 모든 권력은 국민으로부터 나온다.");
+                }}
+        ));
+
+        // 기본 자격증
+        document.put("default_licenses", Arrays.asList(
+                new HashMap<String, Object>() {{
+                    put("subject", "수학");
+                }},
+                new HashMap<String, Object>() {{
+                    put("subject", "과학");
+                }},
+                new HashMap<String, Object>() {{
+                    put("subject", "사회");
+                }},
+                new HashMap<String, Object>() {{
+                    put("subject", "독서");
+                }},
+                new HashMap<String, Object>() {{
+                    put("subject", "바른 글씨");
+                }},
+                new HashMap<String, Object>() {{
+                    put("subject", "정리 정돈");
+                }},
+                new HashMap<String, Object>() {{
+                    put("subject", "체력");
+                }},
+                new HashMap<String, Object>() {{
+                        put("subject", "디자인");
+                }},
+                new HashMap<String, Object>() {{
+                    put("subject", "저축");
+                }},
+                new HashMap<String, Object>() {{
+                    put("subject", "운전면허");
                 }}
         ));
 

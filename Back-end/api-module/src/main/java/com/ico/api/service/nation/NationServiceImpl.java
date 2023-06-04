@@ -10,6 +10,7 @@ import com.ico.core.code.Status;
 import com.ico.core.code.TaxType;
 import com.ico.core.data.Default_interest;
 import com.ico.core.data.Default_job;
+import com.ico.core.data.Default_license;
 import com.ico.core.data.Default_rule;
 import com.ico.core.data.Default_tax;
 import com.ico.core.dto.StockReqDto;
@@ -18,10 +19,12 @@ import com.ico.core.entity.Immigration;
 import com.ico.core.entity.Interest;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
+import com.ico.core.entity.NationLicense;
 import com.ico.core.entity.Rule;
 import com.ico.core.entity.Stock;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentJob;
+import com.ico.core.entity.StudentLicense;
 import com.ico.core.entity.StudentProduct;
 import com.ico.core.entity.Tax;
 import com.ico.core.entity.Teacher;
@@ -33,10 +36,12 @@ import com.ico.core.repository.DefaultNationRepository;
 import com.ico.core.repository.ImmigrationRepository;
 import com.ico.core.repository.InterestRepository;
 import com.ico.core.repository.InvestRepository;
+import com.ico.core.repository.NationLicenseRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.RuleRepository;
 import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.StudentJobRepository;
+import com.ico.core.repository.StudentLicenseRepository;
 import com.ico.core.repository.StudentProductRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TaxRepository;
@@ -79,6 +84,8 @@ public class NationServiceImpl implements NationService {
     private final NationRepository nationRepository;
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
+    private final StudentLicenseRepository studentLicenseRepository;
+    private final NationLicenseRepository nationLicenseRepository;
     private final StockRepository stockRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -337,6 +344,15 @@ public class NationServiceImpl implements NationService {
                     .build();
             ruleRepository.save(rule);
         }
+        // 자격증
+        List<Default_license> licenses = defaultNation.getDefault_licenses();
+        for (Default_license data : licenses) {
+            NationLicense license = NationLicense.builder()
+                    .nation(nation)
+                    .subject(data.getSubject())
+                    .build();
+            nationLicenseRepository.save(license);
+        }
     }
 
     @Override
@@ -362,6 +378,11 @@ public class NationServiceImpl implements NationService {
         for (Student student : students) {
             student.setNation(null);
             studentRepository.save(student);
+            // StudentLicense
+            List<StudentLicense> studentLicenses = studentLicenseRepository.findAllByStudentId(student.getId());
+            if (!studentLicenses.isEmpty()) {
+                studentLicenseRepository.deleteAll(studentLicenses);
+            }
         }
 
         // Immigration
@@ -422,6 +443,12 @@ public class NationServiceImpl implements NationService {
         List<TreasuryHistory> treasuryHistories = treasuryHistoryRepository.findAllByNationId(nationId);
         if (!treasuryHistories.isEmpty()) {
             treasuryHistoryRepository.deleteAll(treasuryHistories);
+        }
+
+        // NationLicense
+        List<NationLicense> nationLicenses = nationLicenseRepository.findAllByNationId(nationId);
+        if (!nationLicenses.isEmpty()) {
+            nationLicenseRepository.deleteAll(nationLicenses);
         }
 
         // 연관관계 매핑을 모두 끊고 마지막에 삭제

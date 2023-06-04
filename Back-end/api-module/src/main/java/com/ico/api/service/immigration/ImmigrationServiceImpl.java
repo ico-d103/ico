@@ -5,12 +5,17 @@ import com.ico.api.dto.student.StudentSseDto;
 import com.ico.api.sse.SseEmitters;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Role;
+import com.ico.core.data.Default_license;
 import com.ico.core.entity.Immigration;
+import com.ico.core.entity.NationLicense;
+import com.ico.core.entity.StudentLicense;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.ImmigrationRepository;
+import com.ico.core.repository.NationLicenseRepository;
+import com.ico.core.repository.StudentLicenseRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +39,9 @@ import java.util.List;
 public class ImmigrationServiceImpl implements ImmigrationService {
 
     private final NationRepository nationRepository;
+    private final NationLicenseRepository nationLicenseRepository;
     private final StudentRepository studentRepository;
+    private final StudentLicenseRepository studentLicenseRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final ImmigrationRepository immigrationRepository;
 
@@ -110,20 +117,36 @@ public class ImmigrationServiceImpl implements ImmigrationService {
     public void approveImmigration(Long immigrationId, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Role role = jwtTokenProvider.getRole(token);
+        Long nationId = jwtTokenProvider.getNation(token);
         if (role.equals(Role.TEACHER)) {
             Immigration immigration = immigrationRepository.findById(immigrationId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION_USER));
-
             Student student = immigration.getStudent();
 
+            // 학생 요청 승인
             student.setNation(immigration.getNation());
             studentRepository.save(student);
 
+            // 학생 요청 삭제
             immigrationRepository.delete(immigration);
 
+            // 학생 자격증 생성
+            List<NationLicense> licenses = nationLicenseRepository.findAllByNationId(nationId);
+            if (licenses.isEmpty()) {
+                throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
+            }
+            for (NationLicense data : licenses) {
+                StudentLicense license = StudentLicense.builder()
+                        .student(student)
+                        .nation(immigration.getNation())
+                        .subject(data.getSubject())
+                        .rating((byte) -1)
+                        .build();
+                studentLicenseRepository.save(license);
+            }
         }
         // 입국심사 요청 승인 시 SSE로 요청 목록 전송
-        sseEmitters.send(findStudentSseList(jwtTokenProvider.getNation(token)));
+        sseEmitters.send(findStudentSseList(nationId));
     }
 
     @Override
