@@ -67,7 +67,7 @@ const QRScanner = ({ closeComp, type, id }: QRScannerProps) => {
 					postRentalTeacherProductsAPI({ body: { id: Number(bodyData[1]), unixTime: Number(bodyData[2]) } })
 						.then((res) => {
 							noti({ content: <NotiTemplate type={"ok"} content={"물건을 빌렸어요!"} />, duration: 5000 })
-							navigate("/student/shop/teacher_rental", "bottomToTop")
+							navigate(`/student/shop/teacher/purchased/${Number(bodyData[1])}`, "bottomToTop")
 							closeComp && closeComp()
 						})
 						.catch((error) => {
@@ -94,7 +94,7 @@ const QRScanner = ({ closeComp, type, id }: QRScannerProps) => {
 					postPurchaseStudentProductsAPI({ body: { id: Number(bodyData[1]), unixTime: Number(bodyData[2]) } })
 						.then((res) => {
 							noti({ content: <NotiTemplate type={"ok"} content={"물건을 구매했어요!"} />, duration: 5000 })
-							navigate("/student/shop/student_purchase", "bottomToTop")
+							navigate(`/student/shop/student/purchased/${Number(bodyData[1])}`, "bottomToTop")
 							closeComp && closeComp()
 						})
 						.catch((error) => {

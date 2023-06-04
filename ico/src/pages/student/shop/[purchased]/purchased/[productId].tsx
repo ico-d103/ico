@@ -1,21 +1,41 @@
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
-import React from "react"
+import React, {useState, useEffect} from "react"
 import { css } from "@emotion/react"
 import UseAnimations from "react-useanimations"
 import radioButton from "react-useanimations/lib/radioButton"
 import Button from "@/components/common/Button/Button"
 import { useRouter } from "next/router"
 import useNavigate from "@/hooks/useNavigate"
+import { getPurchasedTransactionType } from "@/types/student/apiReturnTypes"
+import { getPurchasedStudentTransactionAPI } from "@/api/student/shop/getPurchasedStudentTransactionAPI"
+import { getPurchasedTeacherTransactionAPI } from "@/api/student/shop/getPurchasedTeacherTransactionAPI"
 
 function purchased() {
 	const router = useRouter()
-	const { purchased } = router.query
+	const { purchased, productId } = router.query
 	const navigate = useNavigate()
 
+	const [data, setData] = useState<getPurchasedTransactionType>()
+
+	useEffect(() => {
+		if (purchased === "teacher") {
+			getPurchasedTeacherTransactionAPI({idx: Number(productId)})
+			.then((res) => {
+				console.log(res)
+				setData(() => res)
+			})
+		} else if (purchased === "student") {
+			getPurchasedStudentTransactionAPI({idx: Number(productId)})
+			.then((res) => {
+				setData(() => res)
+			})
+		}
+	}, [])
+
 	const toShop = () => {
-		if (purchased === "teacher_rental" || purchased === "teacher_purchase") {
+		if (purchased === "teacher") {
 			navigate("/student/shop/teacher", "bottomToTop")
-		} else if (purchased === "student_purchase") {
+		} else if (purchased === "student") {
 			navigate("/student/shop/student", "bottomToTop")
 		}
 	}
@@ -37,11 +57,18 @@ function purchased() {
 							margin: 0px 0px 24px 0px;
 						`}
 					/>
-					결제가 완료되었습니다!
+					<span>결제가 완료되었습니다!</span>
+
+					<div css={productInfoWrapperCSS}>
+						<div>상품 정보</div>
+						{JSON.stringify(data)}
+					</div>
 				</div>
+
+				
 				<div css={buttonWrapperCSS}>
 					<Button text={"확인"} fontSize={"var(--student-h3)"} width={"45%"} theme={"mobileSoft2"} onClick={toShop} />
-					{purchased === "teacher_purchase" && (
+					{data?.type === true && (
 						<Button
 							text={"쿠폰함"}
 							fontSize={"var(--student-h3)"}
@@ -77,6 +104,10 @@ const buttonWrapperCSS = css`
 	width: 100%;
 	display: flex;
 	justify-content: space-around;
+`
+
+const productInfoWrapperCSS = css`
+	margin-top: 36px;
 `
 
 export default purchased

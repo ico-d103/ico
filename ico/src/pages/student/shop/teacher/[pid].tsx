@@ -68,7 +68,7 @@ function product() {
 					height: "120px",
 					duration: 3000,
 				})
-				navigate("/student/shop/teacher_purchase", "bottomToTop")
+				navigate(`/student/shop/teacher/purchased/${productId}`, "bottomToTop")
 				closeConfirm()
 			})
 			.catch((err) => {

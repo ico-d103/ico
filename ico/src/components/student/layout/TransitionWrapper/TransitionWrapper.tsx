@@ -68,7 +68,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		window.history.scrollRestoration = "manual"
 
 		router.beforePopState(({ url, as, options }) => {
-
 			if (modalHandlerAtom) {
 				console.log("모달 핸들러")
 				modalHandlerAtom()
@@ -89,7 +88,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				setIsNavigatingAtom(() => true)
 
 				setNavToAtom(() => {
-					return { url: url, transition: "beforeScale" }
+					return { url: as, transition: "beforeScale" }
 				})
 
 				// navigate(url, "beforeScale")
