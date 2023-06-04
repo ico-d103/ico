@@ -10,19 +10,11 @@ import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
 import useCompHandler from "@/hooks/useCompHandler"
 import Modal from "@/components/common/Modal/Modal"
-import { checkedStudent } from "@/store/store"
-import { useAtomValue } from "jotai"
-import { useEffect } from "react"
 
 function StudentEnteredList() {
 	const noti = useNotification()
 	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
 	const [openJobResetModal, closeJobResetModal, jobResetModalState] = useCompHandler()
-	const checkedStudentAtom = useAtomValue(checkedStudent)
-
-	useEffect(() => {
-		console.log(checkedStudentAtom)
-	}, [checkedStudentAtom])
 
 	const queryClient = useQueryClient()
 	const resetStudentsJobMutation = useMutation((a: number) => putResetStudentsJobAPI())

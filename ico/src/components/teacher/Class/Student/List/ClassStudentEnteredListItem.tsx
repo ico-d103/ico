@@ -28,9 +28,13 @@ function StudentEnteredListItem({ student }: StudentEnteredListItemPropsType) {
 
 	const changeToggleState = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.checked) {
-			setCheckedStudentAtom([...checkedStudentAtom, student.id])
+			setCheckedStudentAtom([...checkedStudentAtom, { [student.id]: student.name }])
 		} else {
-			setCheckedStudentAtom(checkedStudentAtom.filter((id) => id !== student.id))
+			setCheckedStudentAtom(
+				checkedStudentAtom.filter((obj) => {
+					return !obj.hasOwnProperty(student.id)
+				}),
+			)
 		}
 	}
 

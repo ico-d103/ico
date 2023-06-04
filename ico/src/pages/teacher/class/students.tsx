@@ -50,13 +50,16 @@ function students() {
 	const [nation] = useGetNation()
 
 	useEffect(() => {
-		console.log(checkedStudentAtom.length)
+		console.log(checkedStudentAtom)
 	}, [checkedStudentAtom])
 
 	return (
 		<>
 			<div css={modalWrapperCSS}>
-				<span>체크를 통해 여러 명의 학생을 한 번에 관리해 보세요 !</span>
+				<span>
+					{checkedStudentAtom.map((obj) => Object.values(obj)[0]).join(", ")}{" "}
+					{checkedStudentAtom.length <= 1 ? "학생" : "학생들"}에 대해
+				</span>
 				<div css={modalContentCSS}>
 					{/* studentId는 임시 */}
 					<ClassStudentDetailMoney studentId={-1} />
@@ -143,7 +146,7 @@ const detailWrapperCSS = css`
 const modalWrapperCSS = css`
 	position: fixed;
 	top: 50px;
-	margin-left: 180px;
+	margin-left: 200px;
 	padding: 30px;
 	border-radius: 10px;
 	background-color: var(--common-back-color-2);

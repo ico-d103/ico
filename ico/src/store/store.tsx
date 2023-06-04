@@ -43,7 +43,7 @@ const nationData = atom<getNationType>({
 	credit_down: 0,
 })
 
-const checkedStudent = atom<number[]>([])
+const checkedStudent = atom<{ [key: number]: string }[]>([])
 
 export {
 	navTo,
