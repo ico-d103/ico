@@ -199,7 +199,7 @@ public class LicenseServiceImpl implements LicenseService{
                 continue;
             }
 
-            license.setRating((byte) rating.intValue());
+            license.setRating(rating.byteValue());
             studentLicenseRepository.save(license);
         }
     }
