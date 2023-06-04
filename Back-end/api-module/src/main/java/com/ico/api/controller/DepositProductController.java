@@ -1,7 +1,9 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.bank.DepositProductDto;
+import com.ico.api.dto.bank.DepositProductResDto;
+import com.ico.api.service.bank.DepositProductDto;
 import com.ico.api.service.bank.DepositProductService;
+import com.ico.core.dto.DepositUpdatetDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +38,7 @@ public class DepositProductController {
      * @return
      */
     @GetMapping("/all")
-    public ResponseEntity<List<DepositProductDto>> findAllDeposit(HttpServletRequest request){
+    public ResponseEntity<List<DepositProductResDto>> findAllDeposit(HttpServletRequest request){
         return ResponseEntity.ok(depositProductService.findAllDeposit(request));
     }
 
@@ -62,7 +64,7 @@ public class DepositProductController {
      * @return
      */
     @PutMapping("/teacher/{depositProductId}")
-    public ResponseEntity<HttpStatus> updateDeposit(HttpServletRequest request, @RequestBody DepositProductDto deposit, @PathVariable Long depositProductId){
+    public ResponseEntity<HttpStatus> updateDeposit(HttpServletRequest request, @RequestBody DepositUpdatetDto deposit, @PathVariable Long depositProductId){
         depositProductService.updateDeposit(request, depositProductId, deposit);
         return ResponseEntity.ok(HttpStatus.OK);
     }
