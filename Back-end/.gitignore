@@ -9,6 +9,7 @@ build/
 /**/src/main/resources/application-db.yml
 /**/src/main/resources/application-login.yml
 /**/src/main/resources/application-aws.yml
+/**/src/main/resources/application-redis.yml
 
 ### STS ###
 .apt_generated
