@@ -18,5 +18,7 @@ public class Formatter {
 
     public static final DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("yyyy.MM.dd-HH:mm");
 
+    public static final DateTimeFormatter dateTimeSeconds = DateTimeFormatter.ofPattern("yyyy.MM.dd-HH:mm:ss");
+
     public static final NumberFormat number = NumberFormat.getInstance(Locale.US);
 }

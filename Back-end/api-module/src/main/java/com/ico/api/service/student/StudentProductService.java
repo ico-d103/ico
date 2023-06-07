@@ -64,7 +64,8 @@ public interface StudentProductService {
      * 구매 완료 후 구매 내역 반환
      *
      * @param studentProductId
+     * @param request
      * @return
      */
-    ProductQRResDto findBuyTransaction(Long studentProductId);
+    ProductQRResDto findBuyTransaction(Long studentProductId, HttpServletRequest request);
 }

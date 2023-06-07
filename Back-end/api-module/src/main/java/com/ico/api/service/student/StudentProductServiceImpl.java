@@ -20,6 +20,7 @@ import com.ico.core.repository.StudentProductRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 학생 상품 Service
@@ -48,6 +51,7 @@ public class StudentProductServiceImpl implements StudentProductService {
     private final S3UploadService s3UploadService;
     private final JwtTokenProvider jwtTokenProvider;
     private final ShopTransactionService shopTransactionService;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 학생의 상품 판매 제안서를 학생 상품 테이블에 추가합니다.
@@ -240,18 +244,42 @@ public class StudentProductServiceImpl implements StudentProductService {
         // 상점 거래 내역 기록
         shopTransactionService.addShopTransaction(nationId, product.getAmount());
 
+        // Redis에 학생의 구매 시간 저장
+        saveRedis(String.valueOf(studentId) + product.getId(), LocalDateTime.now().format(Formatter.dateTimeSeconds));
+
         return product.getId();
     }
 
     @Override
-    public ProductQRResDto findBuyTransaction(Long studentProductId) {
+    public ProductQRResDto findBuyTransaction(Long studentProductId, HttpServletRequest request) {
+        String studentId = String.valueOf(jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request)));
+        String key = studentId + studentProductId;
+        // Redis에 학생id+상품id(key) 값이 존재하는 경우 날짜(value) 반환
+        String dateTime = String.valueOf(Optional
+                .ofNullable(redisTemplate.opsForValue().get(key))
+                .orElseThrow(() -> new CustomException(ErrorCode.EXPIRE_BUY_TRANSACTION)));
+        // 반환 후 삭제
+        redisTemplate.delete(key);
+
         StudentProduct product = studentProductRepository.findById(studentProductId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+
         return ProductQRResDto.builder()
                 .title(product.getTitle())
                 .seller(product.getStudent().getName())
-                .type(false)
-                .date(LocalDateTime.now().format(Formatter.date))
+                .price(product.getAmount())
+                .date(LocalDateTime.parse(dateTime, Formatter.dateTimeSeconds))
                 .build();
+    }
+
+    /**
+     * Redis 에 key : value 저장
+     * 만료 시간 5분
+     *
+     * @param key 학생 id + 상품 id
+     * @param value 구매 날짜 시간(yyyy.MM.dd-HH:mm:ss)
+     */
+    private void saveRedis(String key, String value) {
+        redisTemplate.opsForValue().set(key, value, 5, TimeUnit.MINUTES);
     }
 }

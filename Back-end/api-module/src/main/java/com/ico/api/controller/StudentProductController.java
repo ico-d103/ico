@@ -109,10 +109,11 @@ public class StudentProductController {
      * 구매 완료 후 구매 내역 반환
      *
      * @param studentProductId
+     * @param request
      * @return
      */
     @GetMapping("/student/transaction/{studentProductId}")
-    public ResponseEntity<ProductQRResDto> findBuyTransaction(@PathVariable Long studentProductId) {
-        return ResponseEntity.ok(studentProductService.findBuyTransaction(studentProductId));
+    public ResponseEntity<ProductQRResDto> findBuyTransaction(@PathVariable Long studentProductId, HttpServletRequest request) {
+        return ResponseEntity.ok(studentProductService.findBuyTransaction(studentProductId, request));
     }
 }
