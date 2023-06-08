@@ -18,12 +18,12 @@ pipeline {
                 withCredentials([file(credentialsId: 'db-credentials', variable: 'dbConfigFile'),
                                 file(credentialsId: 'login-credentials', variable: 'loginConfigFile'),
                                 file(credentialsId: 'aws-credentials', variable: 'awsConfigFile'),
-				file(credentialsId: 'redis-credentials', variable: 'redisConfigFile')]) {
+				                file(credentialsId: 'redis-credentials', variable: 'redisConfigFile')]) {
                     script {
                         sh 'cp $dbConfigFile Back-end/api-module/src/main/resources/application-db.yml'
                         sh 'cp $loginConfigFile Back-end/api-module/src/main/resources/application-login.yml'
                         sh 'cp $awsConfigFile Back-end/api-module/src/main/resources/application-aws.yml'
-			sh 'cp $redisConfigFile Back-end/api-module/src/main/resources/application-redis.yml'
+			            sh 'cp $redisConfigFile Back-end/api-module/src/main/resources/application-redis.yml'
                         
                         sh 'cp $dbConfigFile Back-end/batch-module/src/main/resources/application-db.yml'
                         sh 'cp $loginConfigFile Back-end/batch-module/src/main/resources/application-login.yml'
