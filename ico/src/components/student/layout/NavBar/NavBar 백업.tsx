@@ -106,20 +106,20 @@ const navBarParentCSS = () => {
 const contentWrapperCSS = ({ selected }: { selected: number }) => {
 	return css`
 		min-height: ${selected !== -2 && "calc(100vh - 64px)"};
-		margin-left: ${selected !== -2 && "64px"};
+		margin-bottom: ${selected !== -2 && "64px"};
 		/* position: relative; */
 	`
 }
 const navBarWrapperCSS = ({ selected }: { selected: number }) => {
 	return css`
-		height: 100%;
-		width: 64px;
+		height: 64px;
+		width: 100%;
 		/* background-color: #fff9e6; */
 		background-color: var(--student-main-color-soft);
 		/* backdrop-filter: blur(30px); */
 		box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1);
 		position: fixed;
-		left: 0;
+		bottom: 0;
 		display: flex;
 		flex-direction: column;
 		z-index: 99999;
@@ -144,8 +144,8 @@ const indicatorCSS = ({ length, selected }: { length: number; selected: number }
 }
 
 const navBarInnerWrapperCSS = css`
-	/* flex: 1;
-	display: flex; */
+	flex: 1;
+	display: flex;
 `
 
 const navBarIndivCSS = css`

@@ -292,7 +292,7 @@ const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 		}
 
 		/* min-height: calc(100vh - 64px); */
-		min-height: calc(100vh - 64px);;
+		min-height: calc(100vh);;
 		overflow: hidden;
 	`
 }
@@ -306,7 +306,7 @@ const contentInnerWrapperCSS = ({
 }) => {
 	return css`
 		/* min-height: calc(100vh - 64px); */
-		min-height: calc(100vh - 64px);
+		min-height: calc(100vh);
 		/* background-color: var(--student-back-color); */
 		
 		background: linear-gradient(to bottom, var(--student-main-color), #ffecc4);
@@ -333,7 +333,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			@keyframes rightToLeft {
 				from {
 					opacity: 0%;
-					transform: translateX(100%);
+					transform: translateX(10%);
 					visibility: visible;
 				}
 
@@ -350,7 +350,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			@keyframes leftToRight {
 				from {
 					opacity: 0%;
-					transform: translateX(-100%);
+					transform: translateX(-10%);
 					visibility: visible;
 				}
 
@@ -367,7 +367,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			@keyframes bottomToTop {
 				from {
 					opacity: 0%;
-					transform: translateY(100%);
+					transform: translateY(10%);
 					visibility: visible;
 				}
 
@@ -384,7 +384,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			@keyframes scale {
 				from {
 					opacity: 0%;
-					transform: scale(150%);
+					transform: scale(110%);
 					visibility: visible;
 				}
 
@@ -419,7 +419,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			@keyframes beforeScale1 {
 				from {
 					opacity: 0%;
-					transform: scale(150%);
+					transform: scale(120%);
 					visibility: visible;
 				}
 
@@ -457,7 +457,7 @@ const beforeTransitionsCSS = ({ isTransitioning }: { isTransitioning: boolean })
 
 				to {
 					opacity: 0%;
-					transform: scale(50%);
+					transform: scale(80%);
 				}
 			}
 		`,
