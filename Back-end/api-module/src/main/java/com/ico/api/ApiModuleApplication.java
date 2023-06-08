@@ -26,7 +26,7 @@ import java.util.TimeZone;
 public class ApiModuleApplication {
 
     public static void main(String[] args) {
-        System.setProperty("spring.config.name", "application,application-db,application-login,application-aws");
+        System.setProperty("spring.config.name", "application,application-db,application-login,application-aws,application-redis");
         SpringApplication.run(ApiModuleApplication.class, args);
     }
 
