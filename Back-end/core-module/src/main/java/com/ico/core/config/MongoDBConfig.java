@@ -43,7 +43,7 @@ public class MongoDBConfig {
      * @return
      */
     @Bean
-    MongoTransactionManager transactionManager(MongoDatabaseFactory databaseFactory) {
+    MongoTransactionManager mongoTransactionManager(MongoDatabaseFactory databaseFactory) {
         return new MongoTransactionManager(databaseFactory);
     }
 }
