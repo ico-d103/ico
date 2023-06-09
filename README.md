@@ -36,7 +36,7 @@
 | **Language** | Java, TypeScript                       |
 | **Back-end**  | SpringBoot, JWT |
 | **Front-end** | Next.js, PWA, react-query, jotai, emotion                  |
-| **Database** | MySQL, MongoDB, S3                                |
+| **Database** | MySQL, MongoDB, Redis, S3                                |
 | **Server**   | AWS EC2, Nginx                         |
 | **DevOps**   | Git, Docker, Jenkins                            |
 
@@ -73,6 +73,7 @@
 - SpringBoot: 2.7.11
 - MySQL: 8.0.29
 - MongoDB: 5.0.17
+- Redis: 5.0.7
 - Docker: 23.0.4
 - Docker-compose: 1.29.2
 - Jenkins: 2.387.2
