@@ -2,7 +2,7 @@ package com.ico.api.controller;
 
 import com.ico.api.dto.license.NationLicenseResDto;
 import com.ico.api.dto.license.StudentLicenseResDto;
-import com.ico.api.service.License.LicenseService;
+import com.ico.api.service.license.LicenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

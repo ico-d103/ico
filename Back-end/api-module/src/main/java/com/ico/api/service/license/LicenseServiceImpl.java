@@ -1,4 +1,4 @@
-package com.ico.api.service.License;
+package com.ico.api.service.license;
 
 import com.ico.api.dto.license.NationLicenseResDto;
 import com.ico.api.dto.license.StudentLicenseResDto;
