@@ -24,6 +24,7 @@ import java.util.Map;
 
 /**
  * @author 강교철
+ * @author 서재건
  */
 @Service
 @RequiredArgsConstructor
@@ -45,20 +46,7 @@ public class LicenseServiceImpl implements LicenseService{
         if (!nationId.equals(student.getNation().getId())) {
             throw new CustomException(ErrorCode.NOT_EQUAL_NATION_TEACHER_STUDENT);
         }
-        List<StudentLicense> licenses = studentLicenseRepository.findAllByStudentId(studentId);
-        if (licenses.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
-        }
-        List<StudentLicenseResDto> result = new ArrayList<>();
-        for (StudentLicense license : licenses) {
-            StudentLicenseResDto dto = StudentLicenseResDto.builder()
-                    .id(license.getId())
-                    .subject(license.getSubject())
-                    .rating(license.getRating())
-                    .build();
-            result.add(dto);
-        }
-        return result;
+        return getStudentLicenseList(studentId);
     }
 
     @Override
@@ -66,9 +54,6 @@ public class LicenseServiceImpl implements LicenseService{
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         List<NationLicense> licenses = nationLicenseRepository.findAllByNationId(nationId);
-        if (licenses.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
-        }
         List<NationLicenseResDto> result = new ArrayList<>();
         for (NationLicense license : licenses) {
             NationLicenseResDto dto = NationLicenseResDto.builder()
@@ -109,20 +94,7 @@ public class LicenseServiceImpl implements LicenseService{
     public List<StudentLicenseResDto> getStudentLicense(HttpServletRequest request) {
         Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
 
-        List<StudentLicense> licenses = studentLicenseRepository.findAllByStudentId(studentId);
-        if (licenses.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
-        }
-        List<StudentLicenseResDto> result = new ArrayList<>();
-        for (StudentLicense license : licenses) {
-            StudentLicenseResDto dto = StudentLicenseResDto.builder()
-                    .id(license.getId())
-                    .subject(license.getSubject())
-                    .rating(license.getRating())
-                    .build();
-            result.add(dto);
-        }
-        return result;
+        return getStudentLicenseList(studentId);
     }
 
     @Override
@@ -202,5 +174,27 @@ public class LicenseServiceImpl implements LicenseService{
             license.setRating(rating.byteValue());
             studentLicenseRepository.save(license);
         }
+    }
+
+    /**
+     * 학생의 자격증 목록 조회
+     *
+     * @param studentId
+     * @return
+     */
+    public List<StudentLicenseResDto> getStudentLicenseList(Long studentId) {
+        List<StudentLicense> licenses = studentLicenseRepository.findAllByStudentId(studentId);
+
+        List<StudentLicenseResDto> result = new ArrayList<>();
+        for (StudentLicense license : licenses) {
+            StudentLicenseResDto dto = StudentLicenseResDto.builder()
+                    .id(license.getId())
+                    .subject(license.getSubject())
+                    .rating(license.getRating())
+                    .build();
+            result.add(dto);
+        }
+
+        return result;
     }
 }
