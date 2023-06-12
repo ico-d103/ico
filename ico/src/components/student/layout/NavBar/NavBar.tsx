@@ -10,6 +10,7 @@ import LoadImage from "@/components/common/LoadImage/LoadImage"
 import { getHomeMyInfoAPI } from "@/api/student/home/getHomeMyInfoAPI"
 import { getHomeMyInfoType } from "@/types/student/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
+import NavBarRightMenu from "./NavBarRightMenu"
 
 type NavBarProps = {
 	children: any
@@ -55,7 +56,6 @@ function NavBar({ children }: NavBarProps) {
 		}
 	}, [router.pathname])
 
-
 	const selectHandler = (value: number) => {
 		// setSelectedMain(() => value)
 		// setSelectedSub(() => 0)
@@ -85,7 +85,6 @@ function NavBar({ children }: NavBarProps) {
 		)
 	})
 
-
 	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getHomeMyInfoType>(
 		["student", "homeMyInfo"],
 		getHomeMyInfoAPI,
@@ -96,11 +95,9 @@ function NavBar({ children }: NavBarProps) {
 		refetch()
 	}, [selected === -2])
 
-
 	return (
 		<div css={navBarParentCSS()}>
 			<div css={navBarWrapperCSS({ selected })}>
-
 				<div>
 					<div css={logoWrapperCSS}>
 						<LoadImage
@@ -120,8 +117,8 @@ function NavBar({ children }: NavBarProps) {
 					</div>
 					<div css={navBarInnerWrapperCSS}>{navBarRender}</div>
 				</div>
-				
-				{data && 
+
+				{/* {data && 
 				<div css={footerWrapperCSS}>
 					
 					<div css={css`font-size: var(--student-h2);`}>
@@ -131,11 +128,12 @@ function NavBar({ children }: NavBarProps) {
                         {data.school} {data.room}반 {data.number}번
                     </div>
 				</div>
-			}
-
+			} */}
 			</div>
 
 			<div css={contentWrapperCSS({ selected })}>{children}</div>
+
+			<div css={rightBarWrapperCSS({ selected })}>{data && <NavBarRightMenu data={data} />}</div>
 		</div>
 	)
 }
@@ -152,7 +150,7 @@ const navBarParentCSS = () => {
 const contentWrapperCSS = ({ selected }: { selected: number }) => {
 	return css`
 		/* min-height: ${selected !== -2 && "calc(100vh - 64px)"}; */
-		min-width: ${selected !== -2 && "calc(100% - var(--student-side-bar-width))"};
+		max-width: ${selected !== -2 && "var(--student-full-width)"};
 		margin-left: ${selected !== -2 && "var(--student-side-bar-width)"};
 		/* position: relative; */
 	`
@@ -172,6 +170,32 @@ const navBarWrapperCSS = ({ selected }: { selected: number }) => {
 		justify-content: space-between;
 		z-index: 99999;
 		display: ${selected === -2 && "none"};
+	`
+}
+
+const rightBarWrapperCSS = ({ selected }: { selected: number }) => {
+	return css`
+		height: 100%;
+		width: var(--student-side-bar-width);
+		/* background-color: #fff9e6; */
+		background-color: var(--student-main-color);
+		/* backdrop-filter: blur(30px); */
+		/* box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1); */
+		border-left: 1px solid rgba(0, 0, 0, 0.1);
+		position: fixed;
+		right: 0;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		z-index: 99999;
+		display: ${selected === -2 && "none"};
+
+		@media (max-width: 1280px) {
+			display: none;
+		}
+
+		@media (min-width: 1281px) {
+		}
 	`
 }
 
@@ -229,7 +253,6 @@ const navBarIndivContentCSS = ({ targetIdx, curIdx }: { targetIdx: number; curId
 		cursor: pointer;
 	`
 }
-
 
 const footerWrapperCSS = css`
 	padding: 0px 0px 36px 16px;

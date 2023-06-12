@@ -131,6 +131,14 @@ const sideMenuButtonWrapperCSS = css`
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
+
+	/* @media (max-width: 1280px) {
+
+	} */
+
+	@media (min-width: 1281px) {
+		display: none;
+	}
 `
 
 const homeContentWrapperCSS = css`
