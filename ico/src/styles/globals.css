@@ -31,6 +31,9 @@
 	--student-font-color: #3d2f21;
 	--student-wrapper-color: #ffffff;
 
+	--student-side-bar-width: 280px;
+	--student-full-width: calc(100vw - var(--student-side-bar-width));
+
 	/* --student-gray-color: #00000099;
     --student-gray-color-2: #000000b3;
     --student-input-gray-color: #e3e8ef80;

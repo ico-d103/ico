@@ -35,7 +35,7 @@ function index() {
 					/>
 				)}
 				<div css={headerWrapperCSS}>
-					<div css={logoWrapperCSS}>
+					{/* <div css={logoWrapperCSS}>
 						<LoadImage
 							src={"/assets/children_icon.png"}
 							alt={"icon"}
@@ -43,14 +43,12 @@ function index() {
 								width: 36px;
 								height: 36px;
 								margin-right: 12px;
-								
-								/* filter: hue-rotate(300deg);
-								opacity: 0.7; */
 							`}
 							sizes={"128px"}
 						/>
 						ICO
-					</div>
+					</div> */}
+					<div/>
 					<div onClick={openComp} css={sideMenuButtonWrapperCSS}>
 						<img
 							src={"/assets/side_menu/student_menu_icon.png"}
@@ -61,7 +59,11 @@ function index() {
 						/>
 					</div>
 				</div>
-				<ContentWrapper>
+
+
+
+					<div css={homeContentWrapperCSS}>
+					<ContentWrapper>
 					<div css={contentTitleCSS}>내 프로필</div>
 					{data && (
 						<HomeJobCard
@@ -81,6 +83,10 @@ function index() {
 				)}
 				<HomeButtonSection />
 				<HomeTipSection />
+					</div>
+				
+
+
 			</div>
 		</div>
 	)
@@ -125,5 +131,13 @@ const sideMenuButtonWrapperCSS = css`
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
+`
+
+const homeContentWrapperCSS = css`
+	max-width: 1024px;
+	width: 70vw;
+
+	display: grid;
+	grid-template-columns: 50% 50%;
 `
 export default index

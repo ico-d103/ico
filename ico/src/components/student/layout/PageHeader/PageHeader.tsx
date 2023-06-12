@@ -77,6 +77,7 @@ function PageHeader({ title, addComp }: PageHeaderProps) {
 
 const headerOuterWrapperCSS = ({ compHeight, hasComp }: { compHeight: number, hasComp: boolean }) => {
 	return css`
+
 		height: ${compHeight + 70}px;
 		margin-bottom: ${hasComp && '16px'};
 		/* margin-bottom: 16px; */
@@ -85,9 +86,11 @@ const headerOuterWrapperCSS = ({ compHeight, hasComp }: { compHeight: number, ha
 
 const headerWrapperCSS = ({ isScrolled, hasComp }: { isScrolled: boolean; hasComp: boolean }) => {
 	return css`
+		/* width: calc(100vw - var(--student-side-bar-width)); */
+		width: var(--student-full-width);
 		z-index: 9000;
 		position: fixed;
-		width: 100%;
+		/* width: 100%; */
 		top: ${isScrolled && hasComp ? `-55px` : "0px"};
 		${isScrolled
 			? "box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1)"

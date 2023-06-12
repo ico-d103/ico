@@ -246,6 +246,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 }
 
 const transitionWrapperCSS = css`
+	
 	.enable-will-change {
 		will-change: transform, opacity;
 	}
@@ -255,7 +256,8 @@ const transitionWrapperCSS = css`
 `
 
 const imgWrapperCSS = css`
-	width: 100vw;
+	/* width: calc(100% - var(--student-side-bar-width)); */
+	width: var(--student-full-width);
 	height: 100vh;
 	position: Fixed;
 	z-index: -1;
@@ -265,9 +267,8 @@ const imgWrapperCSS = css`
 
 const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 	return css`
-		width: 100vw;
+		width: 100%;
 		height: auto;
-
 		transform: translate(0, -${scrollTop}px);
 		/* animation: focus-out 0.3s ease both;
 		@keyframes focus-out {
@@ -306,12 +307,13 @@ const contentInnerWrapperCSS = ({
 }) => {
 	return css`
 		/* min-height: calc(100vh - 64px); */
-		min-height: calc(100vh);
+		
+		min-height: 100vh;
 		/* background-color: var(--student-back-color); */
 		
 		background: linear-gradient(to bottom, var(--student-main-color), #ffecc4);
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
-		width: ${isTransitioning && "100vw"};
+		width: ${isTransitioning && "100%"};
 		/* height: ${isTransitioning && "calc(100vh - 64px)"}; */
 		/* height: ${isTransitioning && "100vh"}; */
 		/* overflow: ${isTransitioning && "hidden"}; */

@@ -6,6 +6,10 @@ import useNavigate from "@/hooks/useNavigate"
 import Link from "next/link"
 
 import { NAVBAR_CLASS, NAVBAR_GOVERNMENT, NAVBAR_STORE, NAVBAR_HOME } from "./NavBarIcons"
+import LoadImage from "@/components/common/LoadImage/LoadImage"
+import { getHomeMyInfoAPI } from "@/api/student/home/getHomeMyInfoAPI"
+import { getHomeMyInfoType } from "@/types/student/apiReturnTypes"
+import { useQuery } from "@tanstack/react-query"
 
 type NavBarProps = {
 	children: any
@@ -51,6 +55,7 @@ function NavBar({ children }: NavBarProps) {
 		}
 	}, [router.pathname])
 
+
 	const selectHandler = (value: number) => {
 		// setSelectedMain(() => value)
 		// setSelectedSub(() => 0)
@@ -73,23 +78,64 @@ function NavBar({ children }: NavBarProps) {
 				css={navBarIndivCSS}
 			>
 				<div css={navBarIndivContentCSS({ targetIdx: selected, curIdx: Number(el) })}>
-					{navBarData[Number(el)].content}
+					<div css={iconWrapperCSS}>{navBarData[Number(el)].content}</div>
 					{navBarData[Number(el)].label}
 				</div>
 			</div>
 		)
 	})
 
+
+	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getHomeMyInfoType>(
+		["student", "homeMyInfo"],
+		getHomeMyInfoAPI,
+		// { staleTime: 200000 },
+	)
+
+	useEffect(() => {
+		refetch()
+	}, [selected === -2])
+
+
 	return (
 		<div css={navBarParentCSS()}>
-			<div css={contentWrapperCSS({ selected })}>{children}</div>
-
 			<div css={navBarWrapperCSS({ selected })}>
-				<div css={indicatorWrapperCSS}>
-					<div css={indicatorCSS({ length: Object.keys(navBarData).length, selected })} />
+
+				<div>
+					<div css={logoWrapperCSS}>
+						<LoadImage
+							src={"/assets/children_icon.png"}
+							alt={"icon"}
+							wrapperCss={css`
+								width: 36px;
+								height: 36px;
+								margin-right: 12px;
+
+								/* filter: hue-rotate(300deg);
+									opacity: 0.7; */
+							`}
+							sizes={"128px"}
+						/>
+						ICO
+					</div>
+					<div css={navBarInnerWrapperCSS}>{navBarRender}</div>
 				</div>
-				<div css={navBarInnerWrapperCSS}>{navBarRender}</div>
+				
+				{data && 
+				<div css={footerWrapperCSS}>
+					
+					<div css={css`font-size: var(--student-h2);`}>
+                        {data.name}님 환영해요!
+                    </div>
+                    <div css={css`margin-top: 8px;`}>
+                        {data.school} {data.room}반 {data.number}번
+                    </div>
+				</div>
+			}
+
 			</div>
+
+			<div css={contentWrapperCSS({ selected })}>{children}</div>
 		</div>
 	)
 }
@@ -105,15 +151,16 @@ const navBarParentCSS = () => {
 
 const contentWrapperCSS = ({ selected }: { selected: number }) => {
 	return css`
-		min-height: ${selected !== -2 && "calc(100vh - 64px)"};
-		margin-left: ${selected !== -2 && "64px"};
+		/* min-height: ${selected !== -2 && "calc(100vh - 64px)"}; */
+		min-width: ${selected !== -2 && "calc(100% - var(--student-side-bar-width))"};
+		margin-left: ${selected !== -2 && "var(--student-side-bar-width)"};
 		/* position: relative; */
 	`
 }
 const navBarWrapperCSS = ({ selected }: { selected: number }) => {
 	return css`
 		height: 100%;
-		width: 64px;
+		width: var(--student-side-bar-width);
 		/* background-color: #fff9e6; */
 		background-color: var(--student-main-color-soft);
 		/* backdrop-filter: blur(30px); */
@@ -122,30 +169,27 @@ const navBarWrapperCSS = ({ selected }: { selected: number }) => {
 		left: 0;
 		display: flex;
 		flex-direction: column;
+		justify-content: space-between;
 		z-index: 99999;
 		display: ${selected === -2 && "none"};
 	`
 }
 
-const indicatorWrapperCSS = css`
-	width: 100%;
-	height: 3px;
+const logoWrapperCSS = css`
+	font-size: var(--student-h1);
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	color: #5aa9006a;
+	padding: 18px;
+	/* background-color: var(--student-main-color-2); */
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 `
-
-const indicatorCSS = ({ length, selected }: { length: number; selected: number }) => {
-	return css`
-		transition-property: transform;
-		transition-duration: 0.3s;
-		width: calc(100% / ${length});
-		height: 100%;
-		transform: translate(calc(${selected} * 100%), 0px);
-		background-color: #ff9d00a3;
-	`
-}
 
 const navBarInnerWrapperCSS = css`
 	/* flex: 1;
 	display: flex; */
+	margin-top: 16px;
 `
 
 const navBarIndivCSS = css`
@@ -155,23 +199,39 @@ const navBarIndivCSS = css`
 	align-items: center;
 `
 
+const iconWrapperCSS = css`
+	width: 48px;
+	height: 48px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`
+
 const navBarIndivContentCSS = ({ targetIdx, curIdx }: { targetIdx: number; curIdx: number }) => {
 	return css`
 		display: flex;
-		flex-direction: column;
+		/* flex-direction: column; */
 		align-items: center;
-	
+		gap: 8px;
+		width: 100%;
+		padding-left: 16px;
+		border-right: ${targetIdx === curIdx ? "6px solid var(--student-main-color-4)" : "none"};
 		& path {
 			transition-property: stroke;
 			transition-duration: 0.2s;
 			stroke: ${targetIdx === curIdx ? "rgba(0, 0, 0, 1)" : "rgba(0, 0, 0, 0.7)"};
 		}
 
-		transition-property: color;
+		transition-property: color border;
 		transition-duration: 0.2s;
 		color: ${targetIdx === curIdx ? "rgba(0, 0, 0, 1)" : "rgba(0, 0, 0, 0.5)"};
-		font-size: 12px;
+		font-size: 16px;
+		cursor: pointer;
 	`
 }
 
+
+const footerWrapperCSS = css`
+	padding: 0px 0px 36px 16px;
+`
 export default NavBar
