@@ -1,5 +1,6 @@
 package com.ico.api.service.student;
 
+import com.ico.api.dto.license.StudentLicenseResDto;
 import com.ico.api.dto.nation.CreditScoreAllReqDto;
 import com.ico.api.dto.nation.CreditScoreReqDto;
 import com.ico.api.dto.student.StudentAllResDto;
@@ -9,6 +10,7 @@ import com.ico.api.dto.student.StudentResDto;
 import com.ico.api.dto.transaction.TransactionColDto;
 import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.user.StudentSignUpRequestDto;
+import com.ico.api.service.License.LicenseServiceImpl;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
@@ -78,6 +80,8 @@ public class StudentServiceImpl implements StudentService{
     private final JwtTokenProvider jwtTokenProvider;
 
     private final S3UploadService s3UploadService;
+
+    private final LicenseServiceImpl licenseService;
 
     @Override
     public Long signUp(StudentSignUpRequestDto requestDto) {
@@ -217,7 +221,9 @@ public class StudentServiceImpl implements StudentService{
                             .amount(Formatter.number.format(amount))
                     .build());
         }
-        return new StudentResDto().of(student, map, totalPageNumber);
+        // 학생의 자격증 목록 조회
+        List<StudentLicenseResDto> licenses = licenseService.getStudentLicenseList(studentId);
+        return new StudentResDto().of(student, map, totalPageNumber, licenses);
     }
 
     @Transactional(readOnly = true)
