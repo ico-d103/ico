@@ -15,7 +15,6 @@ import com.ico.core.data.Default_tax;
 import com.ico.core.dto.StockReqDto;
 import com.ico.core.document.DefaultNation;
 import com.ico.core.entity.Immigration;
-import com.ico.core.entity.Interest;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Rule;
@@ -31,7 +30,6 @@ import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.DefaultNationRepository;
 import com.ico.core.repository.ImmigrationRepository;
-import com.ico.core.repository.InterestRepository;
 import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.RuleRepository;
@@ -67,7 +65,6 @@ import java.util.Random;
 @RequiredArgsConstructor
 @Slf4j
 public class NationServiceImpl implements NationService {
-    private final InterestRepository interestRepository;
     private final RuleRepository ruleRepository;
     private final StudentJobRepository studentJobRepository;
     private final StudentProductRepository studentProductRepository;
@@ -299,17 +296,6 @@ public class NationServiceImpl implements NationService {
                     .build();
             taxRepository.save(tax);
         }
-        // 예금 이자율
-        List<Default_interest> interestList = defaultNation.getDefault_interests();
-        for (Default_interest data : interestList) {
-            Interest interest = Interest.builder()
-                    .nation(nation)
-                    .creditRating((byte) data.getCredit_rating())
-                    .shortPeriod((byte) data.getShort_period())
-                    .longPeriod((byte) data.getLong_period())
-                    .build();
-            interestRepository.save(interest);
-        }
         // 직업
         List<Default_job> studentJobList = defaultNation.getDefault_jobs();
         for (Default_job data : studentJobList) {
@@ -410,12 +396,6 @@ public class NationServiceImpl implements NationService {
         List<Invest> invests = investRepository.findAllByNationId(nationId);
         if (!invests.isEmpty()) {
             investRepository.deleteAll(invests);
-        }
-
-        // Interest
-        List<Interest> interests = interestRepository.findAllByNationId(nationId);
-        if (!interests.isEmpty()) {
-            interestRepository.deleteAll(interests);
         }
 
         // TreasuryHistory(MongoDB)
