@@ -33,7 +33,7 @@ public class DepositProductController {
 
 
     /**
-     * 전체 예금 상품 목록 조회(선생님)
+     * 선생님의 전체 예금 상품 목록 조회
      *
      * @param request
      * @return
@@ -43,6 +43,12 @@ public class DepositProductController {
         return ResponseEntity.ok(depositProductService.findAllDepositTeacher(request));
     }
 
+    /**
+     * 학생의 예금 상품 페이지
+     *
+     * @param request
+     * @return
+     */
     @GetMapping("/student")
     public ResponseEntity<DepositProductStudentResDto> findAllDepositStudent(HttpServletRequest request){
         return ResponseEntity.ok(depositProductService.findAllDepositStudent(request));
