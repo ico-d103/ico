@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,8 +15,11 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class DepositProductDto {
+
+    @NotBlank(message = "725")
     private String title;
 
+    @NotNull(message = "726")
     private Byte period;
 
     private List<Byte> interest;
