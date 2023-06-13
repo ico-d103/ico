@@ -168,7 +168,7 @@ function index() {
 				</React.Fragment>
 			)}
 
-			{data && isTimeBetween(data.tradingStart, data.tradingEnd) && (
+			{/* {data && isTimeBetween(data.tradingStart, data.tradingEnd) && (
 				<div css={navBarOverlayCSS}>
 					{data.myStock.amount === 0 ? (
 						<Button
@@ -192,7 +192,7 @@ function index() {
 						/>
 					)}
 				</div>
-			)}
+			)} */}
 			<PageHeader title={"투자"} />
 
 			<div css={contentWrapperCSS}>
@@ -213,9 +213,40 @@ function index() {
 				)}
 
 				{chartData && <FinanceInvestChart data={chartData} />}
+
+				
 				{data && (
 					<div css={stockMentWrapperCSS}>
+						<div>
 						현재 종목은 <span>“{data.stock}”</span> 입니다!
+						</div>
+						
+
+						{data && isTimeBetween(data.tradingStart, data.tradingEnd) && (
+				<div css={css`width: 240px;`}>
+					{data.myStock.amount === 0 ? (
+						<Button
+							text={"매수하기"}
+							fontSize={`var(--student-h3)`}
+							width={"100%"}
+							theme={"mobileNormal"}
+							onClick={() => {
+								openApplyComp()
+							}}
+						/>
+					) : (
+						<Button
+							text={"매도하기"}
+							fontSize={`var(--student-h3)`}
+							width={"100%"}
+							theme={"mobileSoft"}
+							onClick={() => {
+								openDeleteComp()
+							}}
+						/>
+					)}
+				</div>
+			)}
 					</div>
 				)}
 
@@ -277,6 +308,9 @@ const stockMentWrapperCSS = css`
 	font-size: var(--student-h2);
 	font-weight: 500;
 
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	& span {
 		font-weight: 700;
 	}
@@ -296,7 +330,7 @@ const sSizeFontCSS = css`
 `
 
 const navBarOverlayCSS = css`
-	width: 100%;
+	width: var(--student-full-width);
 	height: 64px;
 	background-color: var(--student-main-color);
 	position: fixed;
@@ -306,7 +340,7 @@ const navBarOverlayCSS = css`
 	justify-content: center;
 	align-items: center;
 	padding: 0px 16px;
-
+	
 	opacity: 0%;
 	animation: fadein 0.2s ease-in forwards;
 

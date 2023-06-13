@@ -107,3 +107,10 @@ export type getFinanceInvestIssueType = {
 	tradingEnd: string
 	issue: FinanceInvestIssueType[]
 }
+
+export type getPurchasedTransactionType = {
+	title: string
+    seller: string
+    type: boolean
+    date: string
+}

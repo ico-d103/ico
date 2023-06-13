@@ -9,7 +9,7 @@ type responseType = {
 export const getStudentListAPI = async () => {
 	try {
 		const response: responseType = await tokenInstance.get("/student/teacher")
-
+		console.log(response.data)
 		return response.data
 	} catch (error) {
 		throw error

@@ -5,9 +5,8 @@ import useNavigate from '@/hooks/useNavigate'
 import useGetTokenStatus from '@/hooks/useGetTokenStatus'
 import { getHomeMyInfoType } from '@/types/student/apiReturnTypes'
 import LoadImage from '@/components/common/LoadImage/LoadImage'
-import NavBarRightMenu from '../../layout/NavBar/NavBarRightMenu'
 
-function SideMenu({closeComp, data}: {closeComp?: Function; data: getHomeMyInfoType}) {
+function NavBarRightMenu({data}: {data: getHomeMyInfoType}) {
     const navigate = useNavigate()
     const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
@@ -30,9 +29,9 @@ function SideMenu({closeComp, data}: {closeComp?: Function; data: getHomeMyInfoT
         )
     })
   return (
-    <div css={wrapperCSS} onClick={() => {closeComp && closeComp()}}>
+
         <div css={menuWrapperCSS} onClick={(e) => {e.stopPropagation()}}>
-            {/* <div css={menuHeaderCSS}>
+            <div css={menuHeaderCSS}>
                 <div css={welcomeSectionCSS}>
                     <div>
                     <div css={css`font-size: var(--student-h2);`}>
@@ -56,34 +55,24 @@ function SideMenu({closeComp, data}: {closeComp?: Function; data: getHomeMyInfoT
             
             <div>
                 {renderMenu}
-            </div> */}
-            <NavBarRightMenu data={data}/>
+            </div>
             
         </div>
-    </div>
+
   )
 }
 
-const wrapperCSS = css`
-    width: 100vw;
-    height: 100vh;
-    /* position: fixed; */
-    display: flex;
-    justify-content: flex-end;
-    
-    /* background-color: red; */
-`
 
 const menuWrapperCSS = css`
-    position: fixed;
-    width: var(--student-side-bar-width);
+    /* position: fixed; */
+    width: 100%;
     height: 100%;
-    max-width: var(--student-side-bar-width);
-    background-color: var(--student-main-color-soft);
-    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
-    /* display: flex;
+    /* max-width: 360px; */
+    /* background-color: var(--student-main-color-soft); */
+    /* box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2); */
+    display: flex;
     flex-direction: column;
-    justify-content: space-between;; */
+    justify-content: space-between;;
 `
 
 const menuItemCSS = css`
@@ -126,4 +115,4 @@ color: rgba(0, 0, 0, 0.6);
 `
 
 
-export default SideMenu
+export default NavBarRightMenu
