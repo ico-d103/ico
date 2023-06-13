@@ -62,7 +62,7 @@ function ClassStudentDetail() {
 		<div css={wrapperCSS}>
 			<div css={topWrapperCSS}>
 				<ClassStudentDetailAccountList transactions={data?.transactions} size={data?.size} />
-				<ClassStudentDetailCertificate />
+				<ClassStudentDetailCertificate license={data?.licenses} />
 			</div>
 			<div css={bottomWrapperCSS}>
 				<Button

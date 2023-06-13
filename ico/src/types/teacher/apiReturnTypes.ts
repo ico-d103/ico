@@ -66,13 +66,19 @@ export type transactionsType = {
 	[date: string]: transanctionType[]
 }
 
+export type licenseType = {
+	id: number
+	subject: string
+	rating: number
+}
+
 export type getStudentDetailType = {
 	studentId: number
 	studentName: string
-	creditScore: number
 	transactions: transactionsType
 	frozen: boolean
 	size: number
+	licenses: licenseType[]
 }
 
 export type getTeacherProductsType = {

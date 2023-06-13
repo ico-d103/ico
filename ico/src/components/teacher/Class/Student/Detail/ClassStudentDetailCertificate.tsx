@@ -1,12 +1,15 @@
+import { licenseType } from "@/types/teacher/apiReturnTypes"
 import { css } from "@emotion/react"
 
-function ClassStudentDetailCertificate() {
+type ClassStudentDetailCertificatePropsType = {
+	license: licenseType[] | undefined
+}
+
+function ClassStudentDetailCertificate({ license }: ClassStudentDetailCertificatePropsType) {
 	return (
 		<div css={wrapperCSS}>
 			<h4>자격증</h4>
-			<div css={noneWrapperCSS}>
-				<h5>자격증이 없습니다.</h5>
-			</div>
+			<div css={noneWrapperCSS}>{license?.length ? <h5>자격증이 있습니다.</h5> : <h5>자격증이 없습니다.</h5>}</div>
 		</div>
 	)
 }
