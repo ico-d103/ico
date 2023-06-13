@@ -15,6 +15,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DepositStudentResDto {
 
+    private String title;
+
     private byte interest;
 
     private String startDate;
@@ -30,7 +32,8 @@ public class DepositStudentResDto {
     private boolean end;
 
     @Builder
-    public DepositStudentResDto(byte interest, String startDate, String endDate, byte creditRating, int amount, int depositAmount, boolean end) {
+    public DepositStudentResDto(String title, byte interest, String startDate, String endDate, byte creditRating, int amount, int depositAmount, boolean end) {
+        this.title = title;
         this.interest = interest;
         this.startDate = startDate;
         this.endDate = endDate;

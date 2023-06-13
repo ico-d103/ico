@@ -1,10 +1,6 @@
 package com.ico.api.service.bank;
 
-import com.ico.api.dto.bank.DepositProductDto;
-import com.ico.api.dto.bank.DepositProductStudentColResDto;
-import com.ico.api.dto.bank.DepositProductStudentResDto;
-import com.ico.api.dto.bank.DepositProductTeacherResDto;
-import com.ico.api.dto.bank.DepositStudentResDto;
+import com.ico.api.dto.bank.*;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.document.Deposit;
@@ -27,7 +23,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author 변윤경
@@ -97,6 +92,7 @@ public class DepositProductServiceImpl implements DepositProductService{
             DepositStudentResDto myDeposit = new DepositStudentResDto();
             boolean isEnd = !LocalDateTime.now().toLocalDate().isBefore(deposit.getEndDate().toLocalDate());
             myDeposit = myDeposit.builder()
+                    .title(deposit.getTitle())
                     .amount(deposit.getAmount())
                     .depositAmount(deposit.getAmount() * deposit.getInterest() / 100)
                     .interest(deposit.getInterest())
@@ -202,12 +198,15 @@ public class DepositProductServiceImpl implements DepositProductService{
      * @return boolean
      */
     private boolean isDescending(List<Byte> list) {
-        List<Byte> sortedList = new ArrayList<>(list);
-        Collections.sort(sortedList, Collections.reverseOrder());
-        return sortedList.equals(list);
+        for (int i = 1; i < list.size(); i++) {
+            if(list.get(i-1) < list.get(i)) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    private Byte myInterest(Byte creditRating, DepositProduct deposit){
+    public Byte myInterest(Byte creditRating, DepositProduct deposit){
         switch (creditRating){
             case 1: return deposit.getGrade_1();
             case 2: return deposit.getGrade_2();
