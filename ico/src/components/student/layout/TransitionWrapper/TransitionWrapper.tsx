@@ -68,7 +68,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		window.history.scrollRestoration = "manual"
 
 		router.beforePopState(({ url, as, options }) => {
-
 			if (modalHandlerAtom) {
 				console.log("모달 핸들러")
 				modalHandlerAtom()
@@ -89,7 +88,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				setIsNavigatingAtom(() => true)
 
 				setNavToAtom(() => {
-					return { url: url, transition: "beforeScale" }
+					return { url: as, transition: "beforeScale" }
 				})
 
 				// navigate(url, "beforeScale")
@@ -247,6 +246,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 }
 
 const transitionWrapperCSS = css`
+	
 	.enable-will-change {
 		will-change: transform, opacity;
 	}
@@ -256,7 +256,8 @@ const transitionWrapperCSS = css`
 `
 
 const imgWrapperCSS = css`
-	width: 100vw;
+	/* width: calc(100% - var(--student-side-bar-width)); */
+	width: var(--student-full-width);
 	height: 100vh;
 	position: Fixed;
 	z-index: -1;
@@ -266,9 +267,8 @@ const imgWrapperCSS = css`
 
 const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 	return css`
-		width: 100vw;
+		width: 100%;
 		height: auto;
-
 		transform: translate(0, -${scrollTop}px);
 		/* animation: focus-out 0.3s ease both;
 		@keyframes focus-out {
@@ -293,7 +293,7 @@ const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 		}
 
 		/* min-height: calc(100vh - 64px); */
-		min-height: calc(100vh - 64px);;
+		min-height: calc(100vh);;
 		overflow: hidden;
 	`
 }
@@ -307,12 +307,13 @@ const contentInnerWrapperCSS = ({
 }) => {
 	return css`
 		/* min-height: calc(100vh - 64px); */
-		min-height: calc(100vh - 64px);
+		
+		min-height: 100vh;
 		/* background-color: var(--student-back-color); */
 		
 		background: linear-gradient(to bottom, var(--student-main-color), #ffecc4);
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
-		width: ${isTransitioning && "100vw"};
+		width: ${isTransitioning && "100%"};
 		/* height: ${isTransitioning && "calc(100vh - 64px)"}; */
 		/* height: ${isTransitioning && "100vh"}; */
 		/* overflow: ${isTransitioning && "hidden"}; */
@@ -334,7 +335,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			@keyframes rightToLeft {
 				from {
 					opacity: 0%;
-					transform: translateX(100%);
+					transform: translateX(10%);
 					visibility: visible;
 				}
 
@@ -351,7 +352,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			@keyframes leftToRight {
 				from {
 					opacity: 0%;
-					transform: translateX(-100%);
+					transform: translateX(-10%);
 					visibility: visible;
 				}
 
@@ -368,7 +369,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			@keyframes bottomToTop {
 				from {
 					opacity: 0%;
-					transform: translateY(100%);
+					transform: translateY(10%);
 					visibility: visible;
 				}
 
@@ -385,7 +386,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			@keyframes scale {
 				from {
 					opacity: 0%;
-					transform: scale(150%);
+					transform: scale(110%);
 					visibility: visible;
 				}
 
@@ -420,7 +421,7 @@ const transitionsCSS = ({ isTransitioning }: { isTransitioning: boolean }) => {
 			@keyframes beforeScale1 {
 				from {
 					opacity: 0%;
-					transform: scale(150%);
+					transform: scale(120%);
 					visibility: visible;
 				}
 
@@ -458,7 +459,7 @@ const beforeTransitionsCSS = ({ isTransitioning }: { isTransitioning: boolean })
 
 				to {
 					opacity: 0%;
-					transform: scale(50%);
+					transform: scale(80%);
 				}
 			}
 		`,
