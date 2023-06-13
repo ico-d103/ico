@@ -7,6 +7,13 @@ import ModalContent from "@/components/common/Modal/ModalContent"
 import GovJobCreateModal from "./GovJobCreateModal"
 import useCompHandler from "@/hooks/useCompHandler"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
+import Button from "@/components/common/Button/Button"
+
+type certificationType = {
+	id: number
+	subject: string
+	rating: number
+}[]
 
 type GovRuleClassDetailProps = {
 	job?: string
@@ -19,6 +26,7 @@ type GovRuleClassDetailProps = {
 	count?: number
 	actualIdx?: number
 	currency?: string
+	certification: certificationType
 }
 
 const APPLY_ICON = (
@@ -95,6 +103,8 @@ const inputReducer = (
 			return { ...state, imgUrl: action.value }
 		case "CHANGE_TOTAL":
 			return { ...state, total: action.value }
+		case "CHANGE_CERTIFICATION":
+			return { ...state, certification: action.value }
 		default:
 			return state
 	}
@@ -111,6 +121,7 @@ function GovJobItem({
 	count,
 	actualIdx,
 	currency,
+	certification,
 }: GovRuleClassDetailProps) {
 	const [inputState, dispatchInput] = useReducer(inputReducer, {
 		job: job ? job : "",
@@ -161,16 +172,24 @@ function GovJobItem({
 	const renderCardCustomButton = (
 		<div css={currentColorWrapperCSS} onClick={openComp}>
 			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<path
-						d="M21 18L19.9999 19.094C19.4695 19.6741 18.7502 20 18.0002 20C17.2501 20 16.5308 19.6741 16.0004 19.094C15.4693 18.5151 14.75 18.1901 14.0002 18.1901C13.2504 18.1901 12.5312 18.5151 12 19.094M3.00003 20H4.67457C5.16376 20 5.40835 20 5.63852 19.9447C5.84259 19.8957 6.03768 19.8149 6.21663 19.7053C6.41846 19.5816 6.59141 19.4086 6.93732 19.0627L19.5001 6.49998C20.3285 5.67156 20.3285 4.32841 19.5001 3.49998C18.6716 2.67156 17.3285 2.67156 16.5001 3.49998L3.93729 16.0627C3.59139 16.4086 3.41843 16.5816 3.29475 16.7834C3.18509 16.9624 3.10428 17.1574 3.05529 17.3615C3.00003 17.5917 3.00003 17.8363 3.00003 18.3255V20Z"
-						stroke="black"
-						strokeWidth="2"
-						strokeLinecap="round"
-						strokeLinejoin="round"
-					/>
-				</svg>
+				<path
+					d="M21 18L19.9999 19.094C19.4695 19.6741 18.7502 20 18.0002 20C17.2501 20 16.5308 19.6741 16.0004 19.094C15.4693 18.5151 14.75 18.1901 14.0002 18.1901C13.2504 18.1901 12.5312 18.5151 12 19.094M3.00003 20H4.67457C5.16376 20 5.40835 20 5.63852 19.9447C5.84259 19.8957 6.03768 19.8149 6.21663 19.7053C6.41846 19.5816 6.59141 19.4086 6.93732 19.0627L19.5001 6.49998C20.3285 5.67156 20.3285 4.32841 19.5001 3.49998C18.6716 2.67156 17.3285 2.67156 16.5001 3.49998L3.93729 16.0627C3.59139 16.4086 3.41843 16.5816 3.29475 16.7834C3.18509 16.9624 3.10428 17.1574 3.05529 17.3615C3.00003 17.5917 3.00003 17.8363 3.00003 18.3255V20Z"
+					stroke="black"
+					strokeWidth="2"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
+			</svg>
 		</div>
 	)
+
+	let certCount = 0
+	const renderCertSub = certification?.map((el, idx) => {
+		if (el.rating !== -1) {
+			certCount += 1
+			return `${certCount > 1 ? ", " : ""}${el.subject}: ${el.rating}`
+		}
+	})
 
 	return (
 		<React.Fragment>
@@ -214,7 +233,7 @@ function GovJobItem({
 				<div css={inputFieldCSS}>
 					<div>
 						<Input
-							theme={"none"}
+							theme={"titleNoTheme"}
 							placeholder={"직업 명을 입력해 주세요."}
 							defaultValue={job}
 							customCss={css`
@@ -223,37 +242,54 @@ function GovJobItem({
 						/>
 						<Input theme={"none"} placeholder={"내용을 입력해 주세요."} defaultValue={description} isTextarea={true} />
 					</div>
-					<div css={prefWrapperCSS}>
-						<Input
-							theme={"radial"}
-							customCss={css`
-								width: 128px;
-								margin-right: 8px;
-							`}
-							defaultValue={inputState.credit}
-							leftContent={<div>신용</div>}
-							rightContent={<div>등급</div>}
-						/>
-						<Input
-							theme={"radial"}
-							customCss={css`
-								width: 164px;
-								margin-right: 8px;
-							`}
-							defaultValue={inputState.wage}
-							leftContent={<div>월급</div>}
-							rightContent={<div>{currency}</div>}
-						/>
-						<Input
-							theme={"radial"}
-							customCss={css`
-								width: 148px;
-								margin-right: 8px;
-							`}
-							defaultValue={inputState.total}
-							leftContent={<div>인원 {count} /</div>}
-							rightContent={<div>명</div>}
-						/>
+					<div css={footerCSS}>
+						<div css={prefWrapperCSS}>
+							<Input
+								theme={"radial"}
+								customCss={css`
+									width: 128px;
+								`}
+								defaultValue={inputState.credit}
+								leftContent={<div>신용</div>}
+								rightContent={<div>등급</div>}
+							/>
+							<Input
+								theme={"radial"}
+								customCss={css`
+									width: 164px;
+								`}
+								defaultValue={inputState.wage}
+								leftContent={<div>월급</div>}
+								rightContent={<div>{currency}</div>}
+							/>
+							<Input
+								theme={"radial"}
+								customCss={css`
+									width: 148px;
+								`}
+								defaultValue={inputState.total}
+								leftContent={<div>인원 {count} /</div>}
+								rightContent={<div>명</div>}
+							/>
+
+							<div css={certItemWrapperCSS}>{renderCertSub}</div>
+						</div>
+
+						<div css={ButtonWrapperCSS}>
+							<Button
+								text={"적용"}
+								fontSize={`var(--teacher-h5)`}
+								width={"84px"}
+								cssProps={css`
+									flex: 1;
+									margin-right: 8px;
+									margin-bottom: 8px;
+									height: 32px;
+								`}
+								theme={"cancelDark"}
+								onClick={() => {}}
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -280,12 +316,27 @@ const inputFieldCSS = css`
 	overflow: hidden;
 `
 
-const prefWrapperCSS = css`
+const footerCSS = css`
 	width: 100%;
-	height: 64px;
-	background-color: rgba(0, 0, 0, 0.03);
 	display: flex;
-	align-items: center;
+	justify-content: space-between;
+`
+
+const ButtonWrapperCSS = css`
+	height: 100%;
+	display: flex;
+	align-items: flex-end;
+`
+
+const prefWrapperCSS = css`
+	flex: 1;
+	/* height: 48px; */
+	/* background-color: rgba(0, 0, 0, 0.03); */
+	/* display: flex; */
+	/* align-items: center; */
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
 	padding: 8px;
 `
 
@@ -317,7 +368,7 @@ const currentColorWrapperCSS = css`
 	width: 32px;
 	height: 32px;
 	background-color: rgba(255, 255, 255, 1);
-    opacity: 80%;
+	opacity: 80%;
 	border-radius: 100%;
 	box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.1);
 	cursor: pointer;
@@ -333,26 +384,28 @@ const currentColorWrapperCSS = css`
 		/* background-color: rgba(255, 255, 255, 1); */
 		transform: scale(110%);
 		box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.3);
-        opacity: 100%;
+		opacity: 100%;
 	}
 `
 
-const selectedColorElementCSS = ({ backgroundColor }: { backgroundColor: string }) => {
-	return css`
-		position: relative;
-		width: 28px;
-		height: 28px;
-		background-color: ${backgroundColor};
-		border-radius: 100px;
-		border: 2px solid rgba(255, 255, 255, 0.7);
-		margin: 0px 5px 0px 5px;
-		cursor: pointer;
-		transition-property: filter;
-		transition-duration: 0.3s;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	`
-}
+const certItemWrapperCSS = css`
+	border-radius: 10px;
+	background-color: rgba(255, 255, 255, 0.5);
+	overflow: hidden;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	height: 32px;
+	padding: 8px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition-property: background-color;
+	transition-duration: 0.2s;
+	cursor: pointer;
+	user-select: none;
+
+	&:hover {
+		background-color: rgba(255, 255, 255, 1);
+	}
+`
 
 export default GovJobItem

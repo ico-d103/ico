@@ -221,11 +221,16 @@ const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
 				color: #9b6f00c9;
 			}
 		`,
-		none: css`
+		titleNoTheme: css`
 			height: 42px;
+
+			& input {
+				font-size: 18px;
+			}
+			
 		`,
 		radial: css`
-			height: 42px;
+			height: 32px;
 			border-radius: 10px;
 			background-color: rgba(255, 255, 255, 0.5);
 			overflow: hidden;
