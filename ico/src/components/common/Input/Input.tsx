@@ -7,7 +7,7 @@ type InputProps = {
 	leftContent?: any
 	rightContent?: any
 	customCss?: SerializedStyles | SerializedStyles[]
-	textAlign?: 'left' | 'right' | 'center'
+	textAlign?: "left" | "right" | "center"
 	isFile?: boolean
 	css?: null
 	isTextarea?: boolean
@@ -30,17 +30,16 @@ const Input = React.forwardRef(
 				divRef.current.style.height = textareaRef.current.scrollHeight + "px"
 			}
 		}
-	
+
 		useEffect(() => {
 			resizeHeightHandler()
 		}, [])
 
-
 		return (
 			// div에 {...props}이 있었는데 왜 있었는지 모르겠음...
-			<div css={[themeProvider({ isFocusing })[theme], customCss]} ref={divRef}> 
+			<div css={[themeProvider({ isFocusing })[theme], customCss]} ref={divRef}>
 				<label css={initLabelCSS}>
-					{leftContent && <div css={leftContentWrapperCSS}>{leftContent}</div>}
+					{leftContent && <div css={leftContentWrapperCSS} className={"left-content"}>{leftContent}</div>}
 
 					{isTextarea === true ? (
 						<textarea
@@ -62,7 +61,7 @@ const Input = React.forwardRef(
 						/>
 					)}
 
-					{rightContent && <div css={rightContentWrapperCSS}>{rightContent}</div>}
+					{rightContent && <div css={rightContentWrapperCSS} className={"right-content"}>{rightContent}</div>}
 				</label>
 			</div>
 		)
@@ -197,31 +196,64 @@ const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
 			}
 		`,
 		mobileSoft: css`
-		/* border: 2px solid rgba(0, 0, 0, 0.1); */
-		border: none;
-		background-color: var(--student-main-color-soft);
-		border-radius: 10px;
-		height: 42px;
-		outline: ${isFocusing ? "4px solid var(--student-main-color-2)" : "2px solid rgba(0, 0, 0, 0.1)"};
-		transition-duration: 0.15s;
-		transition-property: outline ease;
+			/* border: 2px solid rgba(0, 0, 0, 0.1); */
+			border: none;
+			background-color: var(--student-main-color-soft);
+			border-radius: 10px;
+			height: 42px;
+			outline: ${isFocusing ? "4px solid var(--student-main-color-2)" : "2px solid rgba(0, 0, 0, 0.1)"};
+			transition-duration: 0.15s;
+			transition-property: outline ease;
 
-		& input {
-			font-size: var(--student-h3);
-		}
-		& div path {
-			stroke: #9b6f007d;
-		}
-		& input::placeholder {
-			color: #9b6f00c9;
-		}
-		& textarea {
-			font-size: var(--student-h3);
-		}
-		& textarea::placeholder {
-			color: #9b6f00c9;
-		}
-	`,
+			& input {
+				font-size: var(--student-h3);
+			}
+			& div path {
+				stroke: #9b6f007d;
+			}
+			& input::placeholder {
+				color: #9b6f00c9;
+			}
+			& textarea {
+				font-size: var(--student-h3);
+			}
+			& textarea::placeholder {
+				color: #9b6f00c9;
+			}
+		`,
+		none: css`
+			height: 42px;
+		`,
+		radial: css`
+			height: 42px;
+			border-radius: 10px;
+			background-color: rgba(255, 255, 255, 0.3);
+			overflow: hidden;
+			border: 1px solid rgba(0, 0, 0, 0.1);
+
+			& label .left-content {
+				/* background-color: rgba(0, 0, 0, 0.1); */
+				height: 100%;
+				display: flex;
+				align-items: center;
+				padding: 8px;
+				color: rgba(0, 0, 0, 1);
+				border-right: 1px solid rgba(0, 0, 0, 0.1);
+			}
+
+			& label .right-content {
+				height: 100%;
+				display: flex;
+				align-items: center;
+				padding: 8px 8px 8px 0px;
+				color: rgba(0, 0, 0, 0.5);
+			}
+			
+			& input {
+				text-align: right;
+				
+			}
+		`
 	}
 
 	return themes
