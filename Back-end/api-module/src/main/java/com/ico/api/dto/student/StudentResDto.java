@@ -1,5 +1,6 @@
 package com.ico.api.dto.student;
 
+import com.ico.api.dto.license.StudentLicenseResDto;
 import com.ico.api.dto.transaction.TransactionColDto;
 import com.ico.core.entity.Student;
 import lombok.Builder;
@@ -28,13 +29,16 @@ public class StudentResDto {
 
     private Map<String, List<TransactionColDto>> transactions;
 
+    private List<StudentLicenseResDto> licenses;
+
     @Builder
-    public StudentResDto(Long studentId, String studentName, boolean isFrozen, int size, Map<String, List<TransactionColDto>> transactions) {
+    public StudentResDto(Long studentId, String studentName, boolean isFrozen, int size, Map<String, List<TransactionColDto>> transactions, List<StudentLicenseResDto> licenses) {
         this.studentId = studentId;
         this.studentName = studentName;
         this.isFrozen = isFrozen;
         this.size = size;
         this.transactions = transactions;
+        this.licenses = licenses;
     }
 
     /**
@@ -44,13 +48,14 @@ public class StudentResDto {
      * @param map
      * @return
      */
-    public StudentResDto of(Student student, Map<String, List<TransactionColDto>> map, int size) {
+    public StudentResDto of(Student student, Map<String, List<TransactionColDto>> map, int size, List<StudentLicenseResDto> licenses) {
         return StudentResDto.builder()
                 .studentId(student.getId())
                 .studentName(student.getName())
                 .isFrozen(student.isFrozen())
                 .size(size)
                 .transactions(map)
+                .licenses(licenses)
                 .build();
     }
 }
