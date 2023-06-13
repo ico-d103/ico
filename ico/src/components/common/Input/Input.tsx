@@ -227,12 +227,25 @@ const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
 		radial: css`
 			height: 42px;
 			border-radius: 10px;
-			background-color: rgba(255, 255, 255, 0.3);
+			background-color: rgba(255, 255, 255, 0.5);
 			overflow: hidden;
 			border: 1px solid rgba(0, 0, 0, 0.1);
+			
+			transition-property: background-color;
+			transition-duration: 0.2s;
+
+			& div {
+				cursor: pointer;
+				user-select: none;
+			}
+
+			&:hover {
+				background-color: rgba(255, 255, 255, 1);
+				
+			}
 
 			& label .left-content {
-				/* background-color: rgba(0, 0, 0, 0.1); */
+				/* background-color: rgba(0, 0, 0, 0.05); */
 				height: 100%;
 				display: flex;
 				align-items: center;

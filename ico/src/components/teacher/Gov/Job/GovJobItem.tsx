@@ -158,6 +158,20 @@ function GovJobItem({
 		)
 	})
 
+	const renderCardCustomButton = (
+		<div css={currentColorWrapperCSS} onClick={openComp}>
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path
+						d="M21 18L19.9999 19.094C19.4695 19.6741 18.7502 20 18.0002 20C17.2501 20 16.5308 19.6741 16.0004 19.094C15.4693 18.5151 14.75 18.1901 14.0002 18.1901C13.2504 18.1901 12.5312 18.5151 12 19.094M3.00003 20H4.67457C5.16376 20 5.40835 20 5.63852 19.9447C5.84259 19.8957 6.03768 19.8149 6.21663 19.7053C6.41846 19.5816 6.59141 19.4086 6.93732 19.0627L19.5001 6.49998C20.3285 5.67156 20.3285 4.32841 19.5001 3.49998C18.6716 2.67156 17.3285 2.67156 16.5001 3.49998L3.93729 16.0627C3.59139 16.4086 3.41843 16.5816 3.29475 16.7834C3.18509 16.9624 3.10428 17.1574 3.05529 17.3615C3.00003 17.5917 3.00003 17.8363 3.00003 18.3255V20Z"
+						stroke="black"
+						strokeWidth="2"
+						strokeLinecap="round"
+						strokeLinejoin="round"
+					/>
+				</svg>
+		</div>
+	)
+
 	return (
 		<React.Fragment>
 			<Modal
@@ -183,12 +197,20 @@ function GovJobItem({
 			/>
 
 			<div css={itemWrapperCSS}>
-				<GovJobCard
-					job={inputState.job}
-					wage={Number(inputState.wage)}
-					backgroundColor={inputState.backgroundColor}
-					imgUrl={inputState.imgUrl}
-				/>
+				<div
+					css={css`
+						position: relative;
+					`}
+				>
+					<GovJobCard
+						job={inputState.job}
+						wage={Number(inputState.wage)}
+						backgroundColor={inputState.backgroundColor}
+						imgUrl={inputState.imgUrl}
+					/>
+					{renderCardCustomButton}
+				</div>
+
 				<div css={inputFieldCSS}>
 					<div>
 						<Input
@@ -232,32 +254,6 @@ function GovJobItem({
 							leftContent={<div>인원 {count} /</div>}
 							rightContent={<div>명</div>}
 						/>
-
-						<div css={currentColorWrapperCSS}>
-							<div onClick={openComp} css={selectedColorElementCSS({ backgroundColor: inputState.backgroundColor })}>
-								<div
-									css={css`
-										width: 100%;
-										height: 100%;
-										border-radius: 100%;
-										overflow: hidden;
-									`}
-								>
-									<LoadImage
-										src={inputState.imgUrl}
-										alt={"thumbnail"}
-										wrapperCss={css`
-											width: 100%;
-											height: 300%;
-											top: -30%;
-											filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.4));
-										`}
-									/>
-								</div>
-
-								{/* <div className={'color-picker'} css={colorPickerWrapperCSS}>{renderColorPicker}</div> */}
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -310,12 +306,35 @@ const colorElementCSS = ({ backgroundColor, currentColor }: { backgroundColor: s
 }
 
 const currentColorWrapperCSS = css`
-	height: 100%;
+	position: absolute;
+	/* height: 100%; */
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	/* position: absolute; */
-	top: 0;
+	top: 32px;
+	right: 32px;
+	width: 32px;
+	height: 32px;
+	background-color: rgba(255, 255, 255, 1);
+    opacity: 80%;
+	border-radius: 100%;
+	box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+	z-index: 999999;
 	/* top: -420%; */
+	transition-property: background-color transform box-shadow opacity;
+	transition-duration: 0.2s;
+	& path {
+		stroke: rgba(0, 0, 0, 0.7);
+	}
+
+	&:hover {
+		/* background-color: rgba(255, 255, 255, 1); */
+		transform: scale(110%);
+		box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.3);
+        opacity: 100%;
+	}
 `
 
 const selectedColorElementCSS = ({ backgroundColor }: { backgroundColor: string }) => {
