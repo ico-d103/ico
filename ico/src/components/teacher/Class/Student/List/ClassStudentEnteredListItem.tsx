@@ -1,59 +1,141 @@
 import { css } from "@emotion/react"
 import { getStudentListType } from "@/types/teacher/apiReturnTypes"
-import { useSetAtom } from "jotai"
-import { selectedStudent } from "@/store/store"
+import { useAtomValue, useAtom } from "jotai"
+import { selectedStudent, checkedStudent } from "@/store/store"
 import useGetNation from "@/hooks/useGetNation"
+import { CLASS_GRADE_DOWN, CLASS_GRADE_UP } from "../../ClassIcons"
+import CollapseMenuStudentDetail from "@/components/teacher/common/CollapseMenu/CollapseMenuStudentDetail"
+import ClassStudentDetail from "../Detail/ClassStudentDetail"
+import ClassStudentDetailMoney from "../Detail/ClassStudentDetailMoney"
+import useNotification from "@/hooks/useNotification"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { postCreditScoreAPI } from "@/api/teacher/class/postCreditScoreAPI"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 type StudentEnteredListItemPropsType = {
 	student: getStudentListType
-	idx: number
 }
 
-function StudentEnteredListItem({ student, idx }: StudentEnteredListItemPropsType) {
+function StudentEnteredListItem({ student }: StudentEnteredListItemPropsType) {
+	const noti = useNotification()
 	const [nation] = useGetNation()
-	const setSelectedStudentAtom = useSetAtom(selectedStudent)
+	const queryClient = useQueryClient()
+	const selectedStudentAtom = useAtomValue(selectedStudent)
+	const [checkedStudentAtom, setCheckedStudentAtom] = useAtom(checkedStudent)
+	const postCreditScoreMutation = useMutation((args: { studentId: number; body: { type: boolean } }) =>
+		postCreditScoreAPI(args),
+	)
 
-	const openStudentDetailHandler = (id: number) => {
-		setSelectedStudentAtom(id)
+	const changeToggleState = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.checked) {
+			setCheckedStudentAtom([...checkedStudentAtom, { [student.id]: student.name }])
+		} else {
+			setCheckedStudentAtom(
+				checkedStudentAtom.filter((obj) => {
+					return !obj.hasOwnProperty(student.id)
+				}),
+			)
+		}
+	}
+
+	const postCreditScore = (type: boolean) => {
+		const args = type
+			? { studentId: student.id, body: { type: true } }
+			: { studentId: student.id, body: { type: false } }
+
+		postCreditScoreMutation.mutate(args, {
+			onSuccess: () => {
+				noti({
+					content: <NotiTemplate type={"ok"} content={"성공적으로 수정되었습니다."} />,
+					duration: 3000,
+				})
+
+				queryClient.invalidateQueries(["studentList", "entered"])
+				queryClient.invalidateQueries(["enteredStudentDetail", student.id])
+			},
+			onError: () => {
+				noti({
+					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+					duration: 3000,
+				})
+			},
+		})
 	}
 
 	return (
-		<div css={wrapperCSS(idx)} onClick={() => openStudentDetailHandler(student.id)}>
-			<div css={leftWrapperCSS}>
-				<h4>{student.number}</h4>
-				<h4>{student.name}</h4>
-				<h4>{student.job}</h4>
-			</div>
-			<div css={rightWrapperCSS}>
-				<div css={currencyWrapperCSS}>
-					<div css={amountWrapperCSS}>{student.amount}</div>
-					{nation.currency}
+		<CollapseMenuStudentDetail
+			studentId={student.id}
+			titleChildren={
+				<div css={wrapperCSS}>
+					<div css={leftWrapperCSS}>
+						<input
+							type="checkbox"
+							onClick={(e) => {
+								e.stopPropagation()
+							}}
+							onChange={changeToggleState}
+						/>
+						<h5 css={numberCSS}>{student.number}</h5>
+						<h5 css={nameCSS}>{student.name}</h5>
+						<h5 css={jobCSS}>{student.job ? student.job : "무직"}</h5>
+					</div>
+					<div css={rightWrapperCSS}>
+						<h5 css={amountCSS}>
+							{student.amount} {nation.currency}
+						</h5>
+						<ClassStudentDetailMoney studentId={student.id} />
+						<div css={divideCSS}></div>
+						<h5 css={creditRatingCSS}>{student.creditRating}등급</h5>
+						<div css={buttonWrapperCSS}>
+							<div
+								onClick={(e) => {
+									e.stopPropagation()
+									postCreditScore(false)
+								}}
+							>
+								{CLASS_GRADE_DOWN}
+							</div>
+							<h4 css={creditScoreCSS}>{student.creditScore} 점</h4>
+							<div
+								onClick={(e) => {
+									e.stopPropagation()
+									postCreditScore(true)
+								}}
+							>
+								{CLASS_GRADE_UP}
+							</div>
+						</div>
+					</div>
 				</div>
-				<div css={creditWrapperCSS}>{student.creditRating}등급</div>
-			</div>
-		</div>
+			}
+			contentChildren={selectedStudentAtom === student.id ? <ClassStudentDetail /> : <></>}
+		></CollapseMenuStudentDetail>
 	)
 }
 
-const wrapperCSS = (idx: number) => {
-	return css`
-		width: 100%;
-		padding: 10px 15px;
-		background-color: ${idx % 2 === 0 ? `var(--teacher-main-color-op-2)` : `var(--common-back-color-2)`};
-		border-radius: 10px;
+const wrapperCSS = css`
+	width: 100%;
+	padding: 15px 15px;
+	background-color: var(--common-back-color-2);
+	border-radius: 10px;
 
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: space-between;
-		cursor: pointer;
-		transition: all 0.2s;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	cursor: pointer;
+	transition: all 0.2s;
 
-		:hover {
-			filter: brightness(93%);
-		}
-	`
-}
+	:hover {
+		filter: brightness(93%);
+	}
+`
+
+const divideCSS = css`
+	height: 40px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	margin: 0 20px;
+`
 
 const leftWrapperCSS = css`
 	display: flex;
@@ -61,55 +143,77 @@ const leftWrapperCSS = css`
 	align-items: center;
 	gap: 15px;
 
-	> h4 {
-		font-size: var(--teacher-h4);
+	> h5 {
+		font-size: var(--teacher-h5);
 	}
 
-	> h4:nth-of-type(1) {
-		font-weight: bold;
-	}
+	> input {
+		width: 23px;
+		height: 23px;
+		cursor: pointer;
+		border-radius: 50%;
+		border: 1px solid #999;
+		appearance: none;
+		transition: background 0.2s;
 
-	> h4:nth-of-type(2) {
-		min-width: 70px;
+		:checked {
+			background: var(--teacher-main-color);
+			border: none;
+		}
 	}
 `
 
 const rightWrapperCSS = css`
-	padding: 3px 3px 3px 0px;
-	background-color: var(--teacher-main-color);
-	border-radius: 5px;
-	/* width: 200px; */
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	justify-content: space-between;
+`
+
+const numberCSS = css`
+	min-width: 20px;
+`
+
+const nameCSS = css`
+	font-weight: bold;
+	min-width: 55px;
+`
+
+const jobCSS = css`
+	min-width: 100px;
+	color: var(--teacher-gray-color);
+`
+
+const creditRatingCSS = css`
+	min-width: 40px;
+	font-weight: bold;
+`
+
+const creditScoreCSS = css`
+	min-width: 40px;
+`
+
+const amountCSS = css`
+	min-width: 110px;
+	font-weight: bold;
+`
+
+const buttonWrapperCSS = css`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	min-width: 130px;
 
 	> div {
-		padding: 10px;
+		cursor: pointer;
+		transition: all 0.2s;
+
+		:hover {
+			transform: scale(1.2);
+		}
 	}
-
-	> div:nth-of-type(1) {
-		color: var(--common-back-color-2);
-	}
-
-	> div:nth-of-type(2) {
-		background-color: var(--common-back-color-2);
-		border-radius: 3px 3px 3px 3px;
-	}
-`
-
-const currencyWrapperCSS = css`
-	display: flex;
-`
-
-const amountWrapperCSS = css`
-	/* width: 70px; */
-	text-align: right;
-`
-
-const creditWrapperCSS = css`
-	width: 65px;
-	display: flex;
-	justify-content: center;
 `
 
 export default StudentEnteredListItem

@@ -47,6 +47,7 @@ export type getStudentListType = {
 	number: number
 	amount: number
 	creditRating: number
+	creditScore: number
 	job: null | string
 }
 
@@ -65,12 +66,19 @@ export type transactionsType = {
 	[date: string]: transanctionType[]
 }
 
+export type licenseType = {
+	id: number
+	subject: string
+	rating: number
+}
+
 export type getStudentDetailType = {
 	studentId: number
 	studentName: string
-	creditScore: number
 	transactions: transactionsType
 	frozen: boolean
+	size: number
+	licenses: licenseType[]
 }
 
 export type getTeacherProductsType = {
@@ -175,8 +183,6 @@ export type interstType = {
 	longPeriod: string[]
 	shortPeriod: string[]
 }
-
-
 
 export type getGovEconomyType = {
 	date: string

@@ -19,13 +19,12 @@ const stackNotification = atom<{ [prop: number]: { width: string; height: string
 
 const selectedPage = atom(1)
 
-
 const modalHandler = atom<Function | null>(null)
 
 const tokenStatus = atom<getTokenStatusType>({
 	status: null,
 	role: null,
-	showMessage: false
+	showMessage: false,
 })
 
 const nationData = atom<getNationType>({
@@ -44,6 +43,8 @@ const nationData = atom<getNationType>({
 	credit_down: 0,
 })
 
+const checkedStudent = atom<{ [key: number]: string }[]>([])
+
 export {
 	navTo,
 	navBeforeScroll,
@@ -55,4 +56,5 @@ export {
 	nationData,
 	tokenStatus,
 	modalHandler,
+	checkedStudent,
 }

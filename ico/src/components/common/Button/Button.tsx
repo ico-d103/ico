@@ -1,33 +1,23 @@
-import React from "react"
 import { css } from "@emotion/react"
 import { SerializedStyles } from "@emotion/react"
 
 type ButtonPropsType = {
-	text: string // 버튼 텍스트
-	fontSize: string // 버튼 폰트사이즈
-	width: string // 버튼 너비
-	height?: string // 버튼 높이
-	theme: string // 버튼 테마
+	text: string
+	fontSize: string
+	width: string
+	height?: string
+	theme: string
 	margin?: string
-	onClick: () => void // 버튼의 onClick 메서드
+	onClick: (e: any) => void
 	disabled?: boolean
 	cssProps?: SerializedStyles
 }
 
-type themeType = {
-	border: string // 테마의 border
-	borderRadius: string // 테마의 border-radius
-	fontColor: string // 테마의 font-color
-	backgroundColor: string // 테마의 background-color
-}
-
 function Button({ text, fontSize, width, height, theme, margin, onClick, disabled, cssProps }: ButtonPropsType) {
-	// 원하는 버튼 테마 추가
-
 	return (
 		<button
 			disabled={disabled}
-			css={[initCSS({ fontSize, width, height, margin }), buttonCSS({ theme }), cssProps ]}
+			css={[initCSS({ fontSize, width, height, margin }), buttonCSS({ theme }), cssProps]}
 			onClick={onClick}
 		>
 			{/* <button disabled={disabled} css={buttonCSS({ fontSize, width, height, themes, theme, margin })} onClick={onClick}></button> */}
@@ -167,7 +157,6 @@ const buttonCSS = ({ theme }: { theme: string }) => {
 			border-radius: 20px;
 			background-color: var(--student-main-color-7);
 			color: var(--student-main-color-6);
-			
 		`,
 		mobileCancel: css`
 			border: none;
@@ -198,6 +187,18 @@ const buttonCSS = ({ theme }: { theme: string }) => {
 					box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.5);
 				}
 			}
+		`,
+		managePlus: css`
+			border: none;
+			border-radius: 20px;
+			background-color: var(--teacher-main-color-2);
+			color: #ffffff;
+		`,
+		manageMinus: css`
+			border: none;
+			border-radius: 20px;
+			background-color: var(--teacher-gray2-color);
+			color: var(--teacher-gray-color);
 		`,
 	}
 

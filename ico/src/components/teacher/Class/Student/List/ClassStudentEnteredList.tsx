@@ -14,70 +14,78 @@ import Modal from "@/components/common/Modal/Modal"
 function StudentEnteredList() {
 	const noti = useNotification()
 	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
-	const [openDeleteModal, closeDeleteModal, deleteModalState] = useCompHandler()
+	const [openJobResetModal, closeJobResetModal, jobResetModalState] = useCompHandler()
 
-	const queryClient = useQueryClient();
-	const resetStudentsJobMutation = useMutation((a:number) => putResetStudentsJobAPI());
-
+	const queryClient = useQueryClient()
+	const resetStudentsJobMutation = useMutation((a: number) => putResetStudentsJobAPI())
 
 	const resetStudentsJob = () => {
 		resetStudentsJobMutation.mutate(0, {
-			onSuccess: formData => {
+			onSuccess: () => {
 				noti({
 					content: <NotiTemplate type={"ok"} content={"직업을 초기화했습니다."} />,
 					duration: 3000,
 				})
-			  return queryClient.invalidateQueries(["studentList", "entered"]); // 'return' wait for invalidate
-				
+
+				return queryClient.invalidateQueries(["studentList", "entered"])
 			},
-			
-			onError: err => 
+			onError: () => {
 				noti({
 					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
 					duration: 3000,
-				}),
-				 
-			
-		
+				})
+			},
 		})
-
-
-		// putResetStudentsJobAPI()
-		// 	.then(() => {
-		// 		noti({
-		// 			content: <NotiTemplate type={"ok"} content={"직업을 초기화했습니다."} />,
-		// 			duration: 3000,
-		// 		})
-		// 	})
-		// 	.catch(() =>
-		// 		noti({
-		// 			content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
-		// 			duration: 3000,
-		// 		}),
-		// 	)
 	}
 
 	const dropdownList = [
 		{
-			name: "reset",
+			name: "resetJob",
 			content: null,
 			label: "직업 초기화",
-			function: openDeleteModal,
+			function: openJobResetModal,
 		},
 	]
 
+	const toggleStudentsAllCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+		// 전체선택 됐을 때 처리
+	}
+
 	return (
 		<div css={wrapperCSS}>
-			<Modal compState={deleteModalState} closeComp={closeDeleteModal} transition={'scale'} content={<ModalAlert title={'모든 학생들의 직업을 초기화합니다.'} titleSize={'var(--teacher-h2)'} proceed={resetStudentsJob} width={'480px'} content={['모든 학생들의 직업이 초기화됩니다!', '더이상 학생들이 직업 활동을 할 수 없습니다!', '월급 날에 해지일까지 일한 날짜만큼 보수를 받습니다.']} />}/>
+			<Modal
+				compState={jobResetModalState}
+				closeComp={closeJobResetModal}
+				transition={"scale"}
+				content={
+					<ModalAlert
+						title={"모든 학생들의 직업을 초기화합니다."}
+						titleSize={"var(--teacher-h2)"}
+						proceed={resetStudentsJob}
+						width={"480px"}
+						content={[
+							"모든 학생들의 직업이 초기화됩니다!",
+							"더이상 학생들이 직업 활동을 할 수 없습니다!",
+							"월급 날에 해지일까지 일한 날짜만큼 보수를 받습니다.",
+						]}
+					/>
+				}
+			/>
 			<div css={contentTitleCSS}>
-				<div css={titleCSS}>
-					학생들 <small>({data && data.length > 0 ? data.length : 0})</small>
+				<div>
+					<div css={titleCSS}>
+						학생들 <small>({data && data.length > 0 ? data.length : 0})</small>
+					</div>
+					<div css={checkCSS}>
+						<input type="checkbox" id="all-check" onChange={toggleStudentsAllCheck} />
+						<label htmlFor="all-check">학생 전체 선택</label>
+					</div>
 				</div>
 				<KebabMenu dropdownList={dropdownList} />
 			</div>
 			<div css={contentCSS}>
-				{data?.map((student, idx) => (
-					<StudentEnteredListItem key={student.id} student={student} idx={idx} />
+				{data?.map((student) => (
+					<StudentEnteredListItem key={student.id} student={student} />
 				))}
 			</div>
 		</div>
@@ -97,8 +105,15 @@ const wrapperCSS = css`
 const contentTitleCSS = css`
 	display: flex;
 	flex-direction: row;
-	/* align-items: center; */
+	align-items: center;
 	justify-content: space-between;
+
+	> div {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 15px;
+	}
 `
 
 const titleCSS = css`
@@ -108,10 +123,39 @@ const titleCSS = css`
 	padding: 10px;
 	border-bottom: 2px solid #064f32;
 	display: inline-block;
-	margin-bottom: 20px;
+	/* margin-bottom: 20px; */
 
 	> small {
 		font-size: var(--teacher-h4);
+	}
+`
+
+const checkCSS = css`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 15px;
+	margin-left: 15px;
+
+	> input {
+		width: 23px;
+		height: 23px;
+		cursor: pointer;
+		border-radius: 50%;
+		border: 1px solid #999;
+		appearance: none;
+		transition: background 0.2s;
+
+		:checked {
+			background: var(--teacher-main-color);
+			border: none;
+		}
+	}
+
+	> label {
+		font-size: var(--teacher-h5);
+		color: var(--teacher-gray-color);
+		cursor: pointer;
 	}
 `
 

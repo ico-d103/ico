@@ -5,9 +5,11 @@ import { useAtom } from "jotai"
 
 type PaginationPropsType = {
 	size: number
+	margin: string
+	buttonSize: string
 }
 
-function Pagination({ size }: PaginationPropsType) {
+function Pagination({ size, margin, buttonSize }: PaginationPropsType) {
 	const [selectedPageAtom, setSelectedPageAtom] = useAtom(selectedPage)
 
 	const pageHandler = (flag: boolean) => {
@@ -26,23 +28,30 @@ function Pagination({ size }: PaginationPropsType) {
 	}
 
 	return (
-		<div css={wrapperCSS}>
-			<PaginationButton pgNumber={"<"} onClick={() => pageHandler(false)} />
+		<div css={wrapperCSS(margin)}>
+			<PaginationButton pgNumber={"<"} onClick={() => pageHandler(false)} buttonSize={buttonSize} />
 			{Array.from({ length: size }, (_, index) => (
-				<PaginationButton key={index} pgNumber={(index + 1).toString()} onClick={() => changePageHandler(index + 1)} />
+				<PaginationButton
+					key={index}
+					pgNumber={(index + 1).toString()}
+					onClick={() => changePageHandler(index + 1)}
+					buttonSize={buttonSize}
+				/>
 			))}
-			<PaginationButton pgNumber={">"} onClick={() => pageHandler(true)} />
+			<PaginationButton pgNumber={">"} onClick={() => pageHandler(true)} buttonSize={buttonSize} />
 		</div>
 	)
 }
 
-const wrapperCSS = css`
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	gap: 20px;
-	margin-top: 30px;
-`
+const wrapperCSS = (margin: string) => {
+	return css`
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		gap: 20px;
+		margin: ${margin};
+	`
+}
 
 export default Pagination

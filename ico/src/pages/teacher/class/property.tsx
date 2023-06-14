@@ -82,7 +82,11 @@ function property() {
 					<PropertyList propertyList={treasuryList.data?.page ? treasuryList.data.page : []} />
 				)}
 			</div>
-			<Pagination size={treasuryList.data?.size ? treasuryList.data.size : 1} />
+			<Pagination
+				size={treasuryList.data?.size ? treasuryList.data.size : 1}
+				margin={"30px 0 0 0"}
+				buttonSize={"35px"}
+			/>
 			<Modal
 				compState={compState}
 				closeComp={closeComp}

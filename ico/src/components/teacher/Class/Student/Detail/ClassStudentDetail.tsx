@@ -1,48 +1,100 @@
-import React, { useEffect, useReducer, useState } from "react"
 import { css } from "@emotion/react"
-import ClassStudentDetailHead from "./ClassStudentDetailHead"
-import ClassStudentDetailMoney from "./ClassStudentDetailMoney"
-import ClassStudentDetailGrade from "./ClassStudentDetailGrade"
 import ClassStudentDetailAccountList from "./ClassStudentDetailAccountList"
 import { useAtomValue } from "jotai"
 import { selectedStudent } from "@/store/store"
 import { getStudentDetailAPI } from "@/api/teacher/class/getStudentDetailAPI"
 import { getStudentDetailType } from "@/types/teacher/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
+import ClassStudentDetailCertificate from "./ClassStudentDetailCertificate"
+import Button from "@/components/common/Button/Button"
+import { putReleaseAccountAPI } from "@/api/teacher/class/putReleaseAccountAPI"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import { putSuspendAccountAPI } from "@/api/teacher/class/putSuspendAccountAPI"
+import useNotification from "@/hooks/useNotification"
+import { useEffect } from "react"
 
-function StudentDetail() {
+function ClassStudentDetail() {
+	const noti = useNotification()
 	const selectedStudentAtom = useAtomValue(selectedStudent)
-
-	const { data, refetch } = useQuery<getStudentDetailType>(
+	const { data } = useQuery<getStudentDetailType>(
 		["enteredStudentDetail", selectedStudentAtom],
 		() => getStudentDetailAPI({ id: selectedStudentAtom }),
-		{ enabled: false },
+		// { enabled: false },
 	)
 
-	useEffect(() => {
-		if (selectedStudentAtom !== -1) {
-			refetch()
+	const preventStudentAccount = () => {
+		if (data?.frozen === true) {
+			putReleaseAccountAPI({ studentId: data.studentId })
+				.then(() => {
+					noti({
+						content: <NotiTemplate type={"ok"} content={`${data?.studentName}의 계좌 정지를 해제하였습니다.`} />,
+						duration: 3000,
+					})
+				})
+				.catch(() => {
+					noti({
+						content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+						duration: 3000,
+					})
+				})
+		} else if (data?.frozen === false) {
+			putSuspendAccountAPI({ studentId: data.studentId })
+				.then(() => {
+					noti({
+						content: <NotiTemplate type={"ok"} content={`${data?.studentName}의 계좌를 정지하였습니다.`} />,
+						duration: 3000,
+					})
+				})
+				.catch(() => {
+					noti({
+						content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+						duration: 3000,
+					})
+				})
 		}
-	}, [selectedStudentAtom])
+	}
+
+	useEffect(() => {
+		console.log(data)
+	}, [data])
 
 	return (
-		<>
-			{selectedStudentAtom === -1 ? (
-				<div css={wrapperCSS}>
-					<h1>관리할 학생을 선택해주세요.</h1>
-				</div>
-			) : (
-				data && (
-					<React.Fragment key={`studentDetail-${selectedStudentAtom}`}>
-						<h1 css={headerCSS}>학생 정보 상세보기</h1>
-						<ClassStudentDetailHead studentName={data.studentName} frozen={data.frozen} />
-						<ClassStudentDetailMoney refetch={refetch} />
-						<ClassStudentDetailGrade creditScore={data.creditScore} refetch={refetch} />
-						<ClassStudentDetailAccountList transactions={data.transactions} />
-					</React.Fragment>
-				)
-			)}
-		</>
+		<div css={wrapperCSS}>
+			<div css={topWrapperCSS}>
+				<ClassStudentDetailAccountList transactions={data?.transactions} size={data?.size} />
+				<ClassStudentDetailCertificate license={data?.licenses} />
+			</div>
+			<div css={bottomWrapperCSS}>
+				<Button
+					text={data?.frozen ? "계좌 정지 해제" : "계좌 정지"}
+					fontSize={`0.9rem`}
+					width={data?.frozen ? "130px" : "90px"}
+					height={"33px"}
+					theme={data?.frozen ? "managePlus" : "manageMinus"}
+					margin={"0 10px 0 0"}
+					onClick={preventStudentAccount}
+				/>
+				<Button
+					text={"비밀번호 초기화"}
+					fontSize={`0.9rem`}
+					width={"130px"}
+					height={"33px"}
+					theme={"manageMinus"}
+					margin={"0 10px 0 0"}
+					onClick={() => {}}
+				/>
+
+				<Button
+					text={"자격증 정보 수정"}
+					fontSize={`0.9rem`}
+					width={"130px"}
+					height={"33px"}
+					theme={"managePlus"}
+					margin={"0 0 0 0"}
+					onClick={() => {}}
+				/>
+			</div>
+		</div>
 	)
 }
 
@@ -53,20 +105,31 @@ export async function getServerSideProps() {
 }
 
 const wrapperCSS = css`
-	height: 100%;
 	display: flex;
-	justify-content: center;
-	align-items: center;
+	flex-direction: column;
+	padding-bottom: 10px;
+`
 
-	> h1 {
-		font-size: var(--teacher-h2);
-		color: var(--teacher-gray-color);
+const topWrapperCSS = css`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 30px;
+
+	> div:nth-of-type(1) {
+		width: 45%;
+	}
+
+	> div:nth-of-type(2) {
+		width: 55%;
 	}
 `
 
-const headerCSS = css`
-	font-size: var(--teacher-h1);
-	font-weight: bold;
+const bottomWrapperCSS = css`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-end;
 `
 
-export default StudentDetail
+export default ClassStudentDetail
