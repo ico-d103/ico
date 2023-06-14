@@ -87,7 +87,7 @@
 
 ## :three:​ System Architecture
 
-![img](./image/system-architecture.png)
+![img](./image/system_architecture.png)
 
 <br>
 
