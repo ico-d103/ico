@@ -41,7 +41,9 @@ function ClassStudentDetailAccountList({ transactions, size }: ClassStudentDetai
 					</div>
 				)}
 			</div>
-			<Pagination size={size ? size : 1} margin={"0 0 0 0"} buttonSize={"30px"} />
+			{transactions && Object.keys(transactions).length > 0 && (
+				<Pagination size={size ? size : 1} margin={"0 0 0 0"} buttonSize={"30px"} />
+			)}
 		</div>
 	)
 }
@@ -49,6 +51,7 @@ function ClassStudentDetailAccountList({ transactions, size }: ClassStudentDetai
 const wrapperCSS = css`
 	display: flex;
 	flex-direction: column;
+	min-height: 300px;
 `
 
 const listWrapperCSS = css`

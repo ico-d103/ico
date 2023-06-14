@@ -1,7 +1,7 @@
 import { css } from "@emotion/react"
 import ClassStudentDetailAccountList from "./ClassStudentDetailAccountList"
 import { useAtomValue } from "jotai"
-import { selectedStudent } from "@/store/store"
+import { selectedPage, selectedStudent } from "@/store/store"
 import { getStudentDetailAPI } from "@/api/teacher/class/getStudentDetailAPI"
 import { getStudentDetailType } from "@/types/teacher/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
@@ -15,10 +15,11 @@ import { useEffect } from "react"
 
 function ClassStudentDetail() {
 	const noti = useNotification()
+	const selectedPageAtom = useAtomValue(selectedPage)
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 	const { data } = useQuery<getStudentDetailType>(
 		["enteredStudentDetail", selectedStudentAtom],
-		() => getStudentDetailAPI({ id: selectedStudentAtom }),
+		() => getStudentDetailAPI({ id: selectedStudentAtom, page: selectedPageAtom }),
 		// { enabled: false },
 	)
 
@@ -113,7 +114,7 @@ const wrapperCSS = css`
 const topWrapperCSS = css`
 	display: flex;
 	flex-direction: row;
-	align-items: center;
+	align-items: flex-start;
 	gap: 30px;
 
 	> div:nth-of-type(1) {

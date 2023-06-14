@@ -21,6 +21,7 @@ const wrapperCSS = css`
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
 	margin-bottom: 30px;
+	min-height: 300px;
 
 	> h4 {
 		font-size: var(--teacher-h4);
