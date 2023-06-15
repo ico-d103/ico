@@ -231,6 +231,7 @@ const initCSS = ({
 
 		:disabled {
 			filter: brightness(60%);
+			opacity: 50%;
 			cursor: default;
 		}
 	`

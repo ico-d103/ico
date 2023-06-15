@@ -116,7 +116,7 @@ function index() {
 	const renderNewJobList = data?.map((el, idx) => {
 		return (
 			<div css={css`border-bottom: ${data.length - 1 > idx && '1px solid rgba(0, 0, 0, 0.1)'};`}>
-				<GovJobItem job={el.title} description={el.detail} wage={el.wage} credit={el.creditRating} backgroundColor={el.color} imgUrl={el.image} total={el.total} count={el.count} currency={nation.currency} certification={dummyCert} roleStatus={dummyStatus} roleStatusList={dummyStatusList} />
+				<GovJobItem idx={el.id} title={el.title} detail={el.detail} wage={el.wage} creditRating={el.creditRating} color={el.color} image={el.image} total={el.total} count={el.count} currency={nation.currency} certification={dummyCert} roleStatus={dummyStatus} roleStatusList={dummyStatusList} />
 			</div>
 			
 		)

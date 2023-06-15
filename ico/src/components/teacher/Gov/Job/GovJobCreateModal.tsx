@@ -27,7 +27,7 @@ function GovJobCreateModal({closeComp, colorPicker, inputState, illustPicker}: G
 			<div css={cardWrapperCSS}>
 				<div css={buttonCSS} onClick={() => illustPicker(true)}>〈</div>
 		
-				<GovJobCard job={inputState.job} wage={inputState.wage} backgroundColor={inputState.backgroundColor} imgUrl={inputState.imgUrl}/>
+				<GovJobCard job={inputState.job} wage={inputState.wage} backgroundColor={inputState.color} imgUrl={inputState.image}/>
 	
 			
 				<div css={buttonCSS} onClick={() => illustPicker()}>〉</div>

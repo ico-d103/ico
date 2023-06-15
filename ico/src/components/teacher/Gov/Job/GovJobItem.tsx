@@ -8,6 +8,9 @@ import GovJobCreateModal from "./GovJobCreateModal"
 import useCompHandler from "@/hooks/useCompHandler"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 import Button from "@/components/common/Button/Button"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { postGovJobAPI } from "@/api/teacher/gov/postGovJobAPI"
+import { putGovJobAPI } from "@/api/teacher/gov/putGovJobAPI"
 
 type certificationType = {
 	id: number
@@ -22,15 +25,15 @@ type roleStatusType = {
 }
 
 type GovRuleClassDetailProps = {
-	job?: string
-	description?: string
+	title?: string
+	detail?: string
 	wage?: number
-	credit?: number
-	backgroundColor?: string
-	imgUrl?: string
+	creditRating?: number
+	color?: string
+	image?: string
 	total?: number
 	count?: number
-	actualIdx?: number
+	idx?: number
 	currency?: string
 	roleStatus: roleStatusType
 	roleStatusList: roleStatusType[]
@@ -84,33 +87,67 @@ const ILLUST = [
 	"https://d3bkfkkihwj5ql.cloudfront.net/postman.png",
 ]
 
-type stateType = {
-	job: string
-	description: string
+type inputType = {
+	title: string
+	detail: string
 	wage: string
-	credit: string
-	backgroundColor: string
-	imgUrl: string
+	creditRating: string
+	color: string
+	image: string
 	total: string
 	roleStatus: roleStatusType
-
 	certification: certificationType[]
 }
 
-const inputReducer = (state: stateType, action: { type: string; value: any }): stateType => {
+type validType = {
+	title: boolean
+	detail: boolean
+	wage: boolean
+	creditRating: boolean
+	color: boolean
+	image: boolean
+	total: boolean
+	roleStatus: boolean
+	certification: boolean
+}
+
+const inputReducer = (state: inputType, action: { type: string; value: any }): inputType => {
 	switch (action.type) {
-		case "CHANGE_JOB":
-			return { ...state, job: action.value }
-		case "CHANGE_DESCRIPTION":
-			return { ...state, description: action.value }
+		case "CHANGE_TITLE":
+			return { ...state, title: action.value }
+		case "CHANGE_DETAIL":
+			return { ...state, detail: action.value }
 		case "CHANGE_WAGE":
 			return { ...state, wage: action.value }
 		case "CHANGE_CREDIT":
-			return { ...state, credit: action.value }
-		case "CHANGE_BACKGROUND_COLOR":
-			return { ...state, backgroundColor: action.value }
+			return { ...state, creditRating: action.value }
+		case "CHANGE_COLOR":
+			return { ...state, color: action.value }
 		case "CHANGE_IMG_URL":
-			return { ...state, imgUrl: action.value }
+			return { ...state, image: action.value }
+		case "CHANGE_TOTAL":
+			return { ...state, total: action.value }
+		case "CHANGE_CERTIFICATION":
+			return { ...state, certification: action.value }
+		default:
+			return state
+	}
+}
+
+const validReducer = (state: validType, action: { type: string; value: boolean }): validType => {
+	switch (action.type) {
+		case "CHANGE_TITLE":
+			return { ...state, title: action.value }
+		case "CHANGE_DETAIL":
+			return { ...state, detail: action.value }
+		case "CHANGE_WAGE":
+			return { ...state, wage: action.value }
+		case "CHANGE_CREDIT":
+			return { ...state, creditRating: action.value }
+		case "CHANGE_COLOR":
+			return { ...state, color: action.value }
+		case "CHANGE_IMG_URL":
+			return { ...state, image: action.value }
 		case "CHANGE_TOTAL":
 			return { ...state, total: action.value }
 		case "CHANGE_CERTIFICATION":
@@ -121,39 +158,84 @@ const inputReducer = (state: stateType, action: { type: string; value: any }): s
 }
 
 function GovJobItem({
-	job,
-	description,
+	title,
+	detail,
 	wage,
-	backgroundColor,
-	imgUrl,
-	credit,
+	color,
+	image,
+	creditRating,
 	total,
 	count,
-	actualIdx,
+	idx,
 	currency,
 	roleStatus,
 	roleStatusList,
 	certification,
 }: GovRuleClassDetailProps) {
-	const inital: stateType = {
-		job: job ? job : "",
-		description: description ? description : "",
+	const initalInput: inputType = {
+		title: title ? title : "",
+		detail: detail ? detail : "",
 		wage: wage ? String(wage) : "",
-		credit: credit ? String(credit) : "",
-		backgroundColor: backgroundColor ? backgroundColor : "#FF165C",
-		imgUrl: imgUrl ? imgUrl : "/assets/job/worker_male.png",
+		creditRating: creditRating ? String(creditRating) : "",
+		color: color ? color : "#FF165C",
+		image: image ? image : "/assets/job/worker_male.png",
 		total: total ? String(total) : "",
 		roleStatus,
 		certification,
 	}
 
-	const [inputState, dispatchInput] = useReducer(inputReducer, inital)
+	const initalValid: validType = {
+		title: false,
+		detail: false,
+		wage: false,
+		creditRating: false,
+		color: false,
+		image: false,
+		total: false,
+		roleStatus: true, // 나중에 기능 실제로 추가되면 false로 바꿀 것!
+		certification: true, // 나중에 기능 실제로 추가되면 false로 바꿀 것!
+	}
 
-	const [illustIdx, setIllustIdx] = useState<number>(ILLUST.indexOf(inputState.imgUrl))
+	const [inputState, dispatchInput] = useReducer(inputReducer, initalInput)
+	const [validState, dispatchValid] = useReducer(validReducer, initalValid)
+	const [isAllValid, setIsAllValid] = useState<boolean>(false)
+	const [illustIdx, setIllustIdx] = useState<number>(ILLUST.indexOf(inputState.image))
 	const [openComp, closeComp, compState] = useCompHandler()
 
+	const queryClient = useQueryClient()
+
+	const createMutation = useMutation((a: number) =>
+		postGovJobAPI({
+			body: inputState,
+		}),
+	)
+	const updateMutation = useMutation((idx: number) =>
+		putGovJobAPI({
+			idx,
+			body: inputState,
+		}),
+	)
+
+	const submitHandler = () => {
+		if (typeof idx === "number") {
+			updateMutation.mutate(idx, {
+				onSuccess: (formData) => {
+					return queryClient.invalidateQueries(["teacher", "govJob"]) // 'return' wait for invalidate
+				},
+			})
+		} else {
+			// 직업 추가 구현시 수정해서 사용
+			createMutation.mutate(1, {
+				onSuccess: (formData) => {
+					return queryClient.invalidateQueries(["teacher", "govJob"]) // 'return' wait for invalidate
+				},
+			})
+		}
+	}
+
 	const colorPickHandler = (value: string) => {
-		dispatchInput({ type: "CHANGE_BACKGROUND_COLOR", value })
+		dispatchInput({ type: "CHANGE_COLOR", value })
+		dispatchValid({ type: "CHANGE_COLOR", value: true })
 	}
 
 	const illustPickerHandler = (reverse = false) => {
@@ -174,12 +256,13 @@ function GovJobItem({
 				setIllustIdx(() => 0)
 			}
 		}
+		dispatchValid({ type: "CHANGE_IMG_URL", value: true })
 	}
 
 	const renderColorPicker = COLOR.map((el, idx) => {
 		return (
 			<div
-				css={colorElementCSS({ backgroundColor: el, currentColor: inputState.backgroundColor })}
+				css={colorElementCSS({ backgroundColor: el, currentColor: inputState.color })}
 				onClick={() => colorPickHandler(el)}
 			></div>
 		)
@@ -206,6 +289,47 @@ function GovJobItem({
 			return `${certCount > 1 ? ", " : ""}${el.subject}: ${el.rating}`
 		}
 	})
+
+	const titleInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+		dispatchInput({ type: "CHANGE_TITLE", value: event.target.value })
+		if (event.target.value.trim() !== "") {
+			dispatchValid({ type: "CHANGE_TITLE", value: true })
+		}
+	}
+
+	const detailInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+		dispatchInput({ type: "CHANGE_DETAIL", value: event.target.value })
+		if (event.target.value.trim() !== "") {
+			dispatchValid({ type: "CHANGE_DETAIL", value: true })
+		}
+	}
+
+	const creditInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (Number(event.target.value) <= 10) {
+			dispatchInput({ type: "CHANGE_CREDIT", value: event.target.value })
+			if (event.target.value.trim() !== "") {
+				dispatchValid({ type: "CHANGE_CREDIT", value: true })
+			}
+		}
+	}
+
+	const wageInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (Number(event.target.value) <= 1000000) {
+			dispatchInput({ type: "CHANGE_WAGE", value: event.target.value })
+			if (event.target.value.trim() !== "") {
+				dispatchValid({ type: "CHANGE_WAGE", value: true })
+			}
+		}
+	}
+
+	const totalInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (Number(event.target.value) <= 100) {
+			dispatchInput({ type: "CHANGE_TOTAL", value: event.target.value })
+			if (event.target.value.trim() !== "") {
+				dispatchValid({ type: "CHANGE_TOTAL", value: true })
+			}
+		}
+	}
 
 	return (
 		<React.Fragment>
@@ -238,10 +362,10 @@ function GovJobItem({
 					`}
 				>
 					<GovJobCard
-						job={inputState.job}
+						job={inputState.title}
 						wage={Number(inputState.wage)}
-						backgroundColor={inputState.backgroundColor}
-						imgUrl={inputState.imgUrl}
+						backgroundColor={inputState.color}
+						imgUrl={inputState.image}
 					/>
 					{renderCardCustomButton}
 				</div>
@@ -251,12 +375,19 @@ function GovJobItem({
 						<Input
 							theme={"titleNoTheme"}
 							placeholder={"직업 명을 입력해 주세요."}
-							defaultValue={job}
+							value={inputState.title}
 							customCss={css`
 								border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 							`}
+							onChange={titleInputHandler}
 						/>
-						<Input theme={"none"} placeholder={"내용을 입력해 주세요."} defaultValue={description} isTextarea={true} />
+						<Input
+							theme={"none"}
+							placeholder={"내용을 입력해 주세요."}
+							onChange={detailInputHandler}
+							value={inputState.detail}
+							isTextarea={true}
+						/>
 					</div>
 					<div css={footerCSS}>
 						<div css={prefWrapperCSS}>
@@ -265,7 +396,8 @@ function GovJobItem({
 								customCss={css`
 									width: 128px;
 								`}
-								defaultValue={inputState.credit}
+								onChange={creditInputHandler}
+								value={inputState.creditRating}
 								leftContent={<div>신용</div>}
 								rightContent={<div>등급</div>}
 							/>
@@ -274,7 +406,8 @@ function GovJobItem({
 								customCss={css`
 									width: 164px;
 								`}
-								defaultValue={inputState.wage}
+								value={inputState.wage}
+								onChange={wageInputHandler}
 								leftContent={<div>월급</div>}
 								rightContent={<div>{currency}</div>}
 							/>
@@ -283,7 +416,8 @@ function GovJobItem({
 								customCss={css`
 									width: 148px;
 								`}
-								defaultValue={inputState.total}
+								value={inputState.total}
+								onChange={totalInputHandler}
 								leftContent={<div>인원 {count} /</div>}
 								rightContent={<div>명</div>}
 							/>
@@ -303,7 +437,10 @@ function GovJobItem({
 									height: 32px;
 								`}
 								theme={"cancelDark"}
-								onClick={() => {}}
+								onClick={() => {
+									submitHandler()
+								}}
+								disabled={true}
 							/>
 						</div>
 					</div>
