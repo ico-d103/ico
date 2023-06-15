@@ -33,7 +33,34 @@ function index() {
 	})
 
 
-	const dummyCert = [
+	const dummyStatus: {
+		id: number;
+		status: string;
+		subject: string;
+	}= {
+		id: 1,
+		status: 'credit',
+		subject: "신용등급 관리"
+	}
+
+	const dummyStatusList: {
+		id: number;
+		status: string;
+		subject: string;
+	}[] = [
+		{
+			id: 1,
+			status: 'credit',
+			subject: "신용등급 관리"
+		},
+		{
+			id: 2,
+			status: 'trade',
+			subject: "상점 재고 관리"
+		},
+	]
+
+	const dummyCert: {id: number; subject: string; rating: number;}[] = [
 		{
 			"id": 840,
 			"subject": "수학",
@@ -89,7 +116,7 @@ function index() {
 	const renderNewJobList = data?.map((el, idx) => {
 		return (
 			<div css={css`border-bottom: ${data.length - 1 > idx && '1px solid rgba(0, 0, 0, 0.1)'};`}>
-				<GovJobItem job={el.title} description={el.detail} wage={el.wage} credit={el.creditRating} backgroundColor={el.color} imgUrl={el.image} total={el.total} count={el.count} currency={nation.currency} certification={dummyCert}/>
+				<GovJobItem job={el.title} description={el.detail} wage={el.wage} credit={el.creditRating} backgroundColor={el.color} imgUrl={el.image} total={el.total} count={el.count} currency={nation.currency} certification={dummyCert} roleStatus={dummyStatus} roleStatusList={dummyStatusList} />
 			</div>
 			
 		)

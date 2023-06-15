@@ -13,7 +13,13 @@ type certificationType = {
 	id: number
 	subject: string
 	rating: number
-}[]
+}
+
+type roleStatusType = {
+	id: number
+	status: string
+	subject: string
+}
 
 type GovRuleClassDetailProps = {
 	job?: string
@@ -26,7 +32,9 @@ type GovRuleClassDetailProps = {
 	count?: number
 	actualIdx?: number
 	currency?: string
-	certification: certificationType
+	roleStatus: roleStatusType
+	roleStatusList: roleStatusType[]
+	certification: certificationType[]
 }
 
 const APPLY_ICON = (
@@ -76,18 +84,20 @@ const ILLUST = [
 	"https://d3bkfkkihwj5ql.cloudfront.net/postman.png",
 ]
 
-const inputReducer = (
-	state: {
-		job: string
-		description: string
-		wage: string
-		credit: string
-		backgroundColor: string
-		imgUrl: string
-		total: string
-	},
-	action: { type: string; value: string },
-) => {
+type stateType = {
+	job: string
+	description: string
+	wage: string
+	credit: string
+	backgroundColor: string
+	imgUrl: string
+	total: string
+	roleStatus: roleStatusType
+
+	certification: certificationType[]
+}
+
+const inputReducer = (state: stateType, action: { type: string; value: any }): stateType => {
 	switch (action.type) {
 		case "CHANGE_JOB":
 			return { ...state, job: action.value }
@@ -121,9 +131,11 @@ function GovJobItem({
 	count,
 	actualIdx,
 	currency,
+	roleStatus,
+	roleStatusList,
 	certification,
 }: GovRuleClassDetailProps) {
-	const [inputState, dispatchInput] = useReducer(inputReducer, {
+	const inital: stateType = {
 		job: job ? job : "",
 		description: description ? description : "",
 		wage: wage ? String(wage) : "",
@@ -131,7 +143,11 @@ function GovJobItem({
 		backgroundColor: backgroundColor ? backgroundColor : "#FF165C",
 		imgUrl: imgUrl ? imgUrl : "/assets/job/worker_male.png",
 		total: total ? String(total) : "",
-	})
+		roleStatus,
+		certification,
+	}
+
+	const [inputState, dispatchInput] = useReducer(inputReducer, inital)
 
 	const [illustIdx, setIllustIdx] = useState<number>(ILLUST.indexOf(inputState.imgUrl))
 	const [openComp, closeComp, compState] = useCompHandler()
@@ -184,7 +200,7 @@ function GovJobItem({
 	)
 
 	let certCount = 0
-	const renderCertSub = certification?.map((el, idx) => {
+	const renderCertSub = inputState?.certification?.map((el, idx) => {
 		if (el.rating !== -1) {
 			certCount += 1
 			return `${certCount > 1 ? ", " : ""}${el.subject}: ${el.rating}`
