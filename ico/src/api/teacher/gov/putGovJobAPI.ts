@@ -8,7 +8,6 @@ type certificationType = {
 }
 
 type roleStatusType = {
-	id: number
 	status: string
 	subject: string
 }

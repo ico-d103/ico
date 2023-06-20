@@ -14,7 +14,6 @@ export type certificationType = {
 }
 
 export type roleStatusType = {
-	id: number
 	status: string
 	subject: string
 }

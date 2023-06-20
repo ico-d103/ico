@@ -238,14 +238,14 @@ function GovJobItem({
 		}
 
 		if (
-			(inputState.roleStatus && roleStatus && inputState.roleStatus.id !== roleStatus.id) ||
+			(inputState.roleStatus && roleStatus && inputState.roleStatus.status !== roleStatus.status) ||
 			(roleStatus === null && inputState.roleStatus !== null) ||
 			(roleStatus !== null && inputState.roleStatus === null)
 		) {
 			dispatchValid({ type: "CHANGE_ROLE_STATUS", value: "changed" })
 		} else if (roleStatus === null && inputState.roleStatus === null) {
 			dispatchValid({ type: "CHANGE_ROLE_STATUS", value: "notChanged" })
-		} else if (inputState.roleStatus && roleStatus && inputState.roleStatus.id === roleStatus.id) {
+		} else if (inputState.roleStatus && roleStatus && inputState.roleStatus.status === roleStatus.status) {
 			dispatchValid({ type: "CHANGE_ROLE_STATUS", value: "notChanged" })
 		}
 	}, [inputState, title, detail, wage, color, image, creditRating, total, roleStatus])
@@ -435,7 +435,6 @@ function GovJobItem({
 					dispatchInput({
 						type: "CHANGE_ROLE_STATUS",
 						value: {
-							id: el.id,
 							status: el.status,
 							subject: el.subject,
 						},
