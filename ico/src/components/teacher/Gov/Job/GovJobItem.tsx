@@ -4,7 +4,7 @@ import { css } from "@emotion/react"
 import Input from "@/components/common/Input/Input"
 import Modal from "@/components/common/Modal/Modal"
 import ModalContent from "@/components/common/Modal/ModalContent"
-import GovJobCreateModal from "./GovJobCreateModal"
+import GovJobItemCardCustomize from "./GovJobItemCardCustomize"
 import useCompHandler from "@/hooks/useCompHandler"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 import Button from "@/components/common/Button/Button"
@@ -12,34 +12,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { postGovJobAPI } from "@/api/teacher/gov/postGovJobAPI"
 import { putGovJobAPI } from "@/api/teacher/gov/putGovJobAPI"
 import GovJobItemCertItem from "./GovJobItemCertItem"
-
-type certificationType = {
-	id: number
-	subject: string
-	rating: number
-}
-
-type roleStatusType = {
-	id: number
-	status: string
-	subject: string
-}
-
-type GovRuleClassDetailProps = {
-	title?: string
-	detail?: string
-	wage?: number
-	creditRating?: number
-	color?: string
-	image?: string
-	total?: number
-	count?: number
-	idx?: number
-	currency?: string
-	roleStatus: roleStatusType
-	roleStatusList: roleStatusType[]
-	certification: certificationType[]
-}
+import Dropdown from "@/components/common/Dropdown/Dropdown"
+import { inputType, validType, GovRuleClassDetailProps, certificationType, validItemType } from "./GovJobItemType"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -88,30 +64,6 @@ const ILLUST = [
 	"https://d3bkfkkihwj5ql.cloudfront.net/postman.png",
 ]
 
-type inputType = {
-	title: string
-	detail: string
-	wage: string
-	creditRating: string
-	color: string
-	image: string
-	total: string
-	roleStatus: roleStatusType
-	certification: certificationType[]
-}
-
-type validType = {
-	title: boolean
-	detail: boolean
-	wage: boolean
-	creditRating: boolean
-	color: boolean
-	image: boolean
-	total: boolean
-	roleStatus: boolean
-	certification: boolean
-}
-
 const inputReducer = (state: inputType, action: { type: string; value: any }): inputType => {
 	switch (action.type) {
 		case "CHANGE_TITLE":
@@ -137,7 +89,7 @@ const inputReducer = (state: inputType, action: { type: string; value: any }): i
 	}
 }
 
-const validReducer = (state: validType, action: { type: string; value: boolean }): validType => {
+const validReducer = (state: validType, action: { type: string; value: validItemType }): validType => {
 	switch (action.type) {
 		case "CHANGE_TITLE":
 			return { ...state, title: action.value }
@@ -176,6 +128,7 @@ function GovJobItem({
 	roleStatus,
 	roleStatusList,
 	certification,
+	closeHandler,
 }: GovRuleClassDetailProps) {
 	const initialInput: inputType = {
 		title: title ? title : "",
@@ -185,56 +138,122 @@ function GovJobItem({
 		color: color ? color : "#FF165C",
 		image: image ? image : "/assets/job/worker_male.png",
 		total: total ? String(total) : "",
-		roleStatus,
+		roleStatus: roleStatus ? roleStatus : null,
 		certification,
 	}
 
 	const initialValid: validType = {
-		title: false,
-		detail: false,
-		wage: false,
-		creditRating: false,
-		color: false,
-		image: false,
-		total: false,
-		roleStatus: true, // 나중에 기능 실제로 추가되면 false로 바꿀 것!
-		certification: true, // 나중에 기능 실제로 추가되면 false로 바꿀 것!
+		title: title ? "notChanged" : "empty",
+		detail: detail ? "notChanged" : "empty",
+		wage: wage ? "notChanged" : "empty",
+		creditRating: creditRating ? "notChanged" : "empty",
+		color: color ? "notChanged" : "changed",
+		image: image ? "notChanged" : "changed",
+		total: total ? "notChanged" : "empty",
+		roleStatus: roleStatus ? "notChanged" : "empty",
+		certification: certification ? "notChanged" : "changed",
 	}
 
 	const [inputState, dispatchInput] = useReducer(inputReducer, initialInput)
 	const [validState, dispatchValid] = useReducer(validReducer, initialValid)
-	const [isAllValid, setIsAllValid] = useState<boolean>(false)
+	const [isSubmitValid, setIsSubmitValid] = useState<boolean>(false)
 	const [illustIdx, setIllustIdx] = useState<number>(ILLUST.indexOf(inputState.image))
 	const [openComp, closeComp, compState] = useCompHandler()
+	const [openDropdown, closeDropdown, dropdownState] = useCompHandler()
+	const noti = useNotification()
+
+	useEffect(() => {
+		const validHandler = function (el: certificationType, idx: number) {
+			return el.rating === certification[idx].rating
+		}
+
+		const isCertValid = inputState.certification.every(validHandler)
+
+		if (isCertValid === false) {
+			dispatchValid({ type: "CHANGE_CERTIFICATION", value: "changed" })
+		} else {
+			dispatchValid({ type: "CHANGE_CERTIFICATION", value: "notChanged" })
+		}
+	}, [inputState.certification, certification])
 
 	useEffect(() => {
 		if (inputState.title !== title && inputState.title.trim() !== "") {
-			dispatchValid({ type: "CHANGE_TITLE", value: true })
+			dispatchValid({ type: "CHANGE_TITLE", value: "changed" })
+		} else if (inputState.title === title) {
+			dispatchValid({ type: "CHANGE_TITLE", value: "notChanged" })
+		} else if (inputState.title.trim() === "") {
+			dispatchValid({ type: "CHANGE_TITLE", value: "empty" })
 		}
+
 		if (inputState.detail !== detail && inputState.detail.trim() !== "") {
-			dispatchValid({ type: "CHANGE_DETAIL", value: true })
+			dispatchValid({ type: "CHANGE_DETAIL", value: "changed" })
+		} else if (inputState.detail === detail) {
+			dispatchValid({ type: "CHANGE_DETAIL", value: "notChanged" })
+		} else if (inputState.detail.trim() === "") {
+			dispatchValid({ type: "CHANGE_DETAIL", value: "empty" })
 		}
-		if (Number(inputState.wage) !== wage && inputState.wage.trim() !== "") {
-			dispatchValid({ type: "CHANGE_DETAIL", value: true })
+
+		if (Number(inputState.wage) !== wage && inputState.wage !== "") {
+			dispatchValid({ type: "CHANGE_WAGE", value: "changed" })
+		} else if (Number(inputState.wage) === wage) {
+			dispatchValid({ type: "CHANGE_WAGE", value: "notChanged" })
+		} else if (inputState.wage === "") {
+			dispatchValid({ type: "CHANGE_WAGE", value: "empty" })
 		}
-		if (Number(inputState.creditRating) !== creditRating && inputState.creditRating.trim() !== "") {
-			dispatchValid({ type: "CHANGE_CREDIT", value: true })
+
+		if (
+			Number(inputState.creditRating) !== creditRating &&
+			inputState.creditRating !== "" &&
+			inputState.creditRating !== "0"
+		) {
+			dispatchValid({ type: "CHANGE_CREDIT", value: "changed" })
+		} else if (Number(inputState.creditRating) === creditRating) {
+			dispatchValid({ type: "CHANGE_CREDIT", value: "notChanged" })
+		} else if (inputState.creditRating === "" || inputState.creditRating === "0") {
+			dispatchValid({ type: "CHANGE_CREDIT", value: "empty" })
 		}
+
 		if (inputState.color !== color && inputState.color.trim() !== "") {
-			dispatchValid({ type: "CHANGE_COLOR", value: true })
+			dispatchValid({ type: "CHANGE_COLOR", value: "changed" })
+		} else if (inputState.color === color) {
+			dispatchValid({ type: "CHANGE_COLOR", value: "notChanged" })
+		} else if (inputState.color.trim() === "") {
+			dispatchValid({ type: "CHANGE_COLOR", value: "empty" })
 		}
+
 		if (inputState.image !== image && inputState.image.trim() !== "") {
-			dispatchValid({ type: "CHANGE_IMG_URL", value: true })
+			dispatchValid({ type: "CHANGE_IMG_URL", value: "changed" })
+		} else if (inputState.image === image) {
+			dispatchValid({ type: "CHANGE_IMG_URL", value: "notChanged" })
+		} else if (inputState.image.trim() === "") {
+			dispatchValid({ type: "CHANGE_IMG_URL", value: "empty" })
 		}
-		if (Number(inputState.total) !== total && inputState.total.trim() !== "") {
-			dispatchValid({ type: "CHANGE_TOTAL", value: true })
+
+		if (Number(inputState.total) !== total && inputState.total !== "") {
+			dispatchValid({ type: "CHANGE_TOTAL", value: "changed" })
+		} else if (Number(inputState.total) === total) {
+			dispatchValid({ type: "CHANGE_TOTAL", value: "notChanged" })
+		} else if (inputState.total === "") {
+			dispatchValid({ type: "CHANGE_TOTAL", value: "empty" })
 		}
-		if (inputState.roleStatus.id !== roleStatus.id) {
-			dispatchValid({ type: "CHANGE_ROLE_STATUS", value: true })
+
+		if (
+			(inputState.roleStatus && roleStatus && inputState.roleStatus.id !== roleStatus.id) ||
+			(roleStatus === null && inputState.roleStatus !== null) ||
+			(roleStatus !== null && inputState.roleStatus === null)
+		) {
+			dispatchValid({ type: "CHANGE_ROLE_STATUS", value: "changed" })
+		} else if (roleStatus === null && inputState.roleStatus === null) {
+			dispatchValid({ type: "CHANGE_ROLE_STATUS", value: "notChanged" })
+		} else if (inputState.roleStatus && roleStatus && inputState.roleStatus.id === roleStatus.id) {
+			dispatchValid({ type: "CHANGE_ROLE_STATUS", value: "notChanged" })
 		}
-		
-		
-	}, [inputState])
+	}, [inputState, title, detail, wage, color, image, creditRating, total, roleStatus])
+
+	useEffect(() => {
+		const arr = Object.values(validState)
+		setIsSubmitValid(() => !arr.includes("empty") && arr.includes("changed"))
+	}, [validState])
 
 	const queryClient = useQueryClient()
 
@@ -254,13 +273,15 @@ function GovJobItem({
 		if (typeof idx === "number") {
 			updateMutation.mutate(idx, {
 				onSuccess: (formData) => {
+					noti({ content: <NotiTemplate type={"ok"} content={"직업을 수정하였습니다."} />, duration: 5000 })
 					return queryClient.invalidateQueries(["teacher", "govJob"]) // 'return' wait for invalidate
 				},
 			})
 		} else {
-			// 직업 추가 구현시 수정해서 사용
 			createMutation.mutate(1, {
 				onSuccess: (formData) => {
+					closeHandler && closeHandler()
+					noti({ content: <NotiTemplate type={"ok"} content={"직업을 생성하였습니다."} />, duration: 5000 })
 					return queryClient.invalidateQueries(["teacher", "govJob"]) // 'return' wait for invalidate
 				},
 			})
@@ -322,103 +343,48 @@ function GovJobItem({
 		}
 	})
 
-
-	const ratingHandler = ({id, reverse = false}: {id: number; reverse: boolean}) => {
-		// 오류 수정하기
-        // let cert = [...inputState.certification]
-        // if (reverse === true) {
-		// 	if (cert[idx].rating > 1) {
-		// 		cert[idx].rating -= 1
-		// 	} else if (cert[idx].rating === -1) {
-		// 		cert[idx].rating = 10
-		// 	}
-        // } else {
-		// 	if (cert[idx].rating < 10 && cert[idx].rating !== -1) {
-		// 		cert[idx].rating += 1
-		// 	} else {
-		// 		cert[idx].rating = -1
-		// 	}
-        // }
-
+	const ratingHandler = ({ id, reverse = false }: { id: number; reverse: boolean }) => {
 		let curIdx: number = 0
-		let diff: number = 0
+
 		inputState.certification.forEach((item, idx) => {
 			if (item.id === id) {
 				curIdx = idx
 			}
-			if (item.rating !== certification[idx].rating) {
-				diff += 1
-			}
 		})
 
-
 		let value: number | null = null
-        if (reverse === true) {
+		if (reverse === true) {
 			if (inputState.certification[curIdx].rating > 1) {
 				value = inputState.certification[curIdx].rating - 1
 			} else if (inputState.certification[curIdx].rating === -1) {
 				value = 10
 			}
-        } else {
+		} else {
 			if (inputState.certification[curIdx].rating < 10 && inputState.certification[curIdx].rating !== -1) {
 				value = inputState.certification[curIdx].rating + 1
 			} else {
 				value = -1
 			}
-        }
-
-		// let value: number | null = null
-        // if (reverse === true) {
-		// 	if (inputState.certification[idx].rating > 1) {
-		// 		value = inputState.certification[idx].rating - 1
-		// 	} else if (inputState.certification[idx].rating === -1) {
-		// 		value = 10
-		// 	}
-        // } else {
-		// 	if (inputState.certification[idx].rating < 10 && inputState.certification[idx].rating !== -1) {
-		// 		value = inputState.certification[idx].rating + 1
-		// 	} else {
-		// 		value = -1
-		// 	}
-        // }
-
-		// if (value !== null) {
-		// 	dispatchInput({ type: "CHANGE_CERTIFICATION", value: inputState.certification.map((item, aidx) =>
-		// 	aidx === idx ? { ...item, rating: value } : item
-		//   )
-		
-		// })
-		// }
-
+		}
 
 		if (value !== null) {
-			dispatchInput({ type: "CHANGE_CERTIFICATION", value: inputState.certification.map((item) =>
-			id === item.id ? { ...item, rating: value } : item
-		  )
-		
-		})
-
-		if (diff > 0) {
-			dispatchValid({ type: "CHANGE_CERTIFICATION", value: true })
-		} else {
-			dispatchValid({ type: "CHANGE_CERTIFICATION", value: false })
+			dispatchInput({
+				type: "CHANGE_CERTIFICATION",
+				value: inputState.certification.map((item) => (id === item.id ? { ...item, rating: value } : item)),
+			})
 		}
-		}
-
-
-		// if (cert[idx].rating !== certification[idx].rating) {
-		// 	alert('few')
-		// }
-
-        // dispatchInput({ type: "CHANGE_CERTIFICATION", value: cert })
-    }
+	}
 
 	const renderCertField = inputState?.certification?.map((el, idx) => {
-
-		return <GovJobItemCertItem arrIdx={idx} id={el.id} subject={el.subject} rating={el.rating} ratingHandler={ratingHandler} />
-		
-		
-		
+		return (
+			<GovJobItemCertItem
+				arrIdx={idx}
+				id={el.id}
+				subject={el.subject}
+				rating={el.rating}
+				ratingHandler={ratingHandler}
+			/>
+		)
 	})
 
 	const titleInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -447,7 +413,37 @@ function GovJobItem({
 		}
 	}
 
-
+	const dropdownList = [
+		{
+			name: "noRole",
+			content: null,
+			label: "권한 없음",
+			function: () => {
+				dispatchInput({
+					type: "CHANGE_ROLE_STATUS",
+					value: null,
+				})
+			},
+		},
+	].concat(
+		roleStatusList.map((el, idx) => {
+			return {
+				name: el.status,
+				content: null,
+				label: el.subject,
+				function: () => {
+					dispatchInput({
+						type: "CHANGE_ROLE_STATUS",
+						value: {
+							id: el.id,
+							status: el.status,
+							subject: el.subject,
+						},
+					})
+				},
+			}
+		}),
+	)
 
 	return (
 		<React.Fragment>
@@ -459,7 +455,7 @@ function GovJobItem({
 						titleSize={"var(--student-h1)"}
 						icon={APPLY_ICON}
 						content={
-							<GovJobCreateModal
+							<GovJobItemCardCustomize
 								closeComp={closeComp}
 								inputState={inputState}
 								colorPicker={renderColorPicker}
@@ -489,90 +485,124 @@ function GovJobItem({
 				</div>
 
 				<div css={outerInputFieldCSS}>
-
-				<div css={certFieldCSS}>
-					<div css={certInnerFieldCSS}>
-						{renderCertField}
+					<div css={certFieldCSS}>
+						<div css={certInnerFieldCSS}>{renderCertField}</div>
 					</div>
-						
-			
-				</div>
-				<div css={inputFieldCSS}>
-					<div>
-						<Input
-							theme={"titleNoTheme"}
-							placeholder={"직업 명을 입력해 주세요."}
-							value={inputState.title}
-							customCss={css`
-								border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-							`}
-							onChange={titleInputHandler}
-						/>
-						<Input
-							theme={"none"}
-							placeholder={"내용을 입력해 주세요."}
-							onChange={detailInputHandler}
-							value={inputState.detail}
-							isTextarea={true}
-						/>
-					</div>
-					<div css={footerCSS}>
-						<div css={prefWrapperCSS}>
+					<div css={inputFieldCSS}>
+						<div>
 							<Input
-								theme={"radial"}
+								theme={"titleNoTheme"}
+								placeholder={"직업 명을 입력해 주세요."}
+								value={inputState.title}
 								customCss={css`
-									width: 128px;
+									border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 								`}
-								onChange={creditInputHandler}
-								value={inputState.creditRating}
-								leftContent={<div>신용</div>}
-								rightContent={<div>등급</div>}
+								onChange={titleInputHandler}
 							/>
 							<Input
-								theme={"radial"}
-								customCss={css`
-									width: 164px;
-								`}
-								value={inputState.wage}
-								onChange={wageInputHandler}
-								leftContent={<div>월급</div>}
-								rightContent={<div>{currency}</div>}
-							/>
-							<Input
-								theme={"radial"}
-								customCss={css`
-									width: 148px;
-								`}
-								value={inputState.total}
-								onChange={totalInputHandler}
-								leftContent={<div>인원 {count} /</div>}
-								rightContent={<div>명</div>}
-							/>
-
-							{certCount !== 0 && <div css={certItemWrapperCSS}>{renderCertSub}</div>}
-						</div>
-
-						<div css={ButtonWrapperCSS}>
-							<Button
-								text={"적용"}
-								fontSize={`var(--teacher-h5)`}
-								width={"84px"}
-								cssProps={css`
-									flex: 1;
-									margin-right: 8px;
-									margin-bottom: 8px;
-									height: 32px;
-								`}
-								theme={"cancelDark"}
-								onClick={() => {
-									submitHandler()
-								}}
-								disabled={true}
+								theme={"none"}
+								placeholder={"내용을 입력해 주세요."}
+								onChange={detailInputHandler}
+								value={inputState.detail}
+								isTextarea={true}
 							/>
 						</div>
+						<div css={footerCSS}>
+							<div css={prefWrapperCSS}>
+								<Input
+									theme={"radial"}
+									customCss={css`
+										width: 128px;
+									`}
+									onChange={creditInputHandler}
+									value={inputState.creditRating}
+									leftContent={<div>신용</div>}
+									rightContent={<div>등급</div>}
+								/>
+								<Input
+									theme={"radial"}
+									customCss={css`
+										width: 164px;
+									`}
+									value={inputState.wage}
+									onChange={wageInputHandler}
+									leftContent={<div>월급</div>}
+									rightContent={<div>{currency}</div>}
+								/>
+								<Input
+									theme={"radial"}
+									customCss={css`
+										width: 148px;
+									`}
+									value={inputState.total}
+									onChange={totalInputHandler}
+									leftContent={<div>인원 {count} /</div>}
+									rightContent={<div>명</div>}
+								/>
+
+								{certCount !== 0 && <div css={inputItemWrapperCSS}>{renderCertSub}</div>}
+
+								<div
+									css={[
+										inputItemWrapperCSS,
+										css`
+											min-width: 100px;
+										`,
+									]}
+									onClick={openDropdown}
+								>
+									<Dropdown
+										compState={dropdownState}
+										closeComp={closeDropdown}
+										width={"100%"}
+										height={"32px"}
+										element={dropdownList}
+										align={"left"}
+										customCss={css`
+											top: 36px;
+										`}
+									/>
+									{inputState.roleStatus ? inputState.roleStatus.subject : "권한 없음"}
+								</div>
+							</div>
+
+							<div css={ButtonWrapperCSS}>
+								{closeHandler && (
+									<Button
+										text={"취소"}
+										fontSize={`var(--teacher-h5)`}
+										width={"84px"}
+										cssProps={css`
+											flex: 1;
+											margin-right: 8px;
+											margin-bottom: 8px;
+											height: 32px;
+										`}
+										theme={"cancelDark"}
+										onClick={() => {
+											closeHandler()
+										}}
+									/>
+								)}
+								<Button
+									text={"저장"}
+									fontSize={`var(--teacher-h5)`}
+									width={"84px"}
+									cssProps={css`
+										flex: 1;
+										margin-right: 8px;
+										margin-bottom: 8px;
+										height: 32px;
+									`}
+									theme={"cancelDark"}
+									onClick={() => {
+										submitHandler()
+									}}
+									disabled={isSubmitValid ? false : true}
+								/>
+							</div>
+						</div>
 					</div>
-				</div>
-				
 				</div>
 			</div>
 		</React.Fragment>
@@ -595,7 +625,7 @@ const inputFieldCSS = css`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	overflow: hidden;
+	/* overflow: hidden; */
 `
 
 const footerCSS = css`
@@ -608,6 +638,7 @@ const ButtonWrapperCSS = css`
 	height: 100%;
 	display: flex;
 	align-items: flex-end;
+	gap: 8px;
 `
 
 const prefWrapperCSS = css`
@@ -670,10 +701,10 @@ const currentColorWrapperCSS = css`
 	}
 `
 
-const certItemWrapperCSS = css`
+const inputItemWrapperCSS = css`
 	border-radius: 10px;
 	background-color: rgba(255, 255, 255, 0.5);
-	overflow: hidden;
+	/* overflow: hidden; */
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	height: 32px;
 	padding: 8px;
@@ -684,6 +715,7 @@ const certItemWrapperCSS = css`
 	transition-duration: 0.2s;
 	cursor: pointer;
 	user-select: none;
+	position: relative;
 
 	&:hover {
 		background-color: rgba(255, 255, 255, 1);
@@ -691,10 +723,8 @@ const certItemWrapperCSS = css`
 `
 
 const outerInputFieldCSS = css`
-	
 	display: flex;
 	flex: 1;
-	
 `
 
 const certFieldCSS = css`
@@ -705,9 +735,6 @@ const certFieldCSS = css`
 	/* height: 100%; */
 	margin: 14px 14px 14px 0px;
 	border-radius: 10px;
-
-	
-	
 `
 
 const certInnerFieldCSS = css`

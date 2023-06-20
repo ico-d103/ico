@@ -23,7 +23,7 @@ type paramsType = {
         color: string
         image: string
         total: string
-        roleStatus?: roleStatusType
+        roleStatus: roleStatusType | null
         certification?: certificationType[]
     }
 }

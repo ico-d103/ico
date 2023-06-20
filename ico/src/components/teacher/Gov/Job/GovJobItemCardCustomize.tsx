@@ -9,37 +9,34 @@ import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
 import GovJobCard from "./GovJobCard"
 
-
 type GovJobCreateModalProps = {
 	closeComp: Function
-	inputState: any;
+	inputState: any
 	colorPicker: any
 	illustPicker: any
 }
 
-function GovJobCreateModal({closeComp, colorPicker, inputState, illustPicker}: GovJobCreateModalProps) {
-
-
-	
+function GovJobItemCardCustomize({ closeComp, colorPicker, inputState, illustPicker }: GovJobCreateModalProps) {
 	return (
 		<div css={wrapperCSS}>
-			
 			<div css={cardWrapperCSS}>
-				<div css={buttonCSS} onClick={() => illustPicker(true)}>〈</div>
-		
-				<GovJobCard job={inputState.job} wage={inputState.wage} backgroundColor={inputState.color} imgUrl={inputState.image}/>
-	
-			
-				<div css={buttonCSS} onClick={() => illustPicker()}>〉</div>
-			</div>
-			
-			
-			<div css={colorPickerWrapperCSS}>
-				{colorPicker}
-			</div>
-			
+				<div css={buttonCSS} onClick={() => illustPicker(true)}>
+					〈
+				</div>
 
-			
+				<GovJobCard
+					job={inputState.job}
+					wage={inputState.wage}
+					backgroundColor={inputState.color}
+					imgUrl={inputState.image}
+				/>
+
+				<div css={buttonCSS} onClick={() => illustPicker()}>
+					〉
+				</div>
+			</div>
+
+			<div css={colorPickerWrapperCSS}>{colorPicker}</div>
 
 			<div css={buttonWrapperCSS}>
 				<Button
@@ -51,7 +48,6 @@ function GovJobCreateModal({closeComp, colorPicker, inputState, illustPicker}: G
 						closeComp()
 					}}
 				/>
-		
 			</div>
 		</div>
 	)
@@ -65,7 +61,6 @@ const wrapperCSS = css`
 `
 
 const colorPickerWrapperCSS = css`
-	
 	display: flex;
 `
 
@@ -75,7 +70,7 @@ const cardWrapperCSS = css`
 `
 
 const buttonWrapperCSS = css`
-width: 100%;
+	width: 100%;
 	margin-top: 24px;
 	display: flex;
 	justify-content: center;
@@ -93,5 +88,4 @@ const buttonCSS = css`
 	}
 `
 
-
-export default GovJobCreateModal
+export default GovJobItemCardCustomize
