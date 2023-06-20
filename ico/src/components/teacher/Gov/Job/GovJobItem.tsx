@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react"
+import React, { useEffect, useReducer, useState } from "react"
 import GovJobCard from "./GovJobCard"
 import { css } from "@emotion/react"
 import Input from "@/components/common/Input/Input"
@@ -11,6 +11,7 @@ import Button from "@/components/common/Button/Button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { postGovJobAPI } from "@/api/teacher/gov/postGovJobAPI"
 import { putGovJobAPI } from "@/api/teacher/gov/putGovJobAPI"
+import GovJobItemCertItem from "./GovJobItemCertItem"
 
 type certificationType = {
 	id: number
@@ -129,6 +130,8 @@ const inputReducer = (state: inputType, action: { type: string; value: any }): i
 			return { ...state, total: action.value }
 		case "CHANGE_CERTIFICATION":
 			return { ...state, certification: action.value }
+		case "CHANGE_ROLE_STATUS":
+			return { ...state, roleStatus: action.value }
 		default:
 			return state
 	}
@@ -152,6 +155,8 @@ const validReducer = (state: validType, action: { type: string; value: boolean }
 			return { ...state, total: action.value }
 		case "CHANGE_CERTIFICATION":
 			return { ...state, certification: action.value }
+		case "CHANGE_ROLE_STATUS":
+			return { ...state, roleStatus: action.value }
 		default:
 			return state
 	}
@@ -172,7 +177,7 @@ function GovJobItem({
 	roleStatusList,
 	certification,
 }: GovRuleClassDetailProps) {
-	const initalInput: inputType = {
+	const initialInput: inputType = {
 		title: title ? title : "",
 		detail: detail ? detail : "",
 		wage: wage ? String(wage) : "",
@@ -184,7 +189,7 @@ function GovJobItem({
 		certification,
 	}
 
-	const initalValid: validType = {
+	const initialValid: validType = {
 		title: false,
 		detail: false,
 		wage: false,
@@ -196,11 +201,40 @@ function GovJobItem({
 		certification: true, // 나중에 기능 실제로 추가되면 false로 바꿀 것!
 	}
 
-	const [inputState, dispatchInput] = useReducer(inputReducer, initalInput)
-	const [validState, dispatchValid] = useReducer(validReducer, initalValid)
+	const [inputState, dispatchInput] = useReducer(inputReducer, initialInput)
+	const [validState, dispatchValid] = useReducer(validReducer, initialValid)
 	const [isAllValid, setIsAllValid] = useState<boolean>(false)
 	const [illustIdx, setIllustIdx] = useState<number>(ILLUST.indexOf(inputState.image))
 	const [openComp, closeComp, compState] = useCompHandler()
+
+	useEffect(() => {
+		if (inputState.title !== title && inputState.title.trim() !== "") {
+			dispatchValid({ type: "CHANGE_TITLE", value: true })
+		}
+		if (inputState.detail !== detail && inputState.detail.trim() !== "") {
+			dispatchValid({ type: "CHANGE_DETAIL", value: true })
+		}
+		if (Number(inputState.wage) !== wage && inputState.wage.trim() !== "") {
+			dispatchValid({ type: "CHANGE_DETAIL", value: true })
+		}
+		if (Number(inputState.creditRating) !== creditRating && inputState.creditRating.trim() !== "") {
+			dispatchValid({ type: "CHANGE_CREDIT", value: true })
+		}
+		if (inputState.color !== color && inputState.color.trim() !== "") {
+			dispatchValid({ type: "CHANGE_COLOR", value: true })
+		}
+		if (inputState.image !== image && inputState.image.trim() !== "") {
+			dispatchValid({ type: "CHANGE_IMG_URL", value: true })
+		}
+		if (Number(inputState.total) !== total && inputState.total.trim() !== "") {
+			dispatchValid({ type: "CHANGE_TOTAL", value: true })
+		}
+		if (inputState.roleStatus.id !== roleStatus.id) {
+			dispatchValid({ type: "CHANGE_ROLE_STATUS", value: true })
+		}
+		
+		
+	}, [inputState])
 
 	const queryClient = useQueryClient()
 
@@ -235,7 +269,6 @@ function GovJobItem({
 
 	const colorPickHandler = (value: string) => {
 		dispatchInput({ type: "CHANGE_COLOR", value })
-		dispatchValid({ type: "CHANGE_COLOR", value: true })
 	}
 
 	const illustPickerHandler = (reverse = false) => {
@@ -256,7 +289,6 @@ function GovJobItem({
 				setIllustIdx(() => 0)
 			}
 		}
-		dispatchValid({ type: "CHANGE_IMG_URL", value: true })
 	}
 
 	const renderColorPicker = COLOR.map((el, idx) => {
@@ -290,46 +322,132 @@ function GovJobItem({
 		}
 	})
 
+
+	const ratingHandler = ({id, reverse = false}: {id: number; reverse: boolean}) => {
+		// 오류 수정하기
+        // let cert = [...inputState.certification]
+        // if (reverse === true) {
+		// 	if (cert[idx].rating > 1) {
+		// 		cert[idx].rating -= 1
+		// 	} else if (cert[idx].rating === -1) {
+		// 		cert[idx].rating = 10
+		// 	}
+        // } else {
+		// 	if (cert[idx].rating < 10 && cert[idx].rating !== -1) {
+		// 		cert[idx].rating += 1
+		// 	} else {
+		// 		cert[idx].rating = -1
+		// 	}
+        // }
+
+		let curIdx: number = 0
+		let diff: number = 0
+		inputState.certification.forEach((item, idx) => {
+			if (item.id === id) {
+				curIdx = idx
+			}
+			if (item.rating !== certification[idx].rating) {
+				diff += 1
+			}
+		})
+
+
+		let value: number | null = null
+        if (reverse === true) {
+			if (inputState.certification[curIdx].rating > 1) {
+				value = inputState.certification[curIdx].rating - 1
+			} else if (inputState.certification[curIdx].rating === -1) {
+				value = 10
+			}
+        } else {
+			if (inputState.certification[curIdx].rating < 10 && inputState.certification[curIdx].rating !== -1) {
+				value = inputState.certification[curIdx].rating + 1
+			} else {
+				value = -1
+			}
+        }
+
+		// let value: number | null = null
+        // if (reverse === true) {
+		// 	if (inputState.certification[idx].rating > 1) {
+		// 		value = inputState.certification[idx].rating - 1
+		// 	} else if (inputState.certification[idx].rating === -1) {
+		// 		value = 10
+		// 	}
+        // } else {
+		// 	if (inputState.certification[idx].rating < 10 && inputState.certification[idx].rating !== -1) {
+		// 		value = inputState.certification[idx].rating + 1
+		// 	} else {
+		// 		value = -1
+		// 	}
+        // }
+
+		// if (value !== null) {
+		// 	dispatchInput({ type: "CHANGE_CERTIFICATION", value: inputState.certification.map((item, aidx) =>
+		// 	aidx === idx ? { ...item, rating: value } : item
+		//   )
+		
+		// })
+		// }
+
+
+		if (value !== null) {
+			dispatchInput({ type: "CHANGE_CERTIFICATION", value: inputState.certification.map((item) =>
+			id === item.id ? { ...item, rating: value } : item
+		  )
+		
+		})
+
+		if (diff > 0) {
+			dispatchValid({ type: "CHANGE_CERTIFICATION", value: true })
+		} else {
+			dispatchValid({ type: "CHANGE_CERTIFICATION", value: false })
+		}
+		}
+
+
+		// if (cert[idx].rating !== certification[idx].rating) {
+		// 	alert('few')
+		// }
+
+        // dispatchInput({ type: "CHANGE_CERTIFICATION", value: cert })
+    }
+
+	const renderCertField = inputState?.certification?.map((el, idx) => {
+
+		return <GovJobItemCertItem arrIdx={idx} id={el.id} subject={el.subject} rating={el.rating} ratingHandler={ratingHandler} />
+		
+		
+		
+	})
+
 	const titleInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		dispatchInput({ type: "CHANGE_TITLE", value: event.target.value })
-		if (event.target.value.trim() !== "") {
-			dispatchValid({ type: "CHANGE_TITLE", value: true })
-		}
 	}
 
 	const detailInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		dispatchInput({ type: "CHANGE_DETAIL", value: event.target.value })
-		if (event.target.value.trim() !== "") {
-			dispatchValid({ type: "CHANGE_DETAIL", value: true })
-		}
 	}
 
 	const creditInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (Number(event.target.value) <= 10) {
 			dispatchInput({ type: "CHANGE_CREDIT", value: event.target.value })
-			if (event.target.value.trim() !== "") {
-				dispatchValid({ type: "CHANGE_CREDIT", value: true })
-			}
 		}
 	}
 
 	const wageInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (Number(event.target.value) <= 1000000) {
-			dispatchInput({ type: "CHANGE_WAGE", value: event.target.value })
-			if (event.target.value.trim() !== "") {
-				dispatchValid({ type: "CHANGE_WAGE", value: true })
-			}
+			dispatchInput({ type: "CHANGE_WAGE", value: Number(event.target.value) })
 		}
 	}
 
 	const totalInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (Number(event.target.value) <= 100) {
-			dispatchInput({ type: "CHANGE_TOTAL", value: event.target.value })
-			if (event.target.value.trim() !== "") {
-				dispatchValid({ type: "CHANGE_TOTAL", value: true })
-			}
+			dispatchInput({ type: "CHANGE_TOTAL", value: Number(event.target.value) })
 		}
 	}
+
+
 
 	return (
 		<React.Fragment>
@@ -370,6 +488,15 @@ function GovJobItem({
 					{renderCardCustomButton}
 				</div>
 
+				<div css={outerInputFieldCSS}>
+
+				<div css={certFieldCSS}>
+					<div css={certInnerFieldCSS}>
+						{renderCertField}
+					</div>
+						
+			
+				</div>
 				<div css={inputFieldCSS}>
 					<div>
 						<Input
@@ -422,7 +549,7 @@ function GovJobItem({
 								rightContent={<div>명</div>}
 							/>
 
-							<div css={certItemWrapperCSS}>{renderCertSub}</div>
+							{certCount !== 0 && <div css={certItemWrapperCSS}>{renderCertSub}</div>}
 						</div>
 
 						<div css={ButtonWrapperCSS}>
@@ -444,6 +571,8 @@ function GovJobItem({
 							/>
 						</div>
 					</div>
+				</div>
+				
 				</div>
 			</div>
 		</React.Fragment>
@@ -559,6 +688,34 @@ const certItemWrapperCSS = css`
 	&:hover {
 		background-color: rgba(255, 255, 255, 1);
 	}
+`
+
+const outerInputFieldCSS = css`
+	
+	display: flex;
+	flex: 1;
+	
+`
+
+const certFieldCSS = css`
+	background-color: rgba(0, 0, 0, 0.03);
+	/* min-width: 200px;
+	max-width: 400px;
+	width: 15vw; */
+	/* height: 100%; */
+	margin: 14px 14px 14px 0px;
+	border-radius: 10px;
+
+	
+	
+`
+
+const certInnerFieldCSS = css`
+	min-height: 100%;
+	height: 1px;
+	overflow-y: scroll;
+
+	padding: 8px;
 `
 
 export default GovJobItem
