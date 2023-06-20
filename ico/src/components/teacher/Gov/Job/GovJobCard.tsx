@@ -44,9 +44,9 @@ function GovJobCard({ job, wage, backgroundColor, imgUrl }: GovJobCardProps) {
 }
 
 const outerCardWrapperCSS = css`
-	width: 270px;
-	min-width: 270px;
-	height: 180px;
+	width: 300px;
+	min-width: 300px;
+	height: 200px;
 	position: relative;
 	display: flex;
 	justify-content: center;
@@ -74,8 +74,8 @@ const cardWrapperCSS = ({ backgroundColor }: { backgroundColor: string }) => {
 		transition-duration: 0.3s;
 		background-color: ${backgroundColor};
 		position: absolute;
-		width: 240px;
-		height: 150px;
+		width: 270px;
+		height: 170px;
 		border-radius: 10px;
 		display: flex;
 	`
@@ -89,9 +89,9 @@ const jobImgSpaceCSS = css`
 const jobImgWrapperCSS = css`
 	position: absolute;
 	top: -20px;
-	left: 0px;
-	width: 110px;
-	height: 150px;
+	left: -10px;
+	width: 140px;
+	height: 170px;
 	/* background-color: gray; */
 `
 

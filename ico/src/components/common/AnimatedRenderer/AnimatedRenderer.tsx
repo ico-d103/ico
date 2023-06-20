@@ -10,6 +10,7 @@ type AnimatedRendererProps = {
 function AnimatedRenderer({ compState, children, initHeight }: AnimatedRendererProps) {
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
 	const [sectionState, setSectionState] = useState<boolean>(false)
+	const [contentHeight, setContentHeight] = useState<number>(0)
 
 	useEffect(() => {
 		if (compState) {
@@ -22,20 +23,38 @@ function AnimatedRenderer({ compState, children, initHeight }: AnimatedRendererP
 			}, 300)
 		}
 	}, [compState])
+
+	useEffect(() => {
+		const resizeObserver = new ResizeObserver((entries) => {
+		  for (let entry of entries) {
+			// entry.contentRect.height는 요소의 높이를 나타냅니다.
+			console.log(entry.contentRect.height);
+			setContentHeight(() => entry.contentRect.height)
+		  }
+		});
+	
+		if (contentWrapperRef.current) {
+		  resizeObserver.observe(contentWrapperRef.current);
+		}
+	
+		return () => {
+		  resizeObserver.disconnect();
+		};
+	  }, []);
 	
 	return (
-		<div css={contentWrapperCSS({ initHeight, sectionState, compState, contentWrapperRef: contentWrapperRef })}>
+		<div css={contentWrapperCSS({ initHeight, sectionState, compState, contentHeight, contentWrapperRef: contentWrapperRef })}>
 			<div ref={contentWrapperRef}>{children}</div>
 		</div>
 	)
 }
 
-const contentWrapperCSS = ({ initHeight, sectionState, compState, contentWrapperRef }: { initHeight?: string; sectionState: boolean; compState: boolean; contentWrapperRef: any }) => {
+const contentWrapperCSS = ({ initHeight, sectionState, compState, contentHeight, contentWrapperRef }: { initHeight?: string; sectionState: boolean; compState: boolean; contentHeight: number; contentWrapperRef: any }) => {
 	return css`
 		margin-top: 16px;
 		transition-property: max-height opacity;
 		transition-duration: 0.3s;
-		max-height: ${compState ? `${contentWrapperRef.current && contentWrapperRef.current.clientHeight}px` : `${initHeight ? initHeight : '0px'}`};
+		max-height: ${compState ? `${contentHeight}px` : `${initHeight ? initHeight : '0px'}`};
 		overflow: ${compState ? (sectionState ? "visible" : "hidden") : "hidden"};
 		opacity: ${compState ? '100%' : "0%"};
 		border-radius: 10px;
