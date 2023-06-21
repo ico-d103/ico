@@ -32,9 +32,15 @@
 	--student-wrapper-color: #ffffff;
 
 	--student-side-bar-width: 280px;
-	--student-full-width: calc(100vw - var(--student-side-bar-width) - var(--student-side-bar-width));
+	/* --student-full-width: calc(100vw - var(--student-side-bar-width) - var(--student-side-bar-width)); */
 
-	@media (max-width: 1280px) {
+	@media (max-width: 768px) {
+		--student-full-width: 100vw;
+	}
+
+
+
+	@media (min-width: 769px) {
 		--student-full-width: calc(100vw - var(--student-side-bar-width));
 	}
 
