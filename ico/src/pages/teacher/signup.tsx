@@ -384,7 +384,7 @@ function signup() {
 						identity: inputState.id,
 						password: inputState.password,
 						checkedPassword: inputState.password,
-						phoneNum: inputState.phone
+						phoneNum: inputState.phone,
 					}),
 				],
 				{ type: "application/json" },
@@ -571,9 +571,16 @@ const wrapperCSS = css`
 `
 
 const innerWrapperCSS = css`
-	width: 40vw;
 	display: flex;
 	flex-direction: column;
+
+	@media (max-width: 768px) {
+		width: 95vw;
+	}
+
+	@media (min-width: 769px) {
+		width: 40vw;
+	}
 `
 
 const inputTitleCSS = css`
@@ -584,7 +591,13 @@ const inputTitleCSS = css`
 
 const imageWrapperCSS = css`
 	width: 100%;
-	height: 23.3vw;
+	@media (max-width: 768px) {
+		height: 60vw;
+	}
+
+	@media (min-width: 769px) {
+		height: 23.3vw;
+	}
 `
 
 const inputCSS = css`
