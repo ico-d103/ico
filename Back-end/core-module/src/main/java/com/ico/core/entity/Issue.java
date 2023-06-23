@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Stock {
+public class Issue {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
@@ -37,7 +37,7 @@ public class Stock {
     private LocalDateTime date;
 
     @Builder
-    public Stock(Long id, Nation nation, double amount, String content, LocalDateTime date) {
+    public Issue(Long id, Nation nation, double amount, String content, LocalDateTime date) {
         this.id = id;
         this.nation = nation;
         this.amount = amount;

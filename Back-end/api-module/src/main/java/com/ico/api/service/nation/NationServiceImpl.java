@@ -8,7 +8,6 @@ import com.ico.api.util.Formatter;
 import com.ico.core.code.Role;
 import com.ico.core.code.Status;
 import com.ico.core.code.TaxType;
-import com.ico.core.data.Default_interest;
 import com.ico.core.data.Default_job;
 import com.ico.core.data.Default_license;
 import com.ico.core.data.Default_rule;
@@ -17,10 +16,10 @@ import com.ico.core.dto.StockReqDto;
 import com.ico.core.document.DefaultNation;
 import com.ico.core.entity.Immigration;
 import com.ico.core.entity.Invest;
+import com.ico.core.entity.Issue;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.NationLicense;
 import com.ico.core.entity.Rule;
-import com.ico.core.entity.Stock;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.StudentLicense;
@@ -37,7 +36,7 @@ import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationLicenseRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.RuleRepository;
-import com.ico.core.repository.StockRepository;
+import com.ico.core.repository.IssueRepository;
 import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.StudentLicenseRepository;
 import com.ico.core.repository.StudentProductRepository;
@@ -83,7 +82,7 @@ public class NationServiceImpl implements NationService {
     private final StudentRepository studentRepository;
     private final StudentLicenseRepository studentLicenseRepository;
     private final NationLicenseRepository nationLicenseRepository;
-    private final StockRepository stockRepository;
+    private final IssueRepository issueRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     private final DefaultNationRepository defaultNationRepository;
@@ -228,13 +227,13 @@ public class NationServiceImpl implements NationService {
             nationRepository.save(nation);
 
             // 주식 가격, 이슈 등록
-            Stock stock = Stock.builder()
+            Issue issue = Issue.builder()
                     .nation(nation)
                     .amount(stockReqDto.getAmount())
                     .content(stockReqDto.getContent())
                     .date(LocalDateTime.now())
                     .build();
-            stockRepository.save(stock);
+            issueRepository.save(issue);
         } else {
             throw new CustomException(ErrorCode.ALREADY_EXIST_STOCK);
         }
@@ -384,9 +383,9 @@ public class NationServiceImpl implements NationService {
         }
 
         // Stock
-        List<Stock> stocks = stockRepository.findAllByNationId(nationId);
-        if (!stocks.isEmpty()) {
-            stockRepository.deleteAll(stocks);
+        List<Issue> issues = issueRepository.findAllByNationId(nationId);
+        if (!issues.isEmpty()) {
+            issueRepository.deleteAll(issues);
         }
 
         // StudentJob

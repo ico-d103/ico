@@ -9,14 +9,14 @@ import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.entity.Invest;
+import com.ico.core.entity.Issue;
 import com.ico.core.entity.Nation;
-import com.ico.core.entity.Stock;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationRepository;
-import com.ico.core.repository.StockRepository;
+import com.ico.core.repository.IssueRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +39,7 @@ import java.util.Optional;
 public class IssueServiceImpl implements IssueService {
     private final StudentRepository studentRepository;
     private final NationRepository nationRepository;
-    private final StockRepository stockRepository;
+    private final IssueRepository issueRepository;
     private final InvestRepository investRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final TransactionService transactionService;
@@ -141,13 +141,13 @@ public class IssueServiceImpl implements IssueService {
 
         double res = Math.round(value * 100.0)/100.0;
         // 투지 이슈 등록
-        Stock stock = Stock.builder()
+        Issue issue = Issue.builder()
                 .date(LocalDateTime.now())
                 .amount(res)
                 .content(dto.getContent())
                 .nation(nation)
                 .build();
-        stockRepository.save(stock);
+        issueRepository.save(issue);
 
     }
 
@@ -167,13 +167,13 @@ public class IssueServiceImpl implements IssueService {
         List<Invest> invests = investRepository.findAllByNationId(nationId);
 
         // 가장 최신 주식 데이터 구하기
-        List<Stock> stockList = stockRepository.findAllByNationIdOrderByIdDesc(nationId);
-        if(stockList.isEmpty()){
+        List<Issue> issueList = issueRepository.findAllByNationIdOrderByIdDesc(nationId);
+        if(issueList.isEmpty()){
             throw new CustomException(ErrorCode.NOT_FOUND_STOCK);
         }
 
         // 최신 지수
-        double price = stockList.get(0).getAmount();
+        double price = issueList.get(0).getAmount();
         log.info("매도지수 : " + price);
 
         // 학생들 매도 일괄 처리
@@ -205,7 +205,7 @@ public class IssueServiceImpl implements IssueService {
             investRepository.delete(invest);
         }
 
-        stockRepository.deleteAll(stockList);
+        issueRepository.deleteAll(issueList);
 
         // 나라의 투자 정보 삭제
         nation.setTrading_end(null);
@@ -238,8 +238,8 @@ public class IssueServiceImpl implements IssueService {
      */
     private List<IssueColDto> getIssues(Long nationId){
         List<IssueColDto> issuesRes = new ArrayList<>();
-        List<Stock> issues = stockRepository.findAllByNationIdOrderByIdDesc(nationId);
-        for(Stock issue : issues){
+        List<Issue> issues = issueRepository.findAllByNationIdOrderByIdDesc(nationId);
+        for(Issue issue : issues){
             IssueColDto col = new IssueColDto();
             col.setContent(issue.getContent());
             col.setAmount(issue.getAmount());
