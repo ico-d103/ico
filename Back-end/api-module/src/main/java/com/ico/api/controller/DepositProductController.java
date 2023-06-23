@@ -2,7 +2,7 @@ package com.ico.api.controller;
 
 import com.ico.api.dto.bank.DepositProductStudentResDto;
 import com.ico.api.dto.bank.DepositProductTeacherResDto;
-import com.ico.api.dto.bank.DepositProductDto;
+import com.ico.api.dto.bank.DepositProductReqDto;
 import com.ico.api.service.bank.DepositProductService;
 import com.ico.core.dto.DepositUpdatetDto;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +63,7 @@ public class DepositProductController {
      * @return
      */
     @PostMapping("/teacher")
-    public ResponseEntity<HttpStatus> addDeposit(HttpServletRequest request, @RequestBody DepositProductDto deposit){
+    public ResponseEntity<HttpStatus> addDeposit(HttpServletRequest request, @RequestBody DepositProductReqDto deposit){
         depositProductService.addDeposit(request, deposit);
         return ResponseEntity.ok(HttpStatus.OK);
     }

@@ -1,6 +1,11 @@
 package com.ico.api.service.bank;
 
-import com.ico.api.dto.bank.*;
+
+import com.ico.api.dto.bank.DepositProductReqDto;
+import com.ico.api.dto.bank.DepositProductStudentColResDto;
+import com.ico.api.dto.bank.DepositProductStudentResDto;
+import com.ico.api.dto.bank.DepositProductTeacherResDto;
+import com.ico.api.dto.bank.DepositStudentResDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.document.Deposit;
@@ -19,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -81,7 +86,7 @@ public class DepositProductServiceImpl implements DepositProductService{
             colDeposit.setId(deposit.getId());
             colDeposit.setTitle(deposit.getTitle());
             colDeposit.setPeriod(deposit.getPeriod());
-            colDeposit.setInterest(myInterest(student.getCreditRating(), deposit));
+            colDeposit.setInterest(getMyInterest(student.getCreditRating(), deposit));
 
             depositList.add(colDeposit);
         }
@@ -90,7 +95,7 @@ public class DepositProductServiceImpl implements DepositProductService{
         List<Deposit> myDepositList = depositMongoRepository.findAllByStudentId(studentId);
         for(Deposit deposit : myDepositList){
             DepositStudentResDto myDeposit = new DepositStudentResDto();
-            boolean isEnd = !LocalDateTime.now().toLocalDate().isBefore(deposit.getEndDate().toLocalDate());
+            boolean isEnd = !LocalDate.now().isBefore(deposit.getEndDate().toLocalDate());
             myDeposit = myDeposit.builder()
                     .title(deposit.getTitle())
                     .amount(deposit.getAmount())
@@ -111,7 +116,7 @@ public class DepositProductServiceImpl implements DepositProductService{
     }
 
     @Override
-    public void addDeposit(HttpServletRequest request, DepositProductDto dto) {
+    public void addDeposit(HttpServletRequest request, DepositProductReqDto dto) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
@@ -206,7 +211,14 @@ public class DepositProductServiceImpl implements DepositProductService{
         return true;
     }
 
-    public Byte myInterest(Byte creditRating, DepositProduct deposit){
+    /**
+     * 나의 신용등급에 따른 이자율
+     *
+     * @param creditRating 나의 신용 등급
+     * @param deposit 애금 상품
+     * @return
+     */
+    public Byte getMyInterest(Byte creditRating, DepositProduct deposit){
         switch (creditRating){
             case 1: return deposit.getGrade_1();
             case 2: return deposit.getGrade_2();

@@ -18,12 +18,12 @@ public class DepositProductStudentColResDto {
 
     private String title;
 
-    private Byte period;
+    private byte period;
 
-    private Byte interest;
+    private byte interest;
 
     @Builder
-    public DepositProductStudentColResDto(Long id, String title, Byte period, Byte interest) {
+    public DepositProductStudentColResDto(Long id, String title, byte period, byte interest) {
         this.id = id;
         this.title = title;
         this.period = period;

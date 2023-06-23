@@ -1,6 +1,6 @@
 package com.ico.api.service.bank;
 
-import com.ico.api.dto.bank.DepositProductDto;
+import com.ico.api.dto.bank.DepositProductReqDto;
 import com.ico.api.dto.bank.DepositProductStudentResDto;
 import com.ico.api.dto.bank.DepositProductTeacherResDto;
 import com.ico.core.dto.DepositUpdatetDto;
@@ -38,7 +38,7 @@ public interface DepositProductService {
      * @param request
      * @param dto
      */
-    void addDeposit(HttpServletRequest request, DepositProductDto dto);
+    void addDeposit(HttpServletRequest request, DepositProductReqDto dto);
 
     /**
      * 예금 상품 수정
