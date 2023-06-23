@@ -91,7 +91,7 @@ const menuItemCSS = css`
 
 const menuHeaderCSS = css`
 width: 100%;
-height: 15vh;
+/* height: 15vh; */
 background-color: var(--student-main-color);
 border-bottom: 1px solid var(--student-main-color-2);
 padding: 32px;
