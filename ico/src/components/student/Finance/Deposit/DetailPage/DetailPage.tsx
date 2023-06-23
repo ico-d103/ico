@@ -74,7 +74,7 @@ function DetailPage({ data, refetch }: DetailPageProps) {
 				<Modal
 					content={
 						<ModalContent
-							width={"90vw"}
+							width={"300px"}
 							title={"예금 중도 해지"}
 							titleSize={"var(--student-h1)"}
 							icon={APPLY_ICON}

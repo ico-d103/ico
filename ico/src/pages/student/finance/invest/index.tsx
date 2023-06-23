@@ -129,7 +129,7 @@ function index() {
 					<Modal
 						content={
 							<ModalContent
-								width={"90vw"}
+								width={"300px"}
 								title={"투자 매도"}
 								titleSize={"var(--student-h1)"}
 								icon={APPLY_ICON}
@@ -145,7 +145,7 @@ function index() {
 					<Modal
 						content={
 							<ModalContent
-								width={"90vw"}
+								width={"300px"}
 								title={"투자 매수"}
 								titleSize={"var(--student-h1)"}
 								icon={APPLY_ICON}
