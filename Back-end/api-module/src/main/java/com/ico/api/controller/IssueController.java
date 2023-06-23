@@ -1,9 +1,9 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.stock.StockStudentResDto;
-import com.ico.api.dto.stock.StockTeacherResDto;
-import com.ico.api.dto.stock.StockUploadReqDto;
-import com.ico.api.service.stock.StockService;
+import com.ico.api.dto.stock.IssueStudentResDto;
+import com.ico.api.dto.stock.IssueTeacherResDto;
+import com.ico.api.dto.stock.IssueUploadReqDto;
+import com.ico.api.service.stock.IssueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,16 +24,16 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/stock")
-public class StockController {
-    private final StockService stockService;
+public class IssueController {
+    private final IssueService issueService;
 
     /**
      * 교사의 투자 이슈 조회
      * @return 투자 이슈 정보, 투자 종목 정보(거래가능시간, 이름)
      */
     @GetMapping("/teacher")
-    public ResponseEntity<StockTeacherResDto> stockIssueTeacher(HttpServletRequest request){
-        return ResponseEntity.ok(stockService.getIssueTeacher(request));
+    public ResponseEntity<IssueTeacherResDto> stockIssueTeacher(HttpServletRequest request){
+        return ResponseEntity.ok(issueService.getIssueTeacher(request));
     }
 
     /**
@@ -42,8 +42,8 @@ public class StockController {
      * @return Httpstatus
      */
     @PostMapping("/teacher/upload")
-    public ResponseEntity<HttpStatus> uploadIssue(HttpServletRequest request, @Valid @RequestBody StockUploadReqDto dto){
-        stockService.uploadIssue(request, dto);
+    public ResponseEntity<HttpStatus> uploadIssue(HttpServletRequest request, @Valid @RequestBody IssueUploadReqDto dto){
+        issueService.uploadIssue(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -52,8 +52,8 @@ public class StockController {
      * @return 투자 이슈
      */
     @GetMapping("/student")
-    public ResponseEntity<StockStudentResDto> stockIssueStudent(HttpServletRequest request){
-        return ResponseEntity.ok(stockService.getIssueStudent(request));
+    public ResponseEntity<IssueStudentResDto> stockIssueStudent(HttpServletRequest request){
+        return ResponseEntity.ok(issueService.getIssueStudent(request));
     }
 
     /**
@@ -64,7 +64,7 @@ public class StockController {
      */
     @DeleteMapping("/teacher")
     public ResponseEntity<HttpStatus> deleteStock(HttpServletRequest request){
-        stockService.deleteStock(request);
+        issueService.deleteStock(request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

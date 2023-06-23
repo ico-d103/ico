@@ -1,10 +1,10 @@
 package com.ico.api.service.stock;
 
-import com.ico.api.dto.stock.StockColDto;
+import com.ico.api.dto.stock.IssueColDto;
 import com.ico.api.dto.stock.StockMyResDto;
-import com.ico.api.dto.stock.StockStudentResDto;
-import com.ico.api.dto.stock.StockTeacherResDto;
-import com.ico.api.dto.stock.StockUploadReqDto;
+import com.ico.api.dto.stock.IssueStudentResDto;
+import com.ico.api.dto.stock.IssueTeacherResDto;
+import com.ico.api.dto.stock.IssueUploadReqDto;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
@@ -36,7 +36,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class StockServiceImpl implements StockService{
+public class IssueServiceImpl implements IssueService {
     private final StudentRepository studentRepository;
     private final NationRepository nationRepository;
     private final StockRepository stockRepository;
@@ -50,13 +50,13 @@ public class StockServiceImpl implements StockService{
      * @return 교사화면의 투자 이슈 정보
      */
     @Override
-    public StockTeacherResDto getIssueTeacher(HttpServletRequest request) {
+    public IssueTeacherResDto getIssueTeacher(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         // 국가 정보, 투자 종목 여부 유효성 검사
         Nation nation = validCheckNationStock(nationId);
 
         // 반환값
-        StockTeacherResDto res = new StockTeacherResDto();
+        IssueTeacherResDto res = new IssueTeacherResDto();
         res.setStock(nation.getStock());
         res.setTradingStart(nation.getTrading_start());
         res.setTradingEnd(nation.getTrading_end());
@@ -70,7 +70,7 @@ public class StockServiceImpl implements StockService{
      * @return 학생 화면의 투자 이슈 정보
      */
     @Override
-    public StockStudentResDto getIssueStudent(HttpServletRequest request) {
+    public IssueStudentResDto getIssueStudent(HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
         Long studentId = jwtTokenProvider.getId(token);
@@ -99,7 +99,7 @@ public class StockServiceImpl implements StockService{
         }
 
         // 반환값
-        StockStudentResDto res = new StockStudentResDto();
+        IssueStudentResDto res = new IssueStudentResDto();
         res.setAccount(student.getAccount());
         res.setStock(nation.getStock());
         res.setTradingStart(nation.getTrading_start());
@@ -115,7 +115,7 @@ public class StockServiceImpl implements StockService{
      * @param dto 지수, 내일의 투자 이슈
      */
     @Override
-    public void uploadIssue(HttpServletRequest request, StockUploadReqDto dto) {
+    public void uploadIssue(HttpServletRequest request, IssueUploadReqDto dto) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
@@ -236,11 +236,11 @@ public class StockServiceImpl implements StockService{
      * @param nationId 국가ID
      * @return 투자 이슈 목록 조회
      */
-    private List<StockColDto> getIssues(Long nationId){
-        List<StockColDto> issuesRes = new ArrayList<>();
+    private List<IssueColDto> getIssues(Long nationId){
+        List<IssueColDto> issuesRes = new ArrayList<>();
         List<Stock> issues = stockRepository.findAllByNationIdOrderByIdDesc(nationId);
         for(Stock issue : issues){
-            StockColDto col = new StockColDto();
+            IssueColDto col = new IssueColDto();
             col.setContent(issue.getContent());
             col.setAmount(issue.getAmount());
             col.setDate(issue.getDate().format(Formatter.date));

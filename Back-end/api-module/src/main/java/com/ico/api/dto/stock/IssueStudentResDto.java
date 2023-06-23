@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class StockStudentResDto {
+public class IssueStudentResDto {
     private String stock;
 
     private int account;
@@ -25,10 +25,10 @@ public class StockStudentResDto {
 
     private StockMyResDto myStock;
 
-    private List<StockColDto> issue;
+    private List<IssueColDto> issue;
 
     @Builder
-    public StockStudentResDto(String stock, int account, LocalTime tradingStart, LocalTime tradingEnd, StockMyResDto myStock, List<StockColDto> issue) {
+    public IssueStudentResDto(String stock, int account, LocalTime tradingStart, LocalTime tradingEnd, StockMyResDto myStock, List<IssueColDto> issue) {
         this.stock = stock;
         this.account = account;
         this.tradingStart = tradingStart;
