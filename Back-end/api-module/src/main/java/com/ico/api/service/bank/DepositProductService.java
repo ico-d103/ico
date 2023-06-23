@@ -1,6 +1,8 @@
 package com.ico.api.service.bank;
 
-import com.ico.api.dto.bank.DepositProductResDto;
+import com.ico.api.dto.bank.DepositProductReqDto;
+import com.ico.api.dto.bank.DepositProductStudentResDto;
+import com.ico.api.dto.bank.DepositProductTeacherResDto;
 import com.ico.core.dto.DepositUpdatetDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,12 +16,21 @@ import java.util.List;
 public interface DepositProductService {
 
     /**
-     * 나라의 전체 예금 상품 조회
+     * 교사의 예금 상품 조회
      *
      * @param request
      * @return
      */
-    List<DepositProductResDto> findAllDeposit(HttpServletRequest request);
+    List<DepositProductTeacherResDto> findAllDepositTeacher(HttpServletRequest request);
+
+
+    /**
+     * 학생의 예금 상품 조회
+     *
+     * @param request
+     * @return
+     */
+    DepositProductStudentResDto findAllDepositStudent(HttpServletRequest request);
 
     /**
      * 예금 상품 추가
@@ -27,7 +38,7 @@ public interface DepositProductService {
      * @param request
      * @param dto
      */
-    void addDeposit(HttpServletRequest request, DepositProductDto dto);
+    void addDeposit(HttpServletRequest request, DepositProductReqDto dto);
 
     /**
      * 예금 상품 수정

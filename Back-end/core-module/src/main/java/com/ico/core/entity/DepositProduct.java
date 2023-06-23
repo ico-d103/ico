@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.util.List;
 
 /**
  * 예금 상품 Entity
@@ -35,30 +36,31 @@ public class DepositProduct {
 
     private String title;
 
-    private Byte period;
+    private byte period;
 
-    private Byte grade_1;
+    private byte grade_1;
 
-    private Byte grade_2;
+    private byte grade_2;
 
-    private Byte grade_3;
+    private byte grade_3;
 
-    private Byte grade_4;
+    private byte grade_4;
 
-    private Byte grade_5;
+    private byte grade_5;
 
-    private Byte grade_6;
+    private byte grade_6;
 
-    private Byte grade_7;
+    private byte grade_7;
 
-    private Byte grade_8;
+    private byte grade_8;
 
-    private Byte grade_9;
+    private byte grade_9;
 
-    private Byte grade_10;
+    private byte grade_10;
+
 
     @Builder
-    public DepositProduct(Long id, Nation nation, String title, Byte period, Byte grade_1, Byte grade_2, Byte grade_3, Byte grade_4, Byte grade_5, Byte grade_6, Byte grade_7, Byte grade_8, Byte grade_9, Byte grade_10) {
+    public DepositProduct(Long id, Nation nation, String title, byte period, byte grade_1, byte grade_2, byte grade_3, byte grade_4, byte grade_5, byte grade_6, byte grade_7, byte grade_8, byte grade_9, byte grade_10) {
         this.id = id;
         this.nation = nation;
         this.title = title;
@@ -75,19 +77,22 @@ public class DepositProduct {
         this.grade_10 = grade_10;
     }
 
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public void updateDepositProduct(DepositUpdatetDto dto){
+        List<Byte> interests = dto.getInterest();
+
         this.title = dto.getTitle();
         this.period = dto.getPeriod();
-        this.grade_1 = dto.getInterest().get(0);
-        this.grade_2 = dto.getInterest().get(1);
-        this.grade_3 = dto.getInterest().get(2);
-        this.grade_4 = dto.getInterest().get(3);
-        this.grade_5 = dto.getInterest().get(4);
-        this.grade_6 = dto.getInterest().get(5);
-        this.grade_7 = dto.getInterest().get(6);
-        this.grade_8 = dto.getInterest().get(7);
-        this.grade_9 = dto.getInterest().get(8);
-        this.grade_10 = dto.getInterest().get(9);
+        this.grade_1 = interests.get(0);
+        this.grade_2 = interests.get(1);
+        this.grade_3 = interests.get(2);
+        this.grade_4 = interests.get(3);
+        this.grade_5 = interests.get(4);
+        this.grade_6 = interests.get(5);
+        this.grade_7 = interests.get(6);
+        this.grade_8 = interests.get(7);
+        this.grade_9 = interests.get(8);
+        this.grade_10 = interests.get(9);
     }
 }

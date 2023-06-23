@@ -3,6 +3,7 @@ package com.ico.core.repository;
 import com.ico.core.document.Deposit;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -12,4 +13,6 @@ import java.util.Optional;
  */
 public interface DepositMongoRepository extends MongoRepository<Deposit, String> {
     Optional<Deposit> findByStudentId(Long studentId);
+
+    List<Deposit> findAllByStudentId(Long studentId);
 }

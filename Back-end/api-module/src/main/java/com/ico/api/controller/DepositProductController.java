@@ -1,7 +1,8 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.bank.DepositProductResDto;
-import com.ico.api.service.bank.DepositProductDto;
+import com.ico.api.dto.bank.DepositProductStudentResDto;
+import com.ico.api.dto.bank.DepositProductTeacherResDto;
+import com.ico.api.dto.bank.DepositProductReqDto;
 import com.ico.api.service.bank.DepositProductService;
 import com.ico.core.dto.DepositUpdatetDto;
 import lombok.RequiredArgsConstructor;
@@ -32,15 +33,27 @@ public class DepositProductController {
 
 
     /**
-     * 전체 예금 상품 목록 조회
+     * 선생님의 전체 예금 상품 목록 조회
      *
      * @param request
      * @return
      */
-    @GetMapping("/all")
-    public ResponseEntity<List<DepositProductResDto>> findAllDeposit(HttpServletRequest request){
-        return ResponseEntity.ok(depositProductService.findAllDeposit(request));
+    @GetMapping("/teacher/all")
+    public ResponseEntity<List<DepositProductTeacherResDto>> findAllDepositTeacher(HttpServletRequest request){
+        return ResponseEntity.ok(depositProductService.findAllDepositTeacher(request));
     }
+
+    /**
+     * 학생의 예금 상품 페이지
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping("/student")
+    public ResponseEntity<DepositProductStudentResDto> findAllDepositStudent(HttpServletRequest request){
+        return ResponseEntity.ok(depositProductService.findAllDepositStudent(request));
+    }
+
 
     /**
      * 예금 상품 추가
@@ -50,7 +63,7 @@ public class DepositProductController {
      * @return
      */
     @PostMapping("/teacher")
-    public ResponseEntity<HttpStatus> addDeposit(HttpServletRequest request, @RequestBody DepositProductDto deposit){
+    public ResponseEntity<HttpStatus> addDeposit(HttpServletRequest request, @RequestBody DepositProductReqDto deposit){
         depositProductService.addDeposit(request, deposit);
         return ResponseEntity.ok(HttpStatus.OK);
     }

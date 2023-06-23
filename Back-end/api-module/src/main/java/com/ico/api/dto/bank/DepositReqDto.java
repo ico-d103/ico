@@ -18,14 +18,14 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class DepositReqDto {
     @NotNull
-    private Boolean longPeriod;
+    private Long id;
 
     @Min(value = 1, message = "723")
     private int amount;
 
     @Builder
-    public DepositReqDto(Boolean longPeriod, int amount) {
-        this.longPeriod = longPeriod;
+    public DepositReqDto(Long id, int amount) {
+        this.id = id;
         this.amount = amount;
     }
 }

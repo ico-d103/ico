@@ -9,6 +9,11 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 예금 상품 수정 dto
+ *
+ * @author 변윤경
+ */
 @Setter
 @Getter
 @NoArgsConstructor
