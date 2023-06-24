@@ -1,9 +1,11 @@
-import { getFinanceDepositRateAPI } from "@/api/student/finance/getFinanceDepositRateAPI"
+// import { getFinanceDepositRateAPI } from "@/api/student/finance/getFinanceDepositRateAPI"
+import { getFinanceDepositAPI } from "@/api/student/finance/getFinanceDepositAPI"
 import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWrapper"
-import DetailPage from "@/components/student/Finance/Deposit/DetailPage/DetailPage"
-import GuidePage from "@/components/student/Finance/Deposit/GuidePage/GuidePage"
+// import DetailPage from "@/components/student/Finance/Deposit/DetailPage/DetailPage"
+// import GuidePage from "@/components/student/Finance/Deposit/GuidePage/GuidePage"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
-import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
+// import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
+import { getFinanceDepositType } from "@/types/student/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
 import React from "react"
 import UseAnimations from "react-useanimations"
@@ -11,14 +13,22 @@ import alertCircle from "react-useanimations/lib/alertCircle"
 import { isNavigating } from "@/store/store"
 import { useAtom } from "jotai"
 import { css } from "@emotion/react"
+import FinanceDepositList from "@/components/student/Finance/Deposit/FinanceDepositList"
 
 function index() {
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
-	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceDepositRateType>(
+	// const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceDepositRateType>(
+	// 	["student", "homeFinanceGetRate"],
+	// 	getFinanceDepositRateAPI,
+	// 	// { staleTime: 200000 },
+	// )
+
+	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceDepositType>(
 		["student", "homeFinanceGetRate"],
-		getFinanceDepositRateAPI,
+		getFinanceDepositAPI,
 		// { staleTime: 200000 },
 	)
+
 	return (
 		<div
 			css={css`
@@ -28,38 +38,39 @@ function index() {
 			`}
 		>
 			<PageHeader title={"예금"} />
-			{data && data.myDeposit.interest === 0 && <GuidePage data={data} refetch={refetch} />}
-			{data && data.myDeposit.interest !== 0 && <DetailPage data={data} refetch={refetch} />}
-
-			{!data && (
-				<div
-					css={css`
-						display: flex;
-						justify-content: center;
-						flex: 1;
-
-						/* background-color: red; */
-					`}
-				>
-					<ContentWrapper
-						cssProps={css`
+			{/* {data && data.myDeposit.interest === 0 && <GuidePage data={data} refetch={refetch} />}
+			{data && data.myDeposit.interest !== 0 && <DetailPage data={data} refetch={refetch} />} */}
+			{data?.depositProduct && <FinanceDepositList {...data} />}
+			{data === undefined ||
+				(data.depositProduct.length === 0 && (
+					<div
+						css={css`
+							display: flex;
+							justify-content: center;
 							flex: 1;
+
+							/* background-color: red; */
 						`}
 					>
-						<div css={alertWrapperCSS}>
-							<div
-								css={css`
-									width: 128px;
-									height: 128px;
-								`}
-							>
-								{isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={128} />}
+						<ContentWrapper
+							cssProps={css`
+								flex: 1;
+							`}
+						>
+							<div css={alertWrapperCSS}>
+								<div
+									css={css`
+										width: 128px;
+										height: 128px;
+									`}
+								>
+									{isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={128} />}
+								</div>
+								<div css={labelCSS}>은행이 아직 열리지 않았어요!</div>
 							</div>
-							<div css={labelCSS}>은행이 아직 열리지 않았어요!</div>
-						</div>
-					</ContentWrapper>
-				</div>
-			)}
+						</ContentWrapper>
+					</div>
+				))}
 		</div>
 	)
 }
