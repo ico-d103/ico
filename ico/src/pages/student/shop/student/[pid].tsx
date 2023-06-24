@@ -221,7 +221,8 @@ const detailCSS = css`
 `
 
 const navBarOverlayCSS = css`
-	width: 100%;
+	/* width: 100%; */
+	width: var(--student-full-width);
 	height: 64px;
 	background-color: var(--student-main-color);
 	position: fixed;

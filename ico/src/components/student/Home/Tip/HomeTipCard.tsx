@@ -13,13 +13,13 @@ function HomeTipCard({mainLabel, subLabel, url}: HomeTipCardProps) {
 	const navigate = useNavigate()
 
 	return (
-		<ContentWrapper cssProps={css`user-select: none;`}>
+		// <ContentWrapper cssProps={css`user-select: none;`}>
 			<div css={wrapperCSS} onClick={() => {navigate(url, 'bottomToTop')}}>
 				<div css={lsizeFontCSS}>{mainLabel}</div>
 				<div css={msizeFontCSS}>{subLabel}</div>
 			</div>
 			
-		</ContentWrapper>
+		// </ContentWrapper>
 	)
 }
 
@@ -42,6 +42,11 @@ height: 100%;
 display: flex;
 flex-direction: column;
 justify-content: center;
+
+background-color: white;
+border-radius: 20px;
+margin: 0px 0px 16px 0px;
+padding: 16px;
 /* align-items: center; */
 
 `

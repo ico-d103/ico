@@ -9,39 +9,41 @@ import { NAVBAR_CLASS, NAVBAR_GOVERNMENT, NAVBAR_STORE, NAVBAR_HOME } from "./Na
 
 type NavBarProps = {
 	children: any
+	routes: { [prop: string]: number }
+	navBarData: { [prop: number]: { url: string; name: string; label: string; content: any; function: Function } }
 }
 
-function NavBar({ children }: NavBarProps) {
+function NavBarMobile({ children, routes, navBarData }: NavBarProps) {
 	const [selected, setSelected] = useState<number>(-1)
 	const router = useRouter()
 	const navigate = useNavigate()
 
-	const routes: { [prop: string]: number } = {
-		"/student/home": 0,
-		"/student/home/asset": 0,
-		"/student/home/coupon": 0,
-		"/student/home/exchequer": 0,
-		"/student/finance/deposit": 0,
-		"/student/finance/invest": 0,
-		"/student/class/students": 1,
-		"/student/class/jobsearch": 1,
-		"/student/gov/rule": 2,
-		"/student/gov/exchequer": 2,
-		"/student/gov/job": 2,
-		"/student/shop/teacher": 3,
-		"/student/shop/student": 3,
-		"/student/shop/create": 3,
-		"/student/shop/teacher/[pid]": 3,
-		"/student/shop/student/[pid]": 3,
-	}
+	// const routes: { [prop: string]: number } = {
+	// 	"/student/home": 0,
+	// 	"/student/home/asset": 0,
+	// 	"/student/home/coupon": 0,
+	// 	"/student/home/exchequer": 0,
+	// 	"/student/finance/deposit": 0,
+	// 	"/student/finance/invest": 0,
+	// 	"/student/class/students": 1,
+	// 	"/student/class/jobsearch": 1,
+	// 	"/student/gov/rule": 2,
+	// 	"/student/gov/exchequer": 2,
+	// 	"/student/gov/job": 2,
+	// 	"/student/shop/teacher": 3,
+	// 	"/student/shop/student": 3,
+	// 	"/student/shop/create": 3,
+	// 	"/student/shop/teacher/[pid]": 3,
+	// 	"/student/shop/student/[pid]": 3,
+	// }
 
-	const navBarData: { [prop: number]: { url: string; name: string; label: string; content: any; function: Function } } =
-		{
-			0: { url: "/student/home", name: "home", label: "홈", content: NAVBAR_HOME, function: () => {} },
-			1: { url: "/student/class/students", name: "class", label: "우리반", content: NAVBAR_CLASS, function: () => {} },
-			2: { url: "/student/gov/rule", name: "gov", label: "정부", content: NAVBAR_GOVERNMENT, function: () => {} },
-			3: { url: "/student/shop/teacher", name: "store", label: "상점", content: NAVBAR_STORE, function: () => {} },
-		}
+	// const navBarData: { [prop: number]: { url: string; name: string; label: string; content: any; function: Function } } =
+	// 	{
+	// 		0: { url: "/student/home", name: "home", label: "홈", content: NAVBAR_HOME, function: () => {} },
+	// 		1: { url: "/student/class/students", name: "class", label: "우리반", content: NAVBAR_CLASS, function: () => {} },
+	// 		2: { url: "/student/gov/rule", name: "gov", label: "정부", content: NAVBAR_GOVERNMENT, function: () => {} },
+	// 		3: { url: "/student/shop/teacher", name: "store", label: "상점", content: NAVBAR_STORE, function: () => {} },
+	// 	}
 
 	useEffect(() => {
 		if (typeof routes[router.pathname] === "number") {
@@ -174,4 +176,4 @@ const navBarIndivContentCSS = ({ targetIdx, curIdx }: { targetIdx: number; curId
 	`
 }
 
-export default NavBar
+export default NavBarMobile

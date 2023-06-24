@@ -101,7 +101,7 @@ function product() {
 			<Modal
 				content={
 					<ModalContent
-						width={"90vw"}
+						width={"300px"}
 						title={"상품 구매"}
 						titleSize={"var(--student-h1)"}
 						icon={APPLY_ICON}
@@ -265,7 +265,8 @@ const detailCSS = css`
 `
 
 const navBarOverlayCSS = css`
-	width: 100%;
+	/* width: 100%; */
+	width: var(--student-full-width);
 	height: 64px;
 	background-color: var(--student-main-color);
 	position: fixed;

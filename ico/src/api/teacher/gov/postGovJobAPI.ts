@@ -1,15 +1,29 @@
 import { tokenInstance } from "@/api/instance"
 import { successReturnType } from "@/types/common/apiReturnTypes"
 
+type certificationType = {
+	id: number
+	subject: string
+	rating: number
+}
+
+type roleStatusType = {
+	status: string
+	subject: string
+}
+
+
 type paramsType = {
     body: {
         title: string
         detail: string
-        total: number
-        wage: number
+        wage: string
+        creditRating: string
         color: string
-        creditRating: number
         image: string
+        total: string
+        roleStatus: roleStatusType | null
+        certification?: certificationType[]
     }
 }
 

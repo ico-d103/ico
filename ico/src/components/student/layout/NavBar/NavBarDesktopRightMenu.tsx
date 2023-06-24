@@ -6,7 +6,7 @@ import useGetTokenStatus from '@/hooks/useGetTokenStatus'
 import { getHomeMyInfoType } from '@/types/student/apiReturnTypes'
 import LoadImage from '@/components/common/LoadImage/LoadImage'
 
-function NavBarRightMenu({data}: {data: getHomeMyInfoType}) {
+function NavBarDesktopRightMenu({data}: {data: getHomeMyInfoType}) {
     const navigate = useNavigate()
     const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
@@ -91,7 +91,7 @@ const menuItemCSS = css`
 
 const menuHeaderCSS = css`
 width: 100%;
-height: 15vh;
+/* height: 15vh; */
 background-color: var(--student-main-color);
 border-bottom: 1px solid var(--student-main-color-2);
 padding: 32px;
@@ -115,4 +115,4 @@ color: rgba(0, 0, 0, 0.6);
 `
 
 
-export default NavBarRightMenu
+export default NavBarDesktopRightMenu

@@ -53,7 +53,7 @@ function GuidePage({data, refetch}: GuidePageProps) {
 				<Modal
 					content={
 						<ModalContent
-							width={"90vw"}
+							width={"300px"}
 							title={"정기 예금 신청"}
 							titleSize={"var(--student-h1)"}
 							icon={APPLY_ICON}

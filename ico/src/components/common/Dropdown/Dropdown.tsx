@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
-import { css } from "@emotion/react"
+import { SerializedStyles, css } from "@emotion/react"
 
 type DropdownProps = {
 	compState: any
@@ -8,9 +8,10 @@ type DropdownProps = {
 	height: string
 	width: string
 	align?: "left" | "right"
+	customCss?: SerializedStyles | SerializedStyles[]
 }
 
-function Dropdown({ compState, closeComp, element, height, width, align }: DropdownProps) {
+function Dropdown({ compState, closeComp, element, height, width, align, customCss }: DropdownProps) {
 	const [dropState, setDropState] = useState<boolean>(false)
 	const dropdownWrapperRef = useRef<HTMLDivElement>(null)
 
@@ -60,7 +61,7 @@ function Dropdown({ compState, closeComp, element, height, width, align }: Dropd
 			onClick={(event) => {
 				event.stopPropagation()
 			}}
-			css={dropdownWrapperCSS({ compState, dropState, width, height, listCount: element.length, align })}
+			css={[dropdownWrapperCSS({ compState, dropState, width, height, listCount: element.length, align }), customCss]}
 		>
 			{renderDropdown}
 		</div>
@@ -101,9 +102,11 @@ const dropdownWrapperCSS = ({
 
 const dropdownIndividualCSS = ({ height }: { height: string }) => {
 	return css`
+		width: 100%;
 		height: ${height};
 		display: flex;
-		padding-left: 20px;
+		/* padding-left: 20px; */
+		justify-content: center;
 		align-items: center;
 		cursor: pointer;
 		transition-property: background-color;

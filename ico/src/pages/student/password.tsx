@@ -238,7 +238,13 @@ const wrapperCSS = css`
 `
 
 const innerWrapperCSS = css`
-	width: 95vw;
+	@media (max-width: 768px) {
+		width: 95vw;
+	}
+
+	@media (min-width: 769px) {
+		width: 40vw;
+	}
 	/* height: 40vh; */
 	/* background-color: red; */
 	display: flex;
@@ -254,7 +260,13 @@ const inputTitleCSS = css`
 
 const imageWrapperCSS = css`
 	width: 100%;
-	height: 60vw;
+	@media (max-width: 768px) {
+		height: 60vw;
+	}
+
+	@media (min-width: 769px) {
+		height: 23.3vw;
+	}
 `
 
 const inputCSS = css`
