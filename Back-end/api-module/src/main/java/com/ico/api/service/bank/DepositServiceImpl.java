@@ -96,6 +96,7 @@ public class DepositServiceImpl implements DepositService{
 
     /**
      * 예금 중도 해지, 수령
+     * TODO: 학생이 예금 여러 개 가질 수 있으므로 로직 수정 필요
      */
     @Transactional
     @Override
