@@ -14,12 +14,16 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-public class DepositProductStudentResDto {
+public class DepositProductStudentResDto
+{
+    int account;
     List<DepositStudentResDto> myDeposit;
     List<DepositProductStudentColResDto> depositProduct;
 
     @Builder
-    public DepositProductStudentResDto(List<DepositStudentResDto> myDeposit, List<DepositProductStudentColResDto> depositProduct) {
+
+    public DepositProductStudentResDto(int account, List<DepositStudentResDto> myDeposit, List<DepositProductStudentColResDto> depositProduct) {
+        this.account = account;
         this.myDeposit = myDeposit;
         this.depositProduct = depositProduct;
     }
