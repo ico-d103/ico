@@ -1,17 +1,23 @@
 import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWrapper"
 import React from "react"
 import { css } from "@emotion/react"
-import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
+// import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
+import { getFinanceDepositDetailAPI } from "@/api/student/finance/getFinanceDepositDetailAPI"
+import { myDepositType } from "@/types/student/apiReturnTypes"
 import useGetNation from "@/hooks/useGetNation"
 import Button from "@/components/common/Button/Button"
 import Modal from "@/components/common/Modal/Modal"
 import ModalContent from "@/components/common/Modal/ModalContent"
-import FinanceDepositDeleteModal from "../Modal/FinanceDepositDeleteModal"
+// import FinanceDepositDeleteModal from "../Modal/FinanceDepositDeleteModal"
+
+import FinanceDepositDeleteModal from "@/components/student/Finance/Deposit/Modal/FinanceDepositDeleteModal"
 import useCompHandler from "@/hooks/useCompHandler"
 import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import useNotification from "@/hooks/useNotification"
 import useNavigate from "@/hooks/useNavigate"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useRouter } from "next/router"
 
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -26,16 +32,30 @@ const APPLY_ICON = (
 )
 
 
-type DetailPageProps = {
-	data: getFinanceDepositRateType
-  refetch: Function
+type FinanceDepositDetailProps = {
+    data: myDepositType
 }
 
-function DetailPage({ data, refetch }: DetailPageProps) {
-	const [nation] = useGetNation()
+function FinanceDepositDetail({data}: FinanceDepositDetailProps) {
+    
+  const router = useRouter()
+    const { pid } = router.query
+
+
+
+
+    const [nation] = useGetNation()
   const [openComp, closeComp, compState] = useCompHandler()
   const noti = useNotification()
   const navigate = useNavigate()
+
+
+
+  const queryClient = useQueryClient()
+
+	const deleteFinanceDepositMutation = useMutation(({id}: {id: string}) =>
+    deleteFinanceDepositAPI({ id }),
+	)
 
   const getDateDiff = (d1: string, d2: null | string) => {
     const date1 = new Date(d1);
@@ -52,21 +72,55 @@ function DetailPage({ data, refetch }: DetailPageProps) {
     return Math.floor(Math.abs(diffDate / (1000 * 60 * 60 * 24))); // 밀리세컨 * 초 * 분 * 시 = 일
   }
 
-  const rangeDate = getDateDiff(data.myDeposit.endDate, data.myDeposit.startDate)
-  const restDate = getDateDiff(data.myDeposit.endDate, null)
+  const rangeDate = getDateDiff(data.endDate, data.startDate)
+  const restDate = getDateDiff(data.endDate, null)
 
 
   const submitHandler = () => {
-		deleteFinanceDepositAPI({}).then((res) => {
-			refetch()
-			noti({content: <NotiTemplate type={'ok'} content="예금 만기 수령을 했어요!" buttons={[{label: '내역 보기', function: () => {navigate('/student/home/asset', 'bottomToTop')}}]}/>, width: '300px', height: '120px', duration: 3000})
-			closeComp()
-		})
-		.catch((err) => {
-			console.log(err)
-			noti({content: <NotiTemplate type={'alert'} content="예금 만기 수령에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
-		})
-	}
+    deleteFinanceDepositMutation.mutate(
+			{ id: data.id },
+			{
+				onSuccess: () => {
+					noti({content: <NotiTemplate type={'ok'} content="예금 만기 수령을 했어요!" buttons={[{label: '내역 보기', function: () => {navigate('/student/home/asset', 'bottomToTop')}}]}/>, width: '300px', height: '120px', duration: 3000})
+					queryClient.invalidateQueries(["student", "homeFinanceGetRate"])
+          navigate('/student/finance/deposit', 'bottomToTop')
+					closeComp()
+				},
+				onError: () => {
+					noti({content: <NotiTemplate type={'alert'} content="예금 만기 수령에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
+				},
+			},
+		)
+  }
+
+  const cancelHandler = () => {
+    deleteFinanceDepositMutation.mutate(
+			{ id: data.id },
+			{
+				onSuccess: () => {
+					noti({content: <NotiTemplate type={'ok'} content="중도 해지를 했어요!"/>, width: '300px', height: '120px', duration: 3000})
+					queryClient.invalidateQueries(["student", "homeFinanceGetRate"])
+          navigate('/student/finance/deposit', 'bottomToTop')
+					closeComp()
+				},
+				onError: () => {
+					noti({content: <NotiTemplate type={'alert'} content="중도 해지에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
+				},
+			},
+		)
+  }
+
+  // const submitHandler = () => {
+	// 	deleteFinanceDepositAPI({}).then((res) => {
+	// 		// refetch()
+	// 		noti({content: <NotiTemplate type={'ok'} content="예금 만기 수령을 했어요!" buttons={[{label: '내역 보기', function: () => {navigate('/student/home/asset', 'bottomToTop')}}]}/>, width: '300px', height: '120px', duration: 3000})
+	// 		closeComp()
+	// 	})
+	// 	.catch((err) => {
+	// 		console.log(err)
+	// 		noti({content: <NotiTemplate type={'alert'} content="예금 만기 수령에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
+	// 	})
+	// }
 
 	return (
     <React.Fragment>
@@ -78,7 +132,7 @@ function DetailPage({ data, refetch }: DetailPageProps) {
 							title={"예금 중도 해지"}
 							titleSize={"var(--student-h1)"}
 							icon={APPLY_ICON}
-							content={<FinanceDepositDeleteModal refetch={refetch} closeComp={closeComp}/>}
+							content={<FinanceDepositDeleteModal cancelHandler={cancelHandler} closeComp={closeComp}/>}
 							forChild={true}
 						/>
 					}
@@ -92,10 +146,10 @@ function DetailPage({ data, refetch }: DetailPageProps) {
 <div css={wrapperCSS}>
 			<ContentWrapper>
 				<div css={lSizeFontCSS}>
-					{data.myDeposit.amount.toLocaleString('ko-KR')} {nation?.currency}
+					{data.amount.toLocaleString('ko-KR')} {nation?.currency}
 				</div>
 				<div css={diffLabelCSS}>
-					+{data.myDeposit.depositAmount.toLocaleString('ko-KR')} {nation?.currency}
+					+{data.depositAmount.toLocaleString('ko-KR')} {nation?.currency}
 				</div>
 			</ContentWrapper>
       <ContentWrapper>
@@ -105,7 +159,7 @@ function DetailPage({ data, refetch }: DetailPageProps) {
         예금 만기까지 <span css={css`font-weight: 700;`}>{restDate}일</span> 남았어요!
         </div>
         <div css={endDateCSS}>
-          {data.myDeposit.endDate}
+          {data.endDate}
         </div>
       </div>
       <div css={barWrapperCSS}>
@@ -119,17 +173,17 @@ function DetailPage({ data, refetch }: DetailPageProps) {
       상품 가입 시 신용등급
       </div>
       <div css={adContentCSS}>
-        {data.myDeposit.creditRating}등급
+        {data.creditRating}등급
       </div>
       <div css={adtitleCSS}>
       현재 상품의 이자율
       </div>
       <div css={adContentCSS}>
-        {data.myDeposit.interest}%
+        {data.interest}%
       </div>
       </ContentWrapper>
 
-      {data.myDeposit.startDate === data.myDeposit.endDate ?
+      {data.startDate === data.endDate ?
               <Button
 					text={"만기 수령"}
 					fontSize={`var(--student-h3)`}
@@ -167,6 +221,7 @@ const wrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	margin-bottom: 16px;
 `
 
 const lSizeFontCSS = css`
@@ -242,4 +297,4 @@ const barCSS = ({rangeDate, restDate}: {rangeDate: number; restDate: number}) =>
   `
 }
 
-export default DetailPage
+export default FinanceDepositDetail

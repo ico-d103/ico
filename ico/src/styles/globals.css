@@ -42,10 +42,12 @@
 
 	@media (min-width: 769px) {
 		--student-full-width: calc(100vw - var(--student-side-bar-width));
+		/* --student-full-width: 100%; */
 	}
 
 	@media (min-width: 1281px) {
 		--student-full-width: calc(100vw - var(--student-side-bar-width) - var(--student-side-bar-width));
+		/* --student-full-width: 100%; */
 	}
 	/* --student-gray-color: #00000099;
     --student-gray-color-2: #000000b3;

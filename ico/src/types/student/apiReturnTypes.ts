@@ -49,19 +49,44 @@ export type FinanceInvestIssueType = {
 	content: string
 }
 
-export type getFinanceDepositRateType = {
-	creditRating: number
-	shortPeriod: number
-	longPeriod: number
+// export type getFinanceDepositRateType = {
+// 	creditRating: number
+// 	shortPeriod: number
+// 	longPeriod: number
+// 	account: number
+// 	myDeposit: {
+// 		interest: number
+// 		startDate: string
+// 		endDate: string
+// 		creditRating: number
+// 		amount: number
+// 		depositAmount: number
+// 	}
+// }
+
+export type myDepositType = {
+	id: string
+	title: null | string,
+	interest: number,
+	startDate: string,
+	endDate: string,
+	creditRating: number,
+	amount: number,
+	depositAmount: number,
+	end: boolean
+}
+
+export type depositProductType = {
+	id: number,
+	title: string,
+	period: number,
+	interest: number
+}
+
+export type getFinanceDepositType = {
 	account: number
-	myDeposit: {
-		interest: number
-		startDate: string
-		endDate: string
-		creditRating: number
-		amount: number
-		depositAmount: number
-	}
+    myDeposit: myDepositType[]
+    depositProduct: depositProductType[]
 }
 
 export type getClassRuleType = {

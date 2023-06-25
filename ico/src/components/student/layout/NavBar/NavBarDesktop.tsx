@@ -133,7 +133,12 @@ function NavBarDesktop({ children, routes, navBarData }: NavBarProps) {
 			} */}
 			</div>
 
-			<div css={contentWrapperCSS({ selected })}>{children}</div>
+			<div css={contentWrapperCSS({ selected })}>
+
+				{children}
+				
+			
+			</div>
 
 			<div css={rightBarWrapperCSS({ selected })}>{data && <NavBarDesktopRightMenu data={data} />}</div>
 		</div>
@@ -151,10 +156,11 @@ const navBarParentCSS = () => {
 
 const contentWrapperCSS = ({ selected }: { selected: number }) => {
 	return css`
-		/* min-height: ${selected !== -2 && "calc(100vh - 64px)"}; */
+		min-height: ${selected !== -2 && "calc(100vh - 64px)"};
 		max-width: ${selected !== -2 && "var(--student-full-width)"};
 		margin-left: ${selected !== -2 && "var(--student-side-bar-width)"};
 		/* position: relative; */
+		/* display: flex; */
 	`
 }
 const navBarWrapperCSS = ({ selected }: { selected: number }) => {
@@ -177,7 +183,7 @@ const navBarWrapperCSS = ({ selected }: { selected: number }) => {
 
 const rightBarWrapperCSS = ({ selected }: { selected: number }) => {
 	return css`
-		height: 100%;
+		height: 100vh;
 		width: var(--student-side-bar-width);
 		/* background-color: #fff9e6; */
 		background-color: var(--student-main-color);

@@ -5,17 +5,27 @@ export function isEndWithConsonant(korStr: string) {
 	return finalConsonantCode !== 0
 }
 
-export function appendEulReul(value: string) {
+export function appendEulReul(value: string, noValue = false) {
     if (!value) {
         return
     }
-    return value + (isEndWithConsonant(value) ? "을" : "를")
+    if (noValue === true) {
+        return isEndWithConsonant(value) ? "을" : "를"
+    } else {
+        return value + (isEndWithConsonant(value) ? "을" : "를")
+    }
+    
 };
 
-export function appendEiGa(value: string) {
+export function appendEiGa(value: string, noValue = false) {
     if (!value) {
         return
     }
-    return value + (isEndWithConsonant(value) ? "이" : "가")
+    if (noValue === true) {
+        return isEndWithConsonant(value) ? "이" : "가"
+    } else {
+        return value + (isEndWithConsonant(value) ? "이" : "가")
+    }
+    // return value + (isEndWithConsonant(value) ? "이" : "가")
 };
 
