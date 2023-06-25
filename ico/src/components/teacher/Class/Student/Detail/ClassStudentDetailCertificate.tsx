@@ -66,8 +66,8 @@ function ClassStudentDetailCertificate({ license }: ClassStudentDetailCertificat
 			<div css={contentCSS}>
 				{mockList?.length ? (
 					<div css={listWrapperCSS}>
-						{mockList.map((mock) => (
-							<ClassStudentDetailCertificateItem key={mock.id} certificate={mock} />
+						{mockList.map((el) => (
+							<ClassStudentDetailCertificateItem key={el.id} certificate={el} />
 						))}
 					</div>
 				) : (
@@ -81,7 +81,7 @@ function ClassStudentDetailCertificate({ license }: ClassStudentDetailCertificat
 }
 
 const wrapperCSS = css`
-	width: 100%;
+	/* width: 100%; */
 	padding: 30px;
 	border: 1px solid #dde3ea;
 	background-color: var(--common-back-color-2);

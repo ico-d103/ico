@@ -26,6 +26,10 @@ const wrapper = css`
 		font-size: 1rem;
 		min-width: 130px;
 	}
+
+	> div {
+		width: 100%;
+	}
 `
 
 export default ClassStudentDetailCertificateItem
