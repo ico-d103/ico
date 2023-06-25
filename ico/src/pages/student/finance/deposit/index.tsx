@@ -41,37 +41,8 @@ function index() {
 			<PageHeader title={"예금"} />
 			{/* {data && data.myDeposit.interest === 0 && <GuidePage data={data} refetch={refetch} />}
 			{data && data.myDeposit.interest !== 0 && <DetailPage data={data} refetch={refetch} />} */}
-			{data?.depositProduct && <FinanceDepositList {...data} />}
-			{data === undefined ||
-				(data.depositProduct.length === 0 && (
-					<div
-						css={css`
-							display: flex;
-							justify-content: center;
-							flex: 1;
-
-							/* background-color: red; */
-						`}
-					>
-						<ContentWrapper
-							cssProps={css`
-								flex: 1;
-							`}
-						>
-							<div css={alertWrapperCSS}>
-								<div
-									css={css`
-										width: 128px;
-										height: 128px;
-									`}
-								>
-									{isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={128} />}
-								</div>
-								<div css={labelCSS}>은행이 아직 열리지 않았어요!</div>
-							</div>
-						</ContentWrapper>
-					</div>
-				))}
+			<FinanceDepositList data={data} isLoading={isLoading} />
+				
 		</div>
 	)
 }

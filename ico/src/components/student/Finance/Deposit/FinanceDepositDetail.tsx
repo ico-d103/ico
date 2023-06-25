@@ -16,7 +16,7 @@ import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepo
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import useNotification from "@/hooks/useNotification"
 import useNavigate from "@/hooks/useNavigate"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/router"
 
 const APPLY_ICON = (
@@ -49,6 +49,14 @@ function FinanceDepositDetail({data}: FinanceDepositDetailProps) {
   const noti = useNotification()
   const navigate = useNavigate()
 
+
+
+  const queryClient = useQueryClient()
+
+	const deleteFinanceDepositMutation = useMutation(({id}: {id: string}) =>
+    deleteFinanceDepositAPI({ id }),
+	)
+
   const getDateDiff = (d1: string, d2: null | string) => {
     const date1 = new Date(d1);
     let date2
@@ -69,20 +77,54 @@ function FinanceDepositDetail({data}: FinanceDepositDetailProps) {
 
 
   const submitHandler = () => {
-		deleteFinanceDepositAPI({}).then((res) => {
-			// refetch()
-			noti({content: <NotiTemplate type={'ok'} content="예금 만기 수령을 했어요!" buttons={[{label: '내역 보기', function: () => {navigate('/student/home/asset', 'bottomToTop')}}]}/>, width: '300px', height: '120px', duration: 3000})
-			closeComp()
-		})
-		.catch((err) => {
-			console.log(err)
-			noti({content: <NotiTemplate type={'alert'} content="예금 만기 수령에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
-		})
-	}
+    deleteFinanceDepositMutation.mutate(
+			{ id: data.id },
+			{
+				onSuccess: () => {
+					noti({content: <NotiTemplate type={'ok'} content="예금 만기 수령을 했어요!" buttons={[{label: '내역 보기', function: () => {navigate('/student/home/asset', 'bottomToTop')}}]}/>, width: '300px', height: '120px', duration: 3000})
+					queryClient.invalidateQueries(["student", "homeFinanceGetRate"])
+          navigate('/student/finance/deposit', 'bottomToTop')
+					closeComp()
+				},
+				onError: () => {
+					noti({content: <NotiTemplate type={'alert'} content="예금 만기 수령에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
+				},
+			},
+		)
+  }
+
+  const cancelHandler = () => {
+    deleteFinanceDepositMutation.mutate(
+			{ id: data.id },
+			{
+				onSuccess: () => {
+					noti({content: <NotiTemplate type={'ok'} content="중도 해지를 했어요!"/>, width: '300px', height: '120px', duration: 3000})
+					queryClient.invalidateQueries(["student", "homeFinanceGetRate"])
+          navigate('/student/finance/deposit', 'bottomToTop')
+					closeComp()
+				},
+				onError: () => {
+					noti({content: <NotiTemplate type={'alert'} content="중도 해지에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
+				},
+			},
+		)
+  }
+
+  // const submitHandler = () => {
+	// 	deleteFinanceDepositAPI({}).then((res) => {
+	// 		// refetch()
+	// 		noti({content: <NotiTemplate type={'ok'} content="예금 만기 수령을 했어요!" buttons={[{label: '내역 보기', function: () => {navigate('/student/home/asset', 'bottomToTop')}}]}/>, width: '300px', height: '120px', duration: 3000})
+	// 		closeComp()
+	// 	})
+	// 	.catch((err) => {
+	// 		console.log(err)
+	// 		noti({content: <NotiTemplate type={'alert'} content="예금 만기 수령에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
+	// 	})
+	// }
 
 	return (
     <React.Fragment>
-      {/* {data && (
+      {data && (
 				<Modal
 					content={
 						<ModalContent
@@ -90,7 +132,7 @@ function FinanceDepositDetail({data}: FinanceDepositDetailProps) {
 							title={"예금 중도 해지"}
 							titleSize={"var(--student-h1)"}
 							icon={APPLY_ICON}
-							content={<FinanceDepositDeleteModal refetch={refetch} closeComp={closeComp}/>}
+							content={<FinanceDepositDeleteModal cancelHandler={cancelHandler} closeComp={closeComp}/>}
 							forChild={true}
 						/>
 					}
@@ -99,7 +141,7 @@ function FinanceDepositDetail({data}: FinanceDepositDetailProps) {
 					transition={"scale"}
 				/>
 			
-			)} */}
+			)}
 
 <div css={wrapperCSS}>
 			<ContentWrapper>
@@ -179,6 +221,7 @@ const wrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	margin-bottom: 16px;
 `
 
 const lSizeFontCSS = css`
