@@ -18,6 +18,7 @@ function NavBar({children}: NavBarProps) {
 		"/student/home/coupon": 0,
 		"/student/home/exchequer": 0,
 		"/student/finance/deposit": 0,
+		"/student/finance/deposit/[pid]": 0,
 		"/student/finance/invest": 0,
 		"/student/class/students": 1,
 		"/student/class/jobsearch": 1,

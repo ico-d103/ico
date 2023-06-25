@@ -8,7 +8,6 @@ import FinanceDepositApplyModal from "./Modal/FinanceDepositApplyModal"
 import useCompHandler from "@/hooks/useCompHandler"
 import useGetNation from "@/hooks/useGetNation"
 
-
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
 		<path
@@ -22,13 +21,13 @@ const APPLY_ICON = (
 )
 
 type FinanceDepositListProductProps = {
-  data: depositProductType
-  account: number
+	data: depositProductType
+	account: number
 }
 
-function FinanceDepositListProduct({data, account}: FinanceDepositListProductProps) {
-  const [openComp, closeComp, compState] = useCompHandler()
-  const [nation] = useGetNation()
+function FinanceDepositListProduct({ data, account }: FinanceDepositListProductProps) {
+	const [openComp, closeComp, compState] = useCompHandler()
+	const [nation] = useGetNation()
 
 	return (
 		<React.Fragment>
@@ -45,7 +44,7 @@ function FinanceDepositListProduct({data, account}: FinanceDepositListProductPro
 									closeComp={closeComp}
 									unit={` ${nation?.currency}`}
 									data={data}
-                  account={account}
+									account={account}
 								/>
 							}
 							forChild={true}
@@ -59,9 +58,15 @@ function FinanceDepositListProduct({data, account}: FinanceDepositListProductPro
 
 			<div css={itemWrapperCSS}>
 				<div css={labelSectionCSS}>
-					<div css={titleCSS}>{data.title}</div>
+					<div css={titleSectionCSS}>
+						<div css={titleCSS}>{data.title}</div>
+            <div>
+              <span css={highlightFontCSS}>{data.period}일</span> 동안 예금
+            </div>
+						
+					</div>
+
 					<div>
-						<span css={highlightFontCSS}>{data.period}일</span>간 예금,{" "}
 						<span css={highlightFontCSS}>{data.interest}%</span> 이자를 얻을 수 있어요!
 					</div>
 					{/* <div>{props.period}일 </div> */}
@@ -71,7 +76,9 @@ function FinanceDepositListProduct({data, account}: FinanceDepositListProductPro
 					fontSize={"var(--student-h3)"}
 					width={"100px"}
 					theme={"mobileNormal"}
-					onClick={() => {openComp()}}
+					onClick={() => {
+						openComp()
+					}}
 				/>
 			</div>
 		</React.Fragment>
@@ -79,20 +86,21 @@ function FinanceDepositListProduct({data, account}: FinanceDepositListProductPro
 }
 
 const itemWrapperCSS = css`
-	width: 95%;
+	width: 100%;
 	padding: 16px;
-	background-color: white;
+	background-color: rgba(0, 0, 0, 0.05);
 	border-radius: 10px;
 	margin-top: 16px;
 
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	direction: ltr;
 `
 
 const titleCSS = css`
 	font-size: var(--student-h2);
-	font-weight: 700;
+	font-weight: 500;
 `
 
 const labelSectionCSS = css`
@@ -104,6 +112,12 @@ const labelSectionCSS = css`
 const highlightFontCSS = css`
 	font-weight: 600;
 	color: var(--student-main-color-5);
+`
+
+const titleSectionCSS = css`
+	display: flex;
+	align-items: center;
+	gap: 8px;
 `
 
 export default FinanceDepositListProduct

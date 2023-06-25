@@ -35,6 +35,7 @@ function index() {
 				flex: 1;
 				display: flex;
 				flex-direction: column;
+				margin-bottom: 16px;
 			`}
 		>
 			<PageHeader title={"예금"} />

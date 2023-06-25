@@ -65,6 +65,7 @@ export type FinanceInvestIssueType = {
 // }
 
 export type myDepositType = {
+	id: string
 	title: null | string,
 	interest: number,
 	startDate: string,

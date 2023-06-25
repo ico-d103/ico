@@ -7,6 +7,7 @@ import UseAnimations from "react-useanimations"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 const ALERT_ICON = (
 	<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -41,6 +42,11 @@ function FinanceDepositDeleteModal({closeComp, refetch }: FinanceDepositDeleteMo
 	const noti = useNotification()
 	const [value, setValue] = useState<number>(0)
 
+	// const queryClient = useQueryClient()
+
+	// const postFinanceDepositMutation = useMutation((body: { id: number; amount: number }) =>
+	// 	deleteFinanceDepositAPI({ body }),
+	// )
 
 
 	const submitHandler = () => {

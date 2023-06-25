@@ -2,17 +2,22 @@ import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWr
 import React from "react"
 import { css } from "@emotion/react"
 // import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
+import { getFinanceDepositDetailAPI } from "@/api/student/finance/getFinanceDepositDetailAPI"
 import { myDepositType } from "@/types/student/apiReturnTypes"
 import useGetNation from "@/hooks/useGetNation"
 import Button from "@/components/common/Button/Button"
 import Modal from "@/components/common/Modal/Modal"
 import ModalContent from "@/components/common/Modal/ModalContent"
-import FinanceDepositDeleteModal from "../Modal/FinanceDepositDeleteModal"
+// import FinanceDepositDeleteModal from "../Modal/FinanceDepositDeleteModal"
+
+import FinanceDepositDeleteModal from "@/components/student/Finance/Deposit/Modal/FinanceDepositDeleteModal"
 import useCompHandler from "@/hooks/useCompHandler"
 import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import useNotification from "@/hooks/useNotification"
 import useNavigate from "@/hooks/useNavigate"
+import { useQuery } from "@tanstack/react-query"
+import { useRouter } from "next/router"
 
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -27,13 +32,19 @@ const APPLY_ICON = (
 )
 
 
-type DetailPageProps = {
-	data: myDepositType
-
+type FinanceDepositDetailProps = {
+    data: myDepositType
 }
 
-function DetailPage({ data }: DetailPageProps) {
-	const [nation] = useGetNation()
+function FinanceDepositDetail({data}: FinanceDepositDetailProps) {
+    
+  const router = useRouter()
+    const { pid } = router.query
+
+
+
+
+    const [nation] = useGetNation()
   const [openComp, closeComp, compState] = useCompHandler()
   const noti = useNotification()
   const navigate = useNavigate()
@@ -57,17 +68,17 @@ function DetailPage({ data }: DetailPageProps) {
   const restDate = getDateDiff(data.endDate, null)
 
 
-  // const submitHandler = () => {
-	// 	deleteFinanceDepositAPI({}).then((res) => {
-	// 		refetch()
-	// 		noti({content: <NotiTemplate type={'ok'} content="예금 만기 수령을 했어요!" buttons={[{label: '내역 보기', function: () => {navigate('/student/home/asset', 'bottomToTop')}}]}/>, width: '300px', height: '120px', duration: 3000})
-	// 		closeComp()
-	// 	})
-	// 	.catch((err) => {
-	// 		console.log(err)
-	// 		noti({content: <NotiTemplate type={'alert'} content="예금 만기 수령에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
-	// 	})
-	// }
+  const submitHandler = () => {
+		deleteFinanceDepositAPI({}).then((res) => {
+			// refetch()
+			noti({content: <NotiTemplate type={'ok'} content="예금 만기 수령을 했어요!" buttons={[{label: '내역 보기', function: () => {navigate('/student/home/asset', 'bottomToTop')}}]}/>, width: '300px', height: '120px', duration: 3000})
+			closeComp()
+		})
+		.catch((err) => {
+			console.log(err)
+			noti({content: <NotiTemplate type={'alert'} content="예금 만기 수령에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
+		})
+	}
 
 	return (
     <React.Fragment>
@@ -138,7 +149,7 @@ function DetailPage({ data }: DetailPageProps) {
 					theme={"vividPositive"}
           margin={'24px 0px 0px 0px'}
 					onClick={() => {
-            // submitHandler()
+            submitHandler()
 						
 					}}
 				/>
@@ -243,4 +254,4 @@ const barCSS = ({rangeDate, restDate}: {rangeDate: number; restDate: number}) =>
   `
 }
 
-export default DetailPage
+export default FinanceDepositDetail

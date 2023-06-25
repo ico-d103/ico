@@ -16,32 +16,39 @@ function FinanceDepositList(props: getFinanceDepositType) {
 	return (
 		<div css={contentParentCSS}>
 			<div css={depositWrapperCSS}>
-				<div css={itemWrapperCSS}>{renderProduct}</div>
-				<div css={itemWrapperCSS}>{renderMyProduct}</div>
+                <div css={itemWrapperCSS}>
+                    <div css={titleLabelCSS}>내가 신청한 예금</div>
+                    {renderMyProduct}
+                </div>
+                <div css={lineCSS}/>
+				<div css={itemWrapperCSS}>
+                    <div css={titleLabelCSS}>예금 상품</div>
+                    {renderProduct}
+                </div>
 			</div>
 		</div>
 	)
 }
 
-const listWrapperCSS = css`
-	@media (max-width: 1024px) {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		width: 100%;
-	}
+// const listWrapperCSS = css`
+// 	@media (max-width: 1024px) {
+// 		display: flex;
+// 		flex-direction: column;
+// 		align-items: center;
+// 		width: 100%;
+// 	}
 
-	@media (min-width: 1025px) {
-		/* margin-left: 16px; */
-		min-width: 568px;
-		max-width: 1024px;
-		width: 60vw;
-		display: grid;
-		grid-template-columns: 50% 50%;
-		/* place-items: center; */
-		justify-items: center;
-	}
-`
+// 	@media (min-width: 1025px) {
+// 		/* margin-left: 16px; */
+// 		min-width: 568px;
+// 		max-width: 1024px;
+// 		width: 60vw;
+// 		display: grid;
+// 		grid-template-columns: 50% 50%;
+// 		/* place-items: center; */
+// 		justify-items: center;
+// 	}
+// `
 
 const contentParentCSS = css`
 	/* background-color: red; */
@@ -65,17 +72,49 @@ const depositWrapperCSS = css`
 		width: 60vw;
 		display: grid;
 		grid-template-columns: 50% 50%;
+        direction: rtl;
+        
 		/* place-items: center; */
 		justify-items: center;
 	}
 `
 
 const itemWrapperCSS = css`
-	width: 100%;
+	
 	/* background-color: red; */
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    padding: 16px;
+
+    width: 95%;
+    background-color: white;
+    border-radius: 10px;
+
+    
+
+`
+
+const lineCSS = css`
+  width: 95%;
+  height: 1px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 24px 0px 24px 0px;
+
+
+
+	@media (min-width: 1025px) {
+        display: none;
+	}
+`
+
+const titleLabelCSS = css`
+    width: 100%;
+    font-size: var(--student-h2);  
+    font-weight: 700;
+    direction: ltr; 
+
 `
 
 export default FinanceDepositList

@@ -4,6 +4,7 @@ import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 import useGetNation from "@/hooks/useGetNation"
 import { appendEulReul } from "@/util/isEndWithConsonant"
+import useNavigate from "@/hooks/useNavigate"
 
 type FinanceDepositListMyProductProps = {
 	data: myDepositType
@@ -11,6 +12,7 @@ type FinanceDepositListMyProductProps = {
 
 function FinanceDepositListMyProduct({ data }: FinanceDepositListMyProductProps) {
 	const [nation] = useGetNation()
+  const navigate = useNavigate()
 
 	const getDateDiff = (d1: string, d2: null | string) => {
 		const date1 = new Date(d1)
@@ -46,27 +48,28 @@ function FinanceDepositListMyProduct({ data }: FinanceDepositListMyProductProps)
 				fontSize={"var(--student-h3)"}
 				width={"100px"}
 				theme={"mobileNormal"}
-				onClick={() => {}}
+				onClick={() => {navigate(`/student/finance/deposit/${data.id}`, 'bottomToTop')}}
 			/>
 		</div>
 	)
 }
 
 const itemWrapperCSS = css`
-	width: 95%;
+	width: 100%;
 	padding: 16px;
-	background-color: white;
+	background-color: rgba(0, 0, 0, 0.05);
 	border-radius: 10px;
 	margin-top: 16px;
 
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+  direction: ltr;
 `
 
 const titleCSS = css`
 	font-size: var(--student-h2);
-	font-weight: 700;
+	font-weight: 500;
 `
 
 const labelSectionCSS = css`
