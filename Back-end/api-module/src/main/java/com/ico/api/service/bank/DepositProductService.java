@@ -1,9 +1,9 @@
 package com.ico.api.service.bank;
 
-import com.ico.api.dto.bank.DepositProductDetailResDto;
 import com.ico.api.dto.bank.DepositProductReqDto;
 import com.ico.api.dto.bank.DepositProductStudentResDto;
 import com.ico.api.dto.bank.DepositProductTeacherResDto;
+import com.ico.api.dto.bank.DepositStudentResDto;
 import com.ico.core.dto.DepositUpdatetDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +39,7 @@ public interface DepositProductService {
      * @param request
      * @return
      */
-    DepositProductDetailResDto getDepositDetail(HttpServletRequest request, Long depositProductId);
+    DepositStudentResDto getDepositDetail(HttpServletRequest request, String depositId);
 
     /**
      * 예금 상품 추가

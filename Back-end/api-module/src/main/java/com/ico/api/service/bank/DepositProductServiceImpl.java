@@ -1,7 +1,6 @@
 package com.ico.api.service.bank;
 
 
-import com.ico.api.dto.bank.DepositProductDetailResDto;
 import com.ico.api.dto.bank.DepositProductReqDto;
 import com.ico.api.dto.bank.DepositProductStudentColResDto;
 import com.ico.api.dto.bank.DepositProductStudentResDto;
@@ -98,6 +97,7 @@ public class DepositProductServiceImpl implements DepositProductService{
             DepositStudentResDto myDeposit = new DepositStudentResDto();
             boolean isEnd = !LocalDate.now().isBefore(deposit.getEndDate().toLocalDate());
             myDeposit = myDeposit.builder()
+                    .id(deposit.getId())
                     .title(deposit.getTitle())
                     .amount(deposit.getAmount())
                     .depositAmount(deposit.getAmount() * deposit.getInterest() / 100)
@@ -118,25 +118,28 @@ public class DepositProductServiceImpl implements DepositProductService{
     }
 
     @Override
-    public DepositProductDetailResDto getDepositDetail(HttpServletRequest request, Long depositProductId) {
-        String token = jwtTokenProvider.parseJwt(request);
-        Long nationId = jwtTokenProvider.getNation(token);
-        Long studentId = jwtTokenProvider.getId(token);
+    public DepositStudentResDto getDepositDetail(HttpServletRequest request, String depositId) {
+        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        Nation nation = nationRepository.findById(nationId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
-        DepositProduct depositProduct = depositProductRepository.findByIdAndNationId(depositProductId, nationId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DEPOSITPRODUCT));
+        Deposit deposit = depositMongoRepository.findByIdAndStudentId(depositId, studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DEPOSIT));
 
+        boolean isEnd = !LocalDate.now().isBefore(deposit.getEndDate().toLocalDate());
 
-        return DepositProductDetailResDto.builder()
-                .title(depositProduct.getTitle())
-                .period(depositProduct.getPeriod())
-                .interest(getMyInterest(student.getCreditRating(), depositProduct))
+        return DepositStudentResDto.builder()
+                .id(deposit.getId())
+                .title(deposit.getTitle())
+                .amount(deposit.getAmount())
+                .depositAmount(deposit.getAmount() * deposit.getInterest() / 100)
+                .interest(deposit.getInterest())
+                .startDate(deposit.getStartDate().format(Formatter.date))
+                .endDate(deposit.getEndDate().format(Formatter.date))
+                .creditRating(deposit.getCreditRating())
+                .end(isEnd)
                 .build();
     }
 

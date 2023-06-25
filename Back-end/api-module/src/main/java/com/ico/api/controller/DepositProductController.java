@@ -1,9 +1,9 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.bank.DepositProductDetailResDto;
 import com.ico.api.dto.bank.DepositProductStudentResDto;
 import com.ico.api.dto.bank.DepositProductTeacherResDto;
 import com.ico.api.dto.bank.DepositProductReqDto;
+import com.ico.api.dto.bank.DepositStudentResDto;
 import com.ico.api.service.bank.DepositProductService;
 import com.ico.core.dto.DepositUpdatetDto;
 import lombok.RequiredArgsConstructor;
@@ -56,14 +56,14 @@ public class DepositProductController {
     }
 
     /**
-     * 학생의 예금 상품 디테일 조회
+     * 학생의 예금 신청 디테일 조회
      *
      * @param request
      * @return
      */
-    @GetMapping("/student/{depositProductId}")
-    public ResponseEntity<DepositProductDetailResDto> getDepositDetail(HttpServletRequest request, @PathVariable Long depositProductId){
-        return ResponseEntity.ok(depositProductService.getDepositDetail(request, depositProductId));
+    @GetMapping("/student/{depositId}")
+    public ResponseEntity<DepositStudentResDto> getDepositDetail(HttpServletRequest request, @PathVariable String depositId){
+        return ResponseEntity.ok(depositProductService.getDepositDetail(request, depositId));
     }
 
     /**
