@@ -107,7 +107,7 @@ public class DepositServiceImpl implements DepositService{
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        // 예금 신청 내역 확인
+        // 예금 신청 내역 확인 (학생 본인 확인 포함)
         Deposit deposit = depositMongoRepository.findByIdAndStudentId(depositId, studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DEPOSIT));
 
