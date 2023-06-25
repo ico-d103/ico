@@ -1,5 +1,6 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.bank.DepositProductDetailResDto;
 import com.ico.api.dto.bank.DepositProductStudentResDto;
 import com.ico.api.dto.bank.DepositProductTeacherResDto;
 import com.ico.api.dto.bank.DepositProductReqDto;
@@ -54,6 +55,16 @@ public class DepositProductController {
         return ResponseEntity.ok(depositProductService.findAllDepositStudent(request));
     }
 
+    /**
+     * 학생의 예금 상품 디테일 조회
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping("/student/{depositProductId}")
+    public ResponseEntity<DepositProductDetailResDto> getDepositDetail(HttpServletRequest request, @PathVariable Long depositProductId){
+        return ResponseEntity.ok(depositProductService.getDepositDetail(request, depositProductId));
+    }
 
     /**
      * 예금 상품 추가

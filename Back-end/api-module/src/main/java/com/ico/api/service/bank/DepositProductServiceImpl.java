@@ -1,6 +1,7 @@
 package com.ico.api.service.bank;
 
 
+import com.ico.api.dto.bank.DepositProductDetailResDto;
 import com.ico.api.dto.bank.DepositProductReqDto;
 import com.ico.api.dto.bank.DepositProductStudentColResDto;
 import com.ico.api.dto.bank.DepositProductStudentResDto;
@@ -114,6 +115,29 @@ public class DepositProductServiceImpl implements DepositProductService{
         dto.setDepositProduct(depositList);
         dto.setMyDeposit(myDepositListReturn);
         return dto;
+    }
+
+    @Override
+    public DepositProductDetailResDto getDepositDetail(HttpServletRequest request, Long depositProductId) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        DepositProduct depositProduct = depositProductRepository.findByIdAndNationId(depositProductId, nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DEPOSITPRODUCT));
+
+
+        return DepositProductDetailResDto.builder()
+                .title(depositProduct.getTitle())
+                .period(depositProduct.getPeriod())
+                .interest(getMyInterest(student.getCreditRating(), depositProduct))
+                .build();
     }
 
     @Override

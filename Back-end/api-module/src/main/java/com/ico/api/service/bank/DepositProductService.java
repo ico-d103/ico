@@ -1,5 +1,6 @@
 package com.ico.api.service.bank;
 
+import com.ico.api.dto.bank.DepositProductDetailResDto;
 import com.ico.api.dto.bank.DepositProductReqDto;
 import com.ico.api.dto.bank.DepositProductStudentResDto;
 import com.ico.api.dto.bank.DepositProductTeacherResDto;
@@ -31,6 +32,14 @@ public interface DepositProductService {
      * @return
      */
     DepositProductStudentResDto findAllDepositStudent(HttpServletRequest request);
+
+    /**
+     * 학생의 예금 상품 디테일 조회
+     *
+     * @param request
+     * @return
+     */
+    DepositProductDetailResDto getDepositDetail(HttpServletRequest request, Long depositProductId);
 
     /**
      * 예금 상품 추가
