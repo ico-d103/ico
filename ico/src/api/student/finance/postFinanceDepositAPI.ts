@@ -2,7 +2,7 @@ import { defaultInstance, tokenInstance } from "@/api/instance"
 import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
-	body: { longPeriod: boolean; amount: number }
+	body: { id: number; amount: number }
 }
 
 type responseType = {

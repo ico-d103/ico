@@ -2,12 +2,15 @@ import React, { useState } from "react"
 import Input from "@/components/common/Input/Input"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
-import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
+// import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
+import { depositProductType } from "@/types/student/apiReturnTypes"
 import { postFinanceDepositAPI } from "@/api/student/finance/postFinanceDepositAPI"
 import useNotification from "@/hooks/useNotification"
 import UseAnimations from "react-useanimations"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import useGetNation from "@/hooks/useGetNation"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 const ALERT_ICON = (
 	<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,46 +37,52 @@ const CHECK_ICON = (
 )
 
 type FinanceDepositApplyModalProps = {
-	term: 0 | 1
-	data: getFinanceDepositRateType
+	data: depositProductType
 	unit: string
 	closeComp: Function
-	refetch: Function
+	account: number
 }
 
-function FinanceDepositApplyModal({ term, data, unit, closeComp, refetch }: FinanceDepositApplyModalProps) {
+function FinanceDepositApplyModal({ data, unit, closeComp, account }: FinanceDepositApplyModalProps) {
 	const noti = useNotification()
 	const [value, setValue] = useState<number>(0)
+	const [nation] = useGetNation()
+	const queryClient = useQueryClient()
+
+	const postFinanceDepositMutation = useMutation((body: { id: number; amount: number }) =>
+		postFinanceDepositAPI({ body }),
+	)
+
+	const submitHandler = () => {
+		postFinanceDepositMutation.mutate(
+			{ id: data.id, amount: value },
+			{
+				onSuccess: () => {
+					noti({
+						content: <NotiTemplate type={"ok"} content="예금 신청에 성공했어요!" />,
+						duration: 3000,
+					})
+
+					queryClient.invalidateQueries(["student", "homeFinanceGetRate"])
+					closeComp()
+				},
+				onError: () => {
+					noti({
+						content: <NotiTemplate type={"alert"} content="예금 신청에 실패했어요!" />,
+						duration: 3000,
+					})
+				},
+			},
+		)
+	}
 
 	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (Number(e.target.value) <= data.account) {
+		if (Number(e.target.value) <= account) {
 			setValue(() => Number(e.target.value))
 		}
 	}
 
-	const submitHandler = () => {
-		postFinanceDepositAPI({ body: { longPeriod: term === 1 ? true : false, amount: value } })
-			.then((res) => {
-				refetch()
-				noti({
-					content: <NotiTemplate type={"ok"} content="예금 신청에 성공했어요!" />,
-					width: "300px",
-					height: "120px",
-					duration: 3000,
-				})
-				closeComp()
-			})
-			.catch((err) => {
-				console.log(err)
 
-				noti({
-					content: <NotiTemplate type={"alert"} content="예금 신청에 실패했어요!" />,
-					width: "300px",
-					height: "120px",
-					duration: 3000,
-				})
-			})
-	}
 	return (
 		<div css={wrapperCSS}>
 			<div css={grayLabelCSS}>원하는 액수를 입력해 주세요!</div>
@@ -84,7 +93,7 @@ function FinanceDepositApplyModal({ term, data, unit, closeComp, refetch }: Fina
 				textAlign={"right"}
 				rightContent={
 					<div css={balanceLabelCSS}>
-						/ {data.account.toLocaleString('ko-KR')} {unit}
+						/ {account.toLocaleString("ko-KR")} {unit}
 					</div>
 				}
 				customCss={inputCSS}
@@ -98,7 +107,7 @@ function FinanceDepositApplyModal({ term, data, unit, closeComp, refetch }: Fina
 				<div css={iconWrapperCSS}>{CHECK_ICON}</div>
 
 				<span css={mentCSS}>
-					만기가 되면 원금의 {term === 0 ? data.shortPeriod : data.longPeriod}퍼센트 만큼 추가로 더 돌려받을 수 있어요!
+					만기가 되면 원금의 {data.interest}퍼센트 만큼 추가로 더 돌려받을 수 있어요!
 				</span>
 			</div>
 

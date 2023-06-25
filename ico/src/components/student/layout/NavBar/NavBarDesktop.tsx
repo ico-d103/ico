@@ -133,9 +133,14 @@ function NavBarDesktop({ children, routes, navBarData }: NavBarProps) {
 			} */}
 			</div>
 
-			<div css={contentWrapperCSS({ selected })}>{children}</div>
-
+			<div css={contentWrapperCSS({ selected })}>
+				<div css={css`flex: 1; position: relative;`}>
+				{children}
+					</div>
 			<div css={rightBarWrapperCSS({ selected })}>{data && <NavBarDesktopRightMenu data={data} />}</div>
+			</div>
+
+			
 		</div>
 	)
 }
@@ -152,9 +157,10 @@ const navBarParentCSS = () => {
 const contentWrapperCSS = ({ selected }: { selected: number }) => {
 	return css`
 		/* min-height: ${selected !== -2 && "calc(100vh - 64px)"}; */
-		max-width: ${selected !== -2 && "var(--student-full-width)"};
+		/* max-width: ${selected !== -2 && "var(--student-full-width)"}; */
 		margin-left: ${selected !== -2 && "var(--student-side-bar-width)"};
 		/* position: relative; */
+		display: flex;
 	`
 }
 const navBarWrapperCSS = ({ selected }: { selected: number }) => {
@@ -177,19 +183,19 @@ const navBarWrapperCSS = ({ selected }: { selected: number }) => {
 
 const rightBarWrapperCSS = ({ selected }: { selected: number }) => {
 	return css`
-		height: 100%;
+		height: 100vh;
 		width: var(--student-side-bar-width);
 		/* background-color: #fff9e6; */
 		background-color: var(--student-main-color);
 		/* backdrop-filter: blur(30px); */
 		/* box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1); */
 		border-left: 1px solid rgba(0, 0, 0, 0.1);
-		position: fixed;
+		/* position: fixed; */
 		right: 0;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		z-index: 99999;
+		/* z-index: 99999; */
 		display: ${selected === -2 && "none"};
 
 		@media (max-width: 1280px) {

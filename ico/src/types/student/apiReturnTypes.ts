@@ -83,6 +83,7 @@ export type depositProductType = {
 }
 
 export type getFinanceDepositType = {
+	account: number
     myDeposit: myDepositType[]
     depositProduct: depositProductType[]
 }
