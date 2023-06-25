@@ -17,18 +17,28 @@ export default function Home() {
 					<div css={subLabelCSS}>함께 성장하는 우리 교실의 작은 경제를 체험해 보세요!</div>
 					<div css={lineCSS} />
 					<div css={buttonWrapperCSS}>
-						
+						<Button
+							theme={"cancelLight"}
+							width={"240px"}
+							height={"84px"}
+							text={"학생 회원가입"}
+							fontSize={"var(--teacher-h2)"}
+							onClick={() => {
+								router.push("/student/signup")
+							}}
+						></Button>
+						{!isMobile && (
 							<Button
 								theme={"highlighted"}
 								width={"240px"}
 								height={"84px"}
-								text={"로그인"}
+								text={"교사 회원가입"}
 								fontSize={"var(--teacher-h2)"}
 								onClick={() => {
-									router.push("/login")
+									router.push("/teacher/signup")
 								}}
 							></Button>
-					
+						)}
 					</div>
 					<img
 						src={"/assets/guide/14.jpg"}
@@ -59,7 +69,7 @@ const scene1CSS = css`
 		width: 100vw;
 		height: 100vh;
 		background-image: url(graphic-to-be-filtered.jpg);
-		background-image: url("/assets/guide/background4.jpg");
+		background-image: url("/assets/signup/illust2.png");
 		background-size: cover;
 		filter: brightness(50%);
 	}

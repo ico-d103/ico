@@ -5,7 +5,7 @@ import useNavigate from '@/hooks/useNavigate'
 import useGetTokenStatus from '@/hooks/useGetTokenStatus'
 import { getHomeMyInfoType } from '@/types/student/apiReturnTypes'
 import LoadImage from '@/components/common/LoadImage/LoadImage'
-import NavBarRightMenu from '../../layout/NavBar/NavBarRightMenu'
+import NavBarDesktopRightMenu from '../../layout/NavBar/NavBarDesktopRightMenu'
 
 function SideMenu({closeComp, data}: {closeComp?: Function; data: getHomeMyInfoType}) {
     const navigate = useNavigate()
@@ -57,7 +57,7 @@ function SideMenu({closeComp, data}: {closeComp?: Function; data: getHomeMyInfoT
             <div>
                 {renderMenu}
             </div> */}
-            <NavBarRightMenu data={data}/>
+            <NavBarDesktopRightMenu data={data}/>
             
         </div>
     </div>

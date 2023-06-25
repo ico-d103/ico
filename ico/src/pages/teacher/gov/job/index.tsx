@@ -1,33 +1,189 @@
-import React from "react"
+import React, { useMemo } from "react"
 import Modal from "@/components/common/Modal/Modal"
 import useCompHandler from "@/hooks/useCompHandler"
 import Button from "@/components/common/Button/Button"
 import AnimatedRenderer from "@/components/common/AnimatedRenderer/AnimatedRenderer"
 import { css } from "@emotion/react"
-
 import FormCreator from "@/components/teacher/common/Form/FormCreator"
-import GovJobDetail from "@/components/teacher/Gov/Job/GovJobDetail"
-import GovJobCreate from "@/components/teacher/Gov/Job/GovJobCreate"
-import GovJobCardCreate from "@/components/teacher/Gov/Job/GovJobCardCreate"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getGovJobAPI } from "@/api/teacher/gov/getGovJobAPI"
 import { getGovJobType } from "@/types/teacher/apiReturnTypes"
-
+import GovJobItem from "@/components/teacher/Gov/Job/GovJobItem"
+import useGetNation from "@/hooks/useGetNation"
 
 function index() {
 	const [openComp, closeComp, compState] = useCompHandler()
+	const [nation] = useGetNation()
 
 	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getGovJobType[]>(
 		["teacher", "govJob"],
 		getGovJobAPI,
 		// { staleTime: 200000 },
 	)
-	
-	const renderJobList = data?.map((el, idx) => {
-		return (
-			<GovJobDetail actualIdx={el.id} job={el.title} description={el.detail} wage={el.wage} credit={el.creditRating} backgroundColor={el.color} imgUrl={el.image} total={el.total} count={el.count}/>
-		)
-	})
+
+	const dummyStatus: {
+		id: number
+		status: string
+		subject: string
+	} = {
+		id: 1,
+		status: "credit",
+		subject: "신용등급 관리",
+	}
+
+	const dummyStatusList: {
+		id: number
+		status: string
+		subject: string
+	}[] = [
+		{
+			id: 1,
+			status: "credit",
+			subject: "신용등급 관리",
+		},
+		{
+			id: 2,
+			status: "trade",
+			subject: "상점 재고 관리",
+		},
+	]
+
+	const dummyCert: { id: number; subject: string; rating: number }[] = [
+		{
+			id: 840,
+			subject: "수학",
+			rating: -1,
+		},
+		{
+			id: 841,
+			subject: "과학",
+			rating: -1,
+		},
+		{
+			id: 842,
+			subject: "사회",
+			rating: -1,
+		},
+		{
+			id: 843,
+			subject: "독서",
+			rating: -1,
+		},
+		{
+			id: 844,
+			subject: "바른 글씨",
+			rating: -1,
+		},
+		{
+			id: 845,
+			subject: "정리 정돈",
+			rating: -1,
+		},
+		{
+			id: 846,
+			subject: "체력",
+			rating: -1,
+		},
+		{
+			id: 847,
+			subject: "디자인",
+			rating: -1,
+		},
+		{
+			id: 848,
+			subject: "저축",
+			rating: -1,
+		},
+		{
+			id: 849,
+			subject: "운전면허",
+			rating: -1,
+		},
+	]
+
+	const dummyCertList: { id: number; subject: string; rating: number }[] = [
+		{
+			id: 840,
+			subject: "수학",
+			rating: 2,
+		},
+		{
+			id: 841,
+			subject: "과학",
+			rating: 3,
+		},
+		{
+			id: 842,
+			subject: "사회",
+			rating: -1,
+		},
+		{
+			id: 843,
+			subject: "독서",
+			rating: -1,
+		},
+		{
+			id: 844,
+			subject: "바른 글씨",
+			rating: -1,
+		},
+		{
+			id: 845,
+			subject: "정리 정돈",
+			rating: -1,
+		},
+		{
+			id: 846,
+			subject: "체력",
+			rating: -1,
+		},
+		{
+			id: 847,
+			subject: "디자인",
+			rating: -1,
+		},
+		{
+			id: 848,
+			subject: "저축",
+			rating: -1,
+		},
+		{
+			id: 849,
+			subject: "운전면허",
+			rating: -1,
+		},
+	]
+
+	const renderJobList = useMemo(
+		() =>
+			data?.map((el, idx) => {
+				return (
+					<div
+						key={`${el.title}-${el.id}`}
+						css={css`
+							border-bottom: ${data.length - 1 > idx && "1px solid rgba(0, 0, 0, 0.1)"};
+						`}
+					>
+						<GovJobItem
+							idx={el.id}
+							title={el.title}
+							detail={el.detail}
+							wage={el.wage}
+							creditRating={el.creditRating}
+							color={el.color}
+							image={el.image}
+							total={el.total}
+							count={el.count}
+							currency={nation.currency}
+							certification={dummyCertList}
+							roleStatus={dummyStatus}
+							roleStatusList={dummyStatusList}
+						/>
+					</div>
+				)
+			}),
+		[data],
+	)
 
 	return (
 		<div css={contentWrapperCSS}>
@@ -46,21 +202,29 @@ function index() {
 				)}
 			</div>
 			<div css={descCSS}>학급의 직업 목록을 관리할 수 있습니다.</div>
+			<AnimatedRenderer compState={compState} initHeight="0">
+				<div css={createWrapperCSS({ compState })}>
+					<GovJobItem roleStatusList={dummyStatusList} certification={dummyCert} closeHandler={closeComp} />
+				</div>
+			</AnimatedRenderer>
 
-			<FormCreator subComp={<GovJobCreate />} frontComp={<GovJobCardCreate />} showIdx={0} compState={compState} closeComp={closeComp} mainInit={{title: '', content: ''}} subInit={{wage: '0', backgroundColor: '#FF165C', imgUrl: '/assets/job/worker_male.png', credit: '0' }} />
-			{/* <GovJobDetail job={'소방관'} description={'교실 내 소화기를 주기적으로 관리하는 직업'} wage={10000} credit={3} backgroundColor={'#FF165C'} imgUrl={'/assets/job/firefighter.png'} total={30} count={21}/>
-			<GovJobDetail job={'기상 캐스터'} description={'학생들의 의견을 수렴하여 에어컨/히터의 온도를 조절하고 다음날 날씨를 알려주는 직업'} wage={12000} credit={4} backgroundColor={'#4A87FF'} imgUrl={'/assets/job/weather_caster.png'} total={3} count={1}/> */}
-			{renderJobList}
+			<div
+				css={css`
+					border: 1px solid rgba(0, 0, 0, 0.1);
+					border-radius: 10px;
+				`}
+			>
+				{renderJobList}
+			</div>
 		</div>
 	)
 }
 
 export async function getServerSideProps() {
 	return {
-	  props: {},
-	};
-  }
-
+		props: {},
+	}
+}
 
 const contentWrapperCSS = css`
 	flex: 1;
@@ -82,5 +246,14 @@ const descCSS = css`
 	margin-bottom: 36px;
 	font-size: var(--teacher-h5);
 `
+
+const createWrapperCSS = ({ compState }: { compState: boolean }) => {
+	return css`
+		padding: 4px;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		border-radius: 10px;
+		margin-bottom: 16px;
+	`
+}
 
 export default index
