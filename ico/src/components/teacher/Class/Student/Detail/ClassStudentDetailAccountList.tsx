@@ -15,31 +15,33 @@ function ClassStudentDetailAccountList({ transactions, size }: ClassStudentDetai
 		<div css={wrapperCSS}>
 			<div css={listWrapperCSS}>
 				<h4>거래 내역</h4>
-				{transactions && Object.keys(transactions).length > 0 ? (
-					Object.keys(transactions).map((date) => {
-						const transactionList = transactions[date]
+				<div css={contentCSS}>
+					{transactions && Object.keys(transactions).length > 0 ? (
+						Object.keys(transactions).map((date) => {
+							const transactionList = transactions[date]
 
-						const result = transactionList.map((transaction, index) => {
-							const showDate = date !== prevDate
-							prevDate = date
+							const result = transactionList.map((transaction, index) => {
+								const showDate = date !== prevDate
+								prevDate = date
 
-							return (
-								<ClassStudentDetailAccountListItem
-									key={index}
-									date={date}
-									transaction={transaction}
-									showDate={showDate}
-								/>
-							)
+								return (
+									<ClassStudentDetailAccountListItem
+										key={index}
+										date={date}
+										transaction={transaction}
+										showDate={showDate}
+									/>
+								)
+							})
+
+							return result
 						})
-
-						return result
-					})
-				) : (
-					<div css={noneListWrapperCSS}>
-						<h5>거래 내역이 없습니다.</h5>
-					</div>
-				)}
+					) : (
+						<div css={noneListWrapperCSS}>
+							<h5>거래 내역이 없습니다.</h5>
+						</div>
+					)}
+				</div>
 			</div>
 			{transactions && Object.keys(transactions).length > 0 && (
 				<Pagination size={size ? size : 1} margin={"0 0 0 0"} buttonSize={"30px"} />
@@ -54,6 +56,11 @@ const wrapperCSS = css`
 	min-height: 300px;
 `
 
+const contentCSS = css`
+	height: 200px;
+	overflow-y: scroll;
+`
+
 const listWrapperCSS = css`
 	width: 100%;
 	padding: 30px;
@@ -61,6 +68,7 @@ const listWrapperCSS = css`
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
 	margin-bottom: 30px;
+	min-height: 300px;
 
 	> h4 {
 		font-size: var(--teacher-h4);
