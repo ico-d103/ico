@@ -235,9 +235,9 @@ public class StudentServiceImpl implements StudentService{
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         int depositAmount = 0;
-        Optional<Deposit> deposit = depositMongoRepository.findByStudentId(studentId);
-        if (deposit.isPresent()) {
-            depositAmount = deposit.get().getAmount();
+        List<Deposit> depositList = depositMongoRepository.findAllByStudentId(studentId);
+        for (Deposit deposit : depositList) {
+            depositAmount += deposit.getAmount();
         }
 
         int investAmount = 0;
