@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -100,18 +101,18 @@ public class DepositServiceImpl implements DepositService{
      */
     @Transactional
     @Override
-    public void deleteDeposit(HttpServletRequest request) {
+    public void deleteDeposit(HttpServletRequest request, String depositId) {
         Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 예금 신청 내역 확인
-        Deposit deposit = depositMongoRepository.findByStudentId(studentId)
+        Deposit deposit = depositMongoRepository.findByIdAndStudentId(depositId, studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DEPOSIT));
 
         // 오늘 날짜
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
 
         //입금 금액
         int inputAmount = deposit.getAmount();
@@ -120,7 +121,7 @@ public class DepositServiceImpl implements DepositService{
 
         // 중도 해지
 //        if(now.toLocalDate().isBefore(deposit.getEndDate().toLocalDate())){
-        if(now.isBefore(deposit.getEndDate())){
+        if(now.isBefore(deposit.getEndDate().toLocalDate())){
             title = "예금 중도 해지";
         }
         else{
