@@ -48,6 +48,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 
 /**
@@ -60,7 +62,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class StudentServiceImpl implements StudentService{
+public class StudentServiceImpl implements StudentService {
     private final NationRepository nationRepository;
 
     private final StudentRepository studentRepository;
@@ -118,10 +120,10 @@ public class StudentServiceImpl implements StudentService{
      * 학생 계좌 잔액 수정
      *
      * @param student 학생 객체
-     * @param amount 지급/차감할 금액
+     * @param amount  지급/차감할 금액
      */
-    private void updateAccount(Student student, int amount){
-        if(student.getAccount() + amount < 0){
+    private void updateAccount(Student student, int amount) {
+        if (student.getAccount() + amount < 0) {
             throw new CustomException(ErrorCode.LOW_BALANCE);
         }
         student.setAccount(student.getAccount() + amount);
@@ -130,12 +132,12 @@ public class StudentServiceImpl implements StudentService{
     /**
      * 선생님이 임의로 돈 지급/차감
      *
-     * @param id 학생 아이디
+     * @param id         학생 아이디
      * @param accountDto 학생
      */
     @Transactional
     @Override
-    public void teacherUpdateAccount(Long id, AccountDto accountDto){
+    public void teacherUpdateAccount(Long id, AccountDto accountDto) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         int amount = accountDto.getAmount();
@@ -144,10 +146,9 @@ public class StudentServiceImpl implements StudentService{
         updateAccount(student, amount);
 
         // 거래 내역 등록
-        if(amount < 0){
+        if (amount < 0) {
             transactionService.addTransactionWithdraw("선생님", id, amount, accountDto.getTitle());
-        }
-        else{
+        } else {
             transactionService.addTransactionDeposit(id, "선생님", amount, accountDto.getTitle());
         }
 
@@ -217,8 +218,8 @@ public class StudentServiceImpl implements StudentService{
 
             map.putIfAbsent(date, new ArrayList<>());
             map.get(date).add(TransactionColDto.builder()
-                            .title(transaction.getTitle())
-                            .amount(Formatter.number.format(amount))
+                    .title(transaction.getTitle())
+                    .amount(Formatter.number.format(amount))
                     .build());
         }
         // 학생의 자격증 목록 조회
@@ -234,22 +235,43 @@ public class StudentServiceImpl implements StudentService{
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        int depositAmount = 0;
-        List<Deposit> depositList = depositMongoRepository.findAllByStudentId(studentId);
-        for (Deposit deposit : depositList) {
-            depositAmount += deposit.getAmount();
-        }
+        CompletableFuture<Integer> futureAmount = CompletableFuture.supplyAsync(() -> {
+            int amount = 0;
+            List<Deposit> depositList = depositMongoRepository.findAllByStudentId(studentId);
+            for (Deposit deposit : depositList) {
+                amount += deposit.getAmount();
+            }
+            return amount;
+        });
+        CompletableFuture<Integer> futureInvest = CompletableFuture.supplyAsync(() -> {
+            int amount = 0;
+            Optional<Invest> invest = investRepository.findByStudentId(studentId);
+            if (invest.isPresent()) {
+                amount = invest.get().getAmount();
+            }
+            return amount;
+        });
+        CompletableFuture<String> futureImgUri = CompletableFuture.supplyAsync(() -> {
+            String imgUrl = null;
+            StudentJob job;
+            if ((job = student.getStudentJob()) != null) {
+                imgUrl = s3UploadService.getFileURL(job.getImage());
+            }
+            return imgUrl;
+        });
+        CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(futureAmount, futureInvest, futureImgUri);
 
-        int investAmount = 0;
-        Optional<Invest> invest = investRepository.findByStudentId(studentId);
-        if (invest.isPresent()) {
-            investAmount = invest.get().getAmount();
-        }
+        int depositAmount;
+        int investAmount;
+        String imgUrl;
 
-        String imgUrl = null;
-        StudentJob job;
-        if ((job = student.getStudentJob()) != null) {
-            imgUrl = s3UploadService.getFileURL(job.getImage());
+        try {
+            combinedFuture.join();
+            depositAmount = futureAmount.join();
+            investAmount = futureInvest.join();
+            imgUrl = futureImgUri.join();
+        } catch (CompletionException e) {
+            throw new RuntimeException(e.getCause());
         }
 
         return new StudentMyPageResDto().of(student, student.getNation(), student.getStudentJob(), depositAmount, investAmount, imgUrl);
@@ -269,7 +291,7 @@ public class StudentServiceImpl implements StudentService{
         if (dto.getType()) {
             student.setCreditScore(getTotalCreditScore(student.getCreditScore(), nation.getCredit_up()));
         } else {
-            student.setCreditScore(getTotalCreditScore(student.getCreditScore(),  -1 * nation.getCredit_down()));
+            student.setCreditScore(getTotalCreditScore(student.getCreditScore(), -1 * nation.getCredit_down()));
         }
 
         // 신용점수에 맞는 신용등급 부여
@@ -345,7 +367,7 @@ public class StudentServiceImpl implements StudentService{
             if (dto.getType()) {
                 student.setCreditScore(getTotalCreditScore(student.getCreditScore(), nation.getCredit_up()));
             } else {
-                student.setCreditScore(getTotalCreditScore(student.getCreditScore(),  -1 * nation.getCredit_down()));
+                student.setCreditScore(getTotalCreditScore(student.getCreditScore(), -1 * nation.getCredit_down()));
             }
 
             // 신용점수에 맞는 신용등급 부여
