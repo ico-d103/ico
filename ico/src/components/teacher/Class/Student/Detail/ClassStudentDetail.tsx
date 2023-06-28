@@ -4,7 +4,7 @@ import { useAtomValue } from "jotai"
 import { selectedPage, selectedStudent } from "@/store/store"
 import { getStudentDetailAPI } from "@/api/teacher/class/getStudentDetailAPI"
 import { getStudentDetailType } from "@/types/teacher/apiReturnTypes"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import ClassStudentDetailCertificate from "./ClassStudentDetailCertificate"
 import Button from "@/components/common/Button/Button"
 import { putReleaseAccountAPI } from "@/api/teacher/class/putReleaseAccountAPI"
@@ -26,38 +26,62 @@ function ClassStudentDetail() {
 		() => getStudentDetailAPI({ id: selectedStudentAtom, page: selectedPageAtom }),
 		// { enabled: false },
 	)
+	const queryClient = useQueryClient()
+	const putReleaseAccountMutation = useMutation((params: { studentId: number }) => putReleaseAccountAPI(params))
+	const putSuspendAccountMutation = useMutation((params: { studentId: number }) => putSuspendAccountAPI(params))
+
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [newPW, setNewPW] = useState<string>("")
 
 	const preventStudentAccountHandler = () => {
 		if (data?.frozen === true) {
-			putReleaseAccountAPI({ studentId: data.studentId })
-				.then(() => {
-					noti({
-						content: <NotiTemplate type={"ok"} content={`${data?.studentName}의 계좌 정지를 해제하였습니다.`} />,
-						duration: 3000,
-					})
-				})
-				.catch(() => {
-					noti({
-						content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
-						duration: 3000,
-					})
-				})
+			const result = confirm(`${data?.studentName} 학생의 계좌정지를 해제하시겠습니까?`)
+
+			if (result) {
+				putReleaseAccountMutation.mutate(
+					{ studentId: data.studentId },
+					{
+						onSuccess: () => {
+							noti({
+								content: <NotiTemplate type={"ok"} content={`${data?.studentName}의 계좌 정지를 해제하였습니다.`} />,
+								duration: 3000,
+							})
+
+							queryClient.invalidateQueries(["enteredStudentDetail", selectedStudentAtom])
+						},
+						onError: () => [
+							noti({
+								content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+								duration: 3000,
+							}),
+						],
+					},
+				)
+			}
 		} else if (data?.frozen === false) {
-			putSuspendAccountAPI({ studentId: data.studentId })
-				.then(() => {
-					noti({
-						content: <NotiTemplate type={"ok"} content={`${data?.studentName}의 계좌를 정지하였습니다.`} />,
-						duration: 3000,
-					})
-				})
-				.catch(() => {
-					noti({
-						content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
-						duration: 3000,
-					})
-				})
+			const result = confirm(`${data?.studentName} 학생의 계좌를 정지하시겠습니까?`)
+
+			if (result) {
+				putSuspendAccountMutation.mutate(
+					{ studentId: data.studentId },
+					{
+						onSuccess: () => {
+							noti({
+								content: <NotiTemplate type={"ok"} content={`${data?.studentName}의 계좌를 정지하였습니다.`} />,
+								duration: 3000,
+							})
+
+							queryClient.invalidateQueries(["enteredStudentDetail", selectedStudentAtom])
+						},
+						onError: () => [
+							noti({
+								content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+								duration: 3000,
+							}),
+						],
+					},
+				)
+			}
 		}
 	}
 
