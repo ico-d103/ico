@@ -93,8 +93,6 @@ function ClassStudentDetail() {
 
 		if (result && data?.studentId) {
 			putResetStudentPWAPI({ studentId: data.studentId }).then((res) => {
-				// res : 새로발급받은 비밀번호
-				// res를 modal로 띄어야 함
 				setNewPW(res)
 				openComp()
 			})
@@ -119,7 +117,7 @@ function ClassStudentDetail() {
 
 	const modifyStudentLicenseHandler = () => {
 		if (data?.studentId) {
-			putStudentLicenseAPI({ studentId: data.studentId })
+			putStudentLicenseAPI({ studentId: data.studentId, body: modifiedStudentLicenseInfoAtom })
 				.then(() => {
 					noti({
 						content: <NotiTemplate type={"ok"} content={`자격증 정보를 수정하였습니다.`} />,
