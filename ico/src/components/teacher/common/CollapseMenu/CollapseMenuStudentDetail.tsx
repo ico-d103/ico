@@ -1,53 +1,55 @@
 import { useState, useRef, useEffect } from "react"
 import { css } from "@emotion/react"
-import { useSetAtom } from "jotai"
+import { useAtom } from "jotai"
 import { selectedStudent } from "@/store/store"
 
 type CollapseMenuStudentDetailPropsType = {
 	studentId: number
 	titleChildren: JSX.Element
-	contentChildren: JSX.Element
-	reverse?: boolean
+	contentChildren: JSX.Element | null
 }
 
-function CollapseMenuStudentDetail({
-	studentId,
-	titleChildren,
-	contentChildren,
-	reverse,
-}: CollapseMenuStudentDetailPropsType) {
-	const [isOpened, setIsOpened] = useState<boolean>(reverse ? true : false)
+function CollapseMenuStudentDetail({ studentId, titleChildren, contentChildren }: CollapseMenuStudentDetailPropsType) {
+	const [isOpened, setIsOpened] = useState<boolean>(false)
 	const [refresh, setRefresh] = useState<boolean>(false)
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
-	const setSelectedStudentAtom = useSetAtom(selectedStudent)
+	const [selectedStudentAtom, setSelectedStudentAtom] = useAtom(selectedStudent)
+
+	const selectStudentHandler = () => {
+		setIsOpened(!isOpened)
+		setSelectedStudentAtom(studentId)
+	}
 
 	useEffect(() => {
-		if (isOpened) {
-			setSelectedStudentAtom(studentId)
+		if (selectedStudentAtom !== studentId) {
+			setIsOpened(false)
+		} else {
+			setIsOpened(true)
 		}
+	}, [selectedStudentAtom])
 
+	useEffect(() => {
+		// 스크롤 위치 맞춰주기 위함
 		setTimeout(() => {
-			setRefresh((prev) => !prev)
-		}, 400)
+			setRefresh(!refresh)
+		}, 200)
 	}, [isOpened])
 
 	return (
 		<div css={ancWrapperCSS}>
-			<div
-				css={trgWrapperCSS}
-				onClick={() => {
-					setIsOpened((prev) => !prev)
-				}}
-			>
+			<div css={trgWrapperCSS} onClick={selectStudentHandler}>
 				{titleChildren}
-				<img css={bracketImgCSS({ isOpened })} src={"/assets/bracket.png"} />
 			</div>
 
 			<div css={contentWrapperCSS({ isOpened, contentWrapperRef })}>
 				<div ref={contentWrapperRef}>
-					<div css={spaceCSS} />
-					{contentChildren}
-					{refresh && <div />}
+					{contentChildren && (
+						<>
+							<div css={spaceCSS} />
+							{contentChildren}
+							{refresh && <div />}
+						</>
+					)}
 				</div>
 			</div>
 		</div>
@@ -69,17 +71,6 @@ const trgWrapperCSS = css`
 	align-items: center;
 	line-height: 20px;
 `
-
-const bracketImgCSS = ({ isOpened }: { isOpened: boolean }) => {
-	return css`
-		transition-property: transform;
-		transition-duration: 0.4s;
-		width: auto;
-		height: 10px;
-		transform: ${isOpened && "rotate( 180deg )"};
-		margin-left: 10px;
-	`
-}
 
 const spaceCSS = css`
 	height: 15px;

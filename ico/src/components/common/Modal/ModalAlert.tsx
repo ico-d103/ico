@@ -10,13 +10,21 @@ type ModalAlertProps = {
 	width: string
 	title: string
 	titleSize: string
-    proceed: any
-    closeComp?: Function
+	proceed: any
+	closeComp?: Function
 	forChild?: boolean
 }
 
 function ModalAlert({ content, proceed, closeComp, width, title, titleSize, forChild }: ModalAlertProps) {
-	const ICON = <div css={css`margin-bottom: -16px;`}><UseAnimations animation={alertTriangle} size={128} /></div>
+	const ICON = (
+		<div
+			css={css`
+				margin-bottom: -16px;
+			`}
+		>
+			<UseAnimations animation={alertTriangle} size={128} />
+		</div>
+	)
 
 	const CONTENT: JSX.Element = (
 		<div css={contentWrapperCSS}>
@@ -30,9 +38,9 @@ function ModalAlert({ content, proceed, closeComp, width, title, titleSize, forC
 									<path
 										d="M12 8V12M12 16H12.01M7.8 21H16.2C17.8802 21 18.7202 21 19.362 20.673C19.9265 20.3854 20.3854 19.9265 20.673 19.362C21 18.7202 21 17.8802 21 16.2V7.8C21 6.11984 21 5.27976 20.673 4.63803C20.3854 4.07354 19.9265 3.6146 19.362 3.32698C18.7202 3 17.8802 3 16.2 3H7.8C6.11984 3 5.27976 3 4.63803 3.32698C4.07354 3.6146 3.6146 4.07354 3.32698 4.63803C3 5.27976 3 6.11984 3 7.8V16.2C3 17.8802 3 18.7202 3.32698 19.362C3.6146 19.9265 4.07354 20.3854 4.63803 20.673C5.27976 21 6.11984 21 7.8 21Z"
 										stroke="#D94A4A"
-										stroke-width="2"
-										stroke-linecap="round"
-										stroke-linejoin="round"
+										strokeWidth="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
 									/>
 								</svg>
 							</div>
@@ -42,21 +50,40 @@ function ModalAlert({ content, proceed, closeComp, width, title, titleSize, forC
 				})}
 			</div>
 			<div css={buttonWrapperCSS}>
-				<Button text={"확인"} fontSize={"var(--student-h3)"} width={"40%"} theme={forChild ? "mobileWarning" : "warning"} onClick={() => {proceed && proceed(); closeComp && closeComp();}} margin={'0px 16px 0px 0px'} />
-				<Button text={"취소"} fontSize={"var(--student-h3)"} width={"40%"} theme={forChild ? "mobileCancel" : "cancelDark"} onClick={() => {closeComp && closeComp()}} />
+				<Button
+					text={"확인"}
+					fontSize={"var(--student-h3)"}
+					width={"40%"}
+					theme={forChild ? "mobileWarning" : "warning"}
+					onClick={() => {
+						proceed && proceed()
+						closeComp && closeComp()
+					}}
+					margin={"0px 16px 0px 0px"}
+				/>
+				<Button
+					text={"취소"}
+					fontSize={"var(--student-h3)"}
+					width={"40%"}
+					theme={forChild ? "mobileCancel" : "cancelDark"}
+					onClick={() => {
+						closeComp && closeComp()
+					}}
+				/>
 			</div>
 		</div>
 	)
 
-	return <ModalContent title={title} titleSize={titleSize} width={width} icon={ICON} content={CONTENT} forChild={forChild} />
+	return (
+		<ModalContent title={title} titleSize={titleSize} width={width} icon={ICON} content={CONTENT} forChild={forChild} />
+	)
 }
 
 const contentWrapperCSS = css`
-    width: 100%;
+	width: 100%;
 `
 
 const mentWrapperCSS = css`
-	
 	display: flex;
 `
 const mentCSS = css`
@@ -68,13 +95,13 @@ const mentCSS = css`
 `
 
 const messageWrapperCSS = css`
-margin-top: 8px;
+	margin-top: 8px;
 	margin-bottom: 24px;
 `
 
 const buttonWrapperCSS = css`
 	display: flex;
 	justify-content: center;
-    width: 100%;
+	width: 100%;
 `
 export default ModalAlert
