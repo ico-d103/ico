@@ -11,7 +11,7 @@ function ClassStudentDetailCertificateItem({ certificate }: ClassStudentDetailCe
 		<div css={wrapper}>
 			<h4>{certificate.subject}</h4>
 			<div>
-				<ClassStudentDetailCertificateRange range={certificate.rating} />
+				<ClassStudentDetailCertificateRange id={certificate.id} range={certificate.rating} />
 			</div>
 		</div>
 	)
