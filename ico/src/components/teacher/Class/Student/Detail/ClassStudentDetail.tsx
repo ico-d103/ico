@@ -16,6 +16,8 @@ import { putResetStudentPWAPI } from "@/api/teacher/class/putResetStudentPWAPI"
 import Modal from "@/components/common/Modal/Modal"
 import useCompHandler from "@/hooks/useCompHandler"
 import ModalContent from "@/components/common/Modal/ModalContent"
+import { modifiedStudentLicenseInfo } from "@/store/store"
+import { putStudentLicenseAPI } from "@/api/teacher/class/putStudentLicenseAPI"
 
 function ClassStudentDetail() {
 	const noti = useNotification()
@@ -32,6 +34,7 @@ function ClassStudentDetail() {
 
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [newPW, setNewPW] = useState<string>("")
+	const modifiedStudentLicenseInfoAtom = useAtomValue(modifiedStudentLicenseInfo)
 
 	const preventStudentAccountHandler = () => {
 		if (data?.frozen === true) {
@@ -114,6 +117,24 @@ function ClassStudentDetail() {
 		}
 	}
 
+	const modifyStudentLicenseHandler = () => {
+		if (data?.studentId) {
+			putStudentLicenseAPI({ studentId: data.studentId })
+				.then(() => {
+					noti({
+						content: <NotiTemplate type={"ok"} content={`자격증 정보를 수정하였습니다.`} />,
+						duration: 2000,
+					})
+				})
+				.catch(() => {
+					noti({
+						content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+						duration: 2000,
+					})
+				})
+		}
+	}
+
 	useEffect(() => {
 		console.log(data)
 	}, [data])
@@ -152,7 +173,7 @@ function ClassStudentDetail() {
 						height={"33px"}
 						theme={"managePlus"}
 						margin={"0 0 0 0"}
-						onClick={() => {}}
+						onClick={modifyStudentLicenseHandler}
 					/>
 				</div>
 			</div>
