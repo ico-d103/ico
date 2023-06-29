@@ -1,13 +1,19 @@
+import React, { useEffect, useState } from "react"
 import { css } from "@emotion/react"
-import React, { useState } from "react"
+import { useAtom, useSetAtom } from "jotai"
+import { modifiedStudentLicenseInfo } from "@/store/store"
 
 type ClassStudentDetailCertificateRangePropsType = {
+	id: number
 	range: number
 }
 
-function ClassStudentDetailCertificateRange({ range }: ClassStudentDetailCertificateRangePropsType) {
-	const MAX_RANGE = 100 / 7
-	const [inputRange, setInputRange] = useState<number>(range === -1 ? range : 7 - range)
+function ClassStudentDetailCertificateRange({ id, range }: ClassStudentDetailCertificateRangePropsType) {
+	// const setModifiedStudentLicenseInfoAtom = useSetAtom(modifiedStudentLicenseInfo)
+	const [modifiedStudentLicenseInfoAtom, setModifiedStudentLicenseInfoAtom] = useAtom(modifiedStudentLicenseInfo)
+
+	const MAX_RANGE = 100 / 8
+	const [inputRange, setInputRange] = useState<number>(range === -1 ? range : 8 - range)
 
 	const changeInputRange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = Number(e.target.value)
@@ -19,6 +25,17 @@ function ClassStudentDetailCertificateRange({ range }: ClassStudentDetailCertifi
 			"%, rgb(236, 236, 236) " +
 			MAX_RANGE * value +
 			"%, rgb(236, 236, 236) 100%)"
+
+		// 등급을 없앤 경우
+		if (value === 0) {
+			const rating = -1
+			setModifiedStudentLicenseInfoAtom({ ...modifiedStudentLicenseInfoAtom, [id]: rating })
+		}
+		// 달인 ~ 7등급까지 설정한 경우
+		else {
+			const rating = 8 - value
+			setModifiedStudentLicenseInfoAtom({ ...modifiedStudentLicenseInfoAtom, [id]: rating })
+		}
 	}
 
 	return (
@@ -27,12 +44,12 @@ function ClassStudentDetailCertificateRange({ range }: ClassStudentDetailCertifi
 				type="range"
 				value={inputRange}
 				min="0"
-				max="7"
+				max="8"
 				step="1"
 				onChange={(e) => changeInputRange(e)}
 				css={inputRangeCSS(MAX_RANGE, inputRange)}
 			/>
-			<span>{inputRange === -1 ? `` : inputRange === 7 ? `달인 👍` : `${7 - inputRange}등급`}</span>
+			<span>{inputRange === -1 || inputRange === 0 ? `` : inputRange === 8 ? `달인 👍` : `${8 - inputRange}등급`}</span>
 		</div>
 	)
 }

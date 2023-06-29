@@ -45,6 +45,8 @@ const nationData = atom<getNationType>({
 
 const checkedStudent = atom<{ [key: number]: string }[]>([])
 
+const modifiedStudentLicenseInfo = atom<{ [key: number]: number }>({})
+
 export {
 	navTo,
 	navBeforeScroll,
@@ -57,4 +59,5 @@ export {
 	tokenStatus,
 	modalHandler,
 	checkedStudent,
+	modifiedStudentLicenseInfo,
 }
