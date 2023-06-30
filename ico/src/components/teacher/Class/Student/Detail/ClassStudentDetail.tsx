@@ -24,7 +24,7 @@ function ClassStudentDetail() {
 	const selectedPageAtom = useAtomValue(selectedPage)
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 	const { data } = useQuery<getStudentDetailType>(
-		["enteredStudentDetail", selectedStudentAtom],
+		["enteredStudentDetail", selectedStudentAtom, selectedPageAtom],
 		() => getStudentDetailAPI({ id: selectedStudentAtom, page: selectedPageAtom }),
 		// { enabled: false },
 	)
