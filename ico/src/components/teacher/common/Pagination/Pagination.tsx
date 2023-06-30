@@ -2,14 +2,16 @@ import { css } from "@emotion/react"
 import PaginationButton from "./PaginationButton"
 import { selectedPage } from "@/store/store"
 import { useAtom } from "jotai"
+import { useEffect } from "react"
 
 type PaginationPropsType = {
 	size: number
+	maxSize: number
 	margin: string
 	buttonSize: string
 }
 
-function Pagination({ size, margin, buttonSize }: PaginationPropsType) {
+function Pagination({ size, maxSize, margin, buttonSize }: PaginationPropsType) {
 	const [selectedPageAtom, setSelectedPageAtom] = useAtom(selectedPage)
 
 	const pageHandler = (flag: boolean) => {
@@ -23,21 +25,47 @@ function Pagination({ size, margin, buttonSize }: PaginationPropsType) {
 		}
 	}
 
-	const changePageHandler = (page: number) => {
-		setSelectedPageAtom(page)
+	const dynamicPaginationButton = () => {
+		const buttons = []
+
+		for (let i = selectedPageAtom; i < selectedPageAtom + maxSize; i++) {
+			if (i > size) break
+
+			buttons.push(
+				<PaginationButton
+					key={i}
+					pgNumber={i.toString()}
+					onClick={() => setSelectedPageAtom(i)}
+					buttonSize={buttonSize}
+				/>,
+			)
+		}
+
+		return buttons
 	}
+
+	useEffect(() => {
+		console.log(selectedPageAtom)
+
+		// if (selectedPageAtom > maxSize) {
+		// 	dynamicPaginationButton()
+		// }
+	}, [selectedPageAtom])
 
 	return (
 		<div css={wrapperCSS(margin)}>
 			<PaginationButton pgNumber={"<"} onClick={() => pageHandler(false)} buttonSize={buttonSize} />
-			{Array.from({ length: size }, (_, index) => (
-				<PaginationButton
-					key={index}
-					pgNumber={(index + 1).toString()}
-					onClick={() => changePageHandler(index + 1)}
-					buttonSize={buttonSize}
-				/>
-			))}
+			{size <= maxSize
+				? Array.from({ length: size }, (_, index) => (
+						<PaginationButton
+							key={index}
+							pgNumber={(index + 1).toString()}
+							onClick={() => setSelectedPageAtom(index + 1)}
+							buttonSize={buttonSize}
+						/>
+				  ))
+				: dynamicPaginationButton()}
+
 			<PaginationButton pgNumber={">"} onClick={() => pageHandler(true)} buttonSize={buttonSize} />
 		</div>
 	)

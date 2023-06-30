@@ -44,7 +44,7 @@ function ClassStudentDetailAccountList({ transactions, size }: ClassStudentDetai
 				</div>
 			</div>
 			{transactions && Object.keys(transactions).length > 0 && (
-				<Pagination size={size ? size : 1} margin={"0 0 0 0"} buttonSize={"30px"} />
+				<Pagination size={size ? size : 1} maxSize={5} margin={"0 0 0 0"} buttonSize={"30px"} />
 			)}
 		</div>
 	)

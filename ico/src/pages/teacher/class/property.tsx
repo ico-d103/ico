@@ -18,12 +18,13 @@ import { selectedPage } from "@/store/store"
 import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
 import useGetNation from "@/hooks/useGetNation"
+import { useEffect } from "react"
 
 function property() {
 	const [nation] = useGetNation()
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [isDepositMenuOpenAtom, setIsDepositMenuOpenAtom] = useAtom(isDepositMenuOpen)
-	const selectedPageAtom = useAtomValue(selectedPage)
+	const [selectedPageAtom, setSelectedPageAtom] = useAtom(selectedPage)
 
 	const treasury = useQuery<getNationTreasuryType>(["property"], getNationTreasuryAPI)
 	const treasuryList = useQuery<getTreasuryHistoryType>(["propertyList", selectedPageAtom], () =>
@@ -52,6 +53,11 @@ function property() {
 			function: () => openModal(false),
 		},
 	]
+
+	useEffect(() => {
+		// 다른 페이지에서 pagination number가 조정됐을 시, 초기화
+		setSelectedPageAtom(1)
+	}, [])
 
 	return (
 		<div css={wrapperCSS}>
@@ -84,6 +90,7 @@ function property() {
 			</div>
 			<Pagination
 				size={treasuryList.data?.size ? treasuryList.data.size : 1}
+				maxSize={10}
 				margin={"30px 0 0 0"}
 				buttonSize={"35px"}
 			/>

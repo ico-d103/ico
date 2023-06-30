@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import { css } from "@emotion/react"
-import { useAtom } from "jotai"
-import { selectedStudent } from "@/store/store"
+import { useAtom, useSetAtom } from "jotai"
+import { selectedPage, selectedStudent } from "@/store/store"
 
 type CollapseMenuStudentDetailPropsType = {
 	studentId: number
@@ -14,10 +14,12 @@ function CollapseMenuStudentDetail({ studentId, titleChildren, contentChildren }
 	const [refresh, setRefresh] = useState<boolean>(false)
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
 	const [selectedStudentAtom, setSelectedStudentAtom] = useAtom(selectedStudent)
+	const setSelectedPageAtom = useSetAtom(selectedPage)
 
 	const selectStudentHandler = () => {
 		setIsOpened(!isOpened)
 		setSelectedStudentAtom(studentId)
+		setSelectedPageAtom(1)
 	}
 
 	useEffect(() => {
