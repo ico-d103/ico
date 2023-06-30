@@ -12,7 +12,7 @@ import { getNationTreasuryAPI } from "@/api/teacher/class/getNationTreasuryAPI"
 import { getNationTreasuryType, getTreasuryHistoryType } from "@/types/teacher/apiReturnTypes"
 import KebabMenu from "@/components/teacher/common/KebabMenu/KebabMenu"
 import { isDepositMenuOpen } from "@/store/store"
-import { useAtom, useAtomValue } from "jotai"
+import { useAtom } from "jotai"
 import { getTreasuryHistoryAPI } from "@/api/teacher/class/getTreasuryHistoryAPI"
 import { selectedPage } from "@/store/store"
 import UseAnimations from "react-useanimations"
@@ -39,21 +39,6 @@ function property() {
 		openComp()
 	}
 
-	const dropdownList = [
-		{
-			name: "deposit",
-			content: null,
-			label: "국고 입금",
-			function: () => openModal(true),
-		},
-		{
-			name: "withdrawal",
-			content: null,
-			label: "국고 출금",
-			function: () => openModal(false),
-		},
-	]
-
 	useEffect(() => {
 		// 다른 페이지에서 pagination number가 조정됐을 시, 초기화
 		setSelectedPageAtom(1)
@@ -63,7 +48,22 @@ function property() {
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
 				<h1>국고</h1>
-				<KebabMenu dropdownList={dropdownList} />
+				<KebabMenu
+					dropdownList={[
+						{
+							name: "deposit",
+							content: null,
+							label: "국고 입금",
+							function: () => openModal(true),
+						},
+						{
+							name: "withdrawal",
+							content: null,
+							label: "국고 출금",
+							function: () => openModal(false),
+						},
+					]}
+				/>
 			</div>
 			<div css={titleCSS}>
 				<div>{CLASS_PROPERTY}</div>
@@ -88,12 +88,10 @@ function property() {
 					<PropertyList propertyList={treasuryList.data?.page ? treasuryList.data.page : []} />
 				)}
 			</div>
-			<Pagination
-				size={treasuryList.data?.size ? treasuryList.data.size : 1}
-				maxSize={10}
-				margin={"30px 0 0 0"}
-				buttonSize={"35px"}
-			/>
+			{treasuryList.data && (
+				<Pagination size={treasuryList.data.size} maxSize={10} margin={"30px 0 0 0"} buttonSize={"35px"} />
+			)}
+
 			<Modal
 				compState={compState}
 				closeComp={closeComp}
