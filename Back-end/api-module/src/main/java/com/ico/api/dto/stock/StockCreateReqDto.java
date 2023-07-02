@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 투자 종목 등록 Req Dto
@@ -14,17 +15,18 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @NoArgsConstructor
 public class StockCreateReqDto {
-    @NotBlank(message = "")
+    @NotBlank(message = "708")
     private String title;
 
-    @NotBlank(message = "")
+    @NotBlank(message = "727")
     private String content;
 
     // 주식 시작 가격
+    @NotNull(message = "711")
     private double amount;
 
     // 내일의 첫 이슈 등록
-    @NotBlank(message = "")
+    @NotBlank(message = "713")
     private String issue;
 
     @Builder

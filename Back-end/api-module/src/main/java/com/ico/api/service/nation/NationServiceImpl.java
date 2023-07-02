@@ -19,6 +19,7 @@ import com.ico.core.entity.Issue;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.NationLicense;
 import com.ico.core.entity.Rule;
+import com.ico.core.entity.Stock;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.StudentLicense;
@@ -36,6 +37,7 @@ import com.ico.core.repository.NationLicenseRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.RuleRepository;
 import com.ico.core.repository.IssueRepository;
+import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.StudentLicenseRepository;
 import com.ico.core.repository.StudentProductRepository;
@@ -81,6 +83,7 @@ public class NationServiceImpl implements NationService {
     private final StudentLicenseRepository studentLicenseRepository;
     private final NationLicenseRepository nationLicenseRepository;
     private final IssueRepository issueRepository;
+    private final StockRepository stockRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     private final DefaultNationRepository defaultNationRepository;
@@ -350,6 +353,12 @@ public class NationServiceImpl implements NationService {
         }
 
         // Stock
+        List<Stock> stocks = stockRepository.findAllByNationId(nationId);
+        if (!stocks.isEmpty()) {
+            stockRepository.deleteAll(stocks);
+        }
+
+        // Issue
         List<Issue> issues = issueRepository.findAllByNationId(nationId);
         if (!issues.isEmpty()) {
             issueRepository.deleteAll(issues);
