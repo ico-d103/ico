@@ -80,7 +80,13 @@ function StudentEnteredList() {
 								name: "resetJob",
 								content: null,
 								label: "직업 초기화",
-								function: openJobResetModal,
+								function: () => alert("준비 중입니다."),
+							},
+							{
+								name: "resetJob",
+								content: null,
+								label: "학생 내보내기",
+								function: () => alert("준비 중입니다."),
 							},
 						]}
 					/>

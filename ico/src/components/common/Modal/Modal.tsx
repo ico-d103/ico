@@ -14,7 +14,6 @@ type ModalProps = {
 	closeComp: () => void
 	transition: string
 	content: JSX.Element
-	
 }
 
 function Modal({ compState, closeComp, transition, content }: ModalProps) {
@@ -22,14 +21,8 @@ function Modal({ compState, closeComp, transition, content }: ModalProps) {
 	const [modalHandlerAtom, setModalHandlerAtom] = useAtom(modalHandler)
 	const router = useRouter()
 
-
-
-
-
 	useEffect(() => {
-		
 		if (compState) {
-			
 			setTimeout(() => {
 				setModalHandlerAtom(() => closeComp)
 				setModalState(() => true)
@@ -37,7 +30,7 @@ function Modal({ compState, closeComp, transition, content }: ModalProps) {
 		} else {
 			setTimeout(() => {
 				setModalState(() => false)
-				setModalHandlerAtom(() =>  null)
+				setModalHandlerAtom(() => null)
 			}, 300)
 		}
 	}, [compState])
@@ -66,7 +59,6 @@ function Modal({ compState, closeComp, transition, content }: ModalProps) {
 
 const backdropCSS = ({ compState, modalState }: { compState: boolean; modalState: boolean }) => {
 	return css`
-		
 		position: fixed;
 		width: 100vw;
 		height: 100vh;
@@ -85,7 +77,6 @@ const modalWrapperCSS = css`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	
 `
 
 const transitions = ({ compState, modalState }: { compState: boolean; modalState: boolean }) => {
