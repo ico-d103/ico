@@ -3,14 +3,14 @@ package com.ico.api.service.stock;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Invest;
+import com.ico.core.entity.Issue;
 import com.ico.core.entity.Nation;
-import com.ico.core.entity.Stock;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationRepository;
-import com.ico.core.repository.StockRepository;
+import com.ico.core.repository.IssueRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class InvestServiceImpl implements InvestService{
-    private final StockRepository stockRepository;
+    private final IssueRepository issueRepository;
     private final StudentRepository studentRepository;
     private final InvestRepository investRepository;
     private final NationRepository nationRepository;
@@ -93,7 +93,7 @@ public class InvestServiceImpl implements InvestService{
         investRepository.save(invest);
 
         // 거래 내역 추가
-        transactionService.addTransactionWithdraw(nation.getTitle() + " 증권", studentId, amount, nation.getStock() + " 지수");
+//        transactionService.addTransactionWithdraw(nation.getTitle() + " 증권", studentId, amount, nation.getStock() + " 지수");
 
     }
 
@@ -125,13 +125,13 @@ public class InvestServiceImpl implements InvestService{
 //        }
 
         // 국가의 주식 데이터가 없을 경우
-        List<Stock> stockList = stockRepository.findAllByNationIdOrderByIdDesc(nationId);
-        if(stockList.isEmpty()){
+        List<Issue> issueList = issueRepository.findAllByNationIdOrderByIdDesc(nationId);
+        if(issueList.isEmpty()){
             throw new CustomException(ErrorCode.NOT_FOUND_STOCK);
         }
 
         // 수익률 계산
-        double price = stockList.get(0).getAmount();
+        double price = issueList.get(0).getAmount();
         log.info("매도지수 : " + price);
 
         double purchasePrice = invest.getPrice();

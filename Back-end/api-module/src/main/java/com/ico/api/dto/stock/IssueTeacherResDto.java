@@ -14,17 +14,17 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class StockTeacherResDto {
+public class IssueTeacherResDto {
     private String stock;
 
     private LocalTime tradingStart;
 
     private LocalTime tradingEnd;
 
-    private List<StockColDto> issue;
+    private List<IssueColDto> issue;
 
     @Builder
-    public StockTeacherResDto(String stock, LocalTime tradingStart, LocalTime tradingEnd, List<StockColDto> issue) {
+    public IssueTeacherResDto(String stock, LocalTime tradingStart, LocalTime tradingEnd, List<IssueColDto> issue) {
         this.stock = stock;
         this.tradingStart = tradingStart;
         this.tradingEnd = tradingEnd;

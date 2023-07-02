@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class StockColDto {
+public class IssueColDto {
     private String date;
 
     private double amount;
@@ -19,7 +19,7 @@ public class StockColDto {
     private String content;
 
     @Builder
-    public StockColDto(String date, double amount, String content) {
+    public IssueColDto(String date, double amount, String content) {
         this.date = date;
         this.amount = amount;
         this.content = content;

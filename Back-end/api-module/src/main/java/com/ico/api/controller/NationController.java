@@ -4,7 +4,6 @@ import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
 import com.ico.api.dto.nation.TradingTimeReqDto;
 import com.ico.api.service.nation.NationService;
-import com.ico.core.dto.StockReqDto;
 import com.ico.core.entity.Nation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,18 +51,6 @@ public class NationController {
     @GetMapping
     public ResponseEntity<Nation> getNation(HttpServletRequest request) {
         return ResponseEntity.ok(nationService.getNation(request));
-    }
-
-    /**
-     * 투자 종목 등록
-     *
-     * @param stockReqDto 주식 이름, 시작가격, 첫번재 이슈, 거래 시간
-     * @return Httpstatus
-     */
-    @PostMapping("/teacher/stock")
-    public ResponseEntity<HttpStatus> createStock(HttpServletRequest request, @Valid @RequestBody StockReqDto stockReqDto){
-        nationService.createStock(request, stockReqDto);
-        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     /**

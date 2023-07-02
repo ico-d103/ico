@@ -49,8 +49,6 @@ public class Nation {
     @ColumnDefault("0")
     private int treasury;
 
-    private String stock;
-
     private LocalTime trading_start;
 
     private LocalTime trading_end;
@@ -67,7 +65,6 @@ public class Nation {
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public void updateStock(StockReqDto dto){
-        this.stock = dto.getStock();
         this.trading_start = dto.getTradingStart();
         this.trading_end = dto.getTradingEnd();
     }

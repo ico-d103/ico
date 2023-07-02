@@ -8,15 +8,14 @@ import com.ico.api.util.Formatter;
 import com.ico.core.code.Role;
 import com.ico.core.code.Status;
 import com.ico.core.code.TaxType;
-import com.ico.core.data.Default_interest;
 import com.ico.core.data.Default_job;
 import com.ico.core.data.Default_license;
 import com.ico.core.data.Default_rule;
 import com.ico.core.data.Default_tax;
-import com.ico.core.dto.StockReqDto;
 import com.ico.core.document.DefaultNation;
 import com.ico.core.entity.Immigration;
 import com.ico.core.entity.Invest;
+import com.ico.core.entity.Issue;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.NationLicense;
 import com.ico.core.entity.Rule;
@@ -37,6 +36,7 @@ import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationLicenseRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.RuleRepository;
+import com.ico.core.repository.IssueRepository;
 import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.StudentLicenseRepository;
@@ -52,7 +52,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +82,7 @@ public class NationServiceImpl implements NationService {
     private final StudentRepository studentRepository;
     private final StudentLicenseRepository studentLicenseRepository;
     private final NationLicenseRepository nationLicenseRepository;
+    private final IssueRepository issueRepository;
     private final StockRepository stockRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -208,37 +208,6 @@ public class NationServiceImpl implements NationService {
         return nation;
     }
 
-
-    /**
-     * 투자 종목 등록
-     *
-     * @param stockReqDto 종목 정보
-     */
-    @Transactional
-    @Override
-    public void createStock(HttpServletRequest request, StockReqDto stockReqDto) {
-        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
-        Nation nation = nationRepository.findById(nationId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
-
-        // 이미 주식 존재 여부 확인
-        if (nation.getStock() == null || nation.getStock().equals("")) {
-            // Nation에 주식 정보 업데이트
-            nation.updateStock(stockReqDto);
-            nationRepository.save(nation);
-
-            // 주식 가격, 이슈 등록
-            Stock stock = Stock.builder()
-                    .nation(nation)
-                    .amount(stockReqDto.getAmount())
-                    .content(stockReqDto.getContent())
-                    .date(LocalDateTime.now())
-                    .build();
-            stockRepository.save(stock);
-        } else {
-            throw new CustomException(ErrorCode.ALREADY_EXIST_STOCK);
-        }
-    }
 
     @Override
     public Map<String, String> findTreasury(HttpServletRequest request) {
@@ -387,6 +356,12 @@ public class NationServiceImpl implements NationService {
         List<Stock> stocks = stockRepository.findAllByNationId(nationId);
         if (!stocks.isEmpty()) {
             stockRepository.deleteAll(stocks);
+        }
+
+        // Issue
+        List<Issue> issues = issueRepository.findAllByNationId(nationId);
+        if (!issues.isEmpty()) {
+            issueRepository.deleteAll(issues);
         }
 
         // StudentJob
