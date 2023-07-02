@@ -11,9 +11,10 @@ import useCompHandler from "@/hooks/useCompHandler"
 import Modal from "@/components/common/Modal/Modal"
 import CollapseMenuStudentDetail from "@/components/teacher/common/CollapseMenu/CollapseMenuStudentDetail"
 import ClassStudentDetail from "../Detail/ClassStudentDetail"
-import { useAtomValue } from "jotai"
-import { selectedStudent } from "@/store/store"
+import { useAtom, useAtomValue } from "jotai"
+import { checkedStudent, selectedStudent } from "@/store/store"
 import ClassStudentDetailHead from "../Detail/ClassStudentDetailHead"
+import { useEffect } from "react"
 
 function StudentEnteredList() {
 	const noti = useNotification()
@@ -22,6 +23,7 @@ function StudentEnteredList() {
 	const queryClient = useQueryClient()
 	const resetStudentsJobMutation = useMutation((a: number) => putResetStudentsJobAPI())
 	const selectedStudentAtom = useAtomValue(selectedStudent)
+	const [checkedStudentAtom, setCheckedStudentAtom] = useAtom(checkedStudent)
 
 	const resetStudentsJob = () => {
 		resetStudentsJobMutation.mutate(0, {
@@ -43,7 +45,20 @@ function StudentEnteredList() {
 	}
 
 	const toggleStudentsAllCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-		// 전체선택 됐을 때 처리
+		// 전체 선택
+		if (e.target.checked) {
+			const selectAll: { [key: number]: string }[] = []
+
+			data?.forEach((student) => {
+				selectAll.push({ [student.id]: student.name })
+			})
+
+			setCheckedStudentAtom(selectAll)
+		}
+		// 전체 선택 해제
+		else {
+			setCheckedStudentAtom([])
+		}
 	}
 
 	return (
