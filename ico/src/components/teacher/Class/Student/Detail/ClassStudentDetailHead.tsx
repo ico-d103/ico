@@ -38,9 +38,7 @@ function ClassStudentDetailHead({ student }: ClassStudentDetailHeadPropsType) {
 	}
 
 	const postCreditScore = (type: boolean) => {
-		const args = type
-			? { studentId: student.id, body: { type: true } }
-			: { studentId: student.id, body: { type: false } }
+		const args = { studentId: student.id, body: { type: type } }
 
 		postCreditScoreMutation.mutate(args, {
 			onSuccess: () => {
