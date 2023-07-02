@@ -70,7 +70,14 @@ function StudentEnteredList() {
 							학생들 <small>({data && data.length > 0 ? data.length : 0})</small>
 						</div>
 						<div css={checkCSS}>
-							<input type="checkbox" id="all-check" onChange={toggleStudentsAllCheck} />
+							<input
+								checked={
+									checkedStudentAtom.length === 0 ? false : checkedStudentAtom.length === data?.length ? true : false
+								}
+								type="checkbox"
+								id="all-check"
+								onChange={toggleStudentsAllCheck}
+							/>
 							<label htmlFor="all-check">학생 전체 선택</label>
 						</div>
 					</div>
