@@ -23,49 +23,51 @@ import javax.validation.Valid;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/stock")
+@RequestMapping("/api/issue")
 public class IssueController {
     private final IssueService issueService;
 
-    /**
-     * 교사의 투자 이슈 조회
-     * @return 투자 이슈 정보, 투자 종목 정보(거래가능시간, 이름)
-     */
-    @GetMapping("/teacher")
-    public ResponseEntity<IssueTeacherResDto> stockIssueTeacher(HttpServletRequest request){
-        return ResponseEntity.ok(issueService.getIssueTeacher(request));
-    }
 
-    /**
-     * 투자 이슈 등록
-     * @param dto 지수, 내일의 이슈
-     * @return Httpstatus
-     */
-    @PostMapping("/teacher/upload")
-    public ResponseEntity<HttpStatus> uploadIssue(HttpServletRequest request, @Valid @RequestBody IssueUploadReqDto dto){
-        issueService.uploadIssue(request, dto);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
 
-    /**
-     * 학생의 투자이슈 조회
-     * @return 투자 이슈
-     */
-    @GetMapping("/student")
-    public ResponseEntity<IssueStudentResDto> stockIssueStudent(HttpServletRequest request){
-        return ResponseEntity.ok(issueService.getIssueStudent(request));
-    }
-
-    /**
-     * 투자 종목 삭제
-     *
-     * @param request
-     * @return
-     */
-    @DeleteMapping("/teacher")
-    public ResponseEntity<HttpStatus> deleteStock(HttpServletRequest request){
-        issueService.deleteStock(request);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
+//    /**
+//     * 교사의 투자 이슈 조회
+//     * @return 투자 이슈 정보, 투자 종목 정보(거래가능시간, 이름)
+//     */
+//    @GetMapping("/teacher/{stockId}")
+//    public ResponseEntity<IssueTeacherResDto> stockIssueTeacher(HttpServletRequest request){
+//        return ResponseEntity.ok(issueService.getIssueTeacher(request));
+//    }
+//
+//    /**
+//     * 투자 이슈 등록
+//     * @param dto 지수, 내일의 이슈
+//     * @return Httpstatus
+//     */
+//    @PostMapping("/teacher/upload")
+//    public ResponseEntity<HttpStatus> uploadIssue(HttpServletRequest request, @Valid @RequestBody IssueUploadReqDto dto){
+//        issueService.uploadIssue(request, dto);
+//        return ResponseEntity.ok(HttpStatus.OK);
+//    }
+//
+//    /**
+//     * 학생의 투자이슈 조회
+//     * @return 투자 이슈
+//     */
+//    @GetMapping("/student")
+//    public ResponseEntity<IssueStudentResDto> stockIssueStudent(HttpServletRequest request){
+//        return ResponseEntity.ok(issueService.getIssueStudent(request));
+//    }
+//
+//    /**
+//     * 투자 종목 삭제
+//     *
+//     * @param request
+//     * @return
+//     */
+//    @DeleteMapping("/teacher")
+//    public ResponseEntity<HttpStatus> deleteStock(HttpServletRequest request){
+//        issueService.deleteStock(request);
+//        return ResponseEntity.ok(HttpStatus.OK);
+//    }
 
 }

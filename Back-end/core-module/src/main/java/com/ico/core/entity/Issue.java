@@ -30,6 +30,10 @@ public class Issue {
     @JoinColumn(name = "nation_id")
     private Nation nation;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stock_id")
+    private Stock stock;
+
     private double amount;
 
     private String content;
@@ -37,13 +41,12 @@ public class Issue {
     private LocalDateTime date;
 
     @Builder
-    public Issue(Long id, Nation nation, double amount, String content, LocalDateTime date) {
+    public Issue(Long id, Nation nation, Stock stock, double amount, String content, LocalDateTime date) {
         this.id = id;
         this.nation = nation;
+        this.stock = stock;
         this.amount = amount;
         this.content = content;
         this.date = date;
     }
-
-
 }
