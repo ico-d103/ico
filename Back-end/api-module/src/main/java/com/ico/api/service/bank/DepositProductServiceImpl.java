@@ -97,6 +97,7 @@ public class DepositProductServiceImpl implements DepositProductService{
             DepositStudentResDto myDeposit = new DepositStudentResDto();
             boolean isEnd = !LocalDate.now().isBefore(deposit.getEndDate().toLocalDate());
             myDeposit = myDeposit.builder()
+                    .id(deposit.getId())
                     .title(deposit.getTitle())
                     .amount(deposit.getAmount())
                     .depositAmount(deposit.getAmount() * deposit.getInterest() / 100)
@@ -110,9 +111,36 @@ public class DepositProductServiceImpl implements DepositProductService{
         }
 
         DepositProductStudentResDto dto = new DepositProductStudentResDto();
+        dto.setAccount(student.getAccount());
         dto.setDepositProduct(depositList);
         dto.setMyDeposit(myDepositListReturn);
         return dto;
+    }
+
+    @Override
+    public DepositStudentResDto getDepositDetail(HttpServletRequest request, String depositId) {
+        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
+
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+
+        Deposit deposit = depositMongoRepository.findByIdAndStudentId(depositId, studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DEPOSIT));
+
+        boolean isEnd = !LocalDate.now().isBefore(deposit.getEndDate().toLocalDate());
+
+        return DepositStudentResDto.builder()
+                .id(deposit.getId())
+                .title(deposit.getTitle())
+                .amount(deposit.getAmount())
+                .depositAmount(deposit.getAmount() * deposit.getInterest() / 100)
+                .interest(deposit.getInterest())
+                .startDate(deposit.getStartDate().format(Formatter.date))
+                .endDate(deposit.getEndDate().format(Formatter.date))
+                .creditRating(deposit.getCreditRating())
+                .end(isEnd)
+                .build();
     }
 
     @Override
