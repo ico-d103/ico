@@ -90,7 +90,7 @@ function ClassStudentDetailHead({ student }: ClassStudentDetailHeadPropsType) {
 				<h5 css={amountCSS}>
 					{student.amount} {nation.currency}
 				</h5>
-				<ClassStudentDetailMoney studentId={student.id} />
+				<ClassStudentDetailMoney studentId={student.id} manageAll={false} />
 				<div css={divideCSS}></div>
 				<h5 css={creditRatingCSS}>{student.creditRating}등급</h5>
 				<div css={buttonWrapperCSS}>

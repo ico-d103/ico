@@ -81,7 +81,7 @@ function ClassStudentManageModal() {
 			<div css={contentCSS}>
 				{/* studentId는 임시 */}
 				<div css={contentTopCSS}>
-					<ClassStudentDetailMoney studentId={-1} />
+					<ClassStudentDetailMoney studentId={-1} manageAll={true} />
 					<div css={divideCSS}></div>
 					<ClassStudentManageGrade />
 				</div>

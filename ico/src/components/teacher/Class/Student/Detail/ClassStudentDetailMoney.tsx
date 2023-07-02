@@ -10,8 +10,8 @@ import useNotification from "@/hooks/useNotification"
 import { NUM_ONLY } from "@/util/regex"
 
 type ClassStudentDetailMoneyPropsType = {
-	refetch?: any
 	studentId: number
+	manageAll: boolean
 }
 
 const inputReducer = (state: { title: string; amount: string }, action: { type: string; value: string }) => {
@@ -25,7 +25,7 @@ const inputReducer = (state: { title: string; amount: string }, action: { type: 
 	}
 }
 
-function ClassStudentDetailMoney({ refetch, studentId }: ClassStudentDetailMoneyPropsType) {
+function ClassStudentDetailMoney({ studentId, manageAll }: ClassStudentDetailMoneyPropsType) {
 	const noti = useNotification()
 	const [nation] = useGetNation()
 	const queryClient = useQueryClient()
@@ -107,7 +107,7 @@ function ClassStudentDetailMoney({ refetch, studentId }: ClassStudentDetailMoney
 				margin={"0 10px 0 0"}
 				onClick={(e) => {
 					e.stopPropagation()
-					postAccountHandler("plus")
+					!manageAll ? postAccountHandler("plus") : alert("준비 중입니다.")
 				}}
 			/>
 			<Button
@@ -118,7 +118,7 @@ function ClassStudentDetailMoney({ refetch, studentId }: ClassStudentDetailMoney
 				theme={"manageMinus"}
 				onClick={(e) => {
 					e.stopPropagation()
-					postAccountHandler("minus")
+					!manageAll ? postAccountHandler("minus") : alert("준비 중입니다.")
 				}}
 			/>
 		</>
