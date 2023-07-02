@@ -43,12 +43,6 @@ public interface NationService {
     Nation updateNation(NationReqDto reqDto, HttpServletRequest request);
 
     /**
-     * 투자 종목 등록
-     * @param stockReqDto 종목 정보
-     */
-    public void createStock(HttpServletRequest request, StockReqDto stockReqDto);
-
-    /**
      * 국고 잔금 조회
      *
      * @param request
