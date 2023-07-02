@@ -385,7 +385,7 @@
     </tr>
     <tr>
         <td>변윤경</td>
-        <td><a href="https://github.com/forever4410">@forever4410</a></td>
+        <td><a href="https://github.com/YunKyungByun">@YunKyungByun</a></td>
     </tr>
     <tr>
         <td>사공지은</td>
