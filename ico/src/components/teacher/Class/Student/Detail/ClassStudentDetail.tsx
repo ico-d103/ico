@@ -11,7 +11,7 @@ import { putReleaseAccountAPI } from "@/api/teacher/class/putReleaseAccountAPI"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { putSuspendAccountAPI } from "@/api/teacher/class/putSuspendAccountAPI"
 import useNotification from "@/hooks/useNotification"
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import { putResetStudentPWAPI } from "@/api/teacher/class/putResetStudentPWAPI"
 import Modal from "@/components/common/Modal/Modal"
 import useCompHandler from "@/hooks/useCompHandler"
@@ -23,10 +23,8 @@ function ClassStudentDetail() {
 	const noti = useNotification()
 	const selectedPageAtom = useAtomValue(selectedPage)
 	const selectedStudentAtom = useAtomValue(selectedStudent)
-	const { data } = useQuery<getStudentDetailType>(
-		["enteredStudentDetail", selectedStudentAtom],
-		() => getStudentDetailAPI({ id: selectedStudentAtom, page: selectedPageAtom }),
-		// { enabled: false },
+	const { data } = useQuery<getStudentDetailType>(["enteredStudentDetail", selectedStudentAtom, selectedPageAtom], () =>
+		getStudentDetailAPI({ id: selectedStudentAtom, page: selectedPageAtom }),
 	)
 	const queryClient = useQueryClient()
 	const putReleaseAccountMutation = useMutation((params: { studentId: number }) => putReleaseAccountAPI(params))
@@ -93,8 +91,6 @@ function ClassStudentDetail() {
 
 		if (result && data?.studentId) {
 			putResetStudentPWAPI({ studentId: data.studentId }).then((res) => {
-				// res : 새로발급받은 비밀번호
-				// res를 modal로 띄어야 함
 				setNewPW(res)
 				openComp()
 			})
@@ -119,7 +115,7 @@ function ClassStudentDetail() {
 
 	const modifyStudentLicenseHandler = () => {
 		if (data?.studentId) {
-			putStudentLicenseAPI({ studentId: data.studentId })
+			putStudentLicenseAPI({ studentId: data.studentId, body: modifiedStudentLicenseInfoAtom })
 				.then(() => {
 					noti({
 						content: <NotiTemplate type={"ok"} content={`자격증 정보를 수정하였습니다.`} />,
@@ -136,8 +132,15 @@ function ClassStudentDetail() {
 	}
 
 	useEffect(() => {
-		console.log(data)
-	}, [data])
+		if (data && selectedPageAtom <= data.size - 1) {
+			const nextPage = selectedPageAtom + 1
+
+			// 다음 내역 prefetch
+			queryClient.prefetchQuery(["enteredStudentDetail", selectedStudentAtom, nextPage], () =>
+				getStudentDetailAPI({ id: selectedStudentAtom, page: nextPage }),
+			)
+		}
+	}, [selectedPageAtom, data])
 
 	return (
 		<>
@@ -236,6 +239,7 @@ const topWrapperCSS = css`
 	flex-direction: row;
 	align-items: flex-start;
 	gap: 30px;
+	min-height: 300px;
 
 	> div:nth-of-type(1) {
 		width: 45%;

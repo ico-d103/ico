@@ -1,5 +1,6 @@
 import { createStore, atom } from "jotai"
 import { getNationType, getTokenStatusType } from "@/types/common/apiReturnTypes"
+import { studentLicenseBodyType } from "@/types/teacher/apiReturnTypes"
 
 export const mainStore = createStore()
 
@@ -45,7 +46,7 @@ const nationData = atom<getNationType>({
 
 const checkedStudent = atom<{ [key: number]: string }[]>([])
 
-const modifiedStudentLicenseInfo = atom<{ [key: number]: number }>({})
+const modifiedStudentLicenseInfo = atom<studentLicenseBodyType>({})
 
 export {
 	navTo,

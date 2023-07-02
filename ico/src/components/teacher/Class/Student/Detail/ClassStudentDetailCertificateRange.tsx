@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { css } from "@emotion/react"
-import { useAtom, useSetAtom } from "jotai"
+import { useAtom } from "jotai"
 import { modifiedStudentLicenseInfo } from "@/store/store"
 
 type ClassStudentDetailCertificateRangePropsType = {
@@ -9,7 +9,6 @@ type ClassStudentDetailCertificateRangePropsType = {
 }
 
 function ClassStudentDetailCertificateRange({ id, range }: ClassStudentDetailCertificateRangePropsType) {
-	// const setModifiedStudentLicenseInfoAtom = useSetAtom(modifiedStudentLicenseInfo)
 	const [modifiedStudentLicenseInfoAtom, setModifiedStudentLicenseInfoAtom] = useAtom(modifiedStudentLicenseInfo)
 
 	const MAX_RANGE = 100 / 8
@@ -26,16 +25,9 @@ function ClassStudentDetailCertificateRange({ id, range }: ClassStudentDetailCer
 			MAX_RANGE * value +
 			"%, rgb(236, 236, 236) 100%)"
 
-		// 등급을 없앤 경우
-		if (value === 0) {
-			const rating = -1
-			setModifiedStudentLicenseInfoAtom({ ...modifiedStudentLicenseInfoAtom, [id]: rating })
-		}
-		// 달인 ~ 7등급까지 설정한 경우
-		else {
-			const rating = 8 - value
-			setModifiedStudentLicenseInfoAtom({ ...modifiedStudentLicenseInfoAtom, [id]: rating })
-		}
+		let rating = 8 - value
+		if (value === 0) rating = -1
+		setModifiedStudentLicenseInfoAtom({ ...modifiedStudentLicenseInfoAtom, [id]: rating })
 	}
 
 	return (

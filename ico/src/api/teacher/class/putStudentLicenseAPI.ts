@@ -1,8 +1,10 @@
 import { tokenInstance } from "@/api/instance"
 import { successReturnType } from "@/types/common/apiReturnTypes"
+import { studentLicenseBodyType } from "@/types/teacher/apiReturnTypes"
 
 type paramsType = {
 	studentId: number
+	body: studentLicenseBodyType
 }
 
 type responseType = {

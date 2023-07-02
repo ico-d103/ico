@@ -5,13 +5,15 @@ import StudentDetail from "@/components/teacher/Class/Student/Detail/ClassStuden
 import useMediaQuery from "@/hooks/useMediaQuery"
 import useCompHandler from "@/hooks/useCompHandler"
 import Modal from "@/components/common/Modal/Modal"
-import { useAtomValue } from "jotai"
-import { checkedStudent } from "@/store/store"
+import { useAtomValue, useSetAtom } from "jotai"
+import { checkedStudent, selectedPage, selectedStudent } from "@/store/store"
 import Button from "@/components/common/Button/Button"
 import useGetNation from "@/hooks/useGetNation"
 import ClassStudentDetailMoney from "@/components/teacher/Class/Student/Detail/ClassStudentDetailMoney"
 
 function students() {
+	const setSelectedPageAtom = useSetAtom(selectedPage)
+	const setSelectedStudentAtom = useSetAtom(selectedStudent)
 	const checkedStudentAtom = useAtomValue(checkedStudent)
 	const [openComp, closeComp, compState] = useCompHandler()
 	// const isDeskTop = useMediaQuery("(min-width: 1440px")
@@ -48,6 +50,12 @@ function students() {
 
 	const modalContent = <div css={modalWrapperCSS}></div>
 	const [nation] = useGetNation()
+
+	useEffect(() => {
+		// 다른 페이지에서 pagination number가 조정됐을 시, 초기화
+		setSelectedPageAtom(1)
+		setSelectedStudentAtom(-1)
+	}, [])
 
 	return (
 		<>

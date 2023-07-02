@@ -190,8 +190,11 @@ export type getGovEconomyType = {
 	totalAmount: number
 }
 
-
 export type getTeacherInfoType = {
-    identity: string,
-    phoneNum: string
+	identity: string
+	phoneNum: string
+}
+
+export type studentLicenseBodyType = {
+	[key: number]: number
 }

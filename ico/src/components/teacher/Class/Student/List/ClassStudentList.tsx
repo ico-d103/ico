@@ -13,11 +13,7 @@ function StudentList() {
 			<h1 css={headerCSS}>학생 정보</h1>
 			<div css={listWrapperCSS}>
 				{data && <StudentWaitingList waitingList={data} />}
-				{data && data.length > 0 && (
-					<>
-						<div css={divideLineCSS}></div>
-					</>
-				)}
+				{data && data.length > 0 && <div css={divideLineCSS}></div>}
 				<StudentEnteredList />
 			</div>
 		</>

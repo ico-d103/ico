@@ -1,5 +1,4 @@
 import { css } from "@emotion/react"
-import StudentEnteredListItem from "./ClassStudentEnteredListItem"
 import KebabMenu from "@/components/teacher/common/KebabMenu/KebabMenu"
 import { getStudentListAPI } from "@/api/teacher/class/getStudentListAPI"
 import { getStudentListType } from "@/types/teacher/apiReturnTypes"
@@ -10,14 +9,19 @@ import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
 import useCompHandler from "@/hooks/useCompHandler"
 import Modal from "@/components/common/Modal/Modal"
+import CollapseMenuStudentDetail from "@/components/teacher/common/CollapseMenu/CollapseMenuStudentDetail"
+import ClassStudentDetail from "../Detail/ClassStudentDetail"
+import { useAtomValue } from "jotai"
+import { selectedStudent } from "@/store/store"
+import ClassStudentDetailHead from "../Detail/ClassStudentDetailHead"
 
 function StudentEnteredList() {
 	const noti = useNotification()
 	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
 	const [openJobResetModal, closeJobResetModal, jobResetModalState] = useCompHandler()
-
 	const queryClient = useQueryClient()
 	const resetStudentsJobMutation = useMutation((a: number) => putResetStudentsJobAPI())
+	const selectedStudentAtom = useAtomValue(selectedStudent)
 
 	const resetStudentsJob = () => {
 		resetStudentsJobMutation.mutate(0, {
@@ -38,21 +42,45 @@ function StudentEnteredList() {
 		})
 	}
 
-	const dropdownList = [
-		{
-			name: "resetJob",
-			content: null,
-			label: "직업 초기화",
-			function: openJobResetModal,
-		},
-	]
-
 	const toggleStudentsAllCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
 		// 전체선택 됐을 때 처리
 	}
 
 	return (
-		<div css={wrapperCSS}>
+		<>
+			<div css={wrapperCSS}>
+				<div css={contentHeadCSS}>
+					<div>
+						<div css={titleCSS}>
+							학생들 <small>({data && data.length > 0 ? data.length : 0})</small>
+						</div>
+						<div css={checkCSS}>
+							<input type="checkbox" id="all-check" onChange={toggleStudentsAllCheck} />
+							<label htmlFor="all-check">학생 전체 선택</label>
+						</div>
+					</div>
+					<KebabMenu
+						dropdownList={[
+							{
+								name: "resetJob",
+								content: null,
+								label: "직업 초기화",
+								function: openJobResetModal,
+							},
+						]}
+					/>
+				</div>
+				<div css={contentCSS}>
+					{data?.map((student) => (
+						<CollapseMenuStudentDetail
+							key={student.id}
+							studentId={student.id}
+							titleChildren={<ClassStudentDetailHead student={student} />}
+							contentChildren={selectedStudentAtom === student.id ? <ClassStudentDetail /> : null}
+						></CollapseMenuStudentDetail>
+					))}
+				</div>
+			</div>
 			<Modal
 				compState={jobResetModalState}
 				closeComp={closeJobResetModal}
@@ -71,24 +99,7 @@ function StudentEnteredList() {
 					/>
 				}
 			/>
-			<div css={contentTitleCSS}>
-				<div>
-					<div css={titleCSS}>
-						학생들 <small>({data && data.length > 0 ? data.length : 0})</small>
-					</div>
-					<div css={checkCSS}>
-						<input type="checkbox" id="all-check" onChange={toggleStudentsAllCheck} />
-						<label htmlFor="all-check">학생 전체 선택</label>
-					</div>
-				</div>
-				<KebabMenu dropdownList={dropdownList} />
-			</div>
-			<div css={contentCSS}>
-				{data?.map((student) => (
-					<StudentEnteredListItem key={student.id} student={student} />
-				))}
-			</div>
-		</div>
+		</>
 	)
 }
 
@@ -102,7 +113,7 @@ const wrapperCSS = css`
 	flex: 1;
 `
 
-const contentTitleCSS = css`
+const contentHeadCSS = css`
 	display: flex;
 	flex-direction: row;
 	align-items: center;

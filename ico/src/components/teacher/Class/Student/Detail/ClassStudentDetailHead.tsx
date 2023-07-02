@@ -1,108 +1,211 @@
+import React from "react"
 import { css } from "@emotion/react"
-import KebabMenu from "@/components/teacher/common/KebabMenu/KebabMenu"
-import { putReleaseAccountAPI } from "@/api/teacher/class/putReleaseAccountAPI"
-import { useAtomValue } from "jotai"
-import { selectedStudent } from "@/store/store"
-import { putSuspendAccountAPI } from "@/api/teacher/class/putSuspendAccountAPI"
-import { putResetStudentJobAPI } from "@/api/teacher/class/putResetStudentJobAPI"
+import ClassStudentDetailMoney from "./ClassStudentDetailMoney"
+import { CLASS_GRADE_DOWN, CLASS_GRADE_UP } from "../../ClassIcons"
+import { getStudentListType } from "@/types/teacher/apiReturnTypes"
 import useNotification from "@/hooks/useNotification"
+import useGetNation from "@/hooks/useGetNation"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useAtom, useSetAtom } from "jotai"
+import { checkedStudent, selectedStudent } from "@/store/store"
+import { postCreditScoreAPI } from "@/api/teacher/class/postCreditScoreAPI"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 type ClassStudentDetailHeadPropsType = {
-	studentName: string
-	frozen: boolean
+	student: getStudentListType
 }
 
-function ClassStudentDetailHead({ studentName, frozen }: ClassStudentDetailHeadPropsType) {
+function ClassStudentDetailHead({ student }: ClassStudentDetailHeadPropsType) {
 	const noti = useNotification()
-	const selectedStudentAtom = useAtomValue(selectedStudent)
+	const [nation] = useGetNation()
+	const queryClient = useQueryClient()
+	const [checkedStudentAtom, setCheckedStudentAtom] = useAtom(checkedStudent)
+	const postCreditScoreMutation = useMutation((args: { studentId: number; body: { type: boolean } }) =>
+		postCreditScoreAPI(args),
+	)
 
-	const resetStudentJob = () => {
-		putResetStudentJobAPI({ studentId: selectedStudentAtom })
-			.then(() => {
+	const changeToggleState = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.checked) {
+			setCheckedStudentAtom([...checkedStudentAtom, { [student.id]: student.name }])
+		} else {
+			setCheckedStudentAtom(
+				checkedStudentAtom.filter((obj) => {
+					return !obj.hasOwnProperty(student.id)
+				}),
+			)
+		}
+	}
+
+	const postCreditScore = (type: boolean) => {
+		const args = type
+			? { studentId: student.id, body: { type: true } }
+			: { studentId: student.id, body: { type: false } }
+
+		postCreditScoreMutation.mutate(args, {
+			onSuccess: () => {
 				noti({
-					content: <NotiTemplate type={"ok"} content={`${studentName}의 직업을 초기화했습니다.`} />,
+					content: <NotiTemplate type={"ok"} content={"성공적으로 수정되었습니다."} />,
 					duration: 3000,
 				})
-			})
-			.catch(() => {
+
+				queryClient.invalidateQueries(["studentList", "entered"])
+				queryClient.invalidateQueries(["enteredStudentDetail", student.id])
+			},
+			onError: () => {
 				noti({
 					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
 					duration: 3000,
 				})
-			})
+			},
+		})
 	}
-
-	const preventStudentAccount = () => {
-		if (frozen) {
-			putReleaseAccountAPI({ studentId: selectedStudentAtom })
-				.then(() => {
-					noti({
-						content: <NotiTemplate type={"ok"} content={`${studentName}의 계좌 정지를 해제하였습니다.`} />,
-						duration: 3000,
-					})
-				})
-				.catch((error) => {
-					noti({
-						content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
-						duration: 3000,
-					})
-				})
-		} else {
-			putSuspendAccountAPI({ studentId: selectedStudentAtom })
-				.then(() => {
-					noti({
-						content: <NotiTemplate type={"ok"} content={`${studentName}의 계좌를 정지하였습니다.`} />,
-						duration: 3000,
-					})
-				})
-				.catch((error) => {
-					noti({
-						content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
-						duration: 3000,
-					})
-				})
-		}
-	}
-
-	const dropdownList = [
-		{
-			name: "reset",
-			content: null,
-			label: "직업 초기화",
-			function: resetStudentJob,
-		},
-		{
-			name: "prevent",
-			content: null,
-			label: frozen ? "계좌 정지 해제" : "계좌 정지",
-			function: preventStudentAccount,
-		},
-	]
 
 	return (
-		<div css={studentWrapperCSS}>
-			<div css={studentNameCSS}>{studentName}</div>
-			<KebabMenu dropdownList={dropdownList} />
+		<div css={wrapperCSS}>
+			<div css={leftWrapperCSS}>
+				<input
+					type="checkbox"
+					onClick={(e) => {
+						e.stopPropagation()
+					}}
+					onChange={changeToggleState}
+				/>
+				<h5 css={numberCSS}>{student.number}</h5>
+				<h5 css={nameCSS}>{student.name}</h5>
+				<h5 css={jobCSS}>{student.job ? student.job : "무직"}</h5>
+			</div>
+			<div css={rightWrapperCSS}>
+				<h5 css={amountCSS}>
+					{student.amount} {nation.currency}
+				</h5>
+				<ClassStudentDetailMoney studentId={student.id} />
+				<div css={divideCSS}></div>
+				<h5 css={creditRatingCSS}>{student.creditRating}등급</h5>
+				<div css={buttonWrapperCSS}>
+					<div
+						onClick={(e) => {
+							e.stopPropagation()
+							postCreditScore(false)
+						}}
+					>
+						{CLASS_GRADE_DOWN}
+					</div>
+					<h4 css={creditScoreCSS}>{student.creditScore} 점</h4>
+					<div
+						onClick={(e) => {
+							e.stopPropagation()
+							postCreditScore(true)
+						}}
+					>
+						{CLASS_GRADE_UP}
+					</div>
+				</div>
+			</div>
 		</div>
 	)
 }
 
-const studentWrapperCSS = css`
+const wrapperCSS = css`
+	width: 100%;
+	padding: 15px 15px;
+	background-color: var(--common-back-color-2);
+	border-radius: 10px;
+
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
-	margin-top: 20px;
+	cursor: pointer;
+	transition: all 0.2s;
+
+	:hover {
+		filter: brightness(93%);
+	}
 `
 
-const studentNameCSS = css`
-	font-size: var(--teacher-h3);
+const divideCSS = css`
+	height: 40px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	margin: 0 20px;
+`
+
+const leftWrapperCSS = css`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 15px;
+
+	> h5 {
+		font-size: var(--teacher-h5);
+	}
+
+	> input {
+		width: 23px;
+		height: 23px;
+		cursor: pointer;
+		border-radius: 50%;
+		border: 1px solid #999;
+		appearance: none;
+		transition: background 0.2s;
+
+		:checked {
+			background: var(--teacher-main-color);
+			border: none;
+		}
+	}
+`
+
+const rightWrapperCSS = css`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+`
+
+const numberCSS = css`
+	min-width: 20px;
+`
+
+const nameCSS = css`
 	font-weight: bold;
-	color: var(--teacher-main-color);
-	padding: 10px;
-	border-bottom: 2px solid #064f32;
-	display: inline-block;
+	min-width: 55px;
+`
+
+const jobCSS = css`
+	min-width: 100px;
+	color: var(--teacher-gray-color);
+`
+
+const creditRatingCSS = css`
+	min-width: 40px;
+	font-weight: bold;
+`
+
+const creditScoreCSS = css`
+	min-width: 40px;
+`
+
+const amountCSS = css`
+	min-width: 110px;
+	font-weight: bold;
+`
+
+const buttonWrapperCSS = css`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	min-width: 130px;
+
+	> div {
+		cursor: pointer;
+		transition: all 0.2s;
+
+		:hover {
+			transform: scale(1.2);
+		}
+	}
 `
 
 export default ClassStudentDetailHead
