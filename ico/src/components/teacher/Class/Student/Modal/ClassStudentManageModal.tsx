@@ -1,11 +1,67 @@
+import { useState } from "react"
 import { css } from "@emotion/react"
 import { useAtom } from "jotai"
 import { checkedStudent } from "@/store/store"
 import ClassStudentDetailMoney from "../Detail/ClassStudentDetailMoney"
 import Button from "@/components/common/Button/Button"
+import ClassStudentManageGrade from "./ClassStudentManageGrade"
+import ClassStudentDetailCertificateItem from "../Detail/ClassStudentDetailCertificateItem"
 
 function ClassStudentManageModal() {
+	const [openMoreMenu, setOpenMoreMenu] = useState<boolean>(false)
 	const [checkedStudentAtom, setCheckedStudentAtom] = useAtom(checkedStudent)
+	const license = [
+		{
+			id: 840,
+			subject: "수학",
+			rating: -1,
+		},
+		{
+			id: 841,
+			subject: "과학",
+			rating: -1,
+		},
+		{
+			id: 842,
+			subject: "사회",
+			rating: -1,
+		},
+		{
+			id: 843,
+			subject: "독서",
+			rating: -1,
+		},
+		{
+			id: 844,
+			subject: "바른 글씨",
+			rating: -1,
+		},
+		{
+			id: 845,
+			subject: "정리 정돈",
+			rating: -1,
+		},
+		{
+			id: 846,
+			subject: "체력",
+			rating: -1,
+		},
+		{
+			id: 847,
+			subject: "디자인",
+			rating: -1,
+		},
+		{
+			id: 848,
+			subject: "저축",
+			rating: -1,
+		},
+		{
+			id: 849,
+			subject: "운전면허",
+			rating: -1,
+		},
+	]
 
 	return (
 		<div css={wrapperCSS}>
@@ -24,26 +80,32 @@ function ClassStudentManageModal() {
 			</div>
 			<div css={contentCSS}>
 				{/* studentId는 임시 */}
-				<ClassStudentDetailMoney studentId={-1} />
-				<div css={divideCSS}></div>
-				<span>신용 점수를</span>
-				<Button
-					text={"올릴게요"}
-					fontSize={`var(--teacher-h6)`}
-					width={"80px"}
-					height={"30px"}
-					theme={"managePlus"}
-					margin={"0 10px 0 0"}
-					onClick={(e) => e.stopPropagation()}
-				/>
-				<Button
-					text={"내릴게요"}
-					fontSize={`var(--teacher-h6)`}
-					width={"80px"}
-					height={"30px"}
-					theme={"manageMinus"}
-					onClick={(e) => e.stopPropagation()}
-				/>
+				<div css={contentTopCSS}>
+					<ClassStudentDetailMoney studentId={-1} />
+					<div css={divideCSS}></div>
+					<ClassStudentManageGrade />
+				</div>
+				<button onClick={() => setOpenMoreMenu(!openMoreMenu)}>
+					{openMoreMenu ? "자격증 관리 닫기" : "자격증 관리 열기"}
+				</button>
+				{openMoreMenu && (
+					<div css={contentBottomCSS}>
+						<div>
+							{license.map((el) => (
+								<ClassStudentDetailCertificateItem key={el.id} certificate={el} />
+							))}
+						</div>
+						<Button
+							text={"자격증 정보 수정"}
+							fontSize={`0.9rem`}
+							width={"130px"}
+							height={"33px"}
+							theme={"managePlus"}
+							margin={"0 0 0 0"}
+							onClick={() => {}}
+						/>
+					</div>
+				)}
 			</div>
 		</div>
 	)
@@ -89,14 +151,40 @@ const headerCSS = css`
 
 const contentCSS = css`
 	display: flex;
+	flex-direction: column;
+
+	> button {
+		background: none;
+		margin-top: 5px;
+		font-size: var(--teacher-h5);
+		transition: all 0.1s;
+
+		:hover {
+			font-weight: bold;
+			color: var(--teacher-main-color);
+		}
+	}
+`
+
+const contentTopCSS = css`
+	display: flex;
 	flex-direction: row;
 	align-items: center;
+	margin: 20px 0;
+`
+
+const contentBottomCSS = css`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 30px;
 	margin-top: 20px;
 
-	> span {
-		font-size: var(--teacher-h5);
-		color: var(--teacher-gray-color);
-		margin-right: 15px;
+	> div {
+		width: 90%;
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
 	}
 `
 
