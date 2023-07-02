@@ -7,7 +7,7 @@ import useCompHandler from "@/hooks/useCompHandler"
 import ClassPropertyUseModalContent from "@/components/teacher/Class/Property/ClassPropertyUseModalContent"
 import ModalContent from "@/components/common/Modal/ModalContent"
 import { CLASS_BIG_PROPERTY } from "@/components/teacher/Class/ClassIcons"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getNationTreasuryAPI } from "@/api/teacher/class/getNationTreasuryAPI"
 import { getNationTreasuryType, getTreasuryHistoryType } from "@/types/teacher/apiReturnTypes"
 import KebabMenu from "@/components/teacher/common/KebabMenu/KebabMenu"
@@ -26,6 +26,7 @@ function property() {
 	const [isDepositMenuOpenAtom, setIsDepositMenuOpenAtom] = useAtom(isDepositMenuOpen)
 	const [selectedPageAtom, setSelectedPageAtom] = useAtom(selectedPage)
 
+	const queryClient = useQueryClient()
 	const treasury = useQuery<getNationTreasuryType>(["property"], getNationTreasuryAPI)
 	const treasuryList = useQuery<getTreasuryHistoryType>(["propertyList", selectedPageAtom], () =>
 		getTreasuryHistoryAPI({ page: selectedPageAtom }),
@@ -43,6 +44,15 @@ function property() {
 		// 다른 페이지에서 pagination number가 조정됐을 시, 초기화
 		setSelectedPageAtom(1)
 	}, [])
+
+	useEffect(() => {
+		if (treasuryList.data && selectedPageAtom <= treasuryList.data.size - 1) {
+			const nextPage = selectedPageAtom + 1
+
+			// 다음 내역 prefetch
+			queryClient.prefetchQuery(["propertyList", nextPage], () => getTreasuryHistoryAPI({ page: nextPage }))
+		}
+	}, [selectedPageAtom, treasuryList])
 
 	return (
 		<div css={wrapperCSS}>
