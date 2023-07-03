@@ -1,23 +1,27 @@
-import { css } from "@emotion/react"
 import { postResumeAPI } from "@/api/student/class/postResumeAPI"
-import { appendEulReul } from "@/util/isEndWithConsonant"
+import Button from "@/components/common/Button/Button"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import useGetNation from "@/hooks/useGetNation"
 import useNotification from "@/hooks/useNotification"
+import { getGovJobType } from "@/types/teacher/apiReturnTypes"
+import { appendEulReul } from "@/util/isEndWithConsonant"
+import { css } from "@emotion/react"
 
 type ClassJobSearchModalPropsType = {
-	job: string
-	id: number
+	job: getGovJobType
 	closeComp: () => void
+	isAlreadyApplied: boolean
 }
 
-function ClassJobSearchModal({ job, id, closeComp }: ClassJobSearchModalPropsType) {
+function ClassJobSearchModal({ job, closeComp, isAlreadyApplied }: ClassJobSearchModalPropsType) {
 	const noti = useNotification()
+	const [nation] = useGetNation()
 
 	const applyJobHandler = () => {
-		postResumeAPI({ id })
+		postResumeAPI({ id: job.id })
 			.then(() => {
 				noti({
-					content: <NotiTemplate type={"ok"} content={`${appendEulReul(job)} 신청했어요!`} />,
+					content: <NotiTemplate type={"ok"} content={`${appendEulReul(job.title)} 신청했어요!`} />,
 					duration: 3000,
 				})
 				closeComp()
@@ -32,48 +36,55 @@ function ClassJobSearchModal({ job, id, closeComp }: ClassJobSearchModalPropsTyp
 
 	return (
 		<div css={wrapperCSS}>
-			<div css={jobNameCSS}>
-				<span>
-					<b>{appendEulReul(job)}</b> 선택했어요
-				</span>
-			</div>
+			<span>
+				월급 {(job.wage * 30).toLocaleString("ko-KR")} {nation.currency}
+			</span>
+			<textarea readOnly value={job.detail} />
 			<div css={buttonWrapperCSS}>
-				<button onClick={closeComp}>취소</button>
-				<button onClick={applyJobHandler}>신청할래요 !</button>
+				<Button
+					text={"취소"}
+					fontSize={"var(--student-h3)"}
+					width={"130px"}
+					theme={"mobileCancel"}
+					onClick={closeComp}
+				/>
+				{isAlreadyApplied ? (
+					<Button
+						text={"신청 취소"}
+						fontSize={"var(--student-h3)"}
+						width={"130px"}
+						theme={"mobileSoft2"}
+						onClick={() => alert("직업 신청 취소")}
+					/>
+				) : (
+					<Button
+						text={"신청하기"}
+						fontSize={"var(--student-h3)"}
+						width={"130px"}
+						theme={"mobileSoft2"}
+						onClick={applyJobHandler}
+					/>
+				)}
 			</div>
 		</div>
 	)
 }
 
 const wrapperCSS = css`
-	padding: 30px 20px;
-	width: 300px;
-	height: 190px;
-	background: #ffffff;
-	border: 1px solid rgba(0, 0, 0, 0.1);
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-	border-radius: 10px;
-
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: space-around;
-`
+	gap: 20px;
 
-const jobNameCSS = css`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 10px;
-
-	> span {
-		font-size: 1.1rem;
-
-		> b {
-			font-size: 1.1rem;
-			font-weight: bold;
-			color: var(--student-main-color-5);
-		}
+	> textarea {
+		width: 286px;
+		height: 100px;
+		background: rgba(0, 0, 0, 0.05);
+		border-radius: 10px;
+		resize: none;
+		outline: none;
+		border: none;
+		padding: 15px;
 	}
 `
 
@@ -81,24 +92,6 @@ const buttonWrapperCSS = css`
 	display: flex;
 	flex-direction: row;
 	gap: 15px;
-
-	> button {
-		border-radius: 20px;
-		padding: 10px 15px;
-		font-size: var(--student-h3);
-	}
-
-	> button:nth-of-type(1) {
-		background-color: rgba(199, 199, 199, 0.4);
-		color: #828282;
-	}
-
-	> button:nth-of-type(2) {
-		background-color: var(--student-main-color);
-		color: var(--student-main-color-5);
-		/* background-color: var(--student-main-color-3);
-		color: var(--student-font-color); */
-	}
 `
 
 export default ClassJobSearchModal

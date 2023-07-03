@@ -3,24 +3,28 @@ import { css } from "@emotion/react"
 import Modal from "@/components/common/Modal/Modal"
 import useCompHandler from "@/hooks/useCompHandler"
 import ClassJobSearchModal from "./ClassJobSearchModal"
-import { getJobListType } from "@/types/student/apiReturnTypes"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { getCheckApplyFlagAPI } from "@/api/student/class/getCheckApplyFlagAPI"
+import { getGovJobType } from "@/types/teacher/apiReturnTypes"
+import ModalContent from "@/components/common/Modal/ModalContent"
+import { GOV_JOB } from "../../Gov/GovIcons"
+import { useState } from "react"
 
 type ClassJobSearchCardPropsType = {
-	job: getJobListType
+	job: getGovJobType
 	myGrade: number
 }
 
 function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 	const noti = useNotification()
 	const [openComp, closeComp, compState] = useCompHandler()
+	const [isAlreadyApplied, setIsAlreadyApplied] = useState<boolean>(false)
 
 	const checkValidApplyHandler = (canApply: boolean) => {
 		if (!canApply) {
 			noti({
-				content: <NotiTemplate type={"alert"} content={`신청할 수 없는 직업입니다.`} />,
+				content: <NotiTemplate type={"alert"} content={`신용 등급이 적합하지 않습니다.`} />,
 				duration: 3000,
 			})
 
@@ -29,13 +33,10 @@ function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 
 		getCheckApplyFlagAPI({ jobId: job.id }).then((res) => {
 			if (res) {
-				noti({
-					content: <NotiTemplate type={"alert"} content={`이미 신청하였습니다.`} />,
-					duration: 3000,
-				})
-			} else {
-				openComp()
+				setIsAlreadyApplied(true) // 신청한 직업 취소하기
 			}
+
+			openComp()
 		})
 	}
 
@@ -58,7 +59,16 @@ function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 				compState={compState}
 				closeComp={closeComp}
 				transition={"scale"}
-				content={<ClassJobSearchModal job={job.title} id={job.id} closeComp={closeComp} />}
+				content={
+					<ModalContent
+						width={"320px"}
+						icon={GOV_JOB}
+						title={`${job.title}`}
+						titleSize={"var(--student-h2)"}
+						content={<ClassJobSearchModal job={job} closeComp={closeComp} isAlreadyApplied={isAlreadyApplied} />}
+						forChild={true}
+					/>
+				}
 			/>
 		</>
 	)

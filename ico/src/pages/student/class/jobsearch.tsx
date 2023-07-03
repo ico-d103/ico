@@ -1,28 +1,21 @@
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import { css } from "@emotion/react"
 import ClassJobSearchCard from "@/components/student/Class/JobSearch/ClassJobSearchCard"
-import useNavigate from "@/hooks/useNavigate"
 import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
 import { ClassTabMenus } from "@/components/student/Class/ClassTabMenus"
-import { getJobListAPI } from "@/api/student/class/getJobListAPI"
 import { useEffect, useState } from "react"
-import { getJobListType } from "@/types/student/apiReturnTypes"
 import { getMyGradeAPI } from "@/api/student/class/getMyGradeAPI"
 import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
-import { useAtom } from "jotai"
-import { isNavigating } from "@/store/store"
+import { getGovJobAPI } from "@/api/teacher/gov/getGovJobAPI"
+import { getGovJobType } from "@/types/teacher/apiReturnTypes"
+import { useQuery } from "@tanstack/react-query"
 
 function jobsearch() {
-	const navigate = useNavigate()
-	const [jobList, setJobList] = useState<getJobListType[]>([])
 	const [myGrade, setMyGrade] = useState<number>(-1)
-	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
+	const { data } = useQuery<getGovJobType[]>(["govJobList"], getGovJobAPI)
 
 	useEffect(() => {
-		getJobListAPI().then((res) => {
-			setJobList(res)
-		})
 		getMyGradeAPI().then((res) => {
 			setMyGrade(res)
 		})
@@ -33,40 +26,18 @@ function jobsearch() {
 			<PageHeader title={"우리반"} addComp={<TabMenu menus={ClassTabMenus()} selected={1} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
-					{jobList.length !== 0 && (
-						<span
-							css={[
-								titleCSS,
-								css`
-									margin-top: 24px;
-								`,
-							]}
-						>
-							현재 <b>&nbsp;{jobList.length}개</b>의 직업이 사람을 구해요
-						</span>
-					)}
-					{jobList.length === 0 && (
+					{data?.length === 0 ? (
 						<div css={noneWrapperCSS}>
 							<UseAnimations animation={alertCircle} size={200} strokeColor={"rgba(0,0,0,0.4)"} />
-							<span css={titleCSS}>
-								현재 사람을 구하는 <b>&nbsp;직업</b>이 없어요!
-							</span>
+							<span css={titleCSS}>등록된 직업 목록이 없어요</span>
+						</div>
+					) : (
+						<div css={jobListCSS}>
+							{data?.map((job) => (
+								<ClassJobSearchCard key={job.id} job={job} myGrade={myGrade} />
+							))}
 						</div>
 					)}
-
-					<div css={jobListCSS}>
-						{jobList.map((job, idx) => (
-							<ClassJobSearchCard key={idx} job={job} myGrade={myGrade} />
-						))}
-					</div>
-					<div
-						css={floatingWrapperCSS}
-						onClick={() => {
-							navigate("/student/gov/job")
-						}}
-					>
-						{isNavigatingAtom === false && <div css={floatingCSS}>직업 설명 자세히 볼래요</div>}
-					</div>
 				</div>
 			</div>
 		</div>
@@ -100,6 +71,7 @@ const titleCSS = css`
 	justify-content: center;
 	align-items: center;
 	font-size: 1.1rem;
+	margin-top: 24px;
 
 	> b {
 		font-weight: bold;

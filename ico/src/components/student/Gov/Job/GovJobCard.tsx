@@ -33,7 +33,7 @@ function GovJobCard({ job }: GovJobCardPropsType) {
 					<div css={conditionWrapperCSS}>
 						<h4>월급</h4>
 						<h3>
-							{(job.wage * 30).toLocaleString('ko-KR')} {nation.currency}
+							{(job.wage * 30).toLocaleString("ko-KR")} {nation.currency}
 						</h3>
 					</div>
 				</div>
@@ -48,7 +48,7 @@ function GovJobCard({ job }: GovJobCardPropsType) {
 						icon={GOV_JOB}
 						title={`${appendEiGa(job.title)} 하는일`}
 						titleSize={"var(--student-h2)"}
-						content={<GovJobCardModalContent content={job.detail} closeComp={closeComp} />}
+						content={<GovJobCardModalContent job={job} closeComp={closeComp} isAlreadyApplied={false} />}
 						forChild={true}
 					/>
 				}
