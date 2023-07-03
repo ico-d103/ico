@@ -41,7 +41,7 @@ function property() {
 	}
 
 	useEffect(() => {
-		// 다른 페이지에서 pagination number가 조정됐을 시, 초기화
+		// 페이지 이동 시 store값 초기화
 		setSelectedPageAtom(1)
 	}, [])
 
