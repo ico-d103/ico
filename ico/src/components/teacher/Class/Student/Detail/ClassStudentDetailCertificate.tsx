@@ -81,7 +81,6 @@ function ClassStudentDetailCertificate({ license }: ClassStudentDetailCertificat
 }
 
 const wrapperCSS = css`
-	/* width: 100%; */
 	padding: 30px;
 	border: 1px solid #dde3ea;
 	background-color: var(--common-back-color-2);

@@ -11,9 +11,10 @@ import useCompHandler from "@/hooks/useCompHandler"
 import Modal from "@/components/common/Modal/Modal"
 import CollapseMenuStudentDetail from "@/components/teacher/common/CollapseMenu/CollapseMenuStudentDetail"
 import ClassStudentDetail from "../Detail/ClassStudentDetail"
-import { useAtomValue } from "jotai"
-import { selectedStudent } from "@/store/store"
+import { useAtom, useAtomValue } from "jotai"
+import { checkedStudent, selectedStudent } from "@/store/store"
 import ClassStudentDetailHead from "../Detail/ClassStudentDetailHead"
+import { useEffect } from "react"
 
 function StudentEnteredList() {
 	const noti = useNotification()
@@ -22,6 +23,7 @@ function StudentEnteredList() {
 	const queryClient = useQueryClient()
 	const resetStudentsJobMutation = useMutation((a: number) => putResetStudentsJobAPI())
 	const selectedStudentAtom = useAtomValue(selectedStudent)
+	const [checkedStudentAtom, setCheckedStudentAtom] = useAtom(checkedStudent)
 
 	const resetStudentsJob = () => {
 		resetStudentsJobMutation.mutate(0, {
@@ -43,7 +45,20 @@ function StudentEnteredList() {
 	}
 
 	const toggleStudentsAllCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-		// 전체선택 됐을 때 처리
+		// 전체 선택
+		if (e.target.checked) {
+			const selectAll: { [key: number]: string }[] = []
+
+			data?.forEach((student) => {
+				selectAll.push({ [student.id]: student.name })
+			})
+
+			setCheckedStudentAtom(selectAll)
+		}
+		// 전체 선택 해제
+		else {
+			setCheckedStudentAtom([])
+		}
 	}
 
 	return (
@@ -55,7 +70,14 @@ function StudentEnteredList() {
 							학생들 <small>({data && data.length > 0 ? data.length : 0})</small>
 						</div>
 						<div css={checkCSS}>
-							<input type="checkbox" id="all-check" onChange={toggleStudentsAllCheck} />
+							<input
+								checked={
+									checkedStudentAtom.length === 0 ? false : checkedStudentAtom.length === data?.length ? true : false
+								}
+								type="checkbox"
+								id="all-check"
+								onChange={toggleStudentsAllCheck}
+							/>
 							<label htmlFor="all-check">학생 전체 선택</label>
 						</div>
 					</div>
@@ -65,7 +87,13 @@ function StudentEnteredList() {
 								name: "resetJob",
 								content: null,
 								label: "직업 초기화",
-								function: openJobResetModal,
+								function: () => alert("준비 중입니다."),
+							},
+							{
+								name: "resetJob",
+								content: null,
+								label: "학생 내보내기",
+								function: () => alert("준비 중입니다."),
 							},
 						]}
 					/>

@@ -1,4 +1,4 @@
-import React from "react"
+import { useEffect, useState } from "react"
 import { css } from "@emotion/react"
 import ClassStudentDetailMoney from "./ClassStudentDetailMoney"
 import { CLASS_GRADE_DOWN, CLASS_GRADE_UP } from "../../ClassIcons"
@@ -23,6 +23,7 @@ function ClassStudentDetailHead({ student }: ClassStudentDetailHeadPropsType) {
 	const postCreditScoreMutation = useMutation((args: { studentId: number; body: { type: boolean } }) =>
 		postCreditScoreAPI(args),
 	)
+	const [isChecked, setIsChecked] = useState<boolean>(false)
 
 	const changeToggleState = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.checked) {
@@ -37,9 +38,7 @@ function ClassStudentDetailHead({ student }: ClassStudentDetailHeadPropsType) {
 	}
 
 	const postCreditScore = (type: boolean) => {
-		const args = type
-			? { studentId: student.id, body: { type: true } }
-			: { studentId: student.id, body: { type: false } }
+		const args = { studentId: student.id, body: { type: type } }
 
 		postCreditScoreMutation.mutate(args, {
 			onSuccess: () => {
@@ -60,10 +59,23 @@ function ClassStudentDetailHead({ student }: ClassStudentDetailHeadPropsType) {
 		})
 	}
 
+	useEffect(() => {
+		checkedStudentAtom.find((item) => {
+			if (Object.keys(item)[0] === student.id.toString()) {
+				setIsChecked(true)
+			}
+		})
+
+		return () => {
+			setIsChecked(false)
+		}
+	}, [checkedStudentAtom])
+
 	return (
 		<div css={wrapperCSS}>
 			<div css={leftWrapperCSS}>
 				<input
+					checked={isChecked}
 					type="checkbox"
 					onClick={(e) => {
 						e.stopPropagation()
@@ -78,7 +90,7 @@ function ClassStudentDetailHead({ student }: ClassStudentDetailHeadPropsType) {
 				<h5 css={amountCSS}>
 					{student.amount} {nation.currency}
 				</h5>
-				<ClassStudentDetailMoney studentId={student.id} />
+				<ClassStudentDetailMoney studentId={student.id} manageAll={false} />
 				<div css={divideCSS}></div>
 				<h5 css={creditRatingCSS}>{student.creditRating}등급</h5>
 				<div css={buttonWrapperCSS}>
