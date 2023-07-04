@@ -1,12 +1,17 @@
 package com.ico.api.controller;
 
 import com.ico.api.service.power.PowerService;
+import com.ico.core.entity.Power;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author 강교철
@@ -27,5 +32,15 @@ public class PowerController {
     public ResponseEntity<HttpStatus> createPower() {
         powerService.create();
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 교사가 권한 테이블 전체 조회
+     * @param request
+     * @return
+     */
+    @GetMapping("/teacher")
+    public ResponseEntity<List<Power>> getPower(HttpServletRequest request) {
+        return ResponseEntity.ok(powerService.getPower(request));
     }
 }

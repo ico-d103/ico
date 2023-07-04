@@ -7,6 +7,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
+/**
+ * @author 강교철
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -23,5 +29,10 @@ public class PowerServiceImpl implements PowerService{
                     .build();
             powerRepository.save(power);
         }
+    }
+
+    @Override
+    public List<Power> getPower(HttpServletRequest request) {
+        return powerRepository.findAll();
     }
 }
