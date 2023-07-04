@@ -1,6 +1,7 @@
 package com.ico.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ico.core.code.PowerEnum;
 import com.ico.core.dto.JobReqDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,6 +12,8 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -57,6 +60,9 @@ public class StudentJob {
     private String color;
 
     private String studentNames;
+
+    @Enumerated(EnumType.STRING)
+    private PowerEnum empowered;
 
     @Builder
     public StudentJob(Long id, Nation nation, String title, String detail, String image, int wage, byte creditRating, byte count, byte total, String color, String studentNames) {
