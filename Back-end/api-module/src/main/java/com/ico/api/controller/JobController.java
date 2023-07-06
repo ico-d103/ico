@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 직업 관련 Controller
@@ -126,6 +127,20 @@ public class JobController {
     @PutMapping("/teacher/reset/{studentId}")
     public ResponseEntity<HttpStatus> resetJob(@PathVariable Long studentId, HttpServletRequest request) {
         jobService.resetJob(studentId, request);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 교사가 직업에 권한을 부여
+     * @param request
+     * @param map
+     * @param jobId
+     * @return ok
+     */
+    @PutMapping("/teacher/add-power/{jobId}")
+    public ResponseEntity<HttpStatus> jobAddPower(
+            HttpServletRequest request, @RequestBody Map<String, List<Long>> map, @PathVariable Long jobId) {
+        jobService.addPower(request, map.get("powerIds"), jobId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

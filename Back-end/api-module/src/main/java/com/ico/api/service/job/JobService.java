@@ -4,6 +4,7 @@ import com.ico.api.dto.job.JobAddReqDto;
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
 import com.ico.api.dto.job.JobResDto;
+import com.ico.core.code.PowerEnum;
 import com.ico.core.dto.JobReqDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -74,4 +75,13 @@ public interface JobService {
      * @param request
      */
     void resetJob(Long studentId, HttpServletRequest request);
+
+    /**
+     * 교사가 직업에 권한을 부여
+     * @param request
+     * @param powerIds
+     */
+    void addPower(HttpServletRequest request, List<Long> powerIds, Long jobId);
+
+    void deletePower(HttpServletRequest request, List<Long> powerIds, Long jobId);
 }

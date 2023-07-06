@@ -1,7 +1,6 @@
 package com.ico.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ico.core.code.PowerEnum;
 import com.ico.core.dto.JobReqDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,14 +11,13 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.util.List;
 
 /**
  * 직업 Entity
@@ -61,11 +59,10 @@ public class StudentJob {
 
     private String studentNames;
 
-    @Enumerated(EnumType.STRING)
-    private PowerEnum empowered;
+    private String empowered;
 
     @Builder
-    public StudentJob(Long id, Nation nation, String title, String detail, String image, int wage, byte creditRating, byte count, byte total, String color, String studentNames) {
+    public StudentJob(Long id, Nation nation, String title, String detail, String image, int wage, byte creditRating, byte count, byte total, String color, String studentNames, String empowered) {
         this.id = id;
         this.nation = nation;
         this.title = title;
@@ -77,6 +74,7 @@ public class StudentJob {
         this.total = total;
         this.color = color;
         this.studentNames = studentNames;
+        this.empowered = empowered;
     }
 
     /**

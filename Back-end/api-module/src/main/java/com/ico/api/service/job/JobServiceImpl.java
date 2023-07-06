@@ -8,12 +8,15 @@ import com.ico.api.dto.job.JobResDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
+import com.ico.core.code.PowerEnum;
 import com.ico.core.dto.JobReqDto;
+import com.ico.core.entity.Power;
 import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.PowerRepository;
 import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.ResumeMongoRepository;
@@ -49,6 +52,8 @@ public class JobServiceImpl implements JobService{
     private final S3UploadService s3UploadService;
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final PowerRepository powerRepository;
 
     @Override
     public void updateJob(Long jobId, JobReqDto dto, HttpServletRequest request) {
@@ -219,5 +224,30 @@ public class JobServiceImpl implements JobService{
 
         // 학생의 직업 신청 내역 전부 삭제
         resumeMongoRepository.deleteAllByStudentId(studentId);
+    }
+
+    @Transactional
+    @Override
+    public void addPower(HttpServletRequest request, List<Long> powerIds, Long jobId) {
+        StudentJob job = studentJobRepository.findById(jobId)
+                .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
+        
+        // job.getEmpowered() 에 null 일 때 아무것도 없는 칸으로 비워주기
+        if (job.getEmpowered().equals("null")) {
+            job.setEmpowered("");
+        }
+
+        for (Long powerId : powerIds) {
+            Power power = powerRepository.findById(powerId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POWER));
+            job.setEmpowered(job.getEmpowered() + power.getId().toString() + ",");
+            studentJobRepository.save(job);
+        }
+    }
+
+    @Override
+    public void deletePower(HttpServletRequest request, List<Long> powerIds, Long jobId) {
+        StudentJob job = studentJobRepository.findById(jobId)
+                .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
     }
 }

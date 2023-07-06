@@ -81,11 +81,9 @@ public class Student {
     @Column(name = "pw_status")
     private Password pwStatus;
 
-    @Enumerated(EnumType.STRING)
-    private PowerEnum empowered;
+    private String empowered;
 
     public void encodeStudentPassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);
     }
-
 }

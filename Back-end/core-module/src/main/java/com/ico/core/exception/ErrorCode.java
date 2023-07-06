@@ -188,6 +188,9 @@ public enum ErrorCode{
     NOT_FOUND_RATING(HttpStatus.NOT_FOUND, "801", "등급이 비었습니다."),
 
     DUPLICATED_SUBJECT(HttpStatus.BAD_REQUEST, "802", "존재하는 과목명이 있습니다."),
+
+    NOT_FOUND_POWER(HttpStatus.NOT_FOUND, "900", "존재하지 않는 권한입니다."),
+
     ;
 
     private final HttpStatus httpStatus;
