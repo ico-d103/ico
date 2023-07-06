@@ -23,6 +23,7 @@ import java.util.List;
  * 직업 Entity
  *
  * @author 서재건
+ * @author 강교철
  */
 @Entity(name = "student_job")
 @Getter

@@ -35,6 +35,7 @@ import java.util.List;
  * 직업 관련 Service 로직 작성
  *
  * @author 서재건
+ * @author 강교철
  */
 @Slf4j
 @Service
@@ -228,7 +229,7 @@ public class JobServiceImpl implements JobService{
 
     @Transactional
     @Override
-    public void addPower(HttpServletRequest request, List<Long> powerIds, Long jobId) {
+    public void updatePower(HttpServletRequest request, List<Long> powerIds, Long jobId) {
         StudentJob job = studentJobRepository.findById(jobId)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
         
@@ -240,14 +241,8 @@ public class JobServiceImpl implements JobService{
         for (Long powerId : powerIds) {
             Power power = powerRepository.findById(powerId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POWER));
-            job.setEmpowered(job.getEmpowered() + power.getId().toString() + ",");
+            job.setEmpowered(power.getId().toString() + ",");
             studentJobRepository.save(job);
         }
-    }
-
-    @Override
-    public void deletePower(HttpServletRequest request, List<Long> powerIds, Long jobId) {
-        StudentJob job = studentJobRepository.findById(jobId)
-                .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
     }
 }

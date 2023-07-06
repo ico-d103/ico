@@ -4,7 +4,6 @@ import com.ico.api.dto.job.JobAddReqDto;
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
 import com.ico.api.dto.job.JobResDto;
-import com.ico.core.code.PowerEnum;
 import com.ico.core.dto.JobReqDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +13,7 @@ import java.util.List;
  * 직업 관련 Service interface
  *
  * @author 서재건
+ * @author 강교철
  */
 public interface JobService {
 
@@ -81,7 +81,6 @@ public interface JobService {
      * @param request
      * @param powerIds
      */
-    void addPower(HttpServletRequest request, List<Long> powerIds, Long jobId);
+    void updatePower(HttpServletRequest request, List<Long> powerIds, Long jobId);
 
-    void deletePower(HttpServletRequest request, List<Long> powerIds, Long jobId);
 }

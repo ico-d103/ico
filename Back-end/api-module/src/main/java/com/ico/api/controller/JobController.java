@@ -137,10 +137,10 @@ public class JobController {
      * @param jobId
      * @return ok
      */
-    @PutMapping("/teacher/add-power/{jobId}")
-    public ResponseEntity<HttpStatus> jobAddPower(
+    @PutMapping("/teacher/power/{jobId}")
+    public ResponseEntity<HttpStatus> jobUpdatePower(
             HttpServletRequest request, @RequestBody Map<String, List<Long>> map, @PathVariable Long jobId) {
-        jobService.addPower(request, map.get("powerIds"), jobId);
+        jobService.updatePower(request, map.get("powerIds"), jobId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }
