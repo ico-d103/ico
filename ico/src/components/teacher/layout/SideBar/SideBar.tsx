@@ -42,7 +42,7 @@ function SideBar({ children }: SideBarProps) {
 	useEffect(() => {
 		// Object.keys(SUB_ELEMENT).forEach((el: string, idx: number) => {
 		// 	if (SUB_ELEMENT[Number(el)][router.pathname]) {
-				
+
 		// 		setSelectedMain(() => Number(el))
 		// 		const curRoute = SUB_ELEMENT[Number(el)][router.pathname]
 
@@ -53,23 +53,20 @@ function SideBar({ children }: SideBarProps) {
 		// 			const temp = curRoute.for
 		// 			setSelectedSub(() => temp)
 		// 		}
-				
+
 		// 	} else {
 
 		// 		if (Object.keys(SUB_ELEMENT).length - 1 === idx && selectedMain == -1 && selectedSub == -1) {
-					
+
 		// 			setSelectedMain(() => -2)
 		// 			setSelectedSub(() => -2)
 		// 		}
 		// 	}
-			
-				
-			
+
 		// })
 
 		for (const el of Object.keys(SUB_ELEMENT)) {
 			if (SUB_ELEMENT[Number(el)][router.pathname]) {
-				
 				setSelectedMain(() => Number(el))
 				const curRoute = SUB_ELEMENT[Number(el)][router.pathname]
 
@@ -82,9 +79,7 @@ function SideBar({ children }: SideBarProps) {
 				}
 				return
 			} else {
-
 				if (Object.keys(SUB_ELEMENT).length - 1 === Number(el) && selectedMain == -1 && selectedSub == -1) {
-					
 					setSelectedMain(() => -2)
 					setSelectedSub(() => -2)
 				} else if (!SUB_ELEMENT[Number(el)][router.pathname]) {
@@ -92,11 +87,8 @@ function SideBar({ children }: SideBarProps) {
 					setSelectedSub(() => -2)
 				}
 			}
-			
-				
-			
 		}
-		
+
 		// return () => {
 		// 	if (selectedMain == -1 && selectedSub == -1) {
 		// 		setSelectedMain(() => -2)
@@ -104,10 +96,7 @@ function SideBar({ children }: SideBarProps) {
 		// 		alert('dfggrfw')
 		// 	}
 		// }
-
 	}, [router.pathname])
-
-
 
 	const selectMainHandler = (value: number) => {
 		// setSelectedMain(() => value)
@@ -120,7 +109,7 @@ function SideBar({ children }: SideBarProps) {
 		router.push(Object.keys(SUB_ELEMENT[selectedMain])[value])
 	}
 
-	const MAIN_LOGO = <img css={logoCSS} src={"/assets/icon_desktop.png"} />
+	const MAIN_LOGO = <img css={logoCSS} src={"/assets/icon_desktop.png"} alt="교사회원 메인 아이콘" />
 
 	const MAIN_ELEMENT: { [prop: number]: { name: string; label: string; content: any } } = {
 		0: { name: "class", label: "우리 반", content: MAIN_CLASS },
@@ -165,7 +154,12 @@ function SideBar({ children }: SideBarProps) {
 				menuIndex: 1,
 			},
 			"/teacher/gov/job": { name: "set_job", label: "직업 관리", content: SUB_GOVERNMENT_JOB, menuIndex: 2 },
-			"/teacher/gov/economy": { name: "view_economy", label: "경제 현황", content: SUB_GOVERNMENT_ECONOMY, menuIndex: 3 },
+			"/teacher/gov/economy": {
+				name: "view_economy",
+				label: "경제 현황",
+				content: SUB_GOVERNMENT_ECONOMY,
+				menuIndex: 3,
+			},
 		},
 		2: {
 			"/teacher/finance/deposit": { name: "set_deposit", label: "예금", content: SUB_FINANCE_DEPOSIT, menuIndex: 0 },
@@ -232,7 +226,6 @@ function SideBar({ children }: SideBarProps) {
 
 	return (
 		<div css={layoutWrapperCSS}>
-			
 			{selectedMain >= 0 && selectedSub >= 0 ? sideBarRender : selectedMain === -2 && selectedSub === -2 && children}
 		</div>
 	)
