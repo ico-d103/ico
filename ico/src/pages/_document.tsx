@@ -2,9 +2,13 @@ import { Html, Head, Main, NextScript } from "next/document"
 
 export default function Document() {
 	return (
-		<Html lang="en">
+		<Html lang="ko">
 			<Head>
 				<link rel="shortcut icon" href="/favicon.ico" />
+				<title>학급 경제 교육 플랫폼 | 아이코</title>
+				<meta name="description" content="초등학생 학급 경제 교육 플랫폼 웹/앱 서비스"></meta>
+				<meta name="keywords" content="초등학생, 경제교육"></meta>
+				<meta name="author" content="ICO"></meta>
 			</Head>
 			<link rel="manifest" href="/manifest.json" />
 			<meta name="theme-color" content="#fffae2" />
@@ -30,9 +34,7 @@ export default function Document() {
 			<meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
 			<body>
 				<link href="https://webfontworld.github.io/sunn/SUIT.css" rel="stylesheet"></link>
-				{/* modal이 렌더링 될 위치 */}
 				<div id="portal" />
-
 				<Main />
 				<NextScript />
 			</body>

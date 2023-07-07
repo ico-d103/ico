@@ -198,7 +198,7 @@ const buttonCSS = ({ theme }: { theme: string }) => {
 			border: none;
 			border-radius: 20px;
 			background-color: var(--teacher-gray2-color);
-			color: var(--teacher-gray-color);
+			color: var(--teacher-gray3-color);
 		`,
 	}
 
