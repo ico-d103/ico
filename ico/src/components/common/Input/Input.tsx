@@ -11,11 +11,12 @@ type InputProps = {
 	isFile?: boolean
 	css?: null
 	isTextarea?: boolean
+	resizeTextarea?: boolean
 } & React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>
 
 const Input = React.forwardRef(
 	(
-		{ theme, customCss, css, textAlign, leftContent, rightContent, isFile, isTextarea, ...props }: InputProps,
+		{ theme, customCss, css, textAlign, leftContent, rightContent, isFile, isTextarea, resizeTextarea = true, ...props }: InputProps,
 		ref: React.ForwardedRef<HTMLInputElement>,
 	) => {
 		const [isFocusing, setIsFocusing] = useState<boolean>(false)
@@ -24,7 +25,7 @@ const Input = React.forwardRef(
 		const divRef = useRef<HTMLDivElement>(null)
 
 		const resizeHeightHandler = () => {
-			if (textareaRef.current && divRef.current) {
+			if (textareaRef.current && divRef.current && resizeTextarea) {
 				textareaRef.current.style.height = "auto"
 				textareaRef.current.style.height = textareaRef.current.scrollHeight + "px"
 				divRef.current.style.height = textareaRef.current.scrollHeight + "px"
@@ -32,7 +33,10 @@ const Input = React.forwardRef(
 		}
 
 		useEffect(() => {
-			resizeHeightHandler()
+			if (resizeTextarea) {
+				resizeHeightHandler()
+			}
+			
 		}, [])
 
 		return (
@@ -105,6 +109,7 @@ const initLabelCSS = css`
 	justify-content: space-between;
 	overflow: hidden;
 	flex-wrap: nowrap;
+	/* background-color: red; */
 `
 
 const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {

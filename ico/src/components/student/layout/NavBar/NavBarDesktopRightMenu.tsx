@@ -18,7 +18,13 @@ function NavBarDesktopRightMenu({data}: {data: getHomeMyInfoType}) {
 		// navigate("/teacher/login")
 	}
 
-    const menu = [{content: <img src={"/assets/side_menu/student_logout.png"} css={css`height: 100%; width: auto;`}/>, label: '로그아웃', function: () => {signoutHandler()} }]
+    // 권한에 따라 보여줄지 말지에 대한 분기 처리 할것!
+    const menu = [
+        {content: <img src={"/assets/dock/dock_class.png"} css={css`height: 100%; width: auto;`}/>, label: '학급 소식 관리', function: () => {navigate("/student/job/rule", "bottomToTop")} },
+        {content: <img src={"/assets/side_menu/student_logout.png"} css={css`height: 100%; width: auto;`}/>, label: '로그아웃', function: () => {signoutHandler()} },
+    
+
+]
 
     const renderMenu = menu.map((el, idx) => {
         return (
