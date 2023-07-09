@@ -10,6 +10,7 @@ import { useAtom, useSetAtom } from "jotai"
 import { checkedStudent, selectedStudent } from "@/store/store"
 import { postCreditScoreAPI } from "@/api/teacher/class/postCreditScoreAPI"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import CheckBox from "@/components/teacher/common/CheckBox/CheckBox"
 
 type ClassStudentDetailHeadPropsType = {
 	student: getStudentListType
@@ -73,7 +74,28 @@ function ClassStudentDetailHead({ student }: ClassStudentDetailHeadPropsType) {
 
 	return (
 		<div css={wrapperCSS}>
-			<div css={leftWrapperCSS}>
+			<CheckBox
+			customCss={leftWrapperCSS}
+				checked={isChecked}
+				onClick={(e) => {
+					e.stopPropagation()
+				}}
+				onChange={changeToggleState}
+				id={`${student.id}`}
+			>
+				<label
+					htmlFor={`${student.id}`}
+					onClick={(e) => {
+						e.stopPropagation()
+					}}
+				>
+					<span css={numberCSS}>{student.number}</span>
+					<span css={nameCSS}>{student.name}</span>
+				</label>
+				<span css={jobCSS}>{student.job ? student.job : "무직"}</span>
+			</CheckBox>
+
+			{/* <div css={leftWrapperCSS}>
 				<input
 					checked={isChecked}
 					type="checkbox"
@@ -93,7 +115,7 @@ function ClassStudentDetailHead({ student }: ClassStudentDetailHeadPropsType) {
 					<span css={nameCSS}>{student.name}</span>
 				</label>
 				<span css={jobCSS}>{student.job ? student.job : "무직"}</span>
-			</div>
+			</div> */}
 			<div css={rightWrapperCSS}>
 				<span css={amountCSS}>
 					{student.amount} {nation.currency}
@@ -159,7 +181,7 @@ const leftWrapperCSS = css`
 		font-size: var(--teacher-h5);
 	}
 
-	> input {
+	/* > input {
 		width: 23px;
 		height: 23px;
 		cursor: pointer;
@@ -172,7 +194,7 @@ const leftWrapperCSS = css`
 			background: var(--teacher-main-color);
 			border: none;
 		}
-	}
+	} */
 
 	> label {
 		display: flex;
