@@ -15,6 +15,7 @@ import { useAtom, useAtomValue } from "jotai"
 import { checkedStudent, selectedStudent } from "@/store/store"
 import ClassStudentDetailHead from "../Detail/ClassStudentDetailHead"
 import { useEffect } from "react"
+import CheckBox from "@/components/teacher/common/CheckBox/CheckBox"
 
 function StudentEnteredList() {
 	const noti = useNotification()
@@ -69,7 +70,17 @@ function StudentEnteredList() {
 						<div css={titleCSS}>
 							학생들 <small>({data && data.length > 0 ? data.length : 0})</small>
 						</div>
-						<div css={checkCSS}>
+						<CheckBox
+							customCss={css`margin-left: 15px;`}
+							checked={
+								checkedStudentAtom.length === 0 ? false : checkedStudentAtom.length === data?.length ? true : false
+							}
+							id="all-check"
+							onChange={toggleStudentsAllCheck}
+						>
+							<label htmlFor="all-check">학생 전체 선택</label>
+						</CheckBox>
+						{/* <div css={checkCSS}>
 							<input
 								checked={
 									checkedStudentAtom.length === 0 ? false : checkedStudentAtom.length === data?.length ? true : false
@@ -79,7 +90,7 @@ function StudentEnteredList() {
 								onChange={toggleStudentsAllCheck}
 							/>
 							<label htmlFor="all-check">학생 전체 선택</label>
-						</div>
+						</div> */}
 					</div>
 					<KebabMenu
 						dropdownList={[
