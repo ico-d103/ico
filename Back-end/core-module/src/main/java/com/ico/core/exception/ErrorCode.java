@@ -191,6 +191,7 @@ public enum ErrorCode{
 
     NOT_FOUND_POWER(HttpStatus.NOT_FOUND, "900", "존재하지 않는 권한입니다."),
 
+    DUPLICATED_POWER(HttpStatus.BAD_REQUEST, "901", "중복된 권한입니다."),
     ;
 
     private final HttpStatus httpStatus;

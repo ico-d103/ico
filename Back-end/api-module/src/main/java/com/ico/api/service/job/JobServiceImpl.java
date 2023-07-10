@@ -230,19 +230,35 @@ public class JobServiceImpl implements JobService{
     @Transactional
     @Override
     public void updatePower(HttpServletRequest request, List<Long> powerIds, Long jobId) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         StudentJob job = studentJobRepository.findById(jobId)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
         
-        // job.getEmpowered() 에 null 일 때 아무것도 없는 칸으로 비워주기
-        if (job.getEmpowered().equals("null")) {
-            job.setEmpowered("");
-        }
+        // job.getEmpowered() 아무것도 없는 칸으로 비워주기
+        job.setEmpowered("");
 
         for (Long powerId : powerIds) {
             Power power = powerRepository.findById(powerId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POWER));
-            job.setEmpowered(power.getId().toString() + ",");
+
+            // 중복 체크
+            if (job.getEmpowered().contains(power.getId().toString())) {
+                throw new CustomException(ErrorCode.DUPLICATED_POWER);
+            }
+
+            // job empowered 컬럼 채우기
+            job.setEmpowered(job.getEmpowered() + power.getId() + ",");
             studentJobRepository.save(job);
+        }
+
+        // 권한 업데이트 전에 권한을 가진 직업을 가진 학생이 있는지 확인
+        List<Student> students = studentRepository.findAllByNationIdAndStudentJobId(nationId, jobId);
+        for (Student student : students) {
+            log.info(student.getEmpowered());
+            student.setEmpowered(job.getEmpowered());
+
+            // 학생 테이블의 empowered 수정
+            studentRepository.save(student);
         }
     }
 }

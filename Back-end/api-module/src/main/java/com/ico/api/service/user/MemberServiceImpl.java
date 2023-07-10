@@ -17,8 +17,10 @@ import com.ico.core.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -64,6 +66,7 @@ public class MemberServiceImpl implements MemberService {
         return teacher || student;
     }
 
+    @Transactional
     @Override
     public Map<String, Object> returnStatus(HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
@@ -77,8 +80,13 @@ public class MemberServiceImpl implements MemberService {
                 return Map.of("status", "require_change_password", "role", role);
             }
             if (jwtTokenProvider.getNation(token) != null) {
-                // 학생의 토큰에 NationId 값이 있을 때
-                return Map.of("status", "approved", "role", role);
+                // 학생의 토큰에 NationId 값이 있고 직업 권한이 없을 때
+                if (student.getEmpowered().isBlank()) {
+                    return Map.of("status", "approved", "role", role);
+                }
+                // 학생의 토큰에 NationId 값이 있고 직업 권한이 있을 때
+                return Map.of("status", "approved,"+student.getEmpowered(), "role", role);
+
             } else {
                 if (student.getNation() != null) {
                     // 학생이 반 코드 요청을 보냈고 교사에게 승인 받은 후
