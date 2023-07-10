@@ -5,6 +5,7 @@ import com.ico.api.dto.job.JobAllColDto;
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
 import com.ico.api.dto.job.JobResDto;
+import com.ico.api.dto.job.JobResetReqDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
@@ -171,13 +172,10 @@ public class JobServiceImpl implements JobService{
 
     @Transactional
     @Override
-    public void resetAllJob(HttpServletRequest request) {
-        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
-        nationRepository.findById(nationId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
-
+    public void resetAllJob(JobResetReqDto dto) {
+        List<Long> studentIds = dto.getStudentIds();
         //직업의 배정 인원 및 이름 초기화
-        List<StudentJob> studentJobList = studentJobRepository.findAllByNationId(nationId);
+        List<StudentJob> studentJobList = studentJobRepository.findAllByIdIn(studentIds);
         for (StudentJob studentJob : studentJobList) {
             studentJob.setCount((byte) 0);
             studentJob.setStudentNames("");
@@ -185,14 +183,14 @@ public class JobServiceImpl implements JobService{
         }
 
         // 학생에게 배정된 직업 삭제
-        List<Student> studentList = studentRepository.findAllByNationId(nationId);
+        List<Student> studentList = studentRepository.findAllByIdIn(studentIds);
         for (Student student : studentList) {
             student.setStudentJob(null);
             studentRepository.save(student);
         }
 
         // 직업신청내역에서도 전부 삭제
-        resumeMongoRepository.deleteAllByNationId(nationId);
+        resumeMongoRepository.deleteAllByStudentIdIn(studentIds);
     }
 
     @Transactional
