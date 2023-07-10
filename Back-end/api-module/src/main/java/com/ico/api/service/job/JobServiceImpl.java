@@ -172,11 +172,29 @@ public class JobServiceImpl implements JobService{
 
     @Transactional
     @Override
-    public void resetAllJob(JobResetReqDto dto) {
+    public void resetAllJob(JobResetReqDto dto, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
         List<Long> studentIds = dto.getStudentIds();
+        if (studentIds == null || studentIds.isEmpty()) {
+            throw new CustomException(ErrorCode.EMPTY_STUDENT_IDS);
+        }
         //직업의 배정 인원 및 이름 초기화
         List<StudentJob> studentJobList = studentJobRepository.findAllByIdIn(studentIds);
         for (StudentJob studentJob : studentJobList) {
+
+            Nation nation = studentJob.getNation();
+            // 데이터베이스에서 정상적으로 나라 등록이 안된 경우
+            if (nation == null) {
+                log.info("[resetAllJob] id값[{}] 직업의 나라가 등록되어 있지 않습니다.", studentJob.getId());
+                throw new CustomException(ErrorCode.ERROR_NATION_JOB);
+            }
+
+            // 교사가 잘못된 학생의 id값을 보낸 경우
+            if (!nationId.equals(nation.getId())) {
+                throw new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION);
+            }
+
             studentJob.setCount((byte) 0);
             studentJob.setStudentNames("");
             studentJobRepository.save(studentJob);

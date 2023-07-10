@@ -3,7 +3,6 @@ package com.ico.api.dto.job;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -15,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class JobResetReqDto {
 
-    @NotNull(message = "431")
     private List<Long> studentIds;
 
 }

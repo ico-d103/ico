@@ -66,7 +66,7 @@ public interface JobService {
      *
      * @param dto
      */
-    void resetAllJob(JobResetReqDto dto);
+    void resetAllJob(JobResetReqDto dto, HttpServletRequest request);
 
     /**
      * 개별 직업 배정 초기화

@@ -112,8 +112,8 @@ public class JobController {
      * @return
      */
     @PutMapping("/teacher/reset")
-    public ResponseEntity<HttpStatus> resetAllJob(JobResetReqDto dto) {
-        jobService.resetAllJob(dto);
+    public ResponseEntity<HttpStatus> resetAllJob(JobResetReqDto dto, HttpServletRequest request) {
+        jobService.resetAllJob(dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
