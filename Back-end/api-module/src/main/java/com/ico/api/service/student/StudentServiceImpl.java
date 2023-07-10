@@ -235,6 +235,8 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+        // 비동기 처리
+        // 학생의 예금 총합 반환
         CompletableFuture<Integer> futureAmount = CompletableFuture.supplyAsync(() -> {
             int amount = 0;
             List<Deposit> depositList = depositMongoRepository.findAllByStudentId(studentId);
@@ -243,6 +245,7 @@ public class StudentServiceImpl implements StudentService {
             }
             return amount;
         });
+        // 학생의 투자 총합 반환
         CompletableFuture<Integer> futureInvest = CompletableFuture.supplyAsync(() -> {
             int amount = 0;
             Optional<Invest> invest = investRepository.findByStudentId(studentId);
@@ -251,6 +254,7 @@ public class StudentServiceImpl implements StudentService {
             }
             return amount;
         });
+        // 학생의 직업 이미지 반환
         CompletableFuture<String> futureImgUri = CompletableFuture.supplyAsync(() -> {
             String imgUrl = null;
             StudentJob job;
@@ -259,6 +263,7 @@ public class StudentServiceImpl implements StudentService {
             }
             return imgUrl;
         });
+        // 한 번에 실행
         CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(futureAmount, futureInvest, futureImgUri);
 
         int depositAmount;
@@ -266,11 +271,13 @@ public class StudentServiceImpl implements StudentService {
         String imgUrl;
 
         try {
+            // 값 대입
             combinedFuture.join();
             depositAmount = futureAmount.join();
             investAmount = futureInvest.join();
             imgUrl = futureImgUri.join();
         } catch (CompletionException e) {
+            // 위의 과정에서 발생하는 Custom Exception 던짐
             throw new RuntimeException(e.getCause());
         }
 
