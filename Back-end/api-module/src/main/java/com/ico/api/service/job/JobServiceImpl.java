@@ -194,6 +194,8 @@ public class JobServiceImpl implements JobService{
         List<Student> studentList = studentRepository.findAllByNationId(nationId);
         for (Student student : studentList) {
             student.setStudentJob(null);
+            // 학생의 권한 삭제
+            student.setEmpowered("");
             studentRepository.save(student);
         }
 
@@ -221,6 +223,8 @@ public class JobServiceImpl implements JobService{
         studentJobRepository.save(studentJob);
 
         student.setStudentJob(null);
+        // 학생의 권한 삭제
+        student.setEmpowered("");
         studentRepository.save(student);
 
         // 학생의 직업 신청 내역 전부 삭제
@@ -251,7 +255,7 @@ public class JobServiceImpl implements JobService{
             studentJobRepository.save(job);
         }
 
-        // 권한 업데이트 전에 권한을 가진 직업을 가진 학생이 있는지 확인
+        // 권한 업데이트 전에 권한을 가진 직업을 가진 학생이 있는지 확인 - 없으면 pass
         List<Student> students = studentRepository.findAllByNationIdAndStudentJobId(nationId, jobId);
         for (Student student : students) {
             log.info(student.getEmpowered());
