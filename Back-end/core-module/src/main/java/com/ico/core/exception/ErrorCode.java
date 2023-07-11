@@ -119,8 +119,6 @@ public enum ErrorCode{
 
     INVALID_JOB_TOTAL(HttpStatus.BAD_REQUEST, "424", "배정된 인원보다 적은 총 인원 수를 설정할 수 없습니다."),
 
-    EMPTY_STUDENT_IDS(HttpStatus.BAD_REQUEST, "431", "List에 학생id값이 없습니다."),
-
     INVALID_CREDIT_RATING(HttpStatus.BAD_REQUEST, "500", "신용등급 요건에 적합하지 않습니다."),
 
     REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "503", "신청 내역이 존재하지 않습니다."),

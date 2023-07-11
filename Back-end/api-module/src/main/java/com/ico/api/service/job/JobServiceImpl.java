@@ -176,9 +176,7 @@ public class JobServiceImpl implements JobService{
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         List<Long> studentIds = dto.getStudentIds();
-        if (studentIds == null || studentIds.isEmpty()) {
-            throw new CustomException(ErrorCode.EMPTY_STUDENT_IDS);
-        }
+
         //직업의 배정 인원 및 이름 초기화
         List<StudentJob> studentJobList = studentJobRepository.findAllByIdIn(studentIds);
         for (StudentJob studentJob : studentJobList) {
