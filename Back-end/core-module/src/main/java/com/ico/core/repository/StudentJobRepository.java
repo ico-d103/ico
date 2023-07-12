@@ -59,4 +59,12 @@ public interface StudentJobRepository extends JpaRepository<StudentJob, Long> {
      */
     List<StudentJob> findAllByNationIdOrderByTotalDesc(Long nationId);
 
+    /**
+     * 체크한 학생들의 id값으로 조회
+     *
+     * @param ids
+     * @return
+     */
+    List<StudentJob> findAllByIdIn(List<Long> ids);
+
 }

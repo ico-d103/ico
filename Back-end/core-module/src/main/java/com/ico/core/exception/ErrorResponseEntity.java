@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
@@ -76,4 +77,18 @@ public class ErrorResponseEntity {
                                 .build());
     }
 
+    /**
+     * Request Body가 요구되지만 아무 것도 보내지 않은 경우
+     *
+     * @param e
+     * @return
+     */
+    public static ResponseEntity<ErrorResponseEntity> toResponseEntity(HttpMessageNotReadableException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponseEntity.builder()
+                        .code("39")
+                        .message("Request Body 가 누락되었습니다.")
+                        .build());
+    }
 }

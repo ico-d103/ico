@@ -63,6 +63,8 @@ public enum ErrorCode{
 
     EXPIRE_BUY_TRANSACTION(HttpStatus.BAD_REQUEST, "38", "5분이 경과하여 구매내역을 조회할 수 없습니다."),
 
+    ERROR_NATION_JOB(HttpStatus.INTERNAL_SERVER_ERROR, "39", "학생 직업 데이터베이스에 나라가 등록되어 있지 않습니다."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, "104", "비밀번호 입력 칸이 비었습니다."),

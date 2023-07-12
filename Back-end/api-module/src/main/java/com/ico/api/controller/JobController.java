@@ -4,6 +4,7 @@ import com.ico.api.dto.job.JobAddReqDto;
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
 import com.ico.api.dto.job.JobResDto;
+import com.ico.api.dto.job.JobResetReqDto;
 import com.ico.api.service.job.JobService;
 import com.ico.core.dto.JobReqDto;
 import lombok.RequiredArgsConstructor;
@@ -105,14 +106,14 @@ public class JobController {
     }
 
     /**
-     * 직업 배정 초기화
+     * 선택한 학생들의 직업 배정 초기화
      *
-     * @param request
+     * @param dto
      * @return
      */
     @PutMapping("/teacher/reset")
-    public ResponseEntity<HttpStatus> resetAllJob(HttpServletRequest request) {
-        jobService.resetAllJob(request);
+    public ResponseEntity<HttpStatus> resetAllJob(@Valid @RequestBody JobResetReqDto dto, HttpServletRequest request) {
+        jobService.resetAllJob(dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

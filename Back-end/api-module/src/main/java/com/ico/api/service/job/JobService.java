@@ -4,6 +4,7 @@ import com.ico.api.dto.job.JobAddReqDto;
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
 import com.ico.api.dto.job.JobResDto;
+import com.ico.api.dto.job.JobResetReqDto;
 import com.ico.core.dto.JobReqDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,9 +64,9 @@ public interface JobService {
     /**
      * 직업 배정 초기화
      *
-     * @param request
+     * @param dto
      */
-    void resetAllJob(HttpServletRequest request);
+    void resetAllJob(JobResetReqDto dto, HttpServletRequest request);
 
     /**
      * 개별 직업 배정 초기화

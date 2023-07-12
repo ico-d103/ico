@@ -1,6 +1,7 @@
 package com.ico.core.exception;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,6 +44,17 @@ public class CustomExceptionHandler {
      */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     ResponseEntity<ErrorResponseEntity> handleMaxSizeException(MaxUploadSizeExceededException e) {
+        return ErrorResponseEntity.toResponseEntity(e);
+    }
+
+    /**
+     * Request Body 가 누락되었을 때 발생하는 Exception 처리 method
+     *
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    ResponseEntity<ErrorResponseEntity> handleMissingRequestBodyException(HttpMessageNotReadableException e) {
         return ErrorResponseEntity.toResponseEntity(e);
     }
 }
