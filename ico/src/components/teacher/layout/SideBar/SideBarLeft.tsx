@@ -1,12 +1,12 @@
-import React from 'react'
+import React from "react"
 import { css } from "@emotion/react"
 import { MAIN_SETTING, MAIN_SIGNOUT } from "./SideBarIcons"
 import { removeCookie } from "@/api/cookie"
 import { useRouter } from "next/router"
 import useGetTokenStatus from "@/hooks/useGetTokenStatus"
-import useCompHandler from '@/hooks/useCompHandler'
-import Modal from '@/components/common/Modal/Modal'
-import Account from '../../Account/Account'
+import useCompHandler from "@/hooks/useCompHandler"
+import Modal from "@/components/common/Modal/Modal"
+import Account from "../../Account/Account"
 
 type SideBarLeftProps = {
 	element: { [prop: number]: { name: string; label: string; content: any } }
@@ -44,7 +44,7 @@ function SideBarLeft({ element, logo, selectHandler, selected }: SideBarLeftProp
 
 	return (
 		<React.Fragment>
-			<Modal compState={compState} closeComp={closeComp} transition={'scale'} content={<Account/>}/>
+			<Modal compState={compState} closeComp={closeComp} transition={"scale"} content={<Account />} />
 			<div css={sideBarLeftWrapperCSS}>
 				<div css={topWrapperCSS}>
 					<div css={logoWrapperCSS}>{logo}</div>
@@ -63,7 +63,7 @@ function SideBarLeft({ element, logo, selectHandler, selected }: SideBarLeftProp
 						<div css={elementContentCSS}>{MAIN_SETTING}</div>
 					</div>
 					<div css={bottomLineCSS} />
-					<img css={userImgCSS} src={"/assets/account.png"} alt="" onClick={openComp} />
+					<img css={userImgCSS} src={"/assets/account.png"} alt="교사회원 계정확인 아이콘" onClick={openComp} />
 				</div>
 			</div>
 		</React.Fragment>
