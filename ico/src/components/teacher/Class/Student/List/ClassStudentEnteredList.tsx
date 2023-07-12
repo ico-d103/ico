@@ -14,7 +14,6 @@ import ClassStudentDetail from "../Detail/ClassStudentDetail"
 import { useAtom, useAtomValue } from "jotai"
 import { checkedStudent, selectedStudent } from "@/store/store"
 import ClassStudentDetailHead from "../Detail/ClassStudentDetailHead"
-import { useEffect } from "react"
 import CheckBox from "@/components/teacher/common/CheckBox/CheckBox"
 
 function StudentEnteredList() {
@@ -22,12 +21,14 @@ function StudentEnteredList() {
 	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
 	const [openJobResetModal, closeJobResetModal, jobResetModalState] = useCompHandler()
 	const queryClient = useQueryClient()
-	const resetStudentsJobMutation = useMutation((a: number) => putResetStudentsJobAPI())
+	const resetStudentsJobMutation = useMutation((body: number[]) => putResetStudentsJobAPI({ body }))
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 	const [checkedStudentAtom, setCheckedStudentAtom] = useAtom(checkedStudent)
 
 	const resetStudentsJob = () => {
-		resetStudentsJobMutation.mutate(0, {
+		const keys = checkedStudentAtom.map((item) => parseInt(Object.keys(item)[0]))
+
+		resetStudentsJobMutation.mutate(keys, {
 			onSuccess: () => {
 				noti({
 					content: <NotiTemplate type={"ok"} content={"직업을 초기화했습니다."} />,
@@ -62,6 +63,22 @@ function StudentEnteredList() {
 		}
 	}
 
+	const checkValidModalOpen = (type: string) => {
+		if (!checkedStudentAtom.length) {
+			noti({
+				content: <NotiTemplate type={"alert"} content={`선택된 학생이 없습니다.`} />,
+				duration: 2000,
+			})
+
+			return
+		}
+
+		if (type === "reset") openJobResetModal()
+		else if (type === "deport") {
+			// openDeportStudentModal()
+		}
+	}
+
 	return (
 		<>
 			<div css={wrapperCSS}>
@@ -71,7 +88,9 @@ function StudentEnteredList() {
 							학생들 <small>({data && data.length > 0 ? data.length : 0})</small>
 						</div>
 						<CheckBox
-							customCss={css`margin-left: 15px;`}
+							customCss={css`
+								margin-left: 15px;
+							`}
 							checked={
 								checkedStudentAtom.length === 0 ? false : checkedStudentAtom.length === data?.length ? true : false
 							}
@@ -80,17 +99,6 @@ function StudentEnteredList() {
 						>
 							<label htmlFor="all-check">학생 전체 선택</label>
 						</CheckBox>
-						{/* <div css={checkCSS}>
-							<input
-								checked={
-									checkedStudentAtom.length === 0 ? false : checkedStudentAtom.length === data?.length ? true : false
-								}
-								type="checkbox"
-								id="all-check"
-								onChange={toggleStudentsAllCheck}
-							/>
-							<label htmlFor="all-check">학생 전체 선택</label>
-						</div> */}
 					</div>
 					<KebabMenu
 						dropdownList={[
@@ -98,13 +106,13 @@ function StudentEnteredList() {
 								name: "resetJob",
 								content: null,
 								label: "직업 초기화",
-								function: () => alert("준비 중입니다."),
+								function: () => checkValidModalOpen("reset"),
 							},
 							{
-								name: "resetJob",
+								name: "deportStudent",
 								content: null,
 								label: "학생 내보내기",
-								function: () => alert("준비 중입니다."),
+								function: () => checkValidModalOpen("deport"),
 							},
 						]}
 					/>
@@ -126,13 +134,13 @@ function StudentEnteredList() {
 				transition={"scale"}
 				content={
 					<ModalAlert
-						title={"모든 학생들의 직업을 초기화합니다."}
+						title={"선택된 학생들의 직업을 초기화합니다."}
 						titleSize={"var(--teacher-h2)"}
 						proceed={resetStudentsJob}
 						width={"480px"}
 						content={[
-							"모든 학생들의 직업이 초기화됩니다!",
-							"더이상 학생들이 직업 활동을 할 수 없습니다!",
+							"선택된 학생들이 올바른지 다시 확인해 주세요.",
+							"선택된 학생들은 새로 직업을 구해야 합니다.",
 							"월급 날에 해지일까지 일한 날짜만큼 보수를 받습니다.",
 						]}
 					/>
