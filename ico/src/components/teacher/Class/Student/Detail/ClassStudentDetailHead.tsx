@@ -10,6 +10,7 @@ import { useAtom, useSetAtom } from "jotai"
 import { checkedStudent, selectedStudent } from "@/store/store"
 import { postCreditScoreAPI } from "@/api/teacher/class/postCreditScoreAPI"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import CheckBox from "@/components/teacher/common/CheckBox/CheckBox"
 
 type ClassStudentDetailHeadPropsType = {
 	student: getStudentListType
@@ -73,7 +74,28 @@ function ClassStudentDetailHead({ student }: ClassStudentDetailHeadPropsType) {
 
 	return (
 		<div css={wrapperCSS}>
-			<div css={leftWrapperCSS}>
+			<CheckBox
+			customCss={leftWrapperCSS}
+				checked={isChecked}
+				onClick={(e) => {
+					e.stopPropagation()
+				}}
+				onChange={changeToggleState}
+				id={`${student.id}`}
+			>
+				<label
+					htmlFor={`${student.id}`}
+					onClick={(e) => {
+						e.stopPropagation()
+					}}
+				>
+					<span css={numberCSS}>{student.number}</span>
+					<span css={nameCSS}>{student.name}</span>
+				</label>
+				<span css={jobCSS}>{student.job ? student.job : "무직"}</span>
+			</CheckBox>
+
+			{/* <div css={leftWrapperCSS}>
 				<input
 					checked={isChecked}
 					type="checkbox"
@@ -81,18 +103,26 @@ function ClassStudentDetailHead({ student }: ClassStudentDetailHeadPropsType) {
 						e.stopPropagation()
 					}}
 					onChange={changeToggleState}
+					id={`${student.id}`}
 				/>
-				<h5 css={numberCSS}>{student.number}</h5>
-				<h5 css={nameCSS}>{student.name}</h5>
-				<h5 css={jobCSS}>{student.job ? student.job : "무직"}</h5>
-			</div>
+				<label
+					htmlFor={`${student.id}`}
+					onClick={(e) => {
+						e.stopPropagation()
+					}}
+				>
+					<span css={numberCSS}>{student.number}</span>
+					<span css={nameCSS}>{student.name}</span>
+				</label>
+				<span css={jobCSS}>{student.job ? student.job : "무직"}</span>
+			</div> */}
 			<div css={rightWrapperCSS}>
-				<h5 css={amountCSS}>
+				<span css={amountCSS}>
 					{student.amount} {nation.currency}
-				</h5>
+				</span>
 				<ClassStudentDetailMoney studentId={student.id} manageAll={false} />
 				<div css={divideCSS}></div>
-				<h5 css={creditRatingCSS}>{student.creditRating}등급</h5>
+				<span css={creditRatingCSS}>{student.creditRating}등급</span>
 				<div css={buttonWrapperCSS}>
 					<div
 						onClick={(e) => {
@@ -147,11 +177,11 @@ const leftWrapperCSS = css`
 	align-items: center;
 	gap: 15px;
 
-	> h5 {
+	> span {
 		font-size: var(--teacher-h5);
 	}
 
-	> input {
+	/* > input {
 		width: 23px;
 		height: 23px;
 		cursor: pointer;
@@ -164,6 +194,12 @@ const leftWrapperCSS = css`
 			background: var(--teacher-main-color);
 			border: none;
 		}
+	} */
+
+	> label {
+		display: flex;
+		flex-direction: row;
+		min-width: 100px;
 	}
 `
 
@@ -175,12 +211,11 @@ const rightWrapperCSS = css`
 `
 
 const numberCSS = css`
-	min-width: 20px;
+	min-width: 25px;
 `
 
 const nameCSS = css`
 	font-weight: bold;
-	min-width: 55px;
 `
 
 const jobCSS = css`
