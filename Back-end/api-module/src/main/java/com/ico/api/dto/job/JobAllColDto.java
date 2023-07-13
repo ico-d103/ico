@@ -36,8 +36,10 @@ public class JobAllColDto {
 
     private List<String> studentNames;
 
+    private List<String> empowered;
+
     @Builder
-    public JobAllColDto(Long id, String title, String image, String color, int creditRating, int total, String salary, int count, List<String> studentNames) {
+    public JobAllColDto(Long id, String title, String image, String color, int creditRating, int total, String salary, int count, List<String> studentNames, List<String> empowered) {
         this.id = id;
         this.title = title;
         this.image = image;
@@ -47,6 +49,7 @@ public class JobAllColDto {
         this.salary = salary;
         this.count = count;
         this.studentNames = studentNames;
+        this.empowered = empowered;
     }
 
     /**
@@ -57,6 +60,7 @@ public class JobAllColDto {
      */
     public JobAllColDto of(StudentJob studentJob, String salary, String image) {
         String studentNames = studentJob.getStudentNames();
+        String empowered = studentJob.getEmpowered();
         return JobAllColDto.builder()
                 .id(studentJob.getId())
                 .title(studentJob.getTitle())
@@ -68,6 +72,8 @@ public class JobAllColDto {
                 .count(studentJob.getCount())
                 .studentNames((studentNames == null || studentNames.equals(""))
                         ? new ArrayList<>() : List.of(studentNames.split(",")))
+                .empowered((empowered == null || empowered.equals(""))
+                        ? new ArrayList<>() : List.of(empowered.split(",")))
                 .build();
 
     }

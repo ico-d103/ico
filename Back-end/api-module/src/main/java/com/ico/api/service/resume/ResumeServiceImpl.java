@@ -219,6 +219,7 @@ public class ResumeServiceImpl implements ResumeService {
         studentJobRepository.save(studentJob);
         log.info("[assignResume] 직업 배정 인원 추가");
         student.setStudentJob(studentJob);
+        student.setEmpowered(studentJob.getEmpowered());
         studentRepository.save(student);
         log.info("[assignResume] 학생 직업 배정");
     }

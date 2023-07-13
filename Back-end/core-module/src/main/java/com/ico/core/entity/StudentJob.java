@@ -17,11 +17,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.util.List;
 
 /**
  * 직업 Entity
  *
  * @author 서재건
+ * @author 강교철
  */
 @Entity(name = "student_job")
 @Getter
@@ -58,8 +60,10 @@ public class StudentJob {
 
     private String studentNames;
 
+    private String empowered;
+
     @Builder
-    public StudentJob(Long id, Nation nation, String title, String detail, String image, int wage, byte creditRating, byte count, byte total, String color, String studentNames) {
+    public StudentJob(Long id, Nation nation, String title, String detail, String image, int wage, byte creditRating, byte count, byte total, String color, String studentNames, String empowered) {
         this.id = id;
         this.nation = nation;
         this.title = title;
@@ -71,6 +75,7 @@ public class StudentJob {
         this.total = total;
         this.color = color;
         this.studentNames = studentNames;
+        this.empowered = empowered;
     }
 
     /**
