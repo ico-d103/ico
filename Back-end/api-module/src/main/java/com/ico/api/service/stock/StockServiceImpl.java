@@ -64,4 +64,12 @@ public class StockServiceImpl implements StockService{
 
         return stocksRes;
     }
+
+    @Override
+    public void deleteStock(HttpServletRequest request, Long stockId) {
+        Stock stock = stockRepository.findById(stockId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
+
+        stockRepository.delete(stock);
+    }
 }

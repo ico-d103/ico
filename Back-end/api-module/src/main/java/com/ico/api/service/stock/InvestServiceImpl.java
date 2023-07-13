@@ -5,12 +5,14 @@ import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Issue;
 import com.ico.core.entity.Nation;
+import com.ico.core.entity.Stock;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.IssueRepository;
+import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +37,7 @@ public class InvestServiceImpl implements InvestService{
     private final NationRepository nationRepository;
     private final TransactionService transactionService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final StockRepository stockRepository;
 
     /**
      * 주식 매수
@@ -43,7 +46,7 @@ public class InvestServiceImpl implements InvestService{
      * @param amount 매수 금액
      */
     @Override
-    public void buyStock(HttpServletRequest request, double price, int amount) {
+    public void buyStock(HttpServletRequest request, double price, int amount, Long stockId) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
         Long studentId = jwtTokenProvider.getId(token);
@@ -61,6 +64,11 @@ public class InvestServiceImpl implements InvestService{
 //            throw new CustomException(ErrorCode.NOT_TRADING_TIME);
 //        }
 //        log.info("거래 가능 시간");
+
+        // 투자 종목 여부 유효성 검사
+        // TODO : 계산식이랑 매수 매도는 천천히 더 바꿔야함!!
+        Stock stock = stockRepository.findById(stockId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
 
         log.info("[buyStock] 주식 매수 시간 LocalTime : {}", currentTime);
         log.info("[buyStock] 주식 매수 시간 LocalDateTime : {}", LocalDateTime.now());
@@ -93,7 +101,7 @@ public class InvestServiceImpl implements InvestService{
         investRepository.save(invest);
 
         // 거래 내역 추가
-//        transactionService.addTransactionWithdraw(nation.getTitle() + " 증권", studentId, amount, nation.getStock() + " 지수");
+        transactionService.addTransactionWithdraw(nation.getTitle() + " 증권", studentId, amount, stock.getTitle() + " 지수");
 
     }
 
@@ -102,11 +110,10 @@ public class InvestServiceImpl implements InvestService{
      */
     @Transactional
     @Override
-    public void sellStock(HttpServletRequest request) {
+    public void sellStock(HttpServletRequest request, Long stockId) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
         Long studentId = jwtTokenProvider.getId(token);
-
 
         // 학생 유효검사
         Student student = studentRepository.findById(studentId)
@@ -123,6 +130,9 @@ public class InvestServiceImpl implements InvestService{
 //        if(currentTime.isAfter(nation.getTrading_end()) || currentTime.isBefore(nation.getTrading_start())){
 //            throw new CustomException(ErrorCode.NOT_TRADING_TIME);
 //        }
+        // 투자 종목 여부 유효성 검사
+        Stock stock = stockRepository.findById(stockId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
 
         // 국가의 주식 데이터가 없을 경우
         List<Issue> issueList = issueRepository.findAllByNationIdOrderByIdDesc(nationId);

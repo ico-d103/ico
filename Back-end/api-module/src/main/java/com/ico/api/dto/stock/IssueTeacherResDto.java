@@ -1,5 +1,6 @@
 package com.ico.api.dto.stock;
 
+import com.ico.core.entity.Stock;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
