@@ -237,29 +237,30 @@ public class JobServiceImpl implements JobService{
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         StudentJob job = studentJobRepository.findById(jobId)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
-        
-        // job.getEmpowered() 아무것도 없는 칸으로 비워주기
-        job.setEmpowered("");
+
+        // empowered 초기화
+        StringBuilder jobEmpowered = new StringBuilder();
 
         for (Long powerId : powerIds) {
             Power power = powerRepository.findById(powerId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POWER));
 
             // 중복 체크
-            if (job.getEmpowered().contains(power.getId().toString())) {
+            if (jobEmpowered.toString().contains(power.getId().toString())) {
                 throw new CustomException(ErrorCode.DUPLICATED_POWER);
             }
 
             // job empowered 컬럼 채우기
-            job.setEmpowered(job.getEmpowered() + power.getId() + ",");
-            studentJobRepository.save(job);
+            jobEmpowered.append(power.getId()).append(",");
         }
+        job.setEmpowered(jobEmpowered.toString());
+        studentJobRepository.save(job);
 
         // 권한 업데이트 전에 권한을 가진 직업을 가진 학생이 있는지 확인 - 없으면 pass
         List<Student> students = studentRepository.findAllByNationIdAndStudentJobId(nationId, jobId);
         for (Student student : students) {
-            log.info(student.getEmpowered());
-            student.setEmpowered(job.getEmpowered());
+            log.info("[updatePower] 학생들의 권한 정보 : {}", student.getEmpowered());
+            student.setEmpowered(jobEmpowered.toString());
 
             // 학생 테이블의 empowered 수정
             studentRepository.save(student);

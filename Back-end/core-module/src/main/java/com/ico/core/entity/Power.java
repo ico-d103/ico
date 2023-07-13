@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
+ * 직업 권한 관련
+ *
  * @author 강교철
  */
 @Entity

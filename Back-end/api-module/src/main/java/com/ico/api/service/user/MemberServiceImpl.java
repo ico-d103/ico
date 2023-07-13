@@ -66,7 +66,7 @@ public class MemberServiceImpl implements MemberService {
         return teacher || student;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Map<String, Object> returnStatus(HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);

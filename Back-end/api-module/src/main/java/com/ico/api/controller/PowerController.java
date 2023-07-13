@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
+ * 직업 권한 관련
+ *
  * @author 강교철
  */
 @RestController
