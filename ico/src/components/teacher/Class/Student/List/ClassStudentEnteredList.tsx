@@ -21,14 +21,17 @@ function StudentEnteredList() {
 	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
 	const [openJobResetModal, closeJobResetModal, jobResetModalState] = useCompHandler()
 	const queryClient = useQueryClient()
-	const resetStudentsJobMutation = useMutation((body: number[]) => putResetStudentsJobAPI({ body }))
+	const resetStudentsJobMutation = useMutation((args: { body: { studentIds: number[] } }) =>
+		putResetStudentsJobAPI(args),
+	)
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 	const [checkedStudentAtom, setCheckedStudentAtom] = useAtom(checkedStudent)
 
 	const resetStudentsJob = () => {
 		const keys = checkedStudentAtom.map((item) => parseInt(Object.keys(item)[0]))
+		const args = { body: { studentIds: keys } }
 
-		resetStudentsJobMutation.mutate(keys, {
+		resetStudentsJobMutation.mutate(args, {
 			onSuccess: () => {
 				noti({
 					content: <NotiTemplate type={"ok"} content={"직업을 초기화했습니다."} />,
@@ -134,14 +137,14 @@ function StudentEnteredList() {
 				transition={"scale"}
 				content={
 					<ModalAlert
-						title={"선택된 학생들의 직업을 초기화합니다."}
+						title={`학생 ${checkedStudentAtom.length}명의 직업을 초기화합니다.`}
 						titleSize={"var(--teacher-h2)"}
 						proceed={resetStudentsJob}
 						width={"480px"}
 						content={[
-							"선택된 학생들이 올바른지 다시 확인해 주세요.",
-							"선택된 학생들은 새로 직업을 구해야 합니다.",
-							"월급 날에 해지일까지 일한 날짜만큼 보수를 받습니다.",
+							"선택된 학생(들)이 올바른지 다시 확인해 주세요.",
+							"선택된 학생(들)은 새로 직업을 구해야 합니다.",
+							"월급날에 해지일까지 일한일 수만큼 보수를 받습니다.",
 						]}
 					/>
 				}

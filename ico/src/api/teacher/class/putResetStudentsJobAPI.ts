@@ -2,7 +2,7 @@ import { tokenInstance } from "@/api/instance"
 import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
-	body: number[]
+	body: { studentIds: number[] }
 }
 
 type responseType = {
