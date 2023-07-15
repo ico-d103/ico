@@ -102,7 +102,7 @@ function ClassStudentManageModal() {
 							height={"33px"}
 							theme={"managePlus"}
 							margin={"0 0 0 0"}
-							onClick={() => {}}
+							onClick={() => alert("준비 중입니다.😀")}
 						/>
 					</div>
 				)}
@@ -182,6 +182,8 @@ const contentBottomCSS = css`
 
 	> div {
 		width: 90%;
+		height: 230px;
+		overflow: scroll;
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
