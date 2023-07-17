@@ -21,6 +21,7 @@ import {
 	SUB_FINANCE_STOCK,
 	SUB_STORE_STUDENT,
 	SUB_STORE_TEACHER,
+	SUB_CORPORATE_MANAGEMENT,
 } from "./SideBarIcons"
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react"
 import "overlayscrollbars/overlayscrollbars.css"
@@ -159,6 +160,12 @@ function SideBar({ children }: SideBarProps) {
 				label: "경제 현황",
 				content: SUB_GOVERNMENT_ECONOMY,
 				menuIndex: 3,
+			},
+			"/teacher/gov/corporate": {
+				name: "set_corporate",
+				label: "기업 관리",
+				content: SUB_CORPORATE_MANAGEMENT,
+				menuIndex: 4,
 			},
 		},
 		2: {

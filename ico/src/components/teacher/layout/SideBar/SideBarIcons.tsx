@@ -199,14 +199,13 @@ export const SUB_GOVERNMENT_ECONOMY = (
 		<path
 			d="M15.5 3.5V2M19.4393 4.56066L20.5 3.5M20.5103 8.5H22.0103M21.9506 13C21.4489 18.0533 17.1853 22 12 22C6.47715 22 2 17.5228 2 12C2 6.81465 5.94668 2.5511 11 2.04938M12 8H16V12M15.6197 8C13.2653 11.3276 9.38636 13.5 5 13.5C3.9971 13.5 3.02072 13.3864 2.08302 13.1715"
 			stroke="white"
-			stroke-opacity="0.7"
-			stroke-width="2"
-			stroke-linecap="round"
-			stroke-linejoin="round"
+			strokeOpacity="0.7"
+			strokeWidth="2"
+			strokeLinecap="round"
+			strokeLinejoin="round"
 		/>
 	</svg>
 )
-
 
 // 금융 아이콘
 
@@ -264,3 +263,15 @@ export const SUB_STORE_STUDENT = (
 	</svg>
 )
 
+export const SUB_CORPORATE_MANAGEMENT = (
+	<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<path
+			d="M13 11H17.8C18.9201 11 19.4802 11 19.908 11.218C20.2843 11.4097 20.5903 11.7157 20.782 12.092C21 12.5198 21 13.0799 21 14.2V21M13 21V6.2C13 5.0799 13 4.51984 12.782 4.09202C12.5903 3.71569 12.2843 3.40973 11.908 3.21799C11.4802 3 10.9201 3 9.8 3H6.2C5.0799 3 4.51984 3 4.09202 3.21799C3.71569 3.40973 3.40973 3.71569 3.21799 4.09202C3 4.51984 3 5.0799 3 6.2V21M22 21H2M6.5 7H9.5M6.5 11H9.5M6.5 15H9.5"
+			stroke="white"
+			strokeOpacity="0.7"
+			strokeWidth="2"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		/>
+	</svg>
+)
