@@ -38,4 +38,4 @@ export type layoutTokenStatusType = {
 }
 
 export type tokenRoleIndividual = 'STUDENT' | 'TEACHER' | 'GUEST' | 'ADMIN'
-export type tokenStatusIndividual = 'admin' | 'require_login' | 'require_submit_code' | 'require_refresh_token' | 'require_submit_certification' | 'require_create_nation' | 'require_approval' | 'approved'
+export type tokenStatusIndividual = 'admin' | 'require_login' | 'require_submit_code' | 'require_refresh_token' | 'require_submit_certification' | 'require_create_nation' | 'require_approval' | 'require_change_password' | 'approved'

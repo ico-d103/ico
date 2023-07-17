@@ -38,8 +38,8 @@ function StudentWaitingListItem({ student, idx }: StudentWaitingListItemPropsTyp
 	return (
 		<div css={wrapperCSS(idx)}>
 			<div css={leftWrapperCSS}>
-				<h4>{student.number}</h4>
-				<h4>{student.name}</h4>
+				<h5>{student.number}</h5>
+				<h5>{student.name}</h5>
 			</div>
 			<div css={rightWrapperCSS}>
 				<Button
@@ -47,7 +47,7 @@ function StudentWaitingListItem({ student, idx }: StudentWaitingListItemPropsTyp
 					fontSize={`var(--teacher-h5)`}
 					width={"80px"}
 					height={"30px"}
-					theme={"positive"}
+					theme={"managePlus"}
 					onClick={immigrationAcceptHandler}
 				/>
 				<Button
@@ -55,7 +55,7 @@ function StudentWaitingListItem({ student, idx }: StudentWaitingListItemPropsTyp
 					fontSize={`var(--teacher-h5)`}
 					width={"80px"}
 					height={"30px"}
-					theme={"warning"}
+					theme={"manageMinus"}
 					onClick={immigrationDenyHandler}
 				/>
 			</div>
@@ -66,7 +66,7 @@ function StudentWaitingListItem({ student, idx }: StudentWaitingListItemPropsTyp
 const wrapperCSS = (idx: number) => {
 	return css`
 		width: 100%;
-		padding: 10px 15px;
+		padding: 10px 20px;
 		background-color: ${idx % 2 === 0 ? `var(--teacher-main-color-op-2)` : `var(--common-back-color-2)`};
 		border-radius: 10px;
 
@@ -83,11 +83,13 @@ const leftWrapperCSS = css`
 	align-items: center;
 	gap: 15px;
 
-	> h4 {
-		font-size: var(--teacher-h4);
+	> h5:nth-of-type(1) {
+		min-width: 20px;
+		font-size: var(--teacher-h5);
 	}
 
-	> h4:nth-of-type(1) {
+	> h5:nth-of-type(2) {
+		font-size: var(--teacher-h5);
 		font-weight: bold;
 	}
 `

@@ -7,6 +7,7 @@ import UseAnimations from "react-useanimations"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 const ALERT_ICON = (
 	<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,26 +35,21 @@ const CHECK_ICON = (
 
 type FinanceDepositDeleteModalProps = {
 	closeComp: Function
-	refetch: Function
+	cancelHandler: Function
 }
 
-function FinanceDepositDeleteModal({closeComp, refetch }: FinanceDepositDeleteModalProps) {
+function FinanceDepositDeleteModal({closeComp, cancelHandler }: FinanceDepositDeleteModalProps) {
 	const noti = useNotification()
 	const [value, setValue] = useState<number>(0)
 
+	// const queryClient = useQueryClient()
+
+	// const postFinanceDepositMutation = useMutation((body: { id: number; amount: number }) =>
+	// 	deleteFinanceDepositAPI({ body }),
+	// )
 
 
-	const submitHandler = () => {
-		deleteFinanceDepositAPI({}).then((res) => {
-			refetch()
-			noti({content: <NotiTemplate type={'ok'} content="중도 해지를 했어요!"/>, width: '300px', height: '120px', duration: 3000})
-			closeComp()
-		})
-		.catch((err) => {
-			console.log(err)
-			noti({content: <NotiTemplate type={'alert'} content="중도 해지에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
-		})
-	}
+	
 	return (
 		<div css={wrapperCSS}>
 			
@@ -78,7 +74,7 @@ function FinanceDepositDeleteModal({closeComp, refetch }: FinanceDepositDeleteMo
 					width={"47%"}
 					theme={"mobileWarning"}
 					onClick={() => {
-						submitHandler()
+						cancelHandler()
 					}}
 				/>
 				<Button

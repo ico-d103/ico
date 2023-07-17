@@ -20,10 +20,7 @@ function StudentWaitingList({ waitingList }: StudentWaitingListPropsType) {
 			console.log(`SSE ${receivedConnectData}`)
 		})
 
-		sse.addEventListener("studentList", (e) => {
-			const { data: receivedListData } = e
-
-			// 리스트 자동 업데이트
+		sse.addEventListener("studentList", () => {
 			return queryClient.invalidateQueries(["studentList"])
 		})
 

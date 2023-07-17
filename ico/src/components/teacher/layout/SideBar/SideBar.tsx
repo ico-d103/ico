@@ -27,6 +27,7 @@ import "overlayscrollbars/overlayscrollbars.css"
 import { number } from "prop-types"
 import { useAtom } from "jotai"
 import { nationData } from "@/store/store"
+import useGetNation from "@/hooks/useGetNation"
 
 type SideBarProps = {
 	children: any
@@ -108,7 +109,7 @@ function SideBar({ children }: SideBarProps) {
 		router.push(Object.keys(SUB_ELEMENT[selectedMain])[value])
 	}
 
-	const MAIN_LOGO = <img css={logoCSS} src={"/assets/icon_desktop.png"} />
+	const MAIN_LOGO = <img css={logoCSS} src={"/assets/icon_desktop.png"} alt="교사회원 메인 아이콘" />
 
 	const MAIN_ELEMENT: { [prop: number]: { name: string; label: string; content: any } } = {
 		0: { name: "class", label: "우리 반", content: MAIN_CLASS },

@@ -106,7 +106,7 @@ function login() {
 	}
 
 	const navToSignup = () => {
-		router.push("/teacher/signup")
+		router.push("/signup")
 	}
 
 	const handleKeyDown = (event: any) => {
@@ -125,11 +125,11 @@ function login() {
 
 	return (
 		<>
-			<div css={wrapperCSS}>
+			<div css={wrapperCSS} className={'wrapper'}>
 				<div css={imageSectionCSS}>
 					<img src={"/assets/login/login_illust_2.jpg"} alt={"signup_illust"} css={imageWrapperCSS} />
 				</div>
-				<div css={loginSectionCSS}>
+				<div css={loginSectionCSS} className={'login-section'}>
 					<div css={loginHeaderCSS}>
 						<div css={headerLabelCSS}>아이코에 오신 것을</div>
 						<div css={headerLabelCSS}>환영합니다!</div>
@@ -213,20 +213,22 @@ const wrapperCSS = css`
 	width: 100%;
 	height: 100%;
 
-	@media (max-width: 1440px) {
+	@media (max-width: 1024px) {
 		flex-direction: column;
 	}
 `
 
 const loginSectionCSS = css`
-	@media (max-width: 1440px) {
+	@media (max-width: 1024px) {
 		width: 100%;
 		flex: 1;
 		margin: 36px 0px 36px 0px;
 	}
-	@media (min-width: 1441px) {
-		height: 100%;
+	@media (min-width: 1025px) {
+		min-height: 100%;
 		width: 25vw;
+		/* background-color: red; */
+
 	}
 
 	min-width: 400px;
@@ -239,14 +241,28 @@ const loginSectionCSS = css`
 const imageSectionCSS = css`
 	overflow: hidden;
 	box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
-
-	@media (min-width: 1441px) {
+	max-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	/* @media (min-width: 1025px) {
 		flex: 1;
-	}
+		
+	} */
 `
 
 const imageWrapperCSS = css`
+	/* width: 100%; */
+	/* height: 100%; */
 	width: 100%;
+	/* @media (max-width: 1024px) {
+		width: 100%;
+	}
+	@media (min-width: 1025px) {
+		width: 100%;
+	} */
+
+
 	height: auto;
 `
 

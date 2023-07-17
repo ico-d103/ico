@@ -11,6 +11,7 @@
 	--teacher-warning-color: #d94a4a;
 	--teacher-gray-color: #6e6f71;
 	--teacher-gray2-color: #d9d9d9;
+	--teacher-gray3-color: #434242;
 	--teacher-blue-color: #4b7cc6;
 	--teacher-coupon-color: #ef5b5b;
 
@@ -31,6 +32,22 @@
 	--student-font-color: #3d2f21;
 	--student-wrapper-color: #ffffff;
 
+	--student-side-bar-width: 280px;
+	/* --student-full-width: calc(100vw - var(--student-side-bar-width) - var(--student-side-bar-width)); */
+
+	@media (max-width: 768px) {
+		--student-full-width: 100vw;
+	}
+
+	@media (min-width: 769px) {
+		--student-full-width: calc(100vw - var(--student-side-bar-width));
+		/* --student-full-width: 100%; */
+	}
+
+	@media (min-width: 1281px) {
+		--student-full-width: calc(100vw - var(--student-side-bar-width) - var(--student-side-bar-width));
+		/* --student-full-width: 100%; */
+	}
 	/* --student-gray-color: #00000099;
     --student-gray-color-2: #000000b3;
     --student-input-gray-color: #e3e8ef80;

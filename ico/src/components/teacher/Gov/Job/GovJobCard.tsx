@@ -35,7 +35,7 @@ function GovJobCard({ job, wage, backgroundColor, imgUrl }: GovJobCardProps) {
 					<div css={lineCSS} />
 					<div css={secondaryInfoWrapperCSS}>
 						<div css={creditIndicatorCSS}>현재 신용등급</div>
-						<div css={wageTextCSS}>약 {(wage * 30) / 10000}만</div>
+						{/* <div css={wageTextCSS}>월급 약 {(wage * 30) / 10000}만</div> */}
 					</div>
 				</div>
 			</div>
@@ -44,9 +44,9 @@ function GovJobCard({ job, wage, backgroundColor, imgUrl }: GovJobCardProps) {
 }
 
 const outerCardWrapperCSS = css`
-	width: 350px;
-	min-width: 350px;
-	height: 220px;
+	width: 300px;
+	min-width: 300px;
+	height: 200px;
 	position: relative;
 	display: flex;
 	justify-content: center;
@@ -74,24 +74,24 @@ const cardWrapperCSS = ({ backgroundColor }: { backgroundColor: string }) => {
 		transition-duration: 0.3s;
 		background-color: ${backgroundColor};
 		position: absolute;
-		width: 310px;
-		height: 180px;
+		width: 270px;
+		height: 170px;
 		border-radius: 10px;
 		display: flex;
 	`
 }
 
 const jobImgSpaceCSS = css`
-	width: 110px;
+	width: 90px;
 	height: 100%;
 `
 
 const jobImgWrapperCSS = css`
 	position: absolute;
-	top: -30px;
-	left: 0px;
-	width: 130px;
-	height: 200px;
+	top: -20px;
+	left: -10px;
+	width: 140px;
+	height: 170px;
 	/* background-color: gray; */
 `
 
@@ -103,7 +103,7 @@ const imgCSS = css`
 `
 
 const contentWrapperCSS = css`
-	margin-top: 30px;
+	margin-top: 20px;
 	padding-right: 24px;
 	flex: 1;
 	position: relative;
@@ -120,6 +120,7 @@ const nameIndicatorCSS = css`
 
 const jobTextCSS = css`
 	color: rgba(255, 255, 255, 1);
+	font-size: var(--teacher-h5);
 	margin-top: 5px;
 `
 
@@ -132,6 +133,7 @@ const lineCSS = css`
 
 const creditIndicatorCSS = css`
 	color: rgba(255, 255, 255, 0.6);
+	font-size: var(--teacher-h5);
 `
 
 const secondaryInfoWrapperCSS = css`
@@ -144,6 +146,7 @@ const secondaryInfoWrapperCSS = css`
 const wageTextCSS = css`
 	color: rgba(255, 255, 255, 1);
 	margin-bottom: 16px;
+	font-size: var(--teacher-h5);
 `
 
 export default GovJobCard

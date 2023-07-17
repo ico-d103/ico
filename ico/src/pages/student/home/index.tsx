@@ -43,14 +43,12 @@ function index() {
 								width: 36px;
 								height: 36px;
 								margin-right: 12px;
-								
-								/* filter: hue-rotate(300deg);
-								opacity: 0.7; */
 							`}
 							sizes={"128px"}
 						/>
 						ICO
 					</div>
+					<div />
 					<div onClick={openComp} css={sideMenuButtonWrapperCSS}>
 						<img
 							src={"/assets/side_menu/student_menu_icon.png"}
@@ -61,26 +59,31 @@ function index() {
 						/>
 					</div>
 				</div>
-				<ContentWrapper>
-					<div css={contentTitleCSS}>내 프로필</div>
-					{data && (
-						<HomeJobCard
-							name={data.name}
-							job={data.jobName}
-							credit={data.creditRating}
-							backgroundColor={data.color !== null ? data.color : "#634AFF"}
-							imgUrl={data.jobImage !== null ? data.jobImage : "https://d3bkfkkihwj5ql.cloudfront.net/worker_male.png"}
-						/>
-					)}
-				</ContentWrapper>
-				{data && (
+
+				<div css={homeContentWrapperCSS} className={'home-content'}>
 					<ContentWrapper>
-						<div css={contentTitleCSS}>자산</div>
-						<HomeAsset account={data.account} deposit={data.deposit} invest={data.invest} />
+						<div css={contentTitleCSS}>내 프로필</div>
+						{data && (
+							<HomeJobCard
+								name={data.name}
+								job={data.jobName}
+								credit={data.creditRating}
+								backgroundColor={data.color !== null ? data.color : "#634AFF"}
+								imgUrl={
+									data.jobImage !== null ? data.jobImage : "https://d3bkfkkihwj5ql.cloudfront.net/worker_male.png"
+								}
+							/>
+						)}
 					</ContentWrapper>
-				)}
-				<HomeButtonSection />
-				<HomeTipSection />
+					{data && (
+						<ContentWrapper>
+							<div css={contentTitleCSS}>자산</div>
+							<HomeAsset account={data.account} deposit={data.deposit} invest={data.invest} />
+						</ContentWrapper>
+					)}
+					<HomeButtonSection />
+					<HomeTipSection />
+				</div>
 			</div>
 		</div>
 	)
@@ -117,6 +120,15 @@ const logoWrapperCSS = css`
 	display: flex;
 	align-items: center;
 	color: #5aa9006a;
+
+
+	@media (max-width: 768px) {
+
+	}
+	
+	@media (min-width: 769px) {
+		display: none;
+	}
 `
 
 const sideMenuButtonWrapperCSS = css`
@@ -125,5 +137,33 @@ const sideMenuButtonWrapperCSS = css`
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
+
+	/* @media (max-width: 1280px) {
+
+	} */
+
+	@media (min-width: 1281px) {
+		display: none;
+	}
+`
+
+const homeContentWrapperCSS = css`
+	@media (max-width: 1024px) {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 100%;
+	}
+	
+	@media (min-width: 1025px) {
+		/* margin-left: 16px; */
+		min-width: 568px;
+		max-width: 1024px;
+		width: 60vw;
+		display: grid;
+		grid-template-columns: 50% 50%;
+		/* place-items: center; */
+		justify-items: center;
+	}
 `
 export default index

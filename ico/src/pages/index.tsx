@@ -17,28 +17,18 @@ export default function Home() {
 					<div css={subLabelCSS}>함께 성장하는 우리 교실의 작은 경제를 체험해 보세요!</div>
 					<div css={lineCSS} />
 					<div css={buttonWrapperCSS}>
-						<Button
-							theme={"cancelLight"}
-							width={"240px"}
-							height={"84px"}
-							text={"학생 로그인"}
-							fontSize={"var(--teacher-h2)"}
-							onClick={() => {
-								router.push("/student/login")
-							}}
-						></Button>
-						{!isMobile && (
+						
 							<Button
 								theme={"highlighted"}
 								width={"240px"}
 								height={"84px"}
-								text={"교사 로그인"}
+								text={"로그인"}
 								fontSize={"var(--teacher-h2)"}
 								onClick={() => {
-									router.push("/teacher/login")
+									router.push("/login")
 								}}
 							></Button>
-						)}
+					
 					</div>
 					<img
 						src={"/assets/guide/14.jpg"}
@@ -139,9 +129,9 @@ const subLabelCSS = css`
 `
 
 const lineCSS = css`
-	margin-top: 48px;
-	margin-bottom: 48px;
-	width: 100%;
+	margin-top: 24px;
+	margin-bottom: 40vh;
+	width: 70%;
 	height: 1px;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 `

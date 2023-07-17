@@ -86,11 +86,14 @@ const alertWrapperCSS = css`
 
 const wrapperCSS = ({isMobile}: {isMobile: boolean | null}) => {
 	return css`
-	flex: 1; display: flex; flex-direction: column;
+	/* flex: 1;  */
+	/* display: flex; */
+	/* flex-direction: column; */
 	/* margin-top: ${isMobile ? "0px" : "16px"}; */
+		/* place-items: center; */
+
 	display: grid;
 	grid-template-columns: ${isMobile ? 'repeat(auto-fill, minmax(45vw, 1fr))' : 'repeat(auto-fill, minmax(260px, 1fr))'};
-	/* place-items: center; */
 	grid-row-gap: ${isMobile ? '16px' : '32px'};
 	grid-column-gap: 32px;
 `

@@ -1,5 +1,6 @@
 import { createStore, atom } from "jotai"
 import { getNationType, getTokenStatusType } from "@/types/common/apiReturnTypes"
+import { studentLicenseBodyType } from "@/types/teacher/apiReturnTypes"
 
 export const mainStore = createStore()
 
@@ -19,13 +20,12 @@ const stackNotification = atom<{ [prop: number]: { width: string; height: string
 
 const selectedPage = atom(1)
 
-
 const modalHandler = atom<Function | null>(null)
 
 const tokenStatus = atom<getTokenStatusType>({
 	status: null,
 	role: null,
-	showMessage: false
+	showMessage: false,
 })
 
 const nationData = atom<getNationType>({
@@ -44,6 +44,10 @@ const nationData = atom<getNationType>({
 	credit_down: 0,
 })
 
+const checkedStudent = atom<{ [key: number]: string }[]>([])
+
+const modifiedStudentLicenseInfo = atom<studentLicenseBodyType>({})
+
 export {
 	navTo,
 	navBeforeScroll,
@@ -55,4 +59,6 @@ export {
 	nationData,
 	tokenStatus,
 	modalHandler,
+	checkedStudent,
+	modifiedStudentLicenseInfo,
 }

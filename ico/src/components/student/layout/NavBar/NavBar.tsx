@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from "react"
-import { css } from "@emotion/react"
-import { useRouter } from "next/router"
-// import navigate from "@/util/navigate"
-import useNavigate from "@/hooks/useNavigate"
-import Link from "next/link"
-
+import React from 'react'
 import { NAVBAR_CLASS, NAVBAR_GOVERNMENT, NAVBAR_STORE, NAVBAR_HOME } from "./NavBarIcons"
+import { css } from "@emotion/react"
+import useMediaQuery from "@/hooks/useMediaQuery"
+import NavBarDesktop from './NavBarDesktop'
+import NavBarMobile from './NavBarMobile'
 
 type NavBarProps = {
-	children: any
+    children: any
 }
 
-function NavBar({ children }: NavBarProps) {
-	const [selected, setSelected] = useState<number>(-1)
-	const router = useRouter()
-	const navigate = useNavigate()
+function NavBar({children}: NavBarProps) {
+    const isDesktop = useMediaQuery("(min-width: 769px")
 
-	const routes: { [prop: string]: number } = {
+    const routes: { [prop: string]: number } = {
 		"/student/home": 0,
 		"/student/home/asset": 0,
 		"/student/home/coupon": 0,
 		"/student/home/exchequer": 0,
+		"/student/job/rule": 0,
+		"/student/job/rule/create": 0,
+		"/student/job/rule/[pid]": 0,
 		"/student/finance/deposit": 0,
+		"/student/finance/deposit/[pid]": 0,
 		"/student/finance/invest": 0,
 		"/student/class/students": 1,
 		"/student/class/jobsearch": 1,
@@ -43,135 +43,17 @@ function NavBar({ children }: NavBarProps) {
 			3: { url: "/student/shop/teacher", name: "store", label: "상점", content: NAVBAR_STORE, function: () => {} },
 		}
 
-	useEffect(() => {
-		if (typeof routes[router.pathname] === "number") {
-			setSelected(() => routes[router.pathname])
-		} else {
-			setSelected(() => -2)
-		}
-	}, [router.pathname])
 
-	const selectHandler = (value: number) => {
-		// setSelectedMain(() => value)
-		// setSelectedSub(() => 0)
-		if (value > selected) {
-			navigate(navBarData[value].url, "rightToLeft")
-		} else if (value < selected) {
-			navigate(navBarData[value].url, "leftToRight")
-		} else {
-			navigate(navBarData[value].url, "beforeScale")
-		}
-	}
-
-	const navBarRender = Object.keys(navBarData).map((el, idx) => {
-		return (
-			<div
-				key={`navbar-${navBarData[Number(el)].label}`}
-				onClick={() => {
-					selectHandler(Number(el))
-				}}
-				css={navBarIndivCSS}
-			>
-				<div css={navBarIndivContentCSS({ targetIdx: selected, curIdx: Number(el) })}>
-					{navBarData[Number(el)].content}
-					{navBarData[Number(el)].label}
-				</div>
-			</div>
-		)
-	})
-
-	return (
-		<div css={navBarParentCSS()}>
-			<div css={contentWrapperCSS({ selected })}>{children}</div>
-
-			<div css={navBarWrapperCSS({ selected })}>
-				<div css={indicatorWrapperCSS}>
-					<div css={indicatorCSS({ length: Object.keys(navBarData).length, selected })} />
-				</div>
-				<div css={navBarInnerWrapperCSS}>{navBarRender}</div>
-			</div>
-		</div>
-	)
-}
-
-const navBarParentCSS = () => {
-	return css`
-		width: 100%;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	`
-}
-
-const contentWrapperCSS = ({ selected }: { selected: number }) => {
-	return css`
-		min-height: ${selected !== -2 && "calc(100vh - 64px)"};
-		margin-bottom: ${selected !== -2 && "64px"};
-		/* position: relative; */
-	`
-}
-const navBarWrapperCSS = ({ selected }: { selected: number }) => {
-	return css`
-		height: 64px;
-		width: 100%;
-		/* background-color: #fff9e6; */
-		background-color: var(--student-main-color-soft);
-		/* backdrop-filter: blur(30px); */
-		box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1);
-		position: fixed;
-		bottom: 0;
-		display: flex;
-		flex-direction: column;
-		z-index: 99999;
-		display: ${selected === -2 && "none"};
-	`
-}
-
-const indicatorWrapperCSS = css`
-	width: 100%;
-	height: 3px;
-`
-
-const indicatorCSS = ({ length, selected }: { length: number; selected: number }) => {
-	return css`
-		transition-property: transform;
-		transition-duration: 0.3s;
-		width: calc(100% / ${length});
-		height: 100%;
-		transform: translate(calc(${selected} * 100%), 0px);
-		background-color: #ff9d00a3;
-	`
-}
-
-const navBarInnerWrapperCSS = css`
-	flex: 1;
-	display: flex;
-`
-
-const navBarIndivCSS = css`
-	flex: 1;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-`
-
-const navBarIndivContentCSS = ({ targetIdx, curIdx }: { targetIdx: number; curIdx: number }) => {
-	return css`
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	
-		& path {
-			transition-property: stroke;
-			transition-duration: 0.2s;
-			stroke: ${targetIdx === curIdx ? "rgba(0, 0, 0, 1)" : "rgba(0, 0, 0, 0.7)"};
-		}
-
-		transition-property: color;
-		transition-duration: 0.2s;
-		color: ${targetIdx === curIdx ? "rgba(0, 0, 0, 1)" : "rgba(0, 0, 0, 0.5)"};
-		font-size: 12px;
-	`
+    if (isDesktop) {
+        return (
+            <NavBarDesktop routes={routes} navBarData={navBarData}>{children}</NavBarDesktop>
+          )
+    } else {
+        return (
+            <NavBarMobile routes={routes} navBarData={navBarData}>{children}</NavBarMobile>
+          )
+    }
+  
 }
 
 export default NavBar

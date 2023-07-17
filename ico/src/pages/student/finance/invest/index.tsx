@@ -51,11 +51,86 @@ function index() {
 	const [openDeleteComp, closeDeleteComp, compDeleteState] = useCompHandler()
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 
-	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceInvestType>(
-		["student", "financeInvest"],
-		getFinanceInvestAPI,
-		// { staleTime: 200000 },
-	)
+	// const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceInvestType>(
+	// 	["student", "financeInvest"],
+	// 	getFinanceInvestAPI,
+	// 	// { staleTime: 200000 },
+	// )
+
+	type getFinanceInvestType = {
+		stock: string
+		account: number
+		tradingStart: string
+		tradingEnd: string
+		myStock: {
+			price: number
+			amount: number
+		}
+		issue: {
+			date: string
+			amount: number
+			content: string
+		}[]
+	}
+	const data: getFinanceInvestType = {
+		stock: '조선시대 역사',
+		account: 150,
+		tradingStart: '10:30',
+		tradingEnd: '14:30',
+		myStock: {
+			price: 100, // 상승폭?
+			amount: 1500 // 투자했던 돈
+		},
+		issue: [
+			{
+				date: '2023.05.18',
+				amount: 318,
+				content: '임진왜란이 끝나면서 이순신 장군은 어떻게 되었을까요?',
+			},
+			{
+				date: '2023.05.17',
+				amount: 418,
+				content: '1598년 어떤 일이 일어났을까요?',
+			},
+			{
+				date: '2023.05.16',
+				amount: 216,
+				content: '1592년, 임진왜란이 발발했어요. 과연 조선의 국운은 어떻게 흘러갈까요?',
+			},
+			{
+				date: '2023.05.15',
+				amount: 439,
+				content: '1504년, 갑자사화가 발발했어요. 이 사건으로 조선의 부정부패가 사라지고 더 발전했을까요? 아니면 더 퇴보했을까요?',
+			},
+			{
+				date: '2023.05.14',
+				amount: 592,
+				content: '1446년, 훈민정음이 반포되었어요.',
+			},
+			{
+			date: '2023.05.13',
+			amount: 375,
+			content: '1418년 8월, 지금까지도 큰 영향을 미치고 있는 인물이 왕이 되요.',
+		},
+		{
+			date: '2023.05.12',
+			amount: 171,
+			content: '1408년 5월, 태조 이성계에게 무슨 일이 일어났을까요?',
+		},
+		{
+			date: '2023.05.11',
+			amount: 247,
+			content: '1392년, 태조 이성계가 조선을 건국했어요.',
+		},
+		{
+			date: '2023.05.10',
+			amount: 100,
+			content: '이성계가 위화도 회군을 했어요.',
+		}
+	]
+	}
+	
+	const refetch = () => {}
 
 	useEffect(() => {
 		if (data) {
@@ -129,7 +204,7 @@ function index() {
 					<Modal
 						content={
 							<ModalContent
-								width={"90vw"}
+								width={"300px"}
 								title={"투자 매도"}
 								titleSize={"var(--student-h1)"}
 								icon={APPLY_ICON}
@@ -145,7 +220,7 @@ function index() {
 					<Modal
 						content={
 							<ModalContent
-								width={"90vw"}
+								width={"300px"}
 								title={"투자 매수"}
 								titleSize={"var(--student-h1)"}
 								icon={APPLY_ICON}
@@ -168,7 +243,7 @@ function index() {
 				</React.Fragment>
 			)}
 
-			{data && isTimeBetween(data.tradingStart, data.tradingEnd) && (
+			{/* {data && isTimeBetween(data.tradingStart, data.tradingEnd) && (
 				<div css={navBarOverlayCSS}>
 					{data.myStock.amount === 0 ? (
 						<Button
@@ -192,7 +267,7 @@ function index() {
 						/>
 					)}
 				</div>
-			)}
+			)} */}
 			<PageHeader title={"투자"} />
 
 			<div css={contentWrapperCSS}>
@@ -213,9 +288,40 @@ function index() {
 				)}
 
 				{chartData && <FinanceInvestChart data={chartData} />}
+
+				
 				{data && (
 					<div css={stockMentWrapperCSS}>
+						<div>
 						현재 종목은 <span>“{data.stock}”</span> 입니다!
+						</div>
+						
+
+						{data && isTimeBetween(data.tradingStart, data.tradingEnd) && (
+				<div css={css`width: 240px;`}>
+					{data.myStock.amount === 0 ? (
+						<Button
+							text={"매수하기"}
+							fontSize={`var(--student-h3)`}
+							width={"100%"}
+							theme={"mobileNormal"}
+							onClick={() => {
+								openApplyComp()
+							}}
+						/>
+					) : (
+						<Button
+							text={"매도하기"}
+							fontSize={`var(--student-h3)`}
+							width={"100%"}
+							theme={"mobileSoft"}
+							onClick={() => {
+								openDeleteComp()
+							}}
+						/>
+					)}
+				</div>
+			)}
 					</div>
 				)}
 
@@ -277,6 +383,9 @@ const stockMentWrapperCSS = css`
 	font-size: var(--student-h2);
 	font-weight: 500;
 
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	& span {
 		font-weight: 700;
 	}
@@ -296,7 +405,7 @@ const sSizeFontCSS = css`
 `
 
 const navBarOverlayCSS = css`
-	width: 100%;
+	width: var(--student-full-width);
 	height: 64px;
 	background-color: var(--student-main-color);
 	position: fixed;
@@ -306,7 +415,7 @@ const navBarOverlayCSS = css`
 	justify-content: center;
 	align-items: center;
 	padding: 0px 16px;
-
+	
 	opacity: 0%;
 	animation: fadein 0.2s ease-in forwards;
 

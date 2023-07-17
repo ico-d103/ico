@@ -8,39 +8,35 @@ import alertTriangle from "react-useanimations/lib/alertTriangle"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
 import GovJobCard from "./GovJobCard"
+import { certificationType } from "./GovJobItemType"
+import GovJobItemCertItem from "./GovJobItemCertItem"
 
-
-type GovJobCreateModalProps = {
+type GovJobItemCardCustomizeProps = {
 	closeComp: Function
-	inputState: any;
-	colorPicker: any
-	illustPicker: any
+	certification: certificationType[]
+	ratingHandler: any
 }
 
-function GovJobCreateModal({closeComp, colorPicker, inputState, illustPicker}: GovJobCreateModalProps) {
-
-
-	
+function GovJobItemDetailCustomize({ certification, ratingHandler, closeComp  }: GovJobItemCardCustomizeProps) {
+	const renderCertField = certification?.map((el, idx) => {
+		return (
+			<GovJobItemCertItem
+				arrIdx={idx}
+				id={el.id}
+				subject={el.subject}
+				rating={el.rating}
+				ratingHandler={ratingHandler}
+			/>
+		)
+	})
 	return (
 		<div css={wrapperCSS}>
-			
 			<div css={cardWrapperCSS}>
-				<div css={buttonCSS} onClick={() => illustPicker(true)}>〈</div>
-		
-				<GovJobCard job={inputState.title} wage={inputState.sub.wage} backgroundColor={inputState.sub.backgroundColor} imgUrl={inputState.sub.imgUrl}/>
-	
-			
-				<div css={buttonCSS} onClick={() => illustPicker()}>〉</div>
+				<div css={certInnerFieldCSS}>
+					{renderCertField}
+				</div>
+				
 			</div>
-			
-			
-			<div css={colorPickerWrapperCSS}>
-				{colorPicker}
-			</div>
-			
-
-			
-
 			<div css={buttonWrapperCSS}>
 				<Button
 					text={"확인"}
@@ -51,7 +47,6 @@ function GovJobCreateModal({closeComp, colorPicker, inputState, illustPicker}: G
 						closeComp()
 					}}
 				/>
-		
 			</div>
 		</div>
 	)
@@ -64,10 +59,6 @@ const wrapperCSS = css`
 	align-items: center;
 `
 
-const colorPickerWrapperCSS = css`
-	
-	display: flex;
-`
 
 const cardWrapperCSS = css`
 	display: flex;
@@ -75,23 +66,22 @@ const cardWrapperCSS = css`
 `
 
 const buttonWrapperCSS = css`
-width: 100%;
+	width: 100%;
 	margin-top: 24px;
 	display: flex;
 	justify-content: center;
 `
 
-const buttonCSS = css`
-	font-size: 36px;
-	transition-property: color;
-	transition-duration: 0.3s;
-	user-select: none;
-	cursor: pointer;
-
-	& :hover {
-		color: rgba(0, 0, 0, 0.6);
-	}
+const certInnerFieldCSS = css`
+	min-height: 200px;
+	height: 1px;
+	overflow-y: scroll;
+	background-color: white;;
+	border-radius: 10px;;
+	padding: 8px;
 `
 
 
-export default GovJobCreateModal
+
+
+export default GovJobItemDetailCustomize
