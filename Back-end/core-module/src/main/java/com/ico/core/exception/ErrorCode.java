@@ -187,9 +187,13 @@ public enum ErrorCode{
 
     NOT_FOUND_SUBJECT(HttpStatus.NOT_FOUND, "800", "자격증명이 비었습니다."),
 
-    NOT_FOUND_RATING(HttpStatus.NOT_FOUND, "801", "등급이 비었습니다."),
+    NOT_FOUND_RATING(HttpStatus.NOT_FOUND, "801", "등급을 올릴지 내릴지 결정해주세요."),
 
     DUPLICATED_SUBJECT(HttpStatus.BAD_REQUEST, "802", "존재하는 과목명이 있습니다."),
+
+    NOT_UP_LICENSE(HttpStatus.BAD_REQUEST, "803", "이 자격증 점수를 더 올릴 수 없습니다."),
+
+    NOT_DOWN_LICENSE(HttpStatus.BAD_REQUEST, "804", "이 자격증 점수를 더 내릴 수 없습니다."),
     ;
 
     private final HttpStatus httpStatus;

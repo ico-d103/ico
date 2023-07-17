@@ -135,22 +135,38 @@ public class LicenseServiceImpl implements LicenseService{
         return subject;
     }
 
-//    TODO : 나중에
-//    @Override
-//    public void updateStudentLicense(HttpServletRequest request, StudentLicenseUpdateReqDto reqDto) {
-//        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
-//
-//        List<StudentLicense> licenses = studentLicenseRepository.findAllBySubjectAndNationId(reqDto.getSubject(), nationId);
-//        log.info("[SUBJECT] : {}", reqDto.getSubject());
-//        if (licenses.isEmpty()) {
-//            throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
-//        }
-//        // 학생들의 자격증 등급을 입력받은 수치로 업데이트
-//        for (StudentLicense license : licenses) {
-//            license.setRating((byte) reqDto.getRating().intValue());
-//            studentLicenseRepository.save(license);
-//        }
-//    }
+    @Override
+    public void updateStudentLicense(HttpServletRequest request, Map<Long, Boolean> map) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        for (Map.Entry<Long, Boolean> m : map.entrySet()) {
+            StudentLicense license = studentLicenseRepository.findById(m.getKey())
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
+            // 나라일치 여부
+            if (!nationId.equals(license.getNation().getId())) {
+                throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
+            }
+
+            // 학생들의 자격증 등급 업데이트 / 디버깅과 유지보수를 위해 정규식 안씀
+            int rating = license.getRating();
+            if (m.getValue()) {
+                if (rating == -1) {
+                    license.setRating((byte) 7);
+                } else if (rating == 0) {
+                    throw new CustomException(ErrorCode.NOT_UP_LICENSE);
+                } else {
+                    license.setRating((byte) (rating - 1));
+                }
+            } else {
+                if (rating == -1 || rating == 7) {
+                    throw new CustomException(ErrorCode.NOT_DOWN_LICENSE);
+                } else {
+                    license.setRating((byte) (rating + 1));
+                }
+            }
+            studentLicenseRepository.save(license);
+        }
+    }
 
     @Override
     public void updateStudentDetailLicense(HttpServletRequest request, Long studentId, Map<Long, Integer> map) {
@@ -174,6 +190,11 @@ public class LicenseServiceImpl implements LicenseService{
             license.setRating(rating.byteValue());
             studentLicenseRepository.save(license);
         }
+    }
+
+    @Override
+    public void updateAllStudentLicense(HttpServletRequest request, Long nationLicenseId) {
+
     }
 
     /**

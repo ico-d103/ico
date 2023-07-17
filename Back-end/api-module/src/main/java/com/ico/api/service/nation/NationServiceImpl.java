@@ -312,7 +312,7 @@ public class NationServiceImpl implements NationService {
 
     @Override
     @Transactional
-    public void deleteNation(HttpServletRequest request) {
+    public void deleteNation(HttpServletRequest request) {  // NationLicense, StudentLicense, power 지워야 함
         String token = jwtTokenProvider.parseJwt(request);
 
         Long nationId = jwtTokenProvider.getNation(token);

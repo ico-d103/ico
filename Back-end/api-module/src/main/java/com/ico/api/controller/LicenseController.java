@@ -96,18 +96,17 @@ public class LicenseController {
         return ResponseEntity.ok(licenseService.createNationLicense(request, map.get("subject")));
     }
 
-//    TODO : 나중에
-//    /**
-//     * 과목명과 등급을 입력받고 모든 학생의 자격증을 수정
-//     * @param request
-//     * @param reqDto
-//     * @return
-//     */
-//    @PutMapping("/teacher")
-//    public ResponseEntity<HttpStatus> updateStudentLicense(HttpServletRequest request, @RequestBody StudentLicenseUpdateReqDto reqDto) {
-//        licenseService.updateStudentLicense(request, reqDto);
-//        return ResponseEntity.ok(HttpStatus.OK);
-//    }
+    /**
+     * 학생들의 자격증 등급 조정
+     * @param request
+     * @param map
+     * @return
+     */
+    @PutMapping("/teacher")
+    public ResponseEntity<HttpStatus> updateStudentLicense(HttpServletRequest request, @RequestBody Map<Long, Boolean> map) {
+        licenseService.updateStudentLicense(request, map);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 
     /**
      * 교사가 학생 한명의 자격증을 수정
