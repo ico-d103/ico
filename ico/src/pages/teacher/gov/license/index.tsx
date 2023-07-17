@@ -9,6 +9,11 @@ import { postLicenseAPI } from "@/api/teacher/gov/postLicenseAPI"
 
 import GovLicenseList from "@/components/teacher/Gov/License/GovLicenseList"
 
+import useGetNation from "@/hooks/useGetNation"
+
+import Input from "@/components/common/Input/Input"
+import Button from "@/components/common/Button/Button"
+
 function license() {
 	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getLicenseType[]>(
 		["teacher", "govRule"],
@@ -24,6 +29,8 @@ function license() {
 	})
 
 	const [inputValue, setInputValue] = useState("")
+
+	const [nation] = useGetNation()
 
 	if (!data) {
 		return null
@@ -43,14 +50,38 @@ function license() {
 			<div css={contentWrapperCSS}>
 				<div css={titleCSS}>자격증 관리</div>
 				<div css={descCSS}>학급의 자격증 목록을 관리할 수 있습니다.</div>
-				<div css={licenseWrapper}>
+				<div css={licenseWrapperCSS}>
+					<div css={subTitleCSS}>
+						{nation.school}&nbsp;{nation.grade}학년&nbsp;{nation.room}반 자격증
+					</div>
+
 					{data.map((item) => (
 						<GovLicenseList key={item.id} id={item.id} subject={item.subject} />
 					))}
 				</div>
 
-				<input type="text" value={inputValue} onChange={handleChange} placeholder="자격증 이름을 입력하세요" />
-				<button onClick={handleSubmit}>등록</button>
+				<div css={addLicenseWrapperCSS}>
+					<div css={inputCSS}>
+						<Input
+							theme="default"
+							width={"400px"}
+							onChange={handleChange}
+							placeholder="자격증을 입력해 주세요."
+						></Input>
+					</div>
+					<div css={buttonCSS}>
+						<Button
+							theme={"normal"}
+							width={"80px"}
+							height={"30px"}
+							text={"등록"}
+							fontSize={"var(--teacher-h5)"}
+							onClick={() => {
+								handleSubmit()
+							}}
+						></Button>
+					</div>
+				</div>
 			</div>
 		</>
 	)
@@ -77,12 +108,44 @@ const descCSS = css`
 	font-size: var(--teacher-h5);
 `
 
-const licenseWrapper = css`
-	border: 1px solid gray;
-	border-radius: 30px;
-	padding: 30px;
+const licenseWrapperCSS = css`
+	border: 1px solid #dde3ea;
+	border-radius: 20px;
+	padding: 30px 0px;
 
-	width: 80%;
+	width: 50%;
+`
+
+const subTitleCSS = css`
+	font-size: var(--teacher-h1);
+	font-weight: 700;
+	text-align: center;
+
+	margin-bottom: 30px;
+`
+
+const addLicenseWrapperCSS = css`
+	border: 1px solid #dde3ea;
+	border-radius: 20px;
+	padding: 30px 0px;
+
+	width: 50%;
+
+	margin-top: 2%;
+
+	display: grid;
+	grid-template-columns: 4fr 1fr;
+	align-items: center;
+	justify-content: center;
+`
+const inputCSS = css`
+	margin-left: 20px;
+`
+
+const buttonCSS = css`
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `
 
 export default license

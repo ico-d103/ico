@@ -4,12 +4,12 @@ import { deleteLicenseAPI } from "@/api/teacher/gov/deleteLicenseAPI"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import Button from "@/components/common/Button/Button"
 
-type AType = {
+type subjectType = {
 	id: number
 	subject: string
 }
 
-function GovLicenseList({ id, subject }: AType) {
+function GovLicenseList({ id, subject }: subjectType) {
 	const queryClient = useQueryClient()
 
 	const denyMutation = useMutation((idx: number) => deleteLicenseAPI({ idx: idx }))
@@ -25,24 +25,44 @@ function GovLicenseList({ id, subject }: AType) {
 	return (
 		<div css={subjectWrapperCSS}>
 			<div css={subjectCSS}>{subject}</div>
-			<Button
-				text={"삭제"}
-				fontSize={`var(--teacher-h5)`}
-				width={"80px"}
-				height={"30px"}
-				theme={"warning"}
-				onClick={immigrationDenyHandler}
-			/>
+			<div css={spaceCSS}>&nbsp;</div>
+			<div css={buttonCSS}>
+				<Button
+					text={"삭제"}
+					fontSize={`var(--teacher-h5)`}
+					width={"80px"}
+					height={"30px"}
+					theme={"warning"}
+					onClick={immigrationDenyHandler}
+				/>
+			</div>
 		</div>
 	)
 }
 
 const subjectWrapperCSS = css`
-	flex: 1;
+	display: grid;
+	grid-template-columns: 1fr 3fr 1fr;
+	align-items: center;
+	justify-content: center;
+
+	margin-bottom: 10px;
 `
 
 const subjectCSS = css`
-	font-size: 30px;
+	font-size: 20px;
+	text-align: center;
+`
+
+const spaceCSS = css`
+	background-color: #ececec;
+	border-radius: 8px;
+`
+
+const buttonCSS = css`
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `
 
 export default GovLicenseList
