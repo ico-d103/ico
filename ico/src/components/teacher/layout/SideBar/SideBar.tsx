@@ -167,6 +167,10 @@ function SideBar({ children }: SideBarProps) {
 				content: SUB_CORPORATE_MANAGEMENT,
 				menuIndex: 4,
 			},
+			"/teacher/gov/corporate/create": {
+				for: 4,
+				label: "기업 추가",
+			},
 		},
 		2: {
 			"/teacher/finance/deposit": { name: "set_deposit", label: "예금", content: SUB_FINANCE_DEPOSIT, menuIndex: 0 },

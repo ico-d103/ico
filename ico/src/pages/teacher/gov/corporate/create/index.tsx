@@ -9,16 +9,24 @@ function index() {
 	return (
 		<div css={wrapperCSS}>
 			<div css={titleWrapperCSS}>
-				<h1>기업 관리</h1>
-				<Button
-					text={"기업 추가"}
-					fontSize={"var(--teacher-h5)"}
-					width={"110px"}
-					theme={"normal"}
-					onClick={() => router.push("/teacher/gov/corporate/create")}
-				/>
+				<h1>기업 추가</h1>
+				<div>
+					<Button
+						text={"취소"}
+						fontSize={"var(--teacher-h5)"}
+						width={"110px"}
+						theme={"cancelDark"}
+						onClick={() => router.back()}
+					/>
+					<Button
+						text={"기업 생성"}
+						fontSize={"var(--teacher-h5)"}
+						width={"110px"}
+						theme={"normal"}
+						onClick={() => {}}
+					/>
+				</div>
 			</div>
-			<span css={descriptionCSS}>학생들이 운영할 기업을 생성하고 관리할 수 있습니다.</span>
 		</div>
 	)
 }
@@ -41,10 +49,13 @@ const titleWrapperCSS = css`
 		font-size: var(--teacher-h1);
 		font-weight: bold;
 	}
-`
 
-const descriptionCSS = css`
-	font-size: var(--teacher-h5);
+	> div {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 10px;
+	}
 `
 
 export default index
