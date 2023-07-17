@@ -2,9 +2,18 @@ import React from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 import { useRouter } from "next/router"
+import GovCorporateCreateContents from "@/components/teacher/Gov/Corporate/Create/GovCorporateCreateContents"
+import useCompHandler from "@/hooks/useCompHandler"
 
 function index() {
 	const router = useRouter()
+
+	const createCorporateHandler = () => {
+		// valid 확인
+		// 기업 생성 API
+
+		alert("준비 중입니다.")
+	}
 
 	return (
 		<div css={wrapperCSS}>
@@ -23,10 +32,11 @@ function index() {
 						fontSize={"var(--teacher-h5)"}
 						width={"110px"}
 						theme={"normal"}
-						onClick={() => {}}
+						onClick={createCorporateHandler}
 					/>
 				</div>
 			</div>
+			<GovCorporateCreateContents />
 		</div>
 	)
 }
@@ -43,7 +53,7 @@ const titleWrapperCSS = css`
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 12px;
+	margin-bottom: 35px;
 
 	> h1 {
 		font-size: var(--teacher-h1);

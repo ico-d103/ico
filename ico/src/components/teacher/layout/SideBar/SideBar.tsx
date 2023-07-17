@@ -165,10 +165,10 @@ function SideBar({ children }: SideBarProps) {
 				name: "set_corporate",
 				label: "기업 관리",
 				content: SUB_CORPORATE_MANAGEMENT,
-				menuIndex: 4,
+				menuIndex: 5,
 			},
 			"/teacher/gov/corporate/create": {
-				for: 4,
+				for: 5,
 				label: "기업 추가",
 			},
 		},
