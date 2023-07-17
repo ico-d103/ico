@@ -190,6 +190,11 @@ export type getGovEconomyType = {
 	totalAmount: number
 }
 
+export type getLicenseType = {
+	id: number
+	subject: string
+}
+
 export type getTeacherInfoType = {
 	identity: string
 	phoneNum: string
