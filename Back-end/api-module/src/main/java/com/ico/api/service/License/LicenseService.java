@@ -1,5 +1,6 @@
 package com.ico.api.service.License;
 
+import com.ico.api.dto.license.LicenseUpdateReqDto;
 import com.ico.api.dto.license.NationLicenseResDto;
 import com.ico.api.dto.license.StudentLicenseResDto;
 
@@ -72,7 +73,7 @@ public interface LicenseService {
     /**
      * 모든 학생의 하나의 자격증 등급 조정
      * @param request
-     * @param nationLicenseId
+     * @param dto
      */
-    void updateAllStudentLicense(HttpServletRequest request, Long nationLicenseId);
+    void updateAllStudentLicense(HttpServletRequest request, LicenseUpdateReqDto dto);
 }

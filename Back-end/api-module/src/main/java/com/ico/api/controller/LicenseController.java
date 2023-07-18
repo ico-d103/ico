@@ -1,5 +1,6 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.license.LicenseUpdateReqDto;
 import com.ico.api.dto.license.NationLicenseResDto;
 import com.ico.api.dto.license.StudentLicenseResDto;
 import com.ico.api.service.License.LicenseService;
@@ -118,6 +119,18 @@ public class LicenseController {
     @PutMapping("/teacher/detail/{studentId}")
     public ResponseEntity<HttpStatus> updateStudentDetailLicense(HttpServletRequest request, @PathVariable Long studentId, @RequestBody Map<Long, Integer> map) {
         licenseService.updateStudentDetailLicense(request, studentId, map);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 교사가 학생 전체의 자격증을 수정
+     * @param request
+     * @param dto
+     * @return
+     */
+    @PutMapping("/teacher/all")
+    public ResponseEntity<HttpStatus> updateAllStudentLicense(HttpServletRequest request, @RequestBody LicenseUpdateReqDto dto) {
+        licenseService.updateAllStudentLicense(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

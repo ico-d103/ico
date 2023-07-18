@@ -1,5 +1,6 @@
 package com.ico.api.service.License;
 
+import com.ico.api.dto.license.LicenseUpdateReqDto;
 import com.ico.api.dto.license.NationLicenseResDto;
 import com.ico.api.dto.license.StudentLicenseResDto;
 import com.ico.api.user.JwtTokenProvider;
@@ -66,6 +67,13 @@ public class LicenseServiceImpl implements LicenseService{
     }
 
     @Override
+    public List<StudentLicenseResDto> getStudentLicense(HttpServletRequest request) {
+        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
+
+        return getStudentLicenseList(studentId);
+    }
+    
+    @Override
     public void updateNationLicense(HttpServletRequest request, Long nationLicenseId, String subject) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
@@ -88,13 +96,6 @@ public class LicenseServiceImpl implements LicenseService{
         // 자격증명이 수정
         license.setSubject(subject);
         nationLicenseRepository.save(license);
-    }
-
-    @Override
-    public List<StudentLicenseResDto> getStudentLicense(HttpServletRequest request) {
-        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
-
-        return getStudentLicenseList(studentId);
     }
 
     @Override
@@ -147,24 +148,7 @@ public class LicenseServiceImpl implements LicenseService{
                 throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
             }
 
-            // 학생들의 자격증 등급 업데이트 / 디버깅과 유지보수를 위해 정규식 안씀
-            int rating = license.getRating();
-            if (m.getValue()) {
-                if (rating == -1) {
-                    license.setRating((byte) 7);
-                } else if (rating == 0) {
-                    throw new CustomException(ErrorCode.NOT_UP_LICENSE);
-                } else {
-                    license.setRating((byte) (rating - 1));
-                }
-            } else {
-                if (rating == -1 || rating == 7) {
-                    throw new CustomException(ErrorCode.NOT_DOWN_LICENSE);
-                } else {
-                    license.setRating((byte) (rating + 1));
-                }
-            }
-            studentLicenseRepository.save(license);
+            ratingUpDown(license, license.getRating(), m.getValue());
         }
     }
 
@@ -193,8 +177,20 @@ public class LicenseServiceImpl implements LicenseService{
     }
 
     @Override
-    public void updateAllStudentLicense(HttpServletRequest request, Long nationLicenseId) {
+    public void updateAllStudentLicense(HttpServletRequest request, LicenseUpdateReqDto dto) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
+        NationLicense nationLicense = nationLicenseRepository.findByNationIdAndId(nationId, dto.getNationLicenseId())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
+
+        List<StudentLicense> studentLicenses = studentLicenseRepository.findAllBySubjectAndNationId(nationLicense.getSubject(), nationId);
+        if (studentLicenses.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
+        }
+
+        for (StudentLicense license:studentLicenses) {
+            ratingUpDown(license, license.getRating(), dto.getUpDown());
+        }
     }
 
     /**
@@ -215,7 +211,32 @@ public class LicenseServiceImpl implements LicenseService{
                     .build();
             result.add(dto);
         }
-
         return result;
+    }
+
+    /**
+     * 자격증 등급 조정
+     * @param license
+     * @param rating
+     * @param upDown
+     */
+    private void ratingUpDown(StudentLicense license, int rating, Boolean upDown) {
+        // 학생들의 자격증 등급 업데이트 / 디버깅과 유지보수를 위해 정규식 안씀
+        if (upDown) {
+            if (rating == -1) {
+                license.setRating((byte) 7);
+            } else if (rating == 0) {
+                throw new CustomException(ErrorCode.NOT_UP_LICENSE);
+            } else {
+                license.setRating((byte) (rating - 1));
+            }
+        } else {
+            if (rating == -1 || rating == 7) {
+                throw new CustomException(ErrorCode.NOT_DOWN_LICENSE);
+            } else {
+                license.setRating((byte) (rating + 1));
+            }
+        }
+        studentLicenseRepository.save(license);
     }
 }
