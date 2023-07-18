@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 /**
@@ -25,12 +26,11 @@ public class NationLicense {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "nation_id")
-    Nation nation;
+    private Nation nation;
 
     private String subject;
-
 
     @Builder
     public NationLicense(Long id, Nation nation, String subject) {

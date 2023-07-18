@@ -17,6 +17,7 @@ import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -72,7 +73,8 @@ public class LicenseServiceImpl implements LicenseService{
 
         return getStudentLicenseList(studentId);
     }
-    
+
+    @Transactional
     @Override
     public void updateNationLicense(HttpServletRequest request, Long nationLicenseId, String subject) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -93,11 +95,21 @@ public class LicenseServiceImpl implements LicenseService{
         if (!nationId.equals(license.getNation().getId())) {
             throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
         }
-        // 자격증명이 수정
+        // 자격증명 수정
         license.setSubject(subject);
         nationLicenseRepository.save(license);
+
+        // 학생들이 자격증을 가지고 있다면 학생들의 자격증 모두 수정
+        List<StudentLicense> studentLicenses = studentLicenseRepository.findAllByNationLicenseId(license.getId());
+        if (!studentLicenses.isEmpty()) {
+            for (StudentLicense studentLicense:studentLicenses) {
+                studentLicense.setSubject(license.getSubject());
+                studentLicenseRepository.save(studentLicense);
+            }
+        }
     }
 
+    @Transactional
     @Override
     public void deleteNationLicense(HttpServletRequest request, Long nationLicenseId) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -111,8 +123,15 @@ public class LicenseServiceImpl implements LicenseService{
         }
 
         nationLicenseRepository.delete(license);
+
+        // 학생들이 자격증을 가지고 있다면 학생들의 자격증 모두 삭제
+        List<StudentLicense> studentLicenses = studentLicenseRepository.findAllByNationLicenseId(license.getId());
+        if (!studentLicenses.isEmpty()) {
+            studentLicenseRepository.deleteAll(studentLicenses);
+        }
     }
 
+    @Transactional
     @Override
     public String createNationLicense(HttpServletRequest request, String subject) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -133,6 +152,23 @@ public class LicenseServiceImpl implements LicenseService{
                 .subject(subject)
                 .build();
         nationLicenseRepository.save(license);
+
+        // 학생들의 자격증이 만들어져 있는지 체크
+        boolean isExist = !studentLicenseRepository.findAllByNationId(nationId).isEmpty();
+        if (isExist) {
+            List<Student> students = studentRepository.findAllByNationId(nationId);
+            // 학생들 모두에게 새로만든 자격증을 만들어 주기
+            for (Student student:students) {
+                StudentLicense studentLicense = StudentLicense.builder()
+                        .student(student)
+                        .nation(nation)
+                        .subject(license.getSubject())
+                        .rating((byte) -1)
+                        .nationLicenseId(license.getId())
+                        .build();
+                studentLicenseRepository.save(studentLicense);
+            }
+        }
         return subject;
     }
 
@@ -178,12 +214,7 @@ public class LicenseServiceImpl implements LicenseService{
 
     @Override
     public void updateAllStudentLicense(HttpServletRequest request, LicenseUpdateReqDto dto) {
-        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
-
-        NationLicense nationLicense = nationLicenseRepository.findByNationIdAndId(nationId, dto.getNationLicenseId())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
-
-        List<StudentLicense> studentLicenses = studentLicenseRepository.findAllBySubjectAndNationId(nationLicense.getSubject(), nationId);
+        List<StudentLicense> studentLicenses = studentLicenseRepository.findAllByNationLicenseId(dto.getNationLicenseId());
         if (studentLicenses.isEmpty()) {
             throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
         }

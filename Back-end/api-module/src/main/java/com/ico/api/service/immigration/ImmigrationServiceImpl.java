@@ -141,6 +141,7 @@ public class ImmigrationServiceImpl implements ImmigrationService {
                         .nation(immigration.getNation())
                         .subject(data.getSubject())
                         .rating((byte) -1)
+                        .nationLicenseId(data.getId())
                         .build();
                 studentLicenseRepository.save(license);
             }

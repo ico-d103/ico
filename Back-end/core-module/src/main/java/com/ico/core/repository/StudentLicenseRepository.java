@@ -12,5 +12,7 @@ public interface StudentLicenseRepository extends JpaRepository<StudentLicense, 
 
     List<StudentLicense> findAllByStudentId(Long studentId);
 
-    List<StudentLicense> findAllBySubjectAndNationId(String subject, Long nationId);
+    List<StudentLicense> findAllByNationLicenseId(Long nationLicenseId);
+
+    List<StudentLicense> findAllByNationId(Long nationId);
 }
