@@ -37,4 +37,12 @@ public interface TreasuryHistoryService {
      * @return
      */
     Map<String, List<TreasuryHistoryColDto>> findTreasuryHistoryList(HttpServletRequest request);
+
+    /**
+     * 국고 내역을 삭제하고 내역의 금액을 반환한다.
+     *
+     * @param treasuryHistoryId
+     * @param request
+     */
+    void deleteTreasuryHistory(String treasuryHistoryId, HttpServletRequest request);
 }
