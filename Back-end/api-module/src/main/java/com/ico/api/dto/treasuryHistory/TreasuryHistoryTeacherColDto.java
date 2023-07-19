@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TreasuryHistoryTeacherColDto {
 
+    private String id;
+
     private String date;
 
     private String title;
@@ -23,7 +25,8 @@ public class TreasuryHistoryTeacherColDto {
     private String amount;
 
     @Builder
-    public TreasuryHistoryTeacherColDto(String date, String title, String source, String amount) {
+    public TreasuryHistoryTeacherColDto(String id, String date, String title, String source, String amount) {
+        this.id = id;
         this.date = date;
         this.title = title;
         this.source = source;
@@ -39,6 +42,7 @@ public class TreasuryHistoryTeacherColDto {
      */
     public TreasuryHistoryTeacherColDto of(TreasuryHistory treasuryHistory, String date, String amount) {
         return TreasuryHistoryTeacherColDto.builder()
+                .id(treasuryHistory.getId())
                 .date(date)
                 .title(treasuryHistory.getTitle())
                 .source(treasuryHistory.getSource())

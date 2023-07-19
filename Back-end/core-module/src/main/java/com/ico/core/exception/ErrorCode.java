@@ -137,6 +137,8 @@ public enum ErrorCode{
 
     EMPTY_NATION(HttpStatus.BAD_REQUEST, "511", "아직 나라가 없는 학생입니다."),
 
+    TREASURY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "512", "존재하지 않는 국고 내역 id 입니다."),
+
     NO_PRODUCT_IMAGE(HttpStatus.NOT_FOUND, "608", "상품 이미지를 입력해주세요"),
 
     PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "없는 판매 제안서입니다."),

@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,5 +70,18 @@ public class TreasuryHistoryController {
     @GetMapping("/student")
     public ResponseEntity<Map<String, List<TreasuryHistoryColDto>>> findTreasuryHistoryList(HttpServletRequest request) {
         return ResponseEntity.ok(treasuryHistoryService.findTreasuryHistoryList(request));
+    }
+
+    /**
+     * 교사가 국고 내역 삭제
+     *
+     * @param treasuryHistoryId
+     * @param request
+     * @return
+     */
+    @DeleteMapping("/teacher/delete/{treasuryHistoryId}")
+    public ResponseEntity<HttpStatus> deleteTreasuryHistory(@PathVariable String treasuryHistoryId, HttpServletRequest request) {
+        treasuryHistoryService.deleteTreasuryHistory(treasuryHistoryId, request);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }
