@@ -15,7 +15,7 @@ public interface PowerService {
     /**
      * 권한 테이블 처음으로 생성
      */
-    void create();
+    void createPower();
 
     /**
      * 권한 테이블 전체 조회

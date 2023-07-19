@@ -8,7 +8,6 @@ import com.ico.api.dto.job.JobResDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
-import com.ico.core.code.PowerEnum;
 import com.ico.core.dto.JobReqDto;
 import com.ico.core.entity.Power;
 import com.ico.core.entity.StudentJob;
@@ -29,7 +28,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 직업 관련 Service 로직 작성
@@ -238,20 +240,21 @@ public class JobServiceImpl implements JobService{
         StudentJob job = studentJobRepository.findById(jobId)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
 
+        // powerIds Set
+        Set<Long> setPowerIds = new HashSet<>(powerIds);
+        List<Long> ids = new ArrayList<>(setPowerIds);
+        Collections.sort(ids);
+
         // empowered 초기화
         StringBuilder jobEmpowered = new StringBuilder();
 
-        for (Long powerId : powerIds) {
-            Power power = powerRepository.findById(powerId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POWER));
-
-            // 중복 체크
-            if (jobEmpowered.toString().contains(power.getId().toString())) {
-                throw new CustomException(ErrorCode.DUPLICATED_POWER);
-            }
-
-            // job empowered 컬럼 채우기
-            jobEmpowered.append(power.getId()).append(",");
+        List<Power> powers = powerRepository.findAllByIdIn(ids);
+        if (powers.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_POWER);
+        }
+        for (Power power:powers) {
+                // job empowered 컬럼 채우기
+                jobEmpowered.append(power.getId()).append(",");
         }
         job.setEmpowered(jobEmpowered.toString());
         studentJobRepository.save(job);

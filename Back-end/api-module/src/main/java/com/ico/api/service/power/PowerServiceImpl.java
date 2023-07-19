@@ -23,9 +23,8 @@ public class PowerServiceImpl implements PowerService{
     private final PowerRepository powerRepository;
 
     @Override
-    public void create() {
+    public void createPower() {
         for (PowerEnum data:PowerEnum.values()) {
-//            log.info(data.toString());
             Power power = Power.builder()
                     .name(PowerEnum.valueOf(String.valueOf(data)))
                     .build();

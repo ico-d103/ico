@@ -32,7 +32,7 @@ public class PowerController {
      */
     @PostMapping
     public ResponseEntity<HttpStatus> createPower() {
-        powerService.create();
+        powerService.createPower();
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
