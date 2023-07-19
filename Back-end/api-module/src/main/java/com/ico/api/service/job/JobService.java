@@ -14,6 +14,7 @@ import java.util.List;
  * 직업 관련 Service interface
  *
  * @author 서재건
+ * @author 강교철
  */
 public interface JobService {
 
@@ -75,4 +76,12 @@ public interface JobService {
      * @param request
      */
     void resetJob(Long studentId, HttpServletRequest request);
+
+    /**
+     * 교사가 직업에 권한을 부여
+     * @param request
+     * @param powerIds
+     */
+    void updatePower(HttpServletRequest request, List<Long> powerIds, Long jobId);
+
 }
