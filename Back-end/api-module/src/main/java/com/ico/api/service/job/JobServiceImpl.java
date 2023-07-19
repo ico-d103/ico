@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * 직업 관련 Service 로직 작성
@@ -241,17 +242,14 @@ public class JobServiceImpl implements JobService{
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
 
         // powerIds Set
-        Set<Long> setPowerIds = new HashSet<>(powerIds);
-        List<Long> ids = new ArrayList<>(setPowerIds);
-        Collections.sort(ids);
-
-        // empowered 초기화
-        StringBuilder jobEmpowered = new StringBuilder();
-
-        List<Power> powers = powerRepository.findAllByIdIn(ids);
+        Set<Long> setPowerIds = new TreeSet<>(powerIds);
+        List<Power> powers = powerRepository.findAllByIdIn(new ArrayList<>(setPowerIds));
         if (powers.isEmpty()) {
             throw new CustomException(ErrorCode.NOT_FOUND_POWER);
         }
+
+        // empowered 초기화
+        StringBuilder jobEmpowered = new StringBuilder();
         for (Power power:powers) {
                 // job empowered 컬럼 채우기
                 jobEmpowered.append(power.getId()).append(",");
