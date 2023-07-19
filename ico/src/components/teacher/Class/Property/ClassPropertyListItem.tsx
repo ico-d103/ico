@@ -5,9 +5,16 @@ import useGetNation from "@/hooks/useGetNation"
 import { css } from "@emotion/react"
 import { CLASS_BIG_PROPERTY } from "../ClassIcons"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { deleteTreasuryHistoryAPI } from "@/api/teacher/class/deleteTreasuryHistoryAPI"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import { selectedPage } from "@/store/store"
+import { useAtomValue } from "jotai"
 
 type PropertyListItemPropsType = {
 	property: {
+		id: string
 		date: string
 		title: string
 		source: string
@@ -17,12 +24,30 @@ type PropertyListItemPropsType = {
 }
 
 function PropertyListItem({ property, showDate }: PropertyListItemPropsType) {
+	const noti = useNotification()
 	const [nation] = useGetNation()
+	const queryClient = useQueryClient()
 	const [openComp, closeComp, compState] = useCompHandler()
+	const selectedPageAtom = useAtomValue(selectedPage)
+	const deleteTreasuryHistoryMutation = useMutation((id: string) => deleteTreasuryHistoryAPI({ id }))
 
 	const deletePropertyList = () => {
-		alert("준비 중입니다.")
-		// 국고 삭제 api 연결
+		deleteTreasuryHistoryMutation.mutate(property.id, {
+			onSuccess: () => {
+				noti({
+					content: <NotiTemplate type={"ok"} content={`내역이 성공적으로 삭제되었습니다.`} />,
+					duration: 3000,
+				})
+
+				queryClient.invalidateQueries(["propertyList", selectedPageAtom])
+			},
+			onError: () => {
+				noti({
+					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+					duration: 3000,
+				})
+			},
+		})
 	}
 
 	return (

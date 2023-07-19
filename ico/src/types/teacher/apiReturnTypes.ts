@@ -137,6 +137,7 @@ export type getNationTreasuryType = {
 }
 
 export type getTreasuryHistoryPageType = {
+	id: string
 	date: string
 	title: string
 	source: string
