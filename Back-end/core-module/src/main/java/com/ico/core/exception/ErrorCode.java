@@ -65,7 +65,7 @@ public enum ErrorCode{
 
     ERROR_NATION_JOB(HttpStatus.INTERNAL_SERVER_ERROR, "39", "학생 직업 데이터베이스에 나라가 등록되어 있지 않습니다."),
 
-    NOT_FOUND_PARAMETER(HttpStatus.NOT_FOUND, "40", "값이 없습니다."),
+    NOT_FOUND_PARAMETER(HttpStatus.NOT_FOUND, "40", "Map 값이 없습니다."),
 
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
