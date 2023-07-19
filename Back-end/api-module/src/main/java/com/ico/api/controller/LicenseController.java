@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -129,7 +130,7 @@ public class LicenseController {
      * @return
      */
     @PutMapping("/teacher/all")
-    public ResponseEntity<HttpStatus> updateAllStudentLicense(HttpServletRequest request, @RequestBody LicenseUpdateReqDto dto) {
+    public ResponseEntity<HttpStatus> updateAllStudentLicense(HttpServletRequest request, @Valid @RequestBody LicenseUpdateReqDto dto) {
         licenseService.updateAllStudentLicense(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }

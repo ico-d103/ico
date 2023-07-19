@@ -31,7 +31,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class LicenseServiceImpl implements LicenseService{
+public class LicenseServiceImpl implements LicenseService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final StudentRepository studentRepository;
@@ -174,22 +174,38 @@ public class LicenseServiceImpl implements LicenseService{
 
     @Override
     public void updateStudentLicense(HttpServletRequest request, Map<Long, Boolean> map) {
+        // map 유효성 검사
+        if (map.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_PARAMETER);
+        }
+
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         for (Map.Entry<Long, Boolean> m : map.entrySet()) {
-            StudentLicense license = studentLicenseRepository.findById(m.getKey())
+            Long key = m.getKey();  // nationLicenseId
+            Boolean upDown = m.getValue();  // true(등급 올리기) or false(등급 내리기)
+            // key & value 유효성 검사
+            if (key == null || upDown == null) {
+                throw new CustomException(ErrorCode.NOT_FOUND_PARAMETER);
+            }
+            StudentLicense license = studentLicenseRepository.findById(key)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
-            // 나라일치 여부
+            // 나라 일치 여부 확인
             if (!nationId.equals(license.getNation().getId())) {
                 throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
             }
 
-            ratingUpDown(license, license.getRating(), m.getValue());
+            ratingUpDown(license, license.getRating(), upDown);
         }
     }
 
     @Override
     public void updateStudentDetailLicense(HttpServletRequest request, Long studentId, Map<Long, Integer> map) {
+        // map 유효성 검사
+        if (map.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_PARAMETER);
+        }
+
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         Student student = studentRepository.findById(studentId)

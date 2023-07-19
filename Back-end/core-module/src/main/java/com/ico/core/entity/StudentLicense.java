@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 /**
+ * 나라에 작성된 자격증을 학생 개개인에게 적용
+ * 기본적으로 나라에 입장할 때 학생에게 나라의 자격증이 자동으로 부여
  * @author 강교철
  */
 @Entity

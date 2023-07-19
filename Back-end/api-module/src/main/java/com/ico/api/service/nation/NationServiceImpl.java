@@ -8,6 +8,7 @@ import com.ico.api.util.Formatter;
 import com.ico.core.code.Role;
 import com.ico.core.code.Status;
 import com.ico.core.code.TaxType;
+import com.ico.core.data.Default_interest;
 import com.ico.core.data.Default_job;
 import com.ico.core.data.Default_license;
 import com.ico.core.data.Default_rule;
@@ -310,12 +311,12 @@ public class NationServiceImpl implements NationService {
         }
     }
 
+    // TODO: 권한 부분은 자격증이 BE 에 합쳐진 후에 지우기
     @Override
     @Transactional
-    public void deleteNation(HttpServletRequest request) {  // NationLicense, StudentLicense, power 지워야 함
-        String token = jwtTokenProvider.parseJwt(request);
+    public void deleteNation(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
-        Long nationId = jwtTokenProvider.getNation(token);
         if (nationId == null) {
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
         }
@@ -332,6 +333,14 @@ public class NationServiceImpl implements NationService {
         List<Student> students = studentRepository.findAllByNationId(nationId);
         for (Student student : students) {
             student.setNation(null);
+            student.setAccount(0);
+            student.setCreditScore((short) 700);
+            student.setCreditRating((byte) 6);
+            student.setFrozen(false);
+            student.setNumber((byte) 0);
+            student.setSalary(0);
+            // TODO : 권한 초기화 여기!
+
             studentRepository.save(student);
             // StudentLicense
             List<StudentLicense> studentLicenses = studentLicenseRepository.findAllByStudentId(student.getId());
@@ -405,6 +414,9 @@ public class NationServiceImpl implements NationService {
         if (!nationLicenses.isEmpty()) {
             nationLicenseRepository.deleteAll(nationLicenses);
         }
+
+        // Interest
+        // TODO : 현재 얘 때문에 삭제가 안먹힘
 
         // 연관관계 매핑을 모두 끊고 마지막에 삭제
         nationRepository.delete(nation);
