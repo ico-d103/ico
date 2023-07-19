@@ -3,8 +3,7 @@ import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
 	body: {
-		title: string
-		detail: string
+		subject: string
 	}
 }
 
@@ -13,9 +12,9 @@ type responseType = {
 	data: successReturnType
 }
 
-export const postGovRuleAPI = async ({ body }: paramsType) => {
+export const postLicenseAPI = async ({ body }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.post(`/rule/teacher`, body)
+		const response: responseType = await tokenInstance.post(`/license/teacher`, body)
 		return response.data
 	} catch (error) {
 		throw error
