@@ -125,6 +125,7 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
         return map;
     }
 
+    @Transactional
     @Override
     public void deleteTreasuryHistory(String treasuryHistoryId, HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -143,6 +144,8 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
         nation.setTreasury(treasury);
 
         nationRepository.save(nation);
+
+        treasuryHistoryRepository.delete(treasuryHistory);
     }
 
 }
