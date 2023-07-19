@@ -50,7 +50,7 @@ public class RuleController {
      * @param dto
      * @return
      */
-    @PostMapping("/teacher")
+    @PostMapping
     public ResponseEntity<HttpStatus> addRule(@Valid @RequestBody RuleReqDto dto, HttpServletRequest request) {
         ruleService.addRule(dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
@@ -64,15 +64,15 @@ public class RuleController {
      * @param request
      * @return
      */
-    @PutMapping("/teacher/{ruleId}")
+    @PutMapping("/{ruleId}")
     public ResponseEntity<HttpStatus> addRule(@Valid @RequestBody RuleReqDto dto, @PathVariable Long ruleId, HttpServletRequest request) {
         ruleService.updateRule(dto, ruleId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping("/teacher/{ruleId}")
-    public ResponseEntity<HttpStatus> deleteRule(@PathVariable Long ruleId) {
-        ruleService.deleteRule(ruleId);
+    @DeleteMapping("/{ruleId}")
+    public ResponseEntity<HttpStatus> deleteRule(@PathVariable Long ruleId, HttpServletRequest request) {
+        ruleService.deleteRule(ruleId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }
