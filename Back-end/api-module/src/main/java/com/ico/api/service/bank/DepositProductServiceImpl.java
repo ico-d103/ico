@@ -191,7 +191,7 @@ public class DepositProductServiceImpl implements DepositProductService{
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         DepositProduct depositProduct = depositProductRepository.findByIdAndNationId(depositId, nationId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DEPOSITPRODUCT));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DEPOSIT_PRODUCT));
 
         // 이자율 값 들
         List<Byte> interest = dto.getInterest();
@@ -218,7 +218,7 @@ public class DepositProductServiceImpl implements DepositProductService{
     @Override
     public void deleteDeposit(Long depositId) {
         DepositProduct depositProduct = depositProductRepository.findById(depositId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DEPOSITPRODUCT));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DEPOSIT_PRODUCT));
 
         depositProductRepository.delete(depositProduct);
     }
@@ -259,6 +259,6 @@ public class DepositProductServiceImpl implements DepositProductService{
             case 9: return deposit.getGrade_9();
             case 10: return deposit.getGrade_10();
         }
-        throw new CustomException(ErrorCode.NOT_FOUND_DEPOSITPRODUCT);
+        throw new CustomException(ErrorCode.NOT_FOUND_DEPOSIT_PRODUCT);
     }
 }
