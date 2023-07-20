@@ -50,9 +50,9 @@ public class TaxController {
      * @param dto
      * @return
      */
-    @PutMapping("/teacher/{taxId}")
-    public ResponseEntity<HttpStatus> updateTax(@PathVariable Long taxId, @Valid @RequestBody TaxReqDto dto) {
-        taxService.updateTax(taxId, dto);
+    @PutMapping("/{taxId}")
+    public ResponseEntity<HttpStatus> updateTax(@PathVariable Long taxId, @Valid @RequestBody TaxReqDto dto, HttpServletRequest request) {
+        taxService.updateTax(taxId, dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -63,7 +63,7 @@ public class TaxController {
      * @param request
      * @return
      */
-    @PostMapping("/teacher")
+    @PostMapping
     public ResponseEntity<HttpStatus> addTax(@Valid @RequestBody TaxReqDto dto, HttpServletRequest request) {
         taxService.addTax(dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
@@ -75,9 +75,9 @@ public class TaxController {
      * @param taxId
      * @return
      */
-    @DeleteMapping("/teacher/{taxId}")
-    public ResponseEntity<HttpStatus> deleteTax(@PathVariable Long taxId) {
-        taxService.deleteTax(taxId);
+    @DeleteMapping("/{taxId}")
+    public ResponseEntity<HttpStatus> deleteTax(@PathVariable Long taxId, HttpServletRequest request) {
+        taxService.deleteTax(taxId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class RuleServiceImpl implements RuleService {
     public void addRule(RuleReqDto dto, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
-        checkRoleAndPower(token);
+        checkRoleAndNewspaperPower(token);
 
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
@@ -77,7 +76,7 @@ public class RuleServiceImpl implements RuleService {
     public void updateRule(RuleReqDto dto, Long ruleId, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
-        checkRoleAndPower(token);
+        checkRoleAndNewspaperPower(token);
 
         Rule rule = ruleRepository.findById(ruleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.RULE_NOT_FOUND));
@@ -101,7 +100,7 @@ public class RuleServiceImpl implements RuleService {
     public void deleteRule(Long ruleId, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
-        checkRoleAndPower(token);
+        checkRoleAndNewspaperPower(token);
 
         Rule rule = ruleRepository.findById(ruleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.RULE_NOT_FOUND));
@@ -118,7 +117,7 @@ public class RuleServiceImpl implements RuleService {
      *
      * @param token
      */
-    private void checkRoleAndPower(String token) {
+    private void checkRoleAndNewspaperPower(String token) {
         Role role = jwtTokenProvider.getRole(token);
 
         if (role == Role.STUDENT) {

@@ -359,7 +359,10 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     @Override
     public void postAllCreditScore(CreditScoreAllReqDto dto, HttpServletRequest request) {
-        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        checkRoleAndCreditScorePower(token);
+
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
@@ -439,6 +442,25 @@ public class StudentServiceImpl implements StudentService {
             return 9;
         } else {
             return 10;
+        }
+    }
+
+    /**
+     * 학생이 요청할 때는 권한 확인
+     *
+     * @param token
+     */
+    private void checkRoleAndCreditScorePower(String token) {
+        Role role = jwtTokenProvider.getRole(token);
+
+        if (role == Role.STUDENT) {
+            Student student = studentRepository.findById(jwtTokenProvider.getId(token))
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            String emPowered = student.getEmpowered();
+            // 권한이 없거나 비어있다면 Error
+            if (emPowered == null || emPowered.trim().isEmpty() || !emPowered.contains("1")) {
+                throw new CustomException(ErrorCode.WRONG_ROLE);
+            }
         }
     }
 
