@@ -8,12 +8,12 @@ import com.ico.api.util.Formatter;
 import com.ico.core.code.Role;
 import com.ico.core.code.Status;
 import com.ico.core.code.TaxType;
-import com.ico.core.data.Default_interest;
 import com.ico.core.data.Default_job;
 import com.ico.core.data.Default_license;
 import com.ico.core.data.Default_rule;
 import com.ico.core.data.Default_tax;
 import com.ico.core.document.DefaultNation;
+import com.ico.core.entity.DepositProduct;
 import com.ico.core.entity.Immigration;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Issue;
@@ -32,6 +32,7 @@ import com.ico.core.document.TreasuryHistory;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.DefaultNationRepository;
+import com.ico.core.repository.DepositProductRepository;
 import com.ico.core.repository.ImmigrationRepository;
 import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationLicenseRepository;
@@ -86,8 +87,8 @@ public class NationServiceImpl implements NationService {
     private final IssueRepository issueRepository;
     private final StockRepository stockRepository;
     private final JwtTokenProvider jwtTokenProvider;
-
     private final DefaultNationRepository defaultNationRepository;
+    private final DepositProductRepository depositProductRepository;
 
     @Override
     @Transactional
@@ -416,7 +417,10 @@ public class NationServiceImpl implements NationService {
         }
 
         // Interest
-        // TODO : 현재 얘 때문에 삭제가 안먹힘
+        List<DepositProduct> depositProducts = depositProductRepository.findAllByNationId(nationId);
+        if (!depositProducts.isEmpty()) {
+            depositProductRepository.deleteAll(depositProducts);
+        }
 
         // 연관관계 매핑을 모두 끊고 마지막에 삭제
         nationRepository.delete(nation);
