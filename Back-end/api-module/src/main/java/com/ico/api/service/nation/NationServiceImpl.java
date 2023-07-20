@@ -13,6 +13,7 @@ import com.ico.core.data.Default_license;
 import com.ico.core.data.Default_rule;
 import com.ico.core.data.Default_tax;
 import com.ico.core.document.DefaultNation;
+import com.ico.core.entity.DepositProduct;
 import com.ico.core.entity.Immigration;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Issue;
@@ -31,6 +32,7 @@ import com.ico.core.document.TreasuryHistory;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.DefaultNationRepository;
+import com.ico.core.repository.DepositProductRepository;
 import com.ico.core.repository.ImmigrationRepository;
 import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationLicenseRepository;
@@ -85,8 +87,8 @@ public class NationServiceImpl implements NationService {
     private final IssueRepository issueRepository;
     private final StockRepository stockRepository;
     private final JwtTokenProvider jwtTokenProvider;
-
     private final DefaultNationRepository defaultNationRepository;
+    private final DepositProductRepository depositProductRepository;
 
     @Override
     @Transactional
@@ -310,12 +312,12 @@ public class NationServiceImpl implements NationService {
         }
     }
 
+    // TODO: 권한 부분은 자격증이 BE 에 합쳐진 후에 지우기
     @Override
     @Transactional
     public void deleteNation(HttpServletRequest request) {
-        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
-        Long nationId = jwtTokenProvider.getNation(token);
         if (nationId == null) {
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
         }
@@ -332,6 +334,14 @@ public class NationServiceImpl implements NationService {
         List<Student> students = studentRepository.findAllByNationId(nationId);
         for (Student student : students) {
             student.setNation(null);
+            student.setAccount(0);
+            student.setCreditScore((short) 700);
+            student.setCreditRating((byte) 6);
+            student.setFrozen(false);
+            student.setNumber((byte) 0);
+            student.setSalary(0);
+            // TODO : 권한 초기화 여기!
+
             studentRepository.save(student);
             // StudentLicense
             List<StudentLicense> studentLicenses = studentLicenseRepository.findAllByStudentId(student.getId());
@@ -404,6 +414,12 @@ public class NationServiceImpl implements NationService {
         List<NationLicense> nationLicenses = nationLicenseRepository.findAllByNationId(nationId);
         if (!nationLicenses.isEmpty()) {
             nationLicenseRepository.deleteAll(nationLicenses);
+        }
+
+        // Interest
+        List<DepositProduct> depositProducts = depositProductRepository.findAllByNationId(nationId);
+        if (!depositProducts.isEmpty()) {
+            depositProductRepository.deleteAll(depositProducts);
         }
 
         // 연관관계 매핑을 모두 끊고 마지막에 삭제

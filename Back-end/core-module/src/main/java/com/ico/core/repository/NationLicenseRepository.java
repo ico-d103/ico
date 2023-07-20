@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface NationLicenseRepository extends JpaRepository<NationLicense, Long> {
 
     List<NationLicense> findAllByNationId(Long nationId);
-
     Optional<NationLicense> findBySubjectAndNationId(String subject, Long nationId);
+    Optional<NationLicense> findByNationIdAndId(Long nationId, Long nationLicenseId);
 }

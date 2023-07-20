@@ -1,5 +1,6 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.license.LicenseUpdateReqDto;
 import com.ico.api.dto.license.NationLicenseResDto;
 import com.ico.api.dto.license.StudentLicenseResDto;
 import com.ico.api.service.License.LicenseService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -96,18 +98,17 @@ public class LicenseController {
         return ResponseEntity.ok(licenseService.createNationLicense(request, map.get("subject")));
     }
 
-//    TODO : 나중에
-//    /**
-//     * 과목명과 등급을 입력받고 모든 학생의 자격증을 수정
-//     * @param request
-//     * @param reqDto
-//     * @return
-//     */
-//    @PutMapping("/teacher")
-//    public ResponseEntity<HttpStatus> updateStudentLicense(HttpServletRequest request, @RequestBody StudentLicenseUpdateReqDto reqDto) {
-//        licenseService.updateStudentLicense(request, reqDto);
-//        return ResponseEntity.ok(HttpStatus.OK);
-//    }
+    /**
+     * 학생들의 자격증 등급 조정
+     * @param request
+     * @param map
+     * @return
+     */
+    @PutMapping("/teacher")
+    public ResponseEntity<HttpStatus> updateStudentLicense(HttpServletRequest request, @RequestBody Map<Long, Boolean> map) {
+        licenseService.updateStudentLicense(request, map);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 
     /**
      * 교사가 학생 한명의 자격증을 수정
@@ -119,6 +120,18 @@ public class LicenseController {
     @PutMapping("/teacher/detail/{studentId}")
     public ResponseEntity<HttpStatus> updateStudentDetailLicense(HttpServletRequest request, @PathVariable Long studentId, @RequestBody Map<Long, Integer> map) {
         licenseService.updateStudentDetailLicense(request, studentId, map);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 교사가 학생 전체의 자격증을 수정
+     * @param request
+     * @param dto
+     * @return
+     */
+    @PutMapping("/teacher/all")
+    public ResponseEntity<HttpStatus> updateAllStudentLicense(HttpServletRequest request, @Valid @RequestBody LicenseUpdateReqDto dto) {
+        licenseService.updateAllStudentLicense(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

@@ -49,7 +49,7 @@ public class DepositServiceImpl implements DepositService{
         Long studentId = jwtTokenProvider.getId(token);
 
         DepositProduct depositProduct = depositProductRepository.findByIdAndNationId(dto.getId(), nationId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DEPOSITPRODUCT));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DEPOSIT_PRODUCT));
 
         // 예치 금액
         int amount = dto.getAmount();

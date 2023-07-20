@@ -1,5 +1,6 @@
 package com.ico.api.service.License;
 
+import com.ico.api.dto.license.LicenseUpdateReqDto;
 import com.ico.api.dto.license.NationLicenseResDto;
 import com.ico.api.dto.license.StudentLicenseResDto;
 import com.ico.api.user.JwtTokenProvider;
@@ -16,6 +17,7 @@ import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class LicenseServiceImpl implements LicenseService{
+public class LicenseServiceImpl implements LicenseService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final StudentRepository studentRepository;
@@ -66,6 +68,14 @@ public class LicenseServiceImpl implements LicenseService{
     }
 
     @Override
+    public List<StudentLicenseResDto> getStudentLicense(HttpServletRequest request) {
+        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
+
+        return getStudentLicenseList(studentId);
+    }
+
+    @Transactional
+    @Override
     public void updateNationLicense(HttpServletRequest request, Long nationLicenseId, String subject) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
@@ -85,18 +95,21 @@ public class LicenseServiceImpl implements LicenseService{
         if (!nationId.equals(license.getNation().getId())) {
             throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
         }
-        // 자격증명이 수정
+        // 자격증명 수정
         license.setSubject(subject);
         nationLicenseRepository.save(license);
+
+        // 학생들이 자격증을 가지고 있다면 학생들의 자격증 모두 수정
+        List<StudentLicense> studentLicenses = studentLicenseRepository.findAllByNationLicenseId(license.getId());
+        if (!studentLicenses.isEmpty()) {
+            for (StudentLicense studentLicense:studentLicenses) {
+                studentLicense.setSubject(license.getSubject());
+                studentLicenseRepository.save(studentLicense);
+            }
+        }
     }
 
-    @Override
-    public List<StudentLicenseResDto> getStudentLicense(HttpServletRequest request) {
-        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
-
-        return getStudentLicenseList(studentId);
-    }
-
+    @Transactional
     @Override
     public void deleteNationLicense(HttpServletRequest request, Long nationLicenseId) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -110,8 +123,15 @@ public class LicenseServiceImpl implements LicenseService{
         }
 
         nationLicenseRepository.delete(license);
+
+        // 학생들이 자격증을 가지고 있다면 학생들의 자격증 모두 삭제
+        List<StudentLicense> studentLicenses = studentLicenseRepository.findAllByNationLicenseId(license.getId());
+        if (!studentLicenses.isEmpty()) {
+            studentLicenseRepository.deleteAll(studentLicenses);
+        }
     }
 
+    @Transactional
     @Override
     public String createNationLicense(HttpServletRequest request, String subject) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -132,28 +152,60 @@ public class LicenseServiceImpl implements LicenseService{
                 .subject(subject)
                 .build();
         nationLicenseRepository.save(license);
+
+        // 학생들의 자격증이 만들어져 있는지 체크
+        boolean isExist = !studentLicenseRepository.findAllByNationId(nationId).isEmpty();
+        if (isExist) {
+            List<Student> students = studentRepository.findAllByNationId(nationId);
+            // 학생들 모두에게 새로만든 자격증을 만들어 주기
+            for (Student student:students) {
+                StudentLicense studentLicense = StudentLicense.builder()
+                        .student(student)
+                        .nation(nation)
+                        .subject(license.getSubject())
+                        .rating((byte) -1)
+                        .nationLicenseId(license.getId())
+                        .build();
+                studentLicenseRepository.save(studentLicense);
+            }
+        }
         return subject;
     }
 
-//    TODO : 나중에
-//    @Override
-//    public void updateStudentLicense(HttpServletRequest request, StudentLicenseUpdateReqDto reqDto) {
-//        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
-//
-//        List<StudentLicense> licenses = studentLicenseRepository.findAllBySubjectAndNationId(reqDto.getSubject(), nationId);
-//        log.info("[SUBJECT] : {}", reqDto.getSubject());
-//        if (licenses.isEmpty()) {
-//            throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
-//        }
-//        // 학생들의 자격증 등급을 입력받은 수치로 업데이트
-//        for (StudentLicense license : licenses) {
-//            license.setRating((byte) reqDto.getRating().intValue());
-//            studentLicenseRepository.save(license);
-//        }
-//    }
+    @Override
+    public void updateStudentLicense(HttpServletRequest request, Map<Long, Boolean> map) {
+        // map 유효성 검사
+        if (map.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_PARAMETER);
+        }
+
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        for (Map.Entry<Long, Boolean> m : map.entrySet()) {
+            Long key = m.getKey();  // nationLicenseId
+            Boolean upDown = m.getValue();  // true(등급 올리기) or false(등급 내리기)
+            // key & value 유효성 검사
+            if (key == null || upDown == null) {
+                throw new CustomException(ErrorCode.NOT_FOUND_PARAMETER);
+            }
+            StudentLicense license = studentLicenseRepository.findById(key)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
+            // 나라 일치 여부 확인
+            if (!nationId.equals(license.getNation().getId())) {
+                throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
+            }
+
+            ratingUpDown(license, license.getRating(), upDown);
+        }
+    }
 
     @Override
     public void updateStudentDetailLicense(HttpServletRequest request, Long studentId, Map<Long, Integer> map) {
+        // map 유효성 검사
+        if (map.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_PARAMETER);
+        }
+
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         Student student = studentRepository.findById(studentId)
@@ -176,6 +228,18 @@ public class LicenseServiceImpl implements LicenseService{
         }
     }
 
+    @Override
+    public void updateAllStudentLicense(HttpServletRequest request, LicenseUpdateReqDto dto) {
+        List<StudentLicense> studentLicenses = studentLicenseRepository.findAllByNationLicenseId(dto.getNationLicenseId());
+        if (studentLicenses.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
+        }
+
+        for (StudentLicense license:studentLicenses) {
+            ratingUpDown(license, license.getRating(), dto.getUpDown());
+        }
+    }
+
     /**
      * 학생의 자격증 목록 조회
      *
@@ -194,7 +258,32 @@ public class LicenseServiceImpl implements LicenseService{
                     .build();
             result.add(dto);
         }
-
         return result;
+    }
+
+    /**
+     * 자격증 등급 조정
+     * @param license
+     * @param rating
+     * @param upDown
+     */
+    private void ratingUpDown(StudentLicense license, int rating, Boolean upDown) {
+        // 학생들의 자격증 등급 업데이트 / 디버깅과 유지보수를 위해 정규식 안씀
+        if (upDown) {
+            if (rating == -1) {
+                license.setRating((byte) 7);
+            } else if (rating == 0) {
+                throw new CustomException(ErrorCode.NOT_UP_LICENSE);
+            } else {
+                license.setRating((byte) (rating - 1));
+            }
+        } else {
+            if (rating == -1 || rating == 7) {
+                throw new CustomException(ErrorCode.NOT_DOWN_LICENSE);
+            } else {
+                license.setRating((byte) (rating + 1));
+            }
+        }
+        studentLicenseRepository.save(license);
     }
 }

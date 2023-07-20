@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 /**
+ * 입국심사
+ *
  * @author 강교철
  */
 @Entity
