@@ -74,5 +74,11 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
      */
     Page<Student> findBySalaryGreaterThan(Integer salary, Pageable pageable);
 
-
+    /**
+     * 같은 나라의 같은 직업을 가진 학생들 조회
+     * @param nationId
+     * @param jobId
+     * @return
+     */
+    List<Student> findAllByNationIdAndStudentJobId(Long nationId, Long jobId);
 }

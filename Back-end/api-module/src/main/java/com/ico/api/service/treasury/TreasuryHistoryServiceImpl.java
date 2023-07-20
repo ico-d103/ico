@@ -4,10 +4,10 @@ import com.ico.api.dto.treasuryHistory.TreasuryHistoryColDto;
 import com.ico.api.dto.treasuryHistory.TreasuryHistoryDto;
 import com.ico.api.dto.treasuryHistory.TreasuryHistoryTeacherColDto;
 import com.ico.api.dto.treasuryHistory.TreasuryHistoryTeacherResDto;
-import com.ico.api.util.Formatter;
 import com.ico.api.user.JwtTokenProvider;
-import com.ico.core.entity.Nation;
+import com.ico.api.util.Formatter;
 import com.ico.core.document.TreasuryHistory;
+import com.ico.core.entity.Nation;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.NationRepository;
@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 국고 사용 내역 관련 Service
@@ -122,6 +123,29 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
         }
 
         return map;
+    }
+
+    @Transactional
+    @Override
+    public void deleteTreasuryHistory(String treasuryHistoryId, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        TreasuryHistory treasuryHistory = treasuryHistoryRepository.findById(treasuryHistoryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.TREASURY_HISTORY_NOT_FOUND));
+
+        if (!Objects.equals(treasuryHistory.getNationId(), nationId)) {
+            throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
+        }
+
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        int treasury = nation.getTreasury() + (-1 * treasuryHistory.getAmount());
+        nation.setTreasury(treasury);
+
+        nationRepository.save(nation);
+
+        treasuryHistoryRepository.delete(treasuryHistory);
     }
 
 }

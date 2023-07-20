@@ -10,11 +10,13 @@ import com.ico.api.service.S3UploadService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.dto.JobReqDto;
+import com.ico.core.entity.Power;
 import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.PowerRepository;
 import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.ResumeMongoRepository;
@@ -27,12 +29,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * 직업 관련 Service 로직 작성
  *
  * @author 서재건
+ * @author 강교철
  */
 @Slf4j
 @Service
@@ -50,6 +57,8 @@ public class JobServiceImpl implements JobService{
     private final S3UploadService s3UploadService;
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final PowerRepository powerRepository;
 
     @Override
     public void updateJob(Long jobId, JobReqDto dto, HttpServletRequest request) {
@@ -202,6 +211,8 @@ public class JobServiceImpl implements JobService{
         List<Student> studentList = studentRepository.findAllByIdIn(studentIds);
         for (Student student : studentList) {
             student.setStudentJob(null);
+            // 학생의 권한 삭제
+            student.setEmpowered("");
             studentRepository.save(student);
         }
 
@@ -229,9 +240,45 @@ public class JobServiceImpl implements JobService{
         studentJobRepository.save(studentJob);
 
         student.setStudentJob(null);
+        // 학생의 권한 삭제
+        student.setEmpowered("");
         studentRepository.save(student);
 
         // 학생의 직업 신청 내역 전부 삭제
         resumeMongoRepository.deleteAllByStudentId(studentId);
+    }
+
+    @Transactional
+    @Override
+    public void updatePower(HttpServletRequest request, List<Long> powerIds, Long jobId) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        StudentJob job = studentJobRepository.findById(jobId)
+                .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
+
+        // powerIds Set
+        Set<Long> setPowerIds = new TreeSet<>(powerIds);
+        List<Power> powers = powerRepository.findAllByIdIn(new ArrayList<>(setPowerIds));
+        if (powers.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_POWER);
+        }
+
+        // empowered 초기화
+        StringBuilder jobEmpowered = new StringBuilder();
+        for (Power power:powers) {
+                // job empowered 컬럼 채우기
+                jobEmpowered.append(power.getId()).append(",");
+        }
+        job.setEmpowered(jobEmpowered.toString());
+        studentJobRepository.save(job);
+
+        // 권한 업데이트 전에 권한을 가진 직업을 가진 학생이 있는지 확인 - 없으면 pass
+        List<Student> students = studentRepository.findAllByNationIdAndStudentJobId(nationId, jobId);
+        for (Student student : students) {
+            log.info("[updatePower] 학생들의 권한 정보 : {}", student.getEmpowered());
+            student.setEmpowered(jobEmpowered.toString());
+
+            // 학생 테이블의 empowered 수정
+            studentRepository.save(student);
+        }
     }
 }

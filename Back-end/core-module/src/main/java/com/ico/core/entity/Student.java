@@ -1,6 +1,7 @@
 package com.ico.core.entity;
 
 import com.ico.core.code.Password;
+import com.ico.core.code.PowerEnum;
 import com.ico.core.code.Role;
 import com.ico.core.code.Status;
 import lombok.AllArgsConstructor;
@@ -80,8 +81,9 @@ public class Student {
     @Column(name = "pw_status")
     private Password pwStatus;
 
+    private String empowered;
+
     public void encodeStudentPassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);
     }
-
 }

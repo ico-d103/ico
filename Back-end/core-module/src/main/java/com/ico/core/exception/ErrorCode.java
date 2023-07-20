@@ -139,6 +139,8 @@ public enum ErrorCode{
 
     EMPTY_NATION(HttpStatus.BAD_REQUEST, "511", "아직 나라가 없는 학생입니다."),
 
+    TREASURY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "512", "존재하지 않는 국고 내역 id 입니다."),
+
     NO_PRODUCT_IMAGE(HttpStatus.NOT_FOUND, "608", "상품 이미지를 입력해주세요"),
 
     PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "없는 판매 제안서입니다."),
@@ -196,6 +198,10 @@ public enum ErrorCode{
     NOT_UP_LICENSE(HttpStatus.BAD_REQUEST, "803", "이 자격증 점수를 더 올릴 수 없습니다."),
 
     NOT_DOWN_LICENSE(HttpStatus.BAD_REQUEST, "804", "이 자격증 점수를 더 내릴 수 없습니다."),
+
+    NOT_FOUND_POWER(HttpStatus.NOT_FOUND, "900", "존재하지 않는 권한입니다."),
+
+    DUPLICATED_POWER(HttpStatus.BAD_REQUEST, "901", "중복된 권한입니다."),
     ;
 
     private final HttpStatus httpStatus;
