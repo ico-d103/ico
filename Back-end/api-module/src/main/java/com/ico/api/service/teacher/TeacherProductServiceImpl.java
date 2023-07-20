@@ -9,6 +9,7 @@ import com.ico.api.service.inflation.ShopTransactionService;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
+import com.ico.core.code.Role;
 import com.ico.core.dto.TeacherProductReqDto;
 import com.ico.core.entity.Coupon;
 import com.ico.core.entity.Nation;
@@ -61,7 +62,9 @@ public class TeacherProductServiceImpl implements TeacherProductService {
      */
     @Override
     public void createProduct(HttpServletRequest request, TeacherProductReqDto product, List<MultipartFile> files) {
-        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        String token = jwtTokenProvider.parseJwt(request);
+        checkRoleAndWareHousePower(token);
+        Long nationId = jwtTokenProvider.getNation(token);
 
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
@@ -284,10 +287,17 @@ public class TeacherProductServiceImpl implements TeacherProductService {
 
     @Override
     @Transactional
-    public void deleteTeacherProduct(Long teacherProductId) {
+    public void deleteTeacherProduct(Long teacherProductId, HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        checkRoleAndWareHousePower(token);
+        Long nationId = jwtTokenProvider.getNation(token);
+
         TeacherProduct teacherProduct = teacherProductRepository.findById(teacherProductId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
+        if (teacherProduct.getNation().getId().equals(nationId)) {
+            throw new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION);
+        }
         Arrays.stream(teacherProduct.getImages().split(","))
                 .forEach(s3UploadService::deleteFile);
         teacherProductRepository.delete(teacherProduct);
@@ -325,5 +335,24 @@ public class TeacherProductServiceImpl implements TeacherProductService {
 
     private void saveRedis(String key, String value) {
         redisTemplate.opsForValue().set(key,  value, 5, TimeUnit.MINUTES);
+    }
+
+    /**
+     * 학생이 요청할 때는 권한 확인
+     *
+     * @param token
+     */
+    private void checkRoleAndWareHousePower(String token) {
+        Role role = jwtTokenProvider.getRole(token);
+
+        if (role == Role.STUDENT) {
+            Student student = studentRepository.findById(jwtTokenProvider.getId(token))
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            String emPowered = student.getEmpowered();
+            // 권한이 없거나 비어있다면 Error
+            if (emPowered == null || emPowered.trim().isEmpty() || !emPowered.contains("5")) {
+                throw new CustomException(ErrorCode.WRONG_ROLE);
+            }
+        }
     }
 }
