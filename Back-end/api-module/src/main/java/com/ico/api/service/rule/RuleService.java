@@ -40,5 +40,5 @@ public interface RuleService {
      *
      * @param ruleId
      */
-    void deleteRule(Long ruleId);
+    void deleteRule(Long ruleId, HttpServletRequest request);
 }

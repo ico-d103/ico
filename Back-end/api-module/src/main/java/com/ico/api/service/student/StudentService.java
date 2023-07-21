@@ -58,13 +58,6 @@ public interface StudentService {
     StudentMyPageResDto findStudentMyPage(HttpServletRequest request);
 
     /**
-     * 신용등급 평점 부여
-     *
-     * @param studentId
-     */
-    void postCreditScore(Long studentId, CreditScoreReqDto dto, HttpServletRequest request);
-
-    /**
      * 학생의 계좌 정지
      *
      * @param studentId
@@ -85,6 +78,13 @@ public interface StudentService {
      * @return
      */
     List<StudentAllResDto> findListStudent(HttpServletRequest request);
+
+    /**
+     * 신용등급 평점 부여
+     *
+     * @param studentId
+     */
+    void postCreditScore(Long studentId, CreditScoreReqDto dto, HttpServletRequest request);
 
     /**
      * 학생의 신용등급 조회

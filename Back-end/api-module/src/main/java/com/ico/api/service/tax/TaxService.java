@@ -26,7 +26,7 @@ public interface TaxService {
      * @param taxId
      * @param dto
      */
-    void updateTax(Long taxId, TaxReqDto dto);
+    void updateTax(Long taxId, TaxReqDto dto, HttpServletRequest request);
 
     /**
      * 국세 정보 추가
@@ -40,5 +40,5 @@ public interface TaxService {
      *
      * @param taxId
      */
-    void deleteTax(Long taxId);
+    void deleteTax(Long taxId, HttpServletRequest request);
 }

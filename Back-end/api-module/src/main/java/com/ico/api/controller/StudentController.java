@@ -159,13 +159,13 @@ public class StudentController {
     }
 
     /**
-     * 신용등급 평점 일괄 부여
+     * 신용등급 평점 일괄 부여(교사와 권한 있는 학생 사용)
      *
      * @param dto
      * @param request
      * @return
      */
-    @PostMapping("/teacher/credit-score")
+    @PostMapping("/credit-score")
     public ResponseEntity<HttpStatus> postAllCreditScore(@Valid @RequestBody CreditScoreAllReqDto dto, HttpServletRequest request) {
         studentService.postAllCreditScore(dto, request);
         return ResponseEntity.ok(HttpStatus.OK);

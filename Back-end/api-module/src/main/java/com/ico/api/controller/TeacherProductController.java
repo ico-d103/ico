@@ -43,7 +43,7 @@ public class TeacherProductController {
      *                 제품이름, 가격, 사진 , 상세정보, 개수, 유형(쿠폰, 대여)
      * @return status
      */
-    @PostMapping(value = "/teacher", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<HttpStatus> uploadProduct(HttpServletRequest request, @Valid @RequestPart TeacherProductReqDto product, @RequestPart List<MultipartFile> files) {
         teacherProductService.createProduct(request, product, files);
         return ResponseEntity.ok(HttpStatus.OK);
@@ -99,9 +99,9 @@ public class TeacherProductController {
      * @param teacherProductId
      * @return
      */
-    @DeleteMapping("/teacher/{teacherProductId}")
-    public ResponseEntity<HttpStatus> deleteTeacherProduct(@PathVariable Long teacherProductId) {
-        teacherProductService.deleteTeacherProduct(teacherProductId);
+    @DeleteMapping("/{teacherProductId}")
+    public ResponseEntity<HttpStatus> deleteTeacherProduct(@PathVariable Long teacherProductId, HttpServletRequest request) {
+        teacherProductService.deleteTeacherProduct(teacherProductId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

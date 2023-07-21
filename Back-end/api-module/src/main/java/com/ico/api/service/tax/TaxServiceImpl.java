@@ -1,14 +1,17 @@
 package com.ico.api.service.tax;
 
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.core.code.Role;
 import com.ico.core.code.TaxType;
 import com.ico.core.dto.TaxReqDto;
 import com.ico.api.dto.tax.TaxResDto;
 import com.ico.core.entity.Nation;
+import com.ico.core.entity.Student;
 import com.ico.core.entity.Tax;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.NationRepository;
+import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TaxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +36,7 @@ public class TaxServiceImpl implements TaxService{
     private final NationRepository nationRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final StudentRepository studentRepository;
 
     @Override
     public List<TaxResDto> findAllTax(HttpServletRequest request) {
@@ -47,9 +51,16 @@ public class TaxServiceImpl implements TaxService{
     }
 
     @Override
-    public void updateTax(Long taxId, TaxReqDto dto) {
+    public void updateTax(Long taxId, TaxReqDto dto, HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        checkRoleAndTaxPower(token);
+        Long nationId = jwtTokenProvider.getNation(token);
+
         Tax tax = taxRepository.findById(taxId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TAX_NOT_FOUND));
+        if (!tax.getNation().getId().equals(nationId)) {
+            throw new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION);
+        }
 
         tax.updateTax(dto);
 
@@ -58,7 +69,9 @@ public class TaxServiceImpl implements TaxService{
 
     @Override
     public void addTax(TaxReqDto dto, HttpServletRequest request) {
-        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        String token = jwtTokenProvider.parseJwt(request);
+        checkRoleAndTaxPower(token);
+        Long nationId = jwtTokenProvider.getNation(token);
 
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
@@ -74,10 +87,35 @@ public class TaxServiceImpl implements TaxService{
     }
 
     @Override
-    public void deleteTax(Long taxId) {
+    public void deleteTax(Long taxId, HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        checkRoleAndTaxPower(token);
+        Long nationId = jwtTokenProvider.getNation(token);
+
         Tax tax = taxRepository.findById(taxId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TAX_NOT_FOUND));
+        if (!tax.getNation().getId().equals(nationId)) {
+            throw new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION);
+        }
         taxRepository.delete(tax);
     }
 
+    /**
+     * 학생이 요청할 때는 권한 확인
+     *
+     * @param token
+     */
+    private void checkRoleAndTaxPower(String token) {
+        Role role = jwtTokenProvider.getRole(token);
+
+        if (role == Role.STUDENT) {
+            Student student = studentRepository.findById(jwtTokenProvider.getId(token))
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            String emPowered = student.getEmpowered();
+            // 권한이 없거나 비어있다면 Error
+            if (emPowered == null || emPowered.trim().isEmpty() || !emPowered.contains("2")) {
+                throw new CustomException(ErrorCode.WRONG_ROLE);
+            }
+        }
+    }
 }

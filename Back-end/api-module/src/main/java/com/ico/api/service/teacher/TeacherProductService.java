@@ -19,7 +19,7 @@ import java.util.List;
 public interface TeacherProductService {
     /**
      * 교사 상품 등록
-     *
+     * 권한
      * @param proposal 교사 상품
      */
     void createProduct(HttpServletRequest request, TeacherProductReqDto proposal, List<MultipartFile> files);
@@ -49,7 +49,7 @@ public interface TeacherProductService {
     Long rentalProduct(HttpServletRequest request, ProductQRReqDto dto);
 
     /**
-     * 교사 상품 상세정보 조회
+     * 교사 상품 상세정보 조회(공통)
      *
      * @param request
      * @param id
@@ -59,10 +59,10 @@ public interface TeacherProductService {
 
     /**
      * 교사 상품 삭제
-     *
+     * 권한
      * @param teacherProductId
      */
-    void deleteTeacherProduct(Long teacherProductId);
+    void deleteTeacherProduct(Long teacherProductId, HttpServletRequest request);
 
     /**
      * 구매 완료 후 구매 내역 반환
