@@ -81,7 +81,7 @@ public class MemberServiceImpl implements MemberService {
             }
             if (jwtTokenProvider.getNation(token) != null) {
                 // 학생의 토큰에 NationId 값이 있고 직업 권한이 없을 때
-                if (student.getEmpowered().isBlank()) {
+                if (student.getEmpowered() == null || student.getEmpowered().trim().isEmpty()) {
                     return Map.of("status", "approved", "role", role);
                 }
                 // 학생의 토큰에 NationId 값이 있고 직업 권한이 있을 때
