@@ -159,7 +159,7 @@ public class StudentController {
     }
 
     /**
-     * 신용등급 평점 일괄 부여(교사와
+     * 신용등급 평점 일괄 부여(교사와 권한 있는 학생 사용)
      *
      * @param dto
      * @param request
