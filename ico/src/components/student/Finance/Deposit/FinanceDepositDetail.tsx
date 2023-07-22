@@ -18,6 +18,7 @@ import useNotification from "@/hooks/useNotification"
 import useNavigate from "@/hooks/useNavigate"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/router"
+import { getDateDiff } from "@/util/getDateDiff"
 
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -57,20 +58,7 @@ function FinanceDepositDetail({data}: FinanceDepositDetailProps) {
     deleteFinanceDepositAPI({ id }),
 	)
 
-  const getDateDiff = (d1: string, d2: null | string) => {
-    const date1 = new Date(d1);
-    let date2
-    if (d2 !== null) {
-      date2 = new Date(d2);
-    } else {
-      date2 = new Date();
-    }
 
-    
-    const diffDate = date1.getTime() - date2.getTime();
-    
-    return Math.floor(Math.abs(diffDate / (1000 * 60 * 60 * 24))); // 밀리세컨 * 초 * 분 * 시 = 일
-  }
 
   const rangeDate = getDateDiff(data.endDate, data.startDate)
   const restDate = getDateDiff(data.endDate, null)
@@ -183,12 +171,12 @@ function FinanceDepositDetail({data}: FinanceDepositDetailProps) {
       </div>
       </ContentWrapper>
 
-      {data.startDate === data.endDate ?
+      {restDate === 0 ?
               <Button
 					text={"만기 수령"}
 					fontSize={`var(--student-h3)`}
 					width={"48%"}
-					theme={"vividPositive"}
+					theme={"mobileVividPositive"}
           margin={'24px 0px 0px 0px'}
 					onClick={() => {
             submitHandler()

@@ -36,9 +36,10 @@ function index() {
 							title={<ListNumbering number={idx + 1} text={rule.title} />}
 							fontSize={`var(--student-h3)`}
 							bracketSize={"10px"}
-							children={<div>{rule.detail}</div>}
 							marginBottom={"10px"}
-						/>
+						>
+							<div css={detailWrapperCSS}>{rule.detail}</div>
+						</CollapseMenu>
 					))}
 				</div>
 			</div>
@@ -61,4 +62,8 @@ const contentCSS = css`
 	width: 95%;
 `
 
+const detailWrapperCSS = css`
+	white-space: pre-wrap;
+	line-height: 150%;
+`
 export default index

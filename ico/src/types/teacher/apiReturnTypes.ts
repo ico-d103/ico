@@ -204,3 +204,9 @@ export type getTeacherInfoType = {
 export type studentLicenseBodyType = {
 	[key: number]: number
 }
+
+export type getGovJobAuthType = {
+	id: number
+	name: string
+}
+

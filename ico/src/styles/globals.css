@@ -231,3 +231,8 @@ button {
 	background-color: initial;
 	border-radius: 10px;
 }
+
+#__next {
+	height: 100%;
+
+}

@@ -7,19 +7,26 @@ import { css } from "@emotion/react"
 import FormCreator from "@/components/teacher/common/Form/FormCreator"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getGovJobAPI } from "@/api/teacher/gov/getGovJobAPI"
-import { getGovJobType } from "@/types/teacher/apiReturnTypes"
+import { getGovJobAuthType, getGovJobType } from "@/types/teacher/apiReturnTypes"
 import GovJobItem from "@/components/teacher/Gov/Job/GovJobItem"
 import useGetNation from "@/hooks/useGetNation"
+import { getGovJobAuthAPI } from "@/api/teacher/gov/getGovJobAuthAPI"
 
 function index() {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [nation] = useGetNation()
 
-	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getGovJobType[]>(
+	const jobsQuery = useQuery<getGovJobType[]>(
 		["teacher", "govJob"],
 		getGovJobAPI,
 		// { staleTime: 200000 },
 	)
+
+
+
+
+
+	
 
 	const dummyStatus: {
 		id: number
@@ -156,12 +163,12 @@ function index() {
 
 	const renderJobList = useMemo(
 		() =>
-			data?.map((el, idx) => {
+		jobsQuery.data?.map((el, idx) => {
 				return (
 					<div
 						key={`${el.title}-${el.id}`}
 						css={css`
-							border-bottom: ${data.length - 1 > idx && "1px solid rgba(0, 0, 0, 0.1)"};
+							border-bottom: ${jobsQuery.data.length - 1 > idx && "1px solid rgba(0, 0, 0, 0.1)"};
 						`}
 					>
 						<GovJobItem
@@ -182,7 +189,7 @@ function index() {
 					</div>
 				)
 			}),
-		[data],
+		[jobsQuery.data],
 	)
 
 	return (
