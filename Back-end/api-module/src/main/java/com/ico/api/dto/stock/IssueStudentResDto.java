@@ -17,6 +17,8 @@ import java.util.List;
 public class IssueStudentResDto {
     private String stock;
 
+    private String content;
+
     private int account;
 
     private LocalTime tradingStart;
@@ -28,8 +30,9 @@ public class IssueStudentResDto {
     private List<IssueColDto> issue;
 
     @Builder
-    public IssueStudentResDto(String stock, int account, LocalTime tradingStart, LocalTime tradingEnd, StockMyResDto myStock, List<IssueColDto> issue) {
+    public IssueStudentResDto(String stock, String content, int account, LocalTime tradingStart, LocalTime tradingEnd, StockMyResDto myStock, List<IssueColDto> issue) {
         this.stock = stock;
+        this.content = content;
         this.account = account;
         this.tradingStart = tradingStart;
         this.tradingEnd = tradingEnd;

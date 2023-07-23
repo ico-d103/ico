@@ -52,6 +52,13 @@ public class StockController {
         return ResponseEntity.ok(stockService.findAllStock(request));
     }
 
+    /**
+     *  투자 종목 삭제
+     *
+     * @param request
+     * @param stockId
+     * @return
+     */
     @DeleteMapping("/teacher/{stockId}")
     public ResponseEntity<HttpStatus> deleteStock(HttpServletRequest request, @PathVariable Long stockId) {
         stockService.deleteStock(request, stockId);

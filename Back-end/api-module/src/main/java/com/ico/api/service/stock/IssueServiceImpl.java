@@ -67,6 +67,8 @@ public class IssueServiceImpl implements IssueService {
         IssueTeacherResDto res = new IssueTeacherResDto();
         res.setStock(stock.getTitle());
         res.setContent(stock.getContent());
+        res.setTradingStart(nation.getTrading_start());
+        res.setTradingEnd(nation.getTrading_end());
         res.setIssue(getIssues(nationId));
 
         return res;
@@ -114,6 +116,7 @@ public class IssueServiceImpl implements IssueService {
         IssueStudentResDto res = new IssueStudentResDto();
         res.setAccount(student.getAccount());
         res.setStock(stock.getTitle());
+        res.setContent(stock.getContent());
         res.setTradingStart(nation.getTrading_start());
         res.setTradingEnd(nation.getTrading_end());
         res.setMyStock(myStock);
