@@ -75,7 +75,7 @@ function Layout({ children }: LayoutProps) {
 	}, [accessToken])
 
 	useEffect(() => {
-		setTokenStatus({ showMessage: true })
+		setTokenStatus({ showMessage: false })
 	}, [])
 
 	const TARGET_URL: { [prop: string]: { [prop: string]: { url: string; message: string } } } = {

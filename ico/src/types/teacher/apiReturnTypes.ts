@@ -137,6 +137,7 @@ export type getNationTreasuryType = {
 }
 
 export type getTreasuryHistoryPageType = {
+	id: string
 	date: string
 	title: string
 	source: string
@@ -188,6 +189,11 @@ export type getGovEconomyType = {
 	date: string
 	totalAccount: number
 	totalAmount: number
+}
+
+export type getLicenseType = {
+	id: number
+	subject: string
 }
 
 export type getTeacherInfoType = {

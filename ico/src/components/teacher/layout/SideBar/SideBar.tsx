@@ -21,6 +21,7 @@ import {
 	SUB_FINANCE_STOCK,
 	SUB_STORE_STUDENT,
 	SUB_STORE_TEACHER,
+	SUB_CORPORATE_MANAGEMENT,
 } from "./SideBarIcons"
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react"
 import "overlayscrollbars/overlayscrollbars.css"
@@ -154,11 +155,22 @@ function SideBar({ children }: SideBarProps) {
 				menuIndex: 1,
 			},
 			"/teacher/gov/job": { name: "set_job", label: "직업 관리", content: SUB_GOVERNMENT_JOB, menuIndex: 2 },
+			"/teacher/gov/license": { name: "set_job", label: "자격증 관리", content: SUB_GOVERNMENT_JOB, menuIndex: 3 },
+			"/teacher/gov/corporate": {
+				name: "set_corporate",
+				label: "기업 관리",
+				content: SUB_CORPORATE_MANAGEMENT,
+				menuIndex: 4,
+			},
 			"/teacher/gov/economy": {
 				name: "view_economy",
 				label: "경제 현황",
 				content: SUB_GOVERNMENT_ECONOMY,
-				menuIndex: 3,
+				menuIndex: 5,
+			},
+			"/teacher/gov/corporate/create": {
+				for: 4,
+				label: "기업 추가",
 			},
 		},
 		2: {

@@ -2,10 +2,7 @@ import { tokenInstance } from "@/api/instance"
 import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
-	body: {
-		title: string
-		detail: string
-	}
+	id: string
 }
 
 type responseType = {
@@ -13,9 +10,10 @@ type responseType = {
 	data: successReturnType
 }
 
-export const postGovRuleAPI = async ({ body }: paramsType) => {
+export const deleteTreasuryHistoryAPI = async ({ id }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.post(`/rule/teacher`, body)
+		const response: responseType = await tokenInstance.delete(`/treasury-history/teacher/delete/${id}`)
+
 		return response.data
 	} catch (error) {
 		throw error
