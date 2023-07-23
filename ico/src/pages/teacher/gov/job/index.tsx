@@ -28,31 +28,13 @@ function index() {
 
 	
 
-	const dummyStatus: {
-		id: number
-		status: string
-		subject: string
-	} = {
-		id: 1,
-		status: "credit",
-		subject: "신용등급 관리",
-	}
+	const dummyStatus: string[] = []
 
 	const dummyStatusList: {
 		id: number
-		status: string
-		subject: string
+		name: string
 	}[] = [
-		{
-			id: 1,
-			status: "credit",
-			subject: "신용등급 관리",
-		},
-		{
-			id: 2,
-			status: "trade",
-			subject: "상점 재고 관리",
-		},
+		
 	]
 
 	const dummyCert: { id: number; subject: string; rating: number }[] = [
@@ -175,7 +157,7 @@ function index() {
 							idx={el.id}
 							title={el.title}
 							detail={el.detail}
-							wage={el.wage}
+							salary={el.salary}
 							creditRating={el.creditRating}
 							color={el.color}
 							image={el.image}
@@ -183,8 +165,8 @@ function index() {
 							count={el.count}
 							currency={nation.currency}
 							certification={dummyCertList}
-							roleStatus={dummyStatus}
-							roleStatusList={dummyStatusList}
+							empowered={dummyStatus}
+							powerList={dummyStatusList}
 						/>
 					</div>
 				)
@@ -211,7 +193,7 @@ function index() {
 			<div css={descCSS}>학급의 직업 목록을 관리할 수 있습니다.</div>
 			<AnimatedRenderer compState={compState} initHeight="0">
 				<div css={createWrapperCSS({ compState })}>
-					<GovJobItem roleStatusList={dummyStatusList} certification={dummyCert} closeHandler={closeComp} />
+					<GovJobItem powerList={dummyStatusList} certification={dummyCert} closeHandler={closeComp} />
 				</div>
 			</AnimatedRenderer>
 
