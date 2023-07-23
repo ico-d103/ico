@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 직업 신청 내역 관련 Service 구현 로직
@@ -126,6 +127,48 @@ public class ResumeServiceImpl implements ResumeService {
     public boolean checkRequestJob(Long jobId, HttpServletRequest request) {
         Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
         return resumeMongoRepository.findByStudentIdAndJobId(studentId, jobId).isPresent();
+    }
+
+    @Override
+    public void cancelResume(Long jobId, String resumeId, HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
+        Resume resume = resumeMongoRepository.findById(resumeId)
+                .orElseThrow(() -> {
+                    log.info("[cancelResume] 직업 신청 내역이 존재 하지 않는 경우");
+                    throw new CustomException(ErrorCode.REQUEST_NOT_FOUND);
+                });
+
+        if (validateCancelResume(nationId, studentId, jobId, resume)) {
+            throw new CustomException(ErrorCode.INVALID_RESUME);
+        }
+
+        resumeMongoRepository.delete(resume);
+    }
+
+    /**
+     * 직업 신청 시 신청 내역에 대한 유효성 체크
+     *
+     * @param nationId
+     * @param studentId
+     * @param jobId
+     * @param resume
+     * @return
+     */
+    private boolean validateCancelResume(Long nationId, Long studentId, Long jobId, Resume resume) {
+        if (!Objects.equals(resume.getStudentId(), studentId)) {
+            log.info("[cancelResume] 신청한 학생id가 다른 경우");
+            return true;
+        } else if (!Objects.equals(resume.getJobId(), jobId)) {
+            log.info("[cancelResume] 직업id가 다른 경우");
+            return true;
+        } else if (!Objects.equals(resume.getNationId(), nationId)) {
+            log.info("[cancelResume] 나라id가 다른 경우");
+            return true;
+        }
+        return false;
     }
 
     /**

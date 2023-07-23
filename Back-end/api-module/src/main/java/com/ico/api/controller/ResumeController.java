@@ -88,4 +88,18 @@ public class ResumeController {
         return ResponseEntity.ok(resumeService.checkRequestJob(jobId, request));
     }
 
+    /**
+     * 학생이 직업 신청 취소
+     *
+     * @param jobId 신청한 직업
+     * @param resumeId 신청 내역
+     * @param request request
+     * @return ok
+     */
+    @DeleteMapping("/student/{jobId}/{resumeId}")
+    public ResponseEntity<HttpStatus> cancelResume(@PathVariable Long jobId, @PathVariable String resumeId, HttpServletRequest request) {
+        resumeService.cancelResume(jobId, resumeId, request);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
 }
