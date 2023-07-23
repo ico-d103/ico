@@ -11,6 +11,7 @@ import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { selectedPage } from "@/store/store"
 import { useAtomValue } from "jotai"
+import useModal from "@/components/common/Modal/useModal"
 
 type PropertyListItemPropsType = {
 	property: {
@@ -27,7 +28,8 @@ function PropertyListItem({ property, showDate }: PropertyListItemPropsType) {
 	const noti = useNotification()
 	const [nation] = useGetNation()
 	const queryClient = useQueryClient()
-	const [openComp, closeComp, compState] = useCompHandler()
+	// const [openComp, closeComp, compState] = useCompHandler()
+	const modal = useModal()
 	const selectedPageAtom = useAtomValue(selectedPage)
 	const deleteTreasuryHistoryMutation = useMutation((id: string) => deleteTreasuryHistoryAPI({ id }))
 
@@ -52,7 +54,7 @@ function PropertyListItem({ property, showDate }: PropertyListItemPropsType) {
 
 	return (
 		<>
-			<tr css={wrapperCSS} onClick={() => openComp()}>
+			<tr css={wrapperCSS} onClick={() => modal.open()}>
 				<td css={dateCSS}>{showDate ? <h4>{property.date}</h4> : <h4 css={hiddenDateCSS}>{property.date}</h4>}</td>
 				<td css={moneyCSS}>
 					{property.amount.includes("-") ? (
@@ -72,7 +74,7 @@ function PropertyListItem({ property, showDate }: PropertyListItemPropsType) {
 					<h3>{property.source}</h3>
 				</td>
 			</tr>
-			<Modal
+			{/* <Modal
 				compState={compState}
 				closeComp={closeComp}
 				transition={"scale"}
@@ -88,7 +90,19 @@ function PropertyListItem({ property, showDate }: PropertyListItemPropsType) {
 						]}
 					/>
 				}
-			/>
+			/> */}
+			{modal(
+				<ModalAlert
+					title={"내역을 삭제하시겠습니까?"}
+					titleSize={"var(--teacher-h2)"}
+					proceed={deletePropertyList}
+					width={"480px"}
+					content={[
+						"내역 삭제 후 복원할 수 없습니다",
+						`${property.source}의 ${property.title}을 삭제하시는 게 맞는지 다시 확인해주세요`,
+					]}
+				/>,
+			)}
 		</>
 	)
 }
