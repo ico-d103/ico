@@ -6,7 +6,9 @@ import com.ico.api.service.stock.StockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,4 +52,9 @@ public class StockController {
         return ResponseEntity.ok(stockService.findAllStock(request));
     }
 
+    @DeleteMapping("/teacher/{stockId}")
+    public ResponseEntity<HttpStatus> deleteStock(HttpServletRequest request, @PathVariable Long stockId) {
+        stockService.deleteStock(request, stockId);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 }
