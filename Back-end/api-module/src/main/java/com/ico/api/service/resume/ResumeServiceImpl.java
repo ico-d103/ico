@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Objects;
 
 /**
@@ -124,9 +125,10 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public boolean checkRequestJob(Long jobId, HttpServletRequest request) {
+    public String checkRequestJob(Long jobId, HttpServletRequest request) {
         Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
-        return resumeMongoRepository.findByStudentIdAndJobId(studentId, jobId).isPresent();
+        Optional<Resume> resume = resumeMongoRepository.findByStudentIdAndJobId(studentId, jobId);
+        return resume.map(Resume::getId).orElse(null);
     }
 
     @Override

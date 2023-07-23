@@ -84,7 +84,7 @@ public class ResumeController {
      * @return
      */
     @GetMapping("/student/check/{jobId}")
-    public ResponseEntity<Boolean> checkRequestJob(@PathVariable Long jobId, HttpServletRequest request) {
+    public ResponseEntity<String> checkRequestJob(@PathVariable Long jobId, HttpServletRequest request) {
         return ResponseEntity.ok(resumeService.checkRequestJob(jobId, request));
     }
 
