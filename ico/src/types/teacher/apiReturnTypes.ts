@@ -30,6 +30,11 @@ export type getGovExchequerType = {
 }
 
 export type getGovJobType = {
+	restJobCount: number
+	jobList: getGovJobItemType[]
+}
+
+export type getGovJobItemType = {
 	title: string
 	detail: string
 	creditRating: number
@@ -208,8 +213,9 @@ export type studentLicenseBodyType = {
 	[key: number]: number
 }
 
-export type getGovJobAuthType = {
+export type getGovPowerType = {
 	id: number
 	name: string
 }
 
+export type empoweredType = string

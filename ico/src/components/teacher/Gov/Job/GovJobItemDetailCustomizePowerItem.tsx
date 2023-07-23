@@ -1,18 +1,22 @@
 import React from "react"
 import { css } from "@emotion/react"
+import CheckBox from "../../common/CheckBox/CheckBox"
 
-type GovJobItemDetailCustomizeAuthItemProps = {
-	arrIdx: number
+type GovJobItemDetailCustomizePowerItemProps = {
 	id: number
-	subject: string
-	rating: number
-	ratingHandler: any
+	name: string
+	empoweredInputHandler: any
+	isChecked: boolean
 }
-function GovJobItemDetailCustomizeAuthItem({ arrIdx, id, subject, rating, ratingHandler }: GovJobItemDetailCustomizeAuthItemProps) {
+function GovJobItemDetailCustomizePowerItem({id, name, empoweredInputHandler, isChecked }: GovJobItemDetailCustomizePowerItemProps) {
 	return (
 		<div css={itemWrapperCSS}>
-			<div>{subject}</div>
-
+			<div>{name}</div>
+			<div >
+			<CheckBox onChange={(e) => empoweredInputHandler(e, id)} 
+        checked={isChecked}/>
+			</div>
+			
 	
 		</div>
 	)
@@ -56,4 +60,4 @@ const ratingCSS = css`
 	text-align: center;
 `
 
-export default GovJobItemDetailCustomizeAuthItem
+export default GovJobItemDetailCustomizePowerItem

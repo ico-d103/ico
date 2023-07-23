@@ -5,7 +5,7 @@ type paramsType = {}
 
 type responseType = {
 	status: number
-	data: getGovJobType[]
+	data: getGovJobType
 }
 
 export const getGovJobAPI = async ({}: paramsType) => {
