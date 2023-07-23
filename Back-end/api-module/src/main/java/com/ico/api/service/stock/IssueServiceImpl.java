@@ -66,8 +66,7 @@ public class IssueServiceImpl implements IssueService {
         // 반환값
         IssueTeacherResDto res = new IssueTeacherResDto();
         res.setStock(stock.getTitle());
-        res.setTradingStart(nation.getTrading_start());
-        res.setTradingEnd(nation.getTrading_end());
+        res.setContent(stock.getContent());
         res.setIssue(getIssues(nationId));
 
         return res;
@@ -175,13 +174,28 @@ public class IssueServiceImpl implements IssueService {
         List<IssueColDto> issuesRes = new ArrayList<>();
         List<Issue> issues = issueRepository.findAllByNationIdOrderByIdDesc(nationId);
 
-        for(Issue issue : issues){
+        for(int i = 0; i < issues.size() - 1; i++){
             IssueColDto col = new IssueColDto();
-            col.setContent(issue.getContent());
-            col.setAmount(issue.getAmount());
-            col.setDate(issue.getDate().format(Formatter.date));
+
+            int rate = 0;
+            if(i < issues.size() - 2){
+                rate = (int) ((issues.get(i).getAmount() - issues.get(i + 1).getAmount()) / issues.get(i + 1).getAmount()) * 100;
+            }
+
+
+            col.setContent(issues.get(i).getContent());
+            col.setAmount(issues.get(i).getAmount());
+            col.setDate(issues.get(i).getDate().format(Formatter.date));
+            col.setRate(rate);
             issuesRes.add(col);
         }
+//        for(Issue issue : issues){
+//            IssueColDto col = new IssueColDto();
+//            col.setContent(issue.getContent());
+//            col.setAmount(issue.getAmount());
+//            col.setDate(issue.getDate().format(Formatter.date));
+//            issuesRes.add(col);
+//        }
         return issuesRes;
     }
 }

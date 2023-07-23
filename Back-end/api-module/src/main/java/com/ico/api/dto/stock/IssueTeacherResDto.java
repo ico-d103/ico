@@ -18,17 +18,14 @@ import java.util.List;
 public class IssueTeacherResDto {
     private String stock;
 
-    private LocalTime tradingStart;
-
-    private LocalTime tradingEnd;
+    private String content;
 
     private List<IssueColDto> issue;
 
     @Builder
-    public IssueTeacherResDto(String stock, LocalTime tradingStart, LocalTime tradingEnd, List<IssueColDto> issue) {
+    public IssueTeacherResDto(String stock, String content, List<IssueColDto> issue) {
         this.stock = stock;
-        this.tradingStart = tradingStart;
-        this.tradingEnd = tradingEnd;
+        this.content = content;
         this.issue = issue;
     }
 }
