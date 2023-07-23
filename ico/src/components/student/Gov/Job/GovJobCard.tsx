@@ -8,18 +8,20 @@ import GovJobCardModalContent from "./GovJobCardModalContent"
 import useGetNation from "@/hooks/useGetNation"
 import { getGovJobType } from "@/types/teacher/apiReturnTypes"
 import { appendEiGa } from "@/util/isEndWithConsonant"
+import useModal from "@/components/common/Modal/useModal"
 
 type GovJobCardPropsType = {
 	job: getGovJobType
 }
 
 function GovJobCard({ job }: GovJobCardPropsType) {
-	const [openComp, closeComp, compState] = useCompHandler()
+	// const [openComp, closeComp, compState] = useCompHandler()
+	const modal = useModal()
 	const [nation] = useGetNation()
 
 	return (
 		<>
-			<div css={cardWrapperCSS(job.color)} onClick={openComp}>
+			<div css={cardWrapperCSS(job.color)} onClick={modal.open}>
 				<div css={imageWrapperCSS}>
 					<LoadImage wrapperCss={imgCSS} src={job.image} alt={"job_image"} />
 				</div>
@@ -33,12 +35,12 @@ function GovJobCard({ job }: GovJobCardPropsType) {
 					<div css={conditionWrapperCSS}>
 						<h4>월급</h4>
 						<h3>
-							{(job.wage * 30).toLocaleString('ko-KR')} {nation.currency}
+							{(job.salary * 30).toLocaleString("ko-KR")} {nation.currency}
 						</h3>
 					</div>
 				</div>
 			</div>
-			<Modal
+			{/* <Modal
 				compState={compState}
 				closeComp={closeComp}
 				transition={"scale"}
@@ -52,7 +54,17 @@ function GovJobCard({ job }: GovJobCardPropsType) {
 						forChild={true}
 					/>
 				}
-			/>
+			/> */}
+			{modal(
+				<ModalContent
+					width={"320px"}
+					icon={GOV_JOB}
+					title={`${appendEiGa(job.title)} 하는일`}
+					titleSize={"var(--student-h2)"}
+					content={<GovJobCardModalContent content={job.detail} closeComp={modal.close} />}
+					forChild={true}
+				/>,
+			)}
 		</>
 	)
 }

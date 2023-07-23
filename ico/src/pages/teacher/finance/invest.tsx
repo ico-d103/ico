@@ -13,12 +13,14 @@ import { useQueryClient } from "@tanstack/react-query"
 import Modal from "@/components/common/Modal/Modal"
 import useCompHandler from "@/hooks/useCompHandler"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
+import useModal from "@/components/common/Modal/useModal"
 
 function invest() {
 	const queryClient = useQueryClient()
 	const createMutation = useMutation((a: number) => deleteInvestAPI())
 
-	const [openDeleteModal, closeDeleteModal, deleteModalState] = useCompHandler()
+	// const [openDeleteModal, closeDeleteModal, deleteModalState] = useCompHandler()
+	const modal = useModal()
 
 	// const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceInvestIssueType>(
 	// 	["teacher", "financeInvest"],
@@ -104,7 +106,7 @@ function invest() {
 	return (
 		<div css={wrapperCSS}>
 			<div css={headerCSS}>
-				<Modal
+				{/* <Modal
 					compState={deleteModalState}
 					closeComp={closeDeleteModal}
 					transition={"scale"}
@@ -120,7 +122,19 @@ function invest() {
 							]}
 						/>
 					}
+				/> */}
+				{modal(
+					<ModalAlert
+					title={"투자 종목을 삭제합니다."}
+					titleSize={"var(--teacher-h2)"}
+					proceed={deleteInvest}
+					width={"480px"}
+					content={[
+						"작성한 모든 이슈가 삭제됩니다.",
+						"학생들이 보유한 모든 주식이 최근 이슈의 가격으로 전체 매도됩니다.",
+					]}
 				/>
+				)}
 
 				<div css={titleCSS}>투자</div>
 				<Button
@@ -128,7 +142,7 @@ function invest() {
 					fontSize={`var(--teacher-h4)`}
 					width={"190px"}
 					theme={"normal"}
-					onClick={openDeleteModal}
+					onClick={modal.open}
 				/>
 			</div>
 			<div css={subTitleCSS}>투자 종목 설정을 설정하고 이슈를 등록해 투자 상품을 관리할 수 있습니다.</div>

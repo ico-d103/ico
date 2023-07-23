@@ -33,13 +33,16 @@ export type getGovJobType = {
 	title: string
 	detail: string
 	creditRating: number
-	wage: number
+	salary: number
 	image: string
 	color: string
 	total: number
 	count: number
 	id: number
+	studentNames: string[]
+	empowered: string[]
 }
+
 
 export type getStudentListType = {
 	id: number
@@ -204,3 +207,9 @@ export type getTeacherInfoType = {
 export type studentLicenseBodyType = {
 	[key: number]: number
 }
+
+export type getGovJobAuthType = {
+	id: number
+	name: string
+}
+

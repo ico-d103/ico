@@ -1,14 +1,14 @@
 import React from "react"
 import { css } from "@emotion/react"
 
-type GovJobItemCertItemProps = {
+type GovJobItemDetailCustomizeCertItemProps = {
 	arrIdx: number
 	id: number
 	subject: string
 	rating: number
 	ratingHandler: any
 }
-function GovJobItemCertItem({ arrIdx, id, subject, rating, ratingHandler }: GovJobItemCertItemProps) {
+function GovJobItemDetailCustomizeCertItem({ arrIdx, id, subject, rating, ratingHandler }: GovJobItemDetailCustomizeCertItemProps) {
 	return (
 		<div css={itemWrapperCSS}>
 			<div>{subject}</div>
@@ -93,4 +93,4 @@ const ratingCSS = css`
 	text-align: center;
 `
 
-export default GovJobItemCertItem
+export default GovJobItemDetailCustomizeCertItem

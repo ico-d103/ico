@@ -3,14 +3,14 @@ import Image from "next/image"
 import { css } from "@emotion/react"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 
-type GovJobCardProps = {
+type GovJobItemCardProps = {
 	job: string
-	wage: number
+	salary: number
 	backgroundColor: string
 	imgUrl: string
 }
 
-function GovJobCard({ job, wage, backgroundColor, imgUrl }: GovJobCardProps) {
+function GovJobItemCard({ job, salary, backgroundColor, imgUrl }: GovJobItemCardProps) {
 	return (
 		<div css={outerCardWrapperCSS}>
 			<div css={shadowMakerCSS} />
@@ -149,4 +149,4 @@ const wageTextCSS = css`
 	font-size: var(--teacher-h5);
 `
 
-export default GovJobCard
+export default GovJobItemCard

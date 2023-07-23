@@ -11,6 +11,7 @@ import Modal from "@/components/common/Modal/Modal"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
 import useGetNation from "@/hooks/useGetNation"
 import { appendEulReul } from "@/util/isEndWithConsonant"
+import useModal from "@/components/common/Modal/useModal"
 
 type GovRuleClassDetailProps = {
 	title: string
@@ -23,7 +24,8 @@ type GovRuleClassDetailProps = {
 
 function GovExchequerDetail({ title, content, taxAspect, taxValue, showIdx, actualIdx }: GovRuleClassDetailProps) {
 	const [openComp, closeComp, compState] = useCompHandler()
-	const [openDeleteModal, closeDeleteModal, deleteModalState] = useCompHandler()
+	// const [openDeleteModal, closeDeleteModal, deleteModalState] = useCompHandler()
+	const modal = useModal()
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const [nation] = useGetNation()
@@ -41,7 +43,8 @@ function GovExchequerDetail({ title, content, taxAspect, taxValue, showIdx, actu
 			content: null,
 			label: "삭제",
 			function: () => {
-				openDeleteModal()
+				// openDeleteModal()
+				modal.open()
 			},
 		},
 	]
@@ -101,7 +104,7 @@ function GovExchequerDetail({ title, content, taxAspect, taxValue, showIdx, actu
 
 	return (
 		<div ref={wrapperRef}>
-			<Modal
+			{/* <Modal
 				compState={deleteModalState}
 				closeComp={closeDeleteModal}
 				transition={"scale"}
@@ -114,7 +117,16 @@ function GovExchequerDetail({ title, content, taxAspect, taxValue, showIdx, actu
 						content={["학생들이 더이상 해당 세금을 납부하지 않습니다!"]}
 					/>
 				}
+			/> */}
+			{modal(
+				<ModalAlert
+				title={"세금 항목을 삭제합니다."}
+				titleSize={"var(--teacher-h2)"}
+				proceed={deleteHandler}
+				width={"480px"}
+				content={["학생들이 더이상 해당 세금을 납부하지 않습니다!"]}
 			/>
+			)}
 			<FormCreator
 				subComp={<GovExchequerCreate idx={actualIdx} />}
 				showIdx={showIdx}

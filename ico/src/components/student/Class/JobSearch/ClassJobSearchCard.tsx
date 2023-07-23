@@ -7,6 +7,7 @@ import { getJobListType } from "@/types/student/apiReturnTypes"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { getCheckApplyFlagAPI } from "@/api/student/class/getCheckApplyFlagAPI"
+import useModal from "@/components/common/Modal/useModal"
 
 type ClassJobSearchCardPropsType = {
 	job: getJobListType
@@ -15,7 +16,8 @@ type ClassJobSearchCardPropsType = {
 
 function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 	const noti = useNotification()
-	const [openComp, closeComp, compState] = useCompHandler()
+	// const [openComp, closeComp, compState] = useCompHandler()
+	const modal = useModal()
 
 	const checkValidApplyHandler = (canApply: boolean) => {
 		if (!canApply) {
@@ -34,7 +36,8 @@ function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 					duration: 3000,
 				})
 			} else {
-				openComp()
+				// openComp()
+				modal.open()
 			}
 		})
 	}
@@ -54,12 +57,13 @@ function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 					<span css={needCSS}>{job.total}명</span>
 				</div>
 			</div>
-			<Modal
+			{/* <Modal
 				compState={compState}
 				closeComp={closeComp}
 				transition={"scale"}
 				content={<ClassJobSearchModal job={job.title} id={job.id} closeComp={closeComp} />}
-			/>
+			/> */}
+			{modal(<ClassJobSearchModal job={job.title} id={job.id} closeComp={modal.close} />)}
 		</>
 	)
 }

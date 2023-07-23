@@ -1,15 +1,15 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { css } from "@emotion/react"
 import { SerializedStyles } from "@emotion/react"
 
 type ContentWrapperProps = {
-    children: any
+    children: ReactNode
     cssProps?: SerializedStyles
-}
+} & React.HTMLAttributes<HTMLDivElement>;
 
-function ContentWrapper({children, cssProps}: ContentWrapperProps) {
+function ContentWrapper({children, cssProps, ...props}: ContentWrapperProps) {
   return (
-    <div css={[contentWrapperCSS, cssProps]}>
+    <div {...props} css={[contentWrapperCSS, cssProps]}>
         {children}
     </div>
   )

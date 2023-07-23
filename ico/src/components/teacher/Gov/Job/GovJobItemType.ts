@@ -13,15 +13,17 @@ export type certificationType = {
 	rating: number
 }
 
-export type roleStatusType = {
-	status: string
-	subject: string
+export type empoweredType = string
+
+export type powerItemType = {
+	id: number
+	name: string
 }
 
 export type GovRuleClassDetailProps = {
 	title?: string
 	detail?: string
-	wage?: number
+	salary?: number
 	creditRating?: number
 	color?: string
 	image?: string
@@ -29,8 +31,8 @@ export type GovRuleClassDetailProps = {
 	count?: number
 	idx?: number
 	currency?: string
-	roleStatus?: roleStatusType | null
-	roleStatusList: roleStatusType[]
+	empowered?: empoweredType[]
+	powerList: powerItemType[]
 	certification: certificationType[]
 	closeHandler?: Function
 }
@@ -38,23 +40,23 @@ export type GovRuleClassDetailProps = {
 export type inputType = {
 	title: string
 	detail: string
-	wage: string
+	salary: string
 	creditRating: string
 	color: string
 	image: string
 	total: string
-	roleStatus: roleStatusType | null
+	empowered: empoweredType[]
 	certification: certificationType[]
 }
 
 export type validType = {
 	title: validItemType
 	detail: validItemType
-	wage: validItemType
+	salary: validItemType
 	creditRating: validItemType
 	color: validItemType
 	image: validItemType
 	total: validItemType
-	roleStatus: validItemType
+	empowered: validItemType
 	certification: validItemType
 }

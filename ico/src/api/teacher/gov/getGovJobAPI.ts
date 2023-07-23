@@ -10,7 +10,7 @@ type responseType = {
 
 export const getGovJobAPI = async ({}: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.get(`/job`)
+		const response: responseType = await tokenInstance.get(`/job/teacher/all`)
 		return response.data
 	} catch (error) {
 		throw error

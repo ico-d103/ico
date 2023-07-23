@@ -19,10 +19,12 @@ import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
 import useGetNation from "@/hooks/useGetNation"
 import { useEffect } from "react"
+import useModal from "@/components/common/Modal/useModal"
 
 function property() {
 	const [nation] = useGetNation()
-	const [openComp, closeComp, compState] = useCompHandler()
+	// const [openComp, closeComp, compState] = useCompHandler()
+	const modal = useModal()
 	const [isDepositMenuOpenAtom, setIsDepositMenuOpenAtom] = useAtom(isDepositMenuOpen)
 	const [selectedPageAtom, setSelectedPageAtom] = useAtom(selectedPage)
 
@@ -36,8 +38,8 @@ function property() {
 		// flag: true면 입금, false면 출금
 		if (flag) setIsDepositMenuOpenAtom(true)
 		else setIsDepositMenuOpenAtom(false)
-
-		openComp()
+		modal.open()
+		// openComp()
 	}
 
 	useEffect(() => {
@@ -103,7 +105,7 @@ function property() {
 					<Pagination size={treasuryList.data.size} maxSize={10} margin={"30px 0 0 0"} buttonSize={"35px"} />
 				)}
 			</div>
-			<Modal
+			{/* <Modal
 				compState={compState}
 				closeComp={closeComp}
 				transition={"scale"}
@@ -118,7 +120,18 @@ function property() {
 						}
 					/>
 				}
+			/> */}
+			{modal(
+				<ModalContent
+				width={"500px"}
+				icon={CLASS_BIG_PROPERTY}
+				title={isDepositMenuOpenAtom ? "국고 입금하기" : "국고 출금하기"}
+				titleSize={"var(--teacher-h2)"}
+				content={
+					<ClassPropertyUseModalContent closeComp={modal.close} isDepositMenuOpenAtom={isDepositMenuOpenAtom} />
+				}
 			/>
+			)}
 		</>
 	)
 }

@@ -20,6 +20,7 @@ import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import ModalContent from "@/components/common/Modal/ModalContent"
 import ConfirmModal from "@/components/student/Shop/Modal/ConfirmModal"
 import useNavigate from "@/hooks/useNavigate"
+import useModal from "@/components/common/Modal/useModal"
 
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -36,8 +37,10 @@ const APPLY_ICON = (
 function product() {
 	const router = useRouter()
 	const { pid } = router.query
-	const [openComp, closeComp, compState] = useCompHandler()
-	const [openConfirm, closeConfirm, confirmState] = useCompHandler()
+	// const [openComp, closeComp, compState] = useCompHandler()
+	// const [openConfirm, closeConfirm, confirmState] = useCompHandler()
+	const confirmModal = useModal()
+	const qrScannerModal = useModal()
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 	const [term, setTerm] = useState<0 | 1>(0)
 	const noti = useNotification()
@@ -69,7 +72,8 @@ function product() {
 					duration: 3000,
 				})
 				navigate(`/student/shop/teacher/purchased/${productId}`, "bottomToTop")
-				closeConfirm()
+				// closeConfirm()
+				confirmModal.close()
 			})
 			.catch((err) => {
 				noti({
@@ -78,7 +82,8 @@ function product() {
 					height: "120px",
 					duration: 3000,
 				})
-				closeConfirm()
+				// closeConfirm()
+				confirmModal.close()
 			})
 	}
 
@@ -98,7 +103,7 @@ function product() {
 
 	return (
 		<React.Fragment>
-			<Modal
+			{/* <Modal
 				content={
 					<ModalContent
 						width={"300px"}
@@ -112,7 +117,10 @@ function product() {
 				compState={confirmState}
 				closeComp={closeConfirm}
 				transition={"scale"}
-			/>
+			/> */}
+			{confirmModal(
+				<ConfirmModal closeComp={confirmModal.close} fetchFunction={purchaseProduct} />
+			)}
 
 			<div css={wrapperCSS}>
 				<PageHeader title={"상점"} />
@@ -163,7 +171,7 @@ function product() {
 							fontSize={`var(--student-h3)`}
 							width={"100%"}
 							theme={"mobileSoft"}
-							onClick={openConfirm}
+							onClick={confirmModal.open}
 						/>
 					</div>
 				)}
@@ -179,13 +187,14 @@ function product() {
 							theme={"mobileSoft"}
 							onClick={() => {
 								setTerm(() => 0)
-								openComp()
+								// openComp()
+								qrScannerModal.open()
 							}}
 						/>
 					</div>
 				)}
 
-				{data && (
+				{/* {data && (
 					<Modal
 						compState={compState}
 						closeComp={closeComp}
@@ -194,6 +203,9 @@ function product() {
 							<QRScannerModal compState={compState} type={data.rental ? "ico_rental" : "ico_purchase"} id={data.id} />
 						}
 					/>
+				)} */}
+				{data && qrScannerModal(
+					<QRScannerModal compState={qrScannerModal.state} type={data.rental ? "ico_rental" : "ico_purchase"} id={data.id} />
 				)}
 			</div>
 		</React.Fragment>
