@@ -123,7 +123,8 @@ public class InvestServiceImpl implements InvestService{
         Invest invest = investRepository.findByStudentId(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_INVEST));
 
-        // 거래 가능 시간 확인
+        // TODO : 거래 가능 시간 확인
+//        // 거래 가능 시간 확인
         Nation nation = nationRepository.findById(student.getNation().getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
 //        LocalTime currentTime = LocalTime.now();

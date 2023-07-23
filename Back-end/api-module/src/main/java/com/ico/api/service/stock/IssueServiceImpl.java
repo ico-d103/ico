@@ -1,10 +1,10 @@
 package com.ico.api.service.stock;
 
 import com.ico.api.dto.stock.IssueColDto;
-import com.ico.api.dto.stock.StockMyResDto;
 import com.ico.api.dto.stock.IssueStudentResDto;
 import com.ico.api.dto.stock.IssueTeacherResDto;
 import com.ico.api.dto.stock.IssueUploadReqDto;
+import com.ico.api.dto.stock.StockMyResDto;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
@@ -16,8 +16,8 @@ import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.InvestRepository;
-import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.IssueRepository;
+import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -137,25 +137,16 @@ public class IssueServiceImpl implements IssueService {
         Stock stock = stockRepository.findById(stockId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
 
+        // TODO : 거래 시간 시 투자 종목 이슈 등록 불가
 //        if(nation.getTrading_start().isAfter(LocalTime.now()) && nation.getTrading_end().isBefore(LocalTime.now())){
 //            log.info("거래시간에는 투자 이슈 등록이 불가능합니다.");
 //            throw new CustomException(ErrorCode.NOT_UPLOAD_TIME);
 //        }
 
-        double value = dto.getPrice();
-
-        if(dto.getAmount() > 0){
-            value += dto.getAmount() / 100.0 * value;
-        }
-        else{
-            value -= Math.abs(dto.getAmount()) / 100.0 * value;
-        }
-
-        double res = Math.round(value * 100.0)/100.0;
         // 투지 이슈 등록
         Issue issue = Issue.builder()
                 .date(LocalDateTime.now())
-                .amount(res)
+                .amount(dto.getPrice())
                 .content(dto.getContent())
                 .nation(nation)
                 .stock(stock)
@@ -174,71 +165,9 @@ public class IssueServiceImpl implements IssueService {
         issueRepository.save(issue);
     }
 
-    /**
-     * 투자 종목 삭제
-     *
-     * @param request
-     */
-    @Override
-    public void deleteStock(HttpServletRequest request) {
-        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
-
-        //국가 유효성 확인
-        Nation nation = nationRepository.findById(nationId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
-
-        // 학생들의 투자 내역
-        List<Invest> invests = investRepository.findAllByNationId(nationId);
-
-        // 가장 최신 주식 데이터 구하기
-        List<Issue> issueList = issueRepository.findAllByNationIdOrderByIdDesc(nationId);
-        if(issueList.isEmpty()){
-            throw new CustomException(ErrorCode.NOT_FOUND_STOCK);
-        }
-
-        // 최신 지수
-        double price = issueList.get(0).getAmount();
-        log.info("매도지수 : " + price);
-
-        // 학생들 매도 일괄 처리
-        for(Invest invest : invests){
-            long studentId = invest.getStudent().getId();
-            Student student = studentRepository.findById(studentId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
-            double purchasePrice = invest.getPrice();
-            log.info("매수지수 : " + purchasePrice);
-
-            double changeRate = (price - purchasePrice) / purchasePrice;
-            log.info("수익률 : " + changeRate);
-
-            int amount = invest.getAmount();
-            int salePrice = (int) (amount + amount * changeRate);
-            log.info("매도 이익 : " + salePrice);
-
-            // 매도 금액 입금
-            student.setAccount(student.getAccount() + salePrice);
-            studentRepository.save(student);
-
-            // 거래 내역 기록
-            StringBuilder title = new StringBuilder("수익률 : ");
-            title.append((int)(changeRate * 100)).append("%");
-            transactionService.addTransactionDeposit(studentId, nation.getTitle()+" 증권", salePrice, String.valueOf(title));
-
-            // 매수 이력 삭제
-            investRepository.delete(invest);
-        }
-
-        issueRepository.deleteAll(issueList);
-
-        // 나라의 투자 정보 삭제
-        nation.setTrading_end(null);
-        nation.setTrading_start(null);
-        nationRepository.save(nation);
-    }
 
     /**
-     * 투자 이슈 목록
+     * 투자 이슈 목록 조회 함수
      * @param nationId 국가ID
      * @return 투자 이슈 목록 조회
      */

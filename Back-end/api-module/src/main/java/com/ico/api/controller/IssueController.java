@@ -58,16 +58,4 @@ public class IssueController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    /**
-     * 투자 종목 삭제
-     *
-     * @param request
-     * @return
-     */
-    @DeleteMapping("/teacher")
-    public ResponseEntity<HttpStatus> deleteStock(HttpServletRequest request){
-        issueService.deleteStock(request);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
-
 }

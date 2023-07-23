@@ -30,11 +30,4 @@ public interface IssueService {
      */
     void uploadIssue(HttpServletRequest request, IssueUploadReqDto dto, Long stockId);
 
-    /**
-     * 투자 종목 삭제
-     *
-     * @param request
-     */
-    void deleteStock(HttpServletRequest request);
-
 }
