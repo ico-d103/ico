@@ -1,9 +1,9 @@
 package com.ico.batch.scheduler;
 
 import com.ico.batch.job.InflationConfig;
-import com.ico.batch.service.DepositSalaryService;
 import com.ico.batch.service.InflationService;
 import com.ico.core.repository.ShopTransactionRepository;
+import com.ico.core.service.DepositSalaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobParameter;
