@@ -11,30 +11,23 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface IssueService {
 
-//    /**
-//     * 교사 투자 이슈 목록 조회
-//     *
-//     * @return 교사화면의 투자 이슈 정보
-//     */
-//    IssueTeacherResDto getIssueTeacher(HttpServletRequest request);
-//
-//    /**
-//     * 학생 투자 이슈 목록 조회
-//     * @return 학생화면의 투자 이슈 정보
-//     */
-//    IssueStudentResDto getIssueStudent(HttpServletRequest request);
-//
-//    /**
-//     * 투자 이슈 등록
-//     * @param dto 변동률, 이슈, 오늘의 가격
-//     */
-//    void uploadIssue(HttpServletRequest request, IssueUploadReqDto dto);
-//
-//    /**
-//     * 투자 종목 삭제
-//     *
-//     * @param request
-//     */
-//    void deleteStock(HttpServletRequest request);
+    /**
+     * 교사 투자 이슈 목록 조회
+     *
+     * @return 교사화면의 투자 이슈 정보
+     */
+    IssueTeacherResDto getIssueTeacher(HttpServletRequest request, Long stockId);
+
+    /**
+     * 학생 투자 이슈 목록 조회
+     * @return 학생화면의 투자 이슈 정보
+     */
+    IssueStudentResDto getIssueStudent(HttpServletRequest request, Long stockId);
+
+    /**
+     * 투자 이슈 등록
+     * @param dto 변동률, 이슈, 오늘의 가격
+     */
+    void uploadIssue(HttpServletRequest request, IssueUploadReqDto dto, Long stockId);
 
 }
