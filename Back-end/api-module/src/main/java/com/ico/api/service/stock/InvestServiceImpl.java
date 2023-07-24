@@ -56,17 +56,17 @@ public class InvestServiceImpl implements InvestService{
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         log.info("확생 유효 검사 완료");
 
-        // 거래 가능 시간 확인
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
+
         LocalTime currentTime = LocalTime.now();
+        // TODO : 거래 가능 시간 확인
 //        if(currentTime.isAfter(nation.getTrading_end()) || currentTime.isBefore(nation.getTrading_start())){
 //            throw new CustomException(ErrorCode.NOT_TRADING_TIME);
 //        }
 //        log.info("거래 가능 시간");
 
         // 투자 종목 여부 유효성 검사
-        // TODO : 계산식이랑 매수 매도는 천천히 더 바꿔야함!!
         Stock stock = stockRepository.findById(stockId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
 
@@ -123,10 +123,9 @@ public class InvestServiceImpl implements InvestService{
         Invest invest = investRepository.findByStudentId(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_INVEST));
 
-        // TODO : 거래 가능 시간 확인
-//        // 거래 가능 시간 확인
         Nation nation = nationRepository.findById(student.getNation().getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
+        // TODO : 거래 가능 시간 확인
 //        LocalTime currentTime = LocalTime.now();
 //        if(currentTime.isAfter(nation.getTrading_end()) || currentTime.isBefore(nation.getTrading_start())){
 //            throw new CustomException(ErrorCode.NOT_TRADING_TIME);
