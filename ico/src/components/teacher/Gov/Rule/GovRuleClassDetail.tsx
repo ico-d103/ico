@@ -1,14 +1,15 @@
-import React, {useState, useRef} from "react"
+import React, { useState, useRef } from "react"
 import { css } from "@emotion/react"
 import CommonListElement from "../../common/CommonListElement/CommonListElement"
 import FormCreator from "../../common/Form/FormCreator"
 import GovRuleClassCreate from "./GovRuleClassCreate"
 import useCompHandler from "@/hooks/useCompHandler"
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import { deleteGovRuleAPI } from "@/api/teacher/gov/deleteGovRuleAPI"
 import Modal from "@/components/common/Modal/Modal"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
+import useModal from "@/components/common/Modal/useModal"
 
 type GovRuleClassDetailProps = {
 	title: string
@@ -20,12 +21,27 @@ type GovRuleClassDetailProps = {
 
 function GovRuleClassDetail({ title, content, date, showIdx, actualIdx }: GovRuleClassDetailProps) {
 	const [openComp, closeComp, compState] = useCompHandler()
-	const [openDeleteModal, closeDeleteModal, deleteModalState] = useCompHandler()
+	// const [openDeleteModal, closeDeleteModal, deleteModalState] = useCompHandler()
+	const modal = useModal()
 	const [isEdit, setIsEdit] = useState<boolean>(false)
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const dropdownList = [
-		{ name: "edit", content: null, label: "수정", function: () => {openEditHandler()} },
-		{ name: "delete", content: null, label: "삭제", function: () => {openDeleteModal()} },
+		{
+			name: "edit",
+			content: null,
+			label: "수정",
+			function: () => {
+				openEditHandler()
+			},
+		},
+		{
+			name: "delete",
+			content: null,
+			label: "삭제",
+			function: () => {
+				modal.open()
+			},
+		},
 	]
 
 	const openEditHandler = () => {
@@ -38,25 +54,54 @@ function GovRuleClassDetail({ title, content, date, showIdx, actualIdx }: GovRul
 		setIsEdit(() => false)
 	}
 
-
-	const queryClient = useQueryClient();
-	const createMutation = useMutation((idx: number) => deleteGovRuleAPI({idx}));
+	const queryClient = useQueryClient()
+	const createMutation = useMutation((idx: number) => deleteGovRuleAPI({ idx }))
 
 	const deleteHandler = () => {
 		if (actualIdx) {
 			createMutation.mutate(actualIdx, {
-				onSuccess: formData => {
-				  return queryClient.invalidateQueries(["teacher", "govRule"]); // 'return' wait for invalidate
-				}})
+				onSuccess: (formData) => {
+					return queryClient.invalidateQueries(["teacher", "govRule"]) // 'return' wait for invalidate
+				},
+			})
 		}
-		
 	}
 
 	return (
-		<div ref={wrapperRef} >
-			<Modal compState={deleteModalState} closeComp={closeDeleteModal} transition={'scale'} content={<ModalAlert title={'학급 규칙을 삭제합니다.'} titleSize={'var(--teacher-h2)'} proceed={deleteHandler} width={'480px'} content={['학생들이 더이상 해당 학급 규칙을 조회할 수 없습니다!']} />}/>
-			<FormCreator subComp={<GovRuleClassCreate idx={actualIdx} />} showIdx={showIdx} actualIdx={actualIdx} compState={compState} closeComp={closeEditHandler} mainInit={{title, content}} initHeight={`${wrapperRef.current && wrapperRef.current.clientHeight}px`} />
-			<div css={WrapperCSS({isEdit})}>
+		<div ref={wrapperRef}>
+			{/* <Modal
+				compState={deleteModalState}
+				closeComp={closeDeleteModal}
+				transition={"scale"}
+				content={
+					<ModalAlert
+						title={"학급 규칙을 삭제합니다."}
+						titleSize={"var(--teacher-h2)"}
+						proceed={deleteHandler}
+						width={"480px"}
+						content={["학생들이 더이상 해당 학급 규칙을 조회할 수 없습니다!"]}
+					/>
+				}
+			/> */}
+			{modal(
+				<ModalAlert
+				title={"학급 규칙을 삭제합니다."}
+				titleSize={"var(--teacher-h2)"}
+				proceed={deleteHandler}
+				width={"480px"}
+				content={["학생들이 더이상 해당 학급 규칙을 조회할 수 없습니다!"]}
+			/>
+			)}
+			<FormCreator
+				subComp={<GovRuleClassCreate idx={actualIdx} />}
+				showIdx={showIdx}
+				actualIdx={actualIdx}
+				compState={compState}
+				closeComp={closeEditHandler}
+				mainInit={{ title, content }}
+				initHeight={`${wrapperRef.current && wrapperRef.current.clientHeight}px`}
+			/>
+			<div css={WrapperCSS({ isEdit })}>
 				<CommonListElement idx={showIdx} dropdownList={dropdownList}>
 					<div css={detailWrapperCSS}>
 						<div>
@@ -67,22 +112,16 @@ function GovRuleClassDetail({ title, content, date, showIdx, actualIdx }: GovRul
 					</div>
 				</CommonListElement>
 			</div>
-			
 		</div>
-		
 	)
-
-	
-
 }
 
-
-const WrapperCSS = ({isEdit}: {isEdit: boolean}) => {
+const WrapperCSS = ({ isEdit }: { isEdit: boolean }) => {
 	return css`
-		transition-duration: ${isEdit ? '0s' : '0.3s'};
+		transition-duration: ${isEdit ? "0s" : "0.3s"};
 		transition-property: opacity;
-		opacity: ${isEdit ? '0%' : '100%'};
-		position: ${isEdit ? 'absolute;' : 'static'};
+		opacity: ${isEdit ? "0%" : "100%"};
+		position: ${isEdit ? "absolute;" : "static"};
 	`
 }
 

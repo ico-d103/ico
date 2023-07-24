@@ -13,7 +13,7 @@ function RuleListItem({rule}: RuleItemProps) {
   const navigate = useNavigate()
 
   return (
-    <ContentWrapper>
+    <ContentWrapper css={wrapperCSS}>
       <div css={ruleTitleWrapperCSS}>
        {rule.title}
        <Button
@@ -33,6 +33,11 @@ function RuleListItem({rule}: RuleItemProps) {
     </ContentWrapper>
   )
 }
+
+const wrapperCSS = css`
+  white-space: pre-wrap;
+  line-height: 150%;
+`
 
 const lineCSS = css`
     width: 100%;

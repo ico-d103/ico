@@ -7,6 +7,7 @@ import ModalContent from "@/components/common/Modal/ModalContent"
 import FinanceDepositApplyModal from "./Modal/FinanceDepositApplyModal"
 import useCompHandler from "@/hooks/useCompHandler"
 import useGetNation from "@/hooks/useGetNation"
+import useModal from "@/components/common/Modal/useModal"
 
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -26,12 +27,13 @@ type FinanceDepositListProductProps = {
 }
 
 function FinanceDepositListProduct({ data, account }: FinanceDepositListProductProps) {
-	const [openComp, closeComp, compState] = useCompHandler()
+	// const [openComp, closeComp, compState] = useCompHandler()
+	const modal = useModal()
 	const [nation] = useGetNation()
 
 	return (
 		<React.Fragment>
-			{data && (
+			{/* {data && (
 				<Modal
 					content={
 						<ModalContent
@@ -54,16 +56,33 @@ function FinanceDepositListProduct({ data, account }: FinanceDepositListProductP
 					closeComp={closeComp}
 					transition={"scale"}
 				/>
-			)}
+			)} */}
+			{data &&
+				modal(
+					<ModalContent
+						width={"300px"}
+						title={"예금 신청"}
+						titleSize={"var(--student-h1)"}
+						icon={APPLY_ICON}
+						content={
+							<FinanceDepositApplyModal
+								closeComp={modal.close}
+								unit={` ${nation?.currency}`}
+								data={data}
+								account={account}
+							/>
+						}
+						forChild={true}
+					/>,
+				)}
 
 			<div css={itemWrapperCSS}>
 				<div css={labelSectionCSS}>
 					<div css={titleSectionCSS}>
 						<div css={titleCSS}>{data.title}</div>
-            <div>
-              <span css={highlightFontCSS}>{data.period}일</span> 동안 예금
-            </div>
-						
+						<div>
+							<span css={highlightFontCSS}>{data.period}일</span> 동안 예금
+						</div>
 					</div>
 
 					<div>
@@ -77,7 +96,7 @@ function FinanceDepositListProduct({ data, account }: FinanceDepositListProductP
 					width={"100px"}
 					theme={"mobileNormal"}
 					onClick={() => {
-						openComp()
+						modal.open()
 					}}
 				/>
 			</div>

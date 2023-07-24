@@ -16,11 +16,13 @@ import { checkedStudent, selectedStudent } from "@/store/store"
 import ClassStudentDetailHead from "../Detail/ClassStudentDetailHead"
 import { useEffect } from "react"
 import CheckBox from "@/components/teacher/common/CheckBox/CheckBox"
+import useModal from "@/components/common/Modal/useModal"
 
 function StudentEnteredList() {
 	const noti = useNotification()
 	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
-	const [openJobResetModal, closeJobResetModal, jobResetModalState] = useCompHandler()
+	// const [openJobResetModal, closeJobResetModal, jobResetModalState] = useCompHandler()
+	const modal = useModal()
 	const queryClient = useQueryClient()
 	const resetStudentsJobMutation = useMutation((a: number) => putResetStudentsJobAPI())
 	const selectedStudentAtom = useAtomValue(selectedStudent)
@@ -71,7 +73,9 @@ function StudentEnteredList() {
 							학생들 <small>({data && data.length > 0 ? data.length : 0})</small>
 						</div>
 						<CheckBox
-							customCss={css`margin-left: 15px;`}
+							customCss={css`
+								margin-left: 15px;
+							`}
 							checked={
 								checkedStudentAtom.length === 0 ? false : checkedStudentAtom.length === data?.length ? true : false
 							}
@@ -120,7 +124,7 @@ function StudentEnteredList() {
 					))}
 				</div>
 			</div>
-			<Modal
+			{/* <Modal
 				compState={jobResetModalState}
 				closeComp={closeJobResetModal}
 				transition={"scale"}
@@ -137,7 +141,21 @@ function StudentEnteredList() {
 						]}
 					/>
 				}
-			/>
+			/> */}
+
+			{modal(
+				<ModalAlert
+					title={"모든 학생들의 직업을 초기화합니다."}
+					titleSize={"var(--teacher-h2)"}
+					proceed={resetStudentsJob}
+					width={"480px"}
+					content={[
+						"모든 학생들의 직업이 초기화됩니다!",
+						"더이상 학생들이 직업 활동을 할 수 없습니다!",
+						"월급 날에 해지일까지 일한 날짜만큼 보수를 받습니다.",
+					]}
+				/>,
+			)}
 		</>
 	)
 }

@@ -7,10 +7,10 @@ import UseAnimations from "react-useanimations"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
-import GovJobCard from "./GovJobCard"
+import GovJobCard from "./GovJobItemCard"
 
 type GovJobCreateModalProps = {
-	closeComp: Function
+	closeComp: () => void
 	inputState: any
 	colorPicker: any
 	illustPicker: any
@@ -26,7 +26,7 @@ function GovJobItemCardCustomize({ closeComp, colorPicker, inputState, illustPic
 
 				<GovJobCard
 					job={inputState.job}
-					wage={inputState.wage}
+					salary={inputState.salary}
 					backgroundColor={inputState.color}
 					imgUrl={inputState.image}
 				/>
@@ -44,9 +44,7 @@ function GovJobItemCardCustomize({ closeComp, colorPicker, inputState, illustPic
 					fontSize={"var(--student-h3)"}
 					width={"47%"}
 					theme={"positive"}
-					onClick={() => {
-						closeComp()
-					}}
+					onClick={closeComp}
 				/>
 			</div>
 		</div>

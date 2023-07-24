@@ -10,6 +10,7 @@ import { getGovJobType } from "@/types/teacher/apiReturnTypes"
 import ModalContent from "@/components/common/Modal/ModalContent"
 import { GOV_JOB } from "../../Gov/GovIcons"
 import { useState } from "react"
+import useModal from "@/components/common/Modal/useModal"
 
 type ClassJobSearchCardPropsType = {
 	job: getGovJobType
@@ -17,8 +18,8 @@ type ClassJobSearchCardPropsType = {
 }
 
 function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
+	const modal = useModal()
 	const noti = useNotification()
-	const [openComp, closeComp, compState] = useCompHandler()
 	const [isAlreadyApplied, setIsAlreadyApplied] = useState<boolean>(false)
 
 	const checkValidApplyHandler = (canApply: boolean) => {
@@ -34,9 +35,13 @@ function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 		getCheckApplyFlagAPI({ jobId: job.id }).then((res) => {
 			if (res) {
 				setIsAlreadyApplied(true) // 신청한 직업 취소하기
+				noti({
+					content: <NotiTemplate type={"alert"} content={`이미 신청하였습니다.`} />,
+					duration: 3000,
+				})
+			} else {
+				modal.open()
 			}
-
-			openComp()
 		})
 	}
 
@@ -55,21 +60,7 @@ function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 					<span css={needCSS}>{job.total}명</span>
 				</div>
 			</div>
-			<Modal
-				compState={compState}
-				closeComp={closeComp}
-				transition={"scale"}
-				content={
-					<ModalContent
-						width={"320px"}
-						icon={GOV_JOB}
-						title={`${job.title}`}
-						titleSize={"var(--student-h2)"}
-						content={<ClassJobSearchModal job={job} closeComp={closeComp} isAlreadyApplied={isAlreadyApplied} />}
-						forChild={true}
-					/>
-				}
-			/>
+			{modal(<ClassJobSearchModal job={job} closeComp={modal.close} isAlreadyApplied={isAlreadyApplied} />)}
 		</>
 	)
 }

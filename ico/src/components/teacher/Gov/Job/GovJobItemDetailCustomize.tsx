@@ -7,20 +7,20 @@ import UseAnimations from "react-useanimations"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
-import GovJobCard from "./GovJobCard"
+import GovJobCard from "./GovJobItemCard"
 import { certificationType } from "./GovJobItemType"
-import GovJobItemCertItem from "./GovJobItemCertItem"
+import GovJobItemDetailCustomizeCertItem from "./GovJobItemDetailCustomizeCertItem"
 
 type GovJobItemCardCustomizeProps = {
-	closeComp: Function
+	closeComp: () => void
 	certification: certificationType[]
 	ratingHandler: any
 }
 
-function GovJobItemDetailCustomize({ certification, ratingHandler, closeComp  }: GovJobItemCardCustomizeProps) {
+function GovJobItemDetailCustomize({ certification, ratingHandler, closeComp }: GovJobItemCardCustomizeProps) {
 	const renderCertField = certification?.map((el, idx) => {
 		return (
-			<GovJobItemCertItem
+			<GovJobItemDetailCustomizeCertItem
 				arrIdx={idx}
 				id={el.id}
 				subject={el.subject}
@@ -32,10 +32,7 @@ function GovJobItemDetailCustomize({ certification, ratingHandler, closeComp  }:
 	return (
 		<div css={wrapperCSS}>
 			<div css={cardWrapperCSS}>
-				<div css={certInnerFieldCSS}>
-					{renderCertField}
-				</div>
-				
+				<div css={certInnerFieldCSS}>{renderCertField}</div>
 			</div>
 			<div css={buttonWrapperCSS}>
 				<Button
@@ -43,9 +40,7 @@ function GovJobItemDetailCustomize({ certification, ratingHandler, closeComp  }:
 					fontSize={"var(--student-h3)"}
 					width={"47%"}
 					theme={"positive"}
-					onClick={() => {
-						closeComp()
-					}}
+					onClick={closeComp}
 				/>
 			</div>
 		</div>
@@ -58,7 +53,6 @@ const wrapperCSS = css`
 	flex-direction: column;
 	align-items: center;
 `
-
 
 const cardWrapperCSS = css`
 	display: flex;
@@ -76,12 +70,9 @@ const certInnerFieldCSS = css`
 	min-height: 200px;
 	height: 1px;
 	overflow-y: scroll;
-	background-color: white;;
-	border-radius: 10px;;
+	background-color: white;
+	border-radius: 10px;
 	padding: 8px;
 `
-
-
-
 
 export default GovJobItemDetailCustomize

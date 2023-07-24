@@ -4,46 +4,82 @@ import Button from "@/components/common/Button/Button"
 import { useRouter } from "next/router"
 import useMediaQuery from "@/hooks/useMediaQuery"
 import QRScanner from "@/components/student/Shop/QRScanner/QRScanner"
+import { Container, useContainer } from "@/components/common/Container/useContainer"
+import HomeContainer1 from "@/components/common/Home/HomeContainer1"
 
 export default function Home() {
 	const router = useRouter()
 	const isMobile = useMediaQuery("(max-width: 768px")
 
+	const [steps, setStep, setCondition] = useContainer({
+    init: 1,
+    duration: 1000,
+  });
+
 	return (
-		<div css={guideWrapperCSS}>
-			<div css={scene1CSS}>
-				<div css={scene1InnerCSS}>
-					<div css={mainLabelCSS}>교실 속 작은 경제, 아이코</div>
-					<div css={subLabelCSS}>함께 성장하는 우리 교실의 작은 경제를 체험해 보세요!</div>
-					<div css={lineCSS} />
-					<div css={buttonWrapperCSS}>
-						
-							<Button
-								theme={"highlighted"}
-								width={"240px"}
-								height={"84px"}
-								text={"로그인"}
-								fontSize={"var(--teacher-h2)"}
-								onClick={() => {
-									router.push("/login")
-								}}
-							></Button>
-					
-					</div>
-					<img
-						src={"/assets/guide/14.jpg"}
-						css={css`
-							width: 200px;
-							height: auto;
-							position: absolute;
-							top: 70%;
-							visibility: hidden;
-						`}
-					/>
-				</div>
-			</div>
-		</div>
+		<div
+		css={css`
+			width: 100vw;
+			height: 100vh;
+		`}
+	>
+		<Container steps={steps} setStep={setStep} duration={1000}>
+			<Container.Step>
+				<HomeContainer1
+					setCondition={setCondition}
+					currentStep={1}
+					setStep={setStep}
+				/>
+			</Container.Step>
+			<Container.Step>
+				Container2
+			</Container.Step>
+			{/* <Container.Step>
+				<HomeContainer2 setCondition={setCondition} currentStep={2} />
+			</Container.Step> */}
+		</Container>
+	</div>
+
 	)
+
+
+	// return (
+
+		
+	// 	<div css={guideWrapperCSS}>
+	// 		<div css={scene1CSS}>
+	// 			<div css={scene1InnerCSS}>
+	// 				<div css={mainLabelCSS}>교실 속 작은 경제, 아이코</div>
+	// 				<div css={subLabelCSS}>함께 성장하는 우리 교실의 작은 경제를 체험해 보세요!</div>
+	// 				<div css={lineCSS} />
+	// 				<div css={buttonWrapperCSS}>
+						
+	// 						<Button
+	// 							theme={"highlighted"}
+	// 							width={"240px"}
+	// 							height={"84px"}
+	// 							text={"로그인"}
+	// 							fontSize={"var(--teacher-h2)"}
+	// 							onClick={() => {
+	// 								router.push("/login")
+	// 							}}
+	// 						></Button>
+					
+	// 				</div>
+	// 				<img
+	// 					src={"/assets/guide/14.jpg"}
+	// 					css={css`
+	// 						width: 200px;
+	// 						height: auto;
+	// 						position: absolute;
+	// 						top: 70%;
+	// 						visibility: hidden;
+	// 					`}
+	// 				/>
+	// 			</div>
+	// 		</div>
+	// 	</div>
+	// )
 }
 
 const guideWrapperCSS = css``
