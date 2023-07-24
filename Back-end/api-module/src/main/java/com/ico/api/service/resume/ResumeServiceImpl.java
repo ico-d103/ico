@@ -140,7 +140,7 @@ public class ResumeServiceImpl implements ResumeService {
         Resume resume = resumeMongoRepository.findById(resumeId)
                 .orElseThrow(() -> {
                     log.info("[cancelResume] 직업 신청 내역이 존재 하지 않는 경우");
-                    throw new CustomException(ErrorCode.REQUEST_NOT_FOUND);
+                    return new CustomException(ErrorCode.REQUEST_NOT_FOUND);
                 });
 
         if (validateCancelResume(nationId, studentId, jobId, resume)) {
@@ -184,14 +184,14 @@ public class ResumeServiceImpl implements ResumeService {
         Resume resume = resumeMongoRepository.findById(resumeId)
                 .orElseThrow(() -> {
                     log.info("[assignResume] 직업 신청 내역이 존재 하지 않는 경우");
-                    throw new CustomException(ErrorCode.REQUEST_NOT_FOUND);
+                    return new CustomException(ErrorCode.REQUEST_NOT_FOUND);
                 });
         log.info("[assignResume] 직업 신청 내역 존재");
 
         Nation nation = nationRepository.findById(resume.getNationId()).orElseThrow(() -> {
             log.info("[assignResume] 신청한 나라가 없는 경우");
             deleteResume(resume);
-            throw new CustomException(ErrorCode.NATION_NOT_FOUND);
+            return new CustomException(ErrorCode.NATION_NOT_FOUND);
         });
 
         if (!nation.getId().equals(nationId)) {
@@ -213,7 +213,7 @@ public class ResumeServiceImpl implements ResumeService {
                 .orElseThrow(() -> {
                     log.info("[assignResume] 신청한 학생이 존재하지 않는 경우");
                     deleteResume(resume);
-                    throw new CustomException(ErrorCode.USER_NOT_FOUND);
+                    return new CustomException(ErrorCode.USER_NOT_FOUND);
                 });
     }
 
@@ -228,7 +228,7 @@ public class ResumeServiceImpl implements ResumeService {
                 .orElseThrow(() -> {
                     log.info("[assignResume] 신청한 직업이 존재하지 않는 경우");
                     deleteResume(resume);
-                    throw new CustomException(ErrorCode.JOB_NOT_FOUND);
+                    return new CustomException(ErrorCode.JOB_NOT_FOUND);
                 });
     }
 
