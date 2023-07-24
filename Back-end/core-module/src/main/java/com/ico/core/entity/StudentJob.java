@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 직업 Entity
@@ -92,5 +93,6 @@ public class StudentJob {
         this.creditRating = dto.getCreditRating().byteValue();
         this.color = dto.getColor();
         this.image = fileName;
+        this.empowered = dto.getPowers() != null && !dto.getPowers().isEmpty() ? String.join(",", dto.getPowers().stream().map(String::valueOf).collect(Collectors.toList())) : "";
     }
 }
