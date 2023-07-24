@@ -130,18 +130,4 @@ public class JobController {
         jobService.resetJob(studentId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
-    /**
-     * 교사가 직업에 권한을 부여
-     * @param request
-     * @param map
-     * @param jobId
-     * @return ok
-     */
-    @PutMapping("/teacher/power/{jobId}")
-    public ResponseEntity<HttpStatus> jobUpdatePower(
-            HttpServletRequest request, @RequestBody Map<String, List<Long>> map, @PathVariable Long jobId) {
-        jobService.updatePower(request, map.get("powerIds"), jobId);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
 }

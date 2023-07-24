@@ -29,8 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -78,6 +76,7 @@ public class JobServiceImpl implements JobService{
         }
 
         studentJob.updateJob(dto, s3UploadService.getFileName(dto.getImage()));
+        updatePower(nationId, studentJob, dto.getPowers(), jobId);
         studentJobRepository.save(studentJob);
         log.info("[updateJob] 수정 완료");
     }
@@ -248,13 +247,11 @@ public class JobServiceImpl implements JobService{
         resumeMongoRepository.deleteAllByStudentId(studentId);
     }
 
-    @Transactional
-    @Override
-    public void updatePower(HttpServletRequest request, List<Long> powerIds, Long jobId) {
-        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
-        StudentJob job = studentJobRepository.findById(jobId)
-                .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
-
+    /**
+     * 직업과 직업을 가진 학생의 empowered 를 수정
+     *
+     */
+    private void updatePower(Long nationId, StudentJob job, List<Long> powerIds, Long jobId) {
         // powerIds Set
         Set<Long> setPowerIds = new TreeSet<>(powerIds);
         List<Power> powers = powerRepository.findAllByIdIn(new ArrayList<>(setPowerIds));
@@ -269,7 +266,6 @@ public class JobServiceImpl implements JobService{
                 jobEmpowered.append(power.getId()).append(",");
         }
         job.setEmpowered(jobEmpowered.toString());
-        studentJobRepository.save(job);
 
         // 권한 업데이트 전에 권한을 가진 직업을 가진 학생이 있는지 확인 - 없으면 pass
         List<Student> students = studentRepository.findAllByNationIdAndStudentJobId(nationId, jobId);
