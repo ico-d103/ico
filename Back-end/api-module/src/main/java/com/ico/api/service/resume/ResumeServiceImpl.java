@@ -143,9 +143,7 @@ public class ResumeServiceImpl implements ResumeService {
                     return new CustomException(ErrorCode.REQUEST_NOT_FOUND);
                 });
 
-        if (validateCancelResume(nationId, studentId, jobId, resume)) {
-            throw new CustomException(ErrorCode.INVALID_RESUME);
-        }
+        validateCancelResume(nationId, studentId, jobId, resume);
 
         resumeMongoRepository.delete(resume);
     }
@@ -157,20 +155,18 @@ public class ResumeServiceImpl implements ResumeService {
      * @param studentId
      * @param jobId
      * @param resume
-     * @return
      */
-    private boolean validateCancelResume(Long nationId, Long studentId, Long jobId, Resume resume) {
+    private void validateCancelResume(Long nationId, Long studentId, Long jobId, Resume resume) {
         if (!Objects.equals(resume.getStudentId(), studentId)) {
             log.info("[cancelResume] 신청한 학생id가 다른 경우");
-            return true;
+            throw new CustomException(ErrorCode.NOT_EQUAL_STUDENT);
         } else if (!Objects.equals(resume.getJobId(), jobId)) {
             log.info("[cancelResume] 직업id가 다른 경우");
-            return true;
+            throw new CustomException(ErrorCode.NOT_EQUAL_JOB);
         } else if (!Objects.equals(resume.getNationId(), nationId)) {
             log.info("[cancelResume] 나라id가 다른 경우");
-            return true;
+            throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
         }
-        return false;
     }
 
     /**

@@ -59,13 +59,17 @@ public enum ErrorCode{
 
     NOT_FOUND_LICENSE(HttpStatus.NOT_FOUND, "36", "자격증이 없습니다."),
 
-    NOT_EQUAL_NATION(HttpStatus.BAD_REQUEST, "37", "나라가 다릅니다."),
+    NOT_EQUAL_NATION(HttpStatus.BAD_REQUEST, "37", "나라id가 일치하지 않습니다."),
 
     EXPIRE_BUY_TRANSACTION(HttpStatus.BAD_REQUEST, "38", "5분이 경과하여 구매내역을 조회할 수 없습니다."),
 
     ERROR_NATION_JOB(HttpStatus.INTERNAL_SERVER_ERROR, "39", "학생 직업 데이터베이스에 나라가 등록되어 있지 않습니다."),
 
     NOT_FOUND_PARAMETER(HttpStatus.NOT_FOUND, "40", "Map 값이 없습니다."),
+
+    NOT_EQUAL_STUDENT(HttpStatus.BAD_REQUEST, "44", "학생id가 일치하지 않습니다."),
+
+    NOT_EQUAL_JOB(HttpStatus.BAD_REQUEST, "45", "직업id가 일치하지 않습니다."),
 
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
