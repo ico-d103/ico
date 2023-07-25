@@ -45,13 +45,13 @@ public class JobReqDto {
     @NotEmpty(message = "111")
     private List<Long> powers;
 
-    @NotEmpty
+    @NotEmpty(message = "41")
     private List<Long> jobLicenseIds;
 
-    @NotEmpty
+    @NotEmpty(message = "42")
     private List<Long> licenseIds;
 
-    @NotEmpty
+    @NotEmpty(message = "43")
     private List<Integer> ratings;
 
     @Builder
