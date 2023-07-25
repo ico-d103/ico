@@ -19,4 +19,12 @@ public interface NationRepository extends JpaRepository<Nation, Long> {
 
     Optional<Nation> findByTitle(String title);
 
+    /**
+     * 나라 이름 중복 체크
+     * 있다면 조회를 멈추고 true 반환
+     * @param title
+     * @return
+     */
+    boolean existsByTitle(String title);
+
 }
