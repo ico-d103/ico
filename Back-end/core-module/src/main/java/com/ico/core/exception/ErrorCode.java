@@ -67,6 +67,10 @@ public enum ErrorCode{
 
     NOT_FOUND_PARAMETER(HttpStatus.NOT_FOUND, "40", "Map 값이 없습니다."),
 
+    NOT_ENTER_JOB_ID(HttpStatus.BAD_REQUEST, "41", "직업 아이디 값이 없습니다."),
+    NOT_ENTER_LICENSE_ID(HttpStatus.BAD_REQUEST, "42", "자격증 아이디 값이 없습니다."),
+    NOT_ENTER_RATING(HttpStatus.BAD_REQUEST, "43", "등급 값이 없습니다."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, "104", "비밀번호 입력 칸이 비었습니다."),

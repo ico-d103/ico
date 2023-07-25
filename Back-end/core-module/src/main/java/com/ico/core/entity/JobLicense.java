@@ -1,5 +1,6 @@
 package com.ico.core.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,8 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.List;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * 직업에 자격증 등급을 설정하는 Entity
@@ -22,19 +23,26 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "job_license")
 public class JobLicense {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @Column(name = "license_id")
-    private List<NationLicense> license;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private NationLicense license;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @Column(name = "job_id")
-    private List<StudentJob> job;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private StudentJob job;
 
     private byte rating;
+
+    @Builder
+    public JobLicense(Long id, NationLicense license, StudentJob job, byte rating) {
+        this.id = id;
+        this.license = license;
+        this.job = job;
+        this.rating = rating;
+    }
 }
