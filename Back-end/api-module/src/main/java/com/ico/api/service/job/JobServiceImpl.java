@@ -83,9 +83,9 @@ public class JobServiceImpl implements JobService{
 
         studentJob.updateJob(dto, s3UploadService.getFileName(dto.getImage()));
         updatePower(nationId, studentJob, dto.getPowers(), jobId);
+        updateLicense(nationId, dto);
         studentJobRepository.save(studentJob);
         log.info("[updateJob] 수정 완료");
-        updateLicense(nationId, dto);
     }
 
     @Transactional(readOnly = true)
