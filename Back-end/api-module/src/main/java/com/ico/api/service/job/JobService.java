@@ -6,6 +6,7 @@ import com.ico.api.dto.job.JobAvailableResDto;
 import com.ico.api.dto.job.JobResDto;
 import com.ico.api.dto.job.JobResetReqDto;
 import com.ico.core.dto.JobReqDto;
+import com.ico.core.entity.StudentJob;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -76,4 +77,12 @@ public interface JobService {
      * @param request
      */
     void resetJob(Long studentId, HttpServletRequest request);
+
+    /**
+     * 직업 수정 시 직업 자격증과 등급 수정
+     * @param studentJob
+     * @param nationId
+     * @param dto
+     */
+    void updateLicense(Long nationId, JobReqDto dto);
 }

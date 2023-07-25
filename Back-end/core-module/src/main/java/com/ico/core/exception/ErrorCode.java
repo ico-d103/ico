@@ -125,6 +125,10 @@ public enum ErrorCode{
 
     INVALID_JOB_TOTAL(HttpStatus.BAD_REQUEST, "424", "배정된 인원보다 적은 총 인원 수를 설정할 수 없습니다."),
 
+    NOT_FOUND_JOB_LICENSE(HttpStatus.NOT_FOUND, "425", "직업의 자격증이 없습니다."),
+
+    WRONG_RATING(HttpStatus.NOT_FOUND, "426", "직업의 자격증 등급은 0~7만 입력 가능합니다."),
+
     INVALID_CREDIT_RATING(HttpStatus.BAD_REQUEST, "500", "신용등급 요건에 적합하지 않습니다."),
 
     REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "503", "신청 내역이 존재하지 않습니다."),

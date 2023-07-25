@@ -10,12 +10,16 @@ import com.ico.api.service.S3UploadService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.dto.JobReqDto;
+import com.ico.core.entity.JobLicense;
+import com.ico.core.entity.NationLicense;
 import com.ico.core.entity.Power;
 import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.JobLicenseRepository;
+import com.ico.core.repository.NationLicenseRepository;
 import com.ico.core.repository.PowerRepository;
 import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.NationRepository;
@@ -57,6 +61,8 @@ public class JobServiceImpl implements JobService{
     private final JwtTokenProvider jwtTokenProvider;
 
     private final PowerRepository powerRepository;
+    private final JobLicenseRepository jobLicenseRepository;
+    private final NationLicenseRepository nationLicenseRepository;
 
     @Override
     public void updateJob(Long jobId, JobReqDto dto, HttpServletRequest request) {
@@ -79,6 +85,7 @@ public class JobServiceImpl implements JobService{
         updatePower(nationId, studentJob, dto.getPowers(), jobId);
         studentJobRepository.save(studentJob);
         log.info("[updateJob] 수정 완료");
+        updateLicense(nationId, dto);
     }
 
     @Transactional(readOnly = true)
@@ -275,6 +282,41 @@ public class JobServiceImpl implements JobService{
 
             // 학생 테이블의 empowered 수정
             studentRepository.save(student);
+        }
+    }
+
+    @Transactional
+    @Override
+    public void updateLicense(Long nationId, JobReqDto dto) {
+        List<Long> jobLicenseIds = dto.getJobLicenseIds();
+        List<Long> licenseIds = dto.getLicenseIds();
+        List<Integer> ratings = dto.getRatings();
+
+        for (int i = 0; i < jobLicenseIds.size(); i++) {
+            Long jobLicenseId = jobLicenseIds.get(i);
+            Long licenseId = licenseIds.get(i);
+            byte rating = ratings.get(i).byteValue();
+
+            JobLicense jobLicense = jobLicenseRepository.findById(jobLicenseId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_JOB_LICENSE));
+
+            NationLicense nationLicense = nationLicenseRepository.findById(licenseId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
+            // 나라 일치 여부
+            if (!nationLicense.getNation().getId().equals(nationId)) {
+                throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
+            }
+
+            // rating 유효성 검사
+            if (rating > 7 || rating < 0) {
+                throw new CustomException(ErrorCode.WRONG_RATING);
+            }
+
+            jobLicense.setLicense(nationLicense);
+            jobLicense.setRating(rating);
+
+            jobLicenseRepository.save(jobLicense);
+            log.info("[updateLicense] JobLicense 수정 완료");
         }
     }
 }

@@ -6,12 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 직업 수정 시 입력값 받을 Dto
@@ -47,8 +45,17 @@ public class JobReqDto {
     @NotEmpty(message = "111")
     private List<Long> powers;
 
+    @NotEmpty
+    private List<Long> jobLicenseIds;
+
+    @NotEmpty
+    private List<Long> licenseIds;
+
+    @NotEmpty
+    private List<Integer> ratings;
+
     @Builder
-    public JobReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating, String image, List<Long> powers) {
+    public JobReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating, String image, List<Long> powers, List<Long> jobLicenseId, List<Long> licenseId, List<Integer> rating) {
         this.title = title;
         this.detail = detail;
         this.total = total;
@@ -57,5 +64,8 @@ public class JobReqDto {
         this.creditRating = creditRating;
         this.image = image;
         this.powers = powers;
+        this.jobLicenseIds = jobLicenseId;
+        this.licenseIds = licenseId;
+        this.ratings = rating;
     }
 }
