@@ -97,7 +97,7 @@ public class NationServiceImpl implements NationService {
 
         String title = reqDto.getTitle();
         // 나라 이름 중복
-        if (nationRepository.existsByTitle(title)) {
+        if (nationRepository.findByTitle(title).isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATED_NATION_NAME);
         }
         Long teacherId = jwtTokenProvider.getId(token);
