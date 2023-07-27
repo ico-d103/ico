@@ -2,9 +2,11 @@ package com.ico.api.controller;
 
 import com.ico.api.dto.license.LicenseUpdateReqDto;
 import com.ico.api.dto.license.NationLicenseResDto;
+import com.ico.api.dto.license.StudentLicenseReqDto;
 import com.ico.api.dto.license.StudentLicenseResDto;
 import com.ico.api.service.License.LicenseService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,6 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("api/license")
 @RequiredArgsConstructor
+@Slf4j
 public class LicenseController {
 
     private final LicenseService licenseService;
@@ -105,8 +108,8 @@ public class LicenseController {
      * @return
      */
     @PutMapping("/teacher")
-    public ResponseEntity<HttpStatus> updateStudentLicense(HttpServletRequest request, @RequestBody Map<Long, Boolean> map) {
-        licenseService.updateStudentLicense(request, map);
+    public ResponseEntity<HttpStatus> updateStudentLicense(HttpServletRequest request, @Valid @RequestBody StudentLicenseReqDto map) {
+        licenseService.updateStudentLicense(request, map.getLicenses());
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -118,8 +121,8 @@ public class LicenseController {
      * @return
      */
     @PutMapping("/teacher/detail/{studentId}")
-    public ResponseEntity<HttpStatus> updateStudentDetailLicense(HttpServletRequest request, @PathVariable Long studentId, @RequestBody Map<Long, Integer> map) {
-        licenseService.updateStudentDetailLicense(request, studentId, map);
+    public ResponseEntity<HttpStatus> updateStudentDetailLicense(HttpServletRequest request, @PathVariable Long studentId, @Valid @RequestBody StudentLicenseReqDto map) {
+        licenseService.updateStudentDetailLicense(request, studentId, map.getLicenses());
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

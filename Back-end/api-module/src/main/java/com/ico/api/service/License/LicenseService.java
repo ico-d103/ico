@@ -61,7 +61,7 @@ public interface LicenseService {
      * @param request
      * @param map
      */
-    void updateStudentLicense(HttpServletRequest request, Map<Long, Boolean> map);
+    void updateStudentLicense(HttpServletRequest request, Map<Long, Integer> map);
 
     /**
      * 교사가 학생 한명의 등급 조정
