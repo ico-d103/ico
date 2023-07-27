@@ -84,8 +84,22 @@ public class ResumeController {
      * @return
      */
     @GetMapping("/student/check/{jobId}")
-    public ResponseEntity<Boolean> checkRequestJob(@PathVariable Long jobId, HttpServletRequest request) {
+    public ResponseEntity<String> checkRequestJob(@PathVariable Long jobId, HttpServletRequest request) {
         return ResponseEntity.ok(resumeService.checkRequestJob(jobId, request));
+    }
+
+    /**
+     * 학생이 직업 신청 취소
+     *
+     * @param jobId 신청한 직업
+     * @param resumeId 신청 내역
+     * @param request request
+     * @return ok
+     */
+    @DeleteMapping("/student/{jobId}/{resumeId}")
+    public ResponseEntity<HttpStatus> cancelResume(@PathVariable Long jobId, @PathVariable String resumeId, HttpServletRequest request) {
+        resumeService.cancelResume(jobId, resumeId, request);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 }

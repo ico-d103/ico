@@ -48,5 +48,14 @@ public interface ResumeService {
      * @param request
      * @return
      */
-    boolean checkRequestJob(Long jobId, HttpServletRequest request);
+    String checkRequestJob(Long jobId, HttpServletRequest request);
+
+    /**
+     * 학생이 직업 신청을 취소
+     *
+     * @param jobId
+     * @param resumeId
+     * @param request
+     */
+    void cancelResume(Long jobId, String resumeId, HttpServletRequest request);
 }
