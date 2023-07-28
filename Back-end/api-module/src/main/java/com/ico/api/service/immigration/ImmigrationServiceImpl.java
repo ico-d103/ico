@@ -118,33 +118,34 @@ public class ImmigrationServiceImpl implements ImmigrationService {
         String token = jwtTokenProvider.parseJwt(request);
         Role role = jwtTokenProvider.getRole(token);
         Long nationId = jwtTokenProvider.getNation(token);
-        if (role.equals(Role.TEACHER)) {
-            Immigration immigration = immigrationRepository.findById(immigrationId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION_USER));
-            Student student = immigration.getStudent();
+        if (!role.equals(Role.TEACHER)) {
+            throw new CustomException(ErrorCode.FAIL_AUTHORIZATION);
+        }
+        Immigration immigration = immigrationRepository.findById(immigrationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION_USER));
+        Student student = immigration.getStudent();
 
-            // 학생 요청 승인
-            student.setNation(immigration.getNation());
-            studentRepository.save(student);
+        // 학생 요청 승인
+        student.setNation(immigration.getNation());
+        studentRepository.save(student);
 
-            // 학생 요청 삭제
-            immigrationRepository.delete(immigration);
+        // 학생 요청 삭제
+        immigrationRepository.delete(immigration);
 
-            // 학생 자격증 생성
-            List<NationLicense> licenses = nationLicenseRepository.findAllByNationId(nationId);
-            if (licenses.isEmpty()) {
-                throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
-            }
-            for (NationLicense data : licenses) {
-                StudentLicense license = StudentLicense.builder()
-                        .student(student)
-                        .nation(immigration.getNation())
-                        .subject(data.getSubject())
-                        .rating((byte) -1)
-                        .nationLicenseId(data.getId())
-                        .build();
-                studentLicenseRepository.save(license);
-            }
+        // 학생 자격증 생성
+        List<NationLicense> licenses = nationLicenseRepository.findAllByNationId(nationId);
+        if (licenses.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
+        }
+        for (NationLicense data : licenses) {
+            StudentLicense license = StudentLicense.builder()
+                    .student(student)
+                    .nation(immigration.getNation())
+                    .subject(data.getSubject())
+                    .rating((byte) -1)
+                    .nationLicenseId(data.getId())
+                    .build();
+            studentLicenseRepository.save(license);
         }
         // 입국심사 요청 승인 시 SSE로 요청 목록 전송
         sseEmitters.send(findStudentSseList(nationId));
