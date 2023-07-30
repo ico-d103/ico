@@ -25,12 +25,12 @@ public class IssueStudentResDto {
 
     private LocalTime tradingEnd;
 
-    private StockMyResDto myStock;
+    private StockIssueMyResDto myStock;
 
     private List<IssueColDto> issue;
 
     @Builder
-    public IssueStudentResDto(String stock, String content, int account, LocalTime tradingStart, LocalTime tradingEnd, StockMyResDto myStock, List<IssueColDto> issue) {
+    public IssueStudentResDto(String stock, String content, int account, LocalTime tradingStart, LocalTime tradingEnd, StockIssueMyResDto myStock, List<IssueColDto> issue) {
         this.stock = stock;
         this.content = content;
         this.account = account;

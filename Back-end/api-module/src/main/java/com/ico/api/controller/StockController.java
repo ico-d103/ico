@@ -1,6 +1,7 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.stock.StockCreateReqDto;
+import com.ico.api.dto.stock.StockFindAllStudentResDto;
 import com.ico.api.dto.stock.StockListColDto;
 import com.ico.api.service.stock.StockService;
 import lombok.RequiredArgsConstructor;
@@ -42,14 +43,25 @@ public class StockController {
     }
 
     /**
-     * 투자 종목 목록 조회
+     * 교사의 투자 종목 목록 조회
      *
      * @param request
      * @return
      */
-    @GetMapping
+    @GetMapping("/teacher")
     public ResponseEntity<List<StockListColDto>> findAllStock(HttpServletRequest request){
         return ResponseEntity.ok(stockService.findAllStock(request));
+    }
+
+    /**
+     * 학생의 투자 종목 목록 조회
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping("/student")
+    public ResponseEntity<StockFindAllStudentResDto> findAllStockStudent(HttpServletRequest request){
+        return ResponseEntity.ok(stockService.findAllStockStudent(request));
     }
 
     /**

@@ -12,23 +12,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class StockMyResDto {
-    private long stockId;
-
-    private String title;
-
+public class StockIssueMyResDto {
     private double price;
 
     private int amount;
 
-    private double rate;
-
     @Builder
-    public StockMyResDto(long stockId, String title, double price, int amount, double rate) {
-        this.stockId = stockId;
-        this.title = title;
+    public StockIssueMyResDto(double price, int amount) {
         this.price = price;
         this.amount = amount;
-        this.rate = rate;
     }
 }

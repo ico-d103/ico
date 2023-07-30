@@ -35,6 +35,10 @@ public class Invest {
     @JoinColumn(name = "nation_id")
     private Nation nation;
 
+    @ManyToOne
+    @JoinColumn(name = "stock_id")
+    private Stock stock;
+
     private Double price;
 
     private Integer amount;
@@ -42,10 +46,12 @@ public class Invest {
     private LocalDateTime date;
 
     @Builder
-    public Invest(Long id, Student student, Nation nation, Double price, Integer amount, LocalDateTime date) {
+
+    public Invest(Long id, Student student, Nation nation, Stock stock, Double price, Integer amount, LocalDateTime date) {
         this.id = id;
         this.student = student;
         this.nation = nation;
+        this.stock = stock;
         this.price = price;
         this.amount = amount;
         this.date = date;

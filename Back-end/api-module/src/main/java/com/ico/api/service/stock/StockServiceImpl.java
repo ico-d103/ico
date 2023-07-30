@@ -1,7 +1,9 @@
 package com.ico.api.service.stock;
 
 import com.ico.api.dto.stock.StockCreateReqDto;
+import com.ico.api.dto.stock.StockFindAllStudentResDto;
 import com.ico.api.dto.stock.StockListColDto;
+import com.ico.api.dto.stock.StockMyResDto;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Invest;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author 변윤경
@@ -76,6 +79,51 @@ public class StockServiceImpl implements StockService{
         }
 
         return stocksRes;
+    }
+
+    @Override
+    public StockFindAllStudentResDto findAllStockStudent(HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
+        List<StockListColDto> stocksRes = new ArrayList<>();
+        List<Stock> stocks = stockRepository.findAllByNationId(nationId);
+
+        for(Stock stock : stocks){
+            StockListColDto col = new StockListColDto();
+            col.setId(stock.getId());
+            col.setTitle(stock.getTitle());
+            stocksRes.add(col);
+        }
+
+        List<StockMyResDto> myStocks = new ArrayList<>();
+        List<Invest> invests = investRepository.findAllByStudentId(studentId);
+        // 투자 목록에서 주식 정보와 현재 가격 수익률 찾기
+        for(Invest invest: invests){
+            for(Stock stock: stocks){
+                if(stock.getId().equals(invest.getStock().getId())){
+                  StockMyResDto myStock = new StockMyResDto();
+                  myStock.setStockId(stock.getId());
+                  myStock.setTitle(stock.getTitle());
+                  myStock.setPrice(invest.getPrice());
+                  myStock.setAmount(invest.getAmount());
+                  Optional<Issue> lastIssueOpt = issueRepository.findAllByNationIdOrderByIdDesc(nationId).stream().findFirst();
+                  if(lastIssueOpt.isPresent()){
+                      Issue latestIssue = lastIssueOpt.get();
+                      double rate = (invest.getPrice() - latestIssue.getAmount())/invest.getPrice();
+                      myStock.setRate(rate);
+                  }
+                  myStocks.add(myStock);
+                }
+            }
+        }
+
+        StockFindAllStudentResDto res = new StockFindAllStudentResDto();
+        res.setMyStocks(myStocks);
+        res.setStockList(stocksRes);
+
+        return res;
     }
 
     @Override
