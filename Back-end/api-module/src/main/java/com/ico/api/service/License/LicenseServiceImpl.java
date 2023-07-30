@@ -185,8 +185,11 @@ public class LicenseServiceImpl implements LicenseService {
             Long key = m.getKey();  // nationLicenseId
             Integer val = m.getValue();  // true(등급 올리기) or false(등급 내리기)
             // key & value 유효성 검사
-            if (key == null || val == null) {
-                throw new CustomException(ErrorCode.NOT_FOUND_PARAMETER);
+            if (key == null) {
+                throw new CustomException(ErrorCode.NOT_FOUND_LICENSE_ID);
+            }
+            if (val == null) {
+                throw new CustomException(ErrorCode.NOT_FOUND_RATING_VALUE);
             }
 
 //          // TODO : job 브랜치와 합친 후에 ErrorCode 806번 부여하기

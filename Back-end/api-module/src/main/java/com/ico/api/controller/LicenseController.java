@@ -104,12 +104,12 @@ public class LicenseController {
     /**
      * 학생들의 자격증 등급 조정
      * @param request
-     * @param map
+     * @param dto
      * @return
      */
     @PutMapping("/teacher")
-    public ResponseEntity<HttpStatus> updateStudentLicense(HttpServletRequest request, @Valid @RequestBody StudentLicenseReqDto map) {
-        licenseService.updateStudentLicense(request, map.getLicenses());
+    public ResponseEntity<HttpStatus> updateStudentLicense(HttpServletRequest request, @Valid @RequestBody StudentLicenseReqDto dto) {
+        licenseService.updateStudentLicense(request, dto.getLicenses());
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -117,12 +117,12 @@ public class LicenseController {
      * 교사가 학생 한명의 자격증을 수정
      * @param request
      * @param studentId
-     * @param map
+     * @param dto
      * @return
      */
     @PutMapping("/teacher/detail/{studentId}")
-    public ResponseEntity<HttpStatus> updateStudentDetailLicense(HttpServletRequest request, @PathVariable Long studentId, @Valid @RequestBody StudentLicenseReqDto map) {
-        licenseService.updateStudentDetailLicense(request, studentId, map.getLicenses());
+    public ResponseEntity<HttpStatus> updateStudentDetailLicense(HttpServletRequest request, @PathVariable Long studentId, @Valid @RequestBody StudentLicenseReqDto dto) {
+        licenseService.updateStudentDetailLicense(request, studentId, dto.getLicenses());
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
