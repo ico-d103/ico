@@ -3,12 +3,12 @@ import Button from "@/components/common/Button/Button"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import useGetNation from "@/hooks/useGetNation"
 import useNotification from "@/hooks/useNotification"
-import { getGovJobType } from "@/types/teacher/apiReturnTypes"
+import { jobListType } from "@/types/teacher/apiReturnTypes"
 import { appendEulReul } from "@/util/isEndWithConsonant"
 import { css } from "@emotion/react"
 
 type ClassJobSearchModalPropsType = {
-	job: getGovJobType
+	job: jobListType
 	closeComp: () => void
 	isAlreadyApplied: boolean
 }
@@ -37,7 +37,7 @@ function ClassJobSearchModal({ job, closeComp, isAlreadyApplied }: ClassJobSearc
 	return (
 		<div css={wrapperCSS}>
 			<span>
-				월급 {(job.salary * 30).toLocaleString("ko-KR")} {nation.currency}
+				월급 {job.salary} {nation.currency}
 			</span>
 			<textarea readOnly value={job.detail} />
 			<div css={buttonWrapperCSS}>

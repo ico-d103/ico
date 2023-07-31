@@ -1,19 +1,17 @@
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 import { css } from "@emotion/react"
-import Modal from "@/components/common/Modal/Modal"
-import useCompHandler from "@/hooks/useCompHandler"
 import ClassJobSearchModal from "./ClassJobSearchModal"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { getCheckApplyFlagAPI } from "@/api/student/class/getCheckApplyFlagAPI"
-import { getGovJobType } from "@/types/teacher/apiReturnTypes"
-import ModalContent from "@/components/common/Modal/ModalContent"
-import { GOV_JOB } from "../../Gov/GovIcons"
+import { jobListType } from "@/types/teacher/apiReturnTypes"
 import { useState } from "react"
 import useModal from "@/components/common/Modal/useModal"
+import ModalContent from "@/components/common/Modal/ModalContent"
+import { GOV_JOB } from "../../Gov/GovIcons"
 
 type ClassJobSearchCardPropsType = {
-	job: getGovJobType
+	job: jobListType
 	myGrade: number
 }
 
@@ -60,7 +58,15 @@ function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 					<span css={needCSS}>{job.total}명</span>
 				</div>
 			</div>
-			{modal(<ClassJobSearchModal job={job} closeComp={modal.close} isAlreadyApplied={isAlreadyApplied} />)}
+			{modal(
+				<ModalContent width={"320px"}
+				icon={GOV_JOB}
+				title={`${job.title}`}
+				titleSize={"var(--student-h2)"}
+				content={<ClassJobSearchModal job={job} closeComp={modal.close} isAlreadyApplied={isAlreadyApplied} />}
+				forChild={true} />
+				// <ClassJobSearchModal job={job} closeComp={modal.close} isAlreadyApplied={isAlreadyApplied} />
+			)}
 		</>
 	)
 }

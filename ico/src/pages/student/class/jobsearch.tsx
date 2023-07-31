@@ -8,12 +8,12 @@ import { getMyGradeAPI } from "@/api/student/class/getMyGradeAPI"
 import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
 import { getGovJobAPI } from "@/api/teacher/gov/getGovJobAPI"
-import { getGovJobType } from "@/types/teacher/apiReturnTypes"
+import { getJobListType } from "@/types/teacher/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
 
 function jobsearch() {
 	const [myGrade, setMyGrade] = useState<number>(-1)
-	const { data } = useQuery<getGovJobType[]>(["govJobList"], getGovJobAPI)
+	const { data } = useQuery<getJobListType>(["govJobList"], getGovJobAPI)
 
 	useEffect(() => {
 		getMyGradeAPI().then((res) => {
@@ -26,14 +26,14 @@ function jobsearch() {
 			<PageHeader title={"우리반"} addComp={<TabMenu menus={ClassTabMenus()} selected={1} />} />
 			<div css={wrapperCSS}>
 				<div css={contentCSS}>
-					{data?.length === 0 ? (
+					{data?.jobList.length === 0 ? (
 						<div css={noneWrapperCSS}>
 							<UseAnimations animation={alertCircle} size={200} strokeColor={"rgba(0,0,0,0.4)"} />
 							<span css={titleCSS}>등록된 직업 목록이 없어요</span>
 						</div>
 					) : (
 						<div css={jobListCSS}>
-							{data?.map((job) => (
+							{data?.jobList.map((job) => (
 								<ClassJobSearchCard key={job.id} job={job} myGrade={myGrade} />
 							))}
 						</div>

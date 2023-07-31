@@ -43,7 +43,6 @@ export type getGovJobType = {
 	empowered: string[]
 }
 
-
 export type getStudentListType = {
 	id: number
 	name: string
@@ -170,6 +169,8 @@ export type jobListType = {
 	salary: string
 	count: number
 	studentNames: string[] | string
+	empowered: string[]
+	detail: string
 }
 
 export type getJobListType = {
@@ -212,4 +213,3 @@ export type getGovJobAuthType = {
 	id: number
 	name: string
 }
-
