@@ -131,11 +131,7 @@ public class StockServiceImpl implements StockService{
     public void updateStock(HttpServletRequest request, Long stockId, StockUpdateReqDto stockUpdateReqDto) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
-        //국가 유효성 확인
-        Nation nation = nationRepository.findById(nationId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
-
-        Stock stock = stockRepository.findById(stockId)
+        Stock stock = stockRepository.findByIdAndNationId(stockId, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
 
         stock.setTitle(stockUpdateReqDto.getTitle());
