@@ -4,6 +4,7 @@ import com.ico.api.dto.stock.StockCreateReqDto;
 import com.ico.api.dto.stock.StockFindAllStudentResDto;
 import com.ico.api.dto.stock.StockListColDto;
 import com.ico.api.dto.stock.StockMyResDto;
+import com.ico.api.dto.stock.StockUpdateReqDto;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Invest;
@@ -124,6 +125,22 @@ public class StockServiceImpl implements StockService{
         res.setStockList(stocksRes);
 
         return res;
+    }
+
+    @Override
+    public void updateStock(HttpServletRequest request, Long stockId, StockUpdateReqDto stockUpdateReqDto) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        //국가 유효성 확인
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        Stock stock = stockRepository.findById(stockId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
+
+        stock.setTitle(stockUpdateReqDto.getTitle());
+        stock.setContent(stockUpdateReqDto.getContent());
+        stockRepository.save(stock);
     }
 
     @Override
