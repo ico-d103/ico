@@ -248,10 +248,10 @@ public class StudentServiceImpl implements StudentService {
         // 학생의 투자 총합 반환
         CompletableFuture<Integer> futureInvest = CompletableFuture.supplyAsync(() -> {
             int amount = 0;
-            Optional<Invest> invest = investRepository.findByStudentId(studentId);
-            if (invest.isPresent()) {
-                amount = invest.get().getAmount();
-            }
+//            Optional<Invest> invest = investRepository.findByStudentId(studentId);
+//            if (invest.isPresent()) {
+//                amount = invest.get().getAmount();
+//            }
             return amount;
         });
         // 학생의 직업 이미지 반환

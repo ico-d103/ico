@@ -4,7 +4,7 @@ import com.ico.api.dto.stock.IssueColDto;
 import com.ico.api.dto.stock.IssueStudentResDto;
 import com.ico.api.dto.stock.IssueTeacherResDto;
 import com.ico.api.dto.stock.IssueUploadReqDto;
-import com.ico.api.dto.stock.StockMyResDto;
+import com.ico.api.dto.stock.StockIssueMyResDto;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
@@ -95,10 +95,10 @@ public class IssueServiceImpl implements IssueService {
         Stock stock = stockRepository.findById(stockId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
 
-        Optional<Invest> invest = investRepository.findByStudentId(studentId);
+        Optional<Invest> invest = investRepository.findByStudentIdAndStockId(studentId, stockId);
         log.info("매수 여부 확인");
 
-        StockMyResDto myStock = new StockMyResDto();
+        StockIssueMyResDto myStock = new StockIssueMyResDto();
         log.info("학생 매수 정보");
 
         if(invest.isPresent()){

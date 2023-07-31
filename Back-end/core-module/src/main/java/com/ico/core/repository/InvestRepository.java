@@ -15,7 +15,14 @@ public interface InvestRepository extends JpaRepository<Invest, Long> {
      * @param id 학생 IDX
      * @return 매수 내역
      */
-    Optional<Invest> findByStudentId(Long id);
+    Optional<Invest> findByStudentIdAndStockId(Long studentId, Long stockId);
+
+    /**
+     * 학생이 구매한 주식종류 조회
+     * @param id
+     * @return
+     */
+    List<Invest> findAllByStudentId(Long id);
 
     /**
      * 나라의 학생 주식 매수 내역

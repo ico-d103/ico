@@ -74,7 +74,7 @@ public class InvestServiceImpl implements InvestService{
         log.info("[buyStock] 주식 매수 시간 LocalDateTime : {}", LocalDateTime.now());
 
         // 매수 여부 확인
-        investRepository.findByStudentId(studentId).ifPresent(i -> {
+        investRepository.findByStudentIdAndStockId(studentId, stockId).ifPresent(i -> {
             throw new CustomException(ErrorCode.ALREADY_HAVE_STOCK);
         });
         log.info("매수 여부 확인");
@@ -97,6 +97,7 @@ public class InvestServiceImpl implements InvestService{
                 .date(LocalDateTime.now())
                 .student(student)
                 .nation(nation)
+                .stock(stock)
                 .build();
         investRepository.save(invest);
 
@@ -120,7 +121,7 @@ public class InvestServiceImpl implements InvestService{
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 매수 내역 확인
-        Invest invest = investRepository.findByStudentId(studentId)
+        Invest invest = investRepository.findByStudentIdAndStockId(studentId, stockId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_INVEST));
 
         Nation nation = nationRepository.findById(student.getNation().getId())
