@@ -52,20 +52,28 @@ function ClassStudentManageLicense({ license }: ClassStudentManageLicenseProps) 
 
 	return (
 		<div css={wrapperCSS}>
-			<div>
-				{license.map((el) => (
-					<ClassStudentDetailCertificateItem key={el.id} certificate={el} />
-				))}
-			</div>
-			<Button
-				text={"자격증 정보 수정"}
-				fontSize={`0.9rem`}
-				width={"130px"}
-				height={"33px"}
-				theme={"managePlus"}
-				margin={"0 0 0 0"}
-				onClick={manageStudentsLicenseHandler}
-			/>
+			{license.length ? (
+				<>
+					<div>
+						{license.map((el) => (
+							<ClassStudentDetailCertificateItem key={el.id} certificate={el} />
+						))}
+					</div>
+					<Button
+						text={"자격증 정보 수정"}
+						fontSize={`0.9rem`}
+						width={"130px"}
+						height={"33px"}
+						theme={"managePlus"}
+						margin={"0 0 0 0"}
+						onClick={manageStudentsLicenseHandler}
+					/>
+				</>
+			) : (
+				<div css={noneListWrapperCSS}>
+					<span>자격증이 없습니다.</span>
+				</div>
+			)}
 		</div>
 	)
 }
@@ -84,6 +92,16 @@ const wrapperCSS = css`
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
+	}
+`
+
+const noneListWrapperCSS = css`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	> span {
+		font-size: var(--teacher-h5);
 	}
 `
 
