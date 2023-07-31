@@ -3,9 +3,8 @@ import { css } from "@emotion/react"
 import { useAtom } from "jotai"
 import { checkedStudent } from "@/store/store"
 import ClassStudentDetailMoney from "../Detail/ClassStudentDetailMoney"
-import Button from "@/components/common/Button/Button"
 import ClassStudentManageGrade from "./ClassStudentManageGrade"
-import ClassStudentDetailCertificateItem from "../Detail/ClassStudentDetailCertificateItem"
+import ClassStudentManageLicense from "./ClassStudentManageLicense"
 
 function ClassStudentManageModal() {
 	const [openMoreMenu, setOpenMoreMenu] = useState<boolean>(false)
@@ -88,24 +87,7 @@ function ClassStudentManageModal() {
 				<button onClick={() => setOpenMoreMenu(!openMoreMenu)}>
 					{openMoreMenu ? "자격증 관리 닫기" : "자격증 관리 열기"}
 				</button>
-				{openMoreMenu && (
-					<div css={contentBottomCSS}>
-						<div>
-							{license.map((el) => (
-								<ClassStudentDetailCertificateItem key={el.id} certificate={el} />
-							))}
-						</div>
-						<Button
-							text={"자격증 정보 수정"}
-							fontSize={`0.9rem`}
-							width={"130px"}
-							height={"33px"}
-							theme={"managePlus"}
-							margin={"0 0 0 0"}
-							onClick={() => alert("준비 중입니다.😀")}
-						/>
-					</div>
-				)}
+				{openMoreMenu && <ClassStudentManageLicense license={license} />}
 			</div>
 		</div>
 	)
@@ -171,23 +153,6 @@ const contentTopCSS = css`
 	flex-direction: row;
 	align-items: center;
 	margin: 20px 0;
-`
-
-const contentBottomCSS = css`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 30px;
-	margin-top: 20px;
-
-	> div {
-		width: 90%;
-		height: 230px;
-		overflow: scroll;
-		display: flex;
-		flex-direction: column;
-		gap: 20px;
-	}
 `
 
 const divideCSS = css`

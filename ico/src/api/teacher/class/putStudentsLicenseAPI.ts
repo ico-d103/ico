@@ -5,7 +5,7 @@ import { studentLicenseBodyType } from "@/types/teacher/apiReturnTypes"
 type paramsType = {
 	body: {
 		studentIds: number[]
-		license: { [key: number]: number }[]
+		license: studentLicenseBodyType[]
 	}
 }
 
