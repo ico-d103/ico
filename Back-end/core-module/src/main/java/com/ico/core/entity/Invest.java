@@ -36,7 +36,7 @@ public class Invest {
     private Nation nation;
 
     @ManyToOne
-    @JoinColumn(name = "stock_id")
+    @JoinColumn(name = "stock_id", nullable = false)
     private Stock stock;
 
     private Double price;

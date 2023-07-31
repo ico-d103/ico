@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * 투자 종목 상세보기 조회 시 해당 종목에 대한 학생 보유 현황
+ *
  * @author 변윤경
  */
 

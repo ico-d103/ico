@@ -8,6 +8,8 @@ import lombok.Setter;
 import java.util.List;
 
 /**
+ * 학생의 투자 종목 조회 ResDto
+ *
  * @author 변윤경
  */
 @Getter
