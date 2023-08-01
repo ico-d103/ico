@@ -18,12 +18,13 @@ import { deleteTeacherProductAPI } from "@/api/teacher/shop/deleteTeacherProduct
 import useModal from "@/components/common/Modal/useModal"
 	
 function product() {
+	const modal = useModal()
 	const router = useRouter()
 	const { pid } = router.query
 	const productId = typeof pid === "string" ? pid : ""
 	const [nation] = useGetNation()
 	// const [openComp, closeComp, compState] = useCompHandler()
-	const modal = useModal()
+	
 	const [time, setTime] = useState<number>(0)
 
 	const { data } = useQuery<getTeacherProductDetailType>(["product", productId], () =>
@@ -70,7 +71,7 @@ function product() {
 					content={<ShowQR type={"ico_rental"} id={data?.id} time={time} />}
 				/>
 			)} */}
-			{data && modal(
+			{data && time && modal(
 				<ShowQR type={"ico_rental"} id={data?.id} time={time} />
 			)}
 			<div css={headerCSS}>

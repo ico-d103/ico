@@ -36,8 +36,11 @@ function index() {
 						transition={"rightToLeft"}
 					/>
 				)} */}
-				{data && modal(
-					<SideMenu data={data} />
+				{modal(
+					<>
+						{data && <SideMenu data={data} />}
+					</>
+					
 				)}
 				<div css={headerWrapperCSS}>
 					<div css={logoWrapperCSS}>
