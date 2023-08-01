@@ -7,7 +7,7 @@ import { css } from "@emotion/react"
 import FormCreator from "@/components/teacher/common/Form/FormCreator"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getGovJobAPI } from "@/api/teacher/gov/getGovJobAPI"
-import { getGovPowerType, getGovJobType } from "@/types/teacher/apiReturnTypes"
+import { getGovPowerType, getGovJobType, getJobListType } from "@/types/teacher/apiReturnTypes"
 import GovJobItem from "@/components/teacher/Gov/Job/GovJobItem"
 import useGetNation from "@/hooks/useGetNation"
 import { getGovJobAuthAPI } from "@/api/teacher/gov/getGovJobAuthAPI"
@@ -17,7 +17,7 @@ function index() {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [nation] = useGetNation()
 
-	const jobsQuery = useQuery<getGovJobType>(
+	const jobsQuery = useQuery<getJobListType>(
 		["teacher", "govJob"],
 		getGovJobAPI,
 		// { staleTime: 200000 },

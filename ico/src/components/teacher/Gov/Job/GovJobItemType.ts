@@ -19,7 +19,7 @@ export type certificationType = {
 export type GovRuleClassDetailProps = {
 	title?: string
 	detail?: string
-	salary?: number
+	salary?: string
 	creditRating?: number
 	color?: string
 	image?: string
