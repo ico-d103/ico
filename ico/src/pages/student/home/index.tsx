@@ -36,12 +36,8 @@ function index() {
 						transition={"rightToLeft"}
 					/>
 				)} */}
-				{modal(
-					<>
-						{data && <SideMenu data={data} />}
-					</>
-					
-				)}
+				{modal(<>{data && <SideMenu data={data} />}</>)}
+
 				<div css={headerWrapperCSS}>
 					<div css={logoWrapperCSS}>
 						<LoadImage
@@ -68,7 +64,7 @@ function index() {
 					</div>
 				</div>
 
-				<div css={homeContentWrapperCSS} className={'home-content'}>
+				<div css={homeContentWrapperCSS} className={"home-content"}>
 					<ContentWrapper>
 						<div css={contentTitleCSS}>내 프로필</div>
 						{data && (
@@ -129,11 +125,9 @@ const logoWrapperCSS = css`
 	align-items: center;
 	color: #5aa9006a;
 
-
 	@media (max-width: 768px) {
-
 	}
-	
+
 	@media (min-width: 769px) {
 		display: none;
 	}
@@ -162,7 +156,7 @@ const homeContentWrapperCSS = css`
 		align-items: center;
 		width: 100%;
 	}
-	
+
 	@media (min-width: 1025px) {
 		/* margin-left: 16px; */
 		min-width: 568px;

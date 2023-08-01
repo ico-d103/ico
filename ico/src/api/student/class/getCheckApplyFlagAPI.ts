@@ -6,13 +6,12 @@ type paramsType = {
 
 type responseType = {
 	status: number
-	data: boolean
+	data: string | null
 }
 
 export const getCheckApplyFlagAPI = async ({ jobId }: paramsType) => {
 	try {
 		const response: responseType = await tokenInstance.get(`/resume/student/check/${jobId}`)
-		console.log("getCheckApplyFlagAPI : ", response)
 
 		return response.data
 	} catch (error) {

@@ -38,9 +38,9 @@ function students() {
 					</div>
 					<div key={searchValue} css={contentWrapperCSS}>
 						<span>전체 {studentList.length} 명</span>
-						{studentList.map((student) => {
+						{studentList.map((student, idx) => {
 							if (student.name.includes(searchValue)) {
-								return <ClassStudentsListItem key={student.number} student={student} />
+								return <ClassStudentsListItem key={idx} student={student} />
 							}
 						})}
 					</div>
@@ -87,7 +87,7 @@ const searchWrapperCSS = css`
 
 	> input {
 		width: 100%;
-		
+
 		border: none;
 		outline: none;
 		background: none;
