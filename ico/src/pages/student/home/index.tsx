@@ -37,6 +37,7 @@ function index() {
 					/>
 				)} */}
 				{modal(<>{data && <SideMenu data={data} />}</>)}
+
 				<div css={headerWrapperCSS}>
 					<div css={logoWrapperCSS}>
 						<LoadImage

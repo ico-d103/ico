@@ -1,27 +1,22 @@
-import React, { useState, useEffect, useMemo, ReactNode, ReactElement, JSXElementConstructor } from "react"
+import React, { useState, useEffect, ReactNode, ReactElement, JSXElementConstructor } from "react"
 import Portal from "../Portal/Portal"
 import { css } from "@emotion/react"
 import { useRouter } from "next/router"
-import { useAtom } from "jotai"
-import { LiteralExpression } from "typescript"
 
 
 
-type setModalStateType = {
-	open: () => void
-	close: () => void
-}
 
 
-function useModal(transition: transitionsKeyType = 'scale' ) {
-	const [modalState, modalStateDispatcher] = useState(false)
+
+function useModal(transition: transitionsKeyType = 'scale') {
+	const [modalState, setModalState] = useState(false)
 
 	const modal = (content: ReactNode): any => {
-		return Modal.bind(null, transition, modalState, modalStateDispatcher.bind(null, () => false), content)()
+		return Modal.bind(null, transition, modalState, setModalState.bind(null, () => false), content)()
 	}
 
-	modal.open = modalStateDispatcher.bind(null, () => true)
-	modal.close = modalStateDispatcher.bind(null, () => false)
+	modal.open = setModalState.bind(null, () => true)
+	modal.close = setModalState.bind(null, () => false)
 	modal.state = modalState
 
 	return modal
