@@ -160,8 +160,7 @@ const contentCSS = css`
 		transition: all 0.1s;
 
 		:hover {
-			font-weight: bold;
-			color: var(--teacher-main-color);
+			color: var(--teacher-gray-color);
 		}
 	}
 `

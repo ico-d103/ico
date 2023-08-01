@@ -122,6 +122,12 @@ const buttonCSS = ({ theme }: { theme: string }) => {
 			color: var(--common-back-color-2);
 			background-color: #d94a4a;
 		`,
+		mobileVividPositive: css`
+		border: none;
+		border-radius: 20px;
+		color: var(--common-back-color-2);
+		background-color: #1e7bff;
+		`,
 		RadialPositive: css`
 			border: none;
 			border-radius: 10px;

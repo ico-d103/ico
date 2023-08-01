@@ -1,26 +1,29 @@
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 import { css } from "@emotion/react"
-import Modal from "@/components/common/Modal/Modal"
-import useCompHandler from "@/hooks/useCompHandler"
 import ClassJobSearchModal from "./ClassJobSearchModal"
-import { getJobListType } from "@/types/student/apiReturnTypes"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { getCheckApplyFlagAPI } from "@/api/student/class/getCheckApplyFlagAPI"
+import { jobListType } from "@/types/teacher/apiReturnTypes"
+import { useState } from "react"
+import useModal from "@/components/common/Modal/useModal"
+import ModalContent from "@/components/common/Modal/ModalContent"
+import { GOV_JOB } from "../../Gov/GovIcons"
 
 type ClassJobSearchCardPropsType = {
-	job: getJobListType
+	job: jobListType
 	myGrade: number
 }
 
 function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
+	const modal = useModal()
 	const noti = useNotification()
-	const [openComp, closeComp, compState] = useCompHandler()
+	const [isAlreadyApplied, setIsAlreadyApplied] = useState<string|null>(null)
 
 	const checkValidApplyHandler = (canApply: boolean) => {
 		if (!canApply) {
 			noti({
-				content: <NotiTemplate type={"alert"} content={`신청할 수 없는 직업입니다.`} />,
+				content: <NotiTemplate type={"alert"} content={`신용 등급이 적합하지 않습니다.`} />,
 				duration: 3000,
 			})
 
@@ -29,13 +32,17 @@ function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 
 		getCheckApplyFlagAPI({ jobId: job.id }).then((res) => {
 			if (res) {
+				setIsAlreadyApplied(res) // 신청한 직업 취소할 수 있는 id 저장
+
 				noti({
 					content: <NotiTemplate type={"alert"} content={`이미 신청하였습니다.`} />,
 					duration: 3000,
 				})
 			} else {
-				openComp()
+				setIsAlreadyApplied(null)
 			}
+
+			modal.open()
 		})
 	}
 
@@ -54,12 +61,14 @@ function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 					<span css={needCSS}>{job.total}명</span>
 				</div>
 			</div>
-			<Modal
-				compState={compState}
-				closeComp={closeComp}
-				transition={"scale"}
-				content={<ClassJobSearchModal job={job.title} id={job.id} closeComp={closeComp} />}
-			/>
+			{modal(
+				<ModalContent width={"320px"}
+				icon={GOV_JOB}
+				title={`${job.title}`}
+				titleSize={"var(--student-h2)"}
+				content={<ClassJobSearchModal job={job} closeComp={modal.close} isAlreadyApplied={isAlreadyApplied} />}
+				forChild={true} />
+			)}
 		</>
 	)
 }

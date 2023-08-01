@@ -7,6 +7,7 @@ import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 import useCompHandler from "@/hooks/useCompHandler"
 import Modal from "@/components/common/Modal/Modal"
 import Account from "../../Account/Account"
+import useModal from "@/components/common/Modal/useModal"
 
 type SideBarLeftProps = {
 	element: { [prop: number]: { name: string; label: string; content: any } }
@@ -18,7 +19,8 @@ type SideBarLeftProps = {
 function SideBarLeft({ element, logo, selectHandler, selected }: SideBarLeftProps) {
 	const router = useRouter()
 	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
-	const [openComp, closeComp, compState] = useCompHandler()
+	// const [openComp, closeComp, compState] = useCompHandler()
+	const modal = useModal()
 
 	const signoutHandler = () => {
 		removeCookie("Authorization", { path: "/" })
@@ -44,7 +46,11 @@ function SideBarLeft({ element, logo, selectHandler, selected }: SideBarLeftProp
 
 	return (
 		<React.Fragment>
-			<Modal compState={compState} closeComp={closeComp} transition={"scale"} content={<Account />} />
+
+			{/* <Modal compState={compState} closeComp={closeComp} transition={"scale"} content={<Account />} /> */}
+			{modal(
+				<Account />
+			)}
 			<div css={sideBarLeftWrapperCSS}>
 				<div css={topWrapperCSS}>
 					<div css={logoWrapperCSS}>{logo}</div>
@@ -63,7 +69,7 @@ function SideBarLeft({ element, logo, selectHandler, selected }: SideBarLeftProp
 						<div css={elementContentCSS}>{MAIN_SETTING}</div>
 					</div>
 					<div css={bottomLineCSS} />
-					<img css={userImgCSS} src={"/assets/account.png"} alt="교사회원 계정확인 아이콘" onClick={openComp} />
+					<img css={userImgCSS} src={"/assets/account.png"} alt="교사회원 계정확인 아이콘" onClick={modal.open} />
 				</div>
 			</div>
 		</React.Fragment>

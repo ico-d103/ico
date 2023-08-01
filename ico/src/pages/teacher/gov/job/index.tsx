@@ -7,45 +7,34 @@ import { css } from "@emotion/react"
 import FormCreator from "@/components/teacher/common/Form/FormCreator"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getGovJobAPI } from "@/api/teacher/gov/getGovJobAPI"
-import { getGovJobType } from "@/types/teacher/apiReturnTypes"
+import { getGovJobAuthType, getGovJobType } from "@/types/teacher/apiReturnTypes"
 import GovJobItem from "@/components/teacher/Gov/Job/GovJobItem"
 import useGetNation from "@/hooks/useGetNation"
+import { getGovJobAuthAPI } from "@/api/teacher/gov/getGovJobAuthAPI"
 
 function index() {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [nation] = useGetNation()
 
-	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getGovJobType[]>(
+	const jobsQuery = useQuery<getGovJobType[]>(
 		["teacher", "govJob"],
 		getGovJobAPI,
 		// { staleTime: 200000 },
 	)
 
-	const dummyStatus: {
-		id: number
-		status: string
-		subject: string
-	} = {
-		id: 1,
-		status: "credit",
-		subject: "신용등급 관리",
-	}
+
+
+
+
+	
+
+	const dummyStatus: string[] = []
 
 	const dummyStatusList: {
 		id: number
-		status: string
-		subject: string
+		name: string
 	}[] = [
-		{
-			id: 1,
-			status: "credit",
-			subject: "신용등급 관리",
-		},
-		{
-			id: 2,
-			status: "trade",
-			subject: "상점 재고 관리",
-		},
+		
 	]
 
 	const dummyCert: { id: number; subject: string; rating: number }[] = [
@@ -156,19 +145,19 @@ function index() {
 
 	const renderJobList = useMemo(
 		() =>
-			data?.map((el, idx) => {
+		jobsQuery.data?.map((el, idx) => {
 				return (
 					<div
 						key={`${el.title}-${el.id}`}
 						css={css`
-							border-bottom: ${data.length - 1 > idx && "1px solid rgba(0, 0, 0, 0.1)"};
+							border-bottom: ${jobsQuery.data.length - 1 > idx && "1px solid rgba(0, 0, 0, 0.1)"};
 						`}
 					>
 						<GovJobItem
 							idx={el.id}
 							title={el.title}
 							detail={el.detail}
-							wage={el.wage}
+							salary={el.salary}
 							creditRating={el.creditRating}
 							color={el.color}
 							image={el.image}
@@ -176,13 +165,13 @@ function index() {
 							count={el.count}
 							currency={nation.currency}
 							certification={dummyCertList}
-							roleStatus={dummyStatus}
-							roleStatusList={dummyStatusList}
+							empowered={dummyStatus}
+							powerList={dummyStatusList}
 						/>
 					</div>
 				)
 			}),
-		[data],
+		[jobsQuery.data],
 	)
 
 	return (
@@ -204,7 +193,7 @@ function index() {
 			<div css={descCSS}>학급의 직업 목록을 관리할 수 있습니다.</div>
 			<AnimatedRenderer compState={compState} initHeight="0">
 				<div css={createWrapperCSS({ compState })}>
-					<GovJobItem roleStatusList={dummyStatusList} certification={dummyCert} closeHandler={closeComp} />
+					<GovJobItem powerList={dummyStatusList} certification={dummyCert} closeHandler={closeComp} />
 				</div>
 			</AnimatedRenderer>
 
