@@ -48,6 +48,11 @@ export type getGovJobItemType = {
 	empowered: string[]
 }
 
+export type getGovJobAuthType = {
+	id: number
+	name: string
+}[]
+
 export type getStudentListType = {
 	id: number
 	name: string
@@ -219,6 +224,4 @@ export type getGovPowerType = {
 	name: string
 }
 
-
 export type empoweredType = string
-

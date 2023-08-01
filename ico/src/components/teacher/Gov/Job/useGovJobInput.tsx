@@ -170,9 +170,9 @@ function useGovJobInput({
 			dispatchValid({ type: "CHANGE_DETAIL", value: "empty" })
 		}
 
-		if (Number(inputState.salary) !== salary && inputState.salary !== "") {
+		if (Number(inputState.salary) !== Number(salary) && inputState.salary !== "") {
 			dispatchValid({ type: "CHANGE_SALARY", value: "changed" })
-		} else if (Number(inputState.salary) === salary) {
+		} else if (Number(inputState.salary) === Number(salary)) {
 			dispatchValid({ type: "CHANGE_SALARY", value: "notChanged" })
 		} else if (inputState.salary === "") {
 			dispatchValid({ type: "CHANGE_SALARY", value: "empty" })
