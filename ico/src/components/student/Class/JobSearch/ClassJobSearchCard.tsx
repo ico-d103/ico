@@ -18,7 +18,7 @@ type ClassJobSearchCardPropsType = {
 function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 	const modal = useModal()
 	const noti = useNotification()
-	const [isAlreadyApplied, setIsAlreadyApplied] = useState<boolean>(false)
+	const [isAlreadyApplied, setIsAlreadyApplied] = useState<string|null>(null)
 
 	const checkValidApplyHandler = (canApply: boolean) => {
 		if (!canApply) {
@@ -32,14 +32,17 @@ function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 
 		getCheckApplyFlagAPI({ jobId: job.id }).then((res) => {
 			if (res) {
-				setIsAlreadyApplied(true) // 신청한 직업 취소하기
+				setIsAlreadyApplied(res) // 신청한 직업 취소할 수 있는 id 저장
+
 				noti({
 					content: <NotiTemplate type={"alert"} content={`이미 신청하였습니다.`} />,
 					duration: 3000,
 				})
 			} else {
-				modal.open()
+				setIsAlreadyApplied(null)
 			}
+
+			modal.open()
 		})
 	}
 
@@ -65,7 +68,6 @@ function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 				titleSize={"var(--student-h2)"}
 				content={<ClassJobSearchModal job={job} closeComp={modal.close} isAlreadyApplied={isAlreadyApplied} />}
 				forChild={true} />
-				// <ClassJobSearchModal job={job} closeComp={modal.close} isAlreadyApplied={isAlreadyApplied} />
 			)}
 		</>
 	)
