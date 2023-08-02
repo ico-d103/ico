@@ -3,7 +3,7 @@ package com.ico.api.service.stock;
 import com.ico.api.dto.stock.StockCreateReqDto;
 import com.ico.api.dto.stock.StockFindAllStudentResDto;
 import com.ico.api.dto.stock.StockListColDto;
-import org.springframework.http.ResponseEntity;
+import com.ico.api.dto.stock.StockUpdateReqDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -34,6 +34,14 @@ public interface StockService {
      */
     StockFindAllStudentResDto findAllStockStudent(HttpServletRequest request);
 
+    /**
+     * 투자 종목 수정
+     *
+     * @param request
+     * @param stockId
+     * @param stockUpdateReqDto
+     */
+    void updateStock(HttpServletRequest request, Long stockId, StockUpdateReqDto stockUpdateReqDto);
 
     /**
      * 투자 종목 삭제
