@@ -6,29 +6,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * 투자 종목 상세보기 조회 시 해당 종목에 대한 학생 보유 현황
+ *
  * @author 변윤경
  */
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class StockMyResDto {
-    private long stockId;
-
-    private String title;
-
+public class StockIssueMyResDto {
     private double price;
 
     private int amount;
 
-    private double rate;
-
     @Builder
-    public StockMyResDto(long stockId, String title, double price, int amount, double rate) {
-        this.stockId = stockId;
-        this.title = title;
+    public StockIssueMyResDto(double price, int amount) {
         this.price = price;
         this.amount = amount;
-        this.rate = rate;
     }
 }

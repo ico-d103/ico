@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Objects;
 
 /**
  * 직업 신청 내역 관련 Service 구현 로직
@@ -123,9 +125,48 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public boolean checkRequestJob(Long jobId, HttpServletRequest request) {
+    public String checkRequestJob(Long jobId, HttpServletRequest request) {
         Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
-        return resumeMongoRepository.findByStudentIdAndJobId(studentId, jobId).isPresent();
+        Optional<Resume> resume = resumeMongoRepository.findByStudentIdAndJobId(studentId, jobId);
+        return resume.map(Resume::getId).orElse(null);
+    }
+
+    @Override
+    public void cancelResume(Long jobId, String resumeId, HttpServletRequest request) {
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
+        Resume resume = resumeMongoRepository.findById(resumeId)
+                .orElseThrow(() -> {
+                    log.info("[cancelResume] 직업 신청 내역이 존재 하지 않는 경우");
+                    return new CustomException(ErrorCode.REQUEST_NOT_FOUND);
+                });
+
+        validateCancelResume(nationId, studentId, jobId, resume);
+
+        resumeMongoRepository.delete(resume);
+    }
+
+    /**
+     * 직업 신청 시 신청 내역에 대한 유효성 체크
+     *
+     * @param nationId
+     * @param studentId
+     * @param jobId
+     * @param resume
+     */
+    private void validateCancelResume(Long nationId, Long studentId, Long jobId, Resume resume) {
+        if (!Objects.equals(resume.getStudentId(), studentId)) {
+            log.info("[cancelResume] 신청한 학생id가 다른 경우");
+            throw new CustomException(ErrorCode.NOT_EQUAL_STUDENT);
+        } else if (!Objects.equals(resume.getJobId(), jobId)) {
+            log.info("[cancelResume] 직업id가 다른 경우");
+            throw new CustomException(ErrorCode.NOT_EQUAL_JOB);
+        } else if (!Objects.equals(resume.getNationId(), nationId)) {
+            log.info("[cancelResume] 나라id가 다른 경우");
+            throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
+        }
     }
 
     /**
@@ -139,14 +180,14 @@ public class ResumeServiceImpl implements ResumeService {
         Resume resume = resumeMongoRepository.findById(resumeId)
                 .orElseThrow(() -> {
                     log.info("[assignResume] 직업 신청 내역이 존재 하지 않는 경우");
-                    throw new CustomException(ErrorCode.REQUEST_NOT_FOUND);
+                    return new CustomException(ErrorCode.REQUEST_NOT_FOUND);
                 });
         log.info("[assignResume] 직업 신청 내역 존재");
 
         Nation nation = nationRepository.findById(resume.getNationId()).orElseThrow(() -> {
             log.info("[assignResume] 신청한 나라가 없는 경우");
             deleteResume(resume);
-            throw new CustomException(ErrorCode.NATION_NOT_FOUND);
+            return new CustomException(ErrorCode.NATION_NOT_FOUND);
         });
 
         if (!nation.getId().equals(nationId)) {
@@ -168,7 +209,7 @@ public class ResumeServiceImpl implements ResumeService {
                 .orElseThrow(() -> {
                     log.info("[assignResume] 신청한 학생이 존재하지 않는 경우");
                     deleteResume(resume);
-                    throw new CustomException(ErrorCode.USER_NOT_FOUND);
+                    return new CustomException(ErrorCode.USER_NOT_FOUND);
                 });
     }
 
@@ -183,7 +224,7 @@ public class ResumeServiceImpl implements ResumeService {
                 .orElseThrow(() -> {
                     log.info("[assignResume] 신청한 직업이 존재하지 않는 경우");
                     deleteResume(resume);
-                    throw new CustomException(ErrorCode.JOB_NOT_FOUND);
+                    return new CustomException(ErrorCode.JOB_NOT_FOUND);
                 });
     }
 

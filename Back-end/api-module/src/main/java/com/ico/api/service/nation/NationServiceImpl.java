@@ -94,56 +94,44 @@ public class NationServiceImpl implements NationService {
     @Transactional
     public String createNation(NationReqDto reqDto, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
-        Role role = jwtTokenProvider.getRole(token);
 
-        // 교사만 반 생성
-        if (role == Role.TEACHER) {
-            String title = reqDto.getTitle();
-            // 나라 이름 중복
-            if (nationRepository.findByTitle(title).isEmpty()) {
-                Long teacherId = jwtTokenProvider.getId(token);
-                Teacher teacher = teacherRepository.findById(teacherId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-                // 교사 인증 여부
-                if (teacher.getStatus().equals(Status.APPROVED)){
-                    // 교사가 만든 나라의 여부
-                    if (teacher.getNation() == null) {
-                        Nation nation = Nation.builder()
-                                .school(reqDto.getSchool())
-                                .grade((byte) reqDto.getGrade())
-                                .room((byte) reqDto.getRoom())
-                                .title(title)
-                                .code(randomCode())
-                                .currency(reqDto.getCurrency())
-                                .treasury(0)
-                                .credit_up((byte) 50)
-                                .credit_down((byte) 20)
-                                .build();
-                        nationRepository.save(nation);
-
-                        // 반을 생성했을 때 교사 테이블의 Nation 업데이트
-                        teacher.setNation(nation);
-                        teacherRepository.save(teacher);
-
-                        // 나라의 기본 데이터 생성
-                        createDefaultData(nation);
-                        // 반을 생성했을 때 교사의 토큰 업데이트 / 학생은 직접 확인 버튼을 눌러서 도메인/api/token 으로 직접 요청해야한다.
-                        return jwtTokenProvider.updateTokenCookie(request);
-                    }
-                    else {
-                        throw new CustomException(ErrorCode.EXIST_TEACHER_NATION);
-                    }
-                }
-                else {
-                    throw new CustomException(ErrorCode.NOT_FOUND_TEACHER_CERTIFICATION);
-                }
-            }
-            else {
-                throw new CustomException(ErrorCode.DUPLICATED_NATION_NAME);
-            }
-        } else {
-            throw new CustomException(ErrorCode.WRONG_ROLE);
+        String title = reqDto.getTitle();
+        // 나라 이름 중복
+        if (nationRepository.findByTitle(title).isPresent()) {
+            throw new CustomException(ErrorCode.DUPLICATED_NATION_NAME);
         }
+        Long teacherId = jwtTokenProvider.getId(token);
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        // 교사 인증 여부
+        if (teacher.getStatus().equals(Status.APPROVED)) {
+            throw new CustomException(ErrorCode.NOT_FOUND_TEACHER_CERTIFICATION);
+        }
+        // 교사가 만든 나라의 여부
+        if (teacher.getNation() != null) {
+            throw new CustomException(ErrorCode.EXIST_TEACHER_NATION);
+        }
+        Nation nation = Nation.builder()
+                .school(reqDto.getSchool())
+                .grade((byte) reqDto.getGrade())
+                .room((byte) reqDto.getRoom())
+                .title(title)
+                .code(randomCode())
+                .currency(reqDto.getCurrency())
+                .treasury(0)
+                .credit_up((byte) 50)
+                .credit_down((byte) 20)
+                .build();
+        nationRepository.save(nation);
+
+        // 반을 생성했을 때 교사 테이블의 Nation 업데이트
+        teacher.setNation(nation);
+        teacherRepository.save(teacher);
+
+        // 나라의 기본 데이터 생성
+        createDefaultData(nation);
+        // 반을 생성했을 때 교사의 토큰 업데이트 / 학생은 직접 확인 버튼을 눌러서 도메인/api/token 으로 직접 요청해야한다.
+        return jwtTokenProvider.updateTokenCookie(request);
     }
 
     /**
