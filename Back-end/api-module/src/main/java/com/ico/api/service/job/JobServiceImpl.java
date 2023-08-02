@@ -153,6 +153,7 @@ public class JobServiceImpl implements JobService{
         return dtoList;
     }
 
+    @Transactional
     @Override
     public void addJob(JobAddReqDto dto, HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -171,7 +172,9 @@ public class JobServiceImpl implements JobService{
                 .build();
         addJobPower(studentJob, dto.getPowers());
         studentJobRepository.save(studentJob);
+        log.info("[addJob] 직업 생산 완료.");
         addJobLicense(studentJob, nationId, dto.getLicenseIds(), dto.getRatings());
+        log.info("[addJobLicense] 직업 자격증과 자격증 등급 설정 완료.");
     }
 
     @Override
@@ -330,8 +333,10 @@ public class JobServiceImpl implements JobService{
             Long licenseId = licenseIds.get(i);
             Integer rating = ratings.get(i);
 
-            NationLicense nationLicense = nationLicenseRepository.findByNationIdAndId(licenseId, nationId)
+            NationLicense nationLicense = nationLicenseRepository.findById(licenseId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
+
+
 
             if (rating > 7 || rating < 0) {
                 throw new CustomException(ErrorCode.WRONG_RATING);
