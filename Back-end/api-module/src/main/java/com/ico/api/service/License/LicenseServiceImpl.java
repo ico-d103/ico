@@ -182,13 +182,13 @@ public class LicenseServiceImpl implements LicenseService {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         for (Map.Entry<Long, Integer> m : map.entrySet()) {
-            Long key = m.getKey();  // nationLicenseId
-            Integer val = m.getValue();  // true(등급 올리기) or false(등급 내리기)
+            Long studentLicenseId = m.getKey();
+            Integer rating = m.getValue();
             // key & value 유효성 검사
-            if (key == null) {
+            if (studentLicenseId == null) {
                 throw new CustomException(ErrorCode.NOT_FOUND_LICENSE_ID);
             }
-            if (val == null) {
+            if (rating == null) {
                 throw new CustomException(ErrorCode.NOT_FOUND_RATING_VALUE);
             }
 
@@ -197,14 +197,10 @@ public class LicenseServiceImpl implements LicenseService {
 //                throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
 //            }
 
-            StudentLicense license = studentLicenseRepository.findById(key)
+            StudentLicense license = studentLicenseRepository.findByIdAndNationId(studentLicenseId, nationId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
-            // 나라 일치 여부 확인
-            if (!nationId.equals(license.getNation().getId())) {
-                throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
-            }
 
-            license.setRating(val.byteValue());
+            license.setRating(rating.byteValue());
             studentLicenseRepository.save(license);
         }
     }
