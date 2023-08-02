@@ -46,6 +46,7 @@ function ClassStudentDetailHead({ student }: ClassStudentDetailHeadPropsType) {
 				noti({
 					content: <NotiTemplate type={"ok"} content={"성공적으로 수정되었습니다."} />,
 					duration: 3000,
+					id: "credit"
 				})
 
 				queryClient.invalidateQueries(["studentList", "entered"])
