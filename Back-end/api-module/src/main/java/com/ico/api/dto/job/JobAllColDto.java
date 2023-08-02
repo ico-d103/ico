@@ -26,6 +26,8 @@ public class JobAllColDto {
 
     private String color;
 
+    private String detail;
+
     private int creditRating;
 
     private int total;
@@ -39,11 +41,12 @@ public class JobAllColDto {
     private List<String> empowered;
 
     @Builder
-    public JobAllColDto(Long id, String title, String image, String color, int creditRating, int total, String salary, int count, List<String> studentNames, List<String> empowered) {
+    public JobAllColDto(Long id, String title, String image, String color, String detail, int creditRating, int total, String salary, int count, List<String> studentNames, List<String> empowered) {
         this.id = id;
         this.title = title;
         this.image = image;
         this.color = color;
+        this.detail = detail;
         this.creditRating = creditRating;
         this.total = total;
         this.salary = salary;
@@ -66,6 +69,7 @@ public class JobAllColDto {
                 .title(studentJob.getTitle())
                 .image(image)
                 .color(studentJob.getColor())
+                .detail(studentJob.getDetail())
                 .creditRating(studentJob.getCreditRating())
                 .total(studentJob.getTotal())
                 .salary(salary)
