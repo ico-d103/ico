@@ -40,7 +40,8 @@ public class JobController {
 
     /**
      * 입력값으로 직업 수정
-     *  자격증, 권한 같이 수정할 수 있게
+     * 자격증, 권한 같이 수정할 수 있게
+     * wage > salary
      * @param jobId
      * @param dto 직업 이름, 직업 설명, 총 인원, 임금, 색깔
      * @return OK
@@ -83,7 +84,8 @@ public class JobController {
 
     /**
      * 직업 추가
-     *  자격증, 권한 같이 추가하기
+     * 자격증, 권한 같이 추가하기
+     * wage > salary
      * @param dto
      * @param request
      * @return

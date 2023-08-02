@@ -30,7 +30,7 @@ public class JobAddReqDto {
     private Integer total;
 
     @NotNull(message = "413")
-    private Integer wage;
+    private Integer salary;
 
     @NotNull(message = "414")
     private String color;
@@ -55,7 +55,7 @@ public class JobAddReqDto {
         this.title = title;
         this.detail = detail;
         this.total = total;
-        this.wage = wage;
+        this.salary = wage;
         this.color = color;
         this.creditRating = creditRating;
         this.image = image;

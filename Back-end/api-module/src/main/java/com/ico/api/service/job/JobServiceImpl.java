@@ -165,7 +165,7 @@ public class JobServiceImpl implements JobService{
                 .title(dto.getTitle())
                 .detail(dto.getDetail())
                 .image(s3UploadService.getFileName(dto.getImage()))
-                .wage(dto.getWage())
+                .wage(dto.getSalary())
                 .creditRating(dto.getCreditRating().byteValue())
                 .total(dto.getTotal().byteValue())
                 .color(dto.getColor())
