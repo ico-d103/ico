@@ -173,7 +173,7 @@ public class LicenseServiceImpl implements LicenseService {
     }
 
     @Override
-    public void updateStudentLicense(HttpServletRequest request, Map<Long, Boolean> map) {
+    public void updateStudentLicense(HttpServletRequest request, Map<Long, Integer> map) {
         // map 유효성 검사
         if (map.isEmpty()) {
             throw new CustomException(ErrorCode.NOT_FOUND_PARAMETER);
@@ -181,31 +181,32 @@ public class LicenseServiceImpl implements LicenseService {
 
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
-        for (Map.Entry<Long, Boolean> m : map.entrySet()) {
-            Long key = m.getKey();  // nationLicenseId
-            Boolean upDown = m.getValue();  // true(등급 올리기) or false(등급 내리기)
+        for (Map.Entry<Long, Integer> m : map.entrySet()) {
+            Long studentLicenseId = m.getKey();
+            Integer rating = m.getValue();
             // key & value 유효성 검사
-            if (key == null || upDown == null) {
-                throw new CustomException(ErrorCode.NOT_FOUND_PARAMETER);
+            if (studentLicenseId == null) {
+                throw new CustomException(ErrorCode.NOT_FOUND_LICENSE_ID);
             }
-            StudentLicense license = studentLicenseRepository.findById(key)
-                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
-            // 나라 일치 여부 확인
-            if (!nationId.equals(license.getNation().getId())) {
-                throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
+            if (rating == null) {
+                throw new CustomException(ErrorCode.NOT_FOUND_RATING_VALUE);
             }
 
-            ratingUpDown(license, license.getRating(), upDown);
+//          // TODO : job 브랜치와 합친 후에 ErrorCode 806번 부여하기
+//            if (val < 0 || val > 7) {
+//                throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
+//            }
+
+            StudentLicense license = studentLicenseRepository.findByIdAndNationId(studentLicenseId, nationId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
+
+            license.setRating(rating.byteValue());
+            studentLicenseRepository.save(license);
         }
     }
 
     @Override
     public void updateStudentDetailLicense(HttpServletRequest request, Long studentId, Map<Long, Integer> map) {
-        // map 유효성 검사
-        if (map.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_PARAMETER);
-        }
-
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         Student student = studentRepository.findById(studentId)
@@ -225,6 +226,7 @@ public class LicenseServiceImpl implements LicenseService {
 
             license.setRating(rating.byteValue());
             studentLicenseRepository.save(license);
+            log.info("[updateStudentDetailLicense] 학생 자격증 업데이트 완료");
         }
     }
 

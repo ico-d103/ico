@@ -205,6 +205,10 @@ public enum ErrorCode{
 
     NOT_DOWN_LICENSE(HttpStatus.BAD_REQUEST, "804", "이 자격증 점수를 더 내릴 수 없습니다."),
 
+    NOT_FOUND_LICENSE_ID(HttpStatus.BAD_REQUEST, "807", "자격증 ID 값이 없습니다."),
+
+    NOT_FOUND_RATING_VALUE(HttpStatus.BAD_REQUEST, "808", "Rating 값이 없습니다."),
+
     NOT_FOUND_POWER(HttpStatus.NOT_FOUND, "900", "존재하지 않는 권한입니다."),
 
     DUPLICATED_POWER(HttpStatus.BAD_REQUEST, "901", "중복된 권한입니다."),
