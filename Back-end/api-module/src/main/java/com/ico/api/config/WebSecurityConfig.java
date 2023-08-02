@@ -1,5 +1,6 @@
 package com.ico.api.config;
 
+import com.ico.api.user.JwtTokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -25,6 +28,8 @@ import java.util.Collections;
 @Configuration
 @RequiredArgsConstructor
 public class WebSecurityConfig{
+
+    private final JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
 
     /**
      * 시큐리티 기본 설정
@@ -44,9 +49,18 @@ public class WebSecurityConfig{
                 .and()
                 .authorizeRequests()
                 .antMatchers("api/**/teacher/**").hasRole("TEACHER")
+                .antMatchers("api/**/teacher").hasRole("TEACHER")
                 .antMatchers("api/**/student/**").hasRole("STUDENT")
+                .antMatchers("api/**/student").hasRole("STUDENT")
                 .antMatchers("api/admin/**").hasRole("ADMIN")
+                .antMatchers("api/admin").hasRole("ADMIN")
                 .anyRequest().permitAll();
+
+        // Session 기반의 인증기반을 사용하지 않고 추후 JWT를 이용하여서 인증 예정
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        // Spring Security JWT Filter Load
+        http.addFilterBefore(jwtTokenAuthenticationFilter, BasicAuthenticationFilter.class);
 
         return http.build();
     }

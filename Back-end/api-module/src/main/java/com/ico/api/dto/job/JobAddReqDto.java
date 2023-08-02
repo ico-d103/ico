@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * 직업 추가 req dto
@@ -39,8 +41,17 @@ public class JobAddReqDto {
     @NotBlank(message = "425")
     private String image;
 
+    @NotEmpty(message = "111")
+    private List<Long> powers;
+
+    @NotEmpty(message = "42")
+    private List<Long> licenseIds;
+
+    @NotEmpty(message = "43")
+    private List<Integer> ratings;
+
     @Builder
-    public JobAddReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating, String image) {
+    public JobAddReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating, String image, List<Long> powers, List<Long> licenseIds, List<Integer> ratings) {
         this.title = title;
         this.detail = detail;
         this.total = total;
@@ -48,5 +59,8 @@ public class JobAddReqDto {
         this.color = color;
         this.creditRating = creditRating;
         this.image = image;
+        this.powers = powers;
+        this.licenseIds = licenseIds;
+        this.ratings = ratings;
     }
 }

@@ -14,18 +14,14 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor
 public class IssueUploadReqDto {
-    @NotNull(message = "711")
-    private Integer amount;
-
-    @NotBlank(message = "713")
+@NotBlank(message = "713")
     private String content;
 
     @NotNull(message =  "714")
     private Double price;
 
     @Builder
-    public IssueUploadReqDto(Integer amount, String content, Double price) {
-        this.amount = amount;
+    public IssueUploadReqDto(String content, Double price) {
         this.content = content;
         this.price = price;
     }

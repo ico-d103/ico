@@ -169,7 +169,9 @@ public class JobServiceImpl implements JobService{
                 .total(dto.getTotal().byteValue())
                 .color(dto.getColor())
                 .build();
+        addJobPower(studentJob, dto.getPowers());
         studentJobRepository.save(studentJob);
+        addJobLicense(studentJob, nationId, dto.getLicenseIds(), dto.getRatings());
     }
 
     @Override
@@ -300,12 +302,8 @@ public class JobServiceImpl implements JobService{
             JobLicense jobLicense = jobLicenseRepository.findById(jobLicenseId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_JOB_LICENSE));
 
-            NationLicense nationLicense = nationLicenseRepository.findById(licenseId)
+            NationLicense nationLicense = nationLicenseRepository.findByNationIdAndId(nationId, licenseId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
-            // 나라 일치 여부
-            if (!nationLicense.getNation().getId().equals(nationId)) {
-                throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
-            }
 
             // rating 유효성 검사
             if (rating > 7 || rating < 0) {
@@ -318,5 +316,55 @@ public class JobServiceImpl implements JobService{
             jobLicenseRepository.save(jobLicense);
             log.info("[updateLicense] JobLicense 수정 완료");
         }
+    }
+
+    /**
+     * 직업 생성 시 자격증 등급 설정
+     * @param job
+     * @param nationId
+     * @param licenseIds
+     * @param ratings
+     */
+    private void addJobLicense(StudentJob job, Long nationId, List<Long> licenseIds, List<Integer> ratings) {
+        for (int i = 0; i < licenseIds.size(); i++) {
+            Long licenseId = licenseIds.get(i);
+            Integer rating = ratings.get(i);
+
+            NationLicense nationLicense = nationLicenseRepository.findByNationIdAndId(licenseId, nationId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
+
+            if (rating > 7 || rating < 0) {
+                throw new CustomException(ErrorCode.WRONG_RATING);
+            }
+
+            JobLicense jobLicense = JobLicense.builder()
+                    .job(job)
+                    .license(nationLicense)
+                    .rating(rating.byteValue())
+                    .build();
+            jobLicenseRepository.save(jobLicense);
+        }
+    }
+
+    /**
+     * 직업 생성 시 권한 설정
+     * @param studentJob
+     * @param powerIds
+     */
+    private void addJobPower(StudentJob studentJob, List<Long> powerIds) {
+        // powerIds Set
+        Set<Long> setPowerIds = new TreeSet<>(powerIds);
+        List<Power> powers = powerRepository.findAllByIdIn(new ArrayList<>(setPowerIds));
+        if (powers.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_POWER);
+        }
+
+        // empowered 초기화
+        StringBuilder jobEmpowered = new StringBuilder();
+        for (Power power:powers) {
+            // job empowered 컬럼 채우기
+            jobEmpowered.append(power.getId()).append(",");
+        }
+        studentJob.setEmpowered(jobEmpowered.toString());
     }
 }

@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,9 +32,9 @@ public class InvestController {
      * @param dto 현재 지수, 매수 금액
      * @return Httpstatus
      */
-    @PostMapping("/student")
-    public ResponseEntity<HttpStatus> buyStock(HttpServletRequest request, @Valid @RequestBody InvestReqDto dto) {
-        investService.buyStock(request, dto.getPrice(), dto.getAmount());
+    @PutMapping("/student/{stockId}")
+    public ResponseEntity<HttpStatus> buyStock(HttpServletRequest request, @Valid @RequestBody InvestReqDto dto, @PathVariable Long stockId) {
+        investService.buyStock(request, dto.getPrice(), dto.getAmount(), stockId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -42,9 +43,9 @@ public class InvestController {
      *
      * @return Httpstatus
      */
-    @DeleteMapping("/student")
-    public ResponseEntity<HttpStatus> sellStock(HttpServletRequest request) {
-        investService.sellStock(request);
+    @DeleteMapping("/student/{stockId}")
+    public ResponseEntity<HttpStatus> sellStock(HttpServletRequest request, @PathVariable Long stockId) {
+        investService.sellStock(request, stockId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
