@@ -64,15 +64,6 @@ public class JobLicenseServiceImpl implements JobLicenseService{
     }
 
     @Override
-    public JobLicenseResDto getDetailJobLicense(HttpServletRequest request, Long jobLicenseId) {
-        return null;
-    }
-
-    @Override
-    public void updateJobLicense(HttpServletRequest request, Long JobLicenseId, JobLicenseReqDto dto) {
-    }
-
-    @Override
     public void deleteJobLicense(HttpServletRequest request, JobLicenseDelReqDto dto) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         List<JobLicense> jobLicenses = jobLicenseRepository.findAllById(dto.getJobLicenseIds());

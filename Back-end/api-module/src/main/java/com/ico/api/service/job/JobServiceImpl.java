@@ -4,6 +4,7 @@ import com.ico.api.dto.job.JobAddReqDto;
 import com.ico.api.dto.job.JobAllColDto;
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
+import com.ico.api.dto.job.JobLicenseResDto;
 import com.ico.api.dto.job.JobResDto;
 import com.ico.api.dto.job.JobResetReqDto;
 import com.ico.api.service.S3UploadService;
@@ -107,8 +108,19 @@ public class JobServiceImpl implements JobService{
             if (studentJob.getTotal() > studentJob.getCount()) {
                 restJobCount++;
             }
+            // 직업에 부여된 자격증 보여주기
+            List<JobLicenseResDto> jobLicenseResDto = new ArrayList<>();
+            List<JobLicense> jobLicenses = jobLicenseRepository.findAllByJobId(studentJob.getId());
+            if (!jobLicenses.isEmpty()) {
+                for (JobLicense jobLicense : jobLicenses) {
+                    NationLicense nationLicense = nationLicenseRepository.findById(jobLicense.getLicense().getId())
+                                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
+                    jobLicenseResDto.add(new JobLicenseResDto().of(jobLicense, nationLicense.getSubject()));
+                }
+            }
+
             String salary = Formatter.number.format(studentJob.getWage() * 30L);
-            colJobList.add(new JobAllColDto().of(studentJob, salary, s3UploadService.getFileURL(studentJob.getImage())));
+            colJobList.add(new JobAllColDto().of(studentJob, salary, s3UploadService.getFileURL(studentJob.getImage()), jobLicenseResDto));
         }
 
         return JobAllResDto.builder()

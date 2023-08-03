@@ -40,7 +40,7 @@ public class JobController {
 
     /**
      * 입력값으로 직업 수정
-     * 자격증, 권한 같이 수정할 수 있게
+     * 자격증, 권한 같이 수정할 수 있게 - ok
      * wage > salary
      * @param jobId
      * @param dto 직업 이름, 직업 설명, 총 인원, 임금, 색깔
@@ -64,7 +64,7 @@ public class JobController {
 
     /**
      * 교사가 전체 직업 조회
-     *  자격증, 권한 같이 보여주기
+     * 자격증, 권한 같이 보여주기
      * @return
      */
     @GetMapping("/teacher/all")

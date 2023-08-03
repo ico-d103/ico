@@ -19,22 +19,6 @@ public interface JobLicenseService {
      * @param dto
      */
     void createJobLicense(HttpServletRequest request, JobLicenseReqDto dto);
-    
-    /**
-     * 하나의 직업에 대한 자격증과 자격증 등급 
-     * @param request
-     * @param jobLicenseId
-     * @return
-     */
-    JobLicenseResDto getDetailJobLicense(HttpServletRequest request, Long jobLicenseId);
-
-    /**
-     * 하나의 직업에 대한 자격증 등급 수정
-     * @param request
-     * @param JobLicenseId
-     * @param dto
-     */
-    void updateJobLicense(HttpServletRequest request, Long JobLicenseId, JobLicenseReqDto dto);
 
     /**
      * 자격증 등급 삭제
