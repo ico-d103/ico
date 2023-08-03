@@ -40,26 +40,18 @@ public class JobLicenseServiceImpl implements JobLicenseService{
     public void createJobLicense(HttpServletRequest request, JobLicenseReqDto dto) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
-        StudentJob studentJob = studentJobRepository.findById(dto.getJobId())
+        StudentJob studentJob = studentJobRepository.findByIdAndNationId(dto.getJobId(), nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
-        // 나라 일치 여부
-        if (!studentJob.getNation().getId().equals(nationId)) {
-            throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
-        }
 
-        NationLicense nationLicense = nationLicenseRepository.findById(dto.getLicenseId())
+        NationLicense nationLicense = nationLicenseRepository.findByNationIdAndId(nationId, dto.getLicenseId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
-        // 나라 일치 여부
-        if (!nationLicense.getNation().getId().equals(nationId)) {
-            throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
-        }
 
         JobLicense jobLicense = JobLicense.builder()
                 .job(studentJob)
                 .license(nationLicense)
                 .rating(dto.getRating().byteValue())
                 .build();
-        log.info("[createJobLicense] jobLicense가 만들어졌습니다.");
+        log.info("[createJobLicense] 직업 자격증이 만들어졌습니다.");
         jobLicenseRepository.save(jobLicense);
     }
 
