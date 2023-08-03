@@ -1,5 +1,6 @@
 package com.ico.api.service.job;
 
+import com.ico.api.dto.job.JobLicenseDelReqDto;
 import com.ico.api.dto.job.JobLicenseReqDto;
 import com.ico.api.dto.job.JobLicenseResDto;
 
@@ -38,7 +39,7 @@ public interface JobLicenseService {
     /**
      * 자격증 등급 삭제
      * @param request
-     * @param JobLicenseId
+     * @param dto
      */
-    void deleteJobLicense(HttpServletRequest request, Long JobLicenseId);
+    void deleteJobLicense(HttpServletRequest request, JobLicenseDelReqDto dto);
 }

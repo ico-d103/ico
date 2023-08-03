@@ -1,5 +1,6 @@
 package com.ico.api.service.job;
 
+import com.ico.api.dto.job.JobLicenseDelReqDto;
 import com.ico.api.dto.job.JobLicenseReqDto;
 import com.ico.api.dto.job.JobLicenseResDto;
 import com.ico.api.user.JwtTokenProvider;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 직업에 대한 자격증 등급
@@ -68,11 +70,21 @@ public class JobLicenseServiceImpl implements JobLicenseService{
 
     @Override
     public void updateJobLicense(HttpServletRequest request, Long JobLicenseId, JobLicenseReqDto dto) {
-
     }
 
     @Override
-    public void deleteJobLicense(HttpServletRequest request, Long JobLicenseId) {
-
+    public void deleteJobLicense(HttpServletRequest request, JobLicenseDelReqDto dto) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        List<JobLicense> jobLicenses = jobLicenseRepository.findAllById(dto.getJobLicenseIds());
+        if (jobLicenses.isEmpty()) {
+            log.info("[deleteJobLicense] 직업에 부여된 자격증이 없습니다.");
+            throw new CustomException(ErrorCode.NOT_FOUND_JOB_LICENSE);
+        }
+        for (JobLicense jobLicense : jobLicenses) {
+            if (!jobLicense.getId().equals(nationId)) {
+                throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
+            }
+        }
+        jobLicenseRepository.deleteAll(jobLicenses);
     }
 }
