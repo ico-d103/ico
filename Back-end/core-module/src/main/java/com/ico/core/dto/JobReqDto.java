@@ -10,6 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 직업 수정 시 입력값 받을 Dto
@@ -49,13 +50,10 @@ public class JobReqDto {
     private List<Long> jobLicenseIds;
 
     @NotEmpty(message = "42")
-    private List<Long> licenseIds;
-
-    @NotEmpty(message = "43")
-    private List<Integer> ratings;
+    private Map<Long, Integer> licenses;
 
     @Builder
-    public JobReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating, String image, List<Long> powers, List<Long> jobLicenseId, List<Long> licenseId, List<Integer> rating) {
+    public JobReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating, String image, List<Long> powers, List<Long> jobLicenseId, Map<Long, Integer> licenses) {
         this.title = title;
         this.detail = detail;
         this.total = total;
@@ -65,7 +63,6 @@ public class JobReqDto {
         this.image = image;
         this.powers = powers;
         this.jobLicenseIds = jobLicenseId;
-        this.licenseIds = licenseId;
-        this.ratings = rating;
+        this.licenses = licenses;
     }
 }

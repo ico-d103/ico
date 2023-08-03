@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -294,8 +295,16 @@ public class JobServiceImpl implements JobService{
     @Override
     public void updateLicense(Long nationId, JobReqDto dto) {
         List<Long> jobLicenseIds = dto.getJobLicenseIds();
-        List<Long> licenseIds = dto.getLicenseIds();
-        List<Integer> ratings = dto.getRatings();
+
+        // 프론트에서 객체 형태로 보내고 싶다고 해서 변경
+        List<Long> licenseIds = new ArrayList<>();
+        List<Integer> ratings = new ArrayList<>();
+        Map<Long, Integer> licenses = dto.getLicenses();
+
+        for (Map.Entry<Long, Integer> license : licenses.entrySet()) {
+            licenseIds.add(license.getKey());
+            ratings.add(license.getValue());
+        }
 
         for (int i = 0; i < jobLicenseIds.size(); i++) {
             Long jobLicenseId = jobLicenseIds.get(i);
