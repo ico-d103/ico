@@ -174,7 +174,7 @@ public class JobServiceImpl implements JobService{
         addJobPower(studentJob, dto.getPowers());
         studentJobRepository.save(studentJob);
         log.info("[addJob] 직업 생산 완료.");
-        addJobLicense(studentJob, nationId, dto.getLicenseIds(), dto.getRatings());
+        addJobLicense(studentJob, nationId, dto);
         log.info("[addJobLicense] 직업 자격증과 자격증 등급 설정 완료.");
     }
 
@@ -291,9 +291,12 @@ public class JobServiceImpl implements JobService{
         }
     }
 
-    @Transactional
-    @Override
-    public void updateLicense(Long nationId, JobReqDto dto) {
+    /**
+     * 직업 수정 시 직업 자격증과 등급 수정
+     * @param nationId
+     * @param dto
+     */
+    private void updateLicense(Long nationId, JobReqDto dto) {
         List<Long> jobLicenseIds = dto.getJobLicenseIds();
 
         // 프론트에서 객체 형태로 보내고 싶다고 해서 변경
@@ -309,7 +312,18 @@ public class JobServiceImpl implements JobService{
         for (int i = 0; i < jobLicenseIds.size(); i++) {
             Long jobLicenseId = jobLicenseIds.get(i);
             Long licenseId = licenseIds.get(i);
-            byte rating = ratings.get(i).byteValue();
+            Integer rating = ratings.get(i);
+
+            if (licenseId == null) {
+                throw new CustomException(ErrorCode.NOT_ENTER_LICENSE_ID);
+            }
+            if (rating == null) {
+                throw new CustomException(ErrorCode.NOT_ENTER_RATING);
+            }
+            // rating 유효성 검사
+            if (rating > 7 || rating < 0) {
+                throw new CustomException(ErrorCode.WRONG_RATING);
+            }
 
             JobLicense jobLicense = jobLicenseRepository.findById(jobLicenseId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_JOB_LICENSE));
@@ -317,13 +331,8 @@ public class JobServiceImpl implements JobService{
             NationLicense nationLicense = nationLicenseRepository.findByNationIdAndId(nationId, licenseId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
 
-            // rating 유효성 검사
-            if (rating > 7 || rating < 0) {
-                throw new CustomException(ErrorCode.WRONG_RATING);
-            }
-
             jobLicense.setLicense(nationLicense);
-            jobLicense.setRating(rating);
+            jobLicense.setRating(rating.byteValue());
 
             jobLicenseRepository.save(jobLicense);
             log.info("[updateLicense] JobLicense 수정 완료");
@@ -334,22 +343,29 @@ public class JobServiceImpl implements JobService{
      * 직업 생성 시 자격증 등급 설정
      * @param job
      * @param nationId
-     * @param licenseIds
-     * @param ratings
+     * @param dto
      */
-    private void addJobLicense(StudentJob job, Long nationId, List<Long> licenseIds, List<Integer> ratings) {
-        for (int i = 0; i < licenseIds.size(); i++) {
-            Long licenseId = licenseIds.get(i);
-            Integer rating = ratings.get(i);
+    private void addJobLicense(StudentJob job, Long nationId, JobAddReqDto dto) {
+        // 프론트에서 객체 형태로 보내고 싶다고 해서 변경
+        Map<Long, Integer> licenses = dto.getLicenses();
 
-            NationLicense nationLicense = nationLicenseRepository.findById(licenseId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
+        for (Map.Entry<Long, Integer> license : licenses.entrySet()) {
+            Long licenseId = license.getKey();
+            Integer rating = license.getValue();
 
-
-
+            if (licenseId == null) {
+                throw new CustomException(ErrorCode.NOT_ENTER_LICENSE_ID);
+            }
+            if (rating == null) {
+                throw new CustomException(ErrorCode.NOT_ENTER_RATING);
+            }
+            // rating 유효성 검사
             if (rating > 7 || rating < 0) {
                 throw new CustomException(ErrorCode.WRONG_RATING);
             }
+
+            NationLicense nationLicense = nationLicenseRepository.findByNationIdAndId(nationId, licenseId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
 
             JobLicense jobLicense = JobLicense.builder()
                     .job(job)

@@ -77,12 +77,4 @@ public interface JobService {
      * @param request
      */
     void resetJob(Long studentId, HttpServletRequest request);
-
-    /**
-     * 직업 수정 시 직업 자격증과 등급 수정
-     * @param studentJob
-     * @param nationId
-     * @param dto
-     */
-    void updateLicense(Long nationId, JobReqDto dto);
 }

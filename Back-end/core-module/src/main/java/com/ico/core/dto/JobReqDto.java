@@ -49,7 +49,7 @@ public class JobReqDto {
     @NotEmpty(message = "41")
     private List<Long> jobLicenseIds;
 
-    @NotEmpty(message = "42")
+    @NotEmpty(message = "40")
     private Map<Long, Integer> licenses;
 
     @Builder

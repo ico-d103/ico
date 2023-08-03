@@ -9,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 직업 추가 req dto
@@ -44,14 +45,11 @@ public class JobAddReqDto {
     @NotEmpty(message = "111")
     private List<Long> powers;
 
-    @NotEmpty(message = "42")
-    private List<Long> licenseIds;
-
-    @NotEmpty(message = "43")
-    private List<Integer> ratings;
+    @NotEmpty(message = "40")
+    private Map<Long, Integer> licenses;
 
     @Builder
-    public JobAddReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating, String image, List<Long> powers, List<Long> licenseIds, List<Integer> ratings) {
+    public JobAddReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating, String image, List<Long> powers, Map<Long, Integer> licenses) {
         this.title = title;
         this.detail = detail;
         this.total = total;
@@ -60,7 +58,6 @@ public class JobAddReqDto {
         this.creditRating = creditRating;
         this.image = image;
         this.powers = powers;
-        this.licenseIds = licenseIds;
-        this.ratings = ratings;
+        this.licenses = licenses;
     }
 }
