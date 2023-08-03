@@ -103,8 +103,8 @@ public class JobController {
      * @return
      */
     @DeleteMapping("/teacher/{jobId}")
-    public ResponseEntity<HttpStatus> deleteJob(@PathVariable Long jobId) {
-        jobService.deleteJob(jobId);
+    public ResponseEntity<HttpStatus> deleteJob(@PathVariable Long jobId, HttpServletRequest request) {
+        jobService.deleteJob(jobId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

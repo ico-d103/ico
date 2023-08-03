@@ -178,16 +178,23 @@ public class JobServiceImpl implements JobService{
         log.info("[addJobLicense] 직업 자격증과 자격증 등급 설정 완료.");
     }
 
+    @Transactional
     @Override
-    public void deleteJob(Long jobId) {
-        StudentJob studentJob = studentJobRepository.findById(jobId)
+    public void deleteJob(Long jobId, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        StudentJob studentJob = studentJobRepository.findByIdAndNationId(jobId, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
 
         if (studentJob.getCount() > 0) {
             log.info("[deleteJob] 배정된 인원이 존재하여 삭제할 수 없습니다.");
             throw new CustomException(ErrorCode.ALREADY_ASSIGNED_JOB);
         }
-
+        // 직업에 자격증 조건이 있다면 JobLicense 부터 삭제
+        List<JobLicense> jobLicenses = jobLicenseRepository.findAllByJobId(jobId);
+        if (!jobLicenses.isEmpty()) {
+            jobLicenseRepository.deleteAll(jobLicenses);
+        }
+        
         studentJobRepository.delete(studentJob);
     }
 
