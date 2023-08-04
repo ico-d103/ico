@@ -111,12 +111,11 @@ public class JobServiceImpl implements JobService{
             // 직업에 부여된 자격증 보여주기
             List<JobLicenseResDto> jobLicenseResDto = new ArrayList<>();
             List<JobLicense> jobLicenses = jobLicenseRepository.findAllByJobId(studentJob.getId());
-            if (!jobLicenses.isEmpty()) {
-                for (JobLicense jobLicense : jobLicenses) {
-                    NationLicense nationLicense = nationLicenseRepository.findById(jobLicense.getLicense().getId())
-                                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
-                    jobLicenseResDto.add(new JobLicenseResDto().of(jobLicense, nationLicense.getSubject()));
-                }
+            // jobLicenses 가 있어야 한다는 조건문이 없어도 데이터가 없으면 for문 내부 로직 실행 X
+            for (JobLicense jobLicense : jobLicenses) {
+                NationLicense nationLicense = nationLicenseRepository.findById(jobLicense.getNationLicense().getId())
+                                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
+                jobLicenseResDto.add(new JobLicenseResDto().of(jobLicense, nationLicense.getSubject()));
             }
 
             String salary = Formatter.number.format(studentJob.getWage() * 30L);
@@ -341,6 +340,7 @@ public class JobServiceImpl implements JobService{
             }
             // rating 유효성 검사
             if (rating > 7 || rating < 0) {
+                log.info("[checkRating] 등급 유효성 검사 : {}", rating);
                 throw new CustomException(ErrorCode.WRONG_RATING);
             }
 
@@ -350,7 +350,7 @@ public class JobServiceImpl implements JobService{
             NationLicense nationLicense = nationLicenseRepository.findByNationIdAndId(nationId, licenseId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
 
-            jobLicense.setLicense(nationLicense);
+            jobLicense.setNationLicense(nationLicense);
             jobLicense.setRating(rating.byteValue());
 
             jobLicenseRepository.save(jobLicense);
@@ -388,7 +388,7 @@ public class JobServiceImpl implements JobService{
 
             JobLicense jobLicense = JobLicense.builder()
                     .job(job)
-                    .license(nationLicense)
+                    .nationLicense(nationLicense)
                     .rating(rating.byteValue())
                     .build();
             jobLicenseRepository.save(jobLicense);

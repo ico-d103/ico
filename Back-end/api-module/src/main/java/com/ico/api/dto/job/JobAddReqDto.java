@@ -49,11 +49,11 @@ public class JobAddReqDto {
     private Map<Long, Integer> licenses;
 
     @Builder
-    public JobAddReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating, String image, List<Long> powers, Map<Long, Integer> licenses) {
+    public JobAddReqDto(String title, String detail, Integer total, Integer salary, String color, Integer creditRating, String image, List<Long> powers, Map<Long, Integer> licenses) {
         this.title = title;
         this.detail = detail;
         this.total = total;
-        this.salary = wage;
+        this.salary = salary;
         this.color = color;
         this.creditRating = creditRating;
         this.image = image;

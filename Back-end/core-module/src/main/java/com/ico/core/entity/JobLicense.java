@@ -31,7 +31,7 @@ public class JobLicense {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private NationLicense license;
+    private NationLicense nationLicense;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private StudentJob job;
@@ -39,9 +39,9 @@ public class JobLicense {
     private byte rating;
 
     @Builder
-    public JobLicense(Long id, NationLicense license, StudentJob job, byte rating) {
+    public JobLicense(Long id, NationLicense nationLicense, StudentJob job, byte rating) {
         this.id = id;
-        this.license = license;
+        this.nationLicense = nationLicense;
         this.job = job;
         this.rating = rating;
     }

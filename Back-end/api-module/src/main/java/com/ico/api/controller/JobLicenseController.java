@@ -22,7 +22,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/jobLicense")
+@RequestMapping("api/job-license")
 public class JobLicenseController {
 
     private final JobLicenseService jobLicenseService;

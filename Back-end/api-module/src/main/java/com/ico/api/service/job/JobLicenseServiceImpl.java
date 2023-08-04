@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,7 +49,7 @@ public class JobLicenseServiceImpl implements JobLicenseService{
 
         JobLicense jobLicense = JobLicense.builder()
                 .job(studentJob)
-                .license(nationLicense)
+                .nationLicense(nationLicense)
                 .rating(dto.getRating().byteValue())
                 .build();
         log.info("[createJobLicense] 직업 자격증이 만들어졌습니다.");
@@ -57,16 +58,10 @@ public class JobLicenseServiceImpl implements JobLicenseService{
 
     @Override
     public void deleteJobLicense(HttpServletRequest request, JobLicenseDelReqDto dto) {
-        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         List<JobLicense> jobLicenses = jobLicenseRepository.findAllById(dto.getJobLicenseIds());
         if (jobLicenses.isEmpty()) {
             log.info("[deleteJobLicense] 직업에 부여된 자격증이 없습니다.");
             throw new CustomException(ErrorCode.NOT_FOUND_JOB_LICENSE);
-        }
-        for (JobLicense jobLicense : jobLicenses) {
-            if (!jobLicense.getId().equals(nationId)) {
-                throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
-            }
         }
         jobLicenseRepository.deleteAll(jobLicenses);
     }
