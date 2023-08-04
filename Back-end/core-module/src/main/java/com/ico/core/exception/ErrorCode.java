@@ -71,6 +71,8 @@ public enum ErrorCode{
 
     NOT_EQUAL_JOB(HttpStatus.BAD_REQUEST, "45", "직업id가 일치하지 않습니다."),
 
+    NOT_FOUND_STUDENT_IDS(HttpStatus.NOT_FOUND, "46", "학생의 id를 입력해주세요."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, "104", "비밀번호 입력 칸이 비었습니다."),

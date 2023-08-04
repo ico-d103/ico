@@ -300,7 +300,6 @@ public class NationServiceImpl implements NationService {
         }
     }
 
-    // TODO: 권한 부분은 자격증이 BE 에 합쳐진 후에 지우기
     @Override
     @Transactional
     public void deleteNation(HttpServletRequest request) {
@@ -328,7 +327,7 @@ public class NationServiceImpl implements NationService {
             student.setFrozen(false);
             student.setNumber((byte) 0);
             student.setSalary(0);
-            // TODO : 권한 초기화 여기!
+            student.setEmpowered("");
 
             studentRepository.save(student);
             // StudentLicense

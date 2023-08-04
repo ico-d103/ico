@@ -26,4 +26,5 @@ public interface StudentProductRepository extends JpaRepository<StudentProduct, 
     @Query("SELECT s FROM StudentProduct s WHERE s.count = s.sold")
     Page<StudentProduct> findAllByCountEqualsSold(Pageable pageable);
 
+    List<StudentProduct> findAllByStudentId(Long studentId);
 }
