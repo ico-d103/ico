@@ -30,6 +30,8 @@ public class Power {
     @Enumerated(EnumType.STRING)
     private PowerEnum name;
 
+    private String detail;
+
     @Builder
     public Power(PowerEnum name) {
         this.name = name;
