@@ -58,4 +58,6 @@ public interface ResumeService {
      * @param request
      */
     void cancelResume(Long jobId, String resumeId, HttpServletRequest request);
+
+    void test();
 }

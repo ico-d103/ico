@@ -2,12 +2,16 @@ package com.ico.api.service.resume;
 
 import com.ico.api.dto.resume.ResumeResDto;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.core.entity.Issue;
+import com.ico.core.entity.Stock;
 import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.Nation;
 import com.ico.core.document.Resume;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.IssueRepository;
+import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.ResumeMongoRepository;
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +46,10 @@ public class ResumeServiceImpl implements ResumeService {
     private final StudentRepository studentRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final IssueRepository issueRepository;
+
+    private final StockRepository stockRepository;
 
     @Override
     public void applyJob(Long jobId, HttpServletRequest request) {
@@ -167,6 +176,24 @@ public class ResumeServiceImpl implements ResumeService {
             log.info("[cancelResume] 나라id가 다른 경우");
             throw new CustomException(ErrorCode.NOT_EQUAL_NATION);
         }
+    }
+
+    @Transactional
+    @Override
+    public void test() {
+        resumeMongoRepository.save(new Resume("123", 1L, 1L, 1L));
+
+        Nation nation = nationRepository.findById(404L).get();
+        Stock stock = stockRepository.findById(912L).get();
+        Issue issue = Issue.builder()
+                .id(897L)
+                .amount(1.0)
+                .content("오류 예정")
+                .date(LocalDateTime.now())
+                .nation(nation)
+                .stock(stock)
+                .build();
+//        issueRepository.save(issue);
     }
 
     /**

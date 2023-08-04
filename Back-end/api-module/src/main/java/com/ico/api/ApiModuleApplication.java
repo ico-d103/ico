@@ -20,7 +20,7 @@ import java.util.TimeZone;
 @EnableMongoAuditing
 @ComponentScan({"com.ico.core", "com.ico.api"})
 @EntityScan("com.ico.core")
-@EnableJpaRepositories("com.ico.core")
+@EnableJpaRepositories(basePackages = "com.ico.core")
 @EnableMongoRepositories(basePackages = "com.ico.core.repository")
 @SpringBootApplication
 public class ApiModuleApplication {

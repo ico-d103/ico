@@ -102,4 +102,10 @@ public class ResumeController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @PostMapping("/test")
+    public ResponseEntity<HttpStatus> test() {
+        resumeService.test();
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
 }
