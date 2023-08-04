@@ -34,7 +34,7 @@ public class JobLicenseController {
     }
 
     @DeleteMapping("/teacher")
-    public ResponseEntity<HttpStatus> deleteJobLicense(HttpServletRequest request, @RequestBody JobLicenseDelReqDto dto) {
+    public ResponseEntity<HttpStatus> deleteJobLicense(HttpServletRequest request, @Valid @RequestBody JobLicenseDelReqDto dto) {
         jobLicenseService.deleteJobLicense(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
