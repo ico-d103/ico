@@ -1,4 +1,4 @@
-package com.ico.api.dto.salary;
+package com.ico.api.dto.payment;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SalaryPaymentReqDto {
+public class PaymentSalaryReqDto {
 
     @NotNull(message = "431")
     @NotEmpty(message = "431")

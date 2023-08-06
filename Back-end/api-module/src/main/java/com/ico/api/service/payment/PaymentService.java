@@ -1,6 +1,6 @@
-package com.ico.api.service.salary;
+package com.ico.api.service.payment;
 
-import com.ico.api.dto.salary.SalaryPaymentReqDto;
+import com.ico.api.dto.payment.PaymentSalaryReqDto;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author 서재건
  */
-public interface SalaryService {
+public interface PaymentService {
 
     /**
      * 선택한 학생들의 월급 일괄 지급
@@ -17,5 +17,5 @@ public interface SalaryService {
      * @param dto
      * @param request
      */
-    void paySalary(SalaryPaymentReqDto dto, HttpServletRequest request);
+    void paySalary(PaymentSalaryReqDto dto, HttpServletRequest request);
 }

@@ -1,6 +1,6 @@
-package com.ico.api.service.salary;
+package com.ico.api.service.payment;
 
-import com.ico.api.dto.salary.SalaryPaymentReqDto;
+import com.ico.api.dto.payment.PaymentSalaryReqDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.TaxType;
 import com.ico.core.entity.Student;
@@ -26,7 +26,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SalaryServiceImpl implements SalaryService{
+public class PaymentServiceImpl implements PaymentService {
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -38,7 +38,7 @@ public class SalaryServiceImpl implements SalaryService{
 
     @Transactional
     @Override
-    public void paySalary(SalaryPaymentReqDto dto, HttpServletRequest request) {
+    public void paySalary(PaymentSalaryReqDto dto, HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         List<Student> studentList = studentRepository.findAllByIdIn(dto.getStudentIds());

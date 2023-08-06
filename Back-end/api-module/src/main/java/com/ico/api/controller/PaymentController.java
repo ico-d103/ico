@@ -1,7 +1,7 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.salary.SalaryPaymentReqDto;
-import com.ico.api.service.salary.SalaryService;
+import com.ico.api.dto.payment.PaymentSalaryReqDto;
+import com.ico.api.service.payment.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,10 +23,10 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/salary")
-public class SalaryController {
+@RequestMapping("/api/payment")
+public class PaymentController {
 
-    private final SalaryService salaryService;
+    private final PaymentService salaryService;
 
     /**
      * 선택한 학생들의 월급 일괄 지급
@@ -35,8 +35,8 @@ public class SalaryController {
      * @param request
      * @return
      */
-    @PostMapping("/teacher/payment")
-    public ResponseEntity<HttpStatus> paySalary(@Valid @RequestBody SalaryPaymentReqDto dto, HttpServletRequest request) {
+    @PostMapping("/teacher/salary")
+    public ResponseEntity<HttpStatus> paySalary(@Valid @RequestBody PaymentSalaryReqDto dto, HttpServletRequest request) {
         salaryService.paySalary(dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
