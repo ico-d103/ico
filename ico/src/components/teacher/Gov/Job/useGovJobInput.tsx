@@ -1,10 +1,12 @@
 import React, {useReducer, useEffect, useState} from 'react'
-import { GovRuleClassDetailProps, certificationType, inputType, validItemType, validType } from './GovJobItemType';
-import { UseMutationResult, useMutation, useQueryClient } from '@tanstack/react-query';
+import { GovRuleClassDetailProps, inputType, validItemType, validType } from './GovJobItemType';
+import { getLicenseType, jobLicenseListType } from '@/types/teacher/apiReturnTypes';
+import { UseMutationResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { postGovJobAPI } from '@/api/teacher/gov/postGovJobAPI';
 import { putGovJobAPI } from '@/api/teacher/gov/putGovJobAPI';
 import useNotification from '@/hooks/useNotification';
 import NotiTemplate from '@/components/common/StackNotification/NotiTemplate';
+import { getLicenseAPI } from '@/api/teacher/gov/getLicenseAPI';
 
 
 export const JOB_COLOR = [
@@ -58,8 +60,8 @@ const inputReducer = (state: inputType, action: { type: string; value: any }): i
 			return { ...state, image: action.value }
 		case "CHANGE_TOTAL":
 			return { ...state, total: action.value }
-		case "CHANGE_CERTIFICATION":
-			return { ...state, certification: action.value }
+		case "CHANGE_JOB_LICENSE_LIST":
+			return { ...state, jobLicenseList: action.value }
 		case "CHANGE_EMPOWERED":
 			return { ...state, empowered: action.value }
 		default:
@@ -83,8 +85,8 @@ const validReducer = (state: validType, action: { type: string; value: validItem
 			return { ...state, image: action.value }
 		case "CHANGE_TOTAL":
 			return { ...state, total: action.value }
-		case "CHANGE_CERTIFICATION":
-			return { ...state, certification: action.value }
+		case "CHANGE_JOB_LICENSE_LIST":
+			return { ...state, jobLicenseList: action.value }
 		case "CHANGE_EMPOWERED":
 			return { ...state, empowered: action.value }
 		default:
@@ -105,9 +107,35 @@ function useGovJobInput({
 	currency,
 	empowered,
 	powerList,
-	certification,
+	jobLicenseList,
+	licenseList,
 	closeHandler,
 }: GovRuleClassDetailProps) {
+
+	const [initLicense, setInitLicense] = useState(false)
+	const initJobLicenseList = licenseList.map((el) => {
+		const template = {
+			subject: el.subject,
+			id: el.id,
+			rating: -1
+		}
+		const isExist = jobLicenseList?.filter((eel) => eel.subject === el.subject)
+		if (isExist && isExist[0]) {
+			template.rating = isExist[0].rating
+		}
+
+		return template
+	})
+
+	useEffect(() => {
+		// alert(JSON.stringify(mnftr_jobLicenseList))
+		dispatchInput({
+			type: "CHANGE_JOB_LICENSE_LIST",
+			value: initJobLicenseList
+		})
+		setInitLicense(() => true)
+	}, [])
+	
   const initialInput: inputType = {
 		title: title ? title : "",
 		detail: detail ? detail : "",
@@ -117,7 +145,7 @@ function useGovJobInput({
 		image: image ? image : "/assets/job/worker_male.png",
 		total: total ? String(total) : "",
 		empowered: empowered ? empowered : [],
-		certification,
+		jobLicenseList: jobLicenseList ? jobLicenseList : [],
 	}
 
 	const initialValid: validType = {
@@ -129,7 +157,7 @@ function useGovJobInput({
 		image: image ? "notChanged" : "changed",
 		total: total ? "notChanged" : "empty",
 		empowered: empowered ? "notChanged" : "empty",
-		certification: certification ? "notChanged" : "changed",
+		jobLicenseList: jobLicenseList ? "notChanged" : "changed",
 	}
 
 	const [inputState, dispatchInput] = useReducer(inputReducer, initialInput)
@@ -138,20 +166,28 @@ function useGovJobInput({
   const [illustIdx, setIllustIdx] = useState<number>(ILLUST.indexOf(inputState.image))
   const noti = useNotification()
 
+	
+
 
   useEffect(() => {
-		const validHandler = function (el: certificationType, idx: number) {
-			return el.rating === certification[idx].rating
+		if (initLicense) {
+			const validHandler = function (el: jobLicenseListType, idx: number) {
+				if (initJobLicenseList) {
+					return el.rating === initJobLicenseList[idx].rating
+				}
+				
+			}
+	
+			const isCertValid = inputState.jobLicenseList.every(validHandler)
+	
+			if (isCertValid === false) {
+				dispatchValid({ type: "CHANGE_JOB_LICENSE_LIST", value: "changed" })
+			} else {
+				dispatchValid({ type: "CHANGE_JOB_LICENSE_LIST", value: "notChanged" })
+			}
 		}
-
-		const isCertValid = inputState.certification.every(validHandler)
-
-		if (isCertValid === false) {
-			dispatchValid({ type: "CHANGE_CERTIFICATION", value: "changed" })
-		} else {
-			dispatchValid({ type: "CHANGE_CERTIFICATION", value: "notChanged" })
-		}
-	}, [inputState.certification, certification])
+		
+	}, [inputState.jobLicenseList, jobLicenseList])
 
 	useEffect(() => {
 		if (inputState.title !== title && inputState.title.trim() !== "") {
@@ -170,7 +206,7 @@ function useGovJobInput({
 			dispatchValid({ type: "CHANGE_DETAIL", value: "empty" })
 		}
 
-		if (Number(inputState.salary) !== Number(salary) && inputState.salary !== "") {
+		if (inputState.salary !== salary && inputState.salary !== "") {
 			dispatchValid({ type: "CHANGE_SALARY", value: "changed" })
 		} else if (Number(inputState.salary) === Number(salary)) {
 			dispatchValid({ type: "CHANGE_SALARY", value: "notChanged" })
@@ -240,6 +276,7 @@ function useGovJobInput({
 		}),
 	)
 	const updateMutation = useMutation((idx: number) =>
+		
 		putGovJobAPI({
 			idx,
 			body: inputState,
@@ -273,7 +310,7 @@ function useGovJobInput({
   const ratingHandler = ({ id, reverse = false }: { id: number; reverse: boolean }) => {
 		let curIdx: number = 0
 
-		inputState.certification.forEach((item, idx) => {
+		inputState.jobLicenseList.forEach((item, idx) => {
 			if (item.id === id) {
 				curIdx = idx
 			}
@@ -281,14 +318,14 @@ function useGovJobInput({
 
 		let value: number | null = null
 		if (reverse === true) {
-			if (inputState.certification[curIdx].rating > 1) {
-				value = inputState.certification[curIdx].rating - 1
-			} else if (inputState.certification[curIdx].rating === -1) {
+			if (inputState.jobLicenseList[curIdx].rating > 1) {
+				value = inputState.jobLicenseList[curIdx].rating - 1
+			} else if (inputState.jobLicenseList[curIdx].rating === -1) {
 				value = 10
 			}
 		} else {
-			if (inputState.certification[curIdx].rating < 10 && inputState.certification[curIdx].rating !== -1) {
-				value = inputState.certification[curIdx].rating + 1
+			if (inputState.jobLicenseList[curIdx].rating < 10 && inputState.jobLicenseList[curIdx].rating !== -1) {
+				value = inputState.jobLicenseList[curIdx].rating + 1
 			} else {
 				value = -1
 			}
@@ -296,8 +333,8 @@ function useGovJobInput({
 
 		if (value !== null) {
 			dispatchInput({
-				type: "CHANGE_CERTIFICATION",
-				value: inputState.certification.map((item) => (id === item.id ? { ...item, rating: value } : item)),
+				type: "CHANGE_JOB_LICENSE_LIST",
+				value: inputState.jobLicenseList.map((item) => (id === item.id ? { ...item, rating: value } : item)),
 			})
 		}
 	}
@@ -396,7 +433,7 @@ function useGovJobInput({
 
 
 
-  return {inputState, handler, isSubmitValid}
+  return {inputState, handler, isSubmitValid, validState}
 }
 
 export default useGovJobInput

@@ -2,17 +2,11 @@ import { tokenInstance } from "@/api/instance"
 import { empoweredType } from "@/types/teacher/apiReturnTypes"
 import { successReturnType } from "@/types/common/apiReturnTypes"
 
-type certificationType = {
+type jobLicenseListType = {
 	id: number
 	subject: string
 	rating: number
 }
-
-type roleStatusType = {
-	status: string
-	subject: string
-}
-
 
 type paramsType = {
     idx: number;
@@ -25,7 +19,7 @@ type paramsType = {
         image: string
         total: string
         empowered: empoweredType[]
-        certification?: certificationType[]
+        jobLicenseList?: jobLicenseListType[]
     }
 }
 

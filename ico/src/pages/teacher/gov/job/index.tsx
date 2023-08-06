@@ -7,11 +7,12 @@ import { css } from "@emotion/react"
 import FormCreator from "@/components/teacher/common/Form/FormCreator"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getGovJobAPI } from "@/api/teacher/gov/getGovJobAPI"
-import { getGovPowerType, getGovJobType, getJobListType } from "@/types/teacher/apiReturnTypes"
+import { getGovPowerType, getGovJobType, getJobListType, jobLicenseListType, getLicenseType } from "@/types/teacher/apiReturnTypes"
 import GovJobItem from "@/components/teacher/Gov/Job/GovJobItem"
 import useGetNation from "@/hooks/useGetNation"
 import { getGovJobAuthAPI } from "@/api/teacher/gov/getGovJobAuthAPI"
 import { getGovPowerAPI } from "@/api/teacher/gov/getGovPowerAPI"
+import { getLicenseAPI } from "@/api/teacher/gov/getLicenseAPI"
 
 function index() {
 	const [openComp, closeComp, compState] = useCompHandler()
@@ -29,8 +30,14 @@ function index() {
 		// { staleTime: 200000 },
 	)
 
+	const licenseQuery = useQuery<getLicenseType[]>(
+		["teacher", "govLicense"],
+		getLicenseAPI,
+		// { staleTime: 200000 },
+	)
 
 
+	
 
 
 	
@@ -150,7 +157,7 @@ function index() {
 		},
 	]
 
-	const renderJobList = useMemo(() => powerQuery.data && jobsQuery.data && jobsQuery.data.jobList.map((el, idx) => {
+	const renderJobList = useMemo(() => licenseQuery.data && powerQuery.data && jobsQuery.data && jobsQuery.data.jobList.map((el, idx) => {
 				return (
 					<div
 						key={`${el.title}-${el.id}`}
@@ -169,8 +176,9 @@ function index() {
 							total={el.total}
 							count={el.count}
 							currency={nation.currency}
-							certification={dummyCertList}
+							jobLicenseList={el.jobLicenseList}
 							empowered={el.empowered}
+							licenseList={licenseQuery.data}
 							powerList={powerQuery.data}
 						/>
 					</div>
@@ -197,7 +205,7 @@ function index() {
 			<div css={descCSS}>학급의 직업 목록을 관리할 수 있습니다.</div>
 			<AnimatedRenderer compState={compState} initHeight="0">
 				<div css={createWrapperCSS({ compState })}>
-					<GovJobItem powerList={dummyStatusList} certification={dummyCert} closeHandler={closeComp} />
+					{powerQuery.data && licenseQuery.data && <GovJobItem licenseList={licenseQuery.data} powerList={powerQuery.data} closeHandler={closeComp} />}
 				</div>
 			</AnimatedRenderer>
 
