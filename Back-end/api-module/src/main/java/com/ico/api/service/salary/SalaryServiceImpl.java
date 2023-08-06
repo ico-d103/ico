@@ -44,6 +44,12 @@ public class SalaryServiceImpl implements SalaryService{
         List<Student> studentList = studentRepository.findAllByIdIn(dto.getStudentIds());
 
         for (Student student : studentList) {
+
+            if (student.getSalary() == 0) {
+                log.info("[paySalary] {} : 해당 학생은 salary 가 0입니다.", student.getName());
+                continue;
+            }
+
             Long studentId = student.getId();
             log.info("student name : {}", student.getName());
 
