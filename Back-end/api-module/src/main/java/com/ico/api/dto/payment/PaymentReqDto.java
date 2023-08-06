@@ -9,13 +9,13 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * 선택한 학생들의 월급 일괄 지급을 위한 Request Dto
+ * 선택한 학생들의 일괄 지급 처리하기 위한 Request Dto
  *
  * @author 서재건
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PaymentSalaryReqDto {
+public class PaymentReqDto {
 
     @NotNull(message = "431")
     @NotEmpty(message = "431")

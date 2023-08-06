@@ -1,6 +1,6 @@
 package com.ico.api.service.payment;
 
-import com.ico.api.dto.payment.PaymentSalaryReqDto;
+import com.ico.api.dto.payment.PaymentReqDto;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,5 +17,5 @@ public interface PaymentService {
      * @param dto
      * @param request
      */
-    void paySalary(PaymentSalaryReqDto dto, HttpServletRequest request);
+    void paySalary(PaymentReqDto dto, HttpServletRequest request);
 }

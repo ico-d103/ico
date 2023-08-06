@@ -1,6 +1,6 @@
 package com.ico.api.service.payment;
 
-import com.ico.api.dto.payment.PaymentSalaryReqDto;
+import com.ico.api.dto.payment.PaymentReqDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.TaxType;
 import com.ico.core.entity.Student;
@@ -38,7 +38,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Transactional
     @Override
-    public void paySalary(PaymentSalaryReqDto dto, HttpServletRequest request) {
+    public void paySalary(PaymentReqDto dto, HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         List<Student> studentList = studentRepository.findAllByIdIn(dto.getStudentIds());

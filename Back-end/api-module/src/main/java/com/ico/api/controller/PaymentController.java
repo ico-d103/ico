@@ -1,6 +1,6 @@
 package com.ico.api.controller;
 
-import com.ico.api.dto.payment.PaymentSalaryReqDto;
+import com.ico.api.dto.payment.PaymentReqDto;
 import com.ico.api.service.payment.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class PaymentController {
      * @return
      */
     @PostMapping("/teacher/salary")
-    public ResponseEntity<HttpStatus> paySalary(@Valid @RequestBody PaymentSalaryReqDto dto, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> paySalary(@Valid @RequestBody PaymentReqDto dto, HttpServletRequest request) {
         salaryService.paySalary(dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
