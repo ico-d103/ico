@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreditScoreAllReqDto {
 
-    @NotNull(message = "431")
+    @NotNull(message = "514")
     private List<Long> studentIds;
 
     @NotNull(message = "428")

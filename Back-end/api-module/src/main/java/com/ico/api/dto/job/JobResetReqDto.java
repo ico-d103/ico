@@ -16,8 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 public class JobResetReqDto {
 
-    @NotNull(message = "431")
-    @NotEmpty(message = "431")
+    @NotNull(message = "514")
+    @NotEmpty(message = "514")
     private List<Long> studentIds;
 
 }
