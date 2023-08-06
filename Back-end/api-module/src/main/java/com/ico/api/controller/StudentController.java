@@ -6,6 +6,7 @@ import com.ico.api.dto.student.StudentAllResDto;
 import com.ico.api.dto.student.StudentListResDto;
 import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.student.StudentResDto;
+import com.ico.api.dto.user.AccountAllDto;
 import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.user.StudentSignUpRequestDto;
 import com.ico.api.service.student.StudentService;
@@ -61,6 +62,18 @@ public class StudentController {
     @PostMapping("/teacher/{studentId}/account")
     public ResponseEntity<HttpStatus> teacherUpdateAccount(@PathVariable Long studentId, @Valid @RequestBody AccountDto accountDto) {
         studentService.teacherUpdateAccount(studentId, accountDto);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 선택한 학생의 계좌의 잔액 일괄 관리(지급/차감)
+     *
+     * @param dto 금액, 사유, 학생id 리스트
+     * @return status
+     */
+    @PostMapping("/teacher/account")
+    public ResponseEntity<HttpStatus> updateAccountAll(@Valid @RequestBody AccountAllDto dto, HttpServletRequest request) {
+        studentService.updateAccountAll(dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
