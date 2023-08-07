@@ -419,12 +419,8 @@ public class StudentServiceImpl implements StudentService {
     public void exileStudent(HttpServletRequest request, StudentDelReqDto dto) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
-        List<Student> students = studentRepository.findAllById(dto.getStudentIds());
+        List<Student> students = studentRepository.findAllByIdInAndNationId(dto.getStudentIds(), nationId);
         for (Student student : students) {
-            // TODO : 재건이 형 풀리퀘 올라오면 findAllByIdInAndNationId(dto.getStudentIds(), nationId) 사용해서 수정하기
-            if (!student.getNation().getId().equals(nationId)) {
-                throw new CustomException(ErrorCode.NOT_EQUAL_NATION_TEACHER_STUDENT);
-            }
 
             student.setNation(null);
             student.setAccount(0);
