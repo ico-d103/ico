@@ -420,6 +420,7 @@ public class StudentServiceImpl implements StudentService {
 
         List<Student> students = studentRepository.findAllById(dto.getStudentIds());
         for (Student student : students) {
+            // TODO : 재건이 형 풀리퀘 올라오면 findAllByIdInAndNationId(dto.getStudentIds(), nationId) 사용해서 수정하기
             if (!student.getNation().getId().equals(nationId)) {
                 throw new CustomException(ErrorCode.NOT_EQUAL_NATION_TEACHER_STUDENT);
             }
@@ -459,14 +460,8 @@ public class StudentServiceImpl implements StudentService {
             if (student.getStudentJob() != null) {
                 Optional<StudentJob> studentJob = studentJobRepository.findById(student.getStudentJob().getId());
                 if (studentJob.isPresent()) {
-                    String[] nameArray = studentJob.get().getStudentNames().split(",");
-                    StringBuilder updateNames = new StringBuilder();
-                    for (String name : nameArray) {
-                        if (!name.equals(removeName)) {
-                            updateNames.append(name).append(",");
-                        }
-                    }
-                    studentJob.get().setStudentNames(updateNames.toString());
+                    String updateNames = studentJob.get().getStudentNames().replace(removeName + ",", "");
+                    studentJob.get().setStudentNames(updateNames);
                     studentJobRepository.save(studentJob.get());
                 }
             }
