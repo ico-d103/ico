@@ -3,6 +3,7 @@ package com.ico.api.service.student;
 import com.ico.api.dto.nation.CreditScoreAllReqDto;
 import com.ico.api.dto.nation.CreditScoreReqDto;
 import com.ico.api.dto.student.StudentAllResDto;
+import com.ico.api.dto.student.StudentDelReqDto;
 import com.ico.api.dto.student.StudentListResDto;
 import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.student.StudentResDto;
@@ -108,6 +109,13 @@ public interface StudentService {
      * @return 자산
      */
     Map<String, String> findAccount(HttpServletRequest request);
+
+    /**
+     * 교사가 학생 추방
+     * @param request
+     * @param dto
+     */
+    void exileStudent(HttpServletRequest request, StudentDelReqDto dto);
 
     /**
      * 선택한 학생들의 미소 일괄 지급 및 차감
