@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -22,10 +21,9 @@ public class AccountAllDto {
     @NotBlank(message = "418")
     private String title;
 
-    @Min(value = 1, message = "419")
-    private int amount;
+    @NotNull(message = "420")
+    private Integer amount;
 
-    @NotNull(message = "514")
     @NotEmpty(message = "514")
     private List<Long> studentIds;
 }
