@@ -1,8 +1,8 @@
-package com.ico.batch.service;
+package com.ico.core.service;
 
-import com.ico.core.entity.Nation;
 import com.ico.core.document.Transaction;
 import com.ico.core.document.TreasuryHistory;
+import com.ico.core.entity.Nation;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.NationRepository;
@@ -10,7 +10,7 @@ import com.ico.core.repository.TransactionMongoRepository;
 import com.ico.core.repository.TreasuryHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -20,10 +20,11 @@ import java.util.Map;
  * 월급 입금에 필요한 Service
  *
  * @author 변윤경
+ * @author 서재건 -> core module로 이동
  */
 @Slf4j
+@Service
 @RequiredArgsConstructor
-@Component
 public class DepositSalaryService {
     private final TransactionMongoRepository transactionMongoRepository;
     private final NationRepository nationRepository;

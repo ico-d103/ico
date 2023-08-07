@@ -9,6 +9,7 @@ import com.ico.api.dto.student.StudentListResDto;
 import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.student.StudentResDto;
 import com.ico.api.dto.transaction.TransactionColDto;
+import com.ico.api.dto.user.AccountAllDto;
 import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.user.StudentSignUpRequestDto;
 import com.ico.api.service.License.LicenseServiceImpl;
@@ -478,6 +479,31 @@ public class StudentServiceImpl implements StudentService {
             student.setStudentJob(null);
             studentRepository.save(student);
         }
+    }
+
+    @Transactional
+    @Override
+    public void updateAccountAll(AccountAllDto dto, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        List<Student> studentList = studentRepository.findAllByIdInAndNationId(dto.getStudentIds(), nationId);
+        int amount = dto.getAmount();
+
+        for (Student student : studentList) {
+
+            student.setAccount(student.getAccount() + amount);
+
+            // 거래 내역 등록
+            if (amount < 0) {
+                transactionService.addTransactionWithdraw("선생님", student.getId(), amount, dto.getTitle());
+            } else {
+                transactionService.addTransactionDeposit(student.getId(), "선생님", amount, dto.getTitle());
+            }
+
+            // 수정된 학생 객체 저장
+            studentRepository.save(student);
+        }
+
     }
 
     /**

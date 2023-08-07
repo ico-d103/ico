@@ -7,6 +7,7 @@ import com.ico.api.dto.student.StudentDelReqDto;
 import com.ico.api.dto.student.StudentListResDto;
 import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.student.StudentResDto;
+import com.ico.api.dto.user.AccountAllDto;
 import com.ico.api.dto.user.AccountDto;
 import com.ico.api.dto.user.StudentSignUpRequestDto;
 
@@ -115,4 +116,12 @@ public interface StudentService {
      * @param dto
      */
     void exileStudent(HttpServletRequest request, StudentDelReqDto dto);
+
+    /**
+     * 선택한 학생들의 미소 일괄 지급 및 차감
+     *
+     * @param dto
+     * @param request
+     */
+    void updateAccountAll(AccountAllDto dto, HttpServletRequest request);
 }

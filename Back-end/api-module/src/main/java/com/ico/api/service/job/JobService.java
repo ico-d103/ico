@@ -6,6 +6,7 @@ import com.ico.api.dto.job.JobAvailableResDto;
 import com.ico.api.dto.job.JobResDto;
 import com.ico.api.dto.job.JobResetReqDto;
 import com.ico.core.dto.JobReqDto;
+import com.ico.core.entity.StudentJob;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -60,7 +61,7 @@ public interface JobService {
      *
      * @param jobId
      */
-    void deleteJob(Long jobId);
+    void deleteJob(Long jobId, HttpServletRequest request);
 
     /**
      * 직업 배정 초기화
@@ -76,12 +77,4 @@ public interface JobService {
      * @param request
      */
     void resetJob(Long studentId, HttpServletRequest request);
-
-    /**
-     * 교사가 직업에 권한을 부여
-     * @param request
-     * @param powerIds
-     */
-    void updatePower(HttpServletRequest request, List<Long> powerIds, Long jobId);
-
 }

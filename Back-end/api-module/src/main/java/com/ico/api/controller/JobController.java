@@ -40,7 +40,8 @@ public class JobController {
 
     /**
      * 입력값으로 직업 수정
-     * 
+     * 자격증, 권한 같이 수정할 수 있게 - ok
+     *
      * @param jobId
      * @param dto 직업 이름, 직업 설명, 총 인원, 임금, 색깔
      * @return OK
@@ -63,7 +64,7 @@ public class JobController {
 
     /**
      * 교사가 전체 직업 조회
-     *
+     * 자격증, 권한 같이 보여주기
      * @return
      */
     @GetMapping("/teacher/all")
@@ -73,7 +74,7 @@ public class JobController {
 
     /**
      * 공통) 직업 명함 조회
-     *
+     *  이건 프론트에서 사용 안함
      * @return
      */
     @GetMapping
@@ -83,6 +84,7 @@ public class JobController {
 
     /**
      * 직업 추가
+     * 자격증, 권한 같이 추가하기
      *
      * @param dto
      * @param request
@@ -101,8 +103,8 @@ public class JobController {
      * @return
      */
     @DeleteMapping("/teacher/{jobId}")
-    public ResponseEntity<HttpStatus> deleteJob(@PathVariable Long jobId) {
-        jobService.deleteJob(jobId);
+    public ResponseEntity<HttpStatus> deleteJob(@PathVariable Long jobId, HttpServletRequest request) {
+        jobService.deleteJob(jobId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -128,20 +130,6 @@ public class JobController {
     @PutMapping("/teacher/reset/{studentId}")
     public ResponseEntity<HttpStatus> resetJob(@PathVariable Long studentId, HttpServletRequest request) {
         jobService.resetJob(studentId, request);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    /**
-     * 교사가 직업에 권한을 부여
-     * @param request
-     * @param map
-     * @param jobId
-     * @return ok
-     */
-    @PutMapping("/teacher/power/{jobId}")
-    public ResponseEntity<HttpStatus> jobUpdatePower(
-            HttpServletRequest request, @RequestBody Map<String, List<Long>> map, @PathVariable Long jobId) {
-        jobService.updatePower(request, map.get("powerIds"), jobId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

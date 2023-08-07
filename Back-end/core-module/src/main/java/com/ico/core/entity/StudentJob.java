@@ -17,7 +17,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import java.util.List;
 
 /**
  * 직업 Entity
@@ -88,7 +87,7 @@ public class StudentJob {
         this.title = dto.getTitle();
         this.detail = dto.getDetail();
         this.total = dto.getTotal().byteValue();
-        this.wage = dto.getWage();
+        this.wage = dto.getSalary();
         this.creditRating = dto.getCreditRating().byteValue();
         this.color = dto.getColor();
         this.image = fileName;

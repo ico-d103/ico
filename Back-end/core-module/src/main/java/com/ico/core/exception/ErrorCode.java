@@ -67,9 +67,15 @@ public enum ErrorCode{
 
     NOT_FOUND_PARAMETER(HttpStatus.NOT_FOUND, "40", "Map 값이 없습니다."),
 
-    NOT_EQUAL_STUDENT(HttpStatus.BAD_REQUEST, "44", "학생id가 일치하지 않습니다."),
+    NOT_ENTER_JOB_ID(HttpStatus.BAD_REQUEST, "41", "직업 아이디 값이 없습니다."),
 
-    NOT_EQUAL_JOB(HttpStatus.BAD_REQUEST, "45", "직업id가 일치하지 않습니다."),
+    NOT_ENTER_LICENSE_ID(HttpStatus.BAD_REQUEST, "42", "자격증 아이디 값이 없습니다."),
+
+    NOT_ENTER_RATING(HttpStatus.BAD_REQUEST, "43", "등급 값이 없습니다."),
+
+    NOT_EQUAL_STUDENT(HttpStatus.BAD_REQUEST, "44", "학생 id가 일치하지 않습니다."),
+
+    NOT_EQUAL_JOB(HttpStatus.BAD_REQUEST, "45", "직업 id가 일치하지 않습니다."),
 
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
@@ -204,6 +210,10 @@ public enum ErrorCode{
     NOT_UP_LICENSE(HttpStatus.BAD_REQUEST, "803", "이 자격증 점수를 더 올릴 수 없습니다."),
 
     NOT_DOWN_LICENSE(HttpStatus.BAD_REQUEST, "804", "이 자격증 점수를 더 내릴 수 없습니다."),
+
+    NOT_FOUND_JOB_LICENSE(HttpStatus.NOT_FOUND, "805", "직업의 자격증이 없습니다."),
+
+    WRONG_RATING(HttpStatus.NOT_FOUND, "806", "직업의 자격증 등급은 0~7만 입력 가능합니다."),
 
     NOT_FOUND_LICENSE_ID(HttpStatus.BAD_REQUEST, "807", "자격증 ID 값이 없습니다."),
 

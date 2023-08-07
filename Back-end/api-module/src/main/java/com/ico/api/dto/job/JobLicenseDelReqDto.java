@@ -7,15 +7,14 @@ import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
- * 교사가 선택한 학생들의 id 값을 담은 리스트 dto
+ * 직업에 부여된 자격증 삭제 시 받는 Dto
  *
- * @author 서재건
+ * @author 강교철
  */
 @Getter
 @NoArgsConstructor
-public class JobResetReqDto {
+public class JobLicenseDelReqDto {
 
-    @NotEmpty(message = "514")
-    private List<Long> studentIds;
-
+    @NotEmpty(message = "42")
+    private List<Long> jobLicenseIds;
 }

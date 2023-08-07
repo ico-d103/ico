@@ -4,18 +4,23 @@ import com.ico.api.dto.job.JobAddReqDto;
 import com.ico.api.dto.job.JobAllColDto;
 import com.ico.api.dto.job.JobAllResDto;
 import com.ico.api.dto.job.JobAvailableResDto;
+import com.ico.api.dto.job.JobLicenseResDto;
 import com.ico.api.dto.job.JobResDto;
 import com.ico.api.dto.job.JobResetReqDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.dto.JobReqDto;
+import com.ico.core.entity.JobLicense;
+import com.ico.core.entity.NationLicense;
 import com.ico.core.entity.Power;
 import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.JobLicenseRepository;
+import com.ico.core.repository.NationLicenseRepository;
 import com.ico.core.repository.PowerRepository;
 import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.NationRepository;
@@ -29,9 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -59,6 +63,8 @@ public class JobServiceImpl implements JobService{
     private final JwtTokenProvider jwtTokenProvider;
 
     private final PowerRepository powerRepository;
+    private final JobLicenseRepository jobLicenseRepository;
+    private final NationLicenseRepository nationLicenseRepository;
 
     @Override
     public void updateJob(Long jobId, JobReqDto dto, HttpServletRequest request) {
@@ -78,6 +84,8 @@ public class JobServiceImpl implements JobService{
         }
 
         studentJob.updateJob(dto, s3UploadService.getFileName(dto.getImage()));
+        updatePower(nationId, studentJob, dto.getPowers(), jobId);
+        updateLicense(nationId, dto);
         studentJobRepository.save(studentJob);
         log.info("[updateJob] 수정 완료");
     }
@@ -100,8 +108,18 @@ public class JobServiceImpl implements JobService{
             if (studentJob.getTotal() > studentJob.getCount()) {
                 restJobCount++;
             }
+            // 직업에 부여된 자격증 보여주기
+            List<JobLicenseResDto> jobLicenseResDto = new ArrayList<>();
+            List<JobLicense> jobLicenses = jobLicenseRepository.findAllByJobId(studentJob.getId());
+            // jobLicenses 가 있어야 한다는 조건문이 없어도 데이터가 없으면 for문 내부 로직 실행 X
+            for (JobLicense jobLicense : jobLicenses) {
+                NationLicense nationLicense = nationLicenseRepository.findById(jobLicense.getNationLicense().getId())
+                                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
+                jobLicenseResDto.add(new JobLicenseResDto().of(jobLicense, nationLicense.getSubject()));
+            }
+
             String salary = Formatter.number.format(studentJob.getWage() * 30L);
-            colJobList.add(new JobAllColDto().of(studentJob, salary, s3UploadService.getFileURL(studentJob.getImage())));
+            colJobList.add(new JobAllColDto().of(studentJob, salary, s3UploadService.getFileURL(studentJob.getImage()), jobLicenseResDto));
         }
 
         return JobAllResDto.builder()
@@ -147,6 +165,7 @@ public class JobServiceImpl implements JobService{
         return dtoList;
     }
 
+    @Transactional
     @Override
     public void addJob(JobAddReqDto dto, HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -158,24 +177,35 @@ public class JobServiceImpl implements JobService{
                 .title(dto.getTitle())
                 .detail(dto.getDetail())
                 .image(s3UploadService.getFileName(dto.getImage()))
-                .wage(dto.getWage())
+                .wage(dto.getSalary())
                 .creditRating(dto.getCreditRating().byteValue())
                 .total(dto.getTotal().byteValue())
                 .color(dto.getColor())
                 .build();
+        addJobPower(studentJob, dto.getPowers());
         studentJobRepository.save(studentJob);
+        log.info("[addJob] 직업 생산 완료.");
+        addJobLicense(studentJob, nationId, dto);
+        log.info("[addJobLicense] 직업 자격증과 자격증 등급 설정 완료.");
     }
 
+    @Transactional
     @Override
-    public void deleteJob(Long jobId) {
-        StudentJob studentJob = studentJobRepository.findById(jobId)
+    public void deleteJob(Long jobId, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        StudentJob studentJob = studentJobRepository.findByIdAndNationId(jobId, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
 
         if (studentJob.getCount() > 0) {
             log.info("[deleteJob] 배정된 인원이 존재하여 삭제할 수 없습니다.");
             throw new CustomException(ErrorCode.ALREADY_ASSIGNED_JOB);
         }
-
+        // 직업에 자격증 조건이 있다면 JobLicense 부터 삭제
+        List<JobLicense> jobLicenses = jobLicenseRepository.findAllByJobId(jobId);
+        if (!jobLicenses.isEmpty()) {
+            jobLicenseRepository.deleteAll(jobLicenses);
+        }
+        
         studentJobRepository.delete(studentJob);
     }
 
@@ -248,13 +278,11 @@ public class JobServiceImpl implements JobService{
         resumeMongoRepository.deleteAllByStudentId(studentId);
     }
 
-    @Transactional
-    @Override
-    public void updatePower(HttpServletRequest request, List<Long> powerIds, Long jobId) {
-        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
-        StudentJob job = studentJobRepository.findById(jobId)
-                .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
-
+    /**
+     * 직업과 직업을 가진 학생의 empowered 를 수정
+     *
+     */
+    private void updatePower(Long nationId, StudentJob job, List<Long> powerIds, Long jobId) {
         // powerIds Set
         Set<Long> setPowerIds = new TreeSet<>(powerIds);
         List<Power> powers = powerRepository.findAllByIdIn(new ArrayList<>(setPowerIds));
@@ -269,7 +297,6 @@ public class JobServiceImpl implements JobService{
                 jobEmpowered.append(power.getId()).append(",");
         }
         job.setEmpowered(jobEmpowered.toString());
-        studentJobRepository.save(job);
 
         // 권한 업데이트 전에 권한을 가진 직업을 가진 학생이 있는지 확인 - 없으면 pass
         List<Student> students = studentRepository.findAllByNationIdAndStudentJobId(nationId, jobId);
@@ -280,5 +307,113 @@ public class JobServiceImpl implements JobService{
             // 학생 테이블의 empowered 수정
             studentRepository.save(student);
         }
+    }
+
+    /**
+     * 직업 수정 시 직업 자격증과 등급 수정
+     * @param nationId
+     * @param dto
+     */
+    private void updateLicense(Long nationId, JobReqDto dto) {
+        List<Long> jobLicenseIds = dto.getJobLicenseIds();
+
+        // 프론트에서 객체 형태로 보내고 싶다고 해서 변경
+        List<Long> licenseIds = new ArrayList<>();
+        List<Integer> ratings = new ArrayList<>();
+        Map<Long, Integer> licenses = dto.getLicenses();
+
+        for (Map.Entry<Long, Integer> license : licenses.entrySet()) {
+            licenseIds.add(license.getKey());
+            ratings.add(license.getValue());
+        }
+
+        for (int i = 0; i < jobLicenseIds.size(); i++) {
+            Long jobLicenseId = jobLicenseIds.get(i);
+            Long licenseId = licenseIds.get(i);
+            Integer rating = ratings.get(i);
+
+            if (licenseId == null) {
+                throw new CustomException(ErrorCode.NOT_ENTER_LICENSE_ID);
+            }
+            if (rating == null) {
+                throw new CustomException(ErrorCode.NOT_ENTER_RATING);
+            }
+            // rating 유효성 검사
+            if (rating > 7 || rating < 0) {
+                log.info("[checkRating] 등급 유효성 검사 : {}", rating);
+                throw new CustomException(ErrorCode.WRONG_RATING);
+            }
+
+            JobLicense jobLicense = jobLicenseRepository.findById(jobLicenseId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_JOB_LICENSE));
+
+            NationLicense nationLicense = nationLicenseRepository.findByNationIdAndId(nationId, licenseId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
+
+            jobLicense.setNationLicense(nationLicense);
+            jobLicense.setRating(rating.byteValue());
+
+            jobLicenseRepository.save(jobLicense);
+            log.info("[updateLicense] JobLicense 수정 완료");
+        }
+    }
+
+    /**
+     * 직업 생성 시 자격증 등급 설정
+     * @param job
+     * @param nationId
+     * @param dto
+     */
+    private void addJobLicense(StudentJob job, Long nationId, JobAddReqDto dto) {
+        // 프론트에서 객체 형태로 보내고 싶다고 해서 변경
+        Map<Long, Integer> licenses = dto.getLicenses();
+
+        for (Map.Entry<Long, Integer> license : licenses.entrySet()) {
+            Long licenseId = license.getKey();
+            Integer rating = license.getValue();
+
+            if (licenseId == null) {
+                throw new CustomException(ErrorCode.NOT_ENTER_LICENSE_ID);
+            }
+            if (rating == null) {
+                throw new CustomException(ErrorCode.NOT_ENTER_RATING);
+            }
+            // rating 유효성 검사
+            if (rating > 7 || rating < 0) {
+                throw new CustomException(ErrorCode.WRONG_RATING);
+            }
+
+            NationLicense nationLicense = nationLicenseRepository.findByNationIdAndId(nationId, licenseId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
+
+            JobLicense jobLicense = JobLicense.builder()
+                    .job(job)
+                    .nationLicense(nationLicense)
+                    .rating(rating.byteValue())
+                    .build();
+            jobLicenseRepository.save(jobLicense);
+        }
+    }
+
+    /**
+     * 직업 생성 시 권한 설정
+     * @param studentJob
+     * @param powerIds
+     */
+    private void addJobPower(StudentJob studentJob, List<Long> powerIds) {
+        // powerIds Set
+        Set<Long> setPowerIds = new TreeSet<>(powerIds);
+        List<Power> powers = powerRepository.findAllByIdIn(new ArrayList<>(setPowerIds));
+        if (powers.isEmpty()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_POWER);
+        }
+
+        // empowered 초기화
+        StringBuilder jobEmpowered = new StringBuilder();
+        for (Power power:powers) {
+            // job empowered 컬럼 채우기
+            jobEmpowered.append(power.getId()).append(",");
+        }
+        studentJob.setEmpowered(jobEmpowered.toString());
     }
 }

@@ -1,26 +1,22 @@
-package com.ico.api.dto.nation;
+package com.ico.api.dto.payment;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * 체크한 학생 일괄 신용 점수 부여
+ * 선택한 학생들의 일괄 지급 처리하기 위한 Request Dto
  *
  * @author 서재건
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CreditScoreAllReqDto {
+public class PaymentReqDto {
 
     @NotEmpty(message = "514")
     private List<Long> studentIds;
-
-    @NotNull(message = "428")
-    private Boolean type;
 
 }
