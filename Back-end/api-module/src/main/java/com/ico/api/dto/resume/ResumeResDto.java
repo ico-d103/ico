@@ -5,6 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 직업 신청 내역 조회 Response Dto
+ *
+ * @author 서재건
+ */
 @Getter
 @NoArgsConstructor
 public class ResumeResDto {

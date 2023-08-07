@@ -1,6 +1,6 @@
 package com.ico.batch.job;
 
-import com.ico.batch.service.DepositSalaryService;
+import com.ico.core.service.DepositSalaryService;
 import com.ico.core.code.TaxType;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Tax;
@@ -59,7 +59,7 @@ public class DepositSalaryConfig {
 
     @Bean
     @JobScope
-    public Step depositSalaryStep(RepositoryItemReader depositSalaryReader, ItemProcessor depositSalaryProcessor, ItemWriter depositSalaryWriter) {
+    public Step depositSalaryStep(RepositoryItemReader<Student> depositSalaryReader, ItemProcessor<Student, Student> depositSalaryProcessor, ItemWriter<Student> depositSalaryWriter) {
         log.info(">>>>>> depositSalaryStep");
         return stepBuilderFactory.get("depositSalaryStep")
                 .<Student, Student>chunk(10)

@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -16,8 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class JobResetReqDto {
 
-    @NotNull(message = "431")
-    @NotEmpty(message = "431")
+    @NotEmpty(message = "514")
     private List<Long> studentIds;
 
 }
