@@ -10,9 +10,9 @@ type responseType = {
 	data: successReturnType
 }
 
-export const putResetStudentsJobAPI = async ({ body }: paramsType) => {
+export const postStudentsSalaryAPI = async ({ body }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.put(`/job/teacher/reset`, body)
+		const response: responseType = await tokenInstance.post(`/payment/teacher/salary`, body)
 
 		return response.data
 	} catch (error) {
