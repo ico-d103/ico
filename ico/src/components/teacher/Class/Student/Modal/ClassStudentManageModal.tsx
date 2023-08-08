@@ -78,9 +78,11 @@ function ClassStudentManageModal() {
 				<button onClick={() => setCheckedStudentAtom([])}>닫기</button>
 			</div>
 			<div css={contentCSS}>
-				{/* studentId는 임시 */}
 				<div css={contentTopCSS}>
-					<ClassStudentDetailMoney studentId={-1} manageAll={true} />
+					<ClassStudentDetailMoney
+						studentId={checkedStudentAtom.map((item) => parseInt(Object.keys(item)[0]))}
+						manageAll={true}
+					/>
 					<div css={divideCSS}></div>
 					<ClassStudentManageGrade />
 				</div>
