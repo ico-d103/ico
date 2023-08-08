@@ -7,8 +7,6 @@ import { putResetStudentsJobAPI } from "@/api/teacher/class/putResetStudentsJobA
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
-import useCompHandler from "@/hooks/useCompHandler"
-import Modal from "@/components/common/Modal/Modal"
 import CollapseMenuStudentDetail from "@/components/teacher/common/CollapseMenu/CollapseMenuStudentDetail"
 import ClassStudentDetail from "../Detail/ClassStudentDetail"
 import { useAtom, useAtomValue } from "jotai"
@@ -16,20 +14,24 @@ import { checkedStudent, selectedStudent } from "@/store/store"
 import ClassStudentDetailHead from "../Detail/ClassStudentDetailHead"
 import CheckBox from "@/components/teacher/common/CheckBox/CheckBox"
 import useModal from "@/components/common/Modal/useModal"
+import { putDeportStudentsAPI } from "@/api/teacher/class/putDeportStudentsAPI"
 
 function StudentEnteredList() {
 	const noti = useNotification()
-	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
-	// const [openJobResetModal, closeJobResetModal, jobResetModalState] = useCompHandler()
-	const modal = useModal()
 	const queryClient = useQueryClient()
+	const resetJobModal = useModal()
+	const deportStudentsModal = useModal()
+
+	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
 	const resetStudentsJobMutation = useMutation((args: { body: { studentIds: number[] } }) =>
 		putResetStudentsJobAPI(args),
 	)
+	const deportStudentsMutation = useMutation((args: { body: { studentIds: number[] } }) => putDeportStudentsAPI(args))
+
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 	const [checkedStudentAtom, setCheckedStudentAtom] = useAtom(checkedStudent)
 
-	const resetStudentsJob = () => {
+	const resetStudentsJobHandler = () => {
 		const keys = checkedStudentAtom.map((item) => parseInt(Object.keys(item)[0]))
 		const args = { body: { studentIds: keys } }
 
@@ -78,10 +80,30 @@ function StudentEnteredList() {
 			return
 		}
 
-		if (type === "reset") openJobResetModal()
-		else if (type === "deport") {
-			// openDeportStudentModal()
-		}
+		if (type === "reset") resetJobModal.open()
+		else if (type === "deport") deportStudentsModal.open()
+	}
+
+	const deportStudentsHandler = () => {
+		const keys = checkedStudentAtom.map((item) => parseInt(Object.keys(item)[0]))
+		const args = { body: { studentIds: keys } }
+
+		deportStudentsMutation.mutate(args, {
+			onSuccess: () => {
+				noti({
+					content: <NotiTemplate type={"ok"} content={"학생을 내보냈습니다."} />,
+					duration: 3000,
+				})
+
+				return queryClient.invalidateQueries(["studentList", "entered"])
+			},
+			onError: () => {
+				noti({
+					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+					duration: 3000,
+				})
+			},
+		})
 	}
 
 	return (
@@ -133,36 +155,26 @@ function StudentEnteredList() {
 					))}
 				</div>
 			</div>
-			{/* <Modal
-				compState={jobResetModalState}
-				closeComp={closeJobResetModal}
-				transition={"scale"}
-				content={
-					<ModalAlert
-						title={`학생 ${checkedStudentAtom.length}명의 직업을 초기화합니다.`}
-						titleSize={"var(--teacher-h2)"}
-						proceed={resetStudentsJob}
-						width={"480px"}
-						content={[
-							"선택된 학생(들)이 올바른지 다시 확인해 주세요.",
-							"선택된 학생(들)은 새로 직업을 구해야 합니다.",
-							"월급날에 해지일까지 일한일 수만큼 보수를 받습니다.",
-						]}
-					/>
-				}
-			/> */}
-
-			{modal(
+			{resetJobModal(
 				<ModalAlert
-					title={"모든 학생들의 직업을 초기화합니다."}
+					title={`학생 ${checkedStudentAtom.length}명의 직업을 초기화합니다.`}
 					titleSize={"var(--teacher-h2)"}
-					proceed={resetStudentsJob}
+					proceed={resetStudentsJobHandler}
 					width={"480px"}
 					content={[
-						"모든 학생들의 직업이 초기화됩니다!",
-						"더이상 학생들이 직업 활동을 할 수 없습니다!",
-						"월급 날에 해지일까지 일한 날짜만큼 보수를 받습니다.",
+						"선택된 학생(들)이 올바른지 다시 확인해 주세요.",
+						"선택된 학생(들)은 새로 직업을 구해야 합니다.",
+						"월급날에 해지일까지 일한일 수만큼 보수를 받습니다.",
 					]}
+				/>,
+			)}
+			{deportStudentsModal(
+				<ModalAlert
+					title={`학생 ${checkedStudentAtom.length}명을 반에서 내보냅니다.`}
+					titleSize={"var(--teacher-h2)"}
+					proceed={deportStudentsHandler}
+					width={"480px"}
+					content={["선택된 학생(들)이 올바른지 다시 확인해 주세요.", "선택된 학생(들)의 데이터가 없어집니다."]}
 				/>,
 			)}
 		</>
