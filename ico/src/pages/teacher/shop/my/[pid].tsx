@@ -15,13 +15,16 @@ import Modal from "@/components/common/Modal/Modal"
 import ShowQR from "@/components/common/ShowQR/ShowQR"
 import { useState } from "react"
 import { deleteTeacherProductAPI } from "@/api/teacher/shop/deleteTeacherProductAPI"
+import useModal from "@/components/common/Modal/useModal"
 	
 function product() {
+	const modal = useModal()
 	const router = useRouter()
 	const { pid } = router.query
 	const productId = typeof pid === "string" ? pid : ""
 	const [nation] = useGetNation()
-	const [openComp, closeComp, compState] = useCompHandler()
+	// const [openComp, closeComp, compState] = useCompHandler()
+	
 	const [time, setTime] = useState<number>(0)
 
 	const { data } = useQuery<getTeacherProductDetailType>(["product", productId], () =>
@@ -60,13 +63,16 @@ function product() {
 
 	return (
 		<div css={wrapperCSS}>
-			{data && (
+			{/* {data && (
 				<Modal
 					closeComp={closeComp}
 					compState={compState}
 					transition={"scale"}
 					content={<ShowQR type={"ico_rental"} id={data?.id} time={time} />}
 				/>
+			)} */}
+			{data && time && modal(
+				<ShowQR type={"ico_rental"} id={data?.id} time={time} />
 			)}
 			<div css={headerCSS}>
 				<div css={productCSS}>
@@ -88,7 +94,8 @@ function product() {
 									theme={"vividPositive"}
 									onClick={() => {
 										generateTime()
-										openComp()
+										// openComp()
+										modal.open()
 									}}
 								/>
 							)}

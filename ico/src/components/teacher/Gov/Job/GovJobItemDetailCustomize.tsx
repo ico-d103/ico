@@ -7,20 +7,32 @@ import UseAnimations from "react-useanimations"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
-import GovJobCard from "./GovJobCard"
+import GovJobCard from "./GovJobItemCard"
 import { certificationType } from "./GovJobItemType"
-import GovJobItemCertItem from "./GovJobItemCertItem"
+import GovJobItemDetailCustomizeCertItem from "./GovJobItemDetailCustomizeCertItem"
+import { empoweredType, getGovPowerType } from "@/types/teacher/apiReturnTypes"
+import GovJobItemDetailCustomizePowerItem from "./GovJobItemDetailCustomizePowerItem"
 
 type GovJobItemCardCustomizeProps = {
-	closeComp: Function
+	closeComp: () => void
 	certification: certificationType[]
 	ratingHandler: any
+	empowered: empoweredType[]
+	powerList: getGovPowerType[]
+	empoweredInputHandler: Function
 }
 
-function GovJobItemDetailCustomize({ certification, ratingHandler, closeComp  }: GovJobItemCardCustomizeProps) {
+function GovJobItemDetailCustomize({
+	certification,
+	ratingHandler,
+	empoweredInputHandler,
+	closeComp,
+	empowered,
+	powerList,
+}: GovJobItemCardCustomizeProps) {
 	const renderCertField = certification?.map((el, idx) => {
 		return (
-			<GovJobItemCertItem
+			<GovJobItemDetailCustomizeCertItem
 				arrIdx={idx}
 				id={el.id}
 				subject={el.subject}
@@ -29,24 +41,27 @@ function GovJobItemDetailCustomize({ certification, ratingHandler, closeComp  }:
 			/>
 		)
 	})
+
+	const renderPowerField = powerList.map((el, idx) => {
+		const isChecked = empowered.includes(String(el.id))
+		return (
+			<GovJobItemDetailCustomizePowerItem
+				isChecked={isChecked}
+				id={el.id}
+				name={el.name}
+				empoweredInputHandler={empoweredInputHandler}
+			/>
+		)
+	})
+
 	return (
 		<div css={wrapperCSS}>
 			<div css={cardWrapperCSS}>
-				<div css={certInnerFieldCSS}>
-					{renderCertField}
-				</div>
-				
+				<div css={certInnerFieldCSS}>{renderCertField}</div>
+				<div css={certInnerFieldCSS}>{renderPowerField}</div>
 			</div>
 			<div css={buttonWrapperCSS}>
-				<Button
-					text={"확인"}
-					fontSize={"var(--student-h3)"}
-					width={"47%"}
-					theme={"positive"}
-					onClick={() => {
-						closeComp()
-					}}
-				/>
+				<Button text={"확인"} fontSize={"var(--student-h3)"} width={"47%"} theme={"positive"} onClick={closeComp} />
 			</div>
 		</div>
 	)
@@ -59,10 +74,10 @@ const wrapperCSS = css`
 	align-items: center;
 `
 
-
 const cardWrapperCSS = css`
 	display: flex;
 	align-items: center;
+	gap: 16px;
 `
 
 const buttonWrapperCSS = css`
@@ -76,12 +91,9 @@ const certInnerFieldCSS = css`
 	min-height: 200px;
 	height: 1px;
 	overflow-y: scroll;
-	background-color: white;;
-	border-radius: 10px;;
+	background-color: white;
+	border-radius: 10px;
 	padding: 8px;
 `
-
-
-
 
 export default GovJobItemDetailCustomize

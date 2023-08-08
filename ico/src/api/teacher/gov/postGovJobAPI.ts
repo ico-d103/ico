@@ -1,4 +1,6 @@
 import { tokenInstance } from "@/api/instance"
+// import { empoweredType } from "@/components/teacher/Gov/Job/GovJobItemType"
+import { empoweredType } from "@/types/teacher/apiReturnTypes"
 import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type certificationType = {
@@ -17,12 +19,12 @@ type paramsType = {
     body: {
         title: string
         detail: string
-        wage: string
+        salary: string
         creditRating: string
         color: string
         image: string
         total: string
-        roleStatus: roleStatusType | null
+        empowered: empoweredType[]
         certification?: certificationType[]
     }
 }

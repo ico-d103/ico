@@ -146,15 +146,15 @@ const SwipeableGallery = ({ parentRef, content }: any) => {
 				}}
 				onSwipeEnd={onSwipeEnd}
 				onSwipeMove={onSwipeMove}
+				css={css`width: 100%; height: 100%;`}
 			>
-				<div className={styles.wrapper}>
-					<div className={styles.moveable} ref={movingDiv}>
+				<div css={wrapperCSS}>
+					<div css={moveableCSS} ref={movingDiv}>
 						{content.map((el: any, idx: number) => {
 							return (
 								<div
 									key={`banner-${idx}`}
-									className={styles.content}
-									style={{ width: width + "px", height: height + "px" }}
+									css={contentCSS}
 								>
 									{el}
 								</div>
@@ -175,6 +175,36 @@ export default SwipeableGallery
 
 const outerWrapperCSS = css`
 	position: relative;
+	width: 100%;
+	height: 100%;
+`
+
+const wrapperCSS = css`
+
+  /* width: 300px;
+    height: 300px; */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+
+
+`
+
+const contentCSS = css`
+	  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(250, 250, 250);
+  box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+`
+const moveableCSS = css`
+	  display: flex;
+  transition-property: transform;
+	width: 100%;
+	height: 100%;
 `
 
 const prevBtnCSS = css`

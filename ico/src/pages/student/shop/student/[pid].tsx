@@ -17,12 +17,15 @@ import SwipeableGallery from "@/components/common/SwipeableGallery/SwipeableGall
 import Button from "@/components/common/Button/Button"
 import { useAtom } from "jotai"
 import { isNavigating } from "@/store/store"
+import useModal from "@/components/common/Modal/useModal"
 
 function product() {
 	const router = useRouter()
 	const { pid } = router.query
-	const [openShowQR, closeShowQR, showQRState] = useCompHandler()
-	const [openScanQR, closeScanQR, scanQRState] = useCompHandler()
+	// const [openShowQR, closeShowQR, showQRState] = useCompHandler()
+	// const [openScanQR, closeScanQR, scanQRState] = useCompHandler()
+	const showQRModal = useModal()
+	const scanQRModal = useModal()
 	const [time, setTime] = useState<number>(0)
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 	const [term, setTerm] = useState<0 | 1>(0)
@@ -61,7 +64,7 @@ function product() {
 		<div css={wrapperCSS}>
 			{data && (
 				<React.Fragment>
-					<Modal
+					{/* <Modal
 						compState={showQRState}
 						closeComp={closeShowQR}
 						transition={"scale"}
@@ -69,14 +72,20 @@ function product() {
 							<ShowQR type={"ico_purchase"} id={data.id} time={time} />
 							// <QRScannerModal compState={compState} type={data.rental ? "ico_rental" : "ico_purchase"} id={data.id} />
 						}
-					/>
+					/> */}
+					{showQRModal(
+						<ShowQR type={"ico_purchase"} id={data.id} time={time} />
+					)}
 
-					<Modal
+					{/* <Modal
 						compState={scanQRState}
 						closeComp={closeScanQR}
 						transition={"scale"}
 						content={<QRScannerModal compState={scanQRState} type={"ico_purchase"} id={data.id} />}
-					/>
+					/> */}
+					{scanQRModal(
+						<QRScannerModal compState={scanQRModal.state} type={"ico_purchase"} id={data.id} />
+					)}
 				</React.Fragment>
 			)}
 			<PageHeader title={"상점"} />
@@ -132,7 +141,7 @@ function product() {
 						fontSize={`var(--student-h3)`}
 						width={"100%"}
 						theme={"mobileSoft"}
-						onClick={openScanQR}
+						onClick={scanQRModal.open}
 					/>
 				</div>
 			)}
@@ -146,7 +155,7 @@ function product() {
 						theme={"mobileSoft"}
 						onClick={() => {
 							generateTime()
-							openShowQR()
+							showQRModal.open()
 						}}
 					/>
 				</div>

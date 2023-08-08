@@ -19,10 +19,12 @@ import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
 import useGetNation from "@/hooks/useGetNation"
 import { useEffect } from "react"
+import useModal from "@/components/common/Modal/useModal"
 
 function property() {
 	const [nation] = useGetNation()
-	const [openComp, closeComp, compState] = useCompHandler()
+	// const [openComp, closeComp, compState] = useCompHandler()
+	const modal = useModal()
 	const [isDepositMenuOpenAtom, setIsDepositMenuOpenAtom] = useAtom(isDepositMenuOpen)
 	const [selectedPageAtom, setSelectedPageAtom] = useAtom(selectedPage)
 
@@ -36,12 +38,12 @@ function property() {
 		// flag: true면 입금, false면 출금
 		if (flag) setIsDepositMenuOpenAtom(true)
 		else setIsDepositMenuOpenAtom(false)
-
-		openComp()
+		modal.open()
+		// openComp()
 	}
 
 	useEffect(() => {
-		// 다른 페이지에서 pagination number가 조정됐을 시, 초기화
+		// 페이지 이동 시 store값 초기화
 		setSelectedPageAtom(1)
 	}, [])
 
@@ -55,54 +57,55 @@ function property() {
 	}, [selectedPageAtom, treasuryList])
 
 	return (
-		<div css={wrapperCSS}>
-			<div css={headerCSS}>
-				<h1>국고</h1>
-				<KebabMenu
-					dropdownList={[
-						{
-							name: "deposit",
-							content: null,
-							label: "국고 입금",
-							function: () => openModal(true),
-						},
-						{
-							name: "withdrawal",
-							content: null,
-							label: "국고 출금",
-							function: () => openModal(false),
-						},
-					]}
-				/>
-			</div>
-			<div css={titleCSS}>
-				<div>{CLASS_PROPERTY}</div>
-				<div>
-					현재{" "}
-					<b>
-						{treasury.data?.treasury} {nation.currency}
-					</b>
-					가 국고에 있어요.
+		<>
+			<div css={wrapperCSS}>
+				<div css={headerCSS}>
+					<h1>국고</h1>
+					<KebabMenu
+						dropdownList={[
+							{
+								name: "deposit",
+								content: null,
+								label: "국고 입금",
+								function: () => openModal(true),
+							},
+							{
+								name: "withdrawal",
+								content: null,
+								label: "국고 출금",
+								function: () => openModal(false),
+							},
+						]}
+					/>
 				</div>
-			</div>
-			<div css={contentCSS}>
-				<div>
-					<h3 css={contentTitleCSS}>국고 입출금 내역</h3>
-				</div>
-				{treasuryList.data?.page.length === 0 ? (
-					<div css={noneWrapperCSS}>
-						<UseAnimations animation={alertCircle} size={300} strokeColor={"rgba(0,0,0,0.4)"} />
-						<h1>입출금 내역이 없습니다.</h1>
+				<div css={titleCSS}>
+					<div>{CLASS_PROPERTY}</div>
+					<div>
+						현재{" "}
+						<b>
+							{treasury.data?.treasury} {nation.currency}
+						</b>
+						가 국고에 있어요.
 					</div>
-				) : (
-					<PropertyList propertyList={treasuryList.data?.page ? treasuryList.data.page : []} />
+				</div>
+				<div css={contentCSS}>
+					<div>
+						<h3 css={contentTitleCSS}>국고 입출금 내역</h3>
+					</div>
+					{treasuryList.data?.page.length === 0 ? (
+						<div css={noneWrapperCSS}>
+							<UseAnimations animation={alertCircle} size={300} strokeColor={"rgba(0,0,0,0.4)"} />
+							<h1>입출금 내역이 없습니다.</h1>
+						</div>
+					) : (
+						<PropertyList propertyList={treasuryList.data?.page ? treasuryList.data.page : []} />
+					)}
+				</div>
+				{treasuryList.data && (
+					<Pagination size={treasuryList.data.size} maxSize={10} margin={"30px 0 0 0"} buttonSize={"35px"} />
 				)}
 			</div>
-			{treasuryList.data && (
-				<Pagination size={treasuryList.data.size} maxSize={10} margin={"30px 0 0 0"} buttonSize={"35px"} />
-			)}
-
-			<Modal
+			{/* <Modal
 				compState={compState}
 				closeComp={closeComp}
 				transition={"scale"}
@@ -117,8 +120,19 @@ function property() {
 						}
 					/>
 				}
+			/> */}
+			{modal(
+				<ModalContent
+				width={"500px"}
+				icon={CLASS_BIG_PROPERTY}
+				title={isDepositMenuOpenAtom ? "국고 입금하기" : "국고 출금하기"}
+				titleSize={"var(--teacher-h2)"}
+				content={
+					<ClassPropertyUseModalContent closeComp={modal.close} isDepositMenuOpenAtom={isDepositMenuOpenAtom} />
+				}
 			/>
-		</div>
+			)}
+		</>
 	)
 }
 
