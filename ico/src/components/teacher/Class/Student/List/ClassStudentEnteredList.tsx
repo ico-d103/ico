@@ -15,18 +15,23 @@ import ClassStudentDetailHead from "../Detail/ClassStudentDetailHead"
 import CheckBox from "@/components/teacher/common/CheckBox/CheckBox"
 import useModal from "@/components/common/Modal/useModal"
 import { putDeportStudentsAPI } from "@/api/teacher/class/putDeportStudentsAPI"
+import { postStudentsSalaryAPI } from "@/api/teacher/class/postStudentsSalaryAPI"
 
 function StudentEnteredList() {
 	const noti = useNotification()
 	const queryClient = useQueryClient()
 	const resetJobModal = useModal()
 	const deportStudentsModal = useModal()
+	const payStudentsSalaryModal = useModal()
 
 	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
+	const deportStudentsMutation = useMutation((args: { body: { studentIds: number[] } }) => putDeportStudentsAPI(args))
 	const resetStudentsJobMutation = useMutation((args: { body: { studentIds: number[] } }) =>
 		putResetStudentsJobAPI(args),
 	)
-	const deportStudentsMutation = useMutation((args: { body: { studentIds: number[] } }) => putDeportStudentsAPI(args))
+	const postStudentsSalaryMutation = useMutation((args: { body: { studentIds: number[] } }) =>
+		postStudentsSalaryAPI(args),
+	)
 
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 	const [checkedStudentAtom, setCheckedStudentAtom] = useAtom(checkedStudent)
@@ -82,6 +87,7 @@ function StudentEnteredList() {
 
 		if (type === "reset") resetJobModal.open()
 		else if (type === "deport") deportStudentsModal.open()
+		else if (type === "salary") payStudentsSalaryModal.open()
 	}
 
 	const deportStudentsHandler = () => {
@@ -91,7 +97,29 @@ function StudentEnteredList() {
 		deportStudentsMutation.mutate(args, {
 			onSuccess: () => {
 				noti({
-					content: <NotiTemplate type={"ok"} content={"학생을 내보냈습니다."} />,
+					content: <NotiTemplate type={"ok"} content={"선택된 학생(들)을 내보냈습니다."} />,
+					duration: 3000,
+				})
+
+				return queryClient.invalidateQueries(["studentList", "entered"])
+			},
+			onError: () => {
+				noti({
+					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+					duration: 3000,
+				})
+			},
+		})
+	}
+
+	const payStudentsSalaryHandler = () => {
+		const keys = checkedStudentAtom.map((item) => parseInt(Object.keys(item)[0]))
+		const args = { body: { studentIds: keys } }
+
+		postStudentsSalaryMutation.mutate(args, {
+			onSuccess: () => {
+				noti({
+					content: <NotiTemplate type={"ok"} content={"학생(들)에게 월급을 지급했습니다."} />,
 					duration: 3000,
 				})
 
@@ -129,6 +157,12 @@ function StudentEnteredList() {
 					</div>
 					<KebabMenu
 						dropdownList={[
+							{
+								name: "payStudentsSalary",
+								content: null,
+								label: "월급 지급",
+								function: () => checkValidModalOpen("salary"),
+							},
 							{
 								name: "resetJob",
 								content: null,
@@ -175,6 +209,19 @@ function StudentEnteredList() {
 					proceed={deportStudentsHandler}
 					width={"480px"}
 					content={["선택된 학생(들)이 올바른지 다시 확인해 주세요.", "선택된 학생(들)의 데이터가 없어집니다."]}
+				/>,
+			)}
+			{payStudentsSalaryModal(
+				<ModalAlert
+					title={`학생 ${checkedStudentAtom.length}명에게 월급을 지급합니다.`}
+					titleSize={"var(--teacher-h2)"}
+					proceed={payStudentsSalaryHandler}
+					width={"480px"}
+					content={[
+						"선택된 학생(들)이 올바른지 다시 확인해 주세요.",
+						"무직인 학생에게는 돈이 지급되지 않습니다.",
+						"직업이 있더라도 임금이 없는 경우에는 돈이 지급되지 않습니다.",
+					]}
 				/>,
 			)}
 		</>
