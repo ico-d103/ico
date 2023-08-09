@@ -34,7 +34,6 @@ function FinanceInvestIssueList({ issueList }: FinanceInvestIssueListProps) {
 
 	return (
 		<div>
-			
             {renderIssueList}
 		</div>
 	)

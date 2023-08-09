@@ -1,11 +1,12 @@
-import React, {useReducer, useEffect, useState} from 'react'
-import { GovRuleClassDetailProps, certificationType, inputType, validItemType, validType } from './GovJobItemType';
-import { UseMutationResult, useMutation, useQueryClient } from '@tanstack/react-query';
-import { postGovJobAPI } from '@/api/teacher/gov/postGovJobAPI';
-import { putGovJobAPI } from '@/api/teacher/gov/putGovJobAPI';
-import useNotification from '@/hooks/useNotification';
-import NotiTemplate from '@/components/common/StackNotification/NotiTemplate';
-
+import React, { useReducer, useEffect, useState } from "react"
+import { GovRuleClassDetailProps, inputType, validItemType, validType } from "./GovJobItemType"
+import { getLicenseType, jobLicenseListType } from "@/types/teacher/apiReturnTypes"
+import { UseMutationResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { postGovJobAPI } from "@/api/teacher/gov/postGovJobAPI"
+import { putGovJobAPI } from "@/api/teacher/gov/putGovJobAPI"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import { getLicenseAPI } from "@/api/teacher/gov/getLicenseAPI"
 
 export const JOB_COLOR = [
 	"#FF165C",
@@ -58,8 +59,8 @@ const inputReducer = (state: inputType, action: { type: string; value: any }): i
 			return { ...state, image: action.value }
 		case "CHANGE_TOTAL":
 			return { ...state, total: action.value }
-		case "CHANGE_CERTIFICATION":
-			return { ...state, certification: action.value }
+		case "CHANGE_JOB_LICENSE_LIST":
+			return { ...state, jobLicenseList: action.value }
 		case "CHANGE_EMPOWERED":
 			return { ...state, empowered: action.value }
 		default:
@@ -83,8 +84,8 @@ const validReducer = (state: validType, action: { type: string; value: validItem
 			return { ...state, image: action.value }
 		case "CHANGE_TOTAL":
 			return { ...state, total: action.value }
-		case "CHANGE_CERTIFICATION":
-			return { ...state, certification: action.value }
+		case "CHANGE_JOB_LICENSE_LIST":
+			return { ...state, jobLicenseList: action.value }
 		case "CHANGE_EMPOWERED":
 			return { ...state, empowered: action.value }
 		default:
@@ -105,19 +106,44 @@ function useGovJobInput({
 	currency,
 	empowered,
 	powerList,
-	certification,
+	jobLicenseList,
+	licenseList,
 	closeHandler,
 }: GovRuleClassDetailProps) {
-  const initialInput: inputType = {
+	const [initLicense, setInitLicense] = useState(false)
+	const initJobLicenseList = licenseList.map((el) => {
+		const template = {
+			subject: el.subject,
+			id: el.id,
+			rating: -1,
+		}
+		const isExist = jobLicenseList?.filter((eel) => eel.subject === el.subject)
+		if (isExist && isExist[0]) {
+			template.rating = isExist[0].rating
+		}
+
+		return template
+	})
+
+	useEffect(() => {
+		// alert(JSON.stringify(mnftr_jobLicenseList))
+		dispatchInput({
+			type: "CHANGE_JOB_LICENSE_LIST",
+			value: initJobLicenseList,
+		})
+		setInitLicense(() => true)
+	}, [])
+
+	const initialInput: inputType = {
 		title: title ? title : "",
 		detail: detail ? detail : "",
-		salary: salary ? String(salary) : "",
+		salary: salary ? String(salary.replace(",", "")) : "",
 		creditRating: creditRating ? String(creditRating) : "",
 		color: color ? color : "#FF165C",
 		image: image ? image : "/assets/job/worker_male.png",
 		total: total ? String(total) : "",
 		empowered: empowered ? empowered : [],
-		certification,
+		jobLicenseList: jobLicenseList ? jobLicenseList : [],
 	}
 
 	const initialValid: validType = {
@@ -128,30 +154,111 @@ function useGovJobInput({
 		color: color ? "notChanged" : "changed",
 		image: image ? "notChanged" : "changed",
 		total: total ? "notChanged" : "empty",
-		empowered: empowered ? "notChanged" : "empty",
-		certification: certification ? "notChanged" : "changed",
+		empowered: empowered ? "notChanged" : "changed",
+		jobLicenseList: jobLicenseList ? "notChanged" : "changed",
 	}
 
 	const [inputState, dispatchInput] = useReducer(inputReducer, initialInput)
 	const [validState, dispatchValid] = useReducer(validReducer, initialValid)
 	const [isSubmitValid, setIsSubmitValid] = useState<boolean>(false)
-  const [illustIdx, setIllustIdx] = useState<number>(ILLUST.indexOf(inputState.image))
-  const noti = useNotification()
+	const [illustIdx, setIllustIdx] = useState<number>(ILLUST.indexOf(inputState.image))
+	const noti = useNotification()
 
 
-  useEffect(() => {
-		const validHandler = function (el: certificationType, idx: number) {
-			return el.rating === certification[idx].rating
+
+
+	useEffect(() => {
+		if (initLicense) {
+			const validHandler = function (el: jobLicenseListType, idx: number) {
+				if (initJobLicenseList) {
+					return el.rating === initJobLicenseList[idx].rating
+				}
+			}
+
+			const isCertValid = inputState.jobLicenseList.every(validHandler)
+
+			if (isCertValid === false) {
+				dispatchValid({ type: "CHANGE_JOB_LICENSE_LIST", value: "changed" })
+			} else {
+				dispatchValid({ type: "CHANGE_JOB_LICENSE_LIST", value: "notChanged" })
+			}
 		}
+	}, [inputState.jobLicenseList, jobLicenseList])
 
-		const isCertValid = inputState.certification.every(validHandler)
+	// useEffect(() => {
+	// 	if (inputState.title !== title && inputState.title.trim() !== "") {
+	// 		dispatchValid({ type: "CHANGE_TITLE", value: "changed" })
+	// 	} else if (inputState.title === title) {
+	// 		dispatchValid({ type: "CHANGE_TITLE", value: "notChanged" })
+	// 	} else if (inputState.title.trim() === "") {
+	// 		dispatchValid({ type: "CHANGE_TITLE", value: "empty" })
+	// 	}
 
-		if (isCertValid === false) {
-			dispatchValid({ type: "CHANGE_CERTIFICATION", value: "changed" })
-		} else {
-			dispatchValid({ type: "CHANGE_CERTIFICATION", value: "notChanged" })
-		}
-	}, [inputState.certification, certification])
+	// 	if (inputState.detail !== detail && inputState.detail.trim() !== "") {
+	// 		dispatchValid({ type: "CHANGE_DETAIL", value: "changed" })
+	// 	} else if (inputState.detail === detail) {
+	// 		dispatchValid({ type: "CHANGE_DETAIL", value: "notChanged" })
+	// 	} else if (inputState.detail.trim() === "") {
+	// 		dispatchValid({ type: "CHANGE_DETAIL", value: "empty" })
+	// 	}
+		
+	// 	const existedSalary = salary && String(salary.replace(",", ""))
+	// 	if (inputState.salary !== existedSalary && inputState.salary !== "") {
+	// 		dispatchValid({ type: "CHANGE_SALARY", value: "changed" })
+	// 	} else if (Number(inputState.salary) === Number(salary)) {
+	// 		dispatchValid({ type: "CHANGE_SALARY", value: "notChanged" })
+	// 	} else if (inputState.salary === "") {
+	// 		dispatchValid({ type: "CHANGE_SALARY", value: "empty" })
+	// 	}
+
+	// 	if (
+	// 		Number(inputState.creditRating) !== creditRating &&
+	// 		inputState.creditRating !== "" &&
+	// 		inputState.creditRating !== "0"
+	// 	) {
+	// 		dispatchValid({ type: "CHANGE_CREDIT", value: "changed" })
+	// 	} else if (Number(inputState.creditRating) === creditRating) {
+	// 		dispatchValid({ type: "CHANGE_CREDIT", value: "notChanged" })
+	// 	} else if (inputState.creditRating === "" || inputState.creditRating === "0") {
+	// 		dispatchValid({ type: "CHANGE_CREDIT", value: "empty" })
+	// 	}
+
+	// 	if (inputState.color !== color && inputState.color.trim() !== "") {
+	// 		dispatchValid({ type: "CHANGE_COLOR", value: "changed" })
+	// 	} else if (inputState.color === color) {
+	// 		dispatchValid({ type: "CHANGE_COLOR", value: "notChanged" })
+	// 	} else if (inputState.color.trim() === "") {
+	// 		dispatchValid({ type: "CHANGE_COLOR", value: "empty" })
+	// 	}
+
+	// 	if (inputState.image !== image && inputState.image.trim() !== "") {
+	// 		dispatchValid({ type: "CHANGE_IMG_URL", value: "changed" })
+	// 	} else if (inputState.image === image) {
+	// 		dispatchValid({ type: "CHANGE_IMG_URL", value: "notChanged" })
+	// 	} else if (inputState.image.trim() === "") {
+	// 		dispatchValid({ type: "CHANGE_IMG_URL", value: "empty" })
+	// 	}
+
+	// 	if (Number(inputState.total) !== total && inputState.total !== "") {
+	// 		dispatchValid({ type: "CHANGE_TOTAL", value: "changed" })
+	// 	} else if (Number(inputState.total) === total) {
+	// 		dispatchValid({ type: "CHANGE_TOTAL", value: "notChanged" })
+	// 	} else if (inputState.total === "") {
+	// 		dispatchValid({ type: "CHANGE_TOTAL", value: "empty" })
+	// 	}
+
+	// 	if (
+	// 		(inputState.empowered && empowered && inputState.empowered !== empowered) ||
+	// 		(empowered === null && inputState.empowered !== null) ||
+	// 		(empowered !== null && inputState.empowered === null)
+	// 	) {
+	// 		dispatchValid({ type: "CHANGE_ROLE_STATUS", value: "changed" })
+	// 	} else if (empowered === null && inputState.empowered === null) {
+	// 		dispatchValid({ type: "CHANGE_ROLE_STATUS", value: "notChanged" })
+	// 	} else if (inputState.empowered && empowered && inputState.empowered === empowered) {
+	// 		dispatchValid({ type: "CHANGE_ROLE_STATUS", value: "notChanged" })
+	// 	}
+	// }, [inputState, title, detail, salary, color, image, creditRating, total, empowered])
 
 	useEffect(() => {
 		if (inputState.title !== title && inputState.title.trim() !== "") {
@@ -161,7 +268,9 @@ function useGovJobInput({
 		} else if (inputState.title.trim() === "") {
 			dispatchValid({ type: "CHANGE_TITLE", value: "empty" })
 		}
+	}, [inputState.title, title])
 
+	useEffect(() => {
 		if (inputState.detail !== detail && inputState.detail.trim() !== "") {
 			dispatchValid({ type: "CHANGE_DETAIL", value: "changed" })
 		} else if (inputState.detail === detail) {
@@ -169,15 +278,42 @@ function useGovJobInput({
 		} else if (inputState.detail.trim() === "") {
 			dispatchValid({ type: "CHANGE_DETAIL", value: "empty" })
 		}
+	}, [inputState.detail, detail])
 
-		if (Number(inputState.salary) !== Number(salary) && inputState.salary !== "") {
-			dispatchValid({ type: "CHANGE_SALARY", value: "changed" })
-		} else if (Number(inputState.salary) === Number(salary)) {
+	
+	useEffect(() => {
+		const existedSalary = salary && String(salary.replace(",", ""))
+		if (String(inputState.salary) === String(existedSalary)) {
 			dispatchValid({ type: "CHANGE_SALARY", value: "notChanged" })
-		} else if (inputState.salary === "") {
+		} else if (String(inputState.salary).trim() === "0" || String(inputState.salary).trim() === "") {
 			dispatchValid({ type: "CHANGE_SALARY", value: "empty" })
-		}
+		} else if (inputState.salary !== existedSalary && inputState.salary !== "") {
+			dispatchValid({ type: "CHANGE_SALARY", value: "changed" })
+		} 
+		console.log(`${inputState.salary} ${existedSalary}`)
+	}, [inputState.salary, salary])
 
+	useEffect(() => {
+		if (inputState.color !== color && inputState.color.trim() !== "") {
+			dispatchValid({ type: "CHANGE_COLOR", value: "changed" })
+		} else if (inputState.color === color) {
+			dispatchValid({ type: "CHANGE_COLOR", value: "notChanged" })
+		} else if (inputState.color.trim() === "") {
+			dispatchValid({ type: "CHANGE_COLOR", value: "empty" })
+		}
+	}, [inputState.color, color])
+
+	useEffect(() => {
+		if (inputState.image !== image && inputState.image.trim() !== "") {
+			dispatchValid({ type: "CHANGE_IMG_URL", value: "changed" })
+		} else if (inputState.image === image) {
+			dispatchValid({ type: "CHANGE_IMG_URL", value: "notChanged" })
+		} else if (inputState.image.trim() === "") {
+			dispatchValid({ type: "CHANGE_IMG_URL", value: "empty" })
+		}
+	}, [inputState.image, image])
+
+	useEffect(() => {
 		if (
 			Number(inputState.creditRating) !== creditRating &&
 			inputState.creditRating !== "" &&
@@ -189,31 +325,19 @@ function useGovJobInput({
 		} else if (inputState.creditRating === "" || inputState.creditRating === "0") {
 			dispatchValid({ type: "CHANGE_CREDIT", value: "empty" })
 		}
+	}, [inputState.creditRating, creditRating])
 
-		if (inputState.color !== color && inputState.color.trim() !== "") {
-			dispatchValid({ type: "CHANGE_COLOR", value: "changed" })
-		} else if (inputState.color === color) {
-			dispatchValid({ type: "CHANGE_COLOR", value: "notChanged" })
-		} else if (inputState.color.trim() === "") {
-			dispatchValid({ type: "CHANGE_COLOR", value: "empty" })
-		}
-
-		if (inputState.image !== image && inputState.image.trim() !== "") {
-			dispatchValid({ type: "CHANGE_IMG_URL", value: "changed" })
-		} else if (inputState.image === image) {
-			dispatchValid({ type: "CHANGE_IMG_URL", value: "notChanged" })
-		} else if (inputState.image.trim() === "") {
-			dispatchValid({ type: "CHANGE_IMG_URL", value: "empty" })
-		}
-
-		if (Number(inputState.total) !== total && inputState.total !== "") {
-			dispatchValid({ type: "CHANGE_TOTAL", value: "changed" })
-		} else if (Number(inputState.total) === total) {
+	useEffect(() => {
+		if (Number(inputState.total) === total) {
 			dispatchValid({ type: "CHANGE_TOTAL", value: "notChanged" })
-		} else if (inputState.total === "") {
+		} else if (String(inputState.total).trim() === "" || String(inputState.total).trim() === "0") {
 			dispatchValid({ type: "CHANGE_TOTAL", value: "empty" })
+		} else if (Number(inputState.total) !== total && inputState.total !== "") {
+			dispatchValid({ type: "CHANGE_TOTAL", value: "changed" })
 		}
+	}, [inputState.total, total])
 
+	useEffect(() => {
 		if (
 			(inputState.empowered && empowered && inputState.empowered !== empowered) ||
 			(empowered === null && inputState.empowered !== null) ||
@@ -225,7 +349,12 @@ function useGovJobInput({
 		} else if (inputState.empowered && empowered && inputState.empowered === empowered) {
 			dispatchValid({ type: "CHANGE_ROLE_STATUS", value: "notChanged" })
 		}
-	}, [inputState, title, detail, salary, color, image, creditRating, total, empowered])
+	}, [inputState.empowered, empowered])
+
+
+
+
+
 
 	useEffect(() => {
 		const arr = Object.values(validState)
@@ -234,19 +363,34 @@ function useGovJobInput({
 
 	const queryClient = useQueryClient()
 
-	const createMutation = useMutation((a: number) =>
-		postGovJobAPI({
-			body: inputState,
-		}),
-	)
-	const updateMutation = useMutation((idx: number) =>
-		putGovJobAPI({
-			idx,
-			body: inputState,
-		}),
-	)
+	const createMutation = useMutation((a: number) => {
+		const temp: any = inputState
+		const licenseForm = inputState.jobLicenseList.map((el) => {
+			return {
+				[el.id]: el.rating,
+			}
+		})
+		temp.jobLicenseList = licenseForm
+		return postGovJobAPI({
+			body: temp,
+		})
+	})
+	const updateMutation = useMutation((idx: number) => {
+		const temp: any = inputState
+		const licenseForm = inputState.jobLicenseList.map((el) => {
+			return {
+				[el.id]: el.rating,
+			}
+		})
+		temp.jobLicenseList = licenseForm
 
-  const colorPickHandler = (value: string) => {
+		return putGovJobAPI({
+			idx,
+			body: temp,
+		})
+	})
+
+	const colorPickHandler = (value: string) => {
 		dispatchInput({ type: "CHANGE_COLOR", value })
 	}
 
@@ -270,10 +414,10 @@ function useGovJobInput({
 		}
 	}
 
-  const ratingHandler = ({ id, reverse = false }: { id: number; reverse: boolean }) => {
+	const ratingHandler = ({ id, reverse = false }: { id: number; reverse: boolean }) => {
 		let curIdx: number = 0
 
-		inputState.certification.forEach((item, idx) => {
+		inputState.jobLicenseList.forEach((item, idx) => {
 			if (item.id === id) {
 				curIdx = idx
 			}
@@ -281,14 +425,14 @@ function useGovJobInput({
 
 		let value: number | null = null
 		if (reverse === true) {
-			if (inputState.certification[curIdx].rating > 1) {
-				value = inputState.certification[curIdx].rating - 1
-			} else if (inputState.certification[curIdx].rating === -1) {
+			if (inputState.jobLicenseList[curIdx].rating > 1) {
+				value = inputState.jobLicenseList[curIdx].rating - 1
+			} else if (inputState.jobLicenseList[curIdx].rating === -1) {
 				value = 10
 			}
 		} else {
-			if (inputState.certification[curIdx].rating < 10 && inputState.certification[curIdx].rating !== -1) {
-				value = inputState.certification[curIdx].rating + 1
+			if (inputState.jobLicenseList[curIdx].rating < 10 && inputState.jobLicenseList[curIdx].rating !== -1) {
+				value = inputState.jobLicenseList[curIdx].rating + 1
 			} else {
 				value = -1
 			}
@@ -296,13 +440,11 @@ function useGovJobInput({
 
 		if (value !== null) {
 			dispatchInput({
-				type: "CHANGE_CERTIFICATION",
-				value: inputState.certification.map((item) => (id === item.id ? { ...item, rating: value } : item)),
+				type: "CHANGE_JOB_LICENSE_LIST",
+				value: inputState.jobLicenseList.map((item) => (id === item.id ? { ...item, rating: value } : item)),
 			})
 		}
 	}
-
-
 
 	const titleInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		dispatchInput({ type: "CHANGE_TITLE", value: event.target.value })
@@ -344,7 +486,7 @@ function useGovJobInput({
 
 	// }
 
-	const empoweredInputHandler = (e:React.ChangeEvent<HTMLInputElement>, value: number) => {
+	const empoweredInputHandler = (e: React.ChangeEvent<HTMLInputElement>, value: number) => {
 		const isExist = inputState.empowered.indexOf(String(value))
 		if (e.target.checked) {
 			const temp: string[] = inputState.empowered
@@ -355,14 +497,9 @@ function useGovJobInput({
 			temp.splice(isExist, 1)
 			dispatchInput({ type: "CHANGE_EMPOWERED", value: [...temp] })
 		}
-		
-
 	}
 
-	
-
-  
-  const submitHandler = () => {
+	const submitHandler = () => {
 		if (typeof idx === "number") {
 			return updateMutation.mutate(idx, {
 				onSuccess: (formData) => {
@@ -381,22 +518,20 @@ function useGovJobInput({
 		}
 	}
 
-  const handler = {
-    colorPickHandler,
-    illustPickerHandler,
-    ratingHandler,
-    titleInputHandler,
-    detailInputHandler,
-    creditInputHandler,
-    salaryInputHandler,
-    totalInputHandler,
-    submitHandler,
+	const handler = {
+		colorPickHandler,
+		illustPickerHandler,
+		ratingHandler,
+		titleInputHandler,
+		detailInputHandler,
+		creditInputHandler,
+		salaryInputHandler,
+		totalInputHandler,
+		submitHandler,
 		empoweredInputHandler,
-  }
+	}
 
-
-
-  return {inputState, handler, isSubmitValid}
+	return { inputState, handler, isSubmitValid, validState }
 }
 
 export default useGovJobInput

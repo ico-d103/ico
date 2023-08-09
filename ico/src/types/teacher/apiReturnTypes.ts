@@ -180,7 +180,14 @@ export type jobListType = {
 	count: number
 	studentNames: string[] | string
 	empowered: string[]
+	jobLicenseList: jobLicenseListType[]
 	detail: string
+}
+
+export type jobLicenseListType = {
+	id: number
+	subject: string
+	rating: number
 }
 
 export type getJobListType = {
@@ -222,6 +229,7 @@ export type studentLicenseBodyType = {
 export type getGovPowerType = {
 	id: number
 	name: string
+	detail: string
 }
 
 export type empoweredType = string

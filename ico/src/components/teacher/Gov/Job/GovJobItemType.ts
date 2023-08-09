@@ -1,4 +1,5 @@
-import { empoweredType, getGovPowerType } from "@/types/teacher/apiReturnTypes"
+import { empoweredType, getGovPowerType, getLicenseType } from "@/types/teacher/apiReturnTypes"
+import { jobLicenseListType } from "@/types/teacher/apiReturnTypes"
 
 export const obj = {
 	changed: "changed",
@@ -9,11 +10,7 @@ export const obj = {
 type Union<T> = T[keyof T]
 export type validItemType = Union<typeof obj>
 
-export type certificationType = {
-	id: number
-	subject: string
-	rating: number
-}
+
 
 
 export type GovRuleClassDetailProps = {
@@ -29,7 +26,8 @@ export type GovRuleClassDetailProps = {
 	currency?: string
 	empowered?: empoweredType[]
 	powerList: getGovPowerType[]
-	certification: certificationType[]
+	jobLicenseList?: jobLicenseListType[]
+	licenseList: getLicenseType[]
 	closeHandler?: Function
 }
 
@@ -42,7 +40,7 @@ export type inputType = {
 	image: string
 	total: string
 	empowered: empoweredType[]
-	certification: certificationType[]
+	jobLicenseList: jobLicenseListType[]
 }
 
 export type validType = {
@@ -54,5 +52,5 @@ export type validType = {
 	image: validItemType
 	total: validItemType
 	empowered: validItemType
-	certification: validItemType
+	jobLicenseList: validItemType
 }

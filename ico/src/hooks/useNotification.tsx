@@ -13,11 +13,13 @@ const useNotification = () => {
 	const notiDelieverer = ({
 		content,
 		duration,
+		id,
 		width = '350px',
 		height = '100px',
 	}: {
 		content: any
 		duration: number
+		id?: string
 		width?: string
 		height?: string
 	}) => {
@@ -25,7 +27,16 @@ const useNotification = () => {
 			Object.keys(stackNotificationAtom).length !== 0
 				? parseInt(Object.keys(stackNotificationAtom)[Object.keys(stackNotificationAtom).length - 1]) + 1
 				: 0
-
+		
+		if (id) {
+			let strKey = ""
+			for (let i = 0; i < id.length; i++) {
+				const asc = id.charCodeAt(i)
+				strKey += asc
+			}
+			key = Number(strKey)
+		}
+		
 		const value = {
 			content: content,
 			duration: duration,
