@@ -31,9 +31,32 @@ export type getHomeCouponType = {
 	assigned: boolean
 }
 
+//-----------------------------------------------------------
+// 투자
+
+export type getFinanceInvestListType = {
+	myStocks: getFinanceInvestListMyItemType[]
+	stockList: getFinanceInvestListStockItemType[]
+}
+
+export type getFinanceInvestListStockItemType = {
+	id: number
+	title: string
+}
+
+export type getFinanceInvestListMyItemType = {
+	stockId: number
+	title: string
+	price: number
+	amount: number
+	rate: number
+}
+
+//-----------------------------------------------------------
 export type getFinanceInvestType = {
 	stock: string
 	account: number
+	content: string
 	tradingStart: string
 	tradingEnd: string
 	myStock: {
@@ -48,6 +71,7 @@ export type FinanceInvestIssueType = {
 	amount: number
 	content: string
 }
+//-----------------------------------------------------------
 
 // export type getFinanceDepositRateType = {
 // 	creditRating: number
@@ -66,27 +90,27 @@ export type FinanceInvestIssueType = {
 
 export type myDepositType = {
 	id: string
-	title: null | string,
-	interest: number,
-	startDate: string,
-	endDate: string,
-	creditRating: number,
-	amount: number,
-	depositAmount: number,
+	title: null | string
+	interest: number
+	startDate: string
+	endDate: string
+	creditRating: number
+	amount: number
+	depositAmount: number
 	end: boolean
 }
 
 export type depositProductType = {
-	id: number,
-	title: string,
-	period: number,
+	id: number
+	title: string
+	period: number
 	interest: number
 }
 
 export type getFinanceDepositType = {
 	account: number
-    myDeposit: myDepositType[]
-    depositProduct: depositProductType[]
+	myDeposit: myDepositType[]
+	depositProduct: depositProductType[]
 }
 
 export type getClassRuleType = {
@@ -135,7 +159,7 @@ export type getFinanceInvestIssueType = {
 
 export type getPurchasedTransactionType = {
 	title: string
-    seller: string
-    type: boolean
-    date: string
+	seller: string
+	type: boolean
+	date: string
 }

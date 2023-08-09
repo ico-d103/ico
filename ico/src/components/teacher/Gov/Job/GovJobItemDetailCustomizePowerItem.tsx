@@ -4,14 +4,14 @@ import CheckBox from "../../common/CheckBox/CheckBox"
 
 type GovJobItemDetailCustomizePowerItemProps = {
 	id: number
-	name: string
+	detail: string
 	empoweredInputHandler: any
 	isChecked: boolean
 }
-function GovJobItemDetailCustomizePowerItem({id, name, empoweredInputHandler, isChecked }: GovJobItemDetailCustomizePowerItemProps) {
+function GovJobItemDetailCustomizePowerItem({id, detail, empoweredInputHandler, isChecked }: GovJobItemDetailCustomizePowerItemProps) {
 	return (
 		<div css={itemWrapperCSS}>
-			<div>{name}</div>
+			<div>{detail}</div>
 			<div >
 			<CheckBox onChange={(e) => empoweredInputHandler(e, id)} 
         checked={isChecked}/>

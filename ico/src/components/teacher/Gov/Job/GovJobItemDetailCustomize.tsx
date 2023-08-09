@@ -8,14 +8,14 @@ import alertTriangle from "react-useanimations/lib/alertTriangle"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
 import GovJobCard from "./GovJobItemCard"
-import { certificationType } from "./GovJobItemType"
+import { jobLicenseListType } from "@/types/teacher/apiReturnTypes"
 import GovJobItemDetailCustomizeCertItem from "./GovJobItemDetailCustomizeCertItem"
 import { empoweredType, getGovPowerType } from "@/types/teacher/apiReturnTypes"
 import GovJobItemDetailCustomizePowerItem from "./GovJobItemDetailCustomizePowerItem"
 
 type GovJobItemCardCustomizeProps = {
 	closeComp: () => void
-	certification: certificationType[]
+	jobLicenseList: jobLicenseListType[]
 	ratingHandler: any
 	empowered: empoweredType[]
 	powerList: getGovPowerType[]
@@ -23,14 +23,14 @@ type GovJobItemCardCustomizeProps = {
 }
 
 function GovJobItemDetailCustomize({
-	certification,
+	jobLicenseList,
 	ratingHandler,
 	empoweredInputHandler,
 	closeComp,
 	empowered,
 	powerList,
 }: GovJobItemCardCustomizeProps) {
-	const renderCertField = certification?.map((el, idx) => {
+	const renderCertField = jobLicenseList?.map((el, idx) => {
 		return (
 			<GovJobItemDetailCustomizeCertItem
 				arrIdx={idx}
@@ -48,7 +48,7 @@ function GovJobItemDetailCustomize({
 			<GovJobItemDetailCustomizePowerItem
 				isChecked={isChecked}
 				id={el.id}
-				name={el.name}
+				detail={el.detail}
 				empoweredInputHandler={empoweredInputHandler}
 			/>
 		)

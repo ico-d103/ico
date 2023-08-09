@@ -13,12 +13,13 @@ import { postGovJobAPI } from "@/api/teacher/gov/postGovJobAPI"
 import { putGovJobAPI } from "@/api/teacher/gov/putGovJobAPI"
 import GovJobItemCertItem from "./GovJobItemDetailCustomizeCertItem"
 import Dropdown from "@/components/common/Dropdown/Dropdown"
-import { inputType, validType, GovRuleClassDetailProps, certificationType, validItemType } from "./GovJobItemType"
+import { inputType, validType, GovRuleClassDetailProps, validItemType } from "./GovJobItemType"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import GovJobItemDetailCustomize from "./GovJobItemDetailCustomize"
 import useGovJobInput, { JOB_COLOR } from "./useGovJobInput"
 import useModal from "@/components/common/Modal/useModal"
+import { jobLicenseListType } from "@/types/teacher/apiReturnTypes"
 
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -41,11 +42,7 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 
 	const noti = useNotification()
 
-
-
-
-
-	const { inputState, handler, isSubmitValid } = useGovJobInput(props)
+	const { inputState, handler, isSubmitValid, validState } = useGovJobInput(props)
 
 	const renderColorPicker = JOB_COLOR.map((el, idx) => {
 		return (
@@ -71,7 +68,7 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 	)
 
 	let certCount = 0
-	const renderCertSub = inputState?.certification?.map((el, idx) => {
+	const renderCertSub = inputState?.jobLicenseList?.map((el, idx) => {
 		if (el.rating !== -1) {
 			certCount += 1
 			return `${certCount > 1 ? ", " : ""}${el.subject}: ${el.rating}`
@@ -81,7 +78,8 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 	let powerCount = 0
 	const renderPowerSub = props.powerList.map((el) => {
 		if (inputState.empowered.includes(String(el.id))) {
-			return `${certCount > 1 ? ", " : ""}${el.name}`
+			powerCount += 1
+			return `${powerCount > 1 ? ", " : ""}${el.detail}`
 		}
 	})
 
@@ -89,42 +87,39 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 		<React.Fragment>
 			{cardCustomizeModal(
 				<ModalContent
-				width={"480px"}
-				title={"명함 커스텀"}
-				titleSize={"var(--student-h1)"}
-				icon={APPLY_ICON}
-				content={
-					<GovJobItemCardCustomize
-						closeComp={cardCustomizeModal.close}
-						inputState={inputState}
-						colorPicker={renderColorPicker}
-						illustPicker={handler.illustPickerHandler}
-					/>
-				}
-			/>
+					width={"480px"}
+					title={"명함 커스텀"}
+					titleSize={"var(--student-h1)"}
+					icon={APPLY_ICON}
+					content={
+						<GovJobItemCardCustomize
+							closeComp={cardCustomizeModal.close}
+							inputState={inputState}
+							colorPicker={renderColorPicker}
+							illustPicker={handler.illustPickerHandler}
+						/>
+					}
+				/>,
 			)}
 
 			{detailCustomizeModal(
 				<ModalContent
-				width={"auto"}
-				title={"직업 커스텀"}
-				titleSize={"var(--student-h1)"}
-				icon={APPLY_ICON}
-				content={
-					<GovJobItemDetailCustomize
-						closeComp={detailCustomizeModal.close}
-						certification={inputState.certification}
-						empowered={inputState.empowered}
-						powerList={props.powerList}
-						empoweredInputHandler={handler.empoweredInputHandler}
-						ratingHandler={handler.ratingHandler}
-					/>
-				}
-			/>
+					width={"auto"}
+					title={"직업 커스텀"}
+					titleSize={"var(--student-h1)"}
+					icon={APPLY_ICON}
+					content={
+						<GovJobItemDetailCustomize
+							closeComp={detailCustomizeModal.close}
+							jobLicenseList={inputState.jobLicenseList}
+							empowered={inputState.empowered}
+							powerList={props.powerList}
+							empoweredInputHandler={handler.empoweredInputHandler}
+							ratingHandler={handler.ratingHandler}
+						/>
+					}
+				/>,
 			)}
-
-
-
 
 			<div css={itemWrapperCSS}>
 				<div
@@ -161,6 +156,7 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 								value={inputState.detail}
 								isTextarea={true}
 							/>
+							{/* {JSON.stringify(validState)} */}
 						</div>
 						<div css={footerCSS}>
 							<div css={prefWrapperCSS}>
@@ -195,13 +191,23 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 									rightContent={<div>명</div>}
 								/>
 
-								{certCount !== 0 && (
-									<div css={inputItemWrapperCSS} onClick={detailCustomizeModal.open}>
-										{renderCertSub} {renderPowerSub}
+								<div css={inputItemWrapperCSS} onClick={detailCustomizeModal.open}>
+									<div css={powerCertWrapperCSS}>
+									{certCount !== 0 ? <React.Fragment>{renderCertSub}</React.Fragment> : "자격증 설정"}
+									<span
+										css={css`
+											color: rgba(0, 0, 0, 0.5);
+											margin-left: 8px;
+											margin-right: 8px;
+										`}
+									>
+										|
+									</span>{" "}
+									{powerCount !== 0 ? <React.Fragment>{renderPowerSub}</React.Fragment> : "권한 설정"}
 									</div>
-								)}
+									
+								</div>
 
-								{/* 여기에 권한 리스트 */}
 							</div>
 
 							<div css={ButtonWrapperCSS}>
@@ -381,6 +387,13 @@ const certInnerFieldCSS = css`
 	overflow-y: scroll;
 
 	padding: 8px;
+`
+
+const powerCertWrapperCSS = css`
+	white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+	max-width: 500px;
 `
 
 export default GovJobItem
