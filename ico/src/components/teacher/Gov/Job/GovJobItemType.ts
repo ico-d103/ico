@@ -1,3 +1,5 @@
+import { empoweredType, getGovPowerType } from "@/types/teacher/apiReturnTypes"
+
 export const obj = {
 	changed: "changed",
 	notChanged: "notChanged",
@@ -13,17 +15,11 @@ export type certificationType = {
 	rating: number
 }
 
-export type empoweredType = string
-
-export type powerItemType = {
-	id: number
-	name: string
-}
 
 export type GovRuleClassDetailProps = {
 	title?: string
 	detail?: string
-	salary?: number
+	salary?: string
 	creditRating?: number
 	color?: string
 	image?: string
@@ -32,7 +28,7 @@ export type GovRuleClassDetailProps = {
 	idx?: number
 	currency?: string
 	empowered?: empoweredType[]
-	powerList: powerItemType[]
+	powerList: getGovPowerType[]
 	certification: certificationType[]
 	closeHandler?: Function
 }

@@ -1,5 +1,5 @@
 import { tokenInstance } from "@/api/instance"
-import { empoweredType } from "@/components/teacher/Gov/Job/GovJobItemType"
+import { empoweredType } from "@/types/teacher/apiReturnTypes"
 import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type certificationType = {

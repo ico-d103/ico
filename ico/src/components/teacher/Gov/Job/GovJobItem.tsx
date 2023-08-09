@@ -78,6 +78,13 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 		}
 	})
 
+	let powerCount = 0
+	const renderPowerSub = props.powerList.map((el) => {
+		if (inputState.empowered.includes(String(el.id))) {
+			return `${certCount > 1 ? ", " : ""}${el.name}`
+		}
+	})
+
 	return (
 		<React.Fragment>
 			{cardCustomizeModal(
@@ -107,6 +114,9 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 					<GovJobItemDetailCustomize
 						closeComp={detailCustomizeModal.close}
 						certification={inputState.certification}
+						empowered={inputState.empowered}
+						powerList={props.powerList}
+						empoweredInputHandler={handler.empoweredInputHandler}
 						ratingHandler={handler.ratingHandler}
 					/>
 				}
@@ -187,7 +197,7 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 
 								{certCount !== 0 && (
 									<div css={inputItemWrapperCSS} onClick={detailCustomizeModal.open}>
-										{renderCertSub}
+										{renderCertSub} {renderPowerSub}
 									</div>
 								)}
 

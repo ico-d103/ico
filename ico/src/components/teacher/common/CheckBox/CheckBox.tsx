@@ -4,7 +4,6 @@ import { SerializedStyles, css } from "@emotion/react"
 type CheckBoxProps = {
 	label?: any
 	customCss?: SerializedStyles | SerializedStyles[]
-	css?: null
   children?: ReactNode
   childDir?: 'left' | 'right'
 } & React.InputHTMLAttributes<HTMLInputElement>

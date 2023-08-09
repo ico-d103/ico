@@ -7,18 +7,25 @@ import { css } from "@emotion/react"
 import FormCreator from "@/components/teacher/common/Form/FormCreator"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getGovJobAPI } from "@/api/teacher/gov/getGovJobAPI"
-import { getGovJobAuthType, getGovJobType } from "@/types/teacher/apiReturnTypes"
+import { getGovPowerType, getGovJobType, getJobListType } from "@/types/teacher/apiReturnTypes"
 import GovJobItem from "@/components/teacher/Gov/Job/GovJobItem"
 import useGetNation from "@/hooks/useGetNation"
 import { getGovJobAuthAPI } from "@/api/teacher/gov/getGovJobAuthAPI"
+import { getGovPowerAPI } from "@/api/teacher/gov/getGovPowerAPI"
 
 function index() {
 	const [openComp, closeComp, compState] = useCompHandler()
 	const [nation] = useGetNation()
 
-	const jobsQuery = useQuery<getGovJobType[]>(
+	const jobsQuery = useQuery<getJobListType>(
 		["teacher", "govJob"],
 		getGovJobAPI,
+		// { staleTime: 200000 },
+	)
+
+	const powerQuery = useQuery<getGovPowerType[]>(
+		["teacher", "govPower"],
+		getGovPowerAPI,
 		// { staleTime: 200000 },
 	)
 
@@ -143,14 +150,12 @@ function index() {
 		},
 	]
 
-	const renderJobList = useMemo(
-		() =>
-		jobsQuery.data?.map((el, idx) => {
+	const renderJobList = useMemo(() => powerQuery.data && jobsQuery.data && jobsQuery.data.jobList.map((el, idx) => {
 				return (
 					<div
 						key={`${el.title}-${el.id}`}
 						css={css`
-							border-bottom: ${jobsQuery.data.length - 1 > idx && "1px solid rgba(0, 0, 0, 0.1)"};
+							border-bottom: ${jobsQuery.data.jobList.length - 1 > idx && "1px solid rgba(0, 0, 0, 0.1)"};
 						`}
 					>
 						<GovJobItem
@@ -165,14 +170,13 @@ function index() {
 							count={el.count}
 							currency={nation.currency}
 							certification={dummyCertList}
-							empowered={dummyStatus}
-							powerList={dummyStatusList}
+							empowered={el.empowered}
+							powerList={powerQuery.data}
 						/>
 					</div>
 				)
-			}),
-		[jobsQuery.data],
-	)
+			}), [jobsQuery.data && jobsQuery.data.jobList])
+		
 
 	return (
 		<div css={contentWrapperCSS}>

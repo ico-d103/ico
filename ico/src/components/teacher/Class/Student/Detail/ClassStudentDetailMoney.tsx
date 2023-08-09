@@ -8,9 +8,10 @@ import { postAccountAPI } from "@/api/teacher/class/postAccountAPI"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import useNotification from "@/hooks/useNotification"
 import { NUM_ONLY } from "@/util/regex"
+import { postStudentsAccountAPI } from "@/api/teacher/class/postStudentsAccountAPI"
 
 type ClassStudentDetailMoneyPropsType = {
-	studentId: number
+	studentId: number | number[]
 	manageAll: boolean
 }
 
@@ -33,6 +34,9 @@ function ClassStudentDetailMoney({ studentId, manageAll }: ClassStudentDetailMon
 	const postAccountMutation = useMutation((args: { studentId: number; body: { title: string; amount: string } }) =>
 		postAccountAPI(args),
 	)
+	const postStudentsAccountMutation = useMutation(
+		(args: { body: { title: string; amount: string; studentIds: number[] } }) => postStudentsAccountAPI(args),
+	)
 
 	const postAccountHandler = (flag: string) => {
 		if (inputState.title === "" || inputState.amount === "") {
@@ -41,31 +45,61 @@ function ClassStudentDetailMoney({ studentId, manageAll }: ClassStudentDetailMon
 		}
 
 		const amount = flag === "minus" ? "-" + inputState.amount : inputState.amount
-		const args = { studentId: studentId, body: { title: inputState.title, amount: amount } }
 
-		postAccountMutation.mutate(args, {
-			onSuccess: () => {
-				flag === "minus"
-					? noti({
-							content: <NotiTemplate type={"ok"} content={"성공적으로 차감되었습니다."} />,
-							duration: 3000,
-					  })
-					: noti({
-							content: <NotiTemplate type={"ok"} content={"성공적으로 지급되었습니다."} />,
-							duration: 3000,
-					  })
+		// 학생 개개인의 돈 지급/차감
+		if (!manageAll) {
+			if (typeof studentId !== "number") return
+			const args = { studentId: studentId, body: { title: inputState.title, amount: amount } }
+			postAccountMutation.mutate(args, {
+				onSuccess: () => {
+					flag === "minus"
+						? noti({
+								content: <NotiTemplate type={"ok"} content={"성공적으로 차감되었습니다."} />,
+								duration: 3000,
+						  })
+						: noti({
+								content: <NotiTemplate type={"ok"} content={"성공적으로 지급되었습니다."} />,
+								duration: 3000,
+						  })
 
-				queryClient.invalidateQueries(["studentList", "entered"])
-				queryClient.invalidateQueries(["enteredStudentDetail", studentId])
-				// refetch()
-			},
-			onError: () => {
-				noti({
-					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
-					duration: 3000,
-				})
-			},
-		})
+					queryClient.invalidateQueries(["studentList", "entered"])
+					queryClient.invalidateQueries(["enteredStudentDetail", studentId])
+				},
+				onError: () => {
+					noti({
+						content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+						duration: 3000,
+					})
+				},
+			})
+		}
+		// 여러 학생의 돈 지급/차감
+		else {
+			if (typeof studentId === "number") return
+			const args = { body: { title: inputState.title, amount: amount, studentIds: studentId } }
+			postStudentsAccountMutation.mutate(args, {
+				onSuccess: () => {
+					flag === "minus"
+						? noti({
+								content: <NotiTemplate type={"ok"} content={"성공적으로 차감되었습니다."} />,
+								duration: 3000,
+						  })
+						: noti({
+								content: <NotiTemplate type={"ok"} content={"성공적으로 지급되었습니다."} />,
+								duration: 3000,
+						  })
+
+					queryClient.invalidateQueries(["studentList", "entered"])
+					queryClient.invalidateQueries(["enteredStudentDetail", studentId])
+				},
+				onError: () => {
+					noti({
+						content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+						duration: 3000,
+					})
+				},
+			})
+		}
 	}
 
 	const changeAmountHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,7 +141,7 @@ function ClassStudentDetailMoney({ studentId, manageAll }: ClassStudentDetailMon
 				margin={"0 10px 0 0"}
 				onClick={(e) => {
 					e.stopPropagation()
-					!manageAll ? postAccountHandler("plus") : alert("준비 중입니다.")
+					postAccountHandler("plus")
 				}}
 			/>
 			<Button
@@ -118,7 +152,7 @@ function ClassStudentDetailMoney({ studentId, manageAll }: ClassStudentDetailMon
 				theme={"manageMinus"}
 				onClick={(e) => {
 					e.stopPropagation()
-					!manageAll ? postAccountHandler("minus") : alert("준비 중입니다.")
+					postAccountHandler("minus")
 				}}
 			/>
 		</>

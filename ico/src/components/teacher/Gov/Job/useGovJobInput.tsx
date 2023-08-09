@@ -1,5 +1,5 @@
 import React, {useReducer, useEffect, useState} from 'react'
-import { GovRuleClassDetailProps, certificationType, empoweredType, inputType, validItemType, validType } from './GovJobItemType';
+import { GovRuleClassDetailProps, certificationType, inputType, validItemType, validType } from './GovJobItemType';
 import { UseMutationResult, useMutation, useQueryClient } from '@tanstack/react-query';
 import { postGovJobAPI } from '@/api/teacher/gov/postGovJobAPI';
 import { putGovJobAPI } from '@/api/teacher/gov/putGovJobAPI';
@@ -60,7 +60,7 @@ const inputReducer = (state: inputType, action: { type: string; value: any }): i
 			return { ...state, total: action.value }
 		case "CHANGE_CERTIFICATION":
 			return { ...state, certification: action.value }
-		case "CHANGE_ROLE_STATUS":
+		case "CHANGE_EMPOWERED":
 			return { ...state, empowered: action.value }
 		default:
 			return state
@@ -170,9 +170,9 @@ function useGovJobInput({
 			dispatchValid({ type: "CHANGE_DETAIL", value: "empty" })
 		}
 
-		if (Number(inputState.salary) !== salary && inputState.salary !== "") {
+		if (Number(inputState.salary) !== Number(salary) && inputState.salary !== "") {
 			dispatchValid({ type: "CHANGE_SALARY", value: "changed" })
-		} else if (Number(inputState.salary) === salary) {
+		} else if (Number(inputState.salary) === Number(salary)) {
 			dispatchValid({ type: "CHANGE_SALARY", value: "notChanged" })
 		} else if (inputState.salary === "") {
 			dispatchValid({ type: "CHANGE_SALARY", value: "empty" })
@@ -330,6 +330,37 @@ function useGovJobInput({
 		}
 	}
 
+	// const empoweredInputHandler = (value: number) => {
+	// 	const isExist = inputState.empowered.indexOf(String(value))
+	// 	if (isExist !== -1) {
+	// 		const temp: string[] = inputState.empowered
+	// 		temp.splice(isExist, 1)
+	// 		dispatchInput({ type: "CHANGE_EMPOWERED", value: [...temp] })
+	// 	} else {
+	// 		const temp: string[] = inputState.empowered
+	// 		temp.push(String(value))
+	// 		dispatchInput({ type: "CHANGE_EMPOWERED", value: [...temp] })
+	// 	}
+
+	// }
+
+	const empoweredInputHandler = (e:React.ChangeEvent<HTMLInputElement>, value: number) => {
+		const isExist = inputState.empowered.indexOf(String(value))
+		if (e.target.checked) {
+			const temp: string[] = inputState.empowered
+			temp.push(String(value))
+			dispatchInput({ type: "CHANGE_EMPOWERED", value: [...temp] })
+		} else {
+			const temp: string[] = inputState.empowered
+			temp.splice(isExist, 1)
+			dispatchInput({ type: "CHANGE_EMPOWERED", value: [...temp] })
+		}
+		
+
+	}
+
+	
+
   
   const submitHandler = () => {
 		if (typeof idx === "number") {
@@ -360,6 +391,7 @@ function useGovJobInput({
     salaryInputHandler,
     totalInputHandler,
     submitHandler,
+		empoweredInputHandler,
   }
 
 
