@@ -4,10 +4,62 @@ import Button from "@/components/common/Button/Button"
 import { useRouter } from "next/router"
 import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
+import GovCorporateCard from "@/components/teacher/Gov/Corporate/List/GovCorporateCard"
 
 function index() {
 	const router = useRouter()
-	const data = [] // 임시 data
+	const mockData = [
+		{
+			id: 0,
+			logo: "",
+			name: "다이소",
+			type: "소매업",
+			ceo: "사공지은",
+			content: "어서오세요 다이소입니다.",
+			firstMoney: 1000,
+			registNumber: "1234-1234",
+		},
+		{
+			id: 1,
+			logo: "",
+			name: "장보고마트",
+			type: "도매업",
+			ceo: "변윤경",
+			content: "어서오세요 장보고마트입니다.",
+			firstMoney: 1000,
+			registNumber: "1234-5678",
+		},
+		{
+			id: 2,
+			logo: "",
+			name: "장보고마트",
+			type: "도매업",
+			ceo: "변윤경",
+			content: "어서오세요 장보고마트입니다.",
+			firstMoney: 1000,
+			registNumber: "1234-5678",
+		},
+		{
+			id: 3,
+			logo: "",
+			name: "장보고마트",
+			type: "도매업",
+			ceo: "변윤경",
+			content: "어서오세요 장보고마트입니다.",
+			firstMoney: 1000,
+			registNumber: "1234-5678",
+		},
+		{
+			id: 4,
+			logo: "",
+			name: "장보고마트",
+			type: "도매업",
+			ceo: "변윤경",
+			content: "어서오세요 장보고마트입니다.",
+			firstMoney: 1000,
+			registNumber: "1234-5678",
+		},
+	]
 
 	return (
 		<div css={wrapperCSS}>
@@ -22,13 +74,19 @@ function index() {
 				/>
 			</div>
 			<span css={descriptionCSS}>학생들이 운영할 기업을 생성하고 관리할 수 있습니다.</span>
-			{data.length ? (
-				// 기업 리스트 보여주기
-				<></>
+			{mockData.length ? (
+				<div css={listCSS}>
+					<span>총 {mockData.length}개의 기업</span>
+					<div>
+						{mockData.map((corporate) => (
+							<GovCorporateCard key={corporate.id} corporate={corporate} />
+						))}
+					</div>
+				</div>
 			) : (
 				<div css={noneListCSS}>
 					<UseAnimations animation={alertCircle} size={300} strokeColor={"rgba(0,0,0,0.4)"} />
-					<h2>등록된 기업이 없습니다.</h2>
+					<span>등록된 기업이 없습니다.</span>
 				</div>
 			)}
 		</div>
@@ -59,6 +117,25 @@ const descriptionCSS = css`
 	font-size: var(--teacher-h5);
 `
 
+const listCSS = css`
+	margin-top: 40px;
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+
+	> span {
+		color: #7f7f7f;
+		font-size: var(--teacher-h4);
+	}
+
+	> div {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+		grid-column-gap: 20px;
+		grid-row-gap: 40px;
+	}
+`
+
 const noneListCSS = css`
 	height: 100%;
 	display: flex;
@@ -66,7 +143,7 @@ const noneListCSS = css`
 	justify-content: center;
 	align-items: center;
 
-	> h2 {
+	> span {
 		font-size: var(--teacher-h2);
 	}
 `
