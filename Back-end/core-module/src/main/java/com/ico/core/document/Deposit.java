@@ -37,10 +37,14 @@ public class Deposit {
 
     private String title;
 
-    private Long depositId;
+    private Long depositProductId;
+
+    private byte number;
+
+    private String name;
 
     @Builder
-    public Deposit(String id, Long studentId, byte interest, LocalDateTime startDate, LocalDateTime endDate, byte creditRating, int amount, String title, Long depositId) {
+    public Deposit(String id, Long studentId, byte interest, LocalDateTime startDate, LocalDateTime endDate, byte creditRating, int amount, String title, Long depositProductId, byte number, String name) {
         this.id = id;
         this.studentId = studentId;
         this.interest = interest;
@@ -49,6 +53,8 @@ public class Deposit {
         this.creditRating = creditRating;
         this.amount = amount;
         this.title = title;
-        this.depositId = depositId;
+        this.depositProductId = depositProductId;
+        this.number = number;
+        this.name = name;
     }
 }

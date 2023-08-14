@@ -19,5 +19,5 @@ public interface DepositMongoRepository extends MongoRepository<Deposit, String>
     List<Deposit> findAllByStudentId(Long studentId);
 
     // 예금 상품별 신청 학생 목록 조회
-    List<Deposit> findAllByDepositId(Long depositId);
+    List<Deposit> findAllByDepositProductId(Long depositProductId);
 }

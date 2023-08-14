@@ -53,9 +53,6 @@ public class DepositProductServiceImpl implements DepositProductService{
         // 나라의 예금 상품 목록
         List<DepositProduct> depositProductList = depositProductRepository.findAllByNationId(nation.getId());
 
-        // 해당 국가의 학생들 정보 목록
-        List<Student> studentList = studentRepository.findAllByNationId(nationId);
-
         // 예금 상품 목록의 col
         List<DepositProductTeacherResDto> colDepositList = new ArrayList<>();
 
@@ -63,18 +60,11 @@ public class DepositProductServiceImpl implements DepositProductService{
             List<ProductJoinedStudentResDto> studentInfoList = new ArrayList<ProductJoinedStudentResDto>();
 
             // 해당 예금 상품에 가입한 학생 목록
-            List<Deposit> depositList = depositMongoRepository.findAllByDepositId(depositProduct.getId());
+            List<Deposit> depositList = depositMongoRepository.findAllByDepositProductId(depositProduct.getId());
             for(Deposit deposit: depositList){
                 ProductJoinedStudentResDto studentInfo = new ProductJoinedStudentResDto();
-                // 예금 신청내역의 학생 id
-                long studentId = deposit.getStudentId();
-                for(Student student: studentList){
-                    if(student.getId().equals(studentId)){
-                        studentInfo.setName(student.getName());
-                        studentInfo.setNumber(student.getNumber());
-                        break;
-                    }
-                }
+                studentInfo.setName(deposit.getName());
+                studentInfo.setNumber(deposit.getNumber());
                 studentInfo.setAmount(deposit.getAmount());
                 studentInfo.setStartDate(deposit.getStartDate().toLocalDate().toString());
                 studentInfoList.add(studentInfo);
