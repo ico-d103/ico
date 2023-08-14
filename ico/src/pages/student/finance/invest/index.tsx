@@ -26,7 +26,7 @@ function index() {
 	// )
 
 	const investQueries = useQuery<getFinanceInvestListType>(
-		["student", "homeFinanceGetRate"],
+		["student", "homeFinanceInvestList"],
 		getFinanceInvestListAPI,
 		// { staleTime: 200000 },
 	)
