@@ -86,6 +86,7 @@ public class DepositServiceImpl implements DepositService{
                 .creditRating(student.getCreditRating())
                 .amount(dto.getAmount())
                 .title(depositProduct.getTitle())
+                .depositId(depositProduct.getId())
                 .build();
         depositMongoRepository.insert(deposit);
 

@@ -6,6 +6,7 @@ import com.ico.api.dto.bank.DepositProductStudentColResDto;
 import com.ico.api.dto.bank.DepositProductStudentResDto;
 import com.ico.api.dto.bank.DepositProductTeacherResDto;
 import com.ico.api.dto.bank.DepositStudentResDto;
+import com.ico.api.dto.bank.ProductJoinedStudentResDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.document.Deposit;
@@ -52,11 +53,37 @@ public class DepositProductServiceImpl implements DepositProductService{
         // 나라의 예금 상품 목록
         List<DepositProduct> depositProductList = depositProductRepository.findAllByNationId(nation.getId());
 
+        // 해당 국가의 학생들 정보 목록
+        List<Student> studentList = studentRepository.findAllByNationId(nationId);
+
         // 예금 상품 목록의 col
         List<DepositProductTeacherResDto> colDepositList = new ArrayList<>();
 
-        for(DepositProduct deposit : depositProductList){
-            colDepositList.add(new DepositProductTeacherResDto().of(deposit));
+        for(DepositProduct depositProduct : depositProductList){
+            List<ProductJoinedStudentResDto> studentInfoList = new ArrayList<ProductJoinedStudentResDto>();
+
+            // 해당 예금 상품에 가입한 학생 목록
+            List<Deposit> depositList = depositMongoRepository.findAllByDepositId(depositProduct.getId());
+            for(Deposit deposit: depositList){
+                ProductJoinedStudentResDto studentInfo = new ProductJoinedStudentResDto();
+                // 예금 신청내역의 학생 id
+                long studentId = deposit.getStudentId();
+                for(Student student: studentList){
+                    if(student.getId().equals(studentId)){
+                        studentInfo.setName(student.getName());
+                        studentInfo.setNumber(student.getNumber());
+                        break;
+                    }
+                }
+                studentInfo.setAmount(deposit.getAmount());
+                studentInfo.setStartDate(deposit.getStartDate().toLocalDate().toString());
+                studentInfoList.add(studentInfo);
+            }
+
+            DepositProductTeacherResDto resDto = new DepositProductTeacherResDto().of(depositProduct);
+            resDto.setStudents(studentInfoList);
+
+            colDepositList.add(resDto);
         }
         return colDepositList;
     }

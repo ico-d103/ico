@@ -26,12 +26,15 @@ public class DepositProductTeacherResDto {
 
     private List<Byte> interest;
 
+    private List<ProductJoinedStudentResDto> students;
+
     @Builder
-    public DepositProductTeacherResDto(Long id, String title, Byte period, List<Byte> interest) {
+    public DepositProductTeacherResDto(Long id, String title, Byte period, List<Byte> interest, List<ProductJoinedStudentResDto> students) {
         this.id = id;
         this.title = title;
         this.period = period;
         this.interest = interest;
+        this.students = students;
     }
 
 
