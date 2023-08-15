@@ -68,12 +68,12 @@ public class TeacherProduct {
      * 교사 상품 수정 시 호출되는 메서드
      * @param dto
      */
-    public void updateTeacherProduct(TeacherProductReqDto dto) {
+    public void updateTeacherProduct(TeacherProductReqDto dto, byte sold) {
         this.title = dto.getTitle();
         this.amount = dto.getAmount();
         this.detail = dto.getDetail();
         this.count = dto.getCount();
-        this.sold = (byte) 0;
+        this.sold = sold;
         this.rental = dto.getRental();
     }
 }

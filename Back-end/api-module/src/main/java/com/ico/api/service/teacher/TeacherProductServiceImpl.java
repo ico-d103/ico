@@ -339,8 +339,8 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 .forEach(s3UploadService::deleteFile);
         // 이미지 새로 등록
         teacherProduct.setImages(s3UploadService.saveImageURLs(files));
-        
-        teacherProduct.updateTeacherProduct(dto);
+
+        teacherProduct.updateTeacherProduct(dto, teacherProduct.getCount() == dto.getCount() ? teacherProduct.getSold() : (byte) 0);
         teacherProductRepository.save(teacherProduct);
     }
 
