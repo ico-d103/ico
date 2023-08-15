@@ -39,6 +39,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author 변윤경
  * @author 서재건
+ * @author 강교철
  */
 @Slf4j
 @Service
@@ -323,6 +324,25 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 .price(product.getAmount())
                 .date(LocalDateTime.parse(dateTime, Formatter.dateTimeSeconds))
                 .build();
+    }
+
+    @Override
+    public void updateTeacherProduct(Long teacherProductId, HttpServletRequest request, TeacherProductReqDto dto, List<MultipartFile> files) {
+        String token = jwtTokenProvider.parseJwt(request);
+        checkRoleAndWareHousePower(token);
+        Long nationId = jwtTokenProvider.getNation(token);
+        log.info("이미지 파일 : {}", files.toString());
+        TeacherProduct teacherProduct = teacherProductRepository.findByIdAndNationId(teacherProductId, nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        // 이미지 삭제
+        Arrays.stream(teacherProduct.getImages().split(","))
+                .forEach(s3UploadService::deleteFile);
+        // 이미지 새로 등록
+        teacherProduct.setImages(s3UploadService.saveImageURLs(files));
+        
+        teacherProduct.updateTeacherProduct(dto);
+        teacherProductRepository.save(teacherProduct);
     }
 
     /**

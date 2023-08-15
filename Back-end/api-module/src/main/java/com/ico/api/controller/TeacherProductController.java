@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -115,5 +117,19 @@ public class TeacherProductController {
     @GetMapping("/student/transaction/{teacherProductId}")
     public ResponseEntity<ProductQRResDto> findBuyTransaction(@PathVariable Long teacherProductId, HttpServletRequest request) {
         return ResponseEntity.ok(teacherProductService.findBuyTransaction(teacherProductId, request));
+    }
+
+    /**
+     * 교사 상품 수정
+     * @param teacherProductId
+     * @param request
+     * @param dto
+     * @param files
+     * @return
+     */
+    @PutMapping(value = "/{teacherProductId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<HttpStatus> updateTeacherProduct(@PathVariable Long teacherProductId, HttpServletRequest request, @Valid @RequestPart TeacherProductReqDto dto, @RequestPart List<MultipartFile> files) {
+        teacherProductService.updateTeacherProduct(teacherProductId, request, dto, files);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }
