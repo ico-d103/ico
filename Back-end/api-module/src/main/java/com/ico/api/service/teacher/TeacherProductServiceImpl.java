@@ -331,7 +331,6 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         String token = jwtTokenProvider.parseJwt(request);
         checkRoleAndWareHousePower(token);
         Long nationId = jwtTokenProvider.getNation(token);
-        log.info("이미지 파일 : {}", files.toString());
         TeacherProduct teacherProduct = teacherProductRepository.findByIdAndNationId(teacherProductId, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
