@@ -15,6 +15,7 @@ import java.util.Map;
  * 직업 추가 req dto
  *
  * @author 서재건
+ * @author 강교철
  */
 @Getter
 @NoArgsConstructor
@@ -36,16 +37,13 @@ public class JobAddReqDto {
     @NotNull(message = "414")
     private String color;
 
-    @NotNull(message = "426")
     private Integer creditRating;
 
     @NotBlank(message = "425")
     private String image;
 
-    @NotEmpty(message = "111")
     private List<Long> powers;
 
-    @NotEmpty(message = "40")
     private Map<Long, Integer> licenses;
 
     @Builder

@@ -84,8 +84,12 @@ public class JobServiceImpl implements JobService{
         }
 
         studentJob.updateJob(dto, s3UploadService.getFileName(dto.getImage()));
-        updatePower(nationId, studentJob, dto.getPowers(), jobId);
-        updateLicense(nationId, dto);
+        if (!dto.getPowers().isEmpty()) {
+            updatePower(nationId, studentJob, dto.getPowers(), jobId);
+        }
+        if (!dto.getLicenses().isEmpty()) {
+            updateLicense(studentJob, nationId, dto.getLicenses());
+        }
         studentJobRepository.save(studentJob);
         log.info("[updateJob] 수정 완료");
     }
@@ -178,14 +182,18 @@ public class JobServiceImpl implements JobService{
                 .detail(dto.getDetail())
                 .image(s3UploadService.getFileName(dto.getImage()))
                 .wage(dto.getSalary())
-                .creditRating(dto.getCreditRating().byteValue())
+                .creditRating(dto.getCreditRating() != null ? dto.getCreditRating().byteValue() : (byte) 10)
                 .total(dto.getTotal().byteValue())
                 .color(dto.getColor())
                 .build();
-        addJobPower(studentJob, dto.getPowers());
+        if (!dto.getPowers().isEmpty()) {
+            addJobPower(studentJob, dto.getPowers());
+        }
         studentJobRepository.save(studentJob);
         log.info("[addJob] 직업 생산 완료.");
-        addJobLicense(studentJob, nationId, dto);
+        if (!dto.getLicenses().isEmpty()) {
+            addJobLicense(studentJob, nationId, dto.getLicenses());
+        }
         log.info("[addJobLicense] 직업 자격증과 자격증 등급 설정 완료.");
     }
 
@@ -311,62 +319,22 @@ public class JobServiceImpl implements JobService{
 
     /**
      * 직업 수정 시 직업 자격증과 등급 수정
+     * @param job
      * @param nationId
-     * @param dto
+     * @param licenses
      */
-    private void updateLicense(Long nationId, JobReqDto dto) {
-        List<Long> jobLicenseIds = dto.getJobLicenseIds();
-
-        // 프론트에서 객체 형태로 보내고 싶다고 해서 변경
-        List<Long> licenseIds = new ArrayList<>();
-        List<Integer> ratings = new ArrayList<>();
-        Map<Long, Integer> licenses = dto.getLicenses();
-
-        for (Map.Entry<Long, Integer> license : licenses.entrySet()) {
-            licenseIds.add(license.getKey());
-            ratings.add(license.getValue());
-        }
-
-        for (int i = 0; i < jobLicenseIds.size(); i++) {
-            Long jobLicenseId = jobLicenseIds.get(i);
-            Long licenseId = licenseIds.get(i);
-            Integer rating = ratings.get(i);
-
-            if (licenseId == null) {
-                throw new CustomException(ErrorCode.NOT_ENTER_LICENSE_ID);
-            }
-            if (rating == null) {
-                throw new CustomException(ErrorCode.NOT_ENTER_RATING);
-            }
-            // rating 유효성 검사
-            if (rating > 7 || rating < 0) {
-                log.info("[checkRating] 등급 유효성 검사 : {}", rating);
-                throw new CustomException(ErrorCode.WRONG_RATING);
-            }
-
-            JobLicense jobLicense = jobLicenseRepository.findById(jobLicenseId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_JOB_LICENSE));
-
-            NationLicense nationLicense = nationLicenseRepository.findByNationIdAndId(nationId, licenseId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
-
-            jobLicense.setNationLicense(nationLicense);
-            jobLicense.setRating(rating.byteValue());
-
-            jobLicenseRepository.save(jobLicense);
-            log.info("[updateLicense] JobLicense 수정 완료");
-        }
+    private void updateLicense(StudentJob job, Long nationId, Map<Long, Integer> licenses) {
+        jobLicenseRepository.deleteAll(jobLicenseRepository.findAllByJobId(job.getId()));
+        addJobLicense(job, nationId, licenses);
     }
 
     /**
      * 직업 생성 시 자격증 등급 설정
      * @param job
      * @param nationId
-     * @param dto
+     * @param licenses
      */
-    private void addJobLicense(StudentJob job, Long nationId, JobAddReqDto dto) {
-        // 프론트에서 객체 형태로 보내고 싶다고 해서 변경
-        Map<Long, Integer> licenses = dto.getLicenses();
+    private void addJobLicense(StudentJob job, Long nationId, Map<Long, Integer> licenses) {
 
         for (Map.Entry<Long, Integer> license : licenses.entrySet()) {
             Long licenseId = license.getKey();

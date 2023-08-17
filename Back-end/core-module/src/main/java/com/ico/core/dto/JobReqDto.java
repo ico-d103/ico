@@ -16,6 +16,7 @@ import java.util.Map;
  * 직업 수정 시 입력값 받을 Dto
  *
  * @author 서재건
+ * @author 강교철
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -37,23 +38,17 @@ public class JobReqDto {
     @NotNull(message = "414")
     private String color;
 
-    @NotNull(message = "426")
     private Integer creditRating;
 
     @NotNull(message = "430")
     private String image;
 
-    @NotEmpty(message = "111")
     private List<Long> powers;
 
-    @NotEmpty(message = "41")
-    private List<Long> jobLicenseIds;
-
-    @NotEmpty(message = "40")
     private Map<Long, Integer> licenses;
 
     @Builder
-    public JobReqDto(String title, String detail, Integer total, Integer salary, String color, Integer creditRating, String image, List<Long> powers, List<Long> jobLicenseId, Map<Long, Integer> licenses) {
+    public JobReqDto(String title, String detail, Integer total, Integer salary, String color, Integer creditRating, String image, List<Long> powers, Map<Long, Integer> licenses) {
         this.title = title;
         this.detail = detail;
         this.total = total;
@@ -62,7 +57,6 @@ public class JobReqDto {
         this.creditRating = creditRating;
         this.image = image;
         this.powers = powers;
-        this.jobLicenseIds = jobLicenseId;
         this.licenses = licenses;
     }
 }
