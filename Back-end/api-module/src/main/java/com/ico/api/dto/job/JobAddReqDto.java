@@ -1,5 +1,6 @@
 package com.ico.api.dto.job;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,8 @@ import java.util.Map;
 
 /**
  * 직업 추가 req dto
+ * 자격증, 권한, 신용등급은 사용하지 않는 교사가 있기 때문에 유효성 검사를 하지 않고
+ * Service 로직에서 유효성 검사를 하고 있습니다.
  *
  * @author 서재건
  * @author 강교철
