@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -43,12 +42,12 @@ public class JobReqDto {
     @NotNull(message = "430")
     private String image;
 
-    private List<Long> powers;
+    private List<Long> empowered;
 
-    private Map<Long, Integer> licenses;
+    private Map<Long, Integer> jobLicenseList;
 
     @Builder
-    public JobReqDto(String title, String detail, Integer total, Integer salary, String color, Integer creditRating, String image, List<Long> powers, Map<Long, Integer> licenses) {
+    public JobReqDto(String title, String detail, Integer total, Integer salary, String color, Integer creditRating, String image, List<Long> empowered, Map<Long, Integer> jobLicenseList) {
         this.title = title;
         this.detail = detail;
         this.total = total;
@@ -56,7 +55,7 @@ public class JobReqDto {
         this.color = color;
         this.creditRating = creditRating;
         this.image = image;
-        this.powers = powers;
-        this.licenses = licenses;
+        this.empowered = empowered;
+        this.jobLicenseList = jobLicenseList;
     }
 }

@@ -84,11 +84,11 @@ public class JobServiceImpl implements JobService{
         }
 
         studentJob.updateJob(dto, s3UploadService.getFileName(dto.getImage()));
-        if (!dto.getPowers().isEmpty()) {
-            updatePower(nationId, studentJob, dto.getPowers(), jobId);
+        if (!dto.getEmpowered().isEmpty()) {
+            updatePower(nationId, studentJob, dto.getEmpowered(), jobId);
         }
-        if (!dto.getLicenses().isEmpty()) {
-            updateLicense(studentJob, nationId, dto.getLicenses());
+        if (!dto.getJobLicenseList().isEmpty()) {
+            updateLicense(studentJob, nationId, dto.getJobLicenseList());
         }
         studentJobRepository.save(studentJob);
         log.info("[updateJob] 수정 완료");
@@ -186,15 +186,16 @@ public class JobServiceImpl implements JobService{
                 .total(dto.getTotal().byteValue())
                 .color(dto.getColor())
                 .build();
-        if (!dto.getPowers().isEmpty()) {
-            addJobPower(studentJob, dto.getPowers());
+        if (!dto.getEmpowered().isEmpty()) {
+            addJobPower(studentJob, dto.getEmpowered());
+            log.info("[addPower] 직업에 권한 부여 완료.");
         }
         studentJobRepository.save(studentJob);
-        log.info("[addJob] 직업 생산 완료.");
-        if (!dto.getLicenses().isEmpty()) {
-            addJobLicense(studentJob, nationId, dto.getLicenses());
+        log.info("[addJob] 직업 생성 완료.");
+        if (!dto.getJobLicenseList().isEmpty()) {
+            addJobLicense(studentJob, nationId, dto.getJobLicenseList());
+            log.info("[addJobLicense] 직업에 자격증과 자격증 등급 설정 완료.");
         }
-        log.info("[addJobLicense] 직업 자격증과 자격증 등급 설정 완료.");
     }
 
     @Transactional

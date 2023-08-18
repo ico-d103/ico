@@ -42,12 +42,12 @@ public class JobAddReqDto {
     @NotBlank(message = "425")
     private String image;
 
-    private List<Long> powers;
+    private List<Long> empowered;
 
-    private Map<Long, Integer> licenses;
+    private Map<Long, Integer> jobLicenseList;
 
     @Builder
-    public JobAddReqDto(String title, String detail, Integer total, Integer salary, String color, Integer creditRating, String image, List<Long> powers, Map<Long, Integer> licenses) {
+    public JobAddReqDto(String title, String detail, Integer total, Integer salary, String color, Integer creditRating, String image, List<Long> empowered, Map<Long, Integer> jobLicenseList) {
         this.title = title;
         this.detail = detail;
         this.total = total;
@@ -55,7 +55,7 @@ public class JobAddReqDto {
         this.color = color;
         this.creditRating = creditRating;
         this.image = image;
-        this.powers = powers;
-        this.licenses = licenses;
+        this.empowered = empowered;
+        this.jobLicenseList = jobLicenseList;
     }
 }
