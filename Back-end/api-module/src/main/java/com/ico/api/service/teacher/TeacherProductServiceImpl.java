@@ -333,9 +333,19 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         Long nationId = jwtTokenProvider.getNation(token);
         TeacherProduct teacherProduct = teacherProductRepository.findByIdAndNationId(teacherProductId, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        String[] images = teacherProduct.getImages().split(",");
+        log.info(Arrays.toString(images));
+        for (String image : images) {
+            for (MultipartFile file : files) {
+                log.info("Hash 비교 결과 확인 : {}", s3UploadService.hashingMultipartFile(file, s3UploadService.getFileURL(image)));
+                if (!s3UploadService.hashingMultipartFile(file, s3UploadService.getFileURL(image))) {
+                    log.info("hi");
+                }
+            }
+        }
 
         // 이미지 삭제
-        Arrays.stream(teacherProduct.getImages().split(","))
+        Arrays.stream(images)
                 .forEach(s3UploadService::deleteFile);
         // 이미지 새로 등록
         teacherProduct.setImages(s3UploadService.saveImageURLs(files));

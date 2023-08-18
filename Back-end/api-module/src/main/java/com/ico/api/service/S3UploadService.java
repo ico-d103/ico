@@ -15,8 +15,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -42,6 +49,7 @@ public class S3UploadService {
 
     @Value("${cloud.aws.cloud-front.domain}")
     private String domain;
+
 
     /**
      * 파일 업로드
@@ -161,5 +169,80 @@ public class S3UploadService {
             throw new CustomException(ErrorCode.INVALID_FILE_URL);
         }
         return url.substring(url.lastIndexOf("/") + 1);
+    }
+
+    public boolean hashingMultipartFile(MultipartFile newImage, String existingImageName) {
+        String existingImageHash = calculateMD5Hash(existingImageName);
+        String newImageHash = calculateMD5HashFromMultipartFile(newImage);
+        if (existingImageHash == null) {
+            log.info("없어서 null");
+            return false;
+        } else {
+            log.info("있는데 달라서 null");
+            return existingImageHash.equals(newImageHash);
+        }
+    }
+
+    private String calculateMD5Hash(String imageName) {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            log.info("3");
+            return null;
+        }
+
+        try (FileInputStream inputStream = new FileInputStream(imageName)) {
+            byte[] bytes = new byte[1024];
+            int readBytes;
+
+            while ((readBytes = inputStream.read(bytes)) != -1) {
+                md.update(bytes, 0, readBytes);
+            }
+
+            byte[] mdBytes = md.digest();
+
+            StringBuffer sb = new StringBuffer();
+            for (byte mdByte : mdBytes) {
+                sb.append(Integer.toString((mdByte & 0xff) + 0x100, 16).substring(1));
+            }
+
+            return sb.toString();
+        } catch (IOException e) {
+            log.info("4");
+            return null;
+        }
+    }
+
+    private String calculateMD5HashFromMultipartFile(MultipartFile imageFile) {
+        MessageDigest md = null;
+
+        try {
+            md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            log.info("1");
+            return null;
+        }
+
+        try (InputStream inputStream = imageFile.getInputStream()) {
+            byte[] bytes = new byte[1024];
+            int readBytes;
+
+            while ((readBytes = inputStream.read(bytes)) != -1) {
+                md.update(bytes, 0, readBytes);
+            }
+
+            byte[] mdBytes = md.digest();
+
+            StringBuilder sb = new StringBuilder();
+            for (byte mdByte : mdBytes) {
+                sb.append(Integer.toString((mdByte & 0xff) + 0x100, 16).substring(1));
+            }
+
+            return sb.toString();
+        } catch (IOException e) {
+            log.info("2");
+            return null;
+        }
     }
 }
