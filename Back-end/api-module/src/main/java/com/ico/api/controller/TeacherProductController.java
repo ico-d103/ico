@@ -1,5 +1,6 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.teacher.TeacherProductImgReqDto;
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
 import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
@@ -31,6 +32,7 @@ import java.util.List;
  *
  * @author 변윤경
  * @author 서재건
+ * @author 강교철
  */
 @RestController
 @RequiredArgsConstructor
@@ -124,12 +126,24 @@ public class TeacherProductController {
      * @param teacherProductId
      * @param request
      * @param dto
-     * @param files
      * @return
      */
-    @PutMapping(value = "/{teacherProductId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<HttpStatus> updateTeacherProduct(@PathVariable Long teacherProductId, HttpServletRequest request, @Valid @RequestPart TeacherProductReqDto dto, @RequestPart List<MultipartFile> files) {
-        teacherProductService.updateTeacherProduct(teacherProductId, request, dto, files);
+    @PutMapping("/{teacherProductId}")
+    public ResponseEntity<HttpStatus> updateTeacherProduct(@PathVariable Long teacherProductId, HttpServletRequest request, @Valid @RequestBody TeacherProductReqDto dto) {
+        teacherProductService.updateTeacherProduct(teacherProductId, request, dto);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 교사 상품 이미지 수정
+     * @param teacherProductId
+     * @param request
+     * @param dto
+     * @return
+     */
+    @PutMapping(value = "/{teacherProductId}/image", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<HttpStatus> updateProductImage(@PathVariable Long teacherProductId, HttpServletRequest request, @RequestPart TeacherProductImgReqDto dto, @RequestPart List<MultipartFile> newImages) {
+        teacherProductService.updateProductImage(teacherProductId, request, dto, newImages);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

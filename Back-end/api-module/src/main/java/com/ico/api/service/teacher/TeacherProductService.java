@@ -1,5 +1,6 @@
 package com.ico.api.service.teacher;
 
+import com.ico.api.dto.teacher.TeacherProductImgReqDto;
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
 import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
@@ -79,5 +80,14 @@ public interface TeacherProductService {
      * @param teacherProductId
      * @param request
      */
-    void updateTeacherProduct(Long teacherProductId, HttpServletRequest request, TeacherProductReqDto product, List<MultipartFile> files);
+    void updateTeacherProduct(Long teacherProductId, HttpServletRequest request, TeacherProductReqDto product);
+
+    /**
+     * 교사 상품 이미지 수정
+     * @param teacherProductId
+     * @param request
+     * @param dto
+     * @param newImages
+     */
+    void updateProductImage(Long teacherProductId, HttpServletRequest request, TeacherProductImgReqDto dto, List<MultipartFile> newImages);
 }
