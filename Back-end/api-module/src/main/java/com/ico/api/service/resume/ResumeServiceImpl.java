@@ -2,15 +2,19 @@ package com.ico.api.service.resume;
 
 import com.ico.api.dto.resume.ResumeResDto;
 import com.ico.api.user.JwtTokenProvider;
+import com.ico.core.entity.JobLicense;
 import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.Nation;
 import com.ico.core.document.Resume;
 import com.ico.core.entity.Student;
+import com.ico.core.entity.StudentLicense;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.JobLicenseRepository;
 import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.ResumeMongoRepository;
+import com.ico.core.repository.StudentLicenseRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +31,7 @@ import java.util.Objects;
  * 직업 신청 내역 관련 Service 구현 로직
  *
  * @author 서재건
+ * @author 강교철
  */
 @Slf4j
 @Service
@@ -41,6 +46,8 @@ public class ResumeServiceImpl implements ResumeService {
     private final StudentRepository studentRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final JobLicenseRepository jobLicenseRepository;
+    private final StudentLicenseRepository studentLicenseRepository;
 
     @Override
     public void applyJob(Long jobId, HttpServletRequest request) {
@@ -52,8 +59,18 @@ public class ResumeServiceImpl implements ResumeService {
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        // 신용등급 유효성 검사
         if (studentJob.getCreditRating() < student.getCreditRating()) {
             throw new CustomException(ErrorCode.INVALID_CREDIT_RATING);
+        }
+        // 자격증 유효성 검사
+        List<JobLicense> jobLicenses = jobLicenseRepository.findAllByJobId(jobId);
+        for (JobLicense jobLicense:jobLicenses) {
+            StudentLicense studentLicense = studentLicenseRepository.findByStudentIdAndNationLicenseId(studentId, jobLicense.getNationLicense().getId())
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));
+            if (studentLicense.getRating() > jobLicense.getRating()) {
+                throw new CustomException(ErrorCode.BAD_JOB_LICENSE_RATING);
+            }
         }
         if (student.getStudentJob() != null) {
             throw new CustomException(ErrorCode.ALREADY_HAS_JOB);

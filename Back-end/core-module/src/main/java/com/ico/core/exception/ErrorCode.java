@@ -153,6 +153,8 @@ public enum ErrorCode{
 
     INVALID_RESUME(HttpStatus.BAD_REQUEST, "513", "유효하지 않은 직업 신청 내역 입니다."),
 
+    BAD_JOB_LICENSE_RATING(HttpStatus.BAD_REQUEST, "515", "직업에 적합한 자격증을 보유하지 못했습니다."),
+
     NO_PRODUCT_IMAGE(HttpStatus.NOT_FOUND, "608", "상품 이미지를 입력해주세요"),
 
     PROPOSAL_NOT_FOND(HttpStatus.NOT_FOUND, "613", "없는 판매 제안서입니다."),
