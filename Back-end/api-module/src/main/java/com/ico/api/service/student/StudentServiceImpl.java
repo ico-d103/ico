@@ -117,11 +117,13 @@ public class StudentServiceImpl implements StudentService {
                 .pwStatus(Password.OK)
                 .build();
 
+        // 아이디 중복 체크
         if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()
                 || studentRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATED_ID);
         }
 
+        // 비밀번호와 다시 입력한 비밀번호 일치 여부 체크
         if (!requestDto.getPassword().equals(requestDto.getCheckedPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_WRONG);
         }

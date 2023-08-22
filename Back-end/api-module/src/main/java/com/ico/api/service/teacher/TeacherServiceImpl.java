@@ -54,6 +54,19 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     @Transactional
     public Long signUp(TeacherSignUpRequestDto requestDto, MultipartFile file) {
+        // 아이디 중복 체크
+        if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()
+                || studentRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
+            throw new CustomException(ErrorCode.DUPLICATED_ID);
+        }
+        // 비밀번호와 다시 입력한 비밀번호 일치 여부 체크
+        if (!requestDto.getPassword().equals(requestDto.getCheckedPassword())) {
+            throw new CustomException(ErrorCode.PASSWORD_WRONG);
+        }
+        // 핸드폰 번호 중복 체크
+        if (teacherRepository.findByPhoneNum(requestDto.getPhoneNum()).isPresent()) {
+            throw new CustomException(ErrorCode.DUPLICATED_PHONE_NUM);
+        }
         // 교사 회원가입
         Teacher teacher = Teacher.builder()
                 .identity(requestDto.getIdentity())
@@ -64,19 +77,6 @@ public class TeacherServiceImpl implements TeacherService {
                 .phoneNum(requestDto.getPhoneNum())
                 .pwStatus(Password.OK)
                 .build();
-
-        if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()
-                || studentRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
-            throw new CustomException(ErrorCode.DUPLICATED_ID);
-        }
-
-        if (!requestDto.getPassword().equals(requestDto.getCheckedPassword())) {
-            throw new CustomException(ErrorCode.PASSWORD_WRONG);
-        }
-        // 핸드폰 번호 중복 막기
-        if (teacherRepository.findByPhoneNum(requestDto.getPhoneNum()).isPresent()) {
-            throw new CustomException(ErrorCode.DUPLICATED_PHONE_NUM);
-        }
 
         teacher.encodeTeacherPassword(passwordEncoder);
         teacherRepository.save(teacher);

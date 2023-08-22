@@ -2,6 +2,7 @@ package com.ico.api.dto.job;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -21,6 +22,6 @@ public class JobLicenseReqDto {
     @NotNull(message = "42")
     private Long licenseId;
     @NotNull(message = "43")
-    @Size(max = 7, message = "806")
+    @Range(min = 1, max = 7, message = "806")
     private Integer rating;
 }

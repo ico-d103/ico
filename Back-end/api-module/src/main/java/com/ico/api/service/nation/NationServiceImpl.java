@@ -113,8 +113,8 @@ public class NationServiceImpl implements NationService {
         }
         Nation nation = Nation.builder()
                 .school(reqDto.getSchool())
-                .grade((byte) reqDto.getGrade())
-                .room((byte) reqDto.getRoom())
+                .grade(reqDto.getGrade().byteValue())
+                .room(reqDto.getRoom().byteValue())
                 .title(title)
                 .code(randomCode())
                 .currency(reqDto.getCurrency())
@@ -172,7 +172,7 @@ public class NationServiceImpl implements NationService {
             log.info("[getNation] nation 존재");
             return nation;
         } else {
-            log.info("[getNation] nationId가 null입니다.");
+            log.info("[getNation] nationId가 null 입니다.");
             throw new CustomException(ErrorCode.NOT_FOUND_NATION);
         }
 
@@ -183,10 +183,6 @@ public class NationServiceImpl implements NationService {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
-        nation.setSchool(reqDto.getSchool());
-        nation.setGrade((byte) reqDto.getGrade());
-        nation.setRoom((byte) reqDto.getRoom());
-        nation.setCurrency(reqDto.getCurrency());
         String title = reqDto.getTitle();
         // 나라 이름이 같지 않거나 현재 나라이름 일때만 수정 가능
         if (nationRepository.findByTitle(title).isEmpty() || title.equals(nation.getTitle())) {
@@ -194,6 +190,11 @@ public class NationServiceImpl implements NationService {
         } else {
             throw new CustomException(ErrorCode.DUPLICATED_NATION_NAME);
         }
+        nation.setSchool(reqDto.getSchool());
+        nation.setGrade(reqDto.getGrade().byteValue());
+        nation.setRoom(reqDto.getRoom().byteValue());
+        nation.setCurrency(reqDto.getCurrency());
+
         nationRepository.save(nation);
         return nation;
     }
