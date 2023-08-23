@@ -1,5 +1,7 @@
 package com.ico.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ico.core.dto.TeacherProductReqDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 
 /**
  * @author 변윤경
+ * @author 강교철
  */
 @Entity
 @Getter
@@ -59,5 +62,18 @@ public class TeacherProduct {
         this.rental = rental;
         this.sold = sold;
         this.date = date;
+    }
+
+    /**
+     * 교사 상품 수정 시 호출되는 메서드
+     * @param dto
+     */
+    public void updateTeacherProduct(TeacherProductReqDto dto, byte sold) {
+        this.title = dto.getTitle();
+        this.amount = dto.getAmount();
+        this.detail = dto.getDetail();
+        this.count = dto.getCount();
+        this.sold = sold;
+        this.rental = dto.getRental();
     }
 }
