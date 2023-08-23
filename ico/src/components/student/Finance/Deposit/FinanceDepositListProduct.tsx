@@ -81,12 +81,12 @@ function FinanceDepositListProduct({ data, account }: FinanceDepositListProductP
 					<div css={titleSectionCSS}>
 						<div css={titleCSS}>{data.title}</div>
 						<div>
-							<span css={highlightFontCSS}>{data.period}일</span> 동안 예금
+							<span css={highlightFontCSS}>{data.period}일</span> 예금
 						</div>
 					</div>
 
 					<div>
-						<span css={highlightFontCSS}>{data.interest}%</span> 이자를 얻을 수 있어요!
+						<span css={highlightFontCSS}>{data.interest}%</span> 이자가 추가돼요.
 					</div>
 					{/* <div>{props.period}일 </div> */}
 				</div>

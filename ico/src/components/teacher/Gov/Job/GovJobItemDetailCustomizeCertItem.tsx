@@ -15,7 +15,7 @@ function GovJobItemDetailCustomizeCertItem({ arrIdx, id, subject, rating, rating
 			<div
 				css={[decreaseButtonCSS, buttonCSS]}
 				onClick={() => {
-					ratingHandler({ id: id, reverse: true })
+					ratingHandler({ id: id, reverse: false })
 				}}
 			>
 				<svg width="23" height="23" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -32,7 +32,7 @@ function GovJobItemDetailCustomizeCertItem({ arrIdx, id, subject, rating, rating
 			<div
 				css={[increaseButtonCSS, buttonCSS]}
 				onClick={() => {
-					ratingHandler({ id: id, reverse: false })
+					ratingHandler({ id: id, reverse: true })
 				}}
 			>
 				<svg width="23" height="23" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

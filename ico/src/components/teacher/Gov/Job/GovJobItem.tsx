@@ -329,7 +329,7 @@ const currentColorWrapperCSS = css`
 	border-radius: 100%;
 	box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.1);
 	cursor: pointer;
-	z-index: 999999;
+	z-index: 9999;
 	/* top: -420%; */
 	transition-property: background-color transform box-shadow opacity;
 	transition-duration: 0.2s;

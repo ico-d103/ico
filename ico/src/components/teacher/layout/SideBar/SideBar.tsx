@@ -258,7 +258,7 @@ const sideBarWrapperCSS = css`
 	display: flex;
 	box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.5);
 	position: fixed;
-	z-index: 9999;
+	z-index: 99999;
 `
 
 const contentOuterWrapperCSS = css`

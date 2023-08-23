@@ -2,6 +2,8 @@ import React, { useState, useEffect, ReactNode, ReactElement, JSXElementConstruc
 import Portal from "../Portal/Portal"
 import { css } from "@emotion/react"
 import { useRouter } from "next/router"
+import { useAtom } from "jotai"
+import { modalHandler } from "@/store/store"
 
 
 
@@ -29,7 +31,23 @@ function useModal(transition: transitionsKeyType = 'scale') {
 
 function Modal(transition: string, compState: boolean , closeHandler: () => void, content: ReactNode  ) {
 	const [modalState, setModalState] = useState<boolean>(false)
+	const [modalHandlerAtom, setModalHandlerAtom] = useAtom(modalHandler)
 	const router = useRouter()
+
+	useEffect(() => {
+		if (compState) {
+			setTimeout(() => {
+				setModalHandlerAtom(() => closeHandler)
+				setModalState(() => true)
+			}, 30)
+		} else {
+			setTimeout(() => {
+				setModalState(() => false)
+				setModalHandlerAtom(() => null)
+			}, 300)
+		}
+	}, [compState])
+
 
 
 	useEffect(() => {
@@ -56,8 +74,8 @@ function Modal(transition: string, compState: boolean , closeHandler: () => void
 			<Portal>
 				<div css={modalWrapperCSS}>
 					<div css={backdropCSS({ compState, modalState })} onClick={closeHandler} />
-					<div css={transitions({ compState, modalState })[transition]}>
-						<div className={"inner-wrapper"} css={innerWrapperCSS}>
+					<div css={transitions({ compState, modalState })[transition]} onClick={closeHandler}>
+						<div className={"inner-wrapper"} css={innerWrapperCSS} onClick={(e) => e.stopPropagation()}>
 							{renderContent}
 						</div>
 					</div>

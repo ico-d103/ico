@@ -23,6 +23,7 @@ function NavBar({children}: NavBarProps) {
 		"/student/finance/deposit": 0,
 		"/student/finance/deposit/[pid]": 0,
 		"/student/finance/invest": 0,
+		"/student/finance/invest/[pid]": 0,
 		"/student/class/students": 1,
 		"/student/class/jobsearch": 1,
 		"/student/gov/rule": 2,
