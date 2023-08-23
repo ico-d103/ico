@@ -1,6 +1,7 @@
 package com.ico.api.service.certification;
 
 import com.ico.api.dto.certification.CertificationResDto;
+import com.ico.api.service.CoolSMSService;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Role;
@@ -38,17 +39,8 @@ public class CertificationServiceImpl implements CertificationService{
 
     private final CertificationRepository certificationRepository;
     private final TeacherRepository teacherRepository;
-    private final JwtTokenProvider jwtTokenProvider;
     private final S3UploadService s3;
-
-    @Value("${coolsms.apiKey}")
-    private String apiKey;
-
-    @Value("${coolsms.apiSecret}")
-    private String apiSecret;
-
-    @Value("${coolsms.fromPhoneNum}")
-    private String fromPhoneNum;
+    private final CoolSMSService smsService;
 
     @Override
     @Transactional
@@ -67,17 +59,12 @@ public class CertificationServiceImpl implements CertificationService{
 
         // 문자로 보내주기
         String phoneNum = certification.getTeacher().getPhoneNum();
-        if (phoneNum.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_PHONE_NUMBER);
-        }
-        Message message = new Message();
-        message.setFrom(fromPhoneNum);
-        message.setTo(phoneNum);
+        smsService.validationPhoneNum(phoneNum);
+        Message message = smsService.createMessage(phoneNum);
         message.setText("[아이코]\n교사인증서가 승인되었습니다.");
 
         // 메세지 전송
-        final DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecret, "https://api.coolsms.co.kr");
-        messageService.sendOne(new SingleMessageSendingRequest(message));
+        smsService.sendMessage(message);
 
         // Certification 삭제
         certificationRepository.delete(certification);
@@ -99,17 +86,12 @@ public class CertificationServiceImpl implements CertificationService{
 
         // 문자로 보내주기
         String phoneNum = certification.getTeacher().getPhoneNum();
-        if (phoneNum.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_PHONE_NUMBER);
-        }
-        Message message = new Message();
-        message.setFrom(fromPhoneNum);
-        message.setTo(phoneNum);
+        smsService.validationPhoneNum(phoneNum);
+        Message message = smsService.createMessage(phoneNum);
         message.setText("[아이코]\n교사인증서가 반려되었습니다.");
 
         // 메세지 전송
-        final DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecret, "https://api.coolsms.co.kr");
-        messageService.sendOne(new SingleMessageSendingRequest(message));
+        smsService.sendMessage(message);
 
         // Certification 삭제
         certificationRepository.delete(certification);

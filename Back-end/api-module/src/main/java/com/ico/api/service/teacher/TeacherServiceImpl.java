@@ -95,42 +95,6 @@ public class TeacherServiceImpl implements TeacherService {
         return teacher.getId();
     }
 
-    @Value("${coolsms.apiKey}")
-    private String apiKey;
-
-    @Value("${coolsms.apiSecret}")
-    private String apiSecret;
-
-    @Value("${coolsms.fromPhoneNum}")
-    private String fromPhoneNum;
-
-    @Override
-    public String certifiedPhoneNum(String phoneNum) {
-        // 휴대폰 번호가 입력 되지않았을 때 에러(null 로 처리하면 coolsms에 에러 빼앗김)
-        if (phoneNum.isBlank()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_PHONE_NUMBER);
-        }
-        // 하이픈이 있을 때와 휴대폰 번호 자리가 11개가 넘을 때 에러(정규식)
-        Pattern pattern = Pattern.compile("^(?=.*-)|(?=.{12,})");
-        Matcher matcher = pattern.matcher(phoneNum);
-        if (matcher.find()) {
-            throw new CustomException(ErrorCode.WRONG_PHONE_NUMBER);
-        }
-        // 인증번호 생성 및 메시지에 포함
-        String randomNum = String.format("%06d", new Random().nextInt(999999));
-        log.info(phoneNum);
-        Message message = new Message();
-        message.setFrom(fromPhoneNum);
-        message.setTo(phoneNum);
-        message.setText("[아이코 인증번호]\n입력하셔야할 인증번호는 [" + randomNum + "] 입니다.");
-
-        // 메세지 전송
-        final DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecret, "https://api.coolsms.co.kr");
-        messageService.sendOne(new SingleMessageSendingRequest(message));
-
-        return randomNum;
-    }
-
     @Override
     @Transactional
     public void certifiedImage(HttpServletRequest request, MultipartFile file) {
@@ -188,50 +152,6 @@ public class TeacherServiceImpl implements TeacherService {
         student.encodeStudentPassword(passwordEncoder);
         student.setPwStatus(Password.RESET);
         studentRepository.save(student);
-
-        return password;
-    }
-
-    @Transactional
-    @Override
-    public String findPassword(String phoneNum) {
-        // 휴대폰 번호가 입력 되지않았을 때 에러(null 로 처리하면 coolsms에 에러 빼앗김)
-        if (phoneNum.isBlank()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_PHONE_NUMBER);
-        }
-        // 하이픈이 있을 때와 휴대폰 번호 자리가 11개가 넘을 때 에러(정규식)
-        Pattern pattern = Pattern.compile("^(?=.*-)|(?=.{12,})");
-        Matcher matcher = pattern.matcher(phoneNum);
-        if (matcher.find()) {
-            throw new CustomException(ErrorCode.WRONG_PHONE_NUMBER);
-        }
-
-        Teacher teacher = teacherRepository.findByPhoneNum(phoneNum)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TEACHER_PHONE_NUMBER));
-        // 8자리의 난수 코드 생성
-        String randomNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!";
-        StringBuilder pwBuilder = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < 8; i++) {
-            int digit = random.nextInt(randomNum.length());
-            pwBuilder.append(randomNum.charAt(digit));
-        }
-        String password = pwBuilder.toString();
-
-        Message message = new Message();
-        message.setFrom(fromPhoneNum);
-        message.setTo(phoneNum);
-        message.setText("[아이코]\n변경된 비밀번호는 [" + password + "] 입니다.");
-
-        // 메세지 전송
-        final DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecret, "https://api.coolsms.co.kr");
-        messageService.sendOne(new SingleMessageSendingRequest(message));
-
-        teacher.setPassword(password);
-        teacher.encodeTeacherPassword(passwordEncoder);
-        // teacher 상태 바꾸기
-        teacher.setPwStatus(Password.RESET);
-        teacherRepository.save(teacher);
 
         return password;
     }

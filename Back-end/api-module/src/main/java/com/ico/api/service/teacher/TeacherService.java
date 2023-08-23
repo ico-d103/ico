@@ -1,13 +1,11 @@
 package com.ico.api.service.teacher;
 
-import com.ico.api.dto.license.StudentLicenseResDto;
 import com.ico.api.dto.teacher.TeacherResDto;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Teacher Service
@@ -23,14 +21,6 @@ public interface TeacherService {
      * @return id
      */
     Long signUp(TeacherSignUpRequestDto requestDto, MultipartFile file) throws IOException;
-
-    /**
-     * 휴대폰 인증
-     *
-     * @param phoneNum
-     * @return randomCode
-     */
-    String certifiedPhoneNum(String phoneNum);
 
     /**
      * 회원가입 후 교사인증서 반려 당했을 때 or 다시 교사인증서를 보낼 때
@@ -52,12 +42,4 @@ public interface TeacherService {
      * @return TeacherResDto
      */
     TeacherResDto getTeacher(HttpServletRequest request);
-
-    /**
-     * 교사가 자신의 비밀번호 초기화
-     * @param phoneNum
-     * @return password
-     */
-    String findPassword(String phoneNum);
-
 }
