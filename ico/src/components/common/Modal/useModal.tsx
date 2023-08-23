@@ -75,7 +75,7 @@ function Modal(transition: string, compState: boolean , closeHandler: () => void
 				<div css={modalWrapperCSS}>
 					<div css={backdropCSS({ compState, modalState })} onClick={closeHandler} />
 					<div css={transitions({ compState, modalState })[transition]} onClick={closeHandler}>
-						<div className={"inner-wrapper"} css={innerWrapperCSS}>
+						<div className={"inner-wrapper"} css={innerWrapperCSS} onClick={(e) => e.stopPropagation()}>
 							{renderContent}
 						</div>
 					</div>

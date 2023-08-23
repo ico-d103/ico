@@ -4,7 +4,6 @@ import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type jobLicenseListType = {
 	id: number
-	subject: string
 	rating: number
 }
 
@@ -29,6 +28,7 @@ type responseType = {
 }
 
 export const putGovJobAPI = async ({idx, body}: paramsType) => {
+    console.log('body => ', body)
     try {
         const response: responseType = await tokenInstance.put(`/job/teacher/${idx}`, body)
         return response.data
