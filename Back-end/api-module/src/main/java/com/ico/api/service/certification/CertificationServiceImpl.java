@@ -59,7 +59,6 @@ public class CertificationServiceImpl implements CertificationService{
 
         // 문자로 보내주기
         String phoneNum = certification.getTeacher().getPhoneNum();
-        smsService.validationPhoneNum(phoneNum);
         Message message = smsService.createMessage(phoneNum);
         message.setText("[아이코]\n교사인증서가 승인되었습니다.");
 
@@ -86,7 +85,6 @@ public class CertificationServiceImpl implements CertificationService{
 
         // 문자로 보내주기
         String phoneNum = certification.getTeacher().getPhoneNum();
-        smsService.validationPhoneNum(phoneNum);
         Message message = smsService.createMessage(phoneNum);
         message.setText("[아이코]\n교사인증서가 반려되었습니다.");
 

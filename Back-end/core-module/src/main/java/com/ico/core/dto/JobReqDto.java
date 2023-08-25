@@ -38,6 +38,7 @@ public class JobReqDto {
     @NotNull(message = "414")
     private String color;
 
+    @NotNull(message = "426")
     private Integer creditRating;
 
     @NotNull(message = "430")

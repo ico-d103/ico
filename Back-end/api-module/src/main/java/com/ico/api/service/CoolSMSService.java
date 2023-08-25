@@ -49,8 +49,6 @@ public class CoolSMSService {
      * @return randomCode
      */
     public String certifiedPhoneNum(String phoneNum) {
-        // 휴대폰 번호 유효성 검사
-        validationPhoneNum(phoneNum);
         // 인증번호 생성 및 메시지에 포함
         String randomNum = String.format("%06d", new Random().nextInt(999999));
         Message message = createMessage(phoneNum);
@@ -69,8 +67,6 @@ public class CoolSMSService {
      */
     @Transactional
     public String findPassword(String phoneNum) {
-        // 휴대폰 번호 유효성 검사
-        validationPhoneNum(phoneNum);
 
         Teacher teacher = teacherRepository.findByPhoneNum(phoneNum)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TEACHER_PHONE_NUMBER));
@@ -89,23 +85,6 @@ public class CoolSMSService {
         teacherRepository.save(teacher);
 
         return password;
-    }
-
-    /**
-     * 휴대폰 번호 유효성 검사
-     * @param phoneNum
-     */
-    public void validationPhoneNum(String phoneNum) {
-        // 휴대폰 번호가 입력 되지않았을 때 에러(null 로 처리하면 coolsms에 에러 빼앗김)
-        if (phoneNum.isBlank()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_PHONE_NUMBER);
-        }
-        // 하이픈이 있을 때와 휴대폰 번호 자리가 11개가 넘을 때 에러(정규식)
-        Pattern pattern = Pattern.compile("^(?=.*-)|(?=.{12,})");
-        Matcher matcher = pattern.matcher(phoneNum);
-        if (matcher.find()) {
-            throw new CustomException(ErrorCode.WRONG_PHONE_NUMBER);
-        }
     }
 
     /**
