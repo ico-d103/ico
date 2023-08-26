@@ -4,6 +4,7 @@ import { useRouter } from "next/router"
 import useGetNation from "@/hooks/useGetNation"
 
 type CardProps = {
+	baseUrl: string
 	id: number
 	title: string
 	amount: number
@@ -15,22 +16,23 @@ type CardProps = {
 	assigned: boolean | null
 }
 
-function Card({ id, title, amount, image, count, sold, name, date, assigned }: CardProps) {
+function Card({ baseUrl, id, title, amount, image, count, sold, name, date, assigned }: CardProps) {
 	const router = useRouter()
 
 	const [nation] = useGetNation()
 
 	const handleClickCard = () => {
-		const currentPath = router.asPath
-		if (currentPath.includes("/teacher/shop/my")) {
-			router.push(`/teacher/shop/my/${id}`)
-		} else if (currentPath.includes("/teacher/shop/student")) {
-			router.push(`/teacher/shop/student/${id}`)
-		} else if (currentPath.includes("student/shop/teacher")) {
-			router.push(`/student/shop/teacher/${id}`)
-		} else if (currentPath.includes("/student/shop/student")) {
-			router.push(`/student/shop/student/${id}`)
-		}
+		// const currentPath = router.asPath
+		// if (currentPath.includes("/teacher/shop/my")) {
+		// 	router.push(`/teacher/shop/my/${id}`)
+		// } else if (currentPath.includes("/teacher/shop/student")) {
+		// 	router.push(`/teacher/shop/student/${id}`)
+		// } else if (currentPath.includes("student/shop/teacher")) {
+		// 	router.push(`/student/shop/teacher/${id}`)
+		// } else if (currentPath.includes("/student/shop/student")) {
+		// 	router.push(`/student/shop/student/${id}`)
+		// }
+		router.push(`${baseUrl}/${id}`)
 	}
 
 	const darkCSS = css`

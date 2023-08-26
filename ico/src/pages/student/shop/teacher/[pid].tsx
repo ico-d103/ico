@@ -119,7 +119,17 @@ function product() {
 				transition={"scale"}
 			/> */}
 			{confirmModal(
-				<ConfirmModal closeComp={confirmModal.close} fetchFunction={purchaseProduct} />
+				<ModalContent
+						width={"300px"}
+						title={"상품 구매"}
+						titleSize={"var(--student-h1)"}
+						icon={APPLY_ICON}
+						content={<ConfirmModal closeComp={confirmModal.close} fetchFunction={purchaseProduct} />}
+						forChild={true}
+					/>
+		
+			
+				
 			)}
 
 			<div css={wrapperCSS}>
