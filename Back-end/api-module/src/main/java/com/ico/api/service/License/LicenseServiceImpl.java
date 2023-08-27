@@ -192,10 +192,10 @@ public class LicenseServiceImpl implements LicenseService {
                 throw new CustomException(ErrorCode.NOT_FOUND_RATING_VALUE);
             }
 
-//          // TODO : job 브랜치와 합친 후에 ErrorCode 806번 부여하기
-//            if (val < 0 || val > 7) {
-//                throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
-//            }
+            if (rating < 0 || rating > 7) {
+                log.info(String.valueOf(rating));
+                throw new CustomException(ErrorCode.NOT_FOUND_LICENSE);
+            }
 
             StudentLicense license = studentLicenseRepository.findByIdAndNationId(studentLicenseId, nationId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_LICENSE));

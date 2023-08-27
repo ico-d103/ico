@@ -17,4 +17,6 @@ public interface ImmigrationRepository extends JpaRepository<Immigration, Long> 
     Immigration findByStudentId(Long studentId);
 
     List<Immigration> findAllByNationId(Long nationId);
+
+    boolean existsByStudentId(Long studentId);
 }

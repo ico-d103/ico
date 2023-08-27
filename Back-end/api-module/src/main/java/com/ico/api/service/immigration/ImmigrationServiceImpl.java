@@ -54,25 +54,25 @@ public class ImmigrationServiceImpl implements ImmigrationService {
         String identity = jwtTokenProvider.getIdentity(token);
         Nation nation = nationRepository.findByCode(reqDto.getCode()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
         Student student = studentRepository.findByIdentity(identity).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
-        if (nation.getCode().equals(reqDto.getCode())) {
-            if (immigrationRepository.findByStudentId(student.getId()) == null) {
-                // Create Immigration
-                Immigration immigration = Immigration.builder()
-                        .nation(nation)
-                        .student(student)
-                        .build();
-                immigrationRepository.save(immigration);
-
-                // 학생의 번호 저장
-                student.setNumber(reqDto.getNumber().byteValue());
-                studentRepository.save(student);
-            } else {
-                throw new CustomException(ErrorCode.WRONG_IMMIGRATION);
-            }
-        } else {
+        // 코드 일치 여부 확인
+        if (!nation.getCode().equals(reqDto.getCode())) {
             throw new CustomException(ErrorCode.WRONG_CODE);
         }
+        // 학생이 신청한 입국 심사 여부 확인
+        if (immigrationRepository.existsByStudentId(student.getId())) {
+            throw new CustomException(ErrorCode.WRONG_IMMIGRATION);
+        }
+
+        // Create Immigration
+        Immigration immigration = Immigration.builder()
+                .nation(nation)
+                .student(student)
+                .build();
+        immigrationRepository.save(immigration);
+
+        // 학생의 반 번호 저장
+        student.setNumber(reqDto.getNumber().byteValue());
+        studentRepository.save(student);
 
         // 입국심사 요청 시 SSE로 요청 목록 전송
         sseEmitters.send(findStudentSseList(nation.getId()));
@@ -100,9 +100,7 @@ public class ImmigrationServiceImpl implements ImmigrationService {
 
         Long nationId;  // 해당 나라 id로 SSE 요청 시 변수 전달
         if (immigration != null) {
-
             nationId = immigration.getNation().getId();
-
             immigrationRepository.delete(immigration);
         } else {
             throw new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION_NATION);
@@ -116,11 +114,8 @@ public class ImmigrationServiceImpl implements ImmigrationService {
     @Transactional
     public void approveImmigration(Long immigrationId, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
-        Role role = jwtTokenProvider.getRole(token);
         Long nationId = jwtTokenProvider.getNation(token);
-        if (!role.equals(Role.TEACHER)) {
-            throw new CustomException(ErrorCode.FAIL_AUTHORIZATION);
-        }
+
         Immigration immigration = immigrationRepository.findById(immigrationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION_USER));
         Student student = immigration.getStudent();
@@ -155,17 +150,15 @@ public class ImmigrationServiceImpl implements ImmigrationService {
     @Transactional
     public void companionImmigration(Long immigrationId, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
-        Role role = jwtTokenProvider.getRole(token);
-        if (role.equals(Role.TEACHER)) {
-            Immigration immigration = immigrationRepository.findById(immigrationId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION_USER));
-            immigrationRepository.delete(immigration);
 
-            // 학생의 number 초기화
-            Student student = immigration.getStudent();
-            student.setNumber((byte) 0);
-            studentRepository.save(student);
-        }
+        Immigration immigration = immigrationRepository.findById(immigrationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_IMMIGRATION_USER));
+        immigrationRepository.delete(immigration);
+
+        // 학생의 number 초기화
+        Student student = immigration.getStudent();
+        student.setNumber((byte) 0);
+        studentRepository.save(student);
 
         // 입국심사 요청 삭제 시 SSE로 요청 목록 전송
         sseEmitters.send(findStudentSseList(jwtTokenProvider.getNation(token)));

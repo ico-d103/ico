@@ -75,7 +75,7 @@ public class ResumeServiceImpl implements ResumeService {
         if (student.getStudentJob() != null) {
             throw new CustomException(ErrorCode.ALREADY_HAS_JOB);
         }
-        log.info("자격요건 통과");
+        log.info("[applyJob] 직업 신청 자격요건 통과");
 
         Resume resume = Resume.builder()
                 .studentId(studentId)
@@ -277,7 +277,10 @@ public class ResumeServiceImpl implements ResumeService {
         studentJobRepository.save(studentJob);
         log.info("[assignResume] 직업 배정 인원 추가");
         student.setStudentJob(studentJob);
-        student.setEmpowered(studentJob.getEmpowered());
+        // 직업에 대한 권한에 대한 정보가 있을 때만 수정해주기
+        if (studentJob.getEmpowered() != null && !studentJob.getEmpowered().isEmpty()) {
+            student.setEmpowered(studentJob.getEmpowered());
+        }
         studentRepository.save(student);
         log.info("[assignResume] 학생 직업 배정");
     }

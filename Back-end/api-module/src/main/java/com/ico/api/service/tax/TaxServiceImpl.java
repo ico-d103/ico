@@ -25,6 +25,7 @@ import java.util.List;
  * 국세 관련 Service 로직
  *
  * @author 서재건
+ * @author 강교철
  */
 @Slf4j
 @Service
@@ -56,11 +57,8 @@ public class TaxServiceImpl implements TaxService{
         checkRoleAndTaxPower(token);
         Long nationId = jwtTokenProvider.getNation(token);
 
-        Tax tax = taxRepository.findById(taxId)
+        Tax tax = taxRepository.findByIdAndNationId(taxId, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TAX_NOT_FOUND));
-        if (!tax.getNation().getId().equals(nationId)) {
-            throw new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION);
-        }
 
         tax.updateTax(dto);
 
@@ -92,11 +90,8 @@ public class TaxServiceImpl implements TaxService{
         checkRoleAndTaxPower(token);
         Long nationId = jwtTokenProvider.getNation(token);
 
-        Tax tax = taxRepository.findById(taxId)
+        Tax tax = taxRepository.findByIdAndNationId(taxId, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TAX_NOT_FOUND));
-        if (!tax.getNation().getId().equals(nationId)) {
-            throw new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION);
-        }
         taxRepository.delete(tax);
     }
 

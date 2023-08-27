@@ -55,7 +55,6 @@ public class CertificationController {
      */
     @GetMapping("/admin")
     public ResponseEntity<Page<CertificationResDto>> allCertification(HttpServletRequest request, Pageable pageable) {
-
         return new ResponseEntity<>(certificationService.pageCertification(request, pageable), HttpStatus.OK);
     }
 }

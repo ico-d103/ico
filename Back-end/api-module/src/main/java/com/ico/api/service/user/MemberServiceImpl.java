@@ -10,7 +10,6 @@ import com.ico.core.entity.Student;
 import com.ico.core.entity.Teacher;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
-import com.ico.core.repository.CertificationRepository;
 import com.ico.core.repository.ImmigrationRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -39,7 +37,6 @@ public class MemberServiceImpl implements MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final ImmigrationRepository immigrationRepository;
-    private final CertificationRepository certificationRepository;
 
     @Override
     public String login(LoginDto members) {

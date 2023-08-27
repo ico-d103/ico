@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -40,6 +41,7 @@ public class JobAddReqDto {
     @NotNull(message = "414")
     private String color;
 
+    @Range(min = 1, max = 10, message = "47")
     private Integer creditRating;
 
     @NotBlank(message = "425")
