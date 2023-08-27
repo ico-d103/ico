@@ -20,15 +20,12 @@ public class StockMyResDto {
 
     private String title;
 
-    private double lastPrice;
-
     private List<StockMyColResDto> stocklist;
 
     @Builder
-    public StockMyResDto(Long stockId, String title, double lastPrice, List<StockMyColResDto> stocklist) {
+    public StockMyResDto(Long stockId, String title, List<StockMyColResDto> stocklist) {
         this.stockId = stockId;
         this.title = title;
-        this.lastPrice = lastPrice;
         this.stocklist = stocklist;
     }
 }
