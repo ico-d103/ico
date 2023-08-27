@@ -233,3 +233,18 @@ export type getGovPowerType = {
 }
 
 export type empoweredType = string
+
+export type depositProductType = {
+	id: number
+	title: string
+	period: number
+	interest: number[]
+	students: depositProductStudentType[]
+}
+
+export type depositProductStudentType = {
+	number: number
+	name: string
+	amount: number
+	startDate: string
+}
