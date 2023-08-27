@@ -127,7 +127,7 @@ public enum ErrorCode{
 
     ALREADY_HAS_JOB(HttpStatus.CONFLICT, "422", "해당 학생은 이미 직업이 존재합니다."),
 
-    RULE_NOT_FOUND(HttpStatus.NOT_FOUND, "423", "해당하는 규칙이 없습니다."),
+    NEWS_NOT_FOUND(HttpStatus.NOT_FOUND, "423", "해당하는 학급 소식이 없습니다."),
 
     INVALID_JOB_TOTAL(HttpStatus.BAD_REQUEST, "424", "배정된 인원보다 적은 총 인원 수를 설정할 수 없습니다."),
 
