@@ -1,4 +1,4 @@
-package com.ico.api.dto.rule;
+package com.ico.api.dto.news;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RuleReqDto {
+public class NewsReqDto {
 
 
     @NotBlank(message = "402")
@@ -24,7 +24,7 @@ public class RuleReqDto {
     private String detail;
 
     @Builder
-    public RuleReqDto(String title, String detail) {
+    public NewsReqDto(String title, String detail) {
         this.title = title;
         this.detail = detail;
     }

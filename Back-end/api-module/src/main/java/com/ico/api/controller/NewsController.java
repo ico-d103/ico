@@ -1,9 +1,9 @@
 package com.ico.api.controller;
 
 
-import com.ico.api.dto.rule.RuleReqDto;
-import com.ico.api.dto.rule.RuleResDto;
-import com.ico.api.service.rule.RuleService;
+import com.ico.api.dto.news.NewsReqDto;
+import com.ico.api.dto.news.NewsResDto;
+import com.ico.api.service.news.NewsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,57 +22,64 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * 학급 규칙 관련 Controller
+ * 학급 소식 관련 Controller
  *
  * @author 서재건
  */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/rule")
-public class RuleController {
+@RequestMapping("/api/news")
+public class NewsController {
 
-    private final RuleService ruleService;
+    private final NewsService newsService;
 
     /**
-     * 학급규칙 조회
+     * 학급 소식 조회
      *
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<RuleResDto>> findAllRule(HttpServletRequest request) {
-        return ResponseEntity.ok(ruleService.findAllRule(request));
+    public ResponseEntity<List<NewsResDto>> findAllNews(HttpServletRequest request) {
+        return ResponseEntity.ok(newsService.findAllNews(request));
     }
 
     /**
-     * 학급규칙 추가
+     * 학급 소식 추가
      *
      * @param dto
      * @return
      */
     @PostMapping
-    public ResponseEntity<HttpStatus> addRule(@Valid @RequestBody RuleReqDto dto, HttpServletRequest request) {
-        ruleService.addRule(dto, request);
+    public ResponseEntity<HttpStatus> addNews(@Valid @RequestBody NewsReqDto dto, HttpServletRequest request) {
+        newsService.addNews(dto, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     /**
-     * 학급규칙 수정
+     * 학급 소식 수정
      *
      * @param dto
-     * @param ruleId
+     * @param newsId
      * @param request
      * @return
      */
-    @PutMapping("/{ruleId}")
-    public ResponseEntity<HttpStatus> addRule(@Valid @RequestBody RuleReqDto dto, @PathVariable Long ruleId, HttpServletRequest request) {
-        ruleService.updateRule(dto, ruleId, request);
+    @PutMapping("/{newsId}")
+    public ResponseEntity<HttpStatus> updateNews(@Valid @RequestBody NewsReqDto dto, @PathVariable Long newsId, HttpServletRequest request) {
+        newsService.updateNews(dto, newsId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{ruleId}")
-    public ResponseEntity<HttpStatus> deleteRule(@PathVariable Long ruleId, HttpServletRequest request) {
-        ruleService.deleteRule(ruleId, request);
+    /**
+     * 학급 소식 삭제
+     *
+     * @param newsId
+     * @param request
+     * @return
+     */
+    @DeleteMapping("/{newsId}")
+    public ResponseEntity<HttpStatus> deleteRule(@PathVariable Long newsId, HttpServletRequest request) {
+        newsService.deleteNews(newsId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }
