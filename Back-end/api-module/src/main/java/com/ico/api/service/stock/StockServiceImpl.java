@@ -3,6 +3,7 @@ package com.ico.api.service.stock;
 import com.ico.api.dto.stock.StockCreateReqDto;
 import com.ico.api.dto.stock.StockFindAllStudentResDto;
 import com.ico.api.dto.stock.StockListColDto;
+import com.ico.api.dto.stock.StockMyColResDto;
 import com.ico.api.dto.stock.StockMyResDto;
 import com.ico.api.dto.stock.StockUpdateReqDto;
 import com.ico.api.service.transaction.TransactionService;
@@ -102,24 +103,37 @@ public class StockServiceImpl implements StockService{
         List<Invest> invests = investRepository.findAllByStudentId(studentId);
         // 투자 목록에서 주식 정보와 현재 가격 수익률 찾기
         for(Invest invest: invests){
-            for(Stock stock: stocks){
-                if(stock.getId().equals(invest.getStock().getId())){
-                  StockMyResDto myStock = new StockMyResDto();
-                  myStock.setStockId(stock.getId());
-                  myStock.setTitle(stock.getTitle());
-                  myStock.setPrice(invest.getPrice());
-                  myStock.setAmount(invest.getAmount());
-                  Optional<Issue> lastIssueOpt = issueRepository.findAllByNationIdOrderByIdDesc(nationId).stream().findFirst();
-                  if(lastIssueOpt.isPresent()){
-                      Issue latestIssue = lastIssueOpt.get();
-                      double rate = (invest.getPrice() - latestIssue.getAmount())/invest.getPrice();
-                      myStock.setRate(rate);
-                  }
-                  myStocks.add(myStock);
+            boolean not_stock = true;
+            for(StockMyResDto myStock : myStocks){
+                if(myStock.getStockId().equals(invest.getStock().getId())){
+                    not_stock = false;
+                    double rate = (invest.getPrice() - myStock.getLastPrice())/invest.getPrice();
+                    myStock.getStocklist().add(new StockMyColResDto().of(invest, rate));
+                    break;
                 }
             }
-        }
+            if(not_stock){
+                for(Stock stock: stocks){
+                    if(stock.getId().equals(invest.getStock().getId())){
+                        StockMyResDto myStock = new StockMyResDto();
+                        myStock.setStockId(stock.getId());
+                        myStock.setTitle(stock.getTitle());
+                        Optional<Issue> lastIssueOpt = issueRepository.findAllByNationIdOrderByIdDesc(nationId).stream().findFirst();
+                        if(lastIssueOpt.isPresent()){
+                            Issue latestIssue = lastIssueOpt.get();
+                            double lastPrice = latestIssue.getAmount();
+                            myStock.setLastPrice(lastPrice);
+                            double rate = (invest.getPrice() - lastPrice)/invest.getPrice();
+                            List<StockMyColResDto> stockList = new ArrayList<>();
+                            stockList.add(new StockMyColResDto().of(invest, rate));
+                            myStock.setStocklist(stockList);
+                            myStocks.add(myStock);
+                        }
+                    }
+                }
 
+            }
+        }
         StockFindAllStudentResDto res = new StockFindAllStudentResDto();
         res.setMyStocks(myStocks);
         res.setStockList(stocksRes);

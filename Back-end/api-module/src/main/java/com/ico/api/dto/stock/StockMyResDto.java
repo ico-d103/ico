@@ -5,7 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
+ * 종목별 소유한 학생의 주식목록
  * @author 변윤경
  */
 
@@ -13,22 +16,19 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class StockMyResDto {
-    private long stockId;
+    private Long stockId;
 
     private String title;
 
-    private double price;
+    private double lastPrice;
 
-    private int amount;
-
-    private double rate;
+    private List<StockMyColResDto> stocklist;
 
     @Builder
-    public StockMyResDto(long stockId, String title, double price, int amount, double rate) {
+    public StockMyResDto(Long stockId, String title, double lastPrice, List<StockMyColResDto> stocklist) {
         this.stockId = stockId;
         this.title = title;
-        this.price = price;
-        this.amount = amount;
-        this.rate = rate;
+        this.lastPrice = lastPrice;
+        this.stocklist = stocklist;
     }
 }
