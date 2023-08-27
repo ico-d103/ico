@@ -247,7 +247,7 @@ public class NationServiceImpl implements NationService {
         DefaultNation defaultNation = defaultNationRepository.findById("1")
                 .orElseThrow(() -> {
                     log.info("[createDefaultData] _id 값에서 1이 존재하지 않는 에러 발생, default_nation 확인 필요");
-                    throw new CustomException(ErrorCode.CHECK_DB);
+                    return new CustomException(ErrorCode.CHECK_DB);
                 });
         // 세금
         List<Default_tax> taxList = defaultNation.getDefault_taxes();
