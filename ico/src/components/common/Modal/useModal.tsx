@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactNode, ReactElement, JSXElementConstructor } from "react"
+import React, { useState, useEffect, ReactNode, ReactElement, JSXElementConstructor, useCallback, useMemo } from "react"
 import Portal from "../Portal/Portal"
 import { css } from "@emotion/react"
 import { useRouter } from "next/router"
@@ -7,29 +7,47 @@ import { modalHandler } from "@/store/store"
 
 
 
-
+type ModalPropsType = {
+	transition: any
+	compState: boolean
+	closeHandler: () => void
+	content: ReactNode
+}
 
 
 function useModal(transition: transitionsKeyType = 'scale') {
 	const [modalState, setModalState] = useState(false)
 
 	const modal = (content: ReactNode): any => {
-		return Modal.bind(null, transition, modalState, setModalState.bind(null, () => false), content)()
+		if (content) {
+			return ModalBridge.bind(null, {transition, compState: modalState, closeHandler: setModalState.bind(null, () => false), content})()
+		}
+		
 	}
-
+	
 	modal.open = setModalState.bind(null, () => true)
 	modal.close = setModalState.bind(null, () => false)
 	modal.state = modalState
 
+
+
 	return modal
+
+	
+
+	
+}
+
+
+function ModalBridge(props: ModalPropsType) {
+	return <Modal {...props}/>
 }
 
 
 
 
+function Modal({transition, compState , closeHandler, content}: ModalPropsType  ) {
 
-
-function Modal(transition: string, compState: boolean , closeHandler: () => void, content: ReactNode  ) {
 	const [modalState, setModalState] = useState<boolean>(false)
 	const [modalHandlerAtom, setModalHandlerAtom] = useAtom(modalHandler)
 	const router = useRouter()
@@ -164,5 +182,6 @@ const innerWrapperCSS = css`
 	width: 100%;
 	height: 100%;
 `
+
 
 export default useModal

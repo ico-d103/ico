@@ -48,6 +48,7 @@ function teacher() {
 				<div css={cardWrapperCSS}>
 					{cardData?.map((card) => (
 						<Card
+							baseUrl={router.asPath}
 							key={card.id}
 							id={card.id}
 							title={card.title}

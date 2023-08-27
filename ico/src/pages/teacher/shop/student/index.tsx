@@ -7,6 +7,7 @@ import { getStudentProductsAPI } from "@/api/common/shop/getStudentProductsAPI"
 import { getStudentProductsType } from "@/types/teacher/apiReturnTypes"
 import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
+import { useRouter } from "next/router"
 
 function student() {
 	const {
@@ -18,8 +19,8 @@ function student() {
 		isSuccess,
 		refetch,
 	} = useQuery<getStudentProductsType[]>(["studentProducts"], getStudentProductsAPI)
+	const router = useRouter()
 
-	console.log(cardData)
 
 	return (
 		<div css={wrapperCSS}>
@@ -36,6 +37,7 @@ function student() {
 				<div css={cardWrapperCSS}>
 					{cardData?.map((card) => (
 						<Card
+							baseUrl={router.asPath}
 							key={card.id}
 							id={card.id}
 							title={card.title}

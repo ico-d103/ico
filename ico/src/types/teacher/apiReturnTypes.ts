@@ -93,6 +93,8 @@ export type getStudentDetailType = {
 	licenses: licenseType[]
 }
 
+
+
 export type getTeacherProductsType = {
 	id: number
 	title: string
@@ -129,6 +131,7 @@ export type getStudentProductsType = {
 	name: string
 	assigned: boolean
 }
+
 
 export type getStudentProductDetailType = {
 	id: number
