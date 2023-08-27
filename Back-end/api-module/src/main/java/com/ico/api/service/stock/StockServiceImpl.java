@@ -1,8 +1,8 @@
 package com.ico.api.service.stock;
 
 import com.ico.api.dto.stock.StockCreateReqDto;
-import com.ico.api.dto.stock.StockFindAllStudentResDto;
 import com.ico.api.dto.stock.StockListColDto;
+import com.ico.api.dto.stock.StockMyColResDto;
 import com.ico.api.dto.stock.StockMyResDto;
 import com.ico.api.dto.stock.StockUpdateReqDto;
 import com.ico.api.service.transaction.TransactionService;
@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author 변윤경
@@ -83,48 +82,38 @@ public class StockServiceImpl implements StockService{
     }
 
     @Override
-    public StockFindAllStudentResDto findAllStockStudent(HttpServletRequest request) {
+    public List<StockMyResDto> findAllStockStudent(HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
         Long studentId = jwtTokenProvider.getId(token);
 
-        List<StockListColDto> stocksRes = new ArrayList<>();
+        // 나라의 주식 종목 목록
         List<Stock> stocks = stockRepository.findAllByNationId(nationId);
 
-        for(Stock stock : stocks){
-            StockListColDto col = new StockListColDto();
-            col.setId(stock.getId());
-            col.setTitle(stock.getTitle());
-            stocksRes.add(col);
-        }
-
         List<StockMyResDto> myStocks = new ArrayList<>();
-        List<Invest> invests = investRepository.findAllByStudentId(studentId);
-        // 투자 목록에서 주식 정보와 현재 가격 수익률 찾기
-        for(Invest invest: invests){
-            for(Stock stock: stocks){
-                if(stock.getId().equals(invest.getStock().getId())){
-                  StockMyResDto myStock = new StockMyResDto();
-                  myStock.setStockId(stock.getId());
-                  myStock.setTitle(stock.getTitle());
-                  myStock.setPrice(invest.getPrice());
-                  myStock.setAmount(invest.getAmount());
-                  Optional<Issue> lastIssueOpt = issueRepository.findAllByNationIdOrderByIdDesc(nationId).stream().findFirst();
-                  if(lastIssueOpt.isPresent()){
-                      Issue latestIssue = lastIssueOpt.get();
-                      double rate = (invest.getPrice() - latestIssue.getAmount())/invest.getPrice();
-                      myStock.setRate(rate);
-                  }
-                  myStocks.add(myStock);
+
+        for (Stock stock : stocks) {
+            StockMyResDto myStock = new StockMyResDto();
+            myStock.setStockId(stock.getId());
+            myStock.setTitle(stock.getTitle());
+
+            // 종목에 대한 투자 내역 조회
+            List<Invest> investList = investRepository.findAllByStudentIdAndStockId(studentId, stock.getId());
+
+            if(!investList.isEmpty()){
+                List<Issue> issueList = issueRepository.findAllByStockId(stock.getId());
+                double lastPrice = issueList.get(issueList.size() - 1).getAmount();
+                List<StockMyColResDto> stockList = new ArrayList<>();
+
+                for (Invest invest : investList) {
+                    double rate = (invest.getPrice() - lastPrice) / invest.getPrice();
+                    stockList.add(new StockMyColResDto().of(invest, rate));
                 }
+                myStock.setStocklist(stockList);
+                myStocks.add(myStock);
             }
         }
-
-        StockFindAllStudentResDto res = new StockFindAllStudentResDto();
-        res.setMyStocks(myStocks);
-        res.setStockList(stocksRes);
-
-        return res;
+        return myStocks;
     }
 
     @Override

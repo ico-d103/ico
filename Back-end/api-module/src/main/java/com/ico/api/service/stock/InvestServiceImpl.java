@@ -73,11 +73,6 @@ public class InvestServiceImpl implements InvestService{
         log.info("[buyStock] 주식 매수 시간 LocalTime : {}", currentTime);
         log.info("[buyStock] 주식 매수 시간 LocalDateTime : {}", LocalDateTime.now());
 
-        // 매수 여부 확인
-        investRepository.findByStudentIdAndStockId(studentId, stockId).ifPresent(i -> {
-            throw new CustomException(ErrorCode.ALREADY_HAVE_STOCK);
-        });
-        log.info("매수 여부 확인");
 
         // 잔액 확인
         if(amount > student.getAccount()){
@@ -111,7 +106,7 @@ public class InvestServiceImpl implements InvestService{
      */
     @Transactional
     @Override
-    public void sellStock(HttpServletRequest request, Long stockId) {
+    public void sellStock(HttpServletRequest request, Long stockId, Long investId) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
         Long studentId = jwtTokenProvider.getId(token);
@@ -121,16 +116,17 @@ public class InvestServiceImpl implements InvestService{
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 매수 내역 확인
-        Invest invest = investRepository.findByStudentIdAndStockId(studentId, stockId)
+        Invest invest = investRepository.findByIdAndStudentId(investId, studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_INVEST));
 
         Nation nation = nationRepository.findById(student.getNation().getId())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
         // TODO : 거래 가능 시간 확인
 //        LocalTime currentTime = LocalTime.now();
 //        if(currentTime.isAfter(nation.getTrading_end()) || currentTime.isBefore(nation.getTrading_start())){
 //            throw new CustomException(ErrorCode.NOT_TRADING_TIME);
 //        }
+
         // 투자 종목 여부 유효성 검사
         Stock stock = stockRepository.findById(stockId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));

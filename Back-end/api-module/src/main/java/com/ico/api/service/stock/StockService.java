@@ -1,8 +1,8 @@
 package com.ico.api.service.stock;
 
 import com.ico.api.dto.stock.StockCreateReqDto;
-import com.ico.api.dto.stock.StockFindAllStudentResDto;
 import com.ico.api.dto.stock.StockListColDto;
+import com.ico.api.dto.stock.StockMyResDto;
 import com.ico.api.dto.stock.StockUpdateReqDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +32,7 @@ public interface StockService {
      * @param request
      * @return
      */
-    StockFindAllStudentResDto findAllStockStudent(HttpServletRequest request);
+    List<StockMyResDto> findAllStockStudent(HttpServletRequest request);
 
     /**
      * 투자 종목 수정
