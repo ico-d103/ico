@@ -43,9 +43,9 @@ public class InvestController {
      *
      * @return Httpstatus
      */
-    @DeleteMapping("/student/{stockId}")
-    public ResponseEntity<HttpStatus> sellStock(HttpServletRequest request, @PathVariable Long stockId) {
-        investService.sellStock(request, stockId);
+    @DeleteMapping("/student/{stockId}/{investId}")
+    public ResponseEntity<HttpStatus> sellStock(HttpServletRequest request, @PathVariable Long stockId, @PathVariable Long investId) {
+        investService.sellStock(request, stockId, investId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

@@ -11,11 +11,12 @@ import java.util.Optional;
  */
 public interface InvestRepository extends JpaRepository<Invest, Long> {
     /**
-     * 학생의 주식 매수 여부 확인
-     * @param id 학생 IDX
-     * @return 매수 내역
+     * 학생의 매수 여부 확인
+     * @param id
+     * @param studentId
+     * @return
      */
-    Optional<Invest> findByStudentIdAndStockId(Long studentId, Long stockId);
+    Optional<Invest> findByIdAndStudentId(Long id, Long studentId);
 
     /**
      * 학생의 해당 종목 주식 매수 목록
