@@ -1,7 +1,9 @@
 package com.ico.api.service.teacher;
 
+import com.ico.api.dto.coolsms.PhoneNumReqDto;
 import com.ico.api.dto.teacher.TeacherResDto;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
+import com.ico.api.service.CoolSMSService;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Password;
@@ -50,6 +52,7 @@ public class TeacherServiceImpl implements TeacherService {
     private final PasswordEncoder passwordEncoder;
     private final CertificationRepository certificationRepository;
     private final S3UploadService s3;
+    private final CoolSMSService smsService;
 
     @Override
     @Transactional
@@ -64,7 +67,7 @@ public class TeacherServiceImpl implements TeacherService {
             throw new CustomException(ErrorCode.PASSWORD_WRONG);
         }
         // 핸드폰 번호 중복 체크
-        if (teacherRepository.findByPhoneNum(requestDto.getPhoneNum()).isPresent()) {
+        if (teacherRepository.existsByPhoneNum(requestDto.getPhoneNum())) {
             throw new CustomException(ErrorCode.DUPLICATED_PHONE_NUM);
         }
         // 교사 회원가입
@@ -98,8 +101,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     @Transactional
     public void certifiedImage(HttpServletRequest request, MultipartFile file) {
-        String token = jwtTokenProvider.parseJwt(request);
-        Long teacherId = jwtTokenProvider.getId(token);
+        Long teacherId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
         Teacher teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Optional<Certification> optionalCertification = certificationRepository.findByTeacherId(teacherId);
@@ -165,5 +167,31 @@ public class TeacherServiceImpl implements TeacherService {
                 .identity(teacher.getIdentity())
                 .phoneNum(teacher.getPhoneNum())
                 .build();
+    }
+
+    @Override
+    public String updateCheckPhoneNum(HttpServletRequest request, PhoneNumReqDto dto) {
+        Long teacherId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        // 전에 있던 휴대폰 번호와 동일할 때
+        if (teacher.getPhoneNum().equals(dto.getPhoneNum())) {
+            throw new CustomException(ErrorCode.DUPLICATED_PHONE_NUM);
+        }
+        return smsService.certifiedPhoneNum(dto.getPhoneNum());
+    }
+
+    @Override
+    public void updatePhoneNum(HttpServletRequest request, PhoneNumReqDto dto) {
+        // 핸드폰 번호 중복 체크
+        if (teacherRepository.existsByPhoneNum(dto.getPhoneNum())) {
+            throw new CustomException(ErrorCode.DUPLICATED_PHONE_NUM);
+        }
+
+        Long teacherId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        teacher.setPhoneNum(dto.getPhoneNum());
+        teacherRepository.save(teacher);
     }
 }

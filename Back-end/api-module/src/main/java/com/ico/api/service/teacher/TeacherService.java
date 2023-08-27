@@ -1,5 +1,6 @@
 package com.ico.api.service.teacher;
 
+import com.ico.api.dto.coolsms.PhoneNumReqDto;
 import com.ico.api.dto.teacher.TeacherResDto;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,4 +43,20 @@ public interface TeacherService {
      * @return TeacherResDto
      */
     TeacherResDto getTeacher(HttpServletRequest request);
+
+    /**
+     * 교사 휴대폰 번호 수정 시 인증번호 받기
+     * @param request
+     * @param dto
+     * @return
+     */
+    String updateCheckPhoneNum(HttpServletRequest request, PhoneNumReqDto dto);
+
+    /**
+     * 인증됐다면 휴대폰 번호 업데이트
+     * @param request
+     * @param dto
+     * @return
+     */
+    void updatePhoneNum(HttpServletRequest request, PhoneNumReqDto dto);
 }
