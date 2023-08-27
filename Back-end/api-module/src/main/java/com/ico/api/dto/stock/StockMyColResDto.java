@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * 종목에 속하는 매수 내역 정보
+ *
  * @author 변윤경
  */
 

@@ -1,7 +1,6 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.stock.StockCreateReqDto;
-import com.ico.api.dto.stock.StockFindAllStudentResDto;
 import com.ico.api.dto.stock.StockListColDto;
 import com.ico.api.dto.stock.StockMyResDto;
 import com.ico.api.dto.stock.StockUpdateReqDto;
