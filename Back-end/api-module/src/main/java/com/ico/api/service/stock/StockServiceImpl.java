@@ -136,7 +136,7 @@ public class StockServiceImpl implements StockService{
         Nation nation = nationRepository.findById(nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
-        Stock stock = stockRepository.findById(stockId)
+        Stock stock = stockRepository.findByIdAndNationId(stockId, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
 
         // 학생들의 투자 내역
