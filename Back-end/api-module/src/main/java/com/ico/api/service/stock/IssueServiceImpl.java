@@ -156,10 +156,18 @@ public class IssueServiceImpl implements IssueService {
 
     }
 
-    public void createIssue(double amount, String content, Nation nation){
+    /**
+     * 이슈 생성
+     * @param amount
+     * @param content
+     * @param nation
+     * @param stock
+     */
+    public void createIssue(double amount, String content, Nation nation, Stock stock){
         Issue issue = Issue.builder()
                 .date(LocalDateTime.now())
                 .amount(amount)
+                .stock(stock)
                 .content(content)
                 .nation(nation)
                 .build();
