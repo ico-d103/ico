@@ -22,6 +22,7 @@ import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class StockServiceImpl implements StockService{
     private final IssueServiceImpl issueService;
     private final TransactionService transactionService;
 
+    @Transactional
     @Override
     public void createStock(HttpServletRequest request, StockCreateReqDto dto) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));

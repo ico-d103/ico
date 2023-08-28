@@ -50,7 +50,7 @@ public class StockController {
      * @param request
      * @return
      */
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<StockListColDto>> findAllStock(HttpServletRequest request){
         return ResponseEntity.ok(stockService.findAllStock(request));
     }
