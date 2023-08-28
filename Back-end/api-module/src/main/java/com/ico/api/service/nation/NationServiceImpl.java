@@ -5,7 +5,6 @@ import com.ico.api.dto.nation.NationReqDto;
 import com.ico.api.dto.nation.TradingTimeReqDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
-import com.ico.core.code.Role;
 import com.ico.core.code.Status;
 import com.ico.core.code.TaxType;
 import com.ico.core.data.Default_job;
@@ -19,7 +18,7 @@ import com.ico.core.entity.Invest;
 import com.ico.core.entity.Issue;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.NationLicense;
-import com.ico.core.entity.Rule;
+import com.ico.core.entity.News;
 import com.ico.core.entity.Stock;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentJob;
@@ -37,7 +36,7 @@ import com.ico.core.repository.ImmigrationRepository;
 import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationLicenseRepository;
 import com.ico.core.repository.NationRepository;
-import com.ico.core.repository.RuleRepository;
+import com.ico.core.repository.NewsRepository;
 import com.ico.core.repository.IssueRepository;
 import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.StudentJobRepository;
@@ -71,7 +70,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 @Slf4j
 public class NationServiceImpl implements NationService {
-    private final RuleRepository ruleRepository;
+    private final NewsRepository newsRepository;
     private final StudentJobRepository studentJobRepository;
     private final StudentProductRepository studentProductRepository;
     private final TeacherProductRepository teacherProductRepository;
@@ -249,7 +248,7 @@ public class NationServiceImpl implements NationService {
         DefaultNation defaultNation = defaultNationRepository.findById("1")
                 .orElseThrow(() -> {
                     log.info("[createDefaultData] _id 값에서 1이 존재하지 않는 에러 발생, default_nation 확인 필요");
-                    throw new CustomException(ErrorCode.CHECK_DB);
+                    return new CustomException(ErrorCode.CHECK_DB);
                 });
         // 세금
         List<Default_tax> taxList = defaultNation.getDefault_taxes();
@@ -283,12 +282,12 @@ public class NationServiceImpl implements NationService {
         // 학급규칙
         List<Default_rule> ruleList = defaultNation.getDefault_rules();
         for (Default_rule data : ruleList) {
-            Rule rule = Rule.builder()
+            News news = News.builder()
                     .nation(nation)
                     .title(data.getTitle())
                     .detail(data.getDetail())
                     .build();
-            ruleRepository.save(rule);
+            newsRepository.save(news);
         }
         // 자격증
         List<Default_license> licenses = defaultNation.getDefault_licenses();
@@ -345,9 +344,9 @@ public class NationServiceImpl implements NationService {
         }
 
         // Rule
-        List<Rule> rules = ruleRepository.findAllByNationId(nationId);
-        if (!rules.isEmpty()) {
-            ruleRepository.deleteAll(rules);
+        List<News> newsList = newsRepository.findAllByNationId(nationId);
+        if (!newsList.isEmpty()) {
+            newsRepository.deleteAll(newsList);
         }
 
         // Stock

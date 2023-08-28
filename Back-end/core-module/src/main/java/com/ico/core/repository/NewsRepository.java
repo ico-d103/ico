@@ -1,6 +1,6 @@
 package com.ico.core.repository;
 
-import com.ico.core.entity.Rule;
+import com.ico.core.entity.News;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +13,7 @@ import java.util.Optional;
  * @author 서재건
  */
 @Repository
-public interface RuleRepository extends JpaRepository<Rule, Long> {
+public interface NewsRepository extends JpaRepository<News, Long> {
 
     /**
      * 학급 규칙 조회
@@ -21,7 +21,7 @@ public interface RuleRepository extends JpaRepository<Rule, Long> {
      * @param nationId
      * @return
      */
-    List<Rule> findAllByNationId(Long nationId);
+    List<News> findAllByNationId(Long nationId);
 
     /**
      * 학급 규칙 생성 시 제목 중복 체크
@@ -30,7 +30,7 @@ public interface RuleRepository extends JpaRepository<Rule, Long> {
      * @param title
      * @return
      */
-    Optional<Rule> findByNationIdAndTitle(Long nationId, String title);
+    Optional<News> findByNationIdAndTitle(Long nationId, String title);
 
     /**
      * 학급 규칙 수정 시 제목 중복 제크
@@ -40,5 +40,5 @@ public interface RuleRepository extends JpaRepository<Rule, Long> {
      * @param title
      * @return
      */
-    Optional<Rule> findByIdNotAndNationIdAndTitle(Long ruleId, Long nationId, String title);
+    Optional<News> findByIdNotAndNationIdAndTitle(Long ruleId, Long nationId, String title);
 }

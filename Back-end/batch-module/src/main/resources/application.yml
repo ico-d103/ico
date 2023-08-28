@@ -34,10 +34,9 @@ spring:
       initialize-schema: always
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    generate-ddl: true
     hibernate:
       # create(new table), update(add new column), none(nothing)
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
