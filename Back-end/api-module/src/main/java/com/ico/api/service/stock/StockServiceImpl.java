@@ -63,7 +63,7 @@ public class StockServiceImpl implements StockService{
         stockRepository.save(stock);
 
         // 이슈 등록
-        issueService.createIssue(dto.getAmount(), dto.getIssue(), nation);
+        issueService.createIssue(dto.getAmount(), dto.getIssue(), nation, stock);
     }
 
     @Override
