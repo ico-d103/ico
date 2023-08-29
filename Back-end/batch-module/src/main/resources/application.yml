@@ -36,7 +36,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       # create(new table), update(add new column), none(nothing)
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
