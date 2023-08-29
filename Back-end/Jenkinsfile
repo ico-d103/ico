@@ -50,9 +50,9 @@ pipeline {
                     sh '''
                     if test "`docker ps -aq --filter ancestor=back/api-module`"; then
                     
-					ssh -o StrictHostKeyChecking=no ubuntu@www.iconomy.kr "docker stop $(docker ps -aq --filter ancestor=back/api-module)"
-                    ssh -o StrictHostKeyChecking=no ubuntu@www.iconomy.kr "docker rm -f $(docker ps -aq --filter ancestor=back/api-module)"
-                    ssh -o StrictHostKeyChecking=no ubuntu@www.iconomy.kr "docker rmi back/api-module"
+					ssh -o StrictHostKeyChecking=no ubuntu@3.37.183.246 "docker stop $(docker ps -aq --filter ancestor=back/api-module)"
+                    ssh -o StrictHostKeyChecking=no ubuntu@3.37.183.246 "docker rm -f $(docker ps -aq --filter ancestor=back/api-module)"
+                    ssh -o StrictHostKeyChecking=no ubuntu@3.37.183.246 "docker rmi back/api-module"
 
                     fi
                     '''
@@ -60,9 +60,9 @@ pipeline {
                     sh '''
                     if test "`docker ps -aq --filter ancestor=back/batch-module`"; then
                     
-					ssh -o StrictHostKeyChecking=no ubuntu@www.iconomy.kr "docker stop $(docker ps -aq --filter ancestor=back/batch-module)"
-                    ssh -o StrictHostKeyChecking=no ubuntu@www.iconomy.kr "docker rm -f $(docker ps -aq --filter ancestor=back/batch-module)"
-                    ssh -o StrictHostKeyChecking=no ubuntu@www.iconomy.kr "docker rmi back/batch-module"
+					ssh -o StrictHostKeyChecking=no ubuntu@3.37.183.246 "docker stop $(docker ps -aq --filter ancestor=back/batch-module)"
+                    ssh -o StrictHostKeyChecking=no ubuntu@3.37.183.246 "docker rm -f $(docker ps -aq --filter ancestor=back/batch-module)"
+                    ssh -o StrictHostKeyChecking=no ubuntu@3.37.183.246 "docker rmi back/batch-module"
 
                     fi
                     '''
