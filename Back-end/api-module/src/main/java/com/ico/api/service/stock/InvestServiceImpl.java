@@ -45,6 +45,7 @@ public class InvestServiceImpl implements InvestService{
      * @param price 현재 지수
      * @param amount 매수 금액
      */
+    @Transactional
     @Override
     public void buyStock(HttpServletRequest request, double price, int amount, Long stockId) {
         String token = jwtTokenProvider.parseJwt(request);
@@ -98,7 +99,6 @@ public class InvestServiceImpl implements InvestService{
 
         // 거래 내역 추가
         transactionService.addTransactionWithdraw(nation.getTitle() + " 증권", studentId, amount, stock.getTitle() + " 지수");
-
     }
 
     /**

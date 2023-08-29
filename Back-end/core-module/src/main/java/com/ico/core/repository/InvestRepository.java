@@ -40,4 +40,6 @@ public interface InvestRepository extends JpaRepository<Invest, Long> {
      * @return
      */
     List<Invest> findAllByNationId(Long nationId);
+
+    List<Invest> findAllByStockId(Long stockId);
 }

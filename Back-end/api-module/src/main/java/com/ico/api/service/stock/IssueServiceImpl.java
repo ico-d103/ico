@@ -33,6 +33,7 @@ import java.util.List;
  * 투지 이슈 Service
  *
  * @author 변윤경
+ * @author 강교철
  */
 @Slf4j
 @Service
@@ -43,14 +44,9 @@ public class IssueServiceImpl implements IssueService {
     private final IssueRepository issueRepository;
     private final InvestRepository investRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final TransactionService transactionService;
     private final StockRepository stockRepository;
 
-    /**
-     * 교사 투자 이슈 목록 조회
-     *
-     * @return 교사화면의 투자 이슈 정보
-     */
+    // TODO : 아래 두 개 조회 나라 별로 issue 조회를 해서 stock별로 issue가 나눠지지 않음 고쳐야 함
     @Override
     public IssueTeacherResDto getIssueTeacher(HttpServletRequest request, Long stockId) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -73,10 +69,6 @@ public class IssueServiceImpl implements IssueService {
         return res;
     }
 
-    /**
-     * 학생 투자 이슈 목록 조회
-     * @return 학생 화면의 투자 이슈 정보
-     */
     @Override
     public IssueStudentResDto getIssueStudent(HttpServletRequest request, Long stockId) {
         String token = jwtTokenProvider.parseJwt(request);
@@ -108,7 +100,6 @@ public class IssueServiceImpl implements IssueService {
                 double rate = (invest.getPrice() - issues.get(0).getAmount())/invest.getPrice();
                 myStocks.add(new StockMyColResDto().of(invest, rate));
             }
-
         }
 
         // 반환값
@@ -124,10 +115,6 @@ public class IssueServiceImpl implements IssueService {
         return res;
     }
 
-    /**
-     * 투자 이슈 등록
-     * @param dto 지수, 내일의 투자 이슈
-     */
     @Override
     public void uploadIssue(HttpServletRequest request, IssueUploadReqDto dto, Long stockId) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
@@ -156,13 +143,7 @@ public class IssueServiceImpl implements IssueService {
 
     }
 
-    /**
-     * 이슈 생성
-     * @param amount
-     * @param content
-     * @param nation
-     * @param stock
-     */
+    @Override
     public void createIssue(double amount, String content, Nation nation, Stock stock){
         Issue issue = Issue.builder()
                 .date(LocalDateTime.now())
@@ -191,7 +172,6 @@ public class IssueServiceImpl implements IssueService {
             if(i < issues.size() - 2){
                 rate = (int) ((issues.get(i).getAmount() - issues.get(i + 1).getAmount()) / issues.get(i + 1).getAmount()) * 100;
             }
-
 
             col.setContent(issues.get(i).getContent());
             col.setAmount(issues.get(i).getAmount());
