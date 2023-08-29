@@ -1,5 +1,6 @@
 package com.ico.api.service.teacher;
 
+import com.ico.api.dto.teacher.TeacherProductImgReqDto;
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
 import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
@@ -15,6 +16,7 @@ import java.util.List;
  *
  * @author 변윤경
  * @author 서재건
+ * @author 강교철
  */
 public interface TeacherProductService {
     /**
@@ -72,4 +74,20 @@ public interface TeacherProductService {
      * @return
      */
     ProductQRResDto findBuyTransaction(Long teacherProductId, HttpServletRequest request);
+
+    /**
+     * 교사 상품 수정
+     * @param teacherProductId
+     * @param request
+     */
+    void updateTeacherProduct(Long teacherProductId, HttpServletRequest request, TeacherProductReqDto product);
+
+    /**
+     * 교사 상품 이미지 수정
+     * @param teacherProductId
+     * @param request
+     * @param dto
+     * @param newImages
+     */
+    void updateProductImage(Long teacherProductId, HttpServletRequest request, TeacherProductImgReqDto dto, List<MultipartFile> newImages);
 }

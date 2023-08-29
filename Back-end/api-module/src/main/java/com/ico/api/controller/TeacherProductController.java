@@ -1,5 +1,6 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.teacher.TeacherProductImgReqDto;
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
 import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +32,7 @@ import java.util.List;
  *
  * @author 변윤경
  * @author 서재건
+ * @author 강교철
  */
 @RestController
 @RequiredArgsConstructor
@@ -115,5 +119,31 @@ public class TeacherProductController {
     @GetMapping("/student/transaction/{teacherProductId}")
     public ResponseEntity<ProductQRResDto> findBuyTransaction(@PathVariable Long teacherProductId, HttpServletRequest request) {
         return ResponseEntity.ok(teacherProductService.findBuyTransaction(teacherProductId, request));
+    }
+
+    /**
+     * 교사 상품 수정
+     * @param teacherProductId
+     * @param request
+     * @param dto
+     * @return
+     */
+    @PutMapping("/{teacherProductId}")
+    public ResponseEntity<HttpStatus> updateTeacherProduct(@PathVariable Long teacherProductId, HttpServletRequest request, @Valid @RequestBody TeacherProductReqDto dto) {
+        teacherProductService.updateTeacherProduct(teacherProductId, request, dto);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 교사 상품 이미지 수정
+     * @param teacherProductId
+     * @param request
+     * @param dto
+     * @return
+     */
+    @PutMapping(value = "/{teacherProductId}/image", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<HttpStatus> updateProductImage(@PathVariable Long teacherProductId, HttpServletRequest request, @RequestPart TeacherProductImgReqDto dto, @RequestPart List<MultipartFile> newImages) {
+        teacherProductService.updateProductImage(teacherProductId, request, dto, newImages);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

@@ -4,7 +4,7 @@ import com.ico.api.dto.stock.IssueColDto;
 import com.ico.api.dto.stock.IssueStudentResDto;
 import com.ico.api.dto.stock.IssueTeacherResDto;
 import com.ico.api.dto.stock.IssueUploadReqDto;
-import com.ico.api.dto.stock.StockIssueMyResDto;
+import com.ico.api.dto.stock.StockMyColResDto;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
@@ -28,7 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 투지 이슈 Service
@@ -95,21 +94,21 @@ public class IssueServiceImpl implements IssueService {
         Stock stock = stockRepository.findById(stockId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
 
-        Optional<Invest> invest = investRepository.findByStudentIdAndStockId(studentId, stockId);
+        List<Invest> invests = investRepository.findAllByStudentIdAndStockId(studentId, stockId);
         log.info("매수 여부 확인");
 
-        StockIssueMyResDto myStock = new StockIssueMyResDto();
+        List<StockMyColResDto> myStocks = new ArrayList<StockMyColResDto>();
         log.info("학생 매수 정보");
 
-        if(invest.isPresent()){
+        List<IssueColDto> issues = getIssues(nationId);
+
+        if(!invests.isEmpty()){
             log.info("매수 이력 있음");
-            myStock.setPrice(invest.get().getPrice());
-            myStock.setAmount(invest.get().getAmount());
-        }
-        else{
-            log.info("매수 이력 없음");
-            myStock.setPrice(0);
-            myStock.setAmount(0);
+            for (Invest invest : invests){
+                double rate = (invest.getPrice() - issues.get(0).getAmount())/invest.getPrice();
+                myStocks.add(new StockMyColResDto().of(invest, rate));
+            }
+
         }
 
         // 반환값
@@ -119,8 +118,8 @@ public class IssueServiceImpl implements IssueService {
         res.setContent(stock.getContent());
         res.setTradingStart(nation.getTrading_start());
         res.setTradingEnd(nation.getTrading_end());
-        res.setMyStock(myStock);
-        res.setIssue(getIssues(nationId));
+        res.setMyStocks(myStocks);
+        res.setIssue(issues);
 
         return res;
     }
@@ -157,10 +156,18 @@ public class IssueServiceImpl implements IssueService {
 
     }
 
-    public void createIssue(double amount, String content, Nation nation){
+    /**
+     * 이슈 생성
+     * @param amount
+     * @param content
+     * @param nation
+     * @param stock
+     */
+    public void createIssue(double amount, String content, Nation nation, Stock stock){
         Issue issue = Issue.builder()
                 .date(LocalDateTime.now())
                 .amount(amount)
+                .stock(stock)
                 .content(content)
                 .nation(nation)
                 .build();
@@ -192,13 +199,7 @@ public class IssueServiceImpl implements IssueService {
             col.setRate(rate);
             issuesRes.add(col);
         }
-//        for(Issue issue : issues){
-//            IssueColDto col = new IssueColDto();
-//            col.setContent(issue.getContent());
-//            col.setAmount(issue.getAmount());
-//            col.setDate(issue.getDate().format(Formatter.date));
-//            issuesRes.add(col);
-//        }
+
         return issuesRes;
     }
 }

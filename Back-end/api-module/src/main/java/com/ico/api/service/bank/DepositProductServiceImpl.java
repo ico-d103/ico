@@ -6,6 +6,7 @@ import com.ico.api.dto.bank.DepositProductStudentColResDto;
 import com.ico.api.dto.bank.DepositProductStudentResDto;
 import com.ico.api.dto.bank.DepositProductTeacherResDto;
 import com.ico.api.dto.bank.DepositStudentResDto;
+import com.ico.api.dto.bank.ProductJoinedStudentResDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.document.Deposit;
@@ -55,8 +56,24 @@ public class DepositProductServiceImpl implements DepositProductService{
         // 예금 상품 목록의 col
         List<DepositProductTeacherResDto> colDepositList = new ArrayList<>();
 
-        for(DepositProduct deposit : depositProductList){
-            colDepositList.add(new DepositProductTeacherResDto().of(deposit));
+        for(DepositProduct depositProduct : depositProductList){
+            List<ProductJoinedStudentResDto> studentInfoList = new ArrayList<ProductJoinedStudentResDto>();
+
+            // 해당 예금 상품에 가입한 학생 목록
+            List<Deposit> depositList = depositMongoRepository.findAllByDepositProductId(depositProduct.getId());
+            for(Deposit deposit: depositList){
+                ProductJoinedStudentResDto studentInfo = new ProductJoinedStudentResDto();
+                studentInfo.setName(deposit.getName());
+                studentInfo.setNumber(deposit.getNumber());
+                studentInfo.setAmount(deposit.getAmount());
+                studentInfo.setStartDate(deposit.getStartDate().toLocalDate().toString());
+                studentInfoList.add(studentInfo);
+            }
+
+            DepositProductTeacherResDto resDto = new DepositProductTeacherResDto().of(depositProduct);
+            resDto.setStudents(studentInfoList);
+
+            colDepositList.add(resDto);
         }
         return colDepositList;
     }

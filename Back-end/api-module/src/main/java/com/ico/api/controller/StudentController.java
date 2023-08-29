@@ -3,6 +3,7 @@ package com.ico.api.controller;
 import com.ico.api.dto.nation.CreditScoreAllReqDto;
 import com.ico.api.dto.nation.CreditScoreReqDto;
 import com.ico.api.dto.student.StudentAllResDto;
+import com.ico.api.dto.student.StudentDelReqDto;
 import com.ico.api.dto.student.StudentListResDto;
 import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.student.StudentResDto;
@@ -13,6 +14,7 @@ import com.ico.api.service.student.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -192,5 +194,17 @@ public class StudentController {
     @GetMapping("/account")
     public ResponseEntity<Map<String, String>> getAccount(HttpServletRequest request) {
         return ResponseEntity.ok(studentService.findAccount(request));
+    }
+
+    /**
+     * 교사가 학생 추방
+     * @param request
+     * @param dto
+     * @return
+     */
+    @PutMapping("/teacher/exile")
+    public ResponseEntity<HttpStatus> exileStudent(HttpServletRequest request, @Valid @RequestBody StudentDelReqDto dto) {
+        studentService.exileStudent(request, dto);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

@@ -15,8 +15,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -42,6 +49,7 @@ public class S3UploadService {
 
     @Value("${cloud.aws.cloud-front.domain}")
     private String domain;
+
 
     /**
      * 파일 업로드
@@ -162,4 +170,5 @@ public class S3UploadService {
         }
         return url.substring(url.lastIndexOf("/") + 1);
     }
+
 }

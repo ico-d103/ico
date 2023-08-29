@@ -1,6 +1,7 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.license.LicenseUpdateReqDto;
+import com.ico.api.dto.license.NationLicenseSubjectReqDto;
 import com.ico.api.dto.license.NationLicenseResDto;
 import com.ico.api.dto.license.StudentLicenseReqDto;
 import com.ico.api.dto.license.StudentLicenseResDto;
@@ -59,12 +60,12 @@ public class LicenseController {
      * 교사가 나라의 자격증 수정
      * @param request
      * @param nationLicenseId
-     * @param map
+     * @param dto
      * @return ok
      */
     @PutMapping("/teacher/{nationLicenseId}")
-    public ResponseEntity<HttpStatus> updateNationLicense(HttpServletRequest request, @PathVariable Long nationLicenseId, @RequestBody Map<String, String> map) {
-        licenseService.updateNationLicense(request, nationLicenseId, map.get("subject"));
+    public ResponseEntity<HttpStatus> updateNationLicense(HttpServletRequest request, @PathVariable Long nationLicenseId, @Valid @RequestBody NationLicenseSubjectReqDto dto) {
+        licenseService.updateNationLicense(request, nationLicenseId, dto.getSubject());
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -93,12 +94,12 @@ public class LicenseController {
     /**
      * 교사가 나라의 자격증을 생성
      * @param request
-     * @param map
+     * @param dto
      * @return
      */
     @PostMapping("/teacher")
-    public ResponseEntity<String> createNationLicense(HttpServletRequest request, @RequestBody Map<String, String> map) {
-        return ResponseEntity.ok(licenseService.createNationLicense(request, map.get("subject")));
+    public ResponseEntity<String> createNationLicense(HttpServletRequest request, @Valid @RequestBody NationLicenseSubjectReqDto dto) {
+        return ResponseEntity.ok(licenseService.createNationLicense(request, dto.getSubject()));
     }
 
     /**

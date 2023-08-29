@@ -1,7 +1,9 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.coolsms.PhoneNumReqDto;
 import com.ico.api.dto.teacher.TeacherResDto;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
+import com.ico.api.service.CoolSMSService;
 import com.ico.api.service.teacher.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Map;
 
 
 /**
@@ -27,6 +28,7 @@ import java.util.Map;
 public class TeacherController {
 
     private final TeacherService teacherService;
+    private final CoolSMSService smsService;
 
     /**
      * 교사 회원가입
@@ -43,13 +45,13 @@ public class TeacherController {
 
     /**
      * 휴대폰 인증
-     * @param req
+     * @param dto
      * @return ok
      */
     @PostMapping("/phone")
     @ResponseBody
-    public ResponseEntity<?> certifiedPhone(@RequestBody Map<String, String> req) {
-        return new ResponseEntity<>(teacherService.certifiedPhoneNum(req.get("phoneNum")), HttpStatus.OK);
+    public ResponseEntity<?> certifiedPhone(@Valid @RequestBody PhoneNumReqDto dto) {
+        return new ResponseEntity<>(smsService.certifiedPhoneNum(dto.getPhoneNum()), HttpStatus.OK);
     }
 
     /**
@@ -87,11 +89,11 @@ public class TeacherController {
 
     /**
      * 교사 자신의 비밀번호 초기화
-     * @param req
+     * @param dto
      * @return ok
      */
     @PostMapping("/reset-pw")
-    public ResponseEntity<String> resetTeacherPassword(@RequestBody Map<String, String> req) {
-        return ResponseEntity.ok(teacherService.findPassword(req.get("phoneNum")));
+    public ResponseEntity<String> resetTeacherPassword(@Valid @RequestBody PhoneNumReqDto dto) {
+        return ResponseEntity.ok(smsService.findPassword(dto.getPhoneNum()));
     }
 }

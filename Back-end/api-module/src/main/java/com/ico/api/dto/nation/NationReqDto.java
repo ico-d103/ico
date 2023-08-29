@@ -2,6 +2,7 @@ package com.ico.api.dto.nation;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -18,14 +19,15 @@ import java.time.LocalTime;
 public class NationReqDto {
 
     @NotBlank(message = "19")
-    String school;
+    private String school;
     @NotNull(message = "19")
-    int grade;
+    @Range(min = 1, max = 7, message = "806")
+    private Integer grade;
     @NotNull(message = "19")
-    int room;
+    private Integer room;
     @NotBlank(message = "19")
-    String title;
+    private String title;
     @NotBlank(message = "19")
-    String currency;
+    private String currency;
 
 }

@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * 학생 회원가입시 입력받을 것
@@ -19,8 +21,12 @@ public class StudentSignUpRequestDto {
     @NotBlank(message = "100")
     private String identity;
     @NotBlank(message = "104")
+    @Size(min = 8, max = 16, message = "48")    // 프론트가 정해놓은 글자 수
+    @Pattern(regexp = "^[0-9a-zA-Z]*$", message = "49")     // 프론트가 정한 비밀번호 규칙
     private String password;
     @NotBlank(message = "104")
+    @Size(min = 8, max = 16, message = "48")    // 프론트가 정해놓은 글자 수
+    @Pattern(regexp = "^[0-9a-zA-Z]*$", message = "49")     // 프론트가 정한 비밀번호 규칙
     private String checkedPassword;
     @NotBlank(message = "112")
     private String name;
@@ -32,5 +38,4 @@ public class StudentSignUpRequestDto {
         this.name = student.getName();
         this.role = Role.STUDENT;
     }
-
 }

@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 /**
+ *
+ *
  * @author 변윤경
  */
 @Entity

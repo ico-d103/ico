@@ -127,7 +127,7 @@ public enum ErrorCode{
 
     ALREADY_HAS_JOB(HttpStatus.CONFLICT, "422", "해당 학생은 이미 직업이 존재합니다."),
 
-    RULE_NOT_FOUND(HttpStatus.NOT_FOUND, "423", "해당하는 규칙이 없습니다."),
+    NEWS_NOT_FOUND(HttpStatus.NOT_FOUND, "423", "해당하는 학급 소식이 없습니다."),
 
     INVALID_JOB_TOTAL(HttpStatus.BAD_REQUEST, "424", "배정된 인원보다 적은 총 인원 수를 설정할 수 없습니다."),
 
@@ -152,6 +152,8 @@ public enum ErrorCode{
     TREASURY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "512", "존재하지 않는 국고 내역 id 입니다."),
 
     INVALID_RESUME(HttpStatus.BAD_REQUEST, "513", "유효하지 않은 직업 신청 내역 입니다."),
+
+    BAD_JOB_LICENSE_RATING(HttpStatus.BAD_REQUEST, "515", "직업에 적합한 자격증을 보유하지 못했습니다."),
 
     NO_PRODUCT_IMAGE(HttpStatus.NOT_FOUND, "608", "상품 이미지를 입력해주세요"),
 

@@ -17,5 +17,5 @@ public interface InvestService {
     /**
      * 주식 매도
      */
-    void sellStock(HttpServletRequest request, Long stockId);
+    void sellStock(HttpServletRequest request, Long stockId, Long investId);
 }

@@ -1,5 +1,6 @@
 package com.ico.api.service.teacher;
 
+import com.ico.api.dto.teacher.TeacherProductImgReqDto;
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
 import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
@@ -39,6 +40,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author 변윤경
  * @author 서재건
+ * @author 강교철
  */
 @Slf4j
 @Service
@@ -323,6 +325,54 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 .price(product.getAmount())
                 .date(LocalDateTime.parse(dateTime, Formatter.dateTimeSeconds))
                 .build();
+    }
+
+    @Override
+    public void updateTeacherProduct(Long teacherProductId, HttpServletRequest request, TeacherProductReqDto dto) {
+        String token = jwtTokenProvider.parseJwt(request);
+        checkRoleAndWareHousePower(token);
+        Long nationId = jwtTokenProvider.getNation(token);
+        TeacherProduct teacherProduct = teacherProductRepository.findByIdAndNationId(teacherProductId, nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        // 같은 국가에 같은 선생님 상품 이름이 있는지 확인
+        if (teacherProductRepository.findByNationIdAndTitle(nationId, dto.getTitle()).isPresent()) {
+            throw new CustomException(ErrorCode.ALREADY_EXIST_TITLE);
+        }
+
+        teacherProduct.updateTeacherProduct(dto, teacherProduct.getCount() == dto.getCount() ? teacherProduct.getSold() : (byte) 0);
+        teacherProductRepository.save(teacherProduct);
+    }
+
+    @Transactional
+    @Override
+    public void updateProductImage(Long teacherProductId, HttpServletRequest request, TeacherProductImgReqDto dto, List<MultipartFile> newImages) {
+        String token = jwtTokenProvider.parseJwt(request);
+        checkRoleAndWareHousePower(token);
+        Long nationId = jwtTokenProvider.getNation(token);
+        TeacherProduct teacherProduct = teacherProductRepository.findByIdAndNationId(teacherProductId, nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        // 이미지 수정 중 존재하는 이미지라고 온 리스트와 비교해서 없는 이미지는 삭제
+        if (dto.getExistingImages() != null) {
+            String existImage = teacherProduct.getImages();
+            String[] images = teacherProduct.getImages().split(",");
+            for (String image : images) {
+                if (!dto.getExistingImages().contains(s3UploadService.getFileURL(image))) {
+                    existImage = existImage.replace(image + ",", "");
+                    s3UploadService.deleteFile(image);
+                }
+            }
+            teacherProduct.setImages(existImage);
+        } else {
+            teacherProduct.setImages("");
+            Arrays.stream(teacherProduct.getImages().split(","))
+                    .forEach(s3UploadService::deleteFile);
+        }
+
+        // 추가되는 이미지
+        teacherProduct.setImages(teacherProduct.getImages() + s3UploadService.saveImageURLs(newImages));
+        teacherProductRepository.save(teacherProduct);
+        log.info("[updateProductImage] 이미지 수정 완료.");
     }
 
     /**

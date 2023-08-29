@@ -4,6 +4,7 @@ import com.ico.api.dto.license.StudentLicenseResDto;
 import com.ico.api.dto.nation.CreditScoreAllReqDto;
 import com.ico.api.dto.nation.CreditScoreReqDto;
 import com.ico.api.dto.student.StudentAllResDto;
+import com.ico.api.dto.student.StudentDelReqDto;
 import com.ico.api.dto.student.StudentListResDto;
 import com.ico.api.dto.student.StudentMyPageResDto;
 import com.ico.api.dto.student.StudentResDto;
@@ -19,15 +20,25 @@ import com.ico.api.util.Formatter;
 import com.ico.core.code.Password;
 import com.ico.core.code.Role;
 import com.ico.core.document.Deposit;
+import com.ico.core.document.Resume;
 import com.ico.core.document.Transaction;
+import com.ico.core.entity.Coupon;
+import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentJob;
+import com.ico.core.entity.StudentLicense;
+import com.ico.core.entity.StudentProduct;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
+import com.ico.core.repository.CouponRepository;
 import com.ico.core.repository.DepositMongoRepository;
 import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationRepository;
+import com.ico.core.repository.ResumeMongoRepository;
+import com.ico.core.repository.StudentJobRepository;
+import com.ico.core.repository.StudentLicenseRepository;
+import com.ico.core.repository.StudentProductRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import com.ico.core.repository.TransactionMongoRepository;
@@ -47,6 +58,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
@@ -83,6 +95,11 @@ public class StudentServiceImpl implements StudentService {
     private final S3UploadService s3UploadService;
 
     private final LicenseServiceImpl licenseService;
+    private final CouponRepository couponRepository;
+    private final StudentLicenseRepository studentLicenseRepository;
+    private final StudentProductRepository studentProductRepository;
+    private final StudentJobRepository studentJobRepository;
+    private final ResumeMongoRepository resumeRepository;
 
     @Override
     public Long signUp(StudentSignUpRequestDto requestDto) {
@@ -100,11 +117,13 @@ public class StudentServiceImpl implements StudentService {
                 .pwStatus(Password.OK)
                 .build();
 
+        // 아이디 중복 체크
         if (teacherRepository.findByIdentity(requestDto.getIdentity()).isPresent()
                 || studentRepository.findByIdentity(requestDto.getIdentity()).isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATED_ID);
         }
 
+        // 비밀번호와 다시 입력한 비밀번호 일치 여부 체크
         if (!requestDto.getPassword().equals(requestDto.getCheckedPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_WRONG);
         }
@@ -395,6 +414,69 @@ public class StudentServiceImpl implements StudentService {
         map.put("account", Formatter.number.format(student.getAccount()));
 
         return map;
+    }
+
+    @Transactional
+    @Override
+    public void exileStudent(HttpServletRequest request, StudentDelReqDto dto) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        List<Student> students = studentRepository.findAllByIdInAndNationId(dto.getStudentIds(), nationId);
+        for (Student student : students) {
+
+            student.setNation(null);
+            student.setAccount(0);
+            student.setCreditScore((short) 700);
+            student.setCreditRating((byte) 6);
+            student.setFrozen(false);
+            student.setNumber((byte) 0);
+            student.setSalary(0);
+            student.setEmpowered("");
+
+            Long studentId = student.getId();
+            // coupon
+            List<Coupon> coupons = couponRepository.findAllByStudentId(studentId);
+            if (!coupons.isEmpty()) {
+                couponRepository.deleteAll(coupons);
+            }
+            // invest
+            List<Invest> invests = investRepository.findAllByStudentId(studentId);
+            if (!invests.isEmpty()) {
+                investRepository.deleteAll(invests);
+            }
+            // student_license
+            List<StudentLicense> studentLicenses = studentLicenseRepository.findAllByStudentId(studentId);
+            if (!studentLicenses.isEmpty()) {
+                studentLicenseRepository.deleteAll(studentLicenses);
+            }
+            // student_product
+            List<StudentProduct> studentProducts = studentProductRepository.findAllByStudentId(studentId);
+            if (!studentProducts.isEmpty()) {
+                studentProductRepository.deleteAll(studentProducts);
+            }
+            // student_job
+            String removeName = student.getName();
+            if (student.getStudentJob() != null) {
+                Optional<StudentJob> studentJob = studentJobRepository.findById(student.getStudentJob().getId());
+                if (studentJob.isPresent()) {
+                    String updateNames = studentJob.get().getStudentNames().replace(removeName + ",", "");
+                    studentJob.get().setStudentNames(updateNames);
+                    studentJobRepository.save(studentJob.get());
+                }
+            }
+            // resume
+            List<Resume> resumes = resumeRepository.findAllByStudentId(studentId);
+            if (!resumes.isEmpty()) {
+                resumeRepository.deleteAll(resumes);
+            }
+            // deposit
+            List<Deposit> deposits = depositMongoRepository.findAllByStudentId(studentId);
+            if (!deposits.isEmpty()) {
+                depositMongoRepository.deleteAll(deposits);
+            }
+            student.setStudentJob(null);
+            studentRepository.save(student);
+        }
     }
 
     @Transactional
