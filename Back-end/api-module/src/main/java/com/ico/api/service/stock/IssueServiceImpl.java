@@ -168,11 +168,15 @@ public class IssueServiceImpl implements IssueService {
             if(i < issues.size()-1){
                 rate = ((issues.get(i).getAmount() - issues.get(i+1).getAmount()) / issues.get(i+1).getAmount()) * 100;
             }
+            // rate 를 소수점 1의 자리로 나타내고 1의 자리가 0이라면 제거
+            double roundRate = Math.round(rate*10)/10.0;
+            String formatRate = String.valueOf(roundRate);
+            formatRate = formatRate.endsWith(".0") ? formatRate.substring(0, formatRate.length() - 2) : formatRate;
 
             col.setContent(issues.get(i).getContent());
             col.setAmount(issues.get(i).getAmount());
             col.setDate(issues.get(i).getDate().format(Formatter.date));
-            col.setRate(String.format("%.1f", rate) + "%");
+            col.setRate(formatRate + "%");
             issuesRes.add(col);
         }
 
