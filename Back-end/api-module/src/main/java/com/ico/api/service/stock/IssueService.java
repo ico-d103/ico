@@ -3,6 +3,8 @@ package com.ico.api.service.stock;
 import com.ico.api.dto.stock.IssueStudentResDto;
 import com.ico.api.dto.stock.IssueTeacherResDto;
 import com.ico.api.dto.stock.IssueUploadReqDto;
+import com.ico.core.entity.Nation;
+import com.ico.core.entity.Stock;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,4 +32,12 @@ public interface IssueService {
      */
     void uploadIssue(HttpServletRequest request, IssueUploadReqDto dto, Long stockId);
 
+    /**
+     * 이슈 생성
+     * @param amount
+     * @param content
+     * @param nation
+     * @param stock
+     */
+    void createIssue(double amount, String content, Nation nation, Stock stock);
 }

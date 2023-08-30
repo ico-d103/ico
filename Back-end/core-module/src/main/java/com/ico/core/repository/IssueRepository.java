@@ -21,4 +21,6 @@ public interface IssueRepository extends JpaRepository<Issue, Long> {
     List<Issue> findAllByStockId(Long stockId);
 
     List<Issue> findAllByNationId(Long nationId);
+
+    List<Issue> findAllByStockIdOrderByIdDesc(Long stockId);
 }

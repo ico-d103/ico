@@ -18,10 +18,10 @@ public class IssueColDto {
 
     private String content;
 
-    private int rate;
+    private String rate;
 
     @Builder
-    public IssueColDto(String date, double amount, String content, int rate) {
+    public IssueColDto(String date, double amount, String content, String rate) {
         this.date = date;
         this.amount = amount;
         this.content = content;

@@ -4,12 +4,14 @@ import com.ico.api.dto.stock.StockCreateReqDto;
 import com.ico.api.dto.stock.StockListColDto;
 import com.ico.api.dto.stock.StockMyResDto;
 import com.ico.api.dto.stock.StockUpdateReqDto;
+import com.ico.api.dto.stock.TradingTimeResDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
  * @author 변윤경
+ * @author 강교철
  */
 public interface StockService {
 
@@ -49,4 +51,11 @@ public interface StockService {
      * @param stockId
      */
     void deleteStock(HttpServletRequest request, Long stockId);
+
+    /**
+     * 투자 가능 시간
+     * @param request
+     * @return
+     */
+    TradingTimeResDto tradingTime(HttpServletRequest request);
 }

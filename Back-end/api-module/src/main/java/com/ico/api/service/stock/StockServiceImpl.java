@@ -5,6 +5,7 @@ import com.ico.api.dto.stock.StockListColDto;
 import com.ico.api.dto.stock.StockMyColResDto;
 import com.ico.api.dto.stock.StockMyResDto;
 import com.ico.api.dto.stock.StockUpdateReqDto;
+import com.ico.api.dto.stock.TradingTimeResDto;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Invest;
@@ -29,7 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 투자 종목 관련 Service
+ *
  * @author 변윤경
+ * @author 강교철
  */
 
 @Slf4j
@@ -43,8 +47,7 @@ public class StockServiceImpl implements StockService{
     private final StudentRepository studentRepository;
     private final InvestRepository investRepository;
     private final IssueRepository issueRepository;
-
-    private final IssueServiceImpl issueService;
+    private final IssueService issueService;
     private final TransactionService transactionService;
 
     @Transactional
@@ -130,30 +133,29 @@ public class StockServiceImpl implements StockService{
         stockRepository.save(stock);
     }
 
+    @Transactional
     @Override
     public void deleteStock(HttpServletRequest request, Long stockId) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
-
-        //국가 유효성 확인
+        // 나라 유효성 검사
         Nation nation = nationRepository.findById(nationId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
 
         Stock stock = stockRepository.findByIdAndNationId(stockId, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STOCK));
 
         // 학생들의 투자 내역
-        List<Invest> invests = investRepository.findAllByNationId(nationId);
+        List<Invest> invests = investRepository.findAllByStockId(stockId);
 
-        // TODO : 프론트에서 받아오기
         // 가장 최신 주식 데이터 구하기
-        List<Issue> issueList = issueRepository.findAllByNationIdOrderByIdDesc(nationId);
-        if(issueList.isEmpty()){
-            throw new CustomException(ErrorCode.NOT_FOUND_STOCK);
+        double price = 0;
+        List<Issue> issueList = issueRepository.findAllByStockId(stockId);
+        // issueList 가 없어도 삭제는 되지만 issueList 가 없다면 invest 도 없기 때문에 아래의 for 문 작동 x
+        if (!issueList.isEmpty()) {
+            // 최신 지수
+            price = issueList.get(issueList.size()-1).getAmount();
+            log.info("매도지수 : " + price);
         }
-
-        // 최신 지수
-        double price = issueList.get(0).getAmount();
-        log.info("매도지수 : " + price);
 
         // 학생들 매도 일괄 처리
         for(Invest invest : invests){
@@ -183,9 +185,21 @@ public class StockServiceImpl implements StockService{
             // 매수 이력 삭제
             investRepository.delete(invest);
         }
-
+        // issue 삭제
         issueRepository.deleteAll(issueList);
-
+        // stock 삭제
         stockRepository.delete(stock);
+    }
+
+    @Override
+    public TradingTimeResDto tradingTime(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        // 나라 유효성 검사
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
+        return TradingTimeResDto.builder()
+                .tradingStart(nation.getTrading_start())
+                .tradingEnd(nation.getTrading_end())
+                .build();
     }
 }
