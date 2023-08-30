@@ -149,11 +149,11 @@ public class StockServiceImpl implements StockService{
 
         // 가장 최신 주식 데이터 구하기
         double price = 0;
-        List<Issue> issueList = issueRepository.findAllByStockIdOrderByIdDesc(stockId);
+        List<Issue> issueList = issueRepository.findAllByStockId(stockId);
         // issueList 가 없어도 삭제는 되지만 issueList 가 없다면 invest 도 없기 때문에 아래의 for 문 작동 x
         if (!issueList.isEmpty()) {
             // 최신 지수
-            price = issueList.get(0).getAmount();
+            price = issueList.get(issueList.size()-1).getAmount();
             log.info("매도지수 : " + price);
         }
 
