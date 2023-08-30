@@ -4,6 +4,7 @@ import com.ico.api.dto.stock.StockCreateReqDto;
 import com.ico.api.dto.stock.StockListColDto;
 import com.ico.api.dto.stock.StockMyResDto;
 import com.ico.api.dto.stock.StockUpdateReqDto;
+import com.ico.api.dto.stock.TradingTimeResDto;
 import com.ico.api.service.stock.StockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -91,5 +92,10 @@ public class StockController {
     public ResponseEntity<HttpStatus> deleteStock(HttpServletRequest request, @PathVariable Long stockId) {
         stockService.deleteStock(request, stockId);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/time")
+    public ResponseEntity<TradingTimeResDto> tradingTime(HttpServletRequest request) {
+        return ResponseEntity.ok(stockService.tradingTime(request));
     }
 }

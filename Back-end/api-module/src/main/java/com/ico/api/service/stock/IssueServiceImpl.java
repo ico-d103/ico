@@ -62,9 +62,7 @@ public class IssueServiceImpl implements IssueService {
         IssueTeacherResDto res = new IssueTeacherResDto();
         res.setStock(stock.getTitle());
         res.setContent(stock.getContent());
-        res.setTradingStart(nation.getTrading_start());
-        res.setTradingEnd(nation.getTrading_end());
-        res.setIssue(getIssues(nationId));
+        res.setIssue(getIssues(stockId));
 
         return res;
     }
@@ -92,7 +90,7 @@ public class IssueServiceImpl implements IssueService {
         List<StockMyColResDto> myStocks = new ArrayList<StockMyColResDto>();
         log.info("학생 매수 정보");
 
-        List<IssueColDto> issues = getIssues(nationId);
+        List<IssueColDto> issues = getIssues(stockId);
 
         if(!invests.isEmpty()){
             log.info("매수 이력 있음");
@@ -107,8 +105,6 @@ public class IssueServiceImpl implements IssueService {
         res.setAccount(student.getAccount());
         res.setStock(stock.getTitle());
         res.setContent(stock.getContent());
-        res.setTradingStart(nation.getTrading_start());
-        res.setTradingEnd(nation.getTrading_end());
         res.setMyStocks(myStocks);
         res.setIssue(issues);
 
@@ -158,25 +154,25 @@ public class IssueServiceImpl implements IssueService {
 
     /**
      * 투자 이슈 목록 조회 함수
-     * @param nationId 국가ID
+     * @param stockId 투자 종목 ID
      * @return 투자 이슈 목록 조회
      */
-    private List<IssueColDto> getIssues(Long nationId){
+    private List<IssueColDto> getIssues(Long stockId){
         List<IssueColDto> issuesRes = new ArrayList<>();
-        List<Issue> issues = issueRepository.findAllByNationIdOrderByIdDesc(nationId);
+        List<Issue> issues = issueRepository.findAllByStockIdOrderByIdDesc(stockId);
 
-        for(int i = 0; i < issues.size() - 1; i++){
+        for(int i = 0; i < issues.size(); i++){
             IssueColDto col = new IssueColDto();
 
-            int rate = 0;
-            if(i < issues.size() - 2){
-                rate = (int) ((issues.get(i).getAmount() - issues.get(i + 1).getAmount()) / issues.get(i + 1).getAmount()) * 100;
+            double rate = 0;
+            if(i < issues.size()-1){
+                rate = ((issues.get(i).getAmount() - issues.get(i+1).getAmount()) / issues.get(i+1).getAmount()) * 100;
             }
 
             col.setContent(issues.get(i).getContent());
             col.setAmount(issues.get(i).getAmount());
             col.setDate(issues.get(i).getDate().format(Formatter.date));
-            col.setRate(rate);
+            col.setRate(String.format("%.1f", rate) + "%");
             issuesRes.add(col);
         }
 

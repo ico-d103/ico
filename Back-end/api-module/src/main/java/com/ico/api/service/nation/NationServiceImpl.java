@@ -53,6 +53,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,6 +121,8 @@ public class NationServiceImpl implements NationService {
                 .treasury(0)
                 .credit_up((byte) 50)
                 .credit_down((byte) 20)
+                .trading_start(LocalTime.of(0, 0))
+                .trading_end(LocalTime.of(23,59))
                 .build();
         nationRepository.save(nation);
 

@@ -5,6 +5,7 @@ import com.ico.api.dto.stock.StockListColDto;
 import com.ico.api.dto.stock.StockMyColResDto;
 import com.ico.api.dto.stock.StockMyResDto;
 import com.ico.api.dto.stock.StockUpdateReqDto;
+import com.ico.api.dto.stock.TradingTimeResDto;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Invest;
@@ -188,5 +189,17 @@ public class StockServiceImpl implements StockService{
         issueRepository.deleteAll(issueList);
         // stock 삭제
         stockRepository.delete(stock);
+    }
+
+    @Override
+    public TradingTimeResDto tradingTime(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        // 나라 유효성 검사
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_NATION));
+        return TradingTimeResDto.builder()
+                .tradingStart(nation.getTrading_start())
+                .tradingEnd(nation.getTrading_end())
+                .build();
     }
 }
