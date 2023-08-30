@@ -6,15 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * 내가 신청한 예금 정보
+ * 내가 신청한 적금 정보
  *
  * @author 변윤경
  */
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
-public class DepositStudentResDto {
-
+public class SavingStudentResDto {
     private String id;
 
     private String title;
@@ -29,12 +28,12 @@ public class DepositStudentResDto {
 
     private int amount;
 
-    private int depositAmount;
+    private byte count;
 
     private boolean end;
 
     @Builder
-    public DepositStudentResDto(String id, String title, byte interest, String startDate, String endDate, byte creditRating, int amount, int depositAmount, boolean end) {
+    public SavingStudentResDto(String id, String title, byte interest, String startDate, String endDate, byte creditRating, int amount, byte count, boolean end) {
         this.id = id;
         this.title = title;
         this.interest = interest;
@@ -42,7 +41,7 @@ public class DepositStudentResDto {
         this.endDate = endDate;
         this.creditRating = creditRating;
         this.amount = amount;
-        this.depositAmount = depositAmount;
+        this.count = count;
         this.end = end;
     }
 }
