@@ -37,7 +37,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       # create(new table), update(add new column), none(nothing)
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -47,6 +47,7 @@ spring:
           time_zone: Asia/Seoul
     open-in-view: false
     defer-datasource-initialization: true
+    generate-ddl: true
   sql:
     init:
       mode: always
