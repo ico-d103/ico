@@ -32,7 +32,7 @@ public class JobAllColDto {
 
     private int total;
 
-    private String salary;
+    private int wage;
 
     private int count;
 
@@ -43,7 +43,7 @@ public class JobAllColDto {
     private List<JobLicenseResDto> jobLicenseList;
 
     @Builder
-    public JobAllColDto(Long id, String title, String image, String color, String detail, int creditRating, int total, String salary, int count, List<String> studentNames, List<String> empowered, List<JobLicenseResDto> jobLicenseList) {
+    public JobAllColDto(Long id, String title, String image, String color, String detail, int creditRating, int total, int wage, int count, List<String> studentNames, List<String> empowered, List<JobLicenseResDto> jobLicenseList) {
         this.id = id;
         this.title = title;
         this.image = image;
@@ -51,7 +51,7 @@ public class JobAllColDto {
         this.detail = detail;
         this.creditRating = creditRating;
         this.total = total;
-        this.salary = salary;
+        this.wage = wage;
         this.count = count;
         this.studentNames = studentNames;
         this.empowered = empowered;
@@ -64,7 +64,7 @@ public class JobAllColDto {
      * @param studentJob
      * @return JobAllResDto
      */
-    public JobAllColDto of(StudentJob studentJob, String salary, String image, List<JobLicenseResDto> jobLicenseList) {
+    public JobAllColDto of(StudentJob studentJob, String image, List<JobLicenseResDto> jobLicenseList) {
         String studentNames = studentJob.getStudentNames();
         String empowered = studentJob.getEmpowered();
         return JobAllColDto.builder()
@@ -75,11 +75,11 @@ public class JobAllColDto {
                 .detail(studentJob.getDetail())
                 .creditRating(studentJob.getCreditRating())
                 .total(studentJob.getTotal())
-                .salary(salary)
+                .wage(studentJob.getWage())
                 .count(studentJob.getCount())
-                .studentNames((studentNames == null || studentNames.equals(""))
+                .studentNames((studentNames == null || studentNames.isEmpty())
                         ? new ArrayList<>() : List.of(studentNames.split(",")))
-                .empowered((empowered == null || empowered.equals(""))
+                .empowered((empowered == null || empowered.isEmpty())
                         ? new ArrayList<>() : List.of(empowered.split(",")))
                 .jobLicenseList(jobLicenseList)
                 .build();
