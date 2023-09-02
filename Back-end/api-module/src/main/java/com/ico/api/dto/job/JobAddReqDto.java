@@ -1,13 +1,11 @@
 package com.ico.api.dto.job;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -36,7 +34,7 @@ public class JobAddReqDto {
     private Integer total;
 
     @NotNull(message = "413")
-    private Integer salary;
+    private Integer wage;
 
     @NotNull(message = "414")
     private String color;
@@ -52,11 +50,11 @@ public class JobAddReqDto {
     private Map<Long, Integer> jobLicenseList;
 
     @Builder
-    public JobAddReqDto(String title, String detail, Integer total, Integer salary, String color, Integer creditRating, String image, List<Long> empowered, Map<Long, Integer> jobLicenseList) {
+    public JobAddReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating, String image, List<Long> empowered, Map<Long, Integer> jobLicenseList) {
         this.title = title;
         this.detail = detail;
         this.total = total;
-        this.salary = salary;
+        this.wage = wage;
         this.color = color;
         this.creditRating = creditRating;
         this.image = image;
