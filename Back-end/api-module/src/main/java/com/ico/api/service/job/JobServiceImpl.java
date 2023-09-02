@@ -9,22 +9,21 @@ import com.ico.api.dto.job.JobResDto;
 import com.ico.api.dto.job.JobResetReqDto;
 import com.ico.api.service.S3UploadService;
 import com.ico.api.user.JwtTokenProvider;
-import com.ico.api.util.Formatter;
 import com.ico.core.dto.JobReqDto;
 import com.ico.core.entity.JobLicense;
+import com.ico.core.entity.Nation;
 import com.ico.core.entity.NationLicense;
 import com.ico.core.entity.Power;
-import com.ico.core.entity.StudentJob;
-import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
+import com.ico.core.entity.StudentJob;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.JobLicenseRepository;
 import com.ico.core.repository.NationLicenseRepository;
-import com.ico.core.repository.PowerRepository;
-import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.NationRepository;
+import com.ico.core.repository.PowerRepository;
 import com.ico.core.repository.ResumeMongoRepository;
+import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -122,8 +121,7 @@ public class JobServiceImpl implements JobService{
                 jobLicenseResDto.add(new JobLicenseResDto().of(jobLicense, nationLicense.getSubject()));
             }
 
-            String salary = Formatter.number.format(studentJob.getWage() * 30L);
-            colJobList.add(new JobAllColDto().of(studentJob, salary, s3UploadService.getFileURL(studentJob.getImage()), jobLicenseResDto));
+            colJobList.add(new JobAllColDto().of(studentJob, s3UploadService.getFileURL(studentJob.getImage()), jobLicenseResDto));
         }
 
         return JobAllResDto.builder()
