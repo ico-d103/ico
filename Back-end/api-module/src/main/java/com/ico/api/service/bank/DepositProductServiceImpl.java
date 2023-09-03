@@ -174,7 +174,7 @@ public class DepositProductServiceImpl implements DepositProductService{
             throw new CustomException(ErrorCode.BAD_UPDATE_INTEREST);
         }
 
-        // 이자율이 0이상인지 확인
+        // 이자율이 0미만 인지 확인
         if (Collections.min(interest) < 0 ) {
             throw new CustomException(ErrorCode.LOWER_INTEREST);
         }
