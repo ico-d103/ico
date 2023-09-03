@@ -8,7 +8,7 @@ type responseType = {
 
 export const getClassRuleAPI = async () => {
 	try {
-		const response: responseType = await tokenInstance.get("/rule")
+		const response: responseType = await tokenInstance.get("/news")
 
 		return response.data
 	} catch (error) {
