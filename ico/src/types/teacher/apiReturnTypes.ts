@@ -93,8 +93,6 @@ export type getStudentDetailType = {
 	licenses: licenseType[]
 }
 
-
-
 export type getTeacherProductsType = {
 	id: number
 	title: string
@@ -131,7 +129,6 @@ export type getStudentProductsType = {
 	name: string
 	assigned: boolean
 }
-
 
 export type getStudentProductDetailType = {
 	id: number
@@ -179,7 +176,7 @@ export type jobListType = {
 	color: string
 	creditRating: number
 	total: number
-	salary: string
+	wage: string
 	count: number
 	studentNames: string[] | string
 	empowered: string[]
