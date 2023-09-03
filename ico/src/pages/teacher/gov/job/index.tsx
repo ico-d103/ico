@@ -7,7 +7,13 @@ import { css } from "@emotion/react"
 import FormCreator from "@/components/teacher/common/Form/FormCreator"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getGovJobAPI } from "@/api/teacher/gov/getGovJobAPI"
-import { getGovPowerType, getGovJobType, getJobListType, jobLicenseListType, getLicenseType } from "@/types/teacher/apiReturnTypes"
+import {
+	getGovPowerType,
+	getGovJobType,
+	getJobListType,
+	jobLicenseListType,
+	getLicenseType,
+} from "@/types/teacher/apiReturnTypes"
 import GovJobItem from "@/components/teacher/Gov/Job/GovJobItem"
 import useGetNation from "@/hooks/useGetNation"
 import { getGovJobAuthAPI } from "@/api/teacher/gov/getGovJobAuthAPI"
@@ -36,20 +42,12 @@ function index() {
 		// { staleTime: 200000 },
 	)
 
-
-	
-
-
-	
-
 	const dummyStatus: string[] = []
 
 	const dummyStatusList: {
 		id: number
 		name: string
-	}[] = [
-		
-	]
+	}[] = []
 
 	const dummyCert: { id: number; subject: string; rating: number }[] = [
 		{
@@ -157,7 +155,12 @@ function index() {
 		},
 	]
 
-	const renderJobList = useMemo(() => licenseQuery.data && powerQuery.data && jobsQuery.data && jobsQuery.data.jobList.map((el, idx) => {
+	const renderJobList = useMemo(
+		() =>
+			licenseQuery.data &&
+			powerQuery.data &&
+			jobsQuery.data &&
+			jobsQuery.data.jobList.map((el, idx) => {
 				return (
 					<div
 						key={`${el.title}-${el.id}`}
@@ -169,7 +172,7 @@ function index() {
 							idx={el.id}
 							title={el.title}
 							detail={el.detail}
-							salary={el.salary}
+							// salary={el.salary}
 							creditRating={el.creditRating}
 							color={el.color}
 							image={el.image}
@@ -183,8 +186,9 @@ function index() {
 						/>
 					</div>
 				)
-			}), [jobsQuery.data && jobsQuery.data.jobList])
-		
+			}),
+		[jobsQuery.data && jobsQuery.data.jobList],
+	)
 
 	return (
 		<div css={contentWrapperCSS}>
@@ -205,7 +209,9 @@ function index() {
 			<div css={descCSS}>학급의 직업 목록을 관리할 수 있습니다.</div>
 			<AnimatedRenderer compState={compState} initHeight="0">
 				<div css={createWrapperCSS({ compState })}>
-					{powerQuery.data && licenseQuery.data && <GovJobItem licenseList={licenseQuery.data} powerList={powerQuery.data} closeHandler={closeComp} />}
+					{powerQuery.data && licenseQuery.data && (
+						<GovJobItem licenseList={licenseQuery.data} powerList={powerQuery.data} closeHandler={closeComp} />
+					)}
 				</div>
 			</AnimatedRenderer>
 
