@@ -14,7 +14,7 @@ import java.util.List;
 public interface NewsService {
 
     /**
-     * 학급 소식 조회
+     * 전체 학급 소식 조회
      *
      * @return
      */
@@ -41,4 +41,14 @@ public interface NewsService {
      * @param newsId
      */
     void deleteNews(Long newsId, HttpServletRequest request);
+
+    /**
+     * 학급 소식 조회
+     * (학급 소식 수정 페이지에서 사용됨)
+     *
+     * @param newsId
+     * @param request
+     * @return
+     */
+    NewsResDto findNews(long newsId, HttpServletRequest request);
 }
