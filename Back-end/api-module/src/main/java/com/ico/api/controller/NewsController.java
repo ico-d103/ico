@@ -35,13 +35,26 @@ public class NewsController {
     private final NewsService newsService;
 
     /**
-     * 학급 소식 조회
+     * 전체 학급 소식 조회
      *
      * @return
      */
     @GetMapping
     public ResponseEntity<List<NewsResDto>> findAllNews(HttpServletRequest request) {
         return ResponseEntity.ok(newsService.findAllNews(request));
+    }
+
+    /**
+     * 학급 소식 조회
+     * (학급 소식 수정 페이지에서 사용됨)
+     *
+     * @param newsId
+     * @param request
+     * @return
+     */
+    @GetMapping("/{newsId}")
+    public ResponseEntity<NewsResDto> findNews(@PathVariable long newsId, HttpServletRequest request) {
+        return ResponseEntity.ok(newsService.findNews(newsId, request));
     }
 
     /**

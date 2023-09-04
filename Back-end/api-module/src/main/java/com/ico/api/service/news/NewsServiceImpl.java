@@ -41,7 +41,7 @@ public class NewsServiceImpl implements NewsService {
     public List<NewsResDto> findAllNews(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
-        List<News> newsList = newsRepository.findAllByNationId(nationId);
+        List<News> newsList = newsRepository.findAllByNationIdOrderByUpdatedAtDesc(nationId);
         List<NewsResDto> resList = new ArrayList<>();
         for (News news : newsList) {
             String createdAt = news.getCreatedAt().format(Formatter.date);
@@ -99,6 +99,24 @@ public class NewsServiceImpl implements NewsService {
         News news = fetchIfValidatedNewsAccess(newsId, request);
 
         newsRepository.delete(news);
+    }
+
+    @Override
+    public NewsResDto findNews(long newsId, HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        News news = newsRepository.findById(newsId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NEWS_NOT_FOUND));
+
+        if (!Objects.equals(nationId, news.getNation().getId())) {
+            // 나라 id가 다른 경우
+            throw new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION);
+        }
+
+        String createdAt = news.getCreatedAt().format(Formatter.date);
+        String updatedAt = news.getUpdatedAt().format(Formatter.date);
+
+        return new NewsResDto().of(news, createdAt, updatedAt);
     }
 
     /**

@@ -15,13 +15,15 @@ import java.util.Optional;
 @Repository
 public interface NewsRepository extends JpaRepository<News, Long> {
 
+    List<News> findAllByNationId(Long nationId);
+
     /**
-     * 학급 규칙 조회
+     * 전체 학급 규칙 조회
      *
      * @param nationId
      * @return
      */
-    List<News> findAllByNationId(Long nationId);
+    List<News> findAllByNationIdOrderByUpdatedAtDesc(Long nationId);
 
     /**
      * 학급 규칙 생성 시 제목 중복 체크
