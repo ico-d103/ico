@@ -23,8 +23,6 @@ function GovRuleClass() {
 		// { staleTime: 200000 },
 	)
 
-
-
 	const renderRule =
 		data &&
 		data.map((el, idx) => {

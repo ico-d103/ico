@@ -12,13 +12,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 type ClassJobSearchModalPropsType = {
 	job: jobListType
 	closeComp: () => void
-	isAlreadyApplied: string|null
+	isAlreadyApplied: string | null
 }
 
 function ClassJobSearchModal({ job, closeComp, isAlreadyApplied }: ClassJobSearchModalPropsType) {
 	const noti = useNotification()
 	const [nation] = useGetNation()
-	const deleteResumeMutation = useMutation((params: {id: number, resumeId: string}) => deleteResumeApplyAPI( params ))
+	const deleteResumeMutation = useMutation((params: { id: number; resumeId: string }) => deleteResumeApplyAPI(params))
 
 	const applyJobHandler = () => {
 		postResumeAPI({ id: job.id })
@@ -38,18 +38,17 @@ function ClassJobSearchModal({ job, closeComp, isAlreadyApplied }: ClassJobSearc
 			})
 	}
 
-	const deleteApplyJobHandler= () => {
+	const deleteApplyJobHandler = () => {
 		if (isAlreadyApplied) {
 			deleteResumeMutation.mutate(
-				{id: job.id, resumeId: isAlreadyApplied}, {
-					onSuccess: ()=> {
+				{ id: job.id, resumeId: isAlreadyApplied },
+				{
+					onSuccess: () => {
 						noti({
-							content: (
-								<NotiTemplate type={"ok"} content={'직업 신청을 취소했어요!'} />
-							),
+							content: <NotiTemplate type={"ok"} content={"직업 신청을 취소했어요!"} />,
 							duration: 3000,
 						})
-	
+
 						closeComp()
 					},
 					onError: () => {
@@ -57,17 +56,16 @@ function ClassJobSearchModal({ job, closeComp, isAlreadyApplied }: ClassJobSearc
 							content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
 							duration: 3000,
 						})
-					}
-				}
+					},
+				},
 			)
-			
 		}
 	}
 
 	return (
 		<div css={wrapperCSS}>
 			<span>
-				월급 {job.salary} {nation.currency}
+				월급 {job.wage} {nation.currency}
 			</span>
 			<textarea readOnly value={job.detail} />
 			<div css={buttonWrapperCSS}>
