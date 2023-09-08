@@ -11,7 +11,7 @@ type responseType = {
 
 export const getGovRuleAPI = async ({}: paramsType) => {
     try {
-        const response: responseType = await tokenInstance.get(`/rule`)
+        const response: responseType = await tokenInstance.get(`/news`)
         return response.data
     } catch (error) {
         throw error

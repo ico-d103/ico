@@ -1,5 +1,5 @@
 import React from "react"
-import { getFinanceInvestListMyItemType, myDepositType } from "@/types/student/apiReturnTypes"
+import { getFinanceInvestListMyItemDetailType, getFinanceInvestListMyItemType, myDepositType } from "@/types/student/apiReturnTypes"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 import useGetNation from "@/hooks/useGetNation"
@@ -14,28 +14,31 @@ import { getDateDiff } from "@/util/getDateDiff"
 // rate: 수익률
 
 type FinanceInvestListMyItemProps = {
-	data: getFinanceInvestListMyItemType
+	stockId: number
+	title: string
+	itemData: getFinanceInvestListMyItemDetailType
+	itemIdx: number
 }
 
-function FinanceInvestListMyItem({ data }: FinanceInvestListMyItemProps) {
+function FinanceInvestListMyItem({ stockId, title, itemData, itemIdx }: FinanceInvestListMyItemProps) {
 	const [nation] = useGetNation()
 	const navigate = useNavigate()
 
 	return (
 		<div css={itemWrapperCSS}>
 			<div css={labelSectionCSS}>
-				<div css={titleCSS}>{data.title}</div>
+				<div css={titleCSS}>{title}</div>
 				<div>
-					지금까지의 수익률은 <span css={highlightFontCSS}>{data.rate}</span>이에요!
+					지금까지의 수익률은 <span css={highlightFontCSS}>{itemData.rate}</span>이에요!
 				</div>
 			</div>
 			<Button
 				text={"자세히"}
 				fontSize={"var(--student-h3)"}
-				width={"100px"}
+				width={"72px"}
 				theme={"mobileNormal"}
 				onClick={() => {
-					navigate(`/student/finance/invest/${data.stockId}`, "bottomToTop")
+					navigate(`/student/finance/invest/${stockId}?item=${itemIdx}`, "bottomToTop")
 				}}
 			/>
 		</div>

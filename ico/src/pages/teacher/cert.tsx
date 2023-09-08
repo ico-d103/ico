@@ -39,7 +39,7 @@ function cert() {
 		const formData = new FormData()
 		file && formData.append("file", file)
 		postCertificationAPI({ body: formData }).then((res) => {
-			setTokenStatusAtom(() => {return {role: 'TEACHER', status: 'require_approval', showMessage: false}})
+			setTokenStatusAtom(() => {return {role: 'TEACHER', status: ['require_approval'], showMessage: false}})
 		})
 	}
 

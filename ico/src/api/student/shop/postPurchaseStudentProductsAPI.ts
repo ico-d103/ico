@@ -17,7 +17,6 @@ export const postPurchaseStudentProductsAPI = async ({ body }: paramsType) => {
 		const response: responseType = await tokenInstance.post("/student-product/student/buy", body)
 		return response.data
 	} catch (error) {
-        console.log(error)
 		throw error
 	}
 }

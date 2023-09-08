@@ -1,14 +1,14 @@
 import { tokenInstance } from "@/api/instance"
-import { getClassRuleType } from "@/types/student/apiReturnTypes"
+import { getGovRuleType } from "@/types/teacher/apiReturnTypes"
 
 type responseType = {
 	status: number
-	data: getClassRuleType[]
+	data: getGovRuleType[]
 }
 
 export const getClassRuleAPI = async () => {
 	try {
-		const response: responseType = await tokenInstance.get("/rule")
+		const response: responseType = await tokenInstance.get("/news")
 
 		return response.data
 	} catch (error) {

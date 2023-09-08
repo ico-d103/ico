@@ -13,7 +13,7 @@ function NavBarDesktopRightMenu({ data }: { data: getHomeMyInfoType }) {
 	const signoutHandler = () => {
 		removeCookie("Authorization", { path: "/" })
 		setTokenStatus({ showMessage: false }).then((res) => {
-			console.log("여기에 할일")
+			// console.log("여기에 할일")
 		})
 		// navigate("/teacher/login")
 	}

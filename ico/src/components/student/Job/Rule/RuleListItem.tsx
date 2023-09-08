@@ -1,4 +1,4 @@
-import { getClassRuleType } from '@/types/student/apiReturnTypes'
+import { getGovRuleType } from '@/types/teacher/apiReturnTypes'
 import React from 'react'
 import { css } from "@emotion/react"
 import ContentWrapper from '../../common/ContentWrapper/ContentWrapper'
@@ -6,7 +6,7 @@ import Button from '@/components/common/Button/Button'
 import useNavigate from '@/hooks/useNavigate'
 
 type RuleItemProps = {
-  rule: getClassRuleType
+  rule: getGovRuleType
 }
 
 function RuleListItem({rule}: RuleItemProps) {
@@ -29,6 +29,10 @@ function RuleListItem({rule}: RuleItemProps) {
 				></Button>
       </div>
       <div css={lineCSS}/>
+      <div css={ruleDataWrapperCSS}>
+        <span>최초 작성자 : {rule.author}</span>
+        <span>{rule.createdAt === rule.updatedAt ? `작성일 : ${rule.createdAt}` : `수정일 : ${rule.updatedAt}`}</span>
+      </div>
       {rule.detail}
     </ContentWrapper>
   )
@@ -44,7 +48,7 @@ const lineCSS = css`
     height: 1px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     position: relative;
-    margin: 16px 0px 16px 0px;
+    margin: 8px 0px 8px 0px;
 `
 
 const ruleTitleWrapperCSS = css`
@@ -53,6 +57,14 @@ const ruleTitleWrapperCSS = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`
+
+const ruleDataWrapperCSS = css`
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 8px;
 `
 
 export default RuleListItem

@@ -5,7 +5,7 @@ import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWr
 // import GuidePage from "@/components/student/Finance/Deposit/GuidePage/GuidePage"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 // import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
-import { getFinanceDepositType, getFinanceInvestListType } from "@/types/student/apiReturnTypes"
+import { getFinanceInvestListStockItemType, getFinanceInvestListMyItemType } from "@/types/student/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
 import React from "react"
 import UseAnimations from "react-useanimations"
@@ -16,18 +16,20 @@ import { css } from "@emotion/react"
 import FinanceDepositList from "@/components/student/Finance/Deposit/FinanceDepositList"
 import { getFinanceInvestListAPI } from "@/api/student/finance/getFinanceInvestListAPI"
 import FinanceInvestList from "@/components/student/Finance/Invest/FinanceInvestList"
+import { getFinanceInvestMyListAPI } from "@/api/student/finance/getFinanceInvestMyListAPI"
 
 function index() {
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
-	// const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getFinanceDepositRateType>(
-	// 	["student", "homeFinanceGetRate"],
-	// 	getFinanceDepositRateAPI,
-	// 	// { staleTime: 200000 },
-	// )
 
-	const investQueries = useQuery<getFinanceInvestListType>(
+	const investProductQueries = useQuery<getFinanceInvestListStockItemType[]>(
 		["student", "homeFinanceInvestList"],
 		getFinanceInvestListAPI,
+		// { staleTime: 200000 },
+	)
+
+	const investMyProductQueries = useQuery<getFinanceInvestListMyItemType[]>(
+		["student", "homeFinanceInvestMyList"],
+		getFinanceInvestMyListAPI,
 		// { staleTime: 200000 },
 	)
 
@@ -41,7 +43,7 @@ function index() {
 			`}
 		>
 			<PageHeader title={"투자"} />
-			<FinanceInvestList data={investQueries.data} isLoading={investQueries.isLoading} />
+			<FinanceInvestList investProductQueries={investProductQueries} investMyProductQueries={investMyProductQueries} />
 		</div>
 	)
 }
