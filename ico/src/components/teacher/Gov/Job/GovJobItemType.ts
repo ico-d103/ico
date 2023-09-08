@@ -16,7 +16,7 @@ export type validItemType = Union<typeof obj>
 export type GovRuleClassDetailProps = {
 	title?: string
 	detail?: string
-	salary?: string
+	wage?: string
 	creditRating?: number
 	color?: string
 	image?: string
@@ -34,7 +34,7 @@ export type GovRuleClassDetailProps = {
 export type inputType = {
 	title: string
 	detail: string
-	salary: string
+	wage: string
 	creditRating: string
 	color: string
 	image: string
@@ -46,7 +46,7 @@ export type inputType = {
 export type validType = {
 	title: validItemType
 	detail: validItemType
-	salary: validItemType
+	wage: validItemType
 	creditRating: validItemType
 	color: validItemType
 	image: validItemType

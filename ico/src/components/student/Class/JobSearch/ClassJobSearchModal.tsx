@@ -67,7 +67,7 @@ function ClassJobSearchModal({ job, closeComp, isAlreadyApplied }: ClassJobSearc
 	return (
 		<div css={wrapperCSS}>
 			<span>
-				월급 {job.salary} {nation.currency}
+				월급 {job.wage} {nation.currency}
 			</span>
 			<textarea readOnly value={job.detail} />
 			<div css={buttonWrapperCSS}>

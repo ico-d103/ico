@@ -56,8 +56,8 @@ const inputReducer = (
 				return { ...state, title: action.value }
 			case "CHANGE_DETAIL":
 				return { ...state, detail: action.value }
-			case "CHANGE_SALARY":
-				return { ...state, salary: action.value }
+			case "CHANGE_WAGE":
+				return { ...state, wage: action.value }
 			case "CHANGE_CREDIT":
 				return { ...state, creditRating: action.value }
 			case "CHANGE_COLOR":
@@ -88,8 +88,8 @@ const validReducer = (
 				return { ...state, title: action.value }
 			case "CHANGE_DETAIL":
 				return { ...state, detail: action.value }
-			case "CHANGE_SALARY":
-				return { ...state, salary: action.value }
+			case "CHANGE_WAGE":
+				return { ...state, wage: action.value }
 			case "CHANGE_CREDIT":
 				return { ...state, creditRating: action.value }
 			case "CHANGE_COLOR":
@@ -111,7 +111,7 @@ const validReducer = (
 function useGovJobInput({
 	title,
 	detail,
-	salary,
+	wage,
 	color,
 	image,
 	creditRating,
@@ -150,12 +150,12 @@ function useGovJobInput({
 
 	useEffect(() => {
 		dispatchInput({ type: "RESET", value: initialInput })
-	}, [title, detail, salary, color, image, creditRating, total, empowered, jobLicenseList])
+	}, [title, detail, wage, color, image, creditRating, total, empowered, jobLicenseList])
 
 	const initialInput: inputType = {
 		title: title ? title : "",
 		detail: detail ? detail : "",
-		salary: salary ? String(salary.replace(",", "")) : "",
+		wage: wage ? wage : "",
 		creditRating: creditRating ? String(creditRating) : "",
 		color: color ? color : "#FF165C",
 		image: image ? image : "/assets/job/worker_male.png",
@@ -167,7 +167,7 @@ function useGovJobInput({
 	const initialValid: validType = {
 		title: title ? "notChanged" : "empty",
 		detail: detail ? "notChanged" : "empty",
-		salary: salary ? "notChanged" : "empty",
+		wage: wage ? "notChanged" : "empty",
 		creditRating: creditRating ? "notChanged" : "empty",
 		color: color ? "notChanged" : "changed",
 		image: image ? "notChanged" : "changed",
@@ -278,16 +278,16 @@ function useGovJobInput({
 	}, [inputState.detail, detail])
 
 	useEffect(() => {
-		const existedSalary = salary && String(salary.replace(",", ""))
-		if (String(inputState.salary) === String(existedSalary)) {
-			dispatchValid({ type: "CHANGE_SALARY", value: "notChanged" })
-		} else if (String(inputState.salary).trim() === "0" || String(inputState.salary).trim() === "") {
-			dispatchValid({ type: "CHANGE_SALARY", value: "empty" })
-		} else if (inputState.salary !== existedSalary && inputState.salary !== "") {
-			dispatchValid({ type: "CHANGE_SALARY", value: "changed" })
+		const existedWage = wage
+		if (String(inputState.wage) === String(existedWage)) {
+			dispatchValid({ type: "CHANGE_WAGE", value: "notChanged" })
+		} else if (String(inputState.wage).trim() === "0" || String(inputState.wage).trim() === "") {
+			dispatchValid({ type: "CHANGE_WAGE", value: "empty" })
+		} else if (inputState.wage !== existedWage && inputState.wage !== "") {
+			dispatchValid({ type: "CHANGE_WAGE", value: "changed" })
 		}
-		console.log(`${inputState.salary} ${existedSalary}`)
-	}, [inputState.salary, salary])
+		console.log(`${inputState.wage} ${existedWage}`)
+	}, [inputState.wage, wage])
 
 	useEffect(() => {
 		if (inputState.color !== color && inputState.color.trim() !== "") {
@@ -447,9 +447,9 @@ function useGovJobInput({
 		}
 	}
 
-	const salaryInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const wageInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (Number(event.target.value) <= 1000000) {
-			dispatchInput({ type: "CHANGE_SALARY", value: Number(event.target.value) })
+			dispatchInput({ type: "CHANGE_WAGE", value: Number(event.target.value) })
 		}
 	}
 
@@ -498,7 +498,7 @@ function useGovJobInput({
 		})
 		temp.jobLicenseList = licenseForm
 		temp.empowered = empoweredForm
-		temp.salary = Number(temp.salary)
+		temp.wage = Number(temp.wage)
 		temp.total = Number(temp.total)
 		temp.creditRating = Number(temp.creditRating)
 
@@ -550,7 +550,7 @@ function useGovJobInput({
 		titleInputHandler,
 		detailInputHandler,
 		creditInputHandler,
-		salaryInputHandler,
+		wageInputHandler,
 		totalInputHandler,
 		submitHandler,
 		empoweredInputHandler,

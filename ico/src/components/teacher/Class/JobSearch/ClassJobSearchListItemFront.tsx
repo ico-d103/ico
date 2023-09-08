@@ -26,7 +26,7 @@ function ClassJobSearchListItemFront({ job }: ClassJobSearchListItemFrontPropsTy
 				<div css={secondContentCSS}>
 					<h5>{job.creditRating}등급 이상</h5>
 					<h5>
-						월급 약 {job.salary} {nation.currency}
+						월급 약 {job.wage} {nation.currency}
 					</h5>
 				</div>
 			</div>
