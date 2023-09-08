@@ -87,12 +87,13 @@ function Account() {
 
 const accountWrapperCSS = css`
 	width: 640px;
+	
 	/* height: 80vh; */
 	background-color: white;
 	box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
 	border-radius: 10px;
-  /* overflow-y: scroll;
-  max-height: 80vh; */
+  overflow-y: scroll;
+  max-height: 80vh;
 `
 
 const profileSectorCSS = css`

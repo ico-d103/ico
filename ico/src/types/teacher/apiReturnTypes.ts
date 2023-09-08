@@ -41,7 +41,7 @@ export type getGovJobItemType = {
 	title: string
 	detail: string
 	creditRating: number
-	salary: number
+	wage: number
 	image: string
 	color: string
 	total: number

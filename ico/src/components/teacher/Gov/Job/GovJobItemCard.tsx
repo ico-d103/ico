@@ -5,12 +5,12 @@ import LoadImage from "@/components/common/LoadImage/LoadImage"
 
 type GovJobItemCardProps = {
 	job: string
-	salary: number
+	wage: number
 	backgroundColor: string
 	imgUrl: string
 }
 
-function GovJobItemCard({ job, salary, backgroundColor, imgUrl }: GovJobItemCardProps) {
+function GovJobItemCard({ job, wage, backgroundColor, imgUrl }: GovJobItemCardProps) {
 	return (
 		<div css={outerCardWrapperCSS}>
 			<div css={shadowMakerCSS} />
