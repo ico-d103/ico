@@ -16,7 +16,18 @@ type InputProps = {
 
 const Input = React.forwardRef(
 	(
-		{ theme, customCss, css, textAlign, leftContent, rightContent, isFile, isTextarea, resizeTextarea = true, ...props }: InputProps,
+		{
+			theme,
+			customCss,
+			css,
+			textAlign,
+			leftContent,
+			rightContent,
+			isFile,
+			isTextarea,
+			resizeTextarea = true,
+			...props
+		}: InputProps,
 		ref: React.ForwardedRef<HTMLInputElement>,
 	) => {
 		const [isFocusing, setIsFocusing] = useState<boolean>(false)
@@ -36,14 +47,17 @@ const Input = React.forwardRef(
 			if (resizeTextarea) {
 				resizeHeightHandler()
 			}
-			
 		}, [])
 
 		return (
 			// div에 {...props}이 있었는데 왜 있었는지 모르겠음...
 			<div css={[themeProvider({ isFocusing })[theme], customCss]} ref={divRef}>
 				<label css={initLabelCSS}>
-					{leftContent && <div css={leftContentWrapperCSS} className={"left-content"}>{leftContent}</div>}
+					{leftContent && (
+						<div css={leftContentWrapperCSS} className={"left-content"}>
+							{leftContent}
+						</div>
+					)}
 
 					{isTextarea === true ? (
 						<textarea
@@ -65,7 +79,11 @@ const Input = React.forwardRef(
 						/>
 					)}
 
-					{rightContent && <div css={rightContentWrapperCSS} className={"right-content"}>{rightContent}</div>}
+					{rightContent && (
+						<div css={rightContentWrapperCSS} className={"right-content"}>
+							{rightContent}
+						</div>
+					)}
 				</label>
 			</div>
 		)
@@ -73,7 +91,7 @@ const Input = React.forwardRef(
 )
 
 const initTextAreaCSS = css`
-	padding: 8px;
+	padding: 12px;
 	resize: none;
 `
 
@@ -232,7 +250,6 @@ const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
 			& input {
 				font-size: 18px;
 			}
-			
 		`,
 		radial: css`
 			height: 32px;
@@ -240,7 +257,7 @@ const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
 			background-color: rgba(255, 255, 255, 0.5);
 			overflow: hidden;
 			border: 1px solid rgba(0, 0, 0, 0.1);
-			
+
 			transition-property: background-color;
 			transition-duration: 0.2s;
 
@@ -251,7 +268,6 @@ const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
 
 			&:hover {
 				background-color: rgba(255, 255, 255, 1);
-				
 			}
 
 			& label .left-content {
@@ -271,12 +287,11 @@ const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
 				padding: 8px 8px 8px 0px;
 				color: rgba(0, 0, 0, 0.5);
 			}
-			
+
 			& input {
 				text-align: right;
-				
 			}
-		`
+		`,
 	}
 
 	return themes
