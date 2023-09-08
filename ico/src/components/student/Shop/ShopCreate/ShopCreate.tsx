@@ -73,11 +73,11 @@ function ShopCreate({submitHandler}: ShopCreatePropsType) {
 
 	
 
-	console.log(formData)
+	// console.log(formData)
 
 	return (
 		<React.Fragment>
-			<PageHeader title={"판매 신청서 작성"} />
+			<PageHeader title={"판매글 작성"} />
 			<div
 				css={css`
 					display: flex;

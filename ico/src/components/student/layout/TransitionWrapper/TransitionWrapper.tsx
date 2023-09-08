@@ -69,7 +69,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 		router.beforePopState(({ url, as, options }) => {
 			if (modalHandlerAtom) {
-				console.log("모달 핸들러")
+				// console.log("모달 핸들러")
 				modalHandlerAtom()
 				window.history.pushState("", "")
 				router.push(router.asPath)

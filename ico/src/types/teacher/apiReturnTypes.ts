@@ -3,6 +3,9 @@ export type getGovRuleType = {
 	title: string
 	detail: string
 	dateTime: string
+	author: string
+	createdAt: string
+	updatedAt: string
 }
 
 export type getNationType = {

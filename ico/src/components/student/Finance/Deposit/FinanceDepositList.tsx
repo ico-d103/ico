@@ -121,6 +121,7 @@ const depositWrapperCSS = css`
 		min-width: 568px;
 		max-width: 1024px;
 		width: 60vw;
+		min-width: 726px;
 		display: grid;
 		grid-template-columns: 50% 50%;
 		direction: rtl;

@@ -72,11 +72,11 @@ function enter() {
 			},
 		})
 			.then((res) => {
-				console.log(res)
+				// console.log(res)
 
 				setTokenStatus({ showMessage: false }).then((res) => {
-					console.log(res)
-					console.log("여기에 할일")
+					// console.log(res)
+					// console.log("여기에 할일")
 				})
 
 				// router.push("/student/check")
@@ -89,7 +89,7 @@ function enter() {
 	useEffect(() => {
 		if (code.code1 !== "" && code.code2 !== "" && code.code3 !== "" && code.code4 !== "" && code.code5 !== "") {
 			submitCode = `${code.code1}${code.code2}${code.code3}${code.code4}${code.code5}`
-			console.log(submitCode)
+			// console.log(submitCode)
 		}
 	}, [code])
 

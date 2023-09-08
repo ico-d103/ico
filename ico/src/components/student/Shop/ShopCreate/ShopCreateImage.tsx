@@ -68,7 +68,7 @@ const ShopCreateImage = ({ sendImageList }: ShopCreateImageProps) => {
 		</div>
 	)
 
-	console.log(imageList)
+	// console.log(imageList)
 
 	return (
 		<div>

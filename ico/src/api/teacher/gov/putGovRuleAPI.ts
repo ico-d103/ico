@@ -16,7 +16,7 @@ type responseType = {
 
 export const putGovRuleAPI = async ({idx, body}: paramsType) => {
     try {
-        const response: responseType = await tokenInstance.put(`/rule/teacher/${idx}`, body)
+        const response: responseType = await tokenInstance.put(`/news/${idx}`, body)
         return response.data
     } catch (error) {
         throw error

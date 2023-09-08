@@ -14,7 +14,7 @@ const FinanceInvestChart = ({ data }: LineSvgProps) => {
     const formatYAxisValue = (value:any, space=true) => `${Number(value).toLocaleString('ko-KR')} ${nation.currency}${space ? `\u00A0 \u00A0 \u00A0 \u00A0 \u00A0` : ''}`;
 
 
-	console.log(data[0].data)
+	// console.log(data[0].data)
 	return (
 		<div
 			css={css`

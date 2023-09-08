@@ -2,30 +2,38 @@ import React from "react"
 import { css } from "@emotion/react"
 import FinanceInvestListItem from "./FinanceInvestListItem"
 import FinanceInvestListMyItem from "./FinanceInvestListMyItem"
-import { getFinanceDepositType, getFinanceInvestListType } from "@/types/student/apiReturnTypes"
+import { getFinanceDepositType, getFinanceInvestListStockItemType, getFinanceInvestListMyItemType } from "@/types/student/apiReturnTypes"
 import { useAtom } from "jotai"
 import { isNavigating } from "@/store/store"
 import Loading from "../../common/Loading/Loading"
 import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
+import { UseQueryResult } from "@tanstack/react-query"
 
 type FinanceInvestListProps = {
-	data: getFinanceInvestListType | undefined
-	isLoading: boolean
+	investProductQueries: UseQueryResult<getFinanceInvestListStockItemType[], unknown>
+	investMyProductQueries: UseQueryResult<getFinanceInvestListMyItemType[], unknown>
 }
-function FinanceInvestList({ data, isLoading }: FinanceInvestListProps) {
+function FinanceInvestList({ investProductQueries, investMyProductQueries }: FinanceInvestListProps) {
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 
 	const renderProduct =
-		data &&
-		data.stockList.map((item, idx) => {
-			return <FinanceInvestListItem data={item} />
+	investProductQueries.data &&
+	investProductQueries.data.map((product, idx) => {
+			return <FinanceInvestListItem data={product} />
 		})
 
 	const renderMyProduct =
-		data &&
-		data.myStocks.map((item, idx) => {
-			return <FinanceInvestListMyItem data={item} />
+	investMyProductQueries.data &&
+	investMyProductQueries.data.map((product, idx) => {
+
+			const renderMyProductItem = product.stocklist.map((item, iidx) => {
+				return <FinanceInvestListMyItem stockId={product.stockId} title={product.title} itemData={item} itemIdx={iidx} />
+			})
+			return renderMyProductItem
+
+			
+			
 		})
 
 	const loading = (
@@ -60,18 +68,18 @@ function FinanceInvestList({ data, isLoading }: FinanceInvestListProps) {
 
 	return (
 		<div css={contentParentCSS}>
-			<div css={depositWrapperCSS}>
-				<div css={itemWrapperCSS({ display: data && data.myStocks.length ? true : false, fill: false })}>
+			<div css={investWrapperCSS}>
+				<div css={itemWrapperCSS({ display: investMyProductQueries.data && investMyProductQueries.data.length ? true : false, fill: false })}>
 					<div css={titleLabelCSS}>내가 투자한 종목</div>
-					{isLoading && loading}
-					{data && data.myStocks.length === 0 && empty}
+					{investMyProductQueries.isLoading && loading}
+					{investMyProductQueries.data && investMyProductQueries.data.length === 0 && empty}
 					{renderMyProduct}
 				</div>
-				<div css={lineCSS({ display: data && data.myStocks.length ? true : false })} />
+				<div css={lineCSS({ display: investMyProductQueries.data && investMyProductQueries.data.length ? true : false })} />
 				<div css={itemWrapperCSS({ display: true, fill: true })}>
 					<div css={titleLabelCSS}>투자 종목</div>
-					{isLoading && loading}
-					{data && data.stockList.length === 0 && empty}
+					{investProductQueries.isLoading && loading}
+					{investProductQueries.data && investProductQueries.data.length === 0 && empty}
 					{renderProduct}
 				</div>
 			</div>
@@ -107,7 +115,7 @@ const contentParentCSS = css`
 	flex: 1;
 `
 
-const depositWrapperCSS = css`
+const investWrapperCSS = css`
 	@media (max-width: 1024px) {
 		display: flex;
 		flex-direction: column;
@@ -121,6 +129,7 @@ const depositWrapperCSS = css`
 		min-width: 568px;
 		max-width: 1024px;
 		width: 60vw;
+		min-width: 726px;
 		display: grid;
 		grid-template-columns: 50% 50%;
 		direction: rtl;

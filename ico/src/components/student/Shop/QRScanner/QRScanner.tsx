@@ -26,10 +26,6 @@ const QRScanner = ({ closeComp, type, id }: QRScannerProps) => {
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		console.log(router)
-	}, [])
-
-	useEffect(() => {
 		const codeReader = new BrowserQRCodeReader()
 
 		const showCamera = async () => {
@@ -115,10 +111,10 @@ const QRScanner = ({ closeComp, type, id }: QRScannerProps) => {
 						})
 				}
 
-				console.log("QR code detected:", result.getText())
+				// console.log("QR code detected:", result.getText())
 			}
 			if (error && !(error instanceof NotFoundException)) {
-				console.error(error)
+				// console.error(error)
 				noti({ content: <NotiTemplate type={"alert"} content={"오류가 발생했습니다!"} />, duration: 5000 })
 				closeComp && closeComp()
 			}

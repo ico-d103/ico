@@ -2,11 +2,13 @@ import React, { useState } from "react"
 import Input from "@/components/common/Input/Input"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
-import { postFinanceInvestAPI } from "@/api/student/finance/postFinanceInvestAPI"
+import { putFinanceInvestAPI } from "@/api/student/finance/putFinanceInvestAPI"
 import useNotification from "@/hooks/useNotification"
 import UseAnimations from "react-useanimations"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import { useQueryClient } from "@tanstack/react-query"
+import { useRouter } from "next/router"
 
 const ALERT_ICON = (
 	<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -33,16 +35,18 @@ const CHECK_ICON = (
 )
 
 type FinanceInvestApplyModalProps = {
+	pid: number
 	price: number
 	account: number
 	unit: string
 	closeComp: Function
-	refetch: Function
 }
 
-function FinanceInvestApplyModal({ price, account, unit, closeComp, refetch }: FinanceInvestApplyModalProps) {
+function FinanceInvestApplyModal({ pid, price, account, unit, closeComp }: FinanceInvestApplyModalProps) {
 	const noti = useNotification()
 	const [value, setValue] = useState<number>(0)
+	const queryClient = useQueryClient()
+	const router = useRouter()
 
 	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (Number(e.target.value) <= account) {
@@ -51,13 +55,13 @@ function FinanceInvestApplyModal({ price, account, unit, closeComp, refetch }: F
 	}
 
 	const submitHandler = () => {
-		postFinanceInvestAPI({body: {price, amount: value}}).then((res) => {
-			refetch()
+		putFinanceInvestAPI({id: pid, body: {price, amount: value}}).then((res) => {
+			queryClient.invalidateQueries(["student", "financeInvestDetail", `${pid}`])
 			noti({content: <NotiTemplate type={'ok'} content="투자 매수에 성공했어요!"/>, width: '300px', height: '120px', duration: 3000})
+			router.push('/student/finance/invest')
 			closeComp()
 		})
 		.catch((err) => {
-			console.log(err)
 			noti({content: <NotiTemplate type={'alert'} content="투자 매수에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
 		})
 	}

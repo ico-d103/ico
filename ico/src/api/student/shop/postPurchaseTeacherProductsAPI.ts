@@ -14,7 +14,6 @@ export const postPurchaseTeacherProductsAPI = async ({ pid }: paramsType) => {
 		const response: responseType = await tokenInstance.post(`/teacher-product/student/${pid}`)
 		return response.data
 	} catch (error) {
-		console.log(error)
 		throw error
 	}
 }
