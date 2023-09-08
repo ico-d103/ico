@@ -87,7 +87,7 @@ public class StudentJob {
         this.title = dto.getTitle();
         this.detail = dto.getDetail();
         this.total = dto.getTotal().byteValue();
-        this.wage = dto.getSalary();
+        this.wage = dto.getWage();
         this.creditRating = dto.getCreditRating().byteValue();
         this.color = dto.getColor();
         this.image = fileName;

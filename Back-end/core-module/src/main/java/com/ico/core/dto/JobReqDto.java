@@ -33,7 +33,7 @@ public class JobReqDto {
     private Integer total;
 
     @NotNull(message = "413")
-    private Integer salary;
+    private Integer wage;
 
     @NotNull(message = "414")
     private String color;
@@ -49,11 +49,11 @@ public class JobReqDto {
     private Map<Long, Integer> jobLicenseList;
 
     @Builder
-    public JobReqDto(String title, String detail, Integer total, Integer salary, String color, Integer creditRating, String image, List<Long> empowered, Map<Long, Integer> jobLicenseList) {
+    public JobReqDto(String title, String detail, Integer total, Integer wage, String color, Integer creditRating, String image, List<Long> empowered, Map<Long, Integer> jobLicenseList) {
         this.title = title;
         this.detail = detail;
         this.total = total;
-        this.salary = salary;
+        this.wage = wage;
         this.color = color;
         this.creditRating = creditRating;
         this.image = image;
