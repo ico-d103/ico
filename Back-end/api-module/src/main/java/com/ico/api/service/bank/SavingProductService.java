@@ -40,7 +40,7 @@ public interface SavingProductService {
      * @param depositId
      * @return
      */
-    DepositStudentResDto getDepositDetail(HttpServletRequest request, String depositId);
+    DepositStudentResDto getSavingDetail(HttpServletRequest request, String depositId);
 
     /**
      * 적금 상품 추가

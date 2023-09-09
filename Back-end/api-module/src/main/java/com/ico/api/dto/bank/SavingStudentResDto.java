@@ -22,26 +22,29 @@ public class SavingStudentResDto {
 
     private String startDate;
 
-    private String endDate;
-
     private byte creditRating;
 
     private int amount;
 
     private byte count;
 
+    private byte totalCount;
+
+    private int interestAmount;
+
     private boolean end;
 
     @Builder
-    public SavingStudentResDto(String id, String title, byte interest, String startDate, String endDate, byte creditRating, int amount, byte count, boolean end) {
+    public SavingStudentResDto(String id, String title, byte interest, String startDate, byte creditRating, int amount, byte count, byte totalCount, int interestAmount, boolean end) {
         this.id = id;
         this.title = title;
         this.interest = interest;
         this.startDate = startDate;
-        this.endDate = endDate;
         this.creditRating = creditRating;
         this.amount = amount;
         this.count = count;
+        this.totalCount = totalCount;
+        this.interestAmount = interestAmount;
         this.end = end;
     }
 }

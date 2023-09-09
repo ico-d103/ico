@@ -14,6 +14,8 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class SavingProductStudentColResDto {
+    private Long id;
+
     private String title;
 
     private Byte count;
@@ -23,7 +25,8 @@ public class SavingProductStudentColResDto {
     private byte interest;
 
     @Builder
-    public SavingProductStudentColResDto(String title, Byte count, int amount, byte interest) {
+    public SavingProductStudentColResDto(Long id, String title, Byte count, int amount, byte interest) {
+        this.id = id;
         this.title = title;
         this.count = count;
         this.amount = amount;

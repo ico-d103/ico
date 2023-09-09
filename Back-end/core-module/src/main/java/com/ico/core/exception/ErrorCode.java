@@ -201,7 +201,7 @@ public enum ErrorCode{
 
     NOT_FOUND_DEPOSIT_PRODUCT(HttpStatus.NOT_FOUND, "726", "존재하지 않는 예금 상품입니다."),
 
-    NOT_FOUNT_DEPOSIT(HttpStatus.BAD_REQUEST, "725", "예금 신청 내역이 없습니다."),
+    NOT_FOUND_SAVING_PRODUCT(HttpStatus.NOT_FOUND, "727", "존재하지 않는 적금 상품입니다."),
 
     NOT_FOUND_SUBJECT(HttpStatus.NOT_FOUND, "800", "자격증명이 비었습니다."),
 
