@@ -203,6 +203,10 @@ public enum ErrorCode{
 
     NOT_FOUND_SAVING_PRODUCT(HttpStatus.NOT_FOUND, "727", "존재하지 않는 적금 상품입니다."),
 
+    BAD_DAY_OF_WEEK(HttpStatus.NOT_FOUND, "728", "잘못된 요일입니다."),
+
+    NOT_FOUND_SAVING(HttpStatus.NOT_FOUND, "729", "적금 가입 내역이 없습니다."),
+
     NOT_FOUND_SUBJECT(HttpStatus.NOT_FOUND, "800", "자격증명이 비었습니다."),
 
     NOT_FOUND_RATING(HttpStatus.NOT_FOUND, "801", "등급을 올릴지 내릴지 결정해주세요."),

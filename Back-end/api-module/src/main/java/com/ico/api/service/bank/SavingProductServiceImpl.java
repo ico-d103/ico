@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -120,6 +121,7 @@ public class SavingProductServiceImpl implements SavingProductService{
                     .amount(saving.getAmount())
                     .count(saving.getCount())
                     .totalCount(saving.getTotalCount())
+                    .day(getDayOfWeek(saving.getDay()))
                     .end(isEnd)
                     .build();
             mySavingListReturn.add(mySaving);
@@ -227,6 +229,35 @@ public class SavingProductServiceImpl implements SavingProductService{
             case 10: return saving.getGrade_10();
         }
         throw new CustomException(ErrorCode.NOT_FOUND_SAVING_PRODUCT);
+    }
+
+    /**
+     * 적금 납일 일자 한국어 요일로 반환
+     *
+     * @param day
+     * @return
+     */
+    public String getDayOfWeek(DayOfWeek day){
+        switch (day){
+            case MONDAY:
+                return "월요일";
+            case TUESDAY:
+                return "화요일";
+            case WEDNESDAY:
+                return "수요일";
+            case THURSDAY:
+                return "목요일";
+            case FRIDAY:
+                return "금요일";
+            case SATURDAY:
+                return "토요일";
+            case SUNDAY:
+                return "일요일";
+
+            //TODO: 이후에 토, 일요일 적금 제외시 예외처리 필요
+            default:
+                throw new CustomException(ErrorCode.BAD_DAY_OF_WEEK);
+        }
     }
 }
 

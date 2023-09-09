@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
 /**
@@ -43,7 +44,7 @@ public class Saving {
     private int amount;
 
     // 납입 요일
-    private byte day;
+    private DayOfWeek day;
 
     // 적금 상품 이름
     private String title;
@@ -58,7 +59,7 @@ public class Saving {
     private String name;
 
     @Builder
-    public Saving(String id, Long studentId, byte interest, LocalDateTime startDate, byte totalCount, byte count, byte creditRating, int amount, byte day, String title, Long savingProductId, byte number, String name) {
+    public Saving(String id, Long studentId, byte interest, LocalDateTime startDate, byte totalCount, byte count, byte creditRating, int amount, DayOfWeek day, String title, Long savingProductId, byte number, String name) {
         this.id = id;
         this.studentId = studentId;
         this.interest = interest;

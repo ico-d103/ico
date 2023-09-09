@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface SavingMongoRepository extends MongoRepository<Saving, String> {
     List<Saving> findAllBySavingProductId(Long savingProductId);
 
-    Optional<Saving> findByIdAndStudentId(Long studentId);
+    Optional<Saving> findByIdAndStudentId(String id, Long studentId);
 
     List<Saving> findAllByStudentId(Long studentId);
 
