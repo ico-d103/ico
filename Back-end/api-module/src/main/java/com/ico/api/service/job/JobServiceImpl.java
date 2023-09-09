@@ -183,6 +183,7 @@ public class JobServiceImpl implements JobService{
                 .creditRating(dto.getCreditRating() != null ? dto.getCreditRating().byteValue() : (byte) 10)
                 .total(dto.getTotal().byteValue())
                 .color(dto.getColor())
+                .studentNames("")
                 .build();
         if (!dto.getEmpowered().isEmpty()) {
             addJobPower(studentJob, dto.getEmpowered());
