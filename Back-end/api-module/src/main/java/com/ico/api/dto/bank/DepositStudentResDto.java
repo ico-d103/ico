@@ -29,12 +29,12 @@ public class DepositStudentResDto {
 
     private int amount;
 
-    private int depositAmount;
+    private int interestAmount;
 
     private boolean end;
 
     @Builder
-    public DepositStudentResDto(String id, String title, byte interest, String startDate, String endDate, byte creditRating, int amount, int depositAmount, boolean end) {
+    public DepositStudentResDto(String id, String title, byte interest, String startDate, String endDate, byte creditRating, int amount, int interestAmount, boolean end) {
         this.id = id;
         this.title = title;
         this.interest = interest;
@@ -42,7 +42,7 @@ public class DepositStudentResDto {
         this.endDate = endDate;
         this.creditRating = creditRating;
         this.amount = amount;
-        this.depositAmount = depositAmount;
+        this.interestAmount = interestAmount;
         this.end = end;
     }
 }

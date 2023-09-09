@@ -91,7 +91,7 @@ public class DepositProductServiceImpl implements DepositProductService{
                 .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
 
         // 나라의 예금 상품 목록
-        List<DepositProduct> depositProductList = depositProductRepository.findAllByNationId(nation.getId());
+        List<DepositProduct> depositProductList = depositProductRepository.findAllByNationId(nationId);
 
         // (예금 상품 + 나의 예상 이자율) 목록
         List<DepositProductStudentColResDto> depositList = new ArrayList<>();
@@ -103,7 +103,7 @@ public class DepositProductServiceImpl implements DepositProductService{
             colDeposit.setId(deposit.getId());
             colDeposit.setTitle(deposit.getTitle());
             colDeposit.setPeriod(deposit.getPeriod());
-            colDeposit.setInterest(getMyInterest(student.getCreditRating(), deposit));
+            colDeposit.setInterest(getMyDepositInterest(student.getCreditRating(), deposit));
 
             depositList.add(colDeposit);
         }
@@ -117,7 +117,7 @@ public class DepositProductServiceImpl implements DepositProductService{
                     .id(deposit.getId())
                     .title(deposit.getTitle())
                     .amount(deposit.getAmount())
-                    .depositAmount(deposit.getAmount() * deposit.getInterest() / 100)
+                    .interestAmount(deposit.getAmount() * deposit.getInterest() / 100)
                     .interest(deposit.getInterest())
                     .startDate(deposit.getStartDate().format(Formatter.date))
                     .endDate(deposit.getEndDate().format(Formatter.date))
@@ -151,7 +151,7 @@ public class DepositProductServiceImpl implements DepositProductService{
                 .id(deposit.getId())
                 .title(deposit.getTitle())
                 .amount(deposit.getAmount())
-                .depositAmount(deposit.getAmount() * deposit.getInterest() / 100)
+                .interestAmount(deposit.getAmount() * deposit.getInterest() / 100)
                 .interest(deposit.getInterest())
                 .startDate(deposit.getStartDate().format(Formatter.date))
                 .endDate(deposit.getEndDate().format(Formatter.date))
@@ -263,7 +263,7 @@ public class DepositProductServiceImpl implements DepositProductService{
      * @param deposit 애금 상품
      * @return
      */
-    public Byte getMyInterest(Byte creditRating, DepositProduct deposit){
+    public Byte getMyDepositInterest(Byte creditRating, DepositProduct deposit){
         switch (creditRating){
             case 1: return deposit.getGrade_1();
             case 2: return deposit.getGrade_2();

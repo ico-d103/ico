@@ -58,7 +58,7 @@ public class DepositServiceImpl implements DepositService{
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 신용 등급 확인
-        Byte interestRate = depositProductService.getMyInterest(student.getCreditRating(), depositProduct);
+        Byte interestRate = depositProductService.getMyDepositInterest(student.getCreditRating(), depositProduct);
 
         // 잔액 확인
         if(student.getAccount() < amount){
