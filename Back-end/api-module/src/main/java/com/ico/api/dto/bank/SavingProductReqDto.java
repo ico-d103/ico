@@ -29,6 +29,7 @@ public class SavingProductReqDto {
     @NotNull(message = "735")
     private int amount;
 
+    @NotNull(message = "736")
     private List<Byte> interest;
 
     @Builder

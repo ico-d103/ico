@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +20,16 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class SavingUpdateDto {
+    @NotBlank(message = "733")
     private String title;
 
+    @NotNull(message = "734")
     private Byte count;
 
+    @NotNull(message = "735")
     private int amount;
 
+    @NotNull(message = "736")
     private List<Byte> interest;
 
     @Builder

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -63,7 +64,7 @@ public class SavingProductController {
      * @return
      */
     @PostMapping("/teacher")
-    public ResponseEntity<HttpStatus> addSaving(HttpServletRequest request, @RequestBody SavingProductReqDto saving){
+    public ResponseEntity<HttpStatus> addSaving(HttpServletRequest request, @Valid @RequestBody SavingProductReqDto saving){
         savingProductService.addSaving(request, saving);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -77,7 +78,7 @@ public class SavingProductController {
      * @return
      */
     @PutMapping("/teacher/{savingProductId}")
-    public ResponseEntity<HttpStatus> updateSaving(HttpServletRequest request, @RequestBody SavingUpdateDto dto, @PathVariable Long savingProductId){
+    public ResponseEntity<HttpStatus> updateSaving(HttpServletRequest request,  @Valid @RequestBody SavingUpdateDto dto, @PathVariable Long savingProductId){
         savingProductService.updateSaving(request, savingProductId, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
