@@ -12,7 +12,6 @@ import java.util.Optional;
  * @author 변윤경
  */
 public interface DepositMongoRepository extends MongoRepository<Deposit, String> {
-    Optional<Deposit> findByStudentId(Long studentId);
 
     Optional<Deposit> findByIdAndStudentId(String id, Long studentId);
 

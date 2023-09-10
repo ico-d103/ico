@@ -197,11 +197,15 @@ public enum ErrorCode{
 
     ALREADY_EXIST_DEPOSIT(HttpStatus.BAD_REQUEST, "724", "예금은 1개만 신청이 가능합니다."),
 
-    NOT_FOUND_DEPOSIT(HttpStatus.BAD_REQUEST, "725", "예금 신청 내역이 없습니다."),
+    NOT_FOUND_DEPOSIT(HttpStatus.BAD_REQUEST, "728", "예금 신청 내역이 없습니다."),
 
-    NOT_FOUND_DEPOSIT_PRODUCT(HttpStatus.NOT_FOUND, "726", "존재하지 않는 예금 상품입니다."),
+    NOT_FOUND_DEPOSIT_PRODUCT(HttpStatus.NOT_FOUND, "729", "존재하지 않는 예금 상품입니다."),
 
-    NOT_FOUNT_DEPOSIT(HttpStatus.BAD_REQUEST, "725", "예금 신청 내역이 없습니다."),
+    NOT_FOUND_SAVING_PRODUCT(HttpStatus.NOT_FOUND, "730", "존재하지 않는 적금 상품입니다."),
+
+    BAD_DAY_OF_WEEK(HttpStatus.NOT_FOUND, "731", "잘못된 요일입니다."),
+
+    NOT_FOUND_SAVING(HttpStatus.NOT_FOUND, "732", "적금 가입 내역이 없습니다."),
 
     NOT_FOUND_SUBJECT(HttpStatus.NOT_FOUND, "800", "자격증명이 비었습니다."),
 
