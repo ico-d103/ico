@@ -1,6 +1,5 @@
 package com.ico.core.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ico.core.dto.TeacherProductReqDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -44,14 +43,14 @@ public class TeacherProduct {
 
     private byte count;
 
-    private Boolean rental;
+    private Boolean isCoupon;
 
     private byte sold;
 
     private LocalDateTime date;
 
     @Builder
-    public TeacherProduct(Long id, Nation nation, String title, int amount, String images, String detail, byte count, Boolean rental, byte sold, LocalDateTime date) {
+    public TeacherProduct(Long id, Nation nation, String title, int amount, String images, String detail, byte count, Boolean isCoupon, byte sold, LocalDateTime date) {
         this.id = id;
         this.nation = nation;
         this.title = title;
@@ -59,7 +58,7 @@ public class TeacherProduct {
         this.images = images;
         this.detail = detail;
         this.count = count;
-        this.rental = rental;
+        this.isCoupon = isCoupon;
         this.sold = sold;
         this.date = date;
     }
@@ -74,6 +73,6 @@ public class TeacherProduct {
         this.detail = dto.getDetail();
         this.count = dto.getCount();
         this.sold = sold;
-        this.rental = dto.getRental();
+        this.isCoupon = dto.getIsCoupon();
     }
 }

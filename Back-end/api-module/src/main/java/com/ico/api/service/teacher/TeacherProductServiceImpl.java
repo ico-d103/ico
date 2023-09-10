@@ -83,7 +83,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 .images(s3UploadService.saveImageURLs(files))
                 .detail(product.getDetail())
                 .count(product.getCount())
-                .rental(product.getRental())
+                .isCoupon(product.getIsCoupon())
                 .sold((byte) 0)
                 .date(LocalDateTime.now())
                 .build();
@@ -114,7 +114,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                     .images(s3UploadService.getImageURLs(product.getImages()))
                     .count(product.getCount())
                     .sold(product.getSold())
-                    .rental(product.getRental())
+                    .isCoupon(product.getIsCoupon())
                     .date(product.getDate().format(Formatter.date))
                     .build();
 
@@ -144,7 +144,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         // 타입이 일치하는지 확인
         TeacherProduct product = teacherProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
-        if (product.getRental()) {
+        if (product.getIsCoupon()) {
             throw new CustomException(ErrorCode.NOT_COUPON);
         }
 
@@ -224,7 +224,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         // 타입이 일치하는지 확인
         TeacherProduct product = teacherProductRepository.findByIdAndNationId(dto.getId(), nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
-        if (!product.getRental()) {
+        if (!product.getIsCoupon()) {
             throw new CustomException(ErrorCode.NOT_RENTAL);
         }
 
@@ -281,7 +281,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 .images(s3UploadService.getImageURLs(product.getImages()))
                 .detail(product.getDetail())
                 .count(product.getCount())
-                .rental(product.getRental())
+                .isCoupon(product.getIsCoupon())
                 .sold(product.getSold())
                 .date(product.getDate().format(Formatter.date))
                 .build();
