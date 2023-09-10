@@ -59,4 +59,11 @@ public interface TeacherService {
      * @return
      */
     void updatePhoneNum(HttpServletRequest request, PhoneNumReqDto dto);
+
+    /**
+     * 교사 아이디 찾기
+     * @param phoneNum
+     * @return
+     */
+    String getTeacherId(String phoneNum);
 }

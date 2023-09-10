@@ -194,4 +194,11 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setPhoneNum(dto.getPhoneNum());
         teacherRepository.save(teacher);
     }
+
+    @Override
+    public String getTeacherId(String phoneNum) {
+        Teacher teacher = teacherRepository.findByPhoneNum(phoneNum)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return teacher.getIdentity();
+    }
 }

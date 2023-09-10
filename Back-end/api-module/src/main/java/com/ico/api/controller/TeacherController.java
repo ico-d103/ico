@@ -119,4 +119,14 @@ public class TeacherController {
         teacherService.updatePhoneNum(request, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    /**
+     * 교사 아이디 찾기
+     * @param dto
+     * @return teacherId
+     */
+    @PostMapping("/find-id")
+    public ResponseEntity<String> getTeacherId(@Valid @RequestBody PhoneNumReqDto dto) {
+        return ResponseEntity.ok(teacherService.getTeacherId(dto.getPhoneNum()));
+    }
 }
