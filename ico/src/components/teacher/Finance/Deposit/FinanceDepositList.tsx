@@ -30,7 +30,6 @@ function FinanceDepositList({ data }: FinanceDepositListProps) {
 	const handleInterestRateChange = (index: number, value: number) => {
 		const newInterestRates = [...interestRates]
 
-		// 입력된 값이 유효하지 않은 경우 0으로 초기화
 		if (isNaN(value) || value < 0) {
 			newInterestRates[index] = 0
 		} else {
@@ -68,11 +67,14 @@ function FinanceDepositList({ data }: FinanceDepositListProps) {
 
 	const deleteMutation = useMutation(deleteDepositItemAPI, {
 		onSuccess: () => {
-			queryClient.invalidateQueries(["teacher", "FinanceDeposit"])
+			queryClient.invalidateQueries(["teacher", "financeDeposit"])
 			noti({
 				content: <NotiTemplate type={"ok"} content={"예금 상품을 삭제했습니다."} />,
 				duration: 5000,
 			})
+		},
+		onError: () => {
+			console.log("hello")
 		},
 	})
 

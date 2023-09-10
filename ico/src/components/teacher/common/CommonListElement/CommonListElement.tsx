@@ -61,7 +61,7 @@ function CommonListElement({ children, dropdownList, idx }: CommonListElement) {
 			<div css={lineCSS} />
 			<div css={contentWrapperCSS}>
 				<div css={outerContentWrapperCSS}>
-					<div css={idxWrapperCSS}>{typeof idx === 'number' && `# ${String(idx).padStart(2, "0")}`}</div>
+					<div css={idxWrapperCSS}>{typeof idx === "number" && `# ${String(idx).padStart(2, "0")}`}</div>
 					<div css={innerContentWrapperCSS}>{children}</div>
 				</div>
 				{buttonRender}

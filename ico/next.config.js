@@ -16,14 +16,13 @@ module.exports = withPWA({
 	},
 
 	async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: "https://k8d103.p.ssafy.io/api/:path*",
-      },
-    ];
-  },
-  
+		return [
+			{
+				source: "/api/:path*",
+				destination: "https://www.iconomy.kr/api/:path*",
+			},
+		]
+	},
 })
 
 module.exports = {
@@ -33,14 +32,11 @@ module.exports = {
 	},
 
 	async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: "https://k8d103.p.ssafy.io/api/:path*",
-      },
-    ];
-  },
-  
+		return [
+			{
+				source: "/api/:path*",
+				destination: "https://www.iconomy.kr/api/:path*",
+			},
+		]
+	},
 }
-
-
