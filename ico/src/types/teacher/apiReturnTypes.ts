@@ -3,6 +3,9 @@ export type getGovRuleType = {
 	title: string
 	detail: string
 	dateTime: string
+	author: string
+	createdAt: string
+	updatedAt: string
 }
 
 export type getNationType = {
@@ -38,7 +41,7 @@ export type getGovJobItemType = {
 	title: string
 	detail: string
 	creditRating: number
-	salary: number
+	wage: number
 	image: string
 	color: string
 	total: number
@@ -176,7 +179,7 @@ export type jobListType = {
 	color: string
 	creditRating: number
 	total: number
-	salary: string
+	wage: string
 	count: number
 	studentNames: string[] | string
 	empowered: string[]

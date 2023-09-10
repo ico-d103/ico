@@ -1,10 +1,10 @@
-import { getClassRuleType } from "@/types/student/apiReturnTypes"
+import { getGovRuleType } from "@/types/teacher/apiReturnTypes"
 import React from "react"
 import RuleListItem from "./RuleListItem"
 import { css } from "@emotion/react"
 
 type ruleProps = {
-	rules: getClassRuleType[]
+	rules: getGovRuleType[]
 }
 
 function RuleList({ rules }: ruleProps) {

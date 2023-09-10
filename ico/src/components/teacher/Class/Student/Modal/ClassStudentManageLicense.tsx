@@ -7,14 +7,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { putStudentsLicenseAPI } from "@/api/teacher/class/putStudentsLicenseAPI"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
-import { studentLicenseBodyType } from "@/types/teacher/apiReturnTypes"
+import { getLicenseType, studentLicenseBodyType } from "@/types/teacher/apiReturnTypes"
 
 type ClassStudentManageLicenseProps = {
-	license: {
-		id: number
-		subject: string
-		rating: number
-	}[]
+	license: getLicenseType[]
 }
 
 function ClassStudentManageLicense({ license }: ClassStudentManageLicenseProps) {

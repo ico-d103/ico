@@ -5,62 +5,14 @@ import { checkedStudent } from "@/store/store"
 import ClassStudentDetailMoney from "../Detail/ClassStudentDetailMoney"
 import ClassStudentManageGrade from "./ClassStudentManageGrade"
 import ClassStudentManageLicense from "./ClassStudentManageLicense"
+import { useQuery } from "@tanstack/react-query"
+import { getLicenseType } from "@/types/teacher/apiReturnTypes"
+import { getLicenseAPI } from "@/api/teacher/gov/getLicenseAPI"
 
 function ClassStudentManageModal() {
 	const [openMoreMenu, setOpenMoreMenu] = useState<boolean>(false)
 	const [checkedStudentAtom, setCheckedStudentAtom] = useAtom(checkedStudent)
-	const license = [
-		{
-			id: 840,
-			subject: "수학",
-			rating: -1,
-		},
-		{
-			id: 841,
-			subject: "과학",
-			rating: -1,
-		},
-		{
-			id: 842,
-			subject: "사회",
-			rating: -1,
-		},
-		{
-			id: 843,
-			subject: "독서",
-			rating: -1,
-		},
-		{
-			id: 844,
-			subject: "바른 글씨",
-			rating: -1,
-		},
-		{
-			id: 845,
-			subject: "정리 정돈",
-			rating: -1,
-		},
-		{
-			id: 846,
-			subject: "체력",
-			rating: -1,
-		},
-		{
-			id: 847,
-			subject: "디자인",
-			rating: -1,
-		},
-		{
-			id: 848,
-			subject: "저축",
-			rating: -1,
-		},
-		{
-			id: 849,
-			subject: "운전면허",
-			rating: -1,
-		},
-	]
+	const { data } = useQuery<getLicenseType[]>(["teacher", "studentsLicense"], getLicenseAPI)
 
 	return (
 		<div css={wrapperCSS}>
@@ -89,7 +41,7 @@ function ClassStudentManageModal() {
 				<button onClick={() => setOpenMoreMenu(!openMoreMenu)}>
 					{openMoreMenu ? "자격증 관리 닫기" : "자격증 관리 열기"}
 				</button>
-				{openMoreMenu && <ClassStudentManageLicense license={license} />}
+				{openMoreMenu && data && <ClassStudentManageLicense license={data} />}
 			</div>
 		</div>
 	)

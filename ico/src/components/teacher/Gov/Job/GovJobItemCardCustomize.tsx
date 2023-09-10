@@ -26,7 +26,7 @@ function GovJobItemCardCustomize({ closeComp, colorPicker, inputState, illustPic
 
 				<GovJobCard
 					job={inputState.job}
-					salary={inputState.salary}
+					wage={inputState.wage}
 					backgroundColor={inputState.color}
 					imgUrl={inputState.image}
 				/>

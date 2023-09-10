@@ -9,7 +9,7 @@ pipeline {
     
     stages {
         
-        stage('gitlab_clone') {
+        stage('github_clone') {
             steps {
                 git branch: 'FE', credentialsId: 'github_token', url: 'https://github.com/ico-d103/ico.git'
             }
@@ -18,14 +18,14 @@ pipeline {
         stage('docker-clean-up') {
             steps {
                 script {
-                    sshagent(credentials: ['ec2_ssh_key']) {
+                    sshagent(credentials: ['ubuntu_ssh_key']) {
                     
                     sh '''
                     if test "`docker ps -aq --filter ancestor=front`"; then
                     
-					ssh -o StrictHostKeyChecking=no ubuntu@k8d103.p.ssafy.io "docker stop $(docker ps -aq --filter ancestor=front)"
-                    ssh -o StrictHostKeyChecking=no ubuntu@k8d103.p.ssafy.io "docker rm -f $(docker ps -aq --filter ancestor=front)"
-                    ssh -o StrictHostKeyChecking=no ubuntu@k8d103.p.ssafy.io "docker rmi front"
+					ssh -o StrictHostKeyChecking=no ubuntu@www.iconomy.kr "docker stop $(docker ps -aq --filter ancestor=front)"
+                    ssh -o StrictHostKeyChecking=no ubuntu@www.iconomy.kr "docker rm -f $(docker ps -aq --filter ancestor=front)"
+                    ssh -o StrictHostKeyChecking=no ubuntu@www.iconomy.kr "docker rmi front"
 
                     fi
                     '''

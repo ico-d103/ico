@@ -11,14 +11,15 @@ function useGetTokenStatus(): [getTokenStatusType, ({showMessage}: {showMessage:
         return getTokenStatusAPI()
         .then((res) => {
             if (res) {
-                setTokenStatusAtom(() => { return {...res, showMessage}})
+                const status = res.status.split(',')
+                setTokenStatusAtom(() => { return {...res, status, showMessage}})
             }
             return(res)
         })
         .catch((error) => {
             setTokenStatusAtom(() => {
                 return {
-                    status: "require_login",
+                    status: ["require_login"],
                     role: "GUEST",
                     showMessage
                 }

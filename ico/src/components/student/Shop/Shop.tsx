@@ -36,9 +36,9 @@ function Shop({uploadPageUrl, queries}: ShopPropsType) {
   const renderUpload = uploadPageUrl && (
     <div css={wrapperCSS}>
 				<div css={contentWrapperCSS}>
-					<div style={{ fontSize: "0.95rem", fontWeight: "500" }}>내 물건을 팔고 싶다면?</div>
+					<div style={{ fontSize: "0.95rem", fontWeight: "500" }}>판매할 물건을 등록해 보아요.</div>
 					<Button
-						text={"판매 신청서 작성하기"}
+						text={"판매글 작성하기"}
 						fontSize={`var(--teacher-h5)`}
 						width={"150px"}
 						height={"30px"}

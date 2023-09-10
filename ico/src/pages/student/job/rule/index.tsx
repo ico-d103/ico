@@ -1,18 +1,19 @@
 import { getClassRuleAPI } from '@/api/student/gov/getClassRuleAPI'
 import RuleList from '@/components/student/Job/Rule/RuleList'
-import { getClassRuleType } from '@/types/student/apiReturnTypes'
+import { getGovRuleType } from '@/types/teacher/apiReturnTypes'
 import { useQuery } from '@tanstack/react-query'
 import { css } from "@emotion/react"
 import React from 'react'
 import RuleCreate from '@/components/student/Job/Rule/RuleCreate'
 import Button from '@/components/common/Button/Button'
 import useNavigate from '@/hooks/useNavigate'
+import { getGovRuleAPI } from '@/api/teacher/gov/getGovRuleAPI'
 
 function news() {
   const navigate = useNavigate()
-  const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getClassRuleType[]>(
+  const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getGovRuleType[]>(
 		["student", "job", "rule"],
-		getClassRuleAPI,
+		getGovRuleAPI,
 		// { staleTime: 200000 },
 	)
     // api에서 날짜도 받아올 것!
