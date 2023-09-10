@@ -41,6 +41,7 @@ public class CertificationServiceImpl implements CertificationService{
     private final TeacherRepository teacherRepository;
     private final S3UploadService s3;
     private final CoolSMSService smsService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     @Transactional
@@ -67,6 +68,8 @@ public class CertificationServiceImpl implements CertificationService{
 
         // Certification 삭제
         certificationRepository.delete(certification);
+
+        jwtTokenProvider.updateTokenCookie(request);
     }
 
     @Override

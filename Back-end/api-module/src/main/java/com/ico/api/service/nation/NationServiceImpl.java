@@ -104,7 +104,7 @@ public class NationServiceImpl implements NationService {
         Teacher teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         // 교사 인증 여부
-        if (teacher.getStatus().equals(Status.APPROVED)) {
+        if (!teacher.getStatus().equals(Status.APPROVED)) {
             throw new CustomException(ErrorCode.NOT_FOUND_TEACHER_CERTIFICATION);
         }
         // 교사가 만든 나라의 여부
