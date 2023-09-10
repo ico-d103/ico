@@ -2,11 +2,10 @@ import { tokenInstance } from "@/api/instance"
 import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
+	idx: number
 	body: {
 		title: string
 		content: string
-		amount: string
-		issue: string
 	}
 }
 
@@ -15,9 +14,10 @@ type responseType = {
 	data: successReturnType
 }
 
-export const postInvestItemAPI = async ({ body }: paramsType) => {
+export const putInvestItemAPI = async ({ idx, body }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.post("/stock/teacher", body)
+		const response: responseType = await tokenInstance.put(`/stock/teacher/${idx}`, body)
+
 		return response.data
 	} catch (error) {
 		throw error

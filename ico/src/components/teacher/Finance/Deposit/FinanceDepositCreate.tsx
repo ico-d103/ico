@@ -44,7 +44,7 @@ function FinanceDepositCreate({ onCancelClick }: any) {
 
 	const mutation = useMutation((newData: DepositData) => postDepositItemAPI({ body: newData }), {
 		onSuccess: () => {
-			queryClient.invalidateQueries(["teacher", "FinanceDeposit"])
+			queryClient.invalidateQueries(["teacher", "financeDeposit"])
 		},
 	})
 
