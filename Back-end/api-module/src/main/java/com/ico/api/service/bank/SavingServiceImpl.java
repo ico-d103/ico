@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
@@ -34,6 +35,7 @@ public class SavingServiceImpl implements SavingService{
     private final SavingMongoRepository savingMongoRepository;
     private final SavingProductServiceImpl savingProductService;
 
+    @Transactional
     @Override
     public void createSaving(HttpServletRequest request, Long savingProductId) {
         String token = jwtTokenProvider.parseJwt(request);
@@ -82,6 +84,7 @@ public class SavingServiceImpl implements SavingService{
         transactionService.addTransactionWithdraw("은행", studentId, amount, savingProduct.getTitle() + "적금");
     }
 
+    @Transactional
     @Override
     public void deleteSaving(HttpServletRequest request, String savingId) {
         Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));

@@ -1,6 +1,5 @@
 package com.ico.api.service.bank;
 
-import com.ico.api.dto.bank.DepositStudentResDto;
 import com.ico.api.dto.bank.ProductJoinedStudentResDto;
 import com.ico.api.dto.bank.SavingProductReqDto;
 import com.ico.api.dto.bank.SavingProductStudentColResDto;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -136,11 +134,6 @@ public class SavingProductServiceImpl implements SavingProductService{
     }
 
     @Override
-    public DepositStudentResDto getSavingDetail(HttpServletRequest request, String depositId) {
-        return null;
-    }
-
-    @Override
     public void addSaving(HttpServletRequest request, SavingProductReqDto dto) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         Nation nation = nationRepository.findById(nationId)
@@ -184,13 +177,40 @@ public class SavingProductServiceImpl implements SavingProductService{
     }
 
     @Override
-    public void updateSaving(HttpServletRequest request, Long savingId, SavingUpdateDto dto) {
+    public void updateSaving(HttpServletRequest request, Long savingProductId, SavingUpdateDto dto) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
+        SavingProduct savingProduct = savingProductRepository.findByIdAndNationId(savingProductId, nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_SAVING_PRODUCT));
+
+        // 이자율 값 들
+        List<Byte> interest = dto.getInterest();
+
+        // 이자율 리스트 값이 10개보다 많거나 적을 때
+        if (interest.size() != 10) {
+            throw new CustomException(ErrorCode.BAD_UPDATE_INTEREST);
+        }
+
+        // 이자율이 0이상인지 확인
+        if (Collections.min(interest) < 0 ) {
+            throw new CustomException(ErrorCode.LOWER_INTEREST);
+        }
+
+        // 이자율이 신용등급이 낮을수록 낮아지는지 확인
+        if (!isDescending(interest)) {
+            throw new CustomException(ErrorCode.INTEREST_NOT_DESCENDING);
+        }
+
+        savingProduct.updateSavingProduct(dto);
+        savingProductRepository.save(savingProduct);
     }
 
     @Override
-    public void deleteSaving(Long savingId) {
+    public void deleteSaving(Long savingProductId) {
+        SavingProduct savingProduct = savingProductRepository.findById(savingProductId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_SAVING_PRODUCT));
 
+        savingProductRepository.delete(savingProduct);
     }
 
     /**

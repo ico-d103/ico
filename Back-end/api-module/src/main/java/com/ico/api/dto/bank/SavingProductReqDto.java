@@ -20,12 +20,13 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class SavingProductReqDto {
-    @NotBlank()
+    @NotBlank(message = "733")
     private String title;
 
-    @NotNull()
+    @NotNull(message = "734")
     private Byte count;
 
+    @NotNull(message = "735")
     private int amount;
 
     private List<Byte> interest;

@@ -21,13 +21,24 @@ import javax.servlet.http.HttpServletRequest;
 public class SavingController {
     private final SavingService savingService;
 
-    @PostMapping("/student/{savingId}")
-    public ResponseEntity<HttpStatus> createSaving(HttpServletRequest request, @PathVariable Long savingId){
-        savingService.createSaving(request, savingId);
+    /**
+     * 적금 신청
+     * @param request
+     * @param savingProductId
+     * @return
+     */
+    @PostMapping("/student/{savingProductId}")
+    public ResponseEntity<HttpStatus> createSaving(HttpServletRequest request, @PathVariable Long savingProductId){
+        savingService.createSaving(request, savingProductId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-
+    /**
+     * 적금 해지/중도해지/수령
+     * @param request
+     * @param savingId
+     * @return
+     */
     @DeleteMapping("/student/{savingId}")
     public ResponseEntity<HttpStatus> deleteSaving(HttpServletRequest request, @PathVariable String savingId){
         savingService.deleteSaving(request, savingId);

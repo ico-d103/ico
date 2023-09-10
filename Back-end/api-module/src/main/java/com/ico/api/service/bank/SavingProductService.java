@@ -1,6 +1,5 @@
 package com.ico.api.service.bank;
 
-import com.ico.api.dto.bank.DepositStudentResDto;
 import com.ico.api.dto.bank.SavingProductReqDto;
 import com.ico.api.dto.bank.SavingProductStudentResDto;
 import com.ico.api.dto.bank.SavingProductTeacherResDto;
@@ -34,15 +33,6 @@ public interface SavingProductService {
     SavingProductStudentResDto findAllSavingStudent(HttpServletRequest request);
 
     /**
-     * 학생의 적금 상품 디테일 조회
-     *
-     * @param request
-     * @param depositId
-     * @return
-     */
-    DepositStudentResDto getSavingDetail(HttpServletRequest request, String depositId);
-
-    /**
      * 적금 상품 추가
      *
      * @param request
@@ -54,15 +44,15 @@ public interface SavingProductService {
      * 적금 상품 수정
      *
      * @param request
-     * @param savingId
+     * @param savingProductId
      * @param dto
      */
-    void updateSaving(HttpServletRequest request, Long savingId, SavingUpdateDto dto);
+    void updateSaving(HttpServletRequest request, Long savingProductId, SavingUpdateDto dto);
 
     /**
      * 적금 상품 삭제
      *
-     * @param savingId
+     * @param savingProductId
      */
-    void deleteSaving(Long savingId);
+    void deleteSaving(Long savingProductId);
 }

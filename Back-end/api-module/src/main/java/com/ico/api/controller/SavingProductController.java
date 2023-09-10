@@ -31,28 +31,62 @@ import java.util.List;
 public class SavingProductController {
     private final SavingProductService savingProductService;
 
+    /**
+     * 교사의 적금 관련 정보 조회
+     * - 적금 상품 내역
+     * - 적금 별 가입 학생
+     * @param request
+     * @return
+     */
     @GetMapping("/teacher/all")
     public ResponseEntity<List<SavingProductTeacherResDto>> findAllSavingTeacher(HttpServletRequest request){
         return ResponseEntity.ok(savingProductService.findAllSavingTeacher(request));
     }
 
+    /**
+     * 학생의 적금 관련 정보 조회
+     * - 적금 상품 내역
+     * - 진행중인 적금 내역
+     * @param request
+     * @return
+     */
     @GetMapping("/student")
     public ResponseEntity<SavingProductStudentResDto> findAllSavingStudent(HttpServletRequest request){
         return ResponseEntity.ok(savingProductService.findAllSavingStudent(request));
     }
 
+
+    /**
+     * 적금 상품 등록
+     * @param request
+     * @param saving
+     * @return
+     */
     @PostMapping("/teacher")
     public ResponseEntity<HttpStatus> addSaving(HttpServletRequest request, @RequestBody SavingProductReqDto saving){
         savingProductService.addSaving(request, saving);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    /**
+     * 적금 상품 수정
+     *
+     * @param request
+     * @param saving
+     * @param savingProductId
+     * @return
+     */
     @PutMapping("/teacher/{savingProductId}")
-    public ResponseEntity<HttpStatus> updateSaving(HttpServletRequest request, @RequestBody SavingUpdateDto saving, @PathVariable Long savingProductId){
-        savingProductService.updateSaving(request, savingProductId, saving);
+    public ResponseEntity<HttpStatus> updateSaving(HttpServletRequest request, @RequestBody SavingUpdateDto dto, @PathVariable Long savingProductId){
+        savingProductService.updateSaving(request, savingProductId, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    /**
+     * 적금 상품 삭제
+     * @param savingProductId
+     * @return
+     */
     @DeleteMapping("/teacher/{savingProductId}")
     public ResponseEntity<HttpStatus> deleteSaving(@PathVariable Long savingProductId){
         savingProductService.deleteSaving(savingProductId);
