@@ -88,6 +88,7 @@ const headerWrapperCSS = ({ isScrolled, hasComp }: { isScrolled: boolean; hasCom
 	return css`
 		/* width: calc(100vw - var(--student-side-bar-width)); */
 		width: var(--student-full-width);
+		
 		z-index: 9000;
 		position: fixed;
 		/* width: 100%; */

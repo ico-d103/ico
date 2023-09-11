@@ -101,6 +101,7 @@ function NavBarDesktopRightMenu({ data }: { data: getHomeMyInfoType }) {
 						display: flex;
 						gap: 16px;
 						margin-top: 16px;
+						
 					`}
 				>
 					<div
@@ -129,6 +130,7 @@ const menuWrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	background-color: var(--student-main-color-soft);
 `
 
 const menuItemCSS = css`
@@ -140,15 +142,15 @@ const menuItemCSS = css`
 	gap: 16px;
 	padding-left: 16px;
 	font-size: var(--student-h2);
-	border-top: 1px solid var(--student-main-color-2);
-	background-color: var(--student-main-color);
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
+	/* background-color: var(--student-main-color); */
 `
 
 const menuHeaderCSS = css`
 	width: 100%;
 	/* height: 15vh; */
-	background-color: var(--student-main-color);
-	border-bottom: 1px solid var(--student-main-color-2);
+	/* background-color: var(--student-main-color); */
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 	padding: 32px;
 	display: flex;
 	flex-direction: column;

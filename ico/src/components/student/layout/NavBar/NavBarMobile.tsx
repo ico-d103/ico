@@ -6,6 +6,7 @@ import useNavigate from "@/hooks/useNavigate"
 import Link from "next/link"
 
 import { NAVBAR_CLASS, NAVBAR_GOVERNMENT, NAVBAR_STORE, NAVBAR_HOME } from "./NavBarIcons"
+import { OverlayScrollbarsComponent } from "overlayscrollbars-react"
 
 type NavBarProps = {
 	children: any
@@ -17,33 +18,6 @@ function NavBarMobile({ children, routes, navBarData }: NavBarProps) {
 	const [selected, setSelected] = useState<number>(-1)
 	const router = useRouter()
 	const navigate = useNavigate()
-
-	// const routes: { [prop: string]: number } = {
-	// 	"/student/home": 0,
-	// 	"/student/home/asset": 0,
-	// 	"/student/home/coupon": 0,
-	// 	"/student/home/exchequer": 0,
-	// 	"/student/finance/deposit": 0,
-	// 	"/student/finance/invest": 0,
-	// 	"/student/class/students": 1,
-	// 	"/student/class/jobsearch": 1,
-	// 	"/student/gov/rule": 2,
-	// 	"/student/gov/exchequer": 2,
-	// 	"/student/gov/job": 2,
-	// 	"/student/shop/teacher": 3,
-	// 	"/student/shop/student": 3,
-	// 	"/student/shop/create": 3,
-	// 	"/student/shop/teacher/[pid]": 3,
-	// 	"/student/shop/student/[pid]": 3,
-	// }
-
-	// const navBarData: { [prop: number]: { url: string; name: string; label: string; content: any; function: Function } } =
-	// 	{
-	// 		0: { url: "/student/home", name: "home", label: "홈", content: NAVBAR_HOME, function: () => {} },
-	// 		1: { url: "/student/class/students", name: "class", label: "우리반", content: NAVBAR_CLASS, function: () => {} },
-	// 		2: { url: "/student/gov/rule", name: "gov", label: "정부", content: NAVBAR_GOVERNMENT, function: () => {} },
-	// 		3: { url: "/student/shop/teacher", name: "store", label: "상점", content: NAVBAR_STORE, function: () => {} },
-	// 	}
 
 	useEffect(() => {
 		if (typeof routes[router.pathname] === "number") {
@@ -84,7 +58,15 @@ function NavBarMobile({ children, routes, navBarData }: NavBarProps) {
 
 	return (
 		<div css={navBarParentCSS()}>
-			<div css={contentWrapperCSS({ selected })}>{children}</div>
+			<div css={contentWrapperCSS({ selected })}>
+				{/* <OverlayScrollbarsComponent options={{ scrollbars: { autoHide: "scroll" } }} css={scrollbarCSS} defer> */}
+					<div
+						
+					>
+						{children}
+					</div>
+				{/* </OverlayScrollbarsComponent> */}
+			</div>
 
 			<div css={navBarWrapperCSS({ selected })}>
 				<div css={indicatorWrapperCSS}>
@@ -100,16 +82,23 @@ const navBarParentCSS = () => {
 	return css`
 		width: 100%;
 		height: 100%;
-		display: flex;
-		flex-direction: column;
+		/* display: flex;
+		flex-direction: column; */
 	`
 }
 
 const contentWrapperCSS = ({ selected }: { selected: number }) => {
 	return css`
-		min-height: ${selected !== -2 && "calc(100vh - 64px)"};
-		margin-bottom: ${selected !== -2 && "64px"};
-		/* position: relative; */
+		display: grid;
+		height: calc(100% - 64px);
+		overflow-y: scroll;
+
+		/* -ms-overflow-style: none; 
+		scrollbar-width: none;
+
+		&::-webkit-scrollbar {
+			display: none; 
+		} */
 	`
 }
 const navBarWrapperCSS = ({ selected }: { selected: number }) => {
@@ -162,7 +151,7 @@ const navBarIndivContentCSS = ({ targetIdx, curIdx }: { targetIdx: number; curId
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-	
+
 		& path {
 			transition-property: stroke;
 			transition-duration: 0.2s;
@@ -175,5 +164,12 @@ const navBarIndivContentCSS = ({ targetIdx, curIdx }: { targetIdx: number; curId
 		font-size: 12px;
 	`
 }
+
+const scrollbarCSS = css`
+	& .os-scrollbar-handle {
+		width: 3px !important;
+		background-color: rgba(0, 0, 0, 0.3);
+	}
+`
 
 export default NavBarMobile

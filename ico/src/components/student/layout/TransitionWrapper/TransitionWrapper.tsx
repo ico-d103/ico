@@ -6,6 +6,7 @@ import { css } from "@emotion/react"
 import { useRouter } from "next/router"
 import useNavigate from "@/hooks/useNavigate"
 import { scrollTo } from "@/util/scrollTo"
+import { OverlayScrollbarsComponent } from "overlayscrollbars-react"
 
 type TransitionWrapperProps = {
 	children: any
@@ -25,9 +26,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 	const contentInnerWrapperRef = useRef<HTMLDivElement>(null)
 	const router = useRouter()
 	const navigate = useNavigate()
-	// const [isPrev, setIsPrev] = useState<boolean>(false)
-	// const [trgScroll, setTrgScroll] = useState<boolean>(false)
-
 
 	// TransitionWrapper를 쓰지 않는 페이지로 뒤로가기 시 NavTo의 값이 그대로 남아있는 것을 방지하는 코드
 	useEffect(() => {
@@ -53,23 +51,11 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		return isIos
 	}
 
-	// useEffect(() => {
-
-	// 	const scrollY = sessionStorage.getItem(router.pathname)
-	// 		if (scrollY !== undefined && trgScroll === true) {
-	// 			window.scrollTo({ top: Number(scrollY), left: 0 });
-	// 			setTrgScroll(() => false)
-	// 		}
-
-	// }, [trgScroll])
-
 	useEffect(() => {
-		// window.history.scrollRestoration = "auto";
 		window.history.scrollRestoration = "manual"
 
 		router.beforePopState(({ url, as, options }) => {
 			if (modalHandlerAtom) {
-				// console.log("모달 핸들러")
 				modalHandlerAtom()
 				window.history.pushState("", "")
 				router.push(router.asPath)
@@ -81,8 +67,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				setNavToAtom(() => {
 					return { url: "", transition: "" }
 				})
-				// navigate("", "")
-				// setIsPrev(() => true)
+
 				return true
 			} else {
 				setIsNavigatingAtom(() => true)
@@ -90,10 +75,6 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 				setNavToAtom(() => {
 					return { url: as, transition: "beforeScale" }
 				})
-
-				// navigate(url, "beforeScale")
-
-				// setIsPrev(() => true)
 				return false
 			}
 			return false
@@ -106,46 +87,20 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 
 	const handleScreenshot = () => {
 		if (contentInnerWrapperRef.current) {
-			html2canvas(
-				contentInnerWrapperRef.current,
-				{
-					scale: 0.5,
-					useCORS: true,
-				},
-				// {
-				// 	scrollX: -window.scrollX,
-				// 	scrollY: -window.scrollY,
-				// 	windowWidth: document.documentElement.clientWidth,
-				// 	windowHeight: document.documentElement.clientHeight
-				// 	// width: 100,
-				// 	// height: 100
-				// }
-			).then((canvas) => {
+			html2canvas(contentInnerWrapperRef.current, {
+				scale: 0.5,
+				useCORS: true,
+			}).then((canvas) => {
 				const screenshot = canvas.toDataURL()
 				setScreenshot(screenshot)
 			})
-
-			// htmlToImage.toJpeg(contentInnerWrapperRef.current, { quality: 0,includeQueryParams:true  })
-			// .then(function (canvas) {
-			// 	const screenshot = canvas
-			// 	setScreenshot(screenshot)
-			// });
-
-			// DomToImage.toJpeg(contentInnerWrapperRef.current)
-			// .then(function (dataUrl) {
-			// 	const screenshot = dataUrl
-			// 	setScreenshot(screenshot)
-			// })
 		}
 	}
 
 	useEffect(() => {
 		if (navToAtom.url !== "") {
 			setScrollTop(() => window.scrollY)
-
-			// sessionStorage.setItem(router.pathname, `${window.scrollY}`)
 			handleScreenshot()
-			// setScrollTop(() => window.scrollY)
 		}
 	}, [navToAtom.url])
 
@@ -165,24 +120,11 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 		if (screenshot !== "") {
 			setBeforeTransition(() => false)
 			setIsTransitioning(() => true)
-
-			// if ( isPrev) {
-			// 	setTrgScroll(() => true)
-			// }
-			// setIsPrev(() => false)
 			setTimeout(() => {
 				const _scroll = sessionStorage.getItem(`__next_scroll_${window.history.state.key}`)
 				if (_scroll) {
-					// 스크롤 복원 후 저장된 위치 제거
 					const { x, y } = JSON.parse(_scroll)
-
-					// window.scrollTo(x, y);
 					scrollTo(y, 300)
-					// window.scroll({
-					// 	top: y,
-					// 	left: x,
-					// 	behavior: 'smooth'
-					//   });
 					sessionStorage.removeItem(`__next_scroll_${window.history.state.key}`)
 				}
 			}, 100)
@@ -231,6 +173,7 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 					isTransitioning ? transitionsCSS({ isTransitioning })[navToAtom.transition] : null,
 				]}
 			>
+				
 				<div
 					ref={contentInnerWrapperRef}
 					css={contentInnerWrapperCSS({ isTransitioning, beforeTransition })}
@@ -238,15 +181,20 @@ function TransitionWrapper({ children }: TransitionWrapperProps) {
 						navToAtom.url === router.pathname || screenshot || isTransitioning ? "transitioning" : ""
 					}  ${navToAtom.url ? "enable-will-change" : "disable-will-change"}`}
 				>
+					
 					{children}
+
 				</div>
+				
 			</div>
 		</div>
 	)
 }
 
 const transitionWrapperCSS = css`
-	
+	min-height: 100%;
+	display: grid;
+
 	.enable-will-change {
 		will-change: transform, opacity;
 	}
@@ -256,9 +204,9 @@ const transitionWrapperCSS = css`
 `
 
 const imgWrapperCSS = css`
-	/* width: calc(100% - var(--student-side-bar-width)); */
 	width: var(--student-full-width);
-	height: 100vh;
+	/* height: 100vh; */
+	height: 100%;
 	position: Fixed;
 	z-index: -1;
 	overflow: hidden;
@@ -270,16 +218,6 @@ const imgCSS = ({ scrollTop }: { scrollTop: number }) => {
 		width: 100%;
 		height: auto;
 		transform: translate(0, -${scrollTop}px);
-		/* animation: focus-out 0.3s ease both;
-		@keyframes focus-out {
-			0% {
-				filter:  blur(0px);
-
-			}
-			100% {
-				filter:  blur(6px);
-			}
-		} */
 	`
 }
 
@@ -292,9 +230,14 @@ const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 			will-change: auto;
 		}
 
-		/* min-height: calc(100vh - 64px); */
-		min-height: calc(100vh);;
+		/* min-height: 100%; */
+
+		min-height: 100%;
+
 		overflow: hidden;
+		/* display: flex;
+		flex-direction: column; */
+		display: grid;
 	`
 }
 
@@ -306,21 +249,19 @@ const contentInnerWrapperCSS = ({
 	beforeTransition: boolean
 }) => {
 	return css`
-		/* min-height: calc(100vh - 64px); */
-		
-		min-height: 100vh;
-		/* background-color: var(--student-back-color); */
-		
+		min-height: 100%;
+		/* min-height: 100%; */
+		flex: 1;
+
 		background: linear-gradient(to bottom, var(--student-main-color), #ffecc4);
 		box-shadow: ${isTransitioning && "0px 0px 50px 1px rgba(0, 0, 0, 0.3)"};
 		width: ${isTransitioning && "100%"};
-		/* height: ${isTransitioning && "calc(100vh - 64px)"}; */
-		/* height: ${isTransitioning && "100vh"}; */
-		/* overflow: ${isTransitioning && "hidden"}; */
 		visibility: ${beforeTransition && "hidden"};
 
-		display: flex;
-		flex-direction: column;
+		/* display: flex;
+		flex-direction: column; */
+		display: grid;
+
 		user-select: none;
 	`
 }
@@ -444,10 +385,7 @@ const beforeTransitionsCSS = ({ isTransitioning }: { isTransitioning: boolean })
 		scaleReverse: css``,
 
 		beforeScale: css`
-			/* position: fixed; */
 			animation: ${isTransitioning && "beforeScale2 0.3s cubic-bezier(0.5, 0.2, 0.1, 0.8) forwards"};
-			/* width: 100vw;
-				height: 100vh; */
 
 			@keyframes beforeScale2 {
 				from {

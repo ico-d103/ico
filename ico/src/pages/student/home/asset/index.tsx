@@ -24,7 +24,7 @@ function asset() {
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 
 	return (
-		<React.Fragment>
+		<div css={css`height: 100%; display: flex; flex-direction: column;`}>
 			<PageHeader title={"자산"} />
 			<div css={assetWrapperCSS}>
 				<ContentWrapper>
@@ -70,7 +70,7 @@ function asset() {
 					{data && <HomeAssetDetail tradeHistory={data} />}
 				</ContentWrapper>
 			</div>
-		</React.Fragment>
+		</div>
 	)
 }
 

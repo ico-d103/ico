@@ -23,33 +23,6 @@ function NavBarDesktop({ children, routes, navBarData }: NavBarProps) {
 	const router = useRouter()
 	const navigate = useNavigate()
 
-	// const routes: { [prop: string]: number } = {
-	// 	"/student/home": 0,
-	// 	"/student/home/asset": 0,
-	// 	"/student/home/coupon": 0,
-	// 	"/student/home/exchequer": 0,
-	// 	"/student/finance/deposit": 0,
-	// 	"/student/finance/invest": 0,
-	// 	"/student/class/students": 1,
-	// 	"/student/class/jobsearch": 1,
-	// 	"/student/gov/rule": 2,
-	// 	"/student/gov/exchequer": 2,
-	// 	"/student/gov/job": 2,
-	// 	"/student/shop/teacher": 3,
-	// 	"/student/shop/student": 3,
-	// 	"/student/shop/create": 3,
-	// 	"/student/shop/teacher/[pid]": 3,
-	// 	"/student/shop/student/[pid]": 3,
-	// }
-
-	// const navBarData: { [prop: number]: { url: string; name: string; label: string; content: any; function: Function } } =
-	// 	{
-	// 		0: { url: "/student/home", name: "home", label: "홈", content: NAVBAR_HOME, function: () => {} },
-	// 		1: { url: "/student/class/students", name: "class", label: "우리반", content: NAVBAR_CLASS, function: () => {} },
-	// 		2: { url: "/student/gov/rule", name: "gov", label: "정부", content: NAVBAR_GOVERNMENT, function: () => {} },
-	// 		3: { url: "/student/shop/teacher", name: "store", label: "상점", content: NAVBAR_STORE, function: () => {} },
-	// 	}
-
 	useEffect(() => {
 		if (typeof routes[router.pathname] === "number") {
 			setSelected(() => routes[router.pathname])
@@ -99,48 +72,51 @@ function NavBarDesktop({ children, routes, navBarData }: NavBarProps) {
 
 	return (
 		<div css={navBarParentCSS()}>
-			<div css={navBarWrapperCSS({ selected })}>
-				<div>
-					<div css={logoWrapperCSS}>
-						<LoadImage
-							src={"/assets/children_icon.png"}
-							alt={"icon"}
-							wrapperCss={css`
-								width: 36px;
-								height: 36px;
-								margin-right: 12px;
+			<div
+				css={css`
+					height: 100%;
+					width: var(--student-side-bar-width);
+					display: ${selected === -2 && "none"};
+				`}
+			>
+				<div css={navBarWrapperCSS({ selected })}>
+					<div>
+						<div css={logoWrapperCSS}>
+							<LoadImage
+								src={"/assets/children_icon.png"}
+								alt={"icon"}
+								wrapperCss={css`
+									width: 36px;
+									height: 36px;
+									margin-right: 12px;
 
-								/* filter: hue-rotate(300deg);
-									opacity: 0.7; */
-							`}
-							sizes={"128px"}
-						/>
-						ICO
+									/* filter: hue-rotate(300deg);
+										opacity: 0.7; */
+								`}
+								sizes={"128px"}
+							/>
+							ICO
+						</div>
+						<div css={navBarInnerWrapperCSS}>{navBarRender}</div>
 					</div>
-					<div css={navBarInnerWrapperCSS}>{navBarRender}</div>
 				</div>
-
-				{/* {data && 
-				<div css={footerWrapperCSS}>
-					
-					<div css={css`font-size: var(--student-h2);`}>
-                        {data.name}님 환영해요!
-                    </div>
-                    <div css={css`margin-top: 8px;`}>
-                        {data.school} {data.room}반 {data.number}번
-                    </div>
-				</div>
-			} */}
 			</div>
 
 			<div css={contentWrapperCSS({ selected })}>
-
-				{children}
-				
-			
+				<div
+					css={css`
+						display: grid;
+						width: 100%;
+						min-height: 100%;
+					`}
+				>
+					{children}
+				</div>
 			</div>
 
-			<div css={rightBarWrapperCSS({ selected })}>{data && <NavBarDesktopRightMenu data={data} />}</div>
+			<div css={rightBarOuterWrapperCSS({ selected })}>
+				<div css={rightBarWrapperCSS({ selected })}>{data && <NavBarDesktopRightMenu data={data} />}</div>
+			</div>
 		</div>
 	)
 }
@@ -150,15 +126,18 @@ const navBarParentCSS = () => {
 		width: 100%;
 		height: 100%;
 		display: flex;
-		flex-direction: column;
+		justify-content: space-between;
+		/* grid-template-columns: auto auto auto; */
 	`
 }
 
 const contentWrapperCSS = ({ selected }: { selected: number }) => {
 	return css`
-		min-height: ${selected !== -2 && "calc(100vh - 64px)"};
-		max-width: ${selected !== -2 && "var(--student-full-width)"};
-		margin-left: ${selected !== -2 && "var(--student-side-bar-width)"};
+		flex: 1;
+		min-height: ${selected !== -2 && "calc(100%)"};
+
+		/* max-width: ${selected !== -2 && "var(--student-full-width)"}; */
+		/* margin-left: ${selected !== -2 && "var(--student-side-bar-width)"}; */
 		/* position: relative; */
 		/* display: flex; */
 	`
@@ -170,14 +149,29 @@ const navBarWrapperCSS = ({ selected }: { selected: number }) => {
 		/* background-color: #fff9e6; */
 		background-color: var(--student-main-color-soft);
 		/* backdrop-filter: blur(30px); */
-		box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1);
+		/* box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1); */
+		border-right: 1px solid rgba(0, 0, 0, 0.1);
 		position: fixed;
-		left: 0;
+		/* left: 0; */
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		z-index: 99999;
+	`
+}
+
+const rightBarOuterWrapperCSS = ({ selected }: { selected: number }) => {
+	return css`
+		height: 100%;
+		width: var(--student-side-bar-width);
 		display: ${selected === -2 && "none"};
+
+		@media (max-width: 1280px) {
+			display: none;
+		}
+
+		@media (min-width: 1281px) {
+		}
 	`
 }
 
@@ -191,19 +185,13 @@ const rightBarWrapperCSS = ({ selected }: { selected: number }) => {
 		/* box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.1); */
 		border-left: 1px solid rgba(0, 0, 0, 0.1);
 		position: fixed;
-		right: 0;
+		/* top: 0;
+		right: 0; */
+		/* left: 100%; */
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		z-index: 99999;
-		display: ${selected === -2 && "none"};
-
-		@media (max-width: 1280px) {
-			display: none;
-		}
-
-		@media (min-width: 1281px) {
-		}
 	`
 }
 
