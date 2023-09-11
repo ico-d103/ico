@@ -10,6 +10,8 @@ import { NAME_ICON, ID_ICON, PASSWORD_ICON, PASSWORD2_ICON } from "@/components/
 
 import { postDuplicationCheckAPI } from "@/api/common/postDuplicationCheckAPI"
 import { useRouter } from "next/router"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 const inputReducer = (
 	state: { name: string; id: string; password: string; password2: string },
@@ -66,6 +68,8 @@ const validMessageReducer = (
 }
 
 function signup() {
+	const noti = useNotification()
+
 	const [validState, dispatchValid] = useReducer(validReducer, {
 		name: false,
 		id: false,
@@ -226,9 +230,11 @@ function signup() {
 				},
 			})
 				.then(() => {
-					router.push("/student/login")
+					noti({content: <NotiTemplate type={'ok'} content={"회원가입을 완료했어요!"}/>, duration: 5000})
+					router.push("/login")
 				})
 				.catch((error) => {
+
 					console.log(error)
 				})
 		}

@@ -8,13 +8,14 @@ import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getHomeCouponAPI } from "@/api/student/home/getHomeCouponAPI"
 import { getHomeCouponType } from "@/types/student/apiReturnTypes"
 import Loading from "@/components/student/common/Loading/Loading"
+import QueryAdapter from "@/components/common/Adapter/QueryAdapter"
 
 
 
 
 function coupon() {
 
-	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getHomeCouponType[]>(
+	const couponQuery = useQuery<getHomeCouponType[]>(
 		["student", "homeCouponList"],
 		getHomeCouponAPI,
 		// { staleTime: 200000 },
@@ -27,16 +28,10 @@ function coupon() {
 		<React.Fragment>
 			<PageHeader title={"쿠폰함"} />
 			<div css={couponWrapperCSS}>
-				<ContentWrapper cssProps={css`flex: 1; display: flex; flex-direction: column;`}>
-					{isLoading && (
-						<Loading
-							size={96}
-							labelSize={18}
-							labelMargin={"24px 0px 16px 0px"}
-							label={"쿠폰들을 불러오는 중이에요!"}
-						/>
-					)}
-					{data && <HomeCouponList couponList={data}/>}
+				<ContentWrapper cssProps={css`flex: 1; display: flex; flex-direction: column; width: 100%; height: 100%;`}>
+					<QueryAdapter query={couponQuery} isEmpty={(couponQuery && couponQuery.data?.length === 0)} emptyLabel="쿠폰이 없어요!" fetchingLabel="쿠폰을 불러오는 중이에요!">
+						{couponQuery.data && <HomeCouponList couponList={couponQuery.data}/>}
+					</QueryAdapter>
 				</ContentWrapper>
 			</div>
 		</React.Fragment>
@@ -51,6 +46,7 @@ export async function getServerSideProps() {
 
 
 const couponWrapperCSS = css`
+	height: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

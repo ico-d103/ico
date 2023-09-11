@@ -1,16 +1,16 @@
 import React from 'react'
 import UseAnimations from "react-useanimations"
-import loading from "react-useanimations/lib/loading"
+import alertCircle from "react-useanimations/lib/alertCircle"
 import { css } from "@emotion/react"
 import { isNavigating } from '@/store/store'
 import { useAtom } from 'jotai'
 
-function Loading({size, labelSize, label, labelMargin}: {size: number; labelSize?: number; label?: string; labelMargin?: string;}) {
+function Alert({size, labelSize, label, labelMargin}: {size: number; labelSize?: number; label?: string; labelMargin?: string;}) {
   const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
   return (
     <div css={wrapperCSS}>
       <div css={css`width: ${size}px; height: ${size}px;`}>
-        {isNavigatingAtom === false && <UseAnimations animation={loading} size={size} />}
+        {isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={size} />}
       </div>
         
         <div css={labelCSS({labelSize, labelMargin})}>{label}</div>
@@ -37,4 +37,4 @@ const labelCSS = ({labelSize, labelMargin}: {labelSize?: number; labelMargin?: s
     `
 }
 
-export default Loading
+export default Alert

@@ -206,6 +206,16 @@ const buttonCSS = ({ theme }: { theme: string }) => {
 			background-color: var(--teacher-gray2-color);
 			color: var(--teacher-gray3-color);
 		`,
+		text: css`
+			border: none;
+			background-color: rgba(0, 0, 0, 0);
+			color: rgba(0, 0, 0, 0.6);
+			transition-property: color;
+			transition-duration: 0.3s;
+			&:hover {
+				color: rgba(0, 0, 0, 1);
+			}
+		`
 	}
 
 	return themes[theme]

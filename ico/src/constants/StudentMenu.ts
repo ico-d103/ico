@@ -8,7 +8,7 @@ export const NAVBAR_ROUTES: { [prop: string]: number } = {
   "/student/home/exchequer": 0,
   "/student/job/rule": 0,
   "/student/job/rule/create": 0,
-  "/student/job/rule/[pid]": 0,
+  "/student/job/rule/[ruleId]": 0,
   "/student/job/seller": 0,
   "/student/job/seller/[pid]": 0,
   "/student/job/seller/create": 0,

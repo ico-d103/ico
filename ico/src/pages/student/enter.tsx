@@ -177,35 +177,20 @@ function enter() {
 							css={css`
 								margin-top: 12px;
 								font-weight: 700;
-								font-size: 8vw;
+								font-size: 36px;
 							`}
 						>
 							반 입장
 						</div>
-						<div
-							css={css`
-								margin-top: 12px;
-								font-weight: 500;
-								font-size: 5vw;
-							`}
-						>
-							나의 반 번호를 입력해주세요.
-						</div>
-
-						<div css={bottomWrapperCSS}>
-							<div css={inputOuterWrapperCSS}>
-								<input css={inputWrapperCSS} style={{ width: "20vw" }} type={"number"} onChange={handleClassChange} />
-							</div>
-
+						<input css={inputWrapperCSS} style={{ width: "20vw" }} type={"number"} onChange={handleClassChange} />
 							<Button
 								text={"다음으로!"}
-								fontSize={`5vw`}
-								width={"60%"}
-								height={"15vw"}
+								fontSize={`24px`}
+								width={"128px"}
+								height={"64px"}
 								theme={"mobileNormal"}
 								onClick={passFirstPhaseHandler}
 							/>
-						</div>
 					</div>
 				</div>
 
@@ -213,7 +198,7 @@ function enter() {
 					<div css={logoutWrapperCSS}>
 						<div onClick={signoutHandler}>로그아웃</div>
 					</div>
-					<div css={WrapperCSS} style={{ marginTop: "100vw" }}>
+					<div css={WrapperCSS}>
 						<div
 							css={css`
 								margin-top: 12px;
@@ -278,6 +263,7 @@ const gridCSS = ({ phase }: { phase: number }) => {
 
 const phaseWrapperCSS = css`
 	max-width: 100vw;
+	min-height: 100%;
 	/* height: 100%; */
 	display: flex;
 	flex: 1;
@@ -295,13 +281,13 @@ const WrapperCSS = css`
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
-	padding-bottom: 36px;
+	/* padding-bottom: 36px; */
 `
 
 const imageWrapper = css`
 	margin-top: 8px;
-	width: 200%;
-	height: 100vw;
+	width: 70%;
+	height: 30vw;
 	overflow: visible;
 `
 

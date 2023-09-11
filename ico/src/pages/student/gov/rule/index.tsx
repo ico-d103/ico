@@ -8,15 +8,22 @@ import { GovTabMenus } from "@/components/student/Gov/GovTabMenus"
 import { getClassRuleAPI } from "@/api/student/gov/getClassRuleAPI"
 import { useEffect, useState } from "react"
 import { getGovRuleType } from "@/types/teacher/apiReturnTypes"
+import { useQuery } from "@tanstack/react-query"
 
 function index() {
-	const [ruleList, setRuleList] = useState<getGovRuleType[]>([])
+	// const [ruleList, setRuleList] = useState<getGovRuleType[]>([])
 
-	useEffect(() => {
-		getClassRuleAPI().then((res) => {
-			setRuleList(res)
-		})
-	}, [])
+	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getGovRuleType[]>(
+		["student", "gov", "rule"],
+		getClassRuleAPI,
+		// { staleTime: 200000 },
+	)
+
+	// useEffect(() => {
+	// 	getClassRuleAPI().then((res) => {
+	// 		setRuleList(res)
+	// 	})
+	// }, [])
 
 	return (
 		<div css={mainWrapperCSS}>
@@ -30,15 +37,24 @@ function index() {
 						children={<GovRuleGrade />}
 						marginBottom={"20px"}
 					/>
-					{ruleList.map((rule, idx) => (
+					{data && data.map((rule, idx) => (
 						<CollapseMenu
 							key={rule.id}
 							title={<ListNumbering number={idx + 1} text={rule.title} />}
 							fontSize={`var(--student-h3)`}
 							bracketSize={"10px"}
 							marginBottom={"10px"}
+							reverse={true}
 						>
+							<div>
+							
 							<div css={detailWrapperCSS}>{rule.detail}</div>
+							<div css={ruleDataWrapperCSS}>
+								<span>최초 작성자 : {rule.author}</span>
+								<span>{rule.createdAt === rule.updatedAt ? `작성일 : ${rule.createdAt}` : `수정일 : ${rule.updatedAt}`}</span>
+							</div>
+							</div>
+							
 						</CollapseMenu>
 					))}
 				</div>
@@ -65,5 +81,14 @@ const contentCSS = css`
 const detailWrapperCSS = css`
 	white-space: pre-wrap;
 	line-height: 150%;
+	word-break: keep-all;
+`
+
+const ruleDataWrapperCSS = css`
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 8px;
 `
 export default index
