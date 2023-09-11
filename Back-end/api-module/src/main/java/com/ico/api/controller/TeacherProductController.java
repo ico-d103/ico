@@ -1,8 +1,8 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.teacher.TeacherProductImgReqDto;
+import com.ico.api.dto.teacherProduct.BuyTransactionResDto;
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
-import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.api.service.teacher.TeacherProductService;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,24 +67,12 @@ public class TeacherProductController {
      *
      * @param dto
      * @param request
-     * @return (string) 상품id,상품id,...
+     * @return
      */
     @PostMapping("/student/product")
     public ResponseEntity<String> buyProduct(@Valid @RequestBody ProductQRReqDto dto, HttpServletRequest request) {
         return ResponseEntity.ok(teacherProductService.buyProduct(dto, request));
     }
-
-    /**
-     * QR스캔을 통한 교사 상품 구매
-     *
-     * @param request
-     * @param dto
-     * @return 상품 id
-     */
-//    @PostMapping("/student/qr")
-//    public ResponseEntity<Long> rentalProduct(HttpServletRequest request, @Valid @RequestBody ProductQRReqDto dto){
-//        return ResponseEntity.ok(teacherProductService.rentalProduct(request, dto));
-//    }
 
     /**
      * 교사 상품 상세보기
@@ -118,7 +105,7 @@ public class TeacherProductController {
      * @return
      */
     @GetMapping("/student/transaction/{redisProductKey}")
-    public ResponseEntity<List<ProductQRResDto>> findBuyTransaction(@PathVariable String redisProductKey, HttpServletRequest request) {
+    public ResponseEntity<BuyTransactionResDto> findBuyTransaction(@PathVariable String redisProductKey, HttpServletRequest request) {
         return ResponseEntity.ok(teacherProductService.findBuyTransaction(redisProductKey, request));
     }
 
