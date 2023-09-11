@@ -34,21 +34,22 @@ public interface TeacherProductService {
     List<TeacherProductAllResDto> findAllProduct(HttpServletRequest request);
 
     /**
-     * 쿠폰 유형의 교사 상품을 구매합니다.
+     * 교사 상품 구매
      *
-     * @param id 상품 id
-     * @return 상품 id
+     * @param dto
+     * @param request
+     * @return (string) 상품id,상품id,...
      */
-    Long buyProduct(HttpServletRequest request, Long id);
+    String buyProduct(ProductQRReqDto dto, HttpServletRequest request);
 
     /**
-     * QR스캔을 통한 교사 상품 대여
+     * QR스캔을 통한 교사 상품 구매
      *
      * @param request
      * @param dto qr 시작 시간, 상품 id
      * @return 상품 id
      */
-    Long rentalProduct(HttpServletRequest request, ProductQRReqDto dto);
+//    Long rentalProduct(HttpServletRequest request, ProductQRReqDto dto);
 
     /**
      * 교사 상품 상세정보 조회(공통)
@@ -69,11 +70,11 @@ public interface TeacherProductService {
     /**
      * 구매 완료 후 구매 내역 반환
      *
-     * @param teacherProductId
+     * @param redisProductKey
      * @param request
      * @return
      */
-    ProductQRResDto findBuyTransaction(Long teacherProductId, HttpServletRequest request);
+    List<ProductQRResDto> findBuyTransaction(String redisProductKey, HttpServletRequest request);
 
     /**
      * 교사 상품 수정
