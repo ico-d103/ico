@@ -277,7 +277,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
 
         String key = studentId + redisProductKey;
 
-        // Redis에 학생id+상품id들(key) 값이 존재하는 경우 QRColDto(value) 반환
+        // Redis에 학생id+상품id들(key) 값이 존재하는 경우 BuyTransactionRedisDto(value) 반환
         String jsonString = String.valueOf(Optional
                 .ofNullable(redisTemplate.opsForValue().get(key))
                 .orElseThrow(() -> new CustomException(ErrorCode.EXPIRE_BUY_TRANSACTION)));
