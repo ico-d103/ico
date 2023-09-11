@@ -77,6 +77,10 @@ public enum ErrorCode{
 
     NOT_EQUAL_JOB(HttpStatus.BAD_REQUEST, "45", "직업 id가 일치하지 않습니다."),
 
+    FAIL_OBJECT_TO_JSON(HttpStatus.CONFLICT, "50", "객체를 JSON 문자열로 변환하지 못했습니다."),
+
+    FAIL_JSON_TO_OBJECT(HttpStatus.CONFLICT, "51", "JSON 문자열를 객체로 변환하지 못했습니다."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, "104", "비밀번호 입력 칸이 비었습니다."),
