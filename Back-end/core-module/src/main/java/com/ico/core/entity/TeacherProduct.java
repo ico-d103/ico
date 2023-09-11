@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,8 +18,11 @@ import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 /**
+ * 교사 상품 Entity
+ *
  * @author 변윤경
  * @author 강교철
+ * @author 서재건
  */
 @Entity
 @Getter
@@ -43,6 +47,7 @@ public class TeacherProduct {
 
     private byte count;
 
+    @Column(name = "is_coupon")
     private Boolean isCoupon;
 
     private byte sold;
@@ -50,7 +55,7 @@ public class TeacherProduct {
     private LocalDateTime date;
 
     @Builder
-    public TeacherProduct(Long id, Nation nation, String title, int amount, String images, String detail, byte count, Boolean isCoupon, byte sold, LocalDateTime date) {
+    public TeacherProduct(Long id, Nation nation, String title, int amount, String images, String detail, byte count, boolean isCoupon, byte sold, LocalDateTime date) {
         this.id = id;
         this.nation = nation;
         this.title = title;
