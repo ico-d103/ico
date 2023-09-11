@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductQRReqDto {
 
+    @Valid  // ProductQRColDto 내부에도 validation 적용됌
     @NotEmpty(message = "622")
     List<ProductQRColDto> products;
 
