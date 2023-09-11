@@ -13,14 +13,14 @@ import java.util.List;
  */
 @Getter
 @NoArgsConstructor
-public class QRColDto {
+public class BuyTransactionRedisDto {
 
     String buyTime;
 
     List<ProductQRColDto> products;
 
     @Builder
-    public QRColDto(String buyTime, List<ProductQRColDto> products) {
+    public BuyTransactionRedisDto(String buyTime, List<ProductQRColDto> products) {
         this.buyTime = buyTime;
         this.products = products;
     }

@@ -7,7 +7,7 @@ import com.ico.api.dto.teacherProduct.BuyTransactionColDto;
 import com.ico.api.dto.teacherProduct.BuyTransactionResDto;
 import com.ico.api.dto.teacherProduct.ProductQRColDto;
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
-import com.ico.api.dto.teacherProduct.QRColDto;
+import com.ico.api.dto.teacherProduct.BuyTransactionRedisDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.api.service.S3UploadService;
@@ -206,7 +206,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
             sb.append(product.getId()).append(",");
         }
 
-        QRColDto redisDto = QRColDto.builder()
+        BuyTransactionRedisDto redisDto = BuyTransactionRedisDto.builder()
                 .buyTime(LocalDateTime.now().format(Formatter.dateTimeSeconds))
                 .products(dto.getProducts())
                 .build();
@@ -282,9 +282,9 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 .ofNullable(redisTemplate.opsForValue().get(key))
                 .orElseThrow(() -> new CustomException(ErrorCode.EXPIRE_BUY_TRANSACTION)));
 
-        QRColDto value;
+        BuyTransactionRedisDto productTransaction;
         try {
-            value = objectMapper.readValue(jsonString, QRColDto.class);
+            productTransaction = objectMapper.readValue(jsonString, BuyTransactionRedisDto.class);
         } catch (JsonProcessingException e) {
             // JSON 문자열를 객체로 변환 도중 오류 발생
             throw new CustomException(ErrorCode.FAIL_JSON_TO_OBJECT);
@@ -293,7 +293,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         redisTemplate.delete(key);
 
         List<BuyTransactionColDto> dtoList = new ArrayList<>();
-        for (ProductQRColDto productDto : value.getProducts()) {
+        for (ProductQRColDto productDto : productTransaction.getProducts()) {
             TeacherProduct product = teacherProductRepository.findByIdAndNationId(productDto.getId(), nationId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
             BuyTransactionColDto dto = BuyTransactionColDto.builder()
@@ -307,7 +307,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
 
         return BuyTransactionResDto.builder()
                 .seller("선생님")
-                .date(LocalDateTime.parse(value.getBuyTime(), Formatter.dateTimeSeconds))
+                .date(LocalDateTime.parse(productTransaction.getBuyTime(), Formatter.dateTimeSeconds))
                 .products(dtoList)
                 .build();
     }
