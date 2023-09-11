@@ -203,7 +203,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 }
                 couponRepository.save(coupon);
             }
-            sb.append(product.getId()).append(",");
+            sb.append(product.getId());
         }
 
         BuyTransactionRedisDto redisDto = BuyTransactionRedisDto.builder()
