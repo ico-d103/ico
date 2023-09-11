@@ -1,8 +1,8 @@
 package com.ico.api.service.teacher;
 
 import com.ico.api.dto.teacher.TeacherProductImgReqDto;
+import com.ico.api.dto.teacherProduct.BuyTransactionResDto;
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
-import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.core.dto.TeacherProductReqDto;
@@ -43,15 +43,6 @@ public interface TeacherProductService {
     String buyProduct(ProductQRReqDto dto, HttpServletRequest request);
 
     /**
-     * QR스캔을 통한 교사 상품 구매
-     *
-     * @param request
-     * @param dto qr 시작 시간, 상품 id
-     * @return 상품 id
-     */
-//    Long rentalProduct(HttpServletRequest request, ProductQRReqDto dto);
-
-    /**
      * 교사 상품 상세정보 조회(공통)
      *
      * @param request
@@ -68,13 +59,13 @@ public interface TeacherProductService {
     void deleteTeacherProduct(Long teacherProductId, HttpServletRequest request);
 
     /**
-     * 구매 완료 후 구매 내역 반환
+     * QR 구매 내역 반환
      *
      * @param redisProductKey
      * @param request
      * @return
      */
-    List<ProductQRResDto> findBuyTransaction(String redisProductKey, HttpServletRequest request);
+    BuyTransactionResDto findBuyTransaction(String redisProductKey, HttpServletRequest request);
 
     /**
      * 교사 상품 수정

@@ -1,9 +1,13 @@
 package com.ico.api.service.teacher;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ico.api.dto.teacher.TeacherProductImgReqDto;
-import com.ico.api.dto.teacherProduct.ProductQRReqDto;
-import com.ico.api.dto.teacherProduct.ProductQRResDto;
+import com.ico.api.dto.teacherProduct.BuyTransactionColDto;
+import com.ico.api.dto.teacherProduct.BuyTransactionResDto;
 import com.ico.api.dto.teacherProduct.ProductQRColDto;
+import com.ico.api.dto.teacherProduct.ProductQRReqDto;
+import com.ico.api.dto.teacherProduct.QRColDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.api.service.S3UploadService;
@@ -57,6 +61,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
     private final JwtTokenProvider jwtTokenProvider;
     private final ShopTransactionService shopTransactionService;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final ObjectMapper objectMapper;
 
     /**
      * 교사 상품 등록
@@ -150,8 +155,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         }
 
         StringBuilder sb = new StringBuilder();
-
-        for (ProductQRColDto productDto : dto.getProductList()) {
+        for (ProductQRColDto productDto : dto.getProducts()) {
             // 타입이 일치하는지 확인
             TeacherProduct product = teacherProductRepository.findByIdAndNationId(productDto.getId(), nationId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
@@ -202,74 +206,23 @@ public class TeacherProductServiceImpl implements TeacherProductService {
             sb.append(product.getId()).append(",");
         }
 
+        QRColDto redisDto = QRColDto.builder()
+                .buyTime(LocalDateTime.now().format(Formatter.dateTimeSeconds))
+                .products(dto.getProducts())
+                .build();
+        String redisValue;
+        try {
+            redisValue = objectMapper.writeValueAsString(redisDto);
+        } catch (JsonProcessingException e) {
+            // 객체를 JSON 문자열로 변환 도중 오류 발생
+            throw new CustomException(ErrorCode.FAIL_OBJECT_TO_JSON);
+        }
+
         // Redis에 학생의 구매 시간 저장
-        saveRedis(String.valueOf(studentId) + sb.toString(), LocalDateTime.now().format(Formatter.dateTimeSeconds));
+        saveRedis(String.valueOf(studentId) + sb, redisValue);
 
         return sb.toString();
     }
-
-    /**
-     * QR스캔을 통한 교사 상품 대여
-     *
-     * @param request
-     * @param dto qr 시작 시간, 상품 id
-     * @return 상품 id
-     */
-//    @Transactional
-//    @Override
-//    public Long rentalProduct(HttpServletRequest request, ProductQRReqDto dto) {
-//        String token = jwtTokenProvider.parseJwt(request);
-//        Long nationId = jwtTokenProvider.getNation(token);
-//        Long studentId = jwtTokenProvider.getId(token);
-//
-//        Student student = studentRepository.findById(studentId)
-//                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-//
-//        // QR코드 유효 시간 내인지 확인
-//        long now = System.currentTimeMillis();
-//        log.info("[rentalProduct] : now_{}, qr_valid_{}", now, dto.getUnixTime() + (3 * 60 * 1000));
-//        if(dto.getUnixTime() + (3 * 60 * 1000) < now || dto.getUnixTime() > now){
-//            throw new CustomException(ErrorCode.TIME_OUT_QR);
-//        }
-//
-//        // 타입이 일치하는지 확인
-//        TeacherProduct product = teacherProductRepository.findByIdAndNationId(dto.getId(), nationId)
-//                .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
-//        if (!product.getIsCoupon()) {
-//            throw new CustomException(ErrorCode.NOT_RENTAL);
-//        }
-//
-//        // 재고 있는지 확인
-//        if (product.getCount() == product.getSold()) {
-//            throw new CustomException(ErrorCode.SOLD_OUT);
-//        }
-//
-//        // 잔고가 충분한지 확인
-//        int amount = product.getAmount();
-//        int account = student.getAccount();
-//        if (amount > account) {
-//            throw new CustomException(ErrorCode.LOW_BALANCE);
-//        }
-//
-//        // 상품 가격 지불
-//        student.setAccount(account - amount);
-//        studentRepository.save(student);
-//
-//        // 거래 내역 추가
-//        transactionService.addTransactionWithdraw("교사 상점", studentId, amount, product.getTitle());
-//
-//        // 상점 거래 내역 기록
-//        shopTransactionService.addShopTransaction(nationId, amount);
-//
-//        // 재고 개수 수정
-//        product.setSold((byte) (product.getSold() + 1));
-//        teacherProductRepository.save(product);
-//
-//        // Redis에 학생의 구매 시간 저장
-//        saveRedis(String.valueOf(studentId) + product.getId(), LocalDateTime.now().format(Formatter.dateTimeSeconds));
-//
-//        return product.getId();
-//    }
 
     /**
      * 교사 상품 상세정보 조회
@@ -317,36 +270,46 @@ public class TeacherProductServiceImpl implements TeacherProductService {
     }
 
     @Override
-    public List<ProductQRResDto> findBuyTransaction(String redisProductKey, HttpServletRequest request) {
+    public BuyTransactionResDto findBuyTransaction(String redisProductKey, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
         Long studentId = jwtTokenProvider.getId(token);
 
         String key = studentId + redisProductKey;
-        // Redis에 학생id+상품id들(key) 값이 존재하는 경우 날짜(value) 반환
-        String dateTime = String.valueOf(Optional
+
+        // Redis에 학생id+상품id들(key) 값이 존재하는 경우 QRColDto(value) 반환
+        String jsonString = String.valueOf(Optional
                 .ofNullable(redisTemplate.opsForValue().get(key))
                 .orElseThrow(() -> new CustomException(ErrorCode.EXPIRE_BUY_TRANSACTION)));
+
+        QRColDto value;
+        try {
+            value = objectMapper.readValue(jsonString, QRColDto.class);
+        } catch (JsonProcessingException e) {
+            // JSON 문자열를 객체로 변환 도중 오류 발생
+            throw new CustomException(ErrorCode.FAIL_JSON_TO_OBJECT);
+        }
         // 반환 후 삭제
         redisTemplate.delete(key);
 
-        String[] ids = redisProductKey.split(",");
-
-        // TODO : seller 분리해야할 것 같고, 갯수 필드도 필요하지 않을까 싶네...
-        List<ProductQRResDto> dtoList = new ArrayList<>();
-        for (String id : ids) {
-            TeacherProduct product = teacherProductRepository.findByIdAndNationId(Long.valueOf(id), nationId)
+        List<BuyTransactionColDto> dtoList = new ArrayList<>();
+        for (ProductQRColDto productDto : value.getProducts()) {
+            TeacherProduct product = teacherProductRepository.findByIdAndNationId(productDto.getId(), nationId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
-            ProductQRResDto dto = ProductQRResDto.builder()
+            BuyTransactionColDto dto = BuyTransactionColDto.builder()
                     .title(product.getTitle())
-                    .seller("선생님")
                     .price(product.getAmount())
-                    .date(LocalDateTime.parse(dateTime, Formatter.dateTimeSeconds))
+                    .image(s3UploadService.getFileURL(product.getImages()))
+                    .count(productDto.getCount())
                     .build();
             dtoList.add(dto);
         }
 
-        return dtoList;
+        return BuyTransactionResDto.builder()
+                .seller("선생님")
+                .date(LocalDateTime.parse(value.getBuyTime(), Formatter.dateTimeSeconds))
+                .products(dtoList)
+                .build();
     }
 
     @Override
@@ -404,8 +367,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
      * @param key 학생 id + 상품 id
      * @param value 구매 날짜 시간(yyyy.MM.dd-HH:mm:ss)
      */
-
-    private void saveRedis(String key, String value) {
+    private void saveRedis(String key, Object value) {
         redisTemplate.opsForValue().set(key,  value, 5, TimeUnit.MINUTES);
     }
 

@@ -4,30 +4,28 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 /**
- * QR 상품 구매시 res dto
+ * QR 상품 구매 후 구매 내역 반환 res에서 사용하는 column dto
  *
  * @author 서재건
  */
 @Getter
 @NoArgsConstructor
-public class ProductQRResDto {
+public class BuyTransactionColDto {
 
     private String title;
 
-    private String seller;
-
     private int price;
 
-    private LocalDateTime date;
+    private int count;
+
+    private String image;
 
     @Builder
-    public ProductQRResDto(String title, String seller, int price, LocalDateTime date) {
+    public BuyTransactionColDto(String title, int price, int count, String image) {
         this.title = title;
-        this.seller = seller;
         this.price = price;
-        this.date = date;
+        this.count = count;
+        this.image = image;
     }
 }
