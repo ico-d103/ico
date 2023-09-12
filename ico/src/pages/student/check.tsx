@@ -11,21 +11,16 @@ import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 import { deleteImmigrationAPI } from "@/api/student/user/deleteImmigrationAPI"
-import Check from "@/components/student/Enter/Check"
+import Check from "@/components/student/Signup/Enter/Check"
 
 function enter() {
 	const router = useRouter()
 	const noti = useNotification()
 	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
-
-
-
 	return (
 		<div css={checkWrapperCSS}>
-			<Check/>
-
-			
+			<Check />
 		</div>
 	)
 }
@@ -34,7 +29,6 @@ const checkWrapperCSS = css`
 	width: 100%;
 	height: 100%;
 	display: grid;
-
 `
 
 const imageWrapper = css`
