@@ -80,7 +80,7 @@ const headerOuterWrapperCSS = ({ compHeight, hasComp }: { compHeight: number, ha
 
 		height: ${compHeight + 70}px;
 		margin-bottom: ${hasComp && '16px'};
-		/* margin-bottom: 16px; */
+		margin-bottom: 16px;
 	`
 }
 

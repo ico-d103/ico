@@ -6,7 +6,7 @@ import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 import { getHomeMyInfoType } from "@/types/student/apiReturnTypes"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 
-function NavBarDesktopRightMenu({ data }: { data: getHomeMyInfoType }) {
+function NavBarSideMenu({ data }: { data: getHomeMyInfoType }) {
 	const navigate = useNavigate()
 	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
@@ -20,6 +20,21 @@ function NavBarDesktopRightMenu({ data }: { data: getHomeMyInfoType }) {
 
 	// 권한에 따라 보여줄지 말지에 대한 분기 처리 할것!
 	const menu = [
+		{
+			content: (
+				<img
+					src={"/assets/dock/dock_class.png"}
+					css={css`
+						height: 100%;
+						width: auto;
+					`}
+				/>
+			),
+			label: "도매 상점",
+			function: () => {
+				navigate("/student/job/seller", "bottomToTop")
+			},
+		},
 		{
 			content: (
 				<img
@@ -170,4 +185,4 @@ const labelButtonCSS = css`
 	color: rgba(0, 0, 0, 0.6);
 `
 
-export default NavBarDesktopRightMenu
+export default NavBarSideMenu

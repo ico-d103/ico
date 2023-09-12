@@ -10,7 +10,7 @@ import LoadImage from "@/components/common/LoadImage/LoadImage"
 import { getHomeMyInfoAPI } from "@/api/student/home/getHomeMyInfoAPI"
 import { getHomeMyInfoType } from "@/types/student/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
-import NavBarDesktopRightMenu from "./NavBarDesktopRightMenu"
+import NavBarSideMenu from "./NavBarSideMenu"
 
 type NavBarProps = {
 	children: any
@@ -115,7 +115,7 @@ function NavBarDesktop({ children, routes, navBarData }: NavBarProps) {
 			</div>
 
 			<div css={rightBarOuterWrapperCSS({ selected })}>
-				<div css={rightBarWrapperCSS({ selected })}>{data && <NavBarDesktopRightMenu data={data} />}</div>
+				<div css={rightBarWrapperCSS({ selected })}>{data && <NavBarSideMenu data={data} />}</div>
 			</div>
 		</div>
 	)

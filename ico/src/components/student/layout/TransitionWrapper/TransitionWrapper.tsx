@@ -233,7 +233,7 @@ const contentOuterWrapperCSS = ({ isTransitioning }: { isTransitioning: boolean 
 		/* min-height: 100%; */
 
 		min-height: 100%;
-
+		
 		overflow: hidden;
 		/* display: flex;
 		flex-direction: column; */

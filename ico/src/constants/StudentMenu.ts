@@ -14,6 +14,8 @@ export const NAVBAR_ROUTES: { [prop: string]: number } = {
   "/student/job/seller/create": 0,
   "/student/finance/deposit": 0,
   "/student/finance/deposit/[pid]": 0,
+  "/student/finance/savings": 0,
+  "/student/finance/savings/[pid]": 0,
   "/student/finance/invest": 0,
   "/student/finance/invest/[pid]": 0,
   "/student/class/students": 1,

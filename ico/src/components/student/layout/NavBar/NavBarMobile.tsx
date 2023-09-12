@@ -59,20 +59,16 @@ function NavBarMobile({ children, routes, navBarData }: NavBarProps) {
 	return (
 		<div css={navBarParentCSS()}>
 			<div css={contentWrapperCSS({ selected })}>
-				{/* <OverlayScrollbarsComponent options={{ scrollbars: { autoHide: "scroll" } }} css={scrollbarCSS} defer> */}
-					<div
-						
-					>
-						{children}
-					</div>
-				{/* </OverlayScrollbarsComponent> */}
+				{children}
 			</div>
 
 			<div css={navBarWrapperCSS({ selected })}>
 				<div css={indicatorWrapperCSS}>
 					<div css={indicatorCSS({ length: Object.keys(navBarData).length, selected })} />
 				</div>
-				<div css={navBarInnerWrapperCSS}>{navBarRender}</div>
+				<div css={navBarInnerWrapperCSS}>
+					{navBarRender}
+				</div>
 			</div>
 		</div>
 	)
@@ -81,7 +77,9 @@ function NavBarMobile({ children, routes, navBarData }: NavBarProps) {
 const navBarParentCSS = () => {
 	return css`
 		width: 100%;
-		height: 100%;
+		min-height: 100%;
+		padding-bottom: 64px;
+		display: grid;
 		/* display: flex;
 		flex-direction: column; */
 	`
@@ -90,8 +88,9 @@ const navBarParentCSS = () => {
 const contentWrapperCSS = ({ selected }: { selected: number }) => {
 	return css`
 		display: grid;
-		height: calc(100% - 64px);
-		overflow-y: scroll;
+		min-height: 100%;
+
+		/* overflow-y: scroll; */
 
 		/* -ms-overflow-style: none; 
 		scrollbar-width: none;

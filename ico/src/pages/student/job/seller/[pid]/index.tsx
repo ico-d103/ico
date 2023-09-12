@@ -1,4 +1,5 @@
 import { getTeacherProductDetailAPI } from '@/api/common/shop/getTeacherProductDetailAPI'
+import ShopDetail from '@/components/student/Shop/ShopDetail'
 import { getTeacherProductDetailType } from '@/types/teacher/apiReturnTypes'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
@@ -16,7 +17,9 @@ function index() {
   
   
   return (
-    <div>{JSON.stringify(teacherProductDetailQuery.data)}</div>
+    <div>
+      <ShopDetail query={teacherProductDetailQuery} pid={Number(pid)} isSeller={true}/>
+    </div>
   )
 }
 

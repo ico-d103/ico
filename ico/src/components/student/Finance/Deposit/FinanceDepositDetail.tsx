@@ -135,6 +135,8 @@ function FinanceDepositDetail({ data }: FinanceDepositDetailProps) {
 	// 	})
 	// }
 
+
+
 	return (
 		<React.Fragment>
 			{/* {data && (
@@ -173,7 +175,7 @@ function FinanceDepositDetail({ data }: FinanceDepositDetailProps) {
 						{data.amount.toLocaleString("ko-KR")} {nation?.currency}
 					</div>
 					<div css={diffLabelCSS}>
-						+{data.depositAmount.toLocaleString("ko-KR")} {nation?.currency}
+						+{data.interestAmount.toLocaleString("ko-KR")} {nation?.currency}
 					</div>
 				</ContentWrapper>
 				<ContentWrapper>

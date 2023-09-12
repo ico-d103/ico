@@ -24,7 +24,7 @@ function index() {
 				margin-bottom: 16px;
 			`}
 		>
-			<PageHeader title={"은행"} addComp={<TabMenu menus={financeTabMenu()} selected={0} />} />
+			<PageHeader title={"은행"} addComp={<TabMenu menus={financeTabMenu()} selected={1} />} />
 			<FinanceDepositList query={depositQuery} />
 		</div>
 	)
