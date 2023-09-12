@@ -92,23 +92,6 @@ public class JobScheduler {
         }
     }
 
-    // 00시에 학생 품절 상품 삭제
-    @Scheduled(cron = "0 0 0 * * *")
-    public void soldOutStudentProductJobScheduled()
-            throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        JobParameters jobParameters = new JobParameters(
-                Collections.singletonMap("requestTime", new JobParameter(System.currentTimeMillis()))
-        );
-
-        try {
-            jobLauncher.run(jobRegistry.getJob("soldOutStudentProductJob"), jobParameters);
-
-        } catch (NoSuchJobException e) {
-            log.info("soldOutStudentProductJob을 찾을 수 없습니다.");
-            throw new RuntimeException(e);
-        }
-    }
-
     // 00시에 교사 품절 상품 삭제
     @Scheduled(cron = "0 0 0 * * *")
     public void soldOutTeacherProductJobScheduled()

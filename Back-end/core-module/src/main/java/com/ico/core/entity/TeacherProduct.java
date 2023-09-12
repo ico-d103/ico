@@ -1,6 +1,5 @@
 package com.ico.core.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ico.core.dto.TeacherProductReqDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -8,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -18,8 +18,11 @@ import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 /**
+ * 교사 상품 Entity
+ *
  * @author 변윤경
  * @author 강교철
+ * @author 서재건
  */
 @Entity
 @Getter
@@ -44,14 +47,15 @@ public class TeacherProduct {
 
     private byte count;
 
-    private Boolean rental;
+    @Column(name = "is_coupon")
+    private Boolean isCoupon;
 
     private byte sold;
 
     private LocalDateTime date;
 
     @Builder
-    public TeacherProduct(Long id, Nation nation, String title, int amount, String images, String detail, byte count, Boolean rental, byte sold, LocalDateTime date) {
+    public TeacherProduct(Long id, Nation nation, String title, int amount, String images, String detail, byte count, boolean isCoupon, byte sold, LocalDateTime date) {
         this.id = id;
         this.nation = nation;
         this.title = title;
@@ -59,7 +63,7 @@ public class TeacherProduct {
         this.images = images;
         this.detail = detail;
         this.count = count;
-        this.rental = rental;
+        this.isCoupon = isCoupon;
         this.sold = sold;
         this.date = date;
     }
@@ -74,6 +78,6 @@ public class TeacherProduct {
         this.detail = dto.getDetail();
         this.count = dto.getCount();
         this.sold = sold;
-        this.rental = dto.getRental();
+        this.isCoupon = dto.getIsCoupon();
     }
 }
