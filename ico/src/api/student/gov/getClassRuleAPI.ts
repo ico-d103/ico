@@ -1,9 +1,9 @@
 import { tokenInstance } from "@/api/instance"
-import { getClassRuleType } from "@/types/student/apiReturnTypes"
+import { getGovRuleType } from "@/types/teacher/apiReturnTypes"
 
 type responseType = {
 	status: number
-	data: getClassRuleType[]
+	data: getGovRuleType[]
 }
 
 export const getClassRuleAPI = async () => {

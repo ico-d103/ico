@@ -12,7 +12,7 @@ type responseType = {
 
 export const deleteGovRuleAPI = async ({idx}: paramsType) => {
     try {
-        const response: responseType = await tokenInstance.delete(`/rule/teacher/${idx}` )
+        const response: responseType = await tokenInstance.delete(`/news/${idx}` )
         return response.data
     } catch (error) {
         throw error

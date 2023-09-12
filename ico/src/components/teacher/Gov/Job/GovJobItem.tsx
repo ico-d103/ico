@@ -129,7 +129,7 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 				>
 					<GovJobItemCard
 						job={inputState.title}
-						salary={Number(inputState.salary)}
+						wage={Number(inputState.wage)}
 						backgroundColor={inputState.color}
 						imgUrl={inputState.image}
 					/>
@@ -175,8 +175,8 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 									customCss={css`
 										width: 164px;
 									`}
-									value={inputState.salary}
-									onChange={handler.salaryInputHandler}
+									value={inputState.wage}
+									onChange={handler.wageInputHandler}
 									leftContent={<div>월급</div>}
 									rightContent={<div>{props.currency}</div>}
 								/>

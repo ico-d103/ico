@@ -14,7 +14,7 @@ function SideMenu({closeComp, data}: {closeComp?: Function; data: getHomeMyInfoT
     const signoutHandler = () => {
 		removeCookie("Authorization", { path: "/" })
         setTokenStatus({showMessage: false}).then((res) => {
-            console.log('여기에 할일')
+            // console.log('여기에 할일')
         })
 		// navigate("/teacher/login")
 	}

@@ -3,6 +3,9 @@ export type getGovRuleType = {
 	title: string
 	detail: string
 	dateTime: string
+	author: string
+	createdAt: string
+	updatedAt: string
 }
 
 export type getNationType = {
@@ -38,7 +41,7 @@ export type getGovJobItemType = {
 	title: string
 	detail: string
 	creditRating: number
-	salary: number
+	wage: number
 	image: string
 	color: string
 	total: number
@@ -247,4 +250,42 @@ export type depositProductStudentType = {
 	name: string
 	amount: number
 	startDate: string
+}
+
+export type investListType = {
+	id: number
+	title: string
+}
+
+export type investItemType = {
+	stock: string
+	content: string
+	tradingStart: string
+	tradingEnd: string
+	issue: investIssueType[]
+}
+
+export type investIssueType = {
+	date: string
+	amount: number
+	content: string
+	rate: number
+}
+
+export type investTimeType = {
+	tradingStart: string
+	tradingEnd: string
+}
+
+export type getFinanceInvestIssueType = {
+	stock: string
+	tradingStart: string
+	tradingEnd: string
+	issue: FinanceInvestIssueType[]
+}
+
+export type FinanceInvestIssueType = {
+	date: string
+	amount: number
+	content: string
 }

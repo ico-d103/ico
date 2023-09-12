@@ -22,7 +22,7 @@ function deposit() {
 	}
 
 	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<depositProductType[]>(
-		["teacher", "FinanceDeposit"],
+		["teacher", "financeDeposit"],
 		getDepositListAPI,
 	)
 

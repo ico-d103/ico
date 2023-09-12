@@ -3,9 +3,10 @@ import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
 	body: {
-		amount: number
+		title: string
 		content: string
-		price: number
+		amount: string
+		issue: string
 	}
 }
 
@@ -16,7 +17,7 @@ type responseType = {
 
 export const postInvestItemAPI = async ({ body }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.post("/stock/teacher/upload", body)
+		const response: responseType = await tokenInstance.post("/stock/teacher", body)
 		return response.data
 	} catch (error) {
 		throw error

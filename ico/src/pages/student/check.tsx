@@ -22,7 +22,7 @@ function enter() {
 			if (res.status == "require_refresh_token") {
 				postStudentTokenUpdateAPI().then((res) => {
 					setTokenStatus({ showMessage: false }).then((res) => {
-						console.log("여기에 할일")
+						// console.log("여기에 할일")
 					})
 					// router.push("/student/home")
 				})
@@ -60,7 +60,7 @@ function enter() {
 	const signoutHandler = () => {
 		removeCookie("Authorization", { path: "/" })
 		setTokenStatus({ showMessage: false }).then((res) => {
-			console.log("여기에 할일")
+			// console.log("여기에 할일")
 		})
 		// navigate("/teacher/login")
 	}

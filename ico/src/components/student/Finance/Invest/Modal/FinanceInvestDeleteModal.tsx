@@ -8,6 +8,8 @@ import UseAnimations from "react-useanimations"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import useNavigate from "@/hooks/useNavigate"
+import { useQueryClient } from "@tanstack/react-query"
+import { useRouter } from "next/router"
 
 const ALERT_ICON = (
 	<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,25 +36,28 @@ const CHECK_ICON = (
 )
 
 type FinanceInvestDeleteModalProps = {
+	pid: number
+	mid: number
 	diff: number
 	closeComp: Function
-	refetch: Function
 }
 
-function FinanceInvestDeleteModal({diff, closeComp, refetch }: FinanceInvestDeleteModalProps) {
+function FinanceInvestDeleteModal({pid, mid, diff, closeComp }: FinanceInvestDeleteModalProps) {
 	const noti = useNotification()
 	const [value, setValue] = useState<number>(0)
 	const navigate = useNavigate()
-
+	const queryClient = useQueryClient()
+	const router = useRouter()
 
 	const submitHandler = () => {
-		deleteFinanceInvestAPI({}).then((res) => {
-			refetch()
+		deleteFinanceInvestAPI({pid, mid}).then((res) => {
+			
+			queryClient.invalidateQueries(["student", "financeInvestDetail", `${pid}`])
 			noti({content: <NotiTemplate type={'ok'} content="투자 매도에 성공했어요!" buttons={[{label: '내역 보기', function: () => {navigate('/student/home/asset', 'bottomToTop')}}]}/>, width: '300px', height: '120px', duration: 3000})
+			router.push('/student/finance/invest')
 			closeComp()
 		})
 		.catch((err) => {
-			console.log(err)
 			noti({content: <NotiTemplate type={'alert'} content="투자 매도에 실패했어요!"/>, width: '300px', height: '120px', duration: 3000})
 		})
 	}
@@ -77,7 +82,7 @@ function FinanceInvestDeleteModal({diff, closeComp, refetch }: FinanceInvestDele
 			<div css={mentWrapperCSS}>
 				<div css={iconWrapperCSS}>{ALERT_ICON}</div>
 
-				<span css={mentCSS}>하루에 한번만 매도/매수할 수 있어요!</span>
+				<span css={mentCSS}>매도는 신중하게 결정해 주세요!</span>
 			</div>
 
 			<div css={buttonWrapperCSS}>

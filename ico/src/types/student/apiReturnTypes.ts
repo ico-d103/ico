@@ -34,10 +34,10 @@ export type getHomeCouponType = {
 //-----------------------------------------------------------
 // 투자
 
-export type getFinanceInvestListType = {
-	myStocks: getFinanceInvestListMyItemType[]
-	stockList: getFinanceInvestListStockItemType[]
-}
+// export type getFinanceInvestListType = {
+// 	myStocks: getFinanceInvestListMyItemType[]
+// 	stockList: getFinanceInvestListStockItemType[]
+// }
 
 export type getFinanceInvestListStockItemType = {
 	id: number
@@ -47,29 +47,39 @@ export type getFinanceInvestListStockItemType = {
 export type getFinanceInvestListMyItemType = {
 	stockId: number
 	title: string
+	stocklist: getFinanceInvestListMyItemDetailType[]
+	// price: number
+	// amount: number
+	// rate: string
+}
+
+export type getFinanceInvestListMyItemDetailType = {
+	investId: number
 	price: number
 	amount: number
 	rate: number
 }
 
-//-----------------------------------------------------------
-export type getFinanceInvestType = {
+
+export type getFinanceInvestDetailType = {
 	stock: string
 	account: number
 	content: string
-	tradingStart: string
-	tradingEnd: string
-	myStock: {
-		price: number
-		amount: number
-	}
-	issue: FinanceInvestIssueType[]
+	// tradingStart: string
+	// tradingEnd: string
+	myStocks: getFinanceInvestListMyItemDetailType[]
+	issue: FinanceInvestDetailIssueType[]
 }
 
-export type FinanceInvestIssueType = {
+export type FinanceInvestDetailIssueType = {
 	date: string
 	amount: number
 	content: string
+}
+
+export type getFinanceInvestTimeType = {
+	tradingStart: string
+	tradingEnd: string
 }
 //-----------------------------------------------------------
 
@@ -113,11 +123,7 @@ export type getFinanceDepositType = {
 	depositProduct: depositProductType[]
 }
 
-export type getClassRuleType = {
-	id: number
-	title: string
-	detail: string
-}
+
 
 export type getStudentListType = {
 	number: number
@@ -150,16 +156,25 @@ export type getJobListType = {
 	color: string
 }
 
-export type getFinanceInvestIssueType = {
-	stock: string
-	tradingStart: string
-	tradingEnd: string
-	issue: FinanceInvestIssueType[]
-}
-
 export type getPurchasedTransactionType = {
 	title: string
 	seller: string
 	type: boolean
 	date: string
 }
+
+
+// ---------------------------------
+// 교사쪽으로 옮겨야됌!!!!!
+export type getFinanceInvestIssueType = {
+	stock: string
+	tradingStart: string
+	tradingEnd: string
+	issue: FinanceInvestIssueType[]
+}
+export type FinanceInvestIssueType = {
+	date: string
+	amount: number
+	content: string
+}
+// ------------------------------------

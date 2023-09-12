@@ -81,14 +81,26 @@ function Layout({ children }: LayoutProps) {
 
 	useEffect(() => {
 		if (tokenStatusAtom.role !== null && tokenStatusAtom.status !== null) {
+			// statusArr - 권한을 가진 학생으로 인해 상태를 배열로 변환
+			// const statusArr = tokenStatusAtom.status.split(",")
+			const passedStatus = tokenStatusAtom.status.filter((it: string) => AUTH_ALLOWED_ONLY[router.pathname]?.status.includes(it)).length && true
+
+
 			const isValidRequest =
 				AUTH_ALLOWED_ONLY[router.pathname]?.role.includes(tokenStatusAtom.role) &&
-				AUTH_ALLOWED_ONLY[router.pathname]?.status.includes(tokenStatusAtom.status)
+				passedStatus
+				// AUTH_ALLOWED_ONLY[router.pathname]?.status.includes(tokenStatusAtom.status)
+			// const allowByStatus =
+			// 	tokenStatusAtom.status === "approved" &&
+			// 	(Object.keys(AUTH_ALLOWED_ONLY).includes(router.pathname)
+			// 		? AUTH_ALLOWED_ONLY[router.pathname]?.status.includes("approved")
+			// 		: true)
 			const allowByStatus =
-				tokenStatusAtom.status === "approved" &&
-				(Object.keys(AUTH_ALLOWED_ONLY).includes(router.pathname)
-					? AUTH_ALLOWED_ONLY[router.pathname]?.status.includes("approved")
-					: true)
+			tokenStatusAtom.status.includes("approved") &&
+			(Object.keys(AUTH_ALLOWED_ONLY).includes(router.pathname)
+				? AUTH_ALLOWED_ONLY[router.pathname]?.status.includes("approved")
+				: true)
+
 			const allowByRole =
 				router.pathname === "/" ||
 				(tokenStatusAtom.role === "STUDENT" && separator === "student") ||
@@ -97,19 +109,20 @@ function Layout({ children }: LayoutProps) {
 			if (isValidRequest || (allowByRole && allowByStatus)) {
 				setIsValidChecked(() => true)
 			} else {
-				console.log("접근!")
-				if (tokenStatusAtom.showMessage === true) {
-					noti({
-						content: (
-							<NotiTemplate
-								type={"alert"}
-								content={`${AUTH_TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status].message}`}
-							/>
-						),
-						duration: 5000,
-					})
-				}
-				router.push(AUTH_TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status].url)
+				// console.log("접근!")
+				// if (tokenStatusAtom.showMessage === true) {
+				// 	noti({
+				// 		content: (
+				// 			<NotiTemplate
+				// 				type={"alert"}
+				// 				content={`${AUTH_TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status].message}`}
+				// 			/>
+				// 		),
+				// 		duration: 5000,
+				// 	})
+				// }
+				// router.push(AUTH_TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status].url)
+				router.push(AUTH_TARGET_URL[tokenStatusAtom.role][tokenStatusAtom.status[0]].url)
 			}
 		}
 	}, [tokenStatusAtom, router.pathname])

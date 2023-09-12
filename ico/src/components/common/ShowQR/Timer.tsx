@@ -14,7 +14,6 @@ function Timer({ targetTime, funcHandler }: TimerProps) {
       const timeDifference = targetTime - currentTime;
 
       if (timeDifference <= 0) {
-        console.log('타이머 종료');
         funcHandler && funcHandler()
         clearInterval(intervalId);
       } else {

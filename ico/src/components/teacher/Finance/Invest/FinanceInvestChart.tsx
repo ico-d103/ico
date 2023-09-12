@@ -5,16 +5,16 @@ import React, { useEffect, useState } from "react"
 import useGetNation from "@/hooks/useGetNation"
 
 const FinanceInvestChart = ({ data }: LineSvgProps) => {
-
 	const [nation] = useGetNation()
-	const formatXAxisValue = (value:any) => {
+	const formatXAxisValue = (value: any) => {
 		const date = new Date(value)
 		return `${date.getMonth() + 1}월 ${date.getDate()}일`
-	};
-    const formatYAxisValue = (value:any, space=true) => `${Number(value).toLocaleString('ko-KR')} ${nation.currency}${space ? `\u00A0 \u00A0 \u00A0 \u00A0 \u00A0` : ''}`;
+	}
+	const formatYAxisValue = (value: any, space = true) =>
+		`${Number(value).toLocaleString("ko-KR")} ${nation.currency}${space ? `\u00A0 \u00A0 \u00A0 \u00A0 \u00A0` : ""}`
 
+	// console.log(data[0].data)
 
-	console.log(data[0].data)
 	return (
 		<div
 			css={css`
@@ -40,7 +40,7 @@ const FinanceInvestChart = ({ data }: LineSvgProps) => {
 				axisRight={null}
 				axisLeft={{
 					format: formatYAxisValue, // 축 서식화 함수 적용
-				  }}
+				}}
 				axisBottom={{
 					format: formatXAxisValue, // 축 서식화 함수 적용
 				}}
@@ -92,8 +92,7 @@ const FinanceInvestChart = ({ data }: LineSvgProps) => {
 				// )}
 
 				tooltip={(data) => (
-                    <div
-          
+					<div
 						css={css`
 							border-radius: 25px;
 							padding: 12px;
@@ -101,10 +100,13 @@ const FinanceInvestChart = ({ data }: LineSvgProps) => {
 							background: rgba(0, 0, 0, 0.4);
 							font-size: 12px;
 						`}
-                    >
-                        <div>{formatXAxisValue(data.point.data.xFormatted)}의 종목 가격은 {formatYAxisValue(data.point.data.yFormatted, false)}입니다.</div>
-                    </div>
-                )}
+					>
+						<div>
+							{formatXAxisValue(data.point.data.xFormatted)}의 종목 가격은{" "}
+							{formatYAxisValue(data.point.data.yFormatted, false)}입니다.
+						</div>
+					</div>
+				)}
 			/>
 		</div>
 	)

@@ -12,7 +12,6 @@ type responseType = {
 export const getHomeMyInfoAPI = async ({}: paramsType) => {
     try {
         const response: responseType = await tokenInstance.get(`/student/student/my-page`)
-        console.log(response.data)
         return response.data
     } catch (error:any) {
         if (error.response.data.code === '25') {
@@ -32,7 +31,6 @@ export const getHomeMyInfoAPI = async ({}: paramsType) => {
         } else {
             throw error
         }
-        // console.log(error)
     }
 }
 

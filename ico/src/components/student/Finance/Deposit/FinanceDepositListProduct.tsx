@@ -93,7 +93,7 @@ function FinanceDepositListProduct({ data, account }: FinanceDepositListProductP
 				<Button
 					text={"신청"}
 					fontSize={"var(--student-h3)"}
-					width={"100px"}
+					width={"72px"}
 					theme={"mobileNormal"}
 					onClick={() => {
 						modal.open()

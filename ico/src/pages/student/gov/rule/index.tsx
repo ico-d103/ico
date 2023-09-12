@@ -7,10 +7,10 @@ import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
 import { GovTabMenus } from "@/components/student/Gov/GovTabMenus"
 import { getClassRuleAPI } from "@/api/student/gov/getClassRuleAPI"
 import { useEffect, useState } from "react"
-import { getClassRuleType } from "@/types/student/apiReturnTypes"
+import { getGovRuleType } from "@/types/teacher/apiReturnTypes"
 
 function index() {
-	const [ruleList, setRuleList] = useState<getClassRuleType[]>([])
+	const [ruleList, setRuleList] = useState<getGovRuleType[]>([])
 
 	useEffect(() => {
 		getClassRuleAPI().then((res) => {

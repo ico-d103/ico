@@ -172,7 +172,7 @@ function index() {
 							idx={el.id}
 							title={el.title}
 							detail={el.detail}
-							// salary={el.salary}
+							wage={el.wage}
 							creditRating={el.creditRating}
 							color={el.color}
 							image={el.image}

@@ -1,5 +1,39 @@
 import { layoutTokenStatusType } from "@/types/common/apiReturnTypes";
 
+
+// [
+//   {
+//       "id": 1,
+//       "name": "CREDIT_SCORE",
+//       "detail": "신용 등급 조정 권한"
+//   },
+//   {
+//       "id": 2,
+//       "name": "NATIONAL_TAX",
+//       "detail": "국세 비율 조정 권한"
+//   },
+//   {
+//       "id": 3,
+//       "name": "STATEMENTS",
+//       "detail": "학생 간 입출금 관리 권한"
+//   },
+//   {
+//       "id": 4,
+//       "name": "FINANCE",
+//       "detail": "예금 만기 권한"
+//   },
+//   {
+//       "id": 5,
+//       "name": "WAREHOUSEMAN",
+//       "detail": "교사 상점 운영 권한 "
+//   },
+//   {
+//       "id": 6,
+//       "name": "NEWSPAPER",
+//       "detail": "학급 소식 운영 권한"
+//   }
+// ]
+
 export const AUTH_TARGET_URL: { [prop: string]: { [prop: string]: { url: string; message: string } } } = {
   ADMIN: {
     admin: { url: "/admin/confirm", message: "" },
@@ -39,11 +73,8 @@ export const AUTH_ALLOWED_ONLY: { [prop: string]: layoutTokenStatusType } = {
   "/": { role: ["GUEST"], status: ["require_login"] },
   "/login": { role: ["GUEST"], status: ["require_login"] },
   "/signup": { role: ["GUEST"], status: ["require_login"] },
-  // "/admin/login": { role: ["GUEST"], status: ["require_login"] },
   "/admin/confirm": { role: ["ADMIN"], status: ["admin"] },
-  // "/student/login": { role: ["GUEST"], status: ["require_login"] },
   "/student/signup": { role: ["GUEST"], status: ["require_login"] },
-  // "/teacher/login": { role: ["GUEST"], status: ["require_login"] },
   "/teacher/cert": { role: ["TEACHER"], status: ["require_approval", "require_submit_certification"] },
   "/teacher/signup": { role: ["GUEST"], status: ["require_login"] },
   "/student/enter": { role: ["STUDENT"], status: ["require_submit_code"] },
@@ -51,4 +82,5 @@ export const AUTH_ALLOWED_ONLY: { [prop: string]: layoutTokenStatusType } = {
   "/teacher/create": { role: ["TEACHER"], status: ["require_create_nation"] },
   "/teacher/password": { role: ["TEACHER"], status: ["require_change_password", "approved"] },
   "/student/password": { role: ["STUDENT"], status: ["require_change_password", "approved"] },
+  "/student/job/rule": { role: ["STUDENT"], status: ["6"] },
 }

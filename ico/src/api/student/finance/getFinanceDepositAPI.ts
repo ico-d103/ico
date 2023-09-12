@@ -14,7 +14,6 @@ export const getFinanceDepositAPI = async ({}: paramsType) => {
         const response: responseType = await tokenInstance.get(`/deposit-product/student`)
         return response.data
     } catch (error) {
-        console.log(error)
         throw error
     }
 }

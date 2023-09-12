@@ -1,6 +1,6 @@
 import { css } from "@emotion/react"
 import FinanceInvestToggleButton from "./FinanceInvestToggleButton"
-import { postInvestIssueAPI } from "@/api/teacher/finanace/postInvestIssueAPI"
+import { postInvestIssueAPI } from "@/api/teacher/finanace/legacy/postInvestIssueAPI"
 import useGetNation from "@/hooks/useGetNation"
 import { useQueryClient } from "@tanstack/react-query"
 import { useMutation, useQuery } from "@tanstack/react-query"

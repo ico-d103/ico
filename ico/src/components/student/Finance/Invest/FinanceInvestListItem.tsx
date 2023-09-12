@@ -43,7 +43,7 @@ function FinanceInvestListItem({ data }: FinanceInvestListItemProps) {
 				<Button
 					text={"자세히"}
 					fontSize={"var(--student-h3)"}
-					width={"100px"}
+					width={"72px"}
 					theme={"mobileNormal"}
 					onClick={() => {
 						navigate(`/student/finance/invest/${data.id}`, "bottomToTop")

@@ -1,21 +1,19 @@
 import { defaultInstance, tokenInstance } from "@/api/instance"
-import { getFinanceInvestListType } from "@/types/student/apiReturnTypes"
+import { getFinanceInvestListStockItemType } from "@/types/student/apiReturnTypes"
 
 type paramsType = {
 }
 
 type responseType = {
     status: number
-    data: getFinanceInvestListType
+    data: getFinanceInvestListStockItemType[]
 }
 
 export const getFinanceInvestListAPI = async ({}: paramsType) => {
     try {
-        const response: responseType = await tokenInstance.get(`/stock/student`)
-        console.log(response)
+        const response: responseType = await tokenInstance.get(`/stock`)
         return response.data
     } catch (error) {
-        console.log(error)
         throw error
     }
 }

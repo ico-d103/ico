@@ -13,7 +13,8 @@ type paramsType = {
 	body: {
 		title: string
 		detail: string
-		salary: string
+		// salary: string
+		wage: string
 		creditRating: string
 		color: string
 		image: string

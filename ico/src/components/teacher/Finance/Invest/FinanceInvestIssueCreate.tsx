@@ -1,11 +1,13 @@
 import { css } from "@emotion/react"
-import FinanceInvestToggleButton from "./FinanceInvestToggleButton"
+import FinanceInvestToggleButton from "../Legacy/FinanceInvestToggleButton"
 import React, { useEffect, useState } from "react"
 import Dropdown from "@/components/common/Dropdown/Dropdown"
 import useCompHandler from "@/hooks/useCompHandler"
 import { postInvestItemAPI } from "@/api/teacher/finanace/postInvestItemAPI"
 import { useQueryClient } from "@tanstack/react-query"
 import { useMutation, useQuery } from "@tanstack/react-query"
+
+import { putInvestIssueAPI } from "@/api/teacher/finanace/putInvestIssueAPI"
 
 function FinanceInvestIssueCreate({
 	subInputChangeHandler,
@@ -14,51 +16,56 @@ function FinanceInvestIssueCreate({
 	closeHandler,
 	price,
 	amount,
+	id,
 }: {
 	subInputChangeHandler?: any
 	inputState?: any
 	buttons?: any
 	closeHandler?: Function
-	price?: any
+	price?: number
 	amount?: any
+	id: number
 }) {
 	const queryClient = useQueryClient()
-	const createMutation = useMutation((a: number) =>
-		postInvestItemAPI({ body: { amount: inputState?.sub.value, content: inputState?.content, price: price } }),
-	)
-
+	// 투자 이슈 등록은 put method로 바꿔줘야 하고 content랑 price만 받는다. 밑에 대충만 만듬
+	// const createMutation = useMutation((a: number) =>
+	// 	postInvestItemAPI({ body: { amount: inputState?.sub.value, content: inputState?.content, price: price } }),
+	// )
 	const [openDropdown, closeDropdown, dropdownState] = useCompHandler()
+
+	const updateMutation = useMutation((idx: number) =>
+		putInvestIssueAPI({
+			idx,
+			body: { content: inputState.content, price: Number(price) + Number(inputState.sub.value) },
+		}),
+	)
 
 	const submitHandler = () => {
 		if (inputState?.sub.taxation === 1) {
 			subInputChangeHandler && subInputChangeHandler({ key: "value", value: -inputState?.sub.value })
 		}
 
-		createMutation.mutate(1, {
+		updateMutation.mutate(id, {
 			onSuccess: () => {
 				closeHandler && closeHandler()
-				return queryClient.invalidateQueries(["teacher", "financeInvest"])
+				return queryClient.invalidateQueries(["teacher", id])
 			},
 		})
 	}
 
-	const setTaxPercent = () => {
+	const setIssueRise = () => {
 		subInputChangeHandler && subInputChangeHandler({ key: "taxation", value: 0 })
 		subInputChangeHandler && subInputChangeHandler({ key: "value", value: 0 })
-		console.log("상승")
-
-		console.log(inputState?.sub.value)
 	}
 
-	const setTaxAbsolute = () => {
+	const setIssueFall = () => {
 		subInputChangeHandler && subInputChangeHandler({ key: "taxation", value: 1 })
 		subInputChangeHandler && subInputChangeHandler({ key: "value", value: 0 })
-		console.log("하락")
 	}
 
 	const dropdownList = [
 		{
-			name: "edit",
+			name: "rise ",
 			content: (
 				<div css={iconBlackWrapperCSS}>
 					<svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -74,10 +81,10 @@ function FinanceInvestIssueCreate({
 				</div>
 			),
 			label: "상승",
-			function: setTaxPercent,
+			function: setIssueRise,
 		},
 		{
-			name: "delete",
+			name: "fall",
 			content: (
 				<div css={iconBlackWrapperCSS}>
 					<svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -93,7 +100,7 @@ function FinanceInvestIssueCreate({
 				</div>
 			),
 			label: "하락",
-			function: setTaxAbsolute,
+			function: setIssueFall,
 		},
 	]
 
@@ -112,6 +119,7 @@ function FinanceInvestIssueCreate({
 			&nbsp; 상승
 		</div>
 	)
+
 	const taxAbsolute = (
 		<div css={taxationSelectCSS}>
 			<svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -136,6 +144,8 @@ function FinanceInvestIssueCreate({
 			subInputChangeHandler && subInputChangeHandler({ key: "value", event })
 		}
 	}
+
+	console.log(inputState.sub.value)
 
 	return (
 		<>

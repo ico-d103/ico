@@ -1,15 +1,18 @@
-// 투자 이슈 조회(교사)
 import { tokenInstance } from "@/api/instance"
-import { getFinanceInvestIssueType } from "@/types/student/apiReturnTypes"
+import { investItemType } from "@/types/teacher/apiReturnTypes"
+
+type paramsType = {
+	id: number
+}
 
 type responseType = {
 	status: number
-	data: getFinanceInvestIssueType
+	data: investItemType
 }
 
-export const getInvestItemAPI = async () => {
+export const getInvestItemAPI = async ({ id }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.get("/stock/teacher")
+		const response: responseType = await tokenInstance.get(`/issue/teacher/${id}`)
 		return response.data
 	} catch (error) {
 		throw error
