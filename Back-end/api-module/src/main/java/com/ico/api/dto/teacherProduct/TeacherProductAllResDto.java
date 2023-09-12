@@ -28,7 +28,7 @@ public class TeacherProductAllResDto {
 
     private byte sold;
 
-    private boolean isCoupon;
+    private Boolean isCoupon;
 
     private String date;
 

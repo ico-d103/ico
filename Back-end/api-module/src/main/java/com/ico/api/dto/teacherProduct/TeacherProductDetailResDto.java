@@ -28,7 +28,7 @@ public class TeacherProductDetailResDto {
 
     private byte count;
 
-    private boolean isCoupon;
+    private Boolean isCoupon;
 
     private byte sold;
 
