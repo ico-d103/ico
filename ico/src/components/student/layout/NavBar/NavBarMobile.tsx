@@ -57,7 +57,7 @@ function NavBarMobile({ children, routes, navBarData }: NavBarProps) {
 	})
 
 	return (
-		<div css={navBarParentCSS()}>
+		<div css={navBarParentCSS({ selected })}>
 			<div css={contentWrapperCSS({ selected })}>
 				{children}
 			</div>
@@ -74,11 +74,11 @@ function NavBarMobile({ children, routes, navBarData }: NavBarProps) {
 	)
 }
 
-const navBarParentCSS = () => {
+const navBarParentCSS = ({ selected }: { selected: number }) => {
 	return css`
 		width: 100%;
 		min-height: 100%;
-		padding-bottom: 64px;
+		padding-bottom: ${selected !== -2 && "64px"};;
 		display: grid;
 		/* display: flex;
 		flex-direction: column; */

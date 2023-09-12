@@ -276,6 +276,24 @@ const themeProvider = ({ isFocusing }: { isFocusing: boolean }) => {
 				text-align: right;
 				
 			}
+		`,
+		studentEnter: css`
+				border: none;
+				transition-property: border-bottom background-color;
+				transition-duration: 0.3s;
+				background-color: ${isFocusing ? `rgba(255,190, 0, 0.2)` : `var(--student-main-color-2)`};
+				border-bottom: ${isFocusing ? `4px solid var(--student-main-color-5)` : `2px solid var(--student-main-color-4)`};
+				height: 96px;
+				
+				& input {
+					font-size: 48px;
+					text-align: center;
+
+				}
+				& input::placeholder {
+					color: rgba(0, 0, 0, 0.2);
+				}
+
 		`
 	}
 

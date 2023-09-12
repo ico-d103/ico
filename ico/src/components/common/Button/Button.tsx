@@ -165,10 +165,10 @@ const buttonCSS = ({ theme }: { theme: string }) => {
 			color: var(--student-main-color-6);
 		`,
 		mobileCancel: css`
-			border: none;
+			border: 1px solid var(--student-main-color-5);
 			border-radius: 20px;
-			background-color: rgba(199, 199, 199, 0.4);
-			color: #828282;
+			color: #c46200;
+			background-color: var(--student-main-color-2);
 		`,
 		mobileRadial: css`
 			border: none;
