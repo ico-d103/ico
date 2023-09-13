@@ -7,29 +7,40 @@ import { putResetStudentsJobAPI } from "@/api/teacher/class/putResetStudentsJobA
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
-import useCompHandler from "@/hooks/useCompHandler"
-import Modal from "@/components/common/Modal/Modal"
 import CollapseMenuStudentDetail from "@/components/teacher/common/CollapseMenu/CollapseMenuStudentDetail"
 import ClassStudentDetail from "../Detail/ClassStudentDetail"
 import { useAtom, useAtomValue } from "jotai"
 import { checkedStudent, selectedStudent } from "@/store/store"
 import ClassStudentDetailHead from "../Detail/ClassStudentDetailHead"
-import { useEffect } from "react"
 import CheckBox from "@/components/teacher/common/CheckBox/CheckBox"
 import useModal from "@/components/common/Modal/useModal"
+import { putDeportStudentsAPI } from "@/api/teacher/class/putDeportStudentsAPI"
+import { postStudentsSalaryAPI } from "@/api/teacher/class/postStudentsSalaryAPI"
 
 function StudentEnteredList() {
 	const noti = useNotification()
-	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
-	// const [openJobResetModal, closeJobResetModal, jobResetModalState] = useCompHandler()
-	const modal = useModal()
 	const queryClient = useQueryClient()
-	const resetStudentsJobMutation = useMutation((a: number) => putResetStudentsJobAPI())
+	const resetJobModal = useModal()
+	const deportStudentsModal = useModal()
+	const payStudentsSalaryModal = useModal()
+
+	const { data } = useQuery<getStudentListType[]>(["studentList", "entered"], getStudentListAPI)
+	const deportStudentsMutation = useMutation((args: { body: { studentIds: number[] } }) => putDeportStudentsAPI(args))
+	const resetStudentsJobMutation = useMutation((args: { body: { studentIds: number[] } }) =>
+		putResetStudentsJobAPI(args),
+	)
+	const postStudentsSalaryMutation = useMutation((args: { body: { studentIds: number[] } }) =>
+		postStudentsSalaryAPI(args),
+	)
+
 	const selectedStudentAtom = useAtomValue(selectedStudent)
 	const [checkedStudentAtom, setCheckedStudentAtom] = useAtom(checkedStudent)
 
-	const resetStudentsJob = () => {
-		resetStudentsJobMutation.mutate(0, {
+	const resetStudentsJobHandler = () => {
+		const keys = checkedStudentAtom.map((item) => parseInt(Object.keys(item)[0]))
+		const args = { body: { studentIds: keys } }
+
+		resetStudentsJobMutation.mutate(args, {
 			onSuccess: () => {
 				noti({
 					content: <NotiTemplate type={"ok"} content={"직업을 초기화했습니다."} />,
@@ -64,6 +75,65 @@ function StudentEnteredList() {
 		}
 	}
 
+	const checkValidModalOpen = (type: string) => {
+		if (!checkedStudentAtom.length) {
+			noti({
+				content: <NotiTemplate type={"alert"} content={`선택된 학생이 없습니다.`} />,
+				duration: 2000,
+			})
+
+			return
+		}
+
+		if (type === "reset") resetJobModal.open()
+		else if (type === "deport") deportStudentsModal.open()
+		else if (type === "salary") payStudentsSalaryModal.open()
+	}
+
+	const deportStudentsHandler = () => {
+		const keys = checkedStudentAtom.map((item) => parseInt(Object.keys(item)[0]))
+		const args = { body: { studentIds: keys } }
+
+		deportStudentsMutation.mutate(args, {
+			onSuccess: () => {
+				noti({
+					content: <NotiTemplate type={"ok"} content={"선택된 학생(들)을 내보냈습니다."} />,
+					duration: 3000,
+				})
+
+				return queryClient.invalidateQueries(["studentList", "entered"])
+			},
+			onError: () => {
+				noti({
+					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+					duration: 3000,
+				})
+			},
+		})
+	}
+
+	const payStudentsSalaryHandler = () => {
+		const keys = checkedStudentAtom.map((item) => parseInt(Object.keys(item)[0]))
+		const args = { body: { studentIds: keys } }
+
+		postStudentsSalaryMutation.mutate(args, {
+			onSuccess: () => {
+				noti({
+					content: <NotiTemplate type={"ok"} content={"학생(들)에게 월급을 지급했습니다."} />,
+					duration: 3000,
+				})
+
+				return queryClient.invalidateQueries(["studentList", "entered"])
+			},
+			onError: () => {
+				noti({
+					content: <NotiTemplate type={"alert"} content={`오류가 발생했습니다. 다시 시도해주세요.`} />,
+					duration: 3000,
+				})
+			},
+		})
+	}
+
 	return (
 		<>
 			<div css={wrapperCSS}>
@@ -84,31 +154,26 @@ function StudentEnteredList() {
 						>
 							<label htmlFor="all-check">학생 전체 선택</label>
 						</CheckBox>
-						{/* <div css={checkCSS}>
-							<input
-								checked={
-									checkedStudentAtom.length === 0 ? false : checkedStudentAtom.length === data?.length ? true : false
-								}
-								type="checkbox"
-								id="all-check"
-								onChange={toggleStudentsAllCheck}
-							/>
-							<label htmlFor="all-check">학생 전체 선택</label>
-						</div> */}
 					</div>
 					<KebabMenu
 						dropdownList={[
 							{
-								name: "resetJob",
+								name: "payStudentsSalary",
 								content: null,
-								label: "직업 초기화",
-								function: () => alert("준비 중입니다."),
+								label: "월급 지급",
+								function: () => checkValidModalOpen("salary"),
 							},
 							{
 								name: "resetJob",
 								content: null,
+								label: "직업 초기화",
+								function: () => checkValidModalOpen("reset"),
+							},
+							{
+								name: "deportStudent",
+								content: null,
 								label: "학생 내보내기",
-								function: () => alert("준비 중입니다."),
+								function: () => checkValidModalOpen("deport"),
 							},
 						]}
 					/>
@@ -124,35 +189,38 @@ function StudentEnteredList() {
 					))}
 				</div>
 			</div>
-			{/* <Modal
-				compState={jobResetModalState}
-				closeComp={closeJobResetModal}
-				transition={"scale"}
-				content={
-					<ModalAlert
-						title={"모든 학생들의 직업을 초기화합니다."}
-						titleSize={"var(--teacher-h2)"}
-						proceed={resetStudentsJob}
-						width={"480px"}
-						content={[
-							"모든 학생들의 직업이 초기화됩니다!",
-							"더이상 학생들이 직업 활동을 할 수 없습니다!",
-							"월급 날에 해지일까지 일한 날짜만큼 보수를 받습니다.",
-						]}
-					/>
-				}
-			/> */}
-
-			{modal(
+			{resetJobModal(
 				<ModalAlert
-					title={"모든 학생들의 직업을 초기화합니다."}
+					title={`학생 ${checkedStudentAtom.length}명의 직업을 초기화합니다.`}
 					titleSize={"var(--teacher-h2)"}
-					proceed={resetStudentsJob}
+					proceed={resetStudentsJobHandler}
 					width={"480px"}
 					content={[
-						"모든 학생들의 직업이 초기화됩니다!",
-						"더이상 학생들이 직업 활동을 할 수 없습니다!",
-						"월급 날에 해지일까지 일한 날짜만큼 보수를 받습니다.",
+						"선택된 학생(들)이 올바른지 다시 확인해 주세요.",
+						"선택된 학생(들)은 새로 직업을 구해야 합니다.",
+						"월급날에 해지일까지 일한일 수만큼 보수를 받습니다.",
+					]}
+				/>,
+			)}
+			{deportStudentsModal(
+				<ModalAlert
+					title={`학생 ${checkedStudentAtom.length}명을 반에서 내보냅니다.`}
+					titleSize={"var(--teacher-h2)"}
+					proceed={deportStudentsHandler}
+					width={"480px"}
+					content={["선택된 학생(들)이 올바른지 다시 확인해 주세요.", "선택된 학생(들)의 데이터가 없어집니다."]}
+				/>,
+			)}
+			{payStudentsSalaryModal(
+				<ModalAlert
+					title={`학생 ${checkedStudentAtom.length}명에게 월급을 지급합니다.`}
+					titleSize={"var(--teacher-h2)"}
+					proceed={payStudentsSalaryHandler}
+					width={"480px"}
+					content={[
+						"선택된 학생(들)이 올바른지 다시 확인해 주세요.",
+						"무직인 학생에게는 돈이 지급되지 않습니다.",
+						"직업이 있더라도 임금이 없는 경우에는 돈이 지급되지 않습니다.",
 					]}
 				/>,
 			)}

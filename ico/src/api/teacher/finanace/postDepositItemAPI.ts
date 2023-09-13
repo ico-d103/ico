@@ -1,8 +1,13 @@
+// 투자 이슈 등록
 import { tokenInstance } from "@/api/instance"
 import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
-	idx: string
+	body: {
+		title: string
+		period: string
+		interest: number[]
+	}
 }
 
 type responseType = {
@@ -10,9 +15,9 @@ type responseType = {
 	data: successReturnType
 }
 
-export const deleteGovJobAPI = async ({ idx }: paramsType) => {
+export const postDepositItemAPI = async ({ body }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.delete(`/job/teacher/${idx}`)
+		const response: responseType = await tokenInstance.post("/deposit-product/teacher", body)
 		return response.data
 	} catch (error) {
 		throw error

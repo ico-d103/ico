@@ -96,7 +96,6 @@ export type getStudentDetailType = {
 	licenses: licenseType[]
 }
 
-//--------------------------------------------------------------------
 // 상점
 export type getTeacherProductsType = {
 	id: number
@@ -239,3 +238,56 @@ export type getGovPowerType = {
 }
 
 export type empoweredType = string
+
+export type depositProductType = {
+	id: number
+	title: string
+	period: number
+	interest: number[]
+	students: depositProductStudentType[]
+}
+
+export type depositProductStudentType = {
+	number: number
+	name: string
+	amount: number
+	startDate: string
+}
+
+export type investListType = {
+	id: number
+	title: string
+}
+
+export type investItemType = {
+	stock: string
+	content: string
+	tradingStart: string
+	tradingEnd: string
+	issue: investIssueType[]
+}
+
+export type investIssueType = {
+	date: string
+	amount: number
+	content: string
+	rate: number
+}
+
+export type investTimeType = {
+	tradingStart: string
+	tradingEnd: string
+}
+
+export type getFinanceInvestIssueType = {
+	stock: string
+	tradingStart: string
+	tradingEnd: string
+	issue: FinanceInvestIssueType[]
+}
+
+export type FinanceInvestIssueType = {
+	date: string
+	amount: number
+	content: string
+}

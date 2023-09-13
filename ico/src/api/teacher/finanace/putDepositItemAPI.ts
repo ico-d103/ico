@@ -1,12 +1,13 @@
+// 투자 이슈 조회(교사)
 import { tokenInstance } from "@/api/instance"
 import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
+	idx: number
 	body: {
 		title: string
-		content: string
-		amount: string
-		issue: string
+		period: number
+		interest: number[]
 	}
 }
 
@@ -15,9 +16,10 @@ type responseType = {
 	data: successReturnType
 }
 
-export const postInvestItemAPI = async ({ body }: paramsType) => {
+export const putDepositItemAPI = async ({ idx, body }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.post("/stock/teacher", body)
+		const response: responseType = await tokenInstance.put(`/deposit-product/teacher/${idx}`, body)
+
 		return response.data
 	} catch (error) {
 		throw error

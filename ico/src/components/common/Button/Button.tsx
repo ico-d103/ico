@@ -123,10 +123,10 @@ const buttonCSS = ({ theme }: { theme: string }) => {
 			background-color: #d94a4a;
 		`,
 		mobileVividPositive: css`
-		border: none;
-		border-radius: 20px;
-		color: var(--common-back-color-2);
-		background-color: #1e7bff;
+			border: none;
+			border-radius: 20px;
+			color: var(--common-back-color-2);
+			background-color: #1e7bff;
 		`,
 		RadialPositive: css`
 			border: none;
@@ -216,6 +216,12 @@ const buttonCSS = ({ theme }: { theme: string }) => {
 				color: rgba(0, 0, 0, 1);
 			}
 		`
+		white: css`
+			border: none;
+			border-radius: 10px;
+			background-color: white;
+			color: var(--teacher-gray3-color);
+		`,
 	}
 
 	return themes[theme]

@@ -8,9 +8,16 @@ type GovCorporateCreateContentsProps = {
 	essential: boolean
 	placeholder: string
 	type: string
+	isTextArea?: boolean
 }
 
-function GovCorporateCreateContent({ label, essential, placeholder, type }: GovCorporateCreateContentsProps) {
+function GovCorporateCreateContent({
+	label,
+	essential,
+	placeholder,
+	type,
+	isTextArea,
+}: GovCorporateCreateContentsProps) {
 	const [isValid, setIsValid] = useState<boolean>(false)
 
 	const validCheckHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -42,7 +49,12 @@ function GovCorporateCreateContent({ label, essential, placeholder, type }: GovC
 				{label} <b>{essential ? "*" : ""}</b>
 			</span>
 			<div>
-				<Input theme={"greenDefault"} placeholder={placeholder} onChange={(e) => validCheckHandler(e)} />
+				<Input
+					theme={"greenDefault"}
+					placeholder={placeholder}
+					onChange={(e) => validCheckHandler(e)}
+					isTextarea={isTextArea}
+				/>
 				{isValid ? <span>✓</span> : <></>}
 			</div>
 		</div>

@@ -1,9 +1,9 @@
-import { licenseType } from "@/types/teacher/apiReturnTypes"
+import { getLicenseType, licenseType } from "@/types/teacher/apiReturnTypes"
 import { css } from "@emotion/react"
 import ClassStudentDetailCertificateRange from "./ClassStudentDetailCertificateRange"
 
 type ClassStudentDetailCertificateItemPropsType = {
-	certificate: licenseType
+	certificate: getLicenseType
 }
 
 function ClassStudentDetailCertificateItem({ certificate }: ClassStudentDetailCertificateItemPropsType) {
@@ -11,7 +11,7 @@ function ClassStudentDetailCertificateItem({ certificate }: ClassStudentDetailCe
 		<div css={wrapper}>
 			<h4>{certificate.subject}</h4>
 			<div>
-				<ClassStudentDetailCertificateRange id={certificate.id} range={certificate.rating} />
+				<ClassStudentDetailCertificateRange id={certificate.id} range={-1} />
 			</div>
 		</div>
 	)

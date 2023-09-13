@@ -2,7 +2,11 @@ import { tokenInstance } from "@/api/instance"
 import { successReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
-	idx: string
+	idx: number
+	body: {
+		title: string
+		content: string
+	}
 }
 
 type responseType = {
@@ -10,9 +14,10 @@ type responseType = {
 	data: successReturnType
 }
 
-export const deleteGovJobAPI = async ({ idx }: paramsType) => {
+export const putInvestItemAPI = async ({ idx, body }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.delete(`/job/teacher/${idx}`)
+		const response: responseType = await tokenInstance.put(`/stock/teacher/${idx}`, body)
+
 		return response.data
 	} catch (error) {
 		throw error

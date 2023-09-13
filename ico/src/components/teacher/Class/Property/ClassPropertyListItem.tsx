@@ -1,9 +1,5 @@
-import Modal from "@/components/common/Modal/Modal"
-import ModalContent from "@/components/common/Modal/ModalContent"
-import useCompHandler from "@/hooks/useCompHandler"
 import useGetNation from "@/hooks/useGetNation"
 import { css } from "@emotion/react"
-import { CLASS_BIG_PROPERTY } from "../ClassIcons"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { deleteTreasuryHistoryAPI } from "@/api/teacher/class/deleteTreasuryHistoryAPI"
@@ -12,6 +8,7 @@ import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import { selectedPage } from "@/store/store"
 import { useAtomValue } from "jotai"
 import useModal from "@/components/common/Modal/useModal"
+import { appendEulReul } from "@/util/isEndWithConsonant"
 
 type PropertyListItemPropsType = {
 	property: {
@@ -74,23 +71,6 @@ function PropertyListItem({ property, showDate }: PropertyListItemPropsType) {
 					<h3>{property.source}</h3>
 				</td>
 			</tr>
-			{/* <Modal
-				compState={compState}
-				closeComp={closeComp}
-				transition={"scale"}
-				content={
-					<ModalAlert
-						title={"내역을 삭제하시겠습니까?"}
-						titleSize={"var(--teacher-h2)"}
-						proceed={deletePropertyList}
-						width={"480px"}
-						content={[
-							"내역 삭제 후 복원할 수 없습니다",
-							`${property.source}의 ${property.title}을 삭제하시는 게 맞는지 다시 확인해주세요`,
-						]}
-					/>
-				}
-			/> */}
 			{modal(
 				<ModalAlert
 					title={"내역을 삭제하시겠습니까?"}
@@ -99,7 +79,7 @@ function PropertyListItem({ property, showDate }: PropertyListItemPropsType) {
 					width={"480px"}
 					content={[
 						"내역 삭제 후 복원할 수 없습니다",
-						`${property.source}의 ${property.title}을 삭제하시는 게 맞는지 다시 확인해주세요`,
+						`${property.source}의 ${appendEulReul(property.title)} 삭제하시는 게 맞는지 다시 확인해주세요`,
 					]}
 				/>,
 			)}
