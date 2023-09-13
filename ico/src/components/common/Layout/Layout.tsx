@@ -21,6 +21,7 @@ import {
 import PageLoading from "@/components/student/layout/PageLoading/PageLoading"
 import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 import { AUTH_ALLOWED_ONLY, AUTH_TARGET_URL } from "@/constants/PageAuthorization"
+import { css } from "@emotion/react"
 
 type LayoutProps = {
 	children: any
@@ -224,8 +225,8 @@ function Layout({ children }: LayoutProps) {
 		)
 	} else {
 		return (
-			<OverlayScrollbarsComponent defer>
-				<div>{children}</div>
+			<OverlayScrollbarsComponent css={css`min-height: 100%;`} defer>
+				{children}
 			</OverlayScrollbarsComponent>
 		)
 	}

@@ -92,7 +92,7 @@ function cert() {
 
 	return (
 		<div css={wrapperCSS}>
-			{getTokenStatus.status === "require_approval" && (
+			{getTokenStatus.status.includes("require_approval") && (
 				<div css={contentWrapperCSS}>
 					<UseAnimations animation={alertCircle} size={256} />
 					<div css={successLabelCSS}>교사 인증서 승인 대기중입니다.</div>
@@ -115,7 +115,7 @@ function cert() {
 				</div>
 			)}
 
-			{getTokenStatus.status === "require_submit_certification" && (
+			{getTokenStatus.status.includes("require_submit_certification")  && (
 				<div css={contentWrapperCSS}>
 					<UseAnimations animation={alertTriangle} size={256} />
 					<div css={successLabelCSS}>교사 인증서 승인이 거절되었습니다.</div>
@@ -123,7 +123,7 @@ function cert() {
 				</div>
 			)}
 
-			{(getTokenStatus.status === "require_submit_certification" || rePost) && renderInput}
+			{(getTokenStatus.status.includes("require_submit_certification") || rePost) && renderInput}
 
 			<div onClick={signoutHandler} css={css`margin-top: 12px; cursor: pointer;`}>로그아웃</div>
 		</div>

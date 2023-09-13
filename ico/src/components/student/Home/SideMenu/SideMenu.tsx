@@ -1,38 +1,64 @@
-import React from 'react'
+import React from "react"
 import { css } from "@emotion/react"
-import { removeCookie } from '@/api/cookie'
-import useNavigate from '@/hooks/useNavigate'
-import useGetTokenStatus from '@/hooks/useGetTokenStatus'
-import { getHomeMyInfoType } from '@/types/student/apiReturnTypes'
-import LoadImage from '@/components/common/LoadImage/LoadImage'
-import NavBarDesktopRightMenu from '../../layout/NavBar/NavBarDesktopRightMenu'
+import { removeCookie } from "@/api/cookie"
+import useNavigate from "@/hooks/useNavigate"
+import useGetTokenStatus from "@/hooks/useGetTokenStatus"
+import { getHomeMyInfoType } from "@/types/student/apiReturnTypes"
+import LoadImage from "@/components/common/LoadImage/LoadImage"
+import NavBarDesktopRightMenu from "../../layout/NavBar/NavBarSideMenu"
 
-function SideMenu({closeComp, data}: {closeComp?: Function; data: getHomeMyInfoType}) {
-    const navigate = useNavigate()
-    const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
+function SideMenu({ closeComp, data }: { closeComp?: Function; data: getHomeMyInfoType }) {
+	const navigate = useNavigate()
+	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
-    const signoutHandler = () => {
+	const signoutHandler = () => {
 		removeCookie("Authorization", { path: "/" })
-        setTokenStatus({showMessage: false}).then((res) => {
-            // console.log('여기에 할일')
-        })
+		setTokenStatus({ showMessage: false }).then((res) => {
+			// console.log('여기에 할일')
+		})
 		// navigate("/teacher/login")
 	}
 
-    const menu = [{content: <img src={"/assets/side_menu/student_logout.png"} css={css`height: 100%; width: auto;`}/>, label: '로그아웃', function: () => {signoutHandler()} }]
+	const menu = [
+		{
+			content: (
+				<img
+					src={"/assets/side_menu/student_logout.png"}
+					css={css`
+						height: 100%;
+						width: auto;
+					`}
+				/>
+			),
+			label: "로그아웃",
+			function: () => {
+				signoutHandler()
+			},
+		},
+	]
 
-    const renderMenu = menu.map((el, idx) => {
-        return (
-            <div css={menuItemCSS} onClick={el.function}>
-                {el.content}
-                {el.label}
-            </div>
-        )
-    })
-  return (
-    <div css={wrapperCSS} onClick={() => {closeComp && closeComp()}}>
-        <div css={menuWrapperCSS} onClick={(e) => {e.stopPropagation()}}>
-            {/* <div css={menuHeaderCSS}>
+	const renderMenu = menu.map((el, idx) => {
+		return (
+			<div css={menuItemCSS} onClick={el.function}>
+				{el.content}
+				{el.label}
+			</div>
+		)
+	})
+	return (
+		<div
+			css={wrapperCSS}
+			onClick={() => {
+				closeComp && closeComp()
+			}}
+		>
+			<div
+				css={menuWrapperCSS}
+				onClick={(e) => {
+					e.stopPropagation()
+				}}
+			>
+				{/* <div css={menuHeaderCSS}>
                 <div css={welcomeSectionCSS}>
                     <div>
                     <div css={css`font-size: var(--student-h2);`}>
@@ -57,73 +83,69 @@ function SideMenu({closeComp, data}: {closeComp?: Function; data: getHomeMyInfoT
             <div>
                 {renderMenu}
             </div> */}
-            <NavBarDesktopRightMenu data={data}/>
-            
-        </div>
-    </div>
-  )
+				<NavBarDesktopRightMenu data={data} />
+			</div>
+		</div>
+	)
 }
 
 const wrapperCSS = css`
-    width: 100vw;
-    height: 100vh;
-    /* position: fixed; */
-    display: flex;
-    justify-content: flex-end;
-    
-    /* background-color: red; */
+	width: 100vw;
+	height: 100vh;
+	/* position: fixed; */
+	display: flex;
+	justify-content: flex-end;
+
+	/* background-color: red; */
 `
 
 const menuWrapperCSS = css`
-    position: fixed;
-    width: var(--student-side-bar-width);
-    height: 100%;
-    max-width: var(--student-side-bar-width);
-    background-color: var(--student-main-color-soft);
-    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
-    /* display: flex;
+	position: fixed;
+	width: var(--student-side-bar-width);
+	height: 100%;
+	max-width: var(--student-side-bar-width);
+	background-color: var(--student-main-color-soft);
+	box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
+	/* display: flex;
     flex-direction: column;
     justify-content: space-between;; */
 `
 
 const menuItemCSS = css`
-    width: 100%;
-    height: 64px;
-    display: flex;
-    /* justify-content: center; */
-    align-items: center;
-    gap: 16px;
-    padding-left: 16px;
-    font-size: var(--student-h2);
-    border-top: 1px solid var(--student-main-color-2);
-    background-color: var(--student-main-color);
-
+	width: 100%;
+	height: 64px;
+	display: flex;
+	/* justify-content: center; */
+	align-items: center;
+	gap: 16px;
+	padding-left: 16px;
+	font-size: var(--student-h2);
+	border-top: 1px solid var(--student-main-color-2);
+	background-color: var(--student-main-color);
 `
 
 const menuHeaderCSS = css`
-width: 100%;
-height: 15vh;
-background-color: var(--student-main-color);
-border-bottom: 1px solid var(--student-main-color-2);
-padding: 32px;
-display: flex;
-flex-direction: column;
-/* align-items: center; */
-/* justify-content: space-between; */
+	width: 100%;
+	height: 15vh;
+	background-color: var(--student-main-color);
+	border-bottom: 1px solid var(--student-main-color-2);
+	padding: 32px;
+	display: flex;
+	flex-direction: column;
+	/* align-items: center; */
+	/* justify-content: space-between; */
 `
 
 const welcomeSectionCSS = css`
-    display: flex;
-    align-items: center;
-justify-content: space-between;
-width: 100%;
-
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
 `
 
 const labelButtonCSS = css`
-font-size: var(--student-h4);
-color: rgba(0, 0, 0, 0.6);
+	font-size: var(--student-h4);
+	color: rgba(0, 0, 0, 0.6);
 `
-
 
 export default SideMenu

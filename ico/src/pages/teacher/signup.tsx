@@ -19,6 +19,8 @@ import { postDuplicationCheckAPI } from "@/api/common/postDuplicationCheckAPI"
 import { useRouter } from "next/router"
 import { postPhoneIdentifyAPI } from "@/api/teacher/user/postPhoneIdentifyAPI"
 import { NUM_ONLY } from "@/util/regex"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 const inputReducer = (
 	state: { name: string; id: string; password: string; password2: string; phone: string },
@@ -130,6 +132,7 @@ function signup() {
 	const router = useRouter()
 	const [certifyCode, setCertifyCode] = useState<string>("")
 	const [inputCertifyCode, setInputCertifyCode] = useState<string>("")
+	const noti = useNotification()
 
 	useEffect(() => {
 		checkValidNameHandler()
@@ -402,11 +405,13 @@ function signup() {
 		) {
 			postTeacherAPI({ body: formData })
 				.then(() => {
-					router.push("/teacher/login")
+					noti({content: <NotiTemplate type={'ok'} content={"회원가입을 완료하였습니다."}/>, duration: 5000})
+					router.push("/login")
 				})
 				.catch((error) => {
 					// 회원가입 관련해서 어떤 error 코드가 존재하는지 몰라서 일단
 					console.log(error)
+					noti({content: <NotiTemplate type={'alert'} content={error.response.data.message}/>, duration: 5000})
 				})
 		}
 	}

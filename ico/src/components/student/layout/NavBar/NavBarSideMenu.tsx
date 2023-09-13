@@ -6,7 +6,7 @@ import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 import { getHomeMyInfoType } from "@/types/student/apiReturnTypes"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 
-function NavBarDesktopRightMenu({ data }: { data: getHomeMyInfoType }) {
+function NavBarSideMenu({ data }: { data: getHomeMyInfoType }) {
 	const navigate = useNavigate()
 	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
@@ -20,6 +20,21 @@ function NavBarDesktopRightMenu({ data }: { data: getHomeMyInfoType }) {
 
 	// 권한에 따라 보여줄지 말지에 대한 분기 처리 할것!
 	const menu = [
+		{
+			content: (
+				<img
+					src={"/assets/dock/dock_class.png"}
+					css={css`
+						height: 100%;
+						width: auto;
+					`}
+				/>
+			),
+			label: "도매 상점",
+			function: () => {
+				navigate("/student/job/seller", "bottomToTop")
+			},
+		},
 		{
 			content: (
 				<img
@@ -101,6 +116,7 @@ function NavBarDesktopRightMenu({ data }: { data: getHomeMyInfoType }) {
 						display: flex;
 						gap: 16px;
 						margin-top: 16px;
+						
 					`}
 				>
 					<div
@@ -129,6 +145,7 @@ const menuWrapperCSS = css`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	background-color: var(--student-main-color-soft);
 `
 
 const menuItemCSS = css`
@@ -140,15 +157,15 @@ const menuItemCSS = css`
 	gap: 16px;
 	padding-left: 16px;
 	font-size: var(--student-h2);
-	border-top: 1px solid var(--student-main-color-2);
-	background-color: var(--student-main-color);
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
+	/* background-color: var(--student-main-color); */
 `
 
 const menuHeaderCSS = css`
 	width: 100%;
 	/* height: 15vh; */
-	background-color: var(--student-main-color);
-	border-bottom: 1px solid var(--student-main-color-2);
+	/* background-color: var(--student-main-color); */
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 	padding: 32px;
 	display: flex;
 	flex-direction: column;
@@ -168,4 +185,4 @@ const labelButtonCSS = css`
 	color: rgba(0, 0, 0, 0.6);
 `
 
-export default NavBarDesktopRightMenu
+export default NavBarSideMenu

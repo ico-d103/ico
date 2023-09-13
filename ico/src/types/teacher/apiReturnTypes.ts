@@ -96,6 +96,7 @@ export type getStudentDetailType = {
 	licenses: licenseType[]
 }
 
+// 상점
 export type getTeacherProductsType = {
 	id: number
 	title: string
@@ -104,9 +105,7 @@ export type getTeacherProductsType = {
 	count: number
 	sold: number
 	date: string
-	name: string
-	rental: boolean
-	assigned: boolean
+	isCoupon: boolean
 }
 
 export type getTeacherProductDetailType = {
@@ -114,12 +113,15 @@ export type getTeacherProductDetailType = {
 	title: string
 	amount: number
 	images: string[]
+	detail: string
 	count: number
 	sold: number
 	date: string
-	rental: boolean
-	detail: string
+	isCoupon: boolean
 }
+
+// 상점 끝
+//--------------------------------------------------------------------
 
 export type getStudentProductsType = {
 	id: number

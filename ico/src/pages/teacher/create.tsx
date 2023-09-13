@@ -9,6 +9,7 @@ import { KOREAN_ONLY, GRADE_ONLY, CLASS_ONLY } from "@/util/regex"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
 import { postCreateNationAPI } from "@/api/teacher/user/postCreateNationAPI"
 import useGetTokenStatus from "@/hooks/useGetTokenStatus"
+import { removeCookie } from "@/api/cookie"
 
 const inputReducer = (
 	state: { school: string; grade: string; class: string; nation: string; currency: string },
@@ -222,6 +223,13 @@ function create() {
 		dispatchValid({ type: "VALID_CURRENCY", value: true })
 	}
 
+	const goPrevPhaseHandler = () => {
+		if (phase !== 0) {
+			setPhase((prev) => prev - 1)
+		}
+		
+	}
+
 	const passFirstPhaseHandler = () => {
 		if (validState.school && validState.grade && validState.class) {
 			setPhase(() => 1)
@@ -255,6 +263,14 @@ function create() {
 		}
 	}
 
+	const signoutHandler = () => {
+		removeCookie("Authorization", { path: "/" })
+		setTokenStatus({ showMessage: false }).then((res) => {
+
+		})
+		// navigate("/teacher/login")
+	}
+
 	const messageGenerator = ({ message, isValid }: { message: string; isValid: boolean }) => {
 		return <div css={messageCSS({ isValid })}>{message}</div>
 	}
@@ -263,6 +279,7 @@ function create() {
 		<div css={createWrapperCSS}>
 			<div css={gridCSS({ phase })}>
 				<div css={phaseWrapperCSS}>
+				
 					<LoadImage
 						src={"/assets/create/create_illust_11.png"}
 						alt={"signup_illust"}
@@ -315,6 +332,7 @@ function create() {
 					</div>
 
 					<div css={buttonWrapperCSS}>
+					
 						<Button
 							theme={"highlighted"}
 							width={"300px"}
@@ -323,6 +341,15 @@ function create() {
 							fontSize={"var(--teacher-h5)"}
 							onClick={passFirstPhaseHandler}
 						></Button>
+						<Button
+							theme={"cancelDark"}
+							width={"300px"}
+							height={"42px"}
+							text={"로그아웃"}
+							fontSize={"var(--teacher-h5)"}
+							onClick={signoutHandler}
+						></Button>
+						
 					</div>
 				</div>
 				<div css={phaseWrapperCSS}>
@@ -371,6 +398,14 @@ function create() {
 							fontSize={"var(--teacher-h5)"}
 							onClick={passSecondPhaseHandler}
 						></Button>
+						<Button
+							theme={"cancelDark"}
+							width={"300px"}
+							height={"42px"}
+							text={"이전"}
+							fontSize={"var(--teacher-h5)"}
+							onClick={goPrevPhaseHandler}
+						></Button>
 					</div>
 				</div>
 				<div css={phaseWrapperCSS}>
@@ -382,6 +417,24 @@ function create() {
 		</div>
 	)
 }
+
+const logoutWrapperCSS = css`
+	width: 300px;
+	margin-bottom: 16px;
+	display: flex;
+	justify-content: flex-end;
+`
+
+const logoutCSS = css`
+	cursor: pointer;
+	font-size: 14px;;
+	color: rgba(0, 0, 0, 0.6);
+	transition-property: color;
+	transition-duration: 0.3s;
+	&:hover {
+		color: rgba(0, 0, 0, 1);
+	}
+`
 
 const createWrapperCSS = css`
 	width: 100%;
@@ -425,6 +478,9 @@ const inputWrapperCSS = css``
 
 const buttonWrapperCSS = css`
 	margin-top: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
 `
 
 const successLabelCSS = css`
