@@ -116,7 +116,8 @@ function ShopDetail({pid, query}: ShopDetailPropsType) {
 			)} */}
 
 			{/* 구매자라는 로직 추가 해야 함*/}
-			{isNavigatingAtom === false && query.data.seller === false && (
+			{/* 여기 주석 해제하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 */}
+			{/* {isNavigatingAtom === false && query.data.seller === false && (
 				<div css={navBarOverlayCSS}>
 					<Button
 						text={"이 상품 구매할래요!"}
@@ -141,7 +142,7 @@ function ShopDetail({pid, query}: ShopDetailPropsType) {
 						}}
 					/>
 				</div>
-			)}
+			)} */}
 		</div>
 	)
 }
