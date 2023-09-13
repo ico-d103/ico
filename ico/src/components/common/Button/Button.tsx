@@ -215,7 +215,7 @@ const buttonCSS = ({ theme }: { theme: string }) => {
 			&:hover {
 				color: rgba(0, 0, 0, 1);
 			}
-		`
+		`,
 		white: css`
 			border: none;
 			border-radius: 10px;
