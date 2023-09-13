@@ -174,7 +174,7 @@ function product() {
 
 				{/* rental이 false : 구매 상품이므로 QR 스캔할 카메라가 필요하지 않다.. */}
 
-				{isNavigatingAtom === false && data?.rental === false && (
+				{/* {isNavigatingAtom === false && data?.rental === false && (
 					<div css={navBarOverlayCSS}>
 						<Button
 							text={"이 상품 구매할래요!"}
@@ -184,11 +184,11 @@ function product() {
 							onClick={confirmModal.open}
 						/>
 					</div>
-				)}
+				)} */}
 
 				{/* rental이 true : 대여 상품이므로 QR 스캔할 카메라가 반드시 필요하다. */}
 
-				{isNavigatingAtom === false && data?.rental === true && (
+				{/* {isNavigatingAtom === false && data?.rental === true && (
 					<div css={navBarOverlayCSS}>
 						<Button
 							text={"이 상품 구매할래요!"}
@@ -202,7 +202,7 @@ function product() {
 							}}
 						/>
 					</div>
-				)}
+				)} */}
 
 				{/* {data && (
 					<Modal
@@ -214,9 +214,9 @@ function product() {
 						}
 					/>
 				)} */}
-				{data && qrScannerModal(
+				{/* {data && qrScannerModal(
 					<QRScannerModal compState={qrScannerModal.state} type={data.rental ? "ico_rental" : "ico_purchase"} id={data.id} />
-				)}
+				)} */}
 			</div>
 		</React.Fragment>
 	)
