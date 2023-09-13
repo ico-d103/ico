@@ -6,8 +6,8 @@ import useCompHandler from "@/hooks/useCompHandler"
 import QRScannerModal from "@/components/student/Shop/QRScanner/QRScannerModal"
 import Modal from "@/components/common/Modal/Modal"
 import { getStudentProductDetailAPI } from "@/api/common/shop/getStudentProductDetailAPI"
-import { getStudentProductDetailType } from "@/types/teacher/apiReturnTypes"
-import { useQuery } from "@tanstack/react-query"
+import { getStudentProductDetailType, getTeacherProductDetailType } from "@/types/teacher/apiReturnTypes"
+import { UseQueryResult, useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/router"
 import React, { useState, useRef } from "react"
 import ShowQR from "@/components/common/ShowQR/ShowQR"
@@ -18,25 +18,26 @@ import Button from "@/components/common/Button/Button"
 import { useAtom } from "jotai"
 import { isNavigating } from "@/store/store"
 import useModal from "@/components/common/Modal/useModal"
+import useShopHandler from "./useShopHandler"
 
 type ShopDetailPropsType = {
-  pid: number
+	query: UseQueryResult<getTeacherProductDetailType, unknown> | UseQueryResult<getStudentProductDetailType, unknown>
+  isSeller: boolean
+	pid: number
 }
 
-function ShopDetail({pid}: ShopDetailPropsType) {
+function ShopDetail({pid, query}: ShopDetailPropsType) {
 
 	const showQRModal = useModal()
 	const scanQRModal = useModal()
 	const [time, setTime] = useState<number>(0)
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 	const [term, setTerm] = useState<0 | 1>(0)
-	const [openComp, closeComp, compState] = useCompHandler()
 	const [nation] = useGetNation()
 	const galleryWrapperRef = useRef<HTMLDivElement>(null)
+	const shopHandler = useShopHandler()
 
-	const { data } = useQuery<getStudentProductDetailType>(["product", pid], () =>
-		getStudentProductDetailAPI({ pid: String(pid) }),
-	)
+
 
 	// console.log(data)
 
@@ -45,7 +46,7 @@ function ShopDetail({pid}: ShopDetailPropsType) {
 		setTime(() => new Date().getTime())
 	}
 
-	const imageElements = data?.images.map((img) => (
+	const imageElements = query.data?.images.map((img) => (
 		<img
 			key={img}
 			alt="Image"
@@ -59,34 +60,18 @@ function ShopDetail({pid}: ShopDetailPropsType) {
 
 	return (
 		<div css={wrapperCSS}>
-			{data && (
+			{query.data && (
 				<React.Fragment>
-					{/* <Modal
-						compState={showQRState}
-						closeComp={closeShowQR}
-						transition={"scale"}
-						content={
-							<ShowQR type={"ico_purchase"} id={data.id} time={time} />
-							// <QRScannerModal compState={compState} type={data.rental ? "ico_rental" : "ico_purchase"} id={data.id} />
-						}
-					/> */}
-					{showQRModal(
-						<ShowQR type={"ico_purchase"} id={data.id} time={time} />
+					{query.data && showQRModal(
+						<ShowQR type={"ico_purchase"} id={query.data.id} time={time} />
 					)}
-
-					{/* <Modal
-						compState={scanQRState}
-						closeComp={closeScanQR}
-						transition={"scale"}
-						content={<QRScannerModal compState={scanQRState} type={"ico_purchase"} id={data.id} />}
-					/> */}
-					{scanQRModal(
-						<QRScannerModal compState={scanQRModal.state} type={"ico_purchase"} id={data.id} />
+					{query.data && scanQRModal(
+						<QRScannerModal compState={scanQRModal.state} type={"ico_purchase"} id={query.data.id} />
 					)}
 				</React.Fragment>
 			)}
-			<PageHeader title={"상점"} />
 
+			<PageHeader title={"상점"} />
 			<div ref={galleryWrapperRef} css={parentCSS}>
 				{imageElements && <SwipeableGallery parentRef={galleryWrapperRef} content={[...imageElements]} />}
 			</div>
@@ -94,28 +79,28 @@ function ShopDetail({pid}: ShopDetailPropsType) {
 			<div css={shopWrapperCSS}>
 	
 					<div css={shopUpperCSS}>
-						{data?.title}
-						{data && (
+						{query.data?.title}
+						{query.data && (
 							<div css={css`font-weight: 500;`}>
-								상품이&nbsp;<div style={{ fontWeight: "700" }}>{data?.count - data?.sold}개</div>&nbsp;남았어요!
+								상품이&nbsp;<div style={{ fontWeight: "700" }}>{query.data?.count - query.data?.sold}개</div>&nbsp;남았어요!
 							</div>
 						)}
 					</div>
 
 					<div css={priceTagCSS}>
-						{data?.amount}&nbsp;
+						{query.data?.amount}&nbsp;
 						{nation.currency}
 					</div>
 
 					<div css={css`width: 100%; height: 1px; border-bottom: 1px solid rgba(0, 0, 0, 0.1); margin: 8px 0px;`}/>
-					<div css={dateCSS}>{data?.date}</div>
-					<div css={detailCSS}>{data?.detail}</div>
+					<div css={dateCSS}>{query.data?.date}</div>
+					<div css={detailCSS}>{query.data?.detail}</div>
 		
 			</div>
 
 			{/* <button onClick={openComp}>qr 카메라</button> */}
 
-			{isNavigatingAtom === false && (
+			{/* {isNavigatingAtom === false && (
 				<div css={navBarOverlayCSS}>
 					<Button
 						text={"이 상품 구매할래요!"}
@@ -128,22 +113,23 @@ function ShopDetail({pid}: ShopDetailPropsType) {
 						}}
 					/>
 				</div>
-			)}
+			)} */}
 
 			{/* 구매자라는 로직 추가 해야 함*/}
-			{isNavigatingAtom === false && data?.assigned === true && data.seller === false && (
+			{/* 여기 주석 해제하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 */}
+			{/* {isNavigatingAtom === false && query.data.seller === false && (
 				<div css={navBarOverlayCSS}>
 					<Button
 						text={"이 상품 구매할래요!"}
 						fontSize={`var(--student-h3)`}
 						width={"100%"}
 						theme={"mobileSoft"}
-						onClick={scanQRModal.open}
+						onClick={() => {shopHandler.addProducts({seller: query.data.seller})}}
 					/>
 				</div>
 			)}
 
-			{isNavigatingAtom === false && data?.assigned === true && data.seller === true && (
+			{isNavigatingAtom === false && query.data.seller === true && (
 				<div css={navBarOverlayCSS}>
 					<Button
 						text={"내 상품을 팔거에요!"}
@@ -156,7 +142,7 @@ function ShopDetail({pid}: ShopDetailPropsType) {
 						}}
 					/>
 				</div>
-			)}
+			)} */}
 		</div>
 	)
 }

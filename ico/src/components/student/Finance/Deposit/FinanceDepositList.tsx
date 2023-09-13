@@ -8,71 +8,78 @@ import { isNavigating } from "@/store/store"
 import Loading from "../../common/Loading/Loading"
 import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
+import QueryAdapter from "@/components/common/Adapter/QueryAdapter"
+import { UseQueryResult } from "@tanstack/react-query"
 
 type FinanceDepositListProps = {
-	data: getFinanceDepositType | undefined
-	isLoading: boolean
+	query: UseQueryResult<getFinanceDepositType, unknown>
 }
-function FinanceDepositList({ data, isLoading }: FinanceDepositListProps) {
+function FinanceDepositList({ query}: FinanceDepositListProps) {
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 
 	const renderProduct =
-		data &&
-		data.depositProduct.map((item, idx) => {
-			return <FinanceDepositListProduct data={item} account={data.account} />
+	query.data && query.data.depositProduct &&
+		query.data.depositProduct.map((item, idx) => {
+			return <FinanceDepositListProduct data={item} account={query.data.account} />
 		})
 
 	const renderMyProduct =
-		data &&
-		data.myDeposit.map((item, idx) => {
+	query.data && query.data.myDeposit &&
+	query.data.myDeposit.map((item, idx) => {
 			return <FinanceDepositListMyProduct data={item} />
 		})
 
-	const loading = (
-		<div
-			css={css`
-				flex: 1;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				direction: ltr;
-			`}
-		>
-			{isNavigatingAtom === false && (
-				<Loading size={96} labelSize={18} labelMargin={"24px 0px 16px 0px"} label={"내역을 불러오는 중이에요!"} />
-			)}
-		</div>
-	)
+	// const loading = (
+	// 	<div
+	// 		css={css`
+	// 			flex: 1;
+	// 			display: flex;
+	// 			justify-content: center;
+	// 			align-items: center;
+	// 			direction: ltr;
+	// 		`}
+	// 	>
+	// 		{isNavigatingAtom === false && (
+	// 			<Loading size={96} labelSize={18} labelMargin={"24px 0px 16px 0px"} label={"내역을 불러오는 중이에요!"} />
+	// 		)}
+	// 	</div>
+	// )
 
-	const empty = (
-		<div css={alertWrapperCSS}>
-			<div
-				css={css`
-					width: 128px;
-					height: 128px;
-				`}
-			>
-				{isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={128} />}
-			</div>
-			<div css={labelCSS}>상품이 없어요!</div>
-		</div>
-	)
+	// const empty = (
+	// 	<div css={alertWrapperCSS}>
+	// 		<div
+	// 			css={css`
+	// 				width: 128px;
+	// 				height: 128px;
+	// 			`}
+	// 		>
+	// 			{isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={128} />}
+	// 		</div>
+	// 		<div css={labelCSS}>상품이 없어요!</div>
+	// 	</div>
+	// )
 
 	return (
 		<div css={contentParentCSS}>
 			<div css={depositWrapperCSS}>
-				<div css={itemWrapperCSS({ display: data && data.myDeposit.length ? true : false, fill: false })}>
+				<div css={itemWrapperCSS({ display: query.data && query.data.myDeposit && query.data.myDeposit.length ? true : false, fill: false })}>
 					<div css={titleLabelCSS}>내가 신청한 예금</div>
-					{isLoading && loading}
-					{data && data.myDeposit.length === 0 && empty}
-					{renderMyProduct}
+					<QueryAdapter query={query} isEmpty={!!(query.data && query.data.myDeposit && query.data.myDeposit.length === 0)}>
+						{renderMyProduct}
+					</QueryAdapter>
+					{/* {isLoading && loading}
+					{data && data.myDeposit.length === 0 && empty} */}
+					
 				</div>
-				<div css={lineCSS({ display: data && data.myDeposit.length ? true : false })} />
+				<div css={lineCSS({ display: query.data && query.data.myDeposit && query.data.myDeposit.length ? true : false })} />
 				<div css={itemWrapperCSS({ display: true, fill: true })}>
 					<div css={titleLabelCSS}>예금 상품</div>
-					{isLoading && loading}
-					{data && data.depositProduct.length === 0 && empty}
+					{/* {isLoading && loading}
+					{data && data.depositProduct.length === 0 && empty} */}
+					<QueryAdapter query={query} isEmpty={!!(query.data && query.data.depositProduct && query.data.depositProduct.length === 0)}>
 					{renderProduct}
+					</QueryAdapter>
+					
 				</div>
 			</div>
 		</div>

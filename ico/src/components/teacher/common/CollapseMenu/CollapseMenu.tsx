@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react"
-import { css } from "@emotion/react"
+import { SerializedStyles, css } from "@emotion/react"
 
 type CollapseMenuProps = {
 	children: JSX.Element
@@ -9,9 +9,10 @@ type CollapseMenuProps = {
 	border?: string
 	marginBottom?: string
 	reverse?: boolean
+	customCss?: SerializedStyles
 }
 
-function CollapseMenu({ children, title, fontSize, bracketSize, border, marginBottom, reverse }: CollapseMenuProps) {
+function CollapseMenu({ children, title, fontSize, bracketSize, border, marginBottom, reverse, customCss }: CollapseMenuProps) {
 	const [isOpened, setIsOpened] = useState<boolean>(reverse ? true : false)
 	const [refresh, setRefresh] = useState<boolean>(false)
 	const contentWrapperRef = useRef<HTMLDivElement>(null)
@@ -23,7 +24,7 @@ function CollapseMenu({ children, title, fontSize, bracketSize, border, marginBo
 	}, [isOpened])
 
 	return (
-		<div css={ancWrapperCSS({ border, marginBottom })}>
+		<div css={[ancWrapperCSS({ border, marginBottom }), customCss]}>
 			<div
 				css={trgWrapperCSS({ fontSize })}
 				onClick={() => {

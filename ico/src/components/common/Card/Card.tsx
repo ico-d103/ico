@@ -16,6 +16,8 @@ type CardProps = {
 	assigned: boolean | null
 }
 
+
+
 function Card({ baseUrl, id, title, amount, image, count, sold, name, date, assigned }: CardProps) {
 	const router = useRouter()
 
@@ -50,7 +52,7 @@ function Card({ baseUrl, id, title, amount, image, count, sold, name, date, assi
 	return (
 		<div>
 			<div css={[cardCSS, darkCSS]} onClick={handleClickCard}>
-				{assigned == false && <div css={[testCSS, cardRequestTextCSS]}>승인 진행 중</div>}
+				{/* {assigned == false && <div css={[testCSS, cardRequestTextCSS]}>승인 진행 중</div>} */}
 				{count - sold === 0 && <div css={[testCSS, cardSoldOutTextCSS]}>sold out</div>}
 				<div css={cardImageWrapperCSS}>
 					<Image src={image} alt={title} fill={true} />

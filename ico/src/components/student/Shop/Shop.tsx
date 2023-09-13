@@ -13,21 +13,14 @@ import { useRouter } from "next/router"
 import React from 'react'
 import Button from "@/components/common/Button/Button"
 import useNavigate from "@/hooks/useNavigate"
+import QueryAdapter from "@/components/common/Adapter/QueryAdapter"
 
 type ShopPropsType = {
   uploadPageUrl?: string
-  queries: UseQueryResult<getTeacherProductsType[], unknown> | UseQueryResult<getStudentProductsType[], unknown>
+  query: UseQueryResult<getTeacherProductsType[], unknown> | UseQueryResult<getStudentProductsType[], unknown>
 }
-function Shop({uploadPageUrl, queries}: ShopPropsType) {
-	const {
-		data: cardData,
-		isError,
-		isLoading,
-		isFetching,
-		error,
-		isSuccess,
-		refetch,
-	} = useQuery<getTeacherProductsType[]>(["teacherProducts"], getTeacherProductsAPI)
+function Shop({uploadPageUrl, query}: ShopPropsType) {
+
 
 	const isMobile = useMediaQuery("(max-width: 768px")
   const router = useRouter()
@@ -49,36 +42,35 @@ function Shop({uploadPageUrl, queries}: ShopPropsType) {
 			</div>
   )
 
+	
+
 	return (
 		<React.Fragment>
 			{renderUpload}
-			{queries.data?.length === 0 && (
-				<div css={noneWrapperCSS}>
-					<UseAnimations animation={alertCircle} size={200} strokeColor={"rgba(0,0,0,0.4)"} />
-					<h3>등록된 상품이 없어요</h3>
+			<QueryAdapter query={query} isEmpty={!!(query.data && query.data.length === 0)}>
+				<div css={cardWrapperCSS({isMobile})}>
+					{query.data?.length !== 0 && (
+						<>
+							{query.data?.map((card) => (
+								<Card
+									baseUrl={router.asPath}
+									key={card.id}
+									id={card.id}
+									title={card.title}
+									amount={card.amount}
+									image={card.images[0]}
+									count={card.count}
+									sold={card.sold}
+									name={'선생님'}
+									date={card.date}
+									assigned={true}
+								/>
+							))}
+						</>
+					)}
 				</div>
-			)}
-			<div css={cardWrapperCSS({isMobile})}>
-				{queries.data?.length !== 0 && (
-					<>
-						{queries.data?.map((card) => (
-							<Card
-                baseUrl={router.asPath}
-								key={card.id}
-								id={card.id}
-								title={card.title}
-								amount={card.amount}
-								image={card.images[0]}
-								count={card.count}
-								sold={card.sold}
-								name={card?.name}
-								date={card.date}
-								assigned={card?.assigned}
-							/>
-						))}
-					</>
-				)}
-			</div>
+			</QueryAdapter>
+			
 		</React.Fragment>
 	)
 }

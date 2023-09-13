@@ -8,8 +8,8 @@ type ruleProps = {
 }
 
 function RuleList({ rules }: ruleProps) {
-	const renderRules = rules.map((el) => {
-		return <RuleListItem key={el.id} rule={el} />
+	const renderRules = rules.map((el, idx) => {
+		return <RuleListItem key={el.id} rule={el} idx={idx} />
 	})
 
 	return <React.Fragment>{renderRules}</React.Fragment>

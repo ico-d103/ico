@@ -56,9 +56,9 @@ function teacher() {
 							image={card.images[0]}
 							count={card.count}
 							sold={card.sold}
-							name={card?.name}
+							name={'선생님'}
 							date={card.date}
-							assigned={card?.assigned ?? true}
+							assigned={true}
 						/>
 					))}
 				</div>

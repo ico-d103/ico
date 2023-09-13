@@ -2,13 +2,18 @@ import React from "react"
 import { css } from "@emotion/react"
 import FinanceInvestListItem from "./FinanceInvestListItem"
 import FinanceInvestListMyItem from "./FinanceInvestListMyItem"
-import { getFinanceDepositType, getFinanceInvestListStockItemType, getFinanceInvestListMyItemType } from "@/types/student/apiReturnTypes"
+import {
+	getFinanceDepositType,
+	getFinanceInvestListStockItemType,
+	getFinanceInvestListMyItemType,
+} from "@/types/student/apiReturnTypes"
 import { useAtom } from "jotai"
 import { isNavigating } from "@/store/store"
 import Loading from "../../common/Loading/Loading"
 import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
 import { UseQueryResult } from "@tanstack/react-query"
+import QueryAdapter from "@/components/common/Adapter/QueryAdapter"
 
 type FinanceInvestListProps = {
 	investProductQueries: UseQueryResult<getFinanceInvestListStockItemType[], unknown>
@@ -18,69 +23,57 @@ function FinanceInvestList({ investProductQueries, investMyProductQueries }: Fin
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 
 	const renderProduct =
-	investProductQueries.data &&
-	investProductQueries.data.map((product, idx) => {
+		investProductQueries.data &&
+		investProductQueries.data.map((product, idx) => {
 			return <FinanceInvestListItem data={product} />
 		})
 
 	const renderMyProduct =
-	investMyProductQueries.data &&
-	investMyProductQueries.data.map((product, idx) => {
-
+		investMyProductQueries.data &&
+		investMyProductQueries.data.map((product, idx) => {
 			const renderMyProductItem = product.stocklist.map((item, iidx) => {
-				return <FinanceInvestListMyItem stockId={product.stockId} title={product.title} itemData={item} itemIdx={iidx} />
+				return (
+					<FinanceInvestListMyItem stockId={product.stockId} title={product.title} itemData={item} itemIdx={iidx} />
+				)
 			})
 			return renderMyProductItem
-
-			
-			
 		})
-
-	const loading = (
-		<div
-			css={css`
-				flex: 1;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				direction: ltr;
-			`}
-		>
-			{isNavigatingAtom === false && (
-				<Loading size={96} labelSize={18} labelMargin={"24px 0px 16px 0px"} label={"내역을 불러오는 중이에요!"} />
-			)}
-		</div>
-	)
-
-	const empty = (
-		<div css={alertWrapperCSS}>
-			<div
-				css={css`
-					width: 128px;
-					height: 128px;
-				`}
-			>
-				{isNavigatingAtom === false && <UseAnimations animation={alertCircle} size={128} />}
-			</div>
-			<div css={labelCSS}>종목이 없어요!</div>
-		</div>
-	)
 
 	return (
 		<div css={contentParentCSS}>
 			<div css={investWrapperCSS}>
-				<div css={itemWrapperCSS({ display: investMyProductQueries.data && investMyProductQueries.data.length ? true : false, fill: false })}>
+				<div
+					className="my-list"
+					css={itemWrapperCSS({
+						display: investMyProductQueries.data && investMyProductQueries.data.length ? true : false,
+						fill: false,
+					})}
+				>
 					<div css={titleLabelCSS}>내가 투자한 종목</div>
-					{investMyProductQueries.isLoading && loading}
-					{investMyProductQueries.data && investMyProductQueries.data.length === 0 && empty}
-					{renderMyProduct}
+					<QueryAdapter
+						query={investMyProductQueries}
+						isEmpty={!!(investMyProductQueries.data && investMyProductQueries.data.length === 0)}
+						emptyLabel="종목이 없어요!"
+						fetchingLabel="내역을 불러오는 중이에요!"
+					>
+						{renderMyProduct}
+					</QueryAdapter>
+
 				</div>
-				<div css={lineCSS({ display: investMyProductQueries.data && investMyProductQueries.data.length ? true : false })} />
-				<div css={itemWrapperCSS({ display: true, fill: true })}>
+				<div
+					css={lineCSS({ display: investMyProductQueries.data && investMyProductQueries.data.length ? true : false })}
+				/>
+				<div className="product-list" css={itemWrapperCSS({ display: true, fill: true })}>
 					<div css={titleLabelCSS}>투자 종목</div>
-					{investProductQueries.isLoading && loading}
-					{investProductQueries.data && investProductQueries.data.length === 0 && empty}
-					{renderProduct}
+					<QueryAdapter
+						query={investProductQueries}
+						isEmpty={!!(investProductQueries.data && investProductQueries.data.length === 0)}
+						emptyLabel="종목이 없어요!"
+						fetchingLabel="내역을 불러오는 중이에요!"
+					>
+						{renderProduct}
+					</QueryAdapter>
+					
 				</div>
 			</div>
 		</div>
@@ -132,7 +125,16 @@ const investWrapperCSS = css`
 		min-width: 726px;
 		display: grid;
 		grid-template-columns: 50% 50%;
-		direction: rtl;
+		/* direction: rtl; */
+
+		& .my-list {
+			grid-column-start: 2;
+			grid-row-start: 1;
+		}
+		& .product-list {
+			grid-column-start: 1;
+			grid-row-start: 1;
+		}
 
 		flex: 1;
 		/* background-color: red;; */

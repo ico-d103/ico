@@ -1,8 +1,12 @@
 import Input from "@/components/common/Input/Input"
-import React from "react"
+import React, {useState} from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 import useNavigate from "@/hooks/useNavigate"
+import { putGovRuleAPI } from "@/api/teacher/gov/putGovRuleAPI"
+import { postGovRuleAPI } from "@/api/teacher/gov/postGovRuleAPI"
+import { useQueryClient } from "@tanstack/react-query"
+
 
 type RuleCreateProps = {
 	id?: number
@@ -13,10 +17,25 @@ type RuleCreateProps = {
 function RuleCreate({ id, title, content }: RuleCreateProps) {
 	const navigate = useNavigate()
 
+	const [titleState, setTitleState] = useState(title || '')
+	const [contentState, setContentState] = useState(content || '')
+	const queryClient = useQueryClient()
+
 	const submitHandler = () => {
 		if (id) {
+			putGovRuleAPI({idx: id, body: {title: titleState, detail: contentState}})
+			.then((res) => {
+				navigate("/student/job/rule", "bottomToTop")
+			})
 			// 글 수정 api
 		} else {
+			postGovRuleAPI({body: {title: titleState, detail: contentState}})
+			.then((res) => {
+				queryClient.invalidateQueries(["student", "job", "rule"])
+				queryClient.invalidateQueries(["student", "gov", "rule"])
+				navigate("/student/job/rule", "bottomToTop")
+			})
+			
 			// 글 작성 api
 		}
 	}
@@ -24,7 +43,7 @@ function RuleCreate({ id, title, content }: RuleCreateProps) {
 	return (
 		<div css={ruleCreateWrapperCSS}>
 			<div css={ruleTitleWrapperCSS}>{id ? "글 수정" : "글 작성"}</div>
-			<Input theme={"mobileWhite"} placeholder="제목을 입력해 주세요!" value={title ? title : ""} />
+			<Input theme={"mobileWhite"} placeholder="제목을 입력해 주세요!" value={titleState} onChange={(e) => setTitleState(() => e.target.value)} />
 			<div css={lineCSS} />
 			<div
 				css={css`
@@ -35,7 +54,8 @@ function RuleCreate({ id, title, content }: RuleCreateProps) {
 				<Input
 					theme={"mobileWhite"}
 					placeholder="내용을 입력해 주세요!"
-					value={content ? content : ""}
+					value={contentState}
+					onChange={(e) => setContentState(() => e.target.value)}
 					isTextarea={true}
 					customCss={textAreaCSS}
 					resizeTextarea={false}
