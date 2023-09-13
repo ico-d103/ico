@@ -291,3 +291,16 @@ export type FinanceInvestIssueType = {
 	amount: number
 	content: string
 }
+
+export type savingListType = {
+	id: number
+	title: string
+	count: number
+	amount: number
+	interest: number[]
+	students: savingListStudentType[]
+}
+
+export type savingListStudentType = {
+	
+}
