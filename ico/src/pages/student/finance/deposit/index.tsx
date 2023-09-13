@@ -5,10 +5,9 @@ import { useQuery } from "@tanstack/react-query"
 import { css } from "@emotion/react"
 import FinanceDepositList from "@/components/student/Finance/Deposit/FinanceDepositList"
 import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
-import { financeTabMenu } from "../financeTabMenu"
+import { financeTabMenu } from "../../../../components/student/Finance/financeTabMenu"
 
 function index() {
-
 	const depositQuery = useQuery<getFinanceDepositType>(
 		["student", "homeFinanceGetRate"],
 		getFinanceDepositAPI,
@@ -29,6 +28,5 @@ function index() {
 		</div>
 	)
 }
-
 
 export default index
