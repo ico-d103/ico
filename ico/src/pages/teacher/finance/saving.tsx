@@ -4,59 +4,60 @@ import { css } from "@emotion/react"
 
 import { useQuery } from "@tanstack/react-query"
 
+import useCompHandler from "@/hooks/useCompHandler"
+
+import AnimatedRenderer from "@/components/common/AnimatedRenderer/AnimatedRenderer"
+
+import FinanceSavingCreate from "@/components/teacher/Finance/Saving/FinanceSavingCreate"
+
+import { getSavingListAPI } from "@/api/teacher/finanace/getSavingListAPI"
+
+import { savingListType } from "@/types/teacher/apiReturnTypes"
+import FinanceSavingList from "@/components/teacher/Finance/Saving/FinanceSavingList"
+
 function saving() {
-	const [addDeposit, setAddDeposit] = useState(false) // "추가" 버튼을 눌렀을 때의 상태 추가
+	const [openComp, closeComp, compState] = useCompHandler()
 
-	const handleAddButtonClick = () => {
-		setAddDeposit(true)
+	const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<savingListType[]>(
+		["teacher", "financeSaving"],
+		getSavingListAPI,
+	)
+
+	// console.log(data)
+
+	if (!data) {
+		return null
 	}
 
-	const handleCancelClick = () => {
-		setAddDeposit(false)
-	}
-
-	// const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<depositProductType[]>(
-	// 	["teacher", "financeDeposit"],
-	// 	getDepositListAPI,
-	// )
-
-	// if (!data) {
-	// 	return null
-	// }
-	// test
 	return (
 		<div css={wrapperCSS}>
-			<div css={headerCSS}>
-				<div css={titleCSS}>적금</div>
-				{addDeposit ? (
-					<div></div>
-				) : (
-					<div>
-						<Button
-							text={"예금 상품 추가하기"}
-							fontSize={"var(--teacher-h5)"}
-							width={"200px"}
-							theme={"normal"}
-							onClick={handleAddButtonClick}
-						/>
-					</div>
+			<div css={titleCSS}>
+				적금
+				{!compState && (
+					<Button
+						text={"적금 상품 추가하기"}
+						fontSize={"var(--teacher-h5)"}
+						width={"200px"}
+						theme={"normal"}
+						onClick={() => {
+							openComp()
+						}}
+					/>
 				)}
 			</div>
 			<div css={subTitleCSS}>적금 상품을 만들고 신용등급에 따른 적금 이자율을 설정할 수 있습니다.</div>
 
-			{/* {addDeposit ? (
-				<div>
-					<FinanceDepositCreate onCancelClick={handleCancelClick} />
-				</div>
-			) : (
-				<div></div>
-			)}
+			<div>
+				<AnimatedRenderer compState={compState} initHeight="0">
+					<FinanceSavingCreate closeHandler={closeComp} />
+				</AnimatedRenderer>
+			</div>
 
-			<div css={contentCSS}>
+			<div>
 				{data.map((item) => (
-					<FinanceDepositList key={item.id} data={item} />
+					<FinanceSavingList key={item.id} data={item} />
 				))}
-			</div> */}
+			</div>
 		</div>
 	)
 }
@@ -68,24 +69,19 @@ const wrapperCSS = css`
 	padding: 30px;
 `
 
-const headerCSS = css`
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-`
 const titleCSS = css`
 	font-size: var(--teacher-h1);
-	font-weight: bold;
+	font-weight: 700;
+	margin-bottom: 12px;
+	display: flex;
+	justify-content: space-between;
+	height: 35px;
 `
+
 const subTitleCSS = css`
 	font-size: 0.95rem;
 	margin-top: 12px;
 	margin-bottom: 36px;
-`
-
-const contentCSS = css`
-	// margin-top: 50px;
 `
 
 export default saving

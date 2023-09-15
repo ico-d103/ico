@@ -302,5 +302,8 @@ export type savingListType = {
 }
 
 export type savingListStudentType = {
-	
+	number: number
+	name: string
+	amount: number
+	startDate: string
 }

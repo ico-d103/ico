@@ -93,8 +93,6 @@ const wrapperCSS = css`
 	background-color: var(--common-back-color-2);
 	border-radius: 10px;
 	padding: 30px;
-
-	gap: 10px;
 `
 
 const titleCSS = css`
