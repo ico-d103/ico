@@ -5,8 +5,13 @@ import useNavigate from "@/hooks/useNavigate"
 import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 import { getHomeMyInfoType } from "@/types/student/apiReturnTypes"
 import LoadImage from "@/components/common/LoadImage/LoadImage"
+import useModal from "@/components/common/Modal/useModal"
+import ModalContent from "@/components/common/Modal/ModalContent"
+import { CLASS_BIG_PROPERTY } from "@/components/teacher/Class/ClassIcons"
+import PowerCreditModalContent from "../../Job/Power/PowerCreditModalContent"
 
 function NavBarSideMenu({ data }: { data: getHomeMyInfoType }) {
+	const modal = useModal()
 	const navigate = useNavigate()
 	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
@@ -20,6 +25,19 @@ function NavBarSideMenu({ data }: { data: getHomeMyInfoType }) {
 
 	// 권한에 따라 보여줄지 말지에 대한 분기 처리 할것!
 	const menu = [
+		{
+			content: (
+				<img
+					src={"/assets/dock/dock_class.png"}
+					css={css`
+						height: 100%;
+						width: auto;
+					`}
+				/>
+			),
+			label: "신용 점수 조정",
+			function: () => modal.open(),
+		},
 		{
 			content: (
 				<img
@@ -116,7 +134,6 @@ function NavBarSideMenu({ data }: { data: getHomeMyInfoType }) {
 						display: flex;
 						gap: 16px;
 						margin-top: 16px;
-						
 					`}
 				>
 					<div
@@ -131,6 +148,15 @@ function NavBarSideMenu({ data }: { data: getHomeMyInfoType }) {
 			</div>
 
 			<div>{renderMenu}</div>
+
+			{modal(
+				<ModalContent
+					width={"500px"}
+					title={"신용 점수 조정"}
+					titleSize={"var(--teacher-h2)"}
+					content={<PowerCreditModalContent />}
+				/>,
+			)}
 		</div>
 	)
 }
