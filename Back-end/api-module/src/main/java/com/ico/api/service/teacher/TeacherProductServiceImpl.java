@@ -122,6 +122,8 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                     .sold(product.getSold())
                     .isCoupon(product.getIsCoupon())
                     .date(product.getDate().format(Formatter.date))
+                    .seller("선생님")
+                    .isSeller(true)
                     .build();
 
             resProductList.add(resDto);
@@ -248,6 +250,8 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 .isCoupon(product.getIsCoupon())
                 .sold(product.getSold())
                 .date(product.getDate().format(Formatter.date))
+                .seller("선생님")
+                .isSeller(true)
                 .build();
     }
 
