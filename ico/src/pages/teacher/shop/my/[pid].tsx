@@ -86,7 +86,7 @@ function product() {
 								theme={"vividNegative"}
 								onClick={deleteTeacherProduct}
 							/>
-							{data?.rental && (
+							{/* {data?.rental && (
 								<Button
 									text={"QR코드 생성"}
 									fontSize={"var(--teacher-h5)"}
@@ -98,7 +98,18 @@ function product() {
 										modal.open()
 									}}
 								/>
-							)}
+							)} */}
+							<Button
+									text={"QR코드 생성"}
+									fontSize={"var(--teacher-h5)"}
+									width={"140px"}
+									theme={"vividPositive"}
+									onClick={() => {
+										generateTime()
+										// openComp()
+										modal.open()
+									}}
+								/>
 						</div>
 					</div>
 					{/* 이름 getnation으로 선생님이름 받아올까 생각중 */}

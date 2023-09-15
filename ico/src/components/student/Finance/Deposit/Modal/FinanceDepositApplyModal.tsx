@@ -45,7 +45,7 @@ type FinanceDepositApplyModalProps = {
 
 function FinanceDepositApplyModal({ data, unit, closeComp, account }: FinanceDepositApplyModalProps) {
 	const noti = useNotification()
-	const [value, setValue] = useState<number>(0)
+	const [value, setValue] = useState<string>("")
 	const [nation] = useGetNation()
 	const queryClient = useQueryClient()
 
@@ -55,7 +55,7 @@ function FinanceDepositApplyModal({ data, unit, closeComp, account }: FinanceDep
 
 	const submitHandler = () => {
 		postFinanceDepositMutation.mutate(
-			{ id: data.id, amount: value },
+			{ id: data.id, amount: Number(value) },
 			{
 				onSuccess: () => {
 					noti({
@@ -78,7 +78,7 @@ function FinanceDepositApplyModal({ data, unit, closeComp, account }: FinanceDep
 
 	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (Number(e.target.value) <= account) {
-			setValue(() => Number(e.target.value))
+			setValue(() => e.target.value)
 		}
 	}
 
@@ -91,6 +91,8 @@ function FinanceDepositApplyModal({ data, unit, closeComp, account }: FinanceDep
 				onChange={onChangeHandler}
 				theme={"mobileWhite"}
 				textAlign={"right"}
+				type={'number'}
+				autoFocus
 				rightContent={
 					<div css={balanceLabelCSS}>
 						/ {account.toLocaleString("ko-KR")} {unit}

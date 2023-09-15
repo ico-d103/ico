@@ -44,18 +44,18 @@ type FinanceInvestApplyModalProps = {
 
 function FinanceInvestApplyModal({ pid, price, account, unit, closeComp }: FinanceInvestApplyModalProps) {
 	const noti = useNotification()
-	const [value, setValue] = useState<number>(0)
+	const [value, setValue] = useState<string>("")
 	const queryClient = useQueryClient()
 	const router = useRouter()
 
 	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (Number(e.target.value) <= account) {
-			setValue(() => Number(e.target.value))
+			setValue(() => e.target.value)
 		}
 	}
 
 	const submitHandler = () => {
-		putFinanceInvestAPI({id: pid, body: {price, amount: value}}).then((res) => {
+		putFinanceInvestAPI({id: pid, body: {price, amount: Number(value)}}).then((res) => {
 			queryClient.invalidateQueries(["student", "financeInvestDetail", `${pid}`])
 			noti({content: <NotiTemplate type={'ok'} content="투자 매수에 성공했어요!"/>, width: '300px', height: '120px', duration: 3000})
 			router.push('/student/finance/invest')
@@ -73,6 +73,8 @@ function FinanceInvestApplyModal({ pid, price, account, unit, closeComp }: Finan
 				onChange={onChangeHandler}
 				theme={"mobileWhite"}
 				textAlign={"right"}
+				type={"number"}
+				autoFocus
 				rightContent={
 					<div css={balanceLabelCSS}>
 						/ {account.toLocaleString('ko-KR')} {unit}

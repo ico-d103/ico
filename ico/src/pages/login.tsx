@@ -211,6 +211,7 @@ function login() {
 const wrapperCSS = css`
 	display: flex;
 	width: 100%;
+	max-width: 100%;
 	height: 100%;
 
 	@media (max-width: 1024px) {
@@ -222,7 +223,9 @@ const loginSectionCSS = css`
 	@media (max-width: 1024px) {
 		width: 100%;
 		flex: 1;
-		margin: 36px 0px 36px 0px;
+		/* margin: 36px 0px 0px 0px; */
+		padding-top: 24px;
+		padding-bottom: 24px;
 	}
 	@media (min-width: 1025px) {
 		min-height: 100%;
@@ -231,7 +234,7 @@ const loginSectionCSS = css`
 
 	}
 
-	min-width: 400px;
+	min-width: 360px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -239,6 +242,14 @@ const loginSectionCSS = css`
 `
 
 const imageSectionCSS = css`
+
+	@media (max-width: 1024px) {
+		
+	}
+	@media (min-width: 1025px) {
+		width: 75vw;
+		height: 100%;
+	}
 	overflow: hidden;
 	box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
 	max-height: 100vh;
@@ -252,18 +263,9 @@ const imageSectionCSS = css`
 `
 
 const imageWrapperCSS = css`
-	/* width: 100%; */
-	/* height: 100%; */
-	width: 100%;
-	/* @media (max-width: 1024px) {
-		width: 100%;
-	}
-	@media (min-width: 1025px) {
-		width: 100%;
-	} */
-
-
-	height: auto;
+	height: 100%;
+  width: 100%;
+  object-fit: cover;
 `
 
 const loginFormCSS = css`

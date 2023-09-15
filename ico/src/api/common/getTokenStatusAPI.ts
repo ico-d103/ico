@@ -9,7 +9,7 @@ type responseType = {
 export const getTokenStatusAPI = async () => {
 	try {
 		const response: responseType = await tokenInstance.get("/status")
-
+		console.log("토큰 상태", response.data)
 		return response.data
 	} catch (error) {
 		throw error

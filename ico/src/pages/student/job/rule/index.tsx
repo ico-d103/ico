@@ -38,6 +38,7 @@ function news() {
   )
 }
 const ruleListWrapperCSS = css`
+  width: 100%;
   
   display: flex;
   flex-direction: column;

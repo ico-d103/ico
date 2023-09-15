@@ -16,6 +16,16 @@ export const tokenInstance = axios.create({
 	baseURL: "/api",
 })
 
+defaultInstance.interceptors.response.use(
+	(config) => config,
+	async (error) => {
+		if (error.response.data.code === "29") {
+			await removeCookie("Authorization")
+		}
+		return await Promise.reject(error)
+	}
+)
+
 /**
  * tokenInstance 인터셉터 처리
  */
@@ -29,35 +39,17 @@ tokenInstance.interceptors.request.use(
 
 		return config
 	},
-	(error) => Promise.reject(error),
+	async (error) => Promise.reject(error)
 )
 
 tokenInstance.interceptors.response.use(
 	(response) => response,
 	async (error) => {
-		// // accesstoken 만료 시
-		// if (error.response.status === 401) {
-		// 	// 1. refreshtoken으로 accesstoken 갱신하는 http 요청
-		// 	const response = ""
-
-		// 	// 2. 갱신된 accesstoken을 받으면
-		// 	if (response) {
-		// 		// 2-1. 자동으로 쿠키의 token 갱신
-
-		// 		// 2-2. 원래 하려던 http 요청 수행
-		// 		const originalResponse = await tokenInstance.request(error.config)
-		// 		return originalResponse
-		// 	}
-		// 	// 3. refreshtoken도 만료됐다면
-		// 	else {
-		// 		// 3-1. 로그인 페이지로 이동
-		// 	}
-		// }
-
-
-
-
-		throw error
+		console.log("Fewfwefe", error.response.data.code)
+		if (error.response.data.code === "29") {
+			await removeCookie("Authorization")
+		}
+		return await Promise.reject(error)
 	},
 )
 

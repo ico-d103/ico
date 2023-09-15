@@ -60,7 +60,6 @@ export type getFinanceInvestListMyItemDetailType = {
 	rate: number
 }
 
-
 export type getFinanceInvestDetailType = {
 	stock: string
 	account: number
@@ -98,6 +97,8 @@ export type getFinanceInvestTimeType = {
 // 	}
 // }
 
+// ----------------------------------------------
+// 예금
 export type myDepositType = {
 	id: string
 	title: null | string
@@ -106,7 +107,7 @@ export type myDepositType = {
 	endDate: string
 	creditRating: number
 	amount: number
-	depositAmount: number
+	interestAmount: number
 	end: boolean
 }
 
@@ -123,7 +124,40 @@ export type getFinanceDepositType = {
 	depositProduct: depositProductType[]
 }
 
+// 예금 끝
+// ----------------------------------------------
+// ----------------------------------------------
+// 적금
 
+export type mySavingType = {
+	id: string
+	title: null | string
+	interest: number
+	startDate: string
+	endDate: string
+	creditRating: number
+	amount: number
+	count: number
+	totalCount: number
+	interestAmount: number
+	end: boolean
+}
+
+export type savingProductType = {
+	id: number
+	title: string
+	period: number
+	interest: number
+}
+
+export type getFinanceSavingType = {
+	account: number
+	mySaving: mySavingType[]
+	savingProduct: savingProductType[]
+}
+
+//적금 끝
+// ----------------------------------------------
 
 export type getStudentListType = {
 	number: number
@@ -162,7 +196,6 @@ export type getPurchasedTransactionType = {
 	type: boolean
 	date: string
 }
-
 
 // ---------------------------------
 // 교사쪽으로 옮겨야됌!!!!!

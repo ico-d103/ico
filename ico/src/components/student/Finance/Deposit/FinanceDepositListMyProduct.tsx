@@ -21,7 +21,7 @@ function FinanceDepositListMyProduct({ data }: FinanceDepositListMyProductProps)
 		<div>
 			<span css={highlightFontCSS}>{restDate}일</span> 뒤에{" "}
 			<span css={highlightFontCSS}>
-				{data.amount + data.depositAmount} {nation.currency}
+				{data.amount + data.interestAmount} {nation.currency}
 			</span>
 			{appendEulReul(nation.currency, true)} 얻을 수 있어요!
 		</div>
@@ -31,7 +31,7 @@ function FinanceDepositListMyProduct({ data }: FinanceDepositListMyProductProps)
 		<div>
 			<span css={highlightFontCSS}>지금</span>{" "}
 			<span css={highlightFontCSS}>
-				{data.amount + data.depositAmount} {nation.currency}
+				{data.amount + data.interestAmount} {nation.currency}
 			</span>
 			{appendEulReul(nation.currency, true)} 얻을 수 있어요!
 		</div>

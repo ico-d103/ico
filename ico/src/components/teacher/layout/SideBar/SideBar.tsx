@@ -18,7 +18,7 @@ import {
 	SUB_GOVERNMENT_RULE,
 	SUB_GOVERNMENT_ECONOMY,
 	SUB_FINANCE_DEPOSIT,
-	SUB_FINANCE_STOCK,
+	SUB_FINANCE_INVEST,
 	SUB_STORE_STUDENT,
 	SUB_STORE_TEACHER,
 	SUB_CORPORATE_MANAGEMENT,
@@ -112,8 +112,6 @@ function SideBar({ children }: SideBarProps) {
 	}
 
 	const MAIN_LOGO = <img css={logoCSS} src={"/assets/icon_desktop.png"} alt="교사회원 메인 아이콘" />
-
-
 
 	const generateIndicator = () => {}
 
