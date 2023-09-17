@@ -2,6 +2,8 @@ package com.ico.api.controller;
 
 import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
+import com.ico.api.dto.nation.PaydayReqDto;
+import com.ico.api.dto.nation.PaydayResDto;
 import com.ico.api.dto.nation.TradingTimeReqDto;
 import com.ico.api.service.nation.NationService;
 import com.ico.core.entity.Nation;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -108,6 +111,43 @@ public class NationController {
     @DeleteMapping("/teacher")
     public ResponseEntity<HttpStatus> deleteNation(HttpServletRequest request) {
         nationService.deleteNation(request);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 나라의 월급일정 등록
+     *
+     * @param request
+     * @param dto
+     * @return
+     */
+    @PostMapping("/teacher/payday")
+    public ResponseEntity<HttpStatus> addPayday(HttpServletRequest request, @Valid @RequestBody PaydayReqDto dto) {
+        nationService.addPayday(request, dto);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 나라의 월급일정 조회
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping("teacher/payday")
+    public ResponseEntity<PaydayResDto> getPayday(HttpServletRequest request){
+        return ResponseEntity.ok(nationService.getPayday(request));
+    }
+
+    /**
+     * 나라의 월급일정 삭제
+     *
+     * @param request
+     * @param date
+     * @return
+     */
+    @DeleteMapping("teacher/payday/{date}")
+    public ResponseEntity<HttpStatus> deletePayday(HttpServletRequest request, @PathVariable Byte date){
+        nationService.deletePayday(request, date);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

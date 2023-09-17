@@ -2,6 +2,8 @@ package com.ico.api.service.nation;
 
 import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
+import com.ico.api.dto.nation.PaydayReqDto;
+import com.ico.api.dto.nation.PaydayResDto;
 import com.ico.api.dto.nation.TradingTimeReqDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
@@ -19,6 +21,7 @@ import com.ico.core.entity.Issue;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.NationLicense;
 import com.ico.core.entity.News;
+import com.ico.core.entity.Payday;
 import com.ico.core.entity.Stock;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentJob;
@@ -37,6 +40,7 @@ import com.ico.core.repository.NationLicenseRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.NewsRepository;
 import com.ico.core.repository.IssueRepository;
+import com.ico.core.repository.PaydayRepository;
 import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.StudentLicenseRepository;
@@ -52,6 +56,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,6 +91,8 @@ public class NationServiceImpl implements NationService {
     private final JwtTokenProvider jwtTokenProvider;
     private final DefaultNationRepository defaultNationRepository;
     private final DepositProductRepository depositProductRepository;
+    private final PaydayRepository paydayRepository;
+
 
     @Override
     @Transactional
@@ -406,4 +413,66 @@ public class NationServiceImpl implements NationService {
         // 연관관계 매핑을 모두 끊고 마지막에 삭제
         nationRepository.delete(nation);
     }
+
+    @Override
+    public void addPayday(HttpServletRequest request, PaydayReqDto dto) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        List<Payday> paydayList = paydayRepository.findAllByNationIdOrderByDate(nationId);
+        byte date = dto.getDate();
+
+        for(Payday payday : paydayList){
+            if(payday.getDate().equals(date)){
+                throw new CustomException(ErrorCode.ALREADY_EXIST_PAYDAY);
+            }
+        }
+
+        if(date < 1 || date > 31){
+            throw new CustomException(ErrorCode.INVALID_PAYDAY);
+        }
+
+        Payday payday = Payday.builder()
+                .nation(nation)
+                .date(date)
+                .build();
+
+        paydayRepository.save(payday);
+    }
+
+    @Override
+    public PaydayResDto getPayday(HttpServletRequest request) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+
+        List<Payday> paydayList = paydayRepository.findAllByNationIdOrderByDate(nationId);
+        List<Byte> paydays = new ArrayList<>();
+
+        for(Payday payday: paydayList){
+            paydays.add(payday.getDate());
+
+        }
+
+        PaydayResDto dto = new PaydayResDto();
+        dto.setPaydays(paydays);
+
+        return dto;
+    }
+
+    @Override
+    public void deletePayday(HttpServletRequest request, Byte date) {
+        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+
+        Nation nation = nationRepository.findById(nationId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NATION_NOT_FOUND));
+        Payday payday = paydayRepository.findByNationIdAndDate(nationId, date)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PAYDAY));
+
+        paydayRepository.delete(payday);
+    }
+
 }

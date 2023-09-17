@@ -33,7 +33,6 @@ public class DepositStudentResDto {
 
     private boolean end;
 
-    @Builder
     public DepositStudentResDto(String id, String title, byte interest, String startDate, String endDate, byte creditRating, int amount, int interestAmount, boolean end) {
         this.id = id;
         this.title = title;

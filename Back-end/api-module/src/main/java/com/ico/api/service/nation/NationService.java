@@ -1,14 +1,13 @@
 package com.ico.api.service.nation;
 
-import com.ico.api.dto.license.NationLicenseResDto;
 import com.ico.api.dto.nation.NationCreditReqDto;
 import com.ico.api.dto.nation.NationReqDto;
+import com.ico.api.dto.nation.PaydayReqDto;
+import com.ico.api.dto.nation.PaydayResDto;
 import com.ico.api.dto.nation.TradingTimeReqDto;
-import com.ico.core.dto.StockReqDto;
 import com.ico.core.entity.Nation;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -71,4 +70,26 @@ public interface NationService {
      * @param request
      */
     void deleteNation(HttpServletRequest request);
+
+    /**
+     * 나라의 월급일 지정
+     * @param request
+     * @param dto
+     */
+    void addPayday(HttpServletRequest request, PaydayReqDto dto);
+
+    /**
+     * 나라의 월급일 조회
+     *
+     * @param request
+     * @return
+     */
+    PaydayResDto getPayday(HttpServletRequest request);
+
+    /**
+     * 나라의 월급일 삭제
+     * @param request
+     * @param date
+     */
+    void deletePayday(HttpServletRequest request, Byte date);
 }
