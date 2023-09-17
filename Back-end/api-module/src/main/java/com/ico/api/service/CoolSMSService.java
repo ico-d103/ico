@@ -67,7 +67,6 @@ public class CoolSMSService {
      */
     @Transactional
     public String findPassword(String phoneNum) {
-
         Teacher teacher = teacherRepository.findByPhoneNum(phoneNum)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TEACHER_PHONE_NUMBER));
 

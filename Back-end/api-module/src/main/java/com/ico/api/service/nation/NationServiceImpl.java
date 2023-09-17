@@ -26,7 +26,6 @@ import com.ico.core.entity.Stock;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.StudentLicense;
-import com.ico.core.entity.StudentProduct;
 import com.ico.core.entity.Tax;
 import com.ico.core.entity.Teacher;
 import com.ico.core.entity.TeacherProduct;
@@ -45,7 +44,6 @@ import com.ico.core.repository.PaydayRepository;
 import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.StudentLicenseRepository;
-import com.ico.core.repository.StudentProductRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TaxRepository;
 import com.ico.core.repository.TeacherProductRepository;
@@ -78,7 +76,6 @@ import java.util.Random;
 public class NationServiceImpl implements NationService {
     private final NewsRepository newsRepository;
     private final StudentJobRepository studentJobRepository;
-    private final StudentProductRepository studentProductRepository;
     private final TeacherProductRepository teacherProductRepository;
     private final ImmigrationRepository immigrationRepository;
     private final TaxRepository taxRepository;
@@ -375,12 +372,6 @@ public class NationServiceImpl implements NationService {
         List<StudentJob> jobs = studentJobRepository.findAllByNationId(nationId);
         if (!jobs.isEmpty()) {
             studentJobRepository.deleteAll(jobs);
-        }
-
-        // StudentProduct
-        List<StudentProduct> studentProducts = studentProductRepository.findAllByNationId(nationId);
-        if (!studentProducts.isEmpty()) {
-            studentProductRepository.deleteAll(studentProducts);
         }
 
         // Tax

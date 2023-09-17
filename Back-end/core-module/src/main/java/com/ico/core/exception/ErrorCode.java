@@ -77,6 +77,10 @@ public enum ErrorCode{
 
     NOT_EQUAL_JOB(HttpStatus.BAD_REQUEST, "45", "직업 id가 일치하지 않습니다."),
 
+    FAIL_OBJECT_TO_JSON(HttpStatus.CONFLICT, "50", "객체를 JSON 문자열로 변환하지 못했습니다."),
+
+    FAIL_JSON_TO_OBJECT(HttpStatus.CONFLICT, "51", "JSON 문자열를 객체로 변환하지 못했습니다."),
+
     DUPLICATED_ID(HttpStatus.BAD_REQUEST, "101", "중복된 아이디입니다."),
 
     NOT_FOUND_PASSWORD(HttpStatus.BAD_REQUEST, "104", "비밀번호 입력 칸이 비었습니다."),
@@ -203,11 +207,15 @@ public enum ErrorCode{
 
     ALREADY_EXIST_DEPOSIT(HttpStatus.BAD_REQUEST, "724", "예금은 1개만 신청이 가능합니다."),
 
-    NOT_FOUND_DEPOSIT(HttpStatus.BAD_REQUEST, "725", "예금 신청 내역이 없습니다."),
+    NOT_FOUND_DEPOSIT(HttpStatus.BAD_REQUEST, "728", "예금 신청 내역이 없습니다."),
 
-    NOT_FOUND_DEPOSIT_PRODUCT(HttpStatus.NOT_FOUND, "726", "존재하지 않는 예금 상품입니다."),
+    NOT_FOUND_DEPOSIT_PRODUCT(HttpStatus.NOT_FOUND, "729", "존재하지 않는 예금 상품입니다."),
 
-    NOT_FOUNT_DEPOSIT(HttpStatus.BAD_REQUEST, "725", "예금 신청 내역이 없습니다."),
+    NOT_FOUND_SAVING_PRODUCT(HttpStatus.NOT_FOUND, "730", "존재하지 않는 적금 상품입니다."),
+
+    BAD_DAY_OF_WEEK(HttpStatus.NOT_FOUND, "731", "잘못된 요일입니다."),
+
+    NOT_FOUND_SAVING(HttpStatus.NOT_FOUND, "732", "적금 가입 내역이 없습니다."),
 
     NOT_FOUND_SUBJECT(HttpStatus.NOT_FOUND, "800", "자격증명이 비었습니다."),
 

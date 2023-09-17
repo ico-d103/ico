@@ -30,5 +30,5 @@ public class TeacherProductReqDto {
     private byte count;
 
     @NotNull(message = "612")
-    private Boolean rental;
+    private Boolean isCoupon;
 }

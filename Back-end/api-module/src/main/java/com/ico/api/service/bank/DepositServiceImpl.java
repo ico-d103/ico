@@ -58,7 +58,7 @@ public class DepositServiceImpl implements DepositService{
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 신용 등급 확인
-        Byte interestRate = depositProductService.getMyInterest(student.getCreditRating(), depositProduct);
+        Byte interestRate = depositProductService.getMyDepositInterest(student.getCreditRating(), depositProduct);
 
         // 잔액 확인
         if(student.getAccount() < amount){
@@ -125,10 +125,12 @@ public class DepositServiceImpl implements DepositService{
         // 중도 해지
 //        if(now.toLocalDate().isBefore(deposit.getEndDate().toLocalDate())){
         if(now.isBefore(deposit.getEndDate().toLocalDate())){
+            // todo :  단어 순화하기
             title = "예금 중도 해지";
         }
         else{
-            title = "예금 수령 " + deposit.getInterest() +" %";
+            // todo :  단어 순화하기
+            title = "예금 만기 수령 " + deposit.getInterest() + "%";
             inputAmount += inputAmount * deposit.getInterest() / 100;
         }
 

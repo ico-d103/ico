@@ -96,4 +96,37 @@ public class TeacherController {
     public ResponseEntity<String> resetTeacherPassword(@Valid @RequestBody PhoneNumReqDto dto) {
         return ResponseEntity.ok(smsService.findPassword(dto.getPhoneNum()));
     }
+
+    /**
+     * 교사 휴대폰 번호 수정 시 인증번호 받기
+     * @param request
+     * @param dto
+     * @return
+     */
+    @PostMapping("/teacher/phone-num")
+    public ResponseEntity<String> updateCheckPhoneNum(HttpServletRequest request, @Valid @RequestBody PhoneNumReqDto dto) {
+        return ResponseEntity.ok(teacherService.updateCheckPhoneNum(request, dto));
+    }
+
+    /**
+     * 인증됐다면 휴대폰 번호 업데이트
+     * @param request
+     * @param dto
+     * @return
+     */
+    @PutMapping("/teacher/phone-num")
+    public ResponseEntity<HttpStatus> updatePhoneNum(HttpServletRequest request, @Valid @RequestBody PhoneNumReqDto dto) {
+        teacherService.updatePhoneNum(request, dto);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    /**
+     * 교사 아이디 찾기
+     * @param dto
+     * @return teacherId
+     */
+    @PostMapping("/find-id")
+    public ResponseEntity<String> getTeacherId(@Valid @RequestBody PhoneNumReqDto dto) {
+        return ResponseEntity.ok(teacherService.getTeacherId(dto.getPhoneNum()));
+    }
 }

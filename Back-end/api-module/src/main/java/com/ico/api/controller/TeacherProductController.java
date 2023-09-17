@@ -1,8 +1,8 @@
 package com.ico.api.controller;
 
 import com.ico.api.dto.teacher.TeacherProductImgReqDto;
+import com.ico.api.dto.teacherProduct.BuyTransactionResDto;
 import com.ico.api.dto.teacherProduct.ProductQRReqDto;
-import com.ico.api.dto.teacherProduct.ProductQRResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductAllResDto;
 import com.ico.api.dto.teacherProduct.TeacherProductDetailResDto;
 import com.ico.api.service.teacher.TeacherProductService;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,26 +63,15 @@ public class TeacherProductController {
     }
 
     /**
-     * 교사상품 구매
+     * 교사 상품 구매
      *
-     * @param teacherProductId 상품 ID
-     * @return 상품 id
-     */
-    @PostMapping("/student/{teacherProductId}")
-    public ResponseEntity<Long> buyProduct(HttpServletRequest request, @PathVariable Long teacherProductId) {
-        return ResponseEntity.ok(teacherProductService.buyProduct(request, teacherProductId));
-    }
-
-    /**
-     * QR스캔을 통한 교사 상품 대여
-     *
-     * @param request
      * @param dto
-     * @return 상품 id
+     * @param request
+     * @return
      */
-    @PostMapping("/student/rental")
-    public ResponseEntity<Long> rentalProduct(HttpServletRequest request, @Valid @RequestBody ProductQRReqDto dto){
-        return ResponseEntity.ok(teacherProductService.rentalProduct(request, dto));
+    @PostMapping("/student/product")
+    public ResponseEntity<String> buyProduct(@Valid @RequestBody ProductQRReqDto dto, HttpServletRequest request) {
+        return ResponseEntity.ok(teacherProductService.buyProduct(dto, request));
     }
 
     /**
@@ -112,13 +100,13 @@ public class TeacherProductController {
     /**
      * 구매 완료 후 구매 내역 반환
      *
-     * @param teacherProductId
+     * @param redisProductKey
      * @param request
      * @return
      */
-    @GetMapping("/student/transaction/{teacherProductId}")
-    public ResponseEntity<ProductQRResDto> findBuyTransaction(@PathVariable Long teacherProductId, HttpServletRequest request) {
-        return ResponseEntity.ok(teacherProductService.findBuyTransaction(teacherProductId, request));
+    @GetMapping("/student/transaction/{redisProductKey}")
+    public ResponseEntity<BuyTransactionResDto> findBuyTransaction(@PathVariable String redisProductKey, HttpServletRequest request) {
+        return ResponseEntity.ok(teacherProductService.findBuyTransaction(redisProductKey, request));
     }
 
     /**

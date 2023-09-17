@@ -28,21 +28,21 @@ public class TeacherProductDetailResDto {
 
     private byte count;
 
-    private Boolean rental;
+    private Boolean isCoupon;
 
     private byte sold;
 
     private String date;
 
     @Builder
-    public TeacherProductDetailResDto(Long id, String title, int amount, List<String> images, String detail, byte count, Boolean rental, byte sold, String date) {
+    public TeacherProductDetailResDto(Long id, String title, int amount, List<String> images, String detail, byte count, boolean isCoupon, byte sold, String date) {
         this.id = id;
         this.title = title;
         this.amount = amount;
         this.images = images;
         this.detail = detail;
         this.count = count;
-        this.rental = rental;
+        this.isCoupon = isCoupon;
         this.sold = sold;
         this.date = date;
     }

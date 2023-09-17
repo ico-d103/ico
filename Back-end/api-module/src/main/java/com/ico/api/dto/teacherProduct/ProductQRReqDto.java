@@ -5,26 +5,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
- * QR 상품 구매 dto
+ * QR 상품 구매 request dto
  *
  * @author 변윤경
+ * @author 서재건
  */
 @Setter
 @Getter
 @NoArgsConstructor
 public class ProductQRReqDto {
-    @NotNull(message = "618")
-    private Long id;
+
+    @Valid  // ProductQRColDto 내부에도 validation 적용됌
+    @NotEmpty(message = "622")
+    List<ProductQRColDto> products;
 
     @NotNull(message = "619")
     private Long unixTime;
 
     @Builder
-    public ProductQRReqDto(Long id, Long unixTime) {
-        this.id = id;
+    public ProductQRReqDto(List<ProductQRColDto> products, Long unixTime) {
+        this.products = products;
         this.unixTime = unixTime;
     }
 }

@@ -28,7 +28,6 @@ import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.StudentLicense;
-import com.ico.core.entity.StudentProduct;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.CouponRepository;
@@ -38,7 +37,6 @@ import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.ResumeMongoRepository;
 import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.StudentLicenseRepository;
-import com.ico.core.repository.StudentProductRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
 import com.ico.core.repository.TransactionMongoRepository;
@@ -97,7 +95,6 @@ public class StudentServiceImpl implements StudentService {
     private final LicenseServiceImpl licenseService;
     private final CouponRepository couponRepository;
     private final StudentLicenseRepository studentLicenseRepository;
-    private final StudentProductRepository studentProductRepository;
     private final StudentJobRepository studentJobRepository;
     private final ResumeMongoRepository resumeRepository;
 
@@ -448,11 +445,6 @@ public class StudentServiceImpl implements StudentService {
             List<StudentLicense> studentLicenses = studentLicenseRepository.findAllByStudentId(studentId);
             if (!studentLicenses.isEmpty()) {
                 studentLicenseRepository.deleteAll(studentLicenses);
-            }
-            // student_product
-            List<StudentProduct> studentProducts = studentProductRepository.findAllByStudentId(studentId);
-            if (!studentProducts.isEmpty()) {
-                studentProductRepository.deleteAll(studentProducts);
             }
             // student_job
             String removeName = student.getName();
