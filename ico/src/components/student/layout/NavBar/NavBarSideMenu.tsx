@@ -9,9 +9,11 @@ import useModal from "@/components/common/Modal/useModal"
 import ModalContent from "@/components/common/Modal/ModalContent"
 import { CLASS_BIG_PROPERTY } from "@/components/teacher/Class/ClassIcons"
 import PowerCreditModalContent from "../../Job/Power/PowerCreditModalContent"
+import PowerPropertyModalContent from "../../Job/Power/PowerPropertyModalContent"
 
 function NavBarSideMenu({ data }: { data: getHomeMyInfoType }) {
-	const modal = useModal()
+	const creditModal = useModal()
+	const propertyModal = useModal()
 	const navigate = useNavigate()
 	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
@@ -35,8 +37,21 @@ function NavBarSideMenu({ data }: { data: getHomeMyInfoType }) {
 					`}
 				/>
 			),
+			label: "국고 관리",
+			function: () => propertyModal.open(),
+		},
+		{
+			content: (
+				<img
+					src={"/assets/dock/dock_class.png"}
+					css={css`
+						height: 100%;
+						width: auto;
+					`}
+				/>
+			),
 			label: "신용 점수 조정",
-			function: () => modal.open(),
+			function: () => creditModal.open(),
 		},
 		{
 			content: (
@@ -149,12 +164,21 @@ function NavBarSideMenu({ data }: { data: getHomeMyInfoType }) {
 
 			<div>{renderMenu}</div>
 
-			{modal(
+			{creditModal(
 				<ModalContent
 					width={"500px"}
 					title={"신용 점수 조정"}
 					titleSize={"var(--teacher-h2)"}
 					content={<PowerCreditModalContent />}
+				/>,
+			)}
+
+			{propertyModal(
+				<ModalContent
+					width={"500px"}
+					title={"국고 관리"}
+					titleSize={"var(--teacher-h2)"}
+					content={<PowerPropertyModalContent />}
 				/>,
 			)}
 		</div>
