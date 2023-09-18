@@ -111,9 +111,8 @@ public class DepositProductServiceImpl implements DepositProductService{
         List<DepositStudentResDto> myDepositListReturn = new ArrayList<>();
         List<Deposit> myDepositList = depositMongoRepository.findAllByStudentId(studentId);
         for(Deposit deposit : myDepositList){
-            DepositStudentResDto myDeposit = new DepositStudentResDto();
             boolean isEnd = !LocalDate.now().isBefore(deposit.getEndDate().toLocalDate());
-            myDeposit = myDeposit.builder()
+            DepositStudentResDto myDeposit = DepositStudentResDto.builder()
                     .id(deposit.getId())
                     .title(deposit.getTitle())
                     .amount(deposit.getAmount())
