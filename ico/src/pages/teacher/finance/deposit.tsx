@@ -1,7 +1,7 @@
 import { css } from "@emotion/react"
 import React, { useState } from "react"
 
-import { getDepositListAPI } from "@/api/teacher/finanace/getDepositListAPI"
+import { getDepositListAPI } from "@/api/teacher/finance/getDepositListAPI"
 import { depositProductType } from "@/types/teacher/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
 

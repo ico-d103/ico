@@ -6,7 +6,7 @@ import Input from "@/components/common/Input/Input"
 
 import { useQueryClient, useMutation } from "@tanstack/react-query"
 
-import { postInvestItemAPI } from "@/api/teacher/finanace/postInvestItemAPI"
+import { postInvestItemAPI } from "@/api/teacher/finance/postInvestItemAPI"
 
 type InvestCreateProps = {
 	closeHandler: Function

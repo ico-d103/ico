@@ -10,7 +10,7 @@ import AnimatedRenderer from "@/components/common/AnimatedRenderer/AnimatedRende
 
 import FinanceSavingCreate from "@/components/teacher/Finance/Saving/FinanceSavingCreate"
 
-import { getSavingListAPI } from "@/api/teacher/finanace/getSavingListAPI"
+import { getSavingListAPI } from "@/api/teacher/finance/getSavingListAPI"
 
 import { savingListType } from "@/types/teacher/apiReturnTypes"
 import FinanceSavingList from "@/components/teacher/Finance/Saving/FinanceSavingList"

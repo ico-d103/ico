@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 
-import { postDepositItemAPI } from "@/api/teacher/finanace/postDepositItemAPI"
+import { postDepositItemAPI } from "@/api/teacher/finance/postDepositItemAPI"
 import { css } from "@emotion/react"
 import Input from "@/components/common/Input/Input"
 

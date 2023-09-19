@@ -5,14 +5,14 @@ import { css } from "@emotion/react"
 import Input from "@/components/common/Input/Input"
 import Button from "@/components/common/Button/Button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { deleteDepositItemAPI } from "@/api/teacher/finanace/deleteDepositItemAPI"
+import { deleteDepositItemAPI } from "@/api/teacher/finance/deleteDepositItemAPI"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import useNotification from "@/hooks/useNotification"
-import { putSavingItemAPI } from "@/api/teacher/finanace/putSavingItemAPI"
+import { putSavingItemAPI } from "@/api/teacher/finance/putSavingItemAPI"
 
 import FinanceSavingStudentList from "./FinanceSavingStudentList"
 import { savingListType } from "@/types/teacher/apiReturnTypes"
-import { deleteSavingItemAPI } from "@/api/teacher/finanace/deleteSavingItemAPI"
+import { deleteSavingItemAPI } from "@/api/teacher/finance/deleteSavingItemAPI"
 
 type FinanceSavingListProps = {
 	data: savingListType

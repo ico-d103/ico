@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query"
 import { getFinanceInvestIssueType } from "@/types/teacher/apiReturnTypes"
 import { useMutation } from "@tanstack/react-query"
 import { useQueryClient } from "@tanstack/react-query"
-import { getInvestItemAPI } from "@/api/teacher/finanace/getInvestItemAPI"
+import { getInvestItemAPI } from "@/api/teacher/finance/getInvestItemAPI"
 
 function FinanceInvestStartForm() {
 	// const { data, isLoading, isError, error } = useQuery<getFinanceInvestIssueType>(

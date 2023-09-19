@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 
 import { investListType } from "@/types/teacher/apiReturnTypes"
 import { css } from "@emotion/react"
-import { getInvestItemAPI } from "@/api/teacher/finanace/getInvestItemAPI"
+import { getInvestItemAPI } from "@/api/teacher/finance/getInvestItemAPI"
 import Button from "@/components/common/Button/Button"
 import Input from "@/components/common/Input/Input"
 

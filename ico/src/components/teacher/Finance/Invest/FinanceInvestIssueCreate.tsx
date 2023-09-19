@@ -3,11 +3,11 @@ import FinanceInvestToggleButton from "../Legacy/FinanceInvestToggleButton"
 import React, { useEffect, useState } from "react"
 import Dropdown from "@/components/common/Dropdown/Dropdown"
 import useCompHandler from "@/hooks/useCompHandler"
-import { postInvestItemAPI } from "@/api/teacher/finanace/postInvestItemAPI"
+import { postInvestItemAPI } from "@/api/teacher/finance/postInvestItemAPI"
 import { useQueryClient } from "@tanstack/react-query"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
-import { putInvestIssueAPI } from "@/api/teacher/finanace/putInvestIssueAPI"
+import { putInvestIssueAPI } from "@/api/teacher/finance/putInvestIssueAPI"
 
 function FinanceInvestIssueCreate({
 	subInputChangeHandler,

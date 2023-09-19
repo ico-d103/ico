@@ -6,7 +6,7 @@ import { css } from "@emotion/react"
 import Input from "@/components/common/Input/Input"
 import Button from "@/components/common/Button/Button"
 
-import { putInvestTimeAPI } from "@/api/teacher/finanace/putInvestTimeAPI"
+import { putInvestTimeAPI } from "@/api/teacher/finance/putInvestTimeAPI"
 
 function FinanceInvestTradingTime(data: any) {
 	const [tradingStart, setTradingStart] = useState(data.tradingStart)
