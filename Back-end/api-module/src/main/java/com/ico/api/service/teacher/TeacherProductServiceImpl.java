@@ -15,6 +15,7 @@ import com.ico.api.service.inflation.ShopTransactionService;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
+import com.ico.core.code.PowerEnum;
 import com.ico.core.code.Role;
 import com.ico.core.dto.TeacherProductReqDto;
 import com.ico.core.entity.Coupon;
@@ -103,7 +104,18 @@ public class TeacherProductServiceImpl implements TeacherProductService {
      */
     @Override
     public List<TeacherProductAllResDto> findAllProduct(HttpServletRequest request) {
-        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Role role = jwtTokenProvider.getRole(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
+        boolean isSeller = false;
+        if (role.equals(Role.STUDENT)) {
+            // 조회하는 유저가 도매상인이라면
+            Student student = studentRepository.findById(studentId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            isSeller = student.getEmpowered().contains(String.valueOf(PowerEnum.WAREHOUSEMAN.ordinal()));
+        }
 
         if (nationRepository.findById(nationId).isEmpty()) {
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
@@ -122,6 +134,8 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                     .sold(product.getSold())
                     .isCoupon(product.getIsCoupon())
                     .date(product.getDate().format(Formatter.date))
+                    .seller("선생님")
+                    .isSeller(isSeller)
                     .build();
 
             resProductList.add(resDto);
@@ -233,7 +247,18 @@ public class TeacherProductServiceImpl implements TeacherProductService {
      */
     @Override
     public TeacherProductDetailResDto detailProduct(HttpServletRequest request, Long id) {
-        Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
+        String token = jwtTokenProvider.parseJwt(request);
+        Long nationId = jwtTokenProvider.getNation(token);
+        Role role = jwtTokenProvider.getRole(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
+        boolean isSeller = false;
+        if (role.equals(Role.STUDENT)) {
+            // 조회하는 유저가 도매상인이라면
+            Student student = studentRepository.findById(studentId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            isSeller = student.getEmpowered().contains(String.valueOf(PowerEnum.WAREHOUSEMAN.ordinal()));
+        }
 
         TeacherProduct product = teacherProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
@@ -248,6 +273,8 @@ public class TeacherProductServiceImpl implements TeacherProductService {
                 .isCoupon(product.getIsCoupon())
                 .sold(product.getSold())
                 .date(product.getDate().format(Formatter.date))
+                .seller("선생님")
+                .isSeller(isSeller)
                 .build();
     }
 

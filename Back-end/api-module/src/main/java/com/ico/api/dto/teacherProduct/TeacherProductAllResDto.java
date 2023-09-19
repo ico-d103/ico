@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * @author 변윤경
+ * @author 서재건
  */
 @Getter
 @NoArgsConstructor
@@ -32,8 +33,12 @@ public class TeacherProductAllResDto {
 
     private String date;
 
+    private String seller;
+
+    private Boolean isSeller;
+
     @Builder
-    public TeacherProductAllResDto(Long id, String title, int amount, List<String> images, byte count, byte sold, boolean isCoupon, String date) {
+    public TeacherProductAllResDto(Long id, String title, int amount, List<String> images, byte count, byte sold, boolean isCoupon, String date, String seller, Boolean isSeller) {
         this.id = id;
         this.title = title;
         this.amount = amount;
@@ -42,5 +47,7 @@ public class TeacherProductAllResDto {
         this.sold = sold;
         this.isCoupon = isCoupon;
         this.date = date;
+        this.seller = seller;
+        this.isSeller = isSeller;
     }
 }

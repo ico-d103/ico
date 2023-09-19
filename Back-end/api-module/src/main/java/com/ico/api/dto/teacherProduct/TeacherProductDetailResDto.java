@@ -11,6 +11,7 @@ import java.util.List;
  * 교상 상품 상세 조회 Res Dto
  *
  * @author 변윤경
+ * @author 서재건
  */
 @Getter
 @Setter
@@ -34,8 +35,12 @@ public class TeacherProductDetailResDto {
 
     private String date;
 
+    private String seller;
+
+    private Boolean isSeller;
+
     @Builder
-    public TeacherProductDetailResDto(Long id, String title, int amount, List<String> images, String detail, byte count, boolean isCoupon, byte sold, String date) {
+    public TeacherProductDetailResDto(Long id, String title, int amount, List<String> images, String detail, byte count, boolean isCoupon, byte sold, String date, String seller, Boolean isSeller) {
         this.id = id;
         this.title = title;
         this.amount = amount;
@@ -45,5 +50,7 @@ public class TeacherProductDetailResDto {
         this.isCoupon = isCoupon;
         this.sold = sold;
         this.date = date;
+        this.seller = seller;
+        this.isSeller = isSeller;
     }
 }
