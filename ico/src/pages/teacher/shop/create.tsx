@@ -48,7 +48,7 @@ function create() {
 					amount: amount,
 					count: count,
 					detail: detail,
-					rental: rental,
+					isCoupon: rental,
 				}),
 			],
 			{ type: "application/json" },
@@ -82,18 +82,18 @@ function create() {
 			</div>
 
 			<div css={contentCSS}>상품 이름</div>
-			<Input value={title} onChange={handleInputChange} theme={'default'} />
+			<Input value={title} onChange={handleInputChange} theme={"default"} />
 			{/* <input css={inputCSS} value={title} onChange={handleInputChange} /> */}
 
 			<div css={productCSS}>
 				<div>
 					<div css={contentCSS}>상품 가격</div>
-					<Input value={amount} onChange={handleAmountChange} theme={'default'} />
+					<Input value={amount} onChange={handleAmountChange} theme={"default"} />
 					{/* <input css={inputCSS} value={amount} onChange={handleAmountChange} /> */}
 				</div>
 				<div>
 					<div css={contentCSS}>상품 수량</div>
-					<Input  value={count} onChange={handleCountChange} theme={'default'} />
+					<Input value={count} onChange={handleCountChange} theme={"default"} />
 					{/* <input css={inputCSS} value={count} onChange={handleCountChange} /> */}
 				</div>
 				<div>
@@ -108,7 +108,7 @@ function create() {
 
 			<div css={contentCSS}>상품 상세 설명</div>
 			{/* <input css={inputCSS} value={detail} onChange={handleDetailChange} /> */}
-			<Input value={detail} onChange={handleDetailChange} theme={'default'} isTextarea={true} />
+			<Input value={detail} onChange={handleDetailChange} theme={"default"} isTextarea={true} />
 
 			<div css={buttonCSS}>
 				<Button

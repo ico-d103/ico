@@ -16,7 +16,7 @@ import ShowQR from "@/components/common/ShowQR/ShowQR"
 import { useState } from "react"
 import { deleteTeacherProductAPI } from "@/api/teacher/shop/deleteTeacherProductAPI"
 import useModal from "@/components/common/Modal/useModal"
-	
+
 function product() {
 	const modal = useModal()
 	const router = useRouter()
@@ -24,14 +24,12 @@ function product() {
 	const productId = typeof pid === "string" ? pid : ""
 	const [nation] = useGetNation()
 	// const [openComp, closeComp, compState] = useCompHandler()
-	
+
 	const [time, setTime] = useState<number>(0)
 
 	const { data } = useQuery<getTeacherProductDetailType>(["product", productId], () =>
 		getTeacherProductDetailAPI({ pid: productId }),
 	)
-
-	console.log(data)
 
 	const deleteTeacherProduct = async () => {
 		deleteTeacherProductAPI({ pid: productId })
@@ -59,7 +57,7 @@ function product() {
 		setTime(() => new Date().getTime())
 	}
 
-	console.log(imageElements)
+	// console.log(imageElements)
 
 	return (
 		<div css={wrapperCSS}>
@@ -71,9 +69,7 @@ function product() {
 					content={<ShowQR type={"ico_rental"} id={data?.id} time={time} />}
 				/>
 			)} */}
-			{data && time && modal(
-				<ShowQR type={"ico_rental"} id={data?.id} time={time} />
-			)}
+			{data && modal(<ShowQR type={"ico_rental"} id={data?.id} time={time} />)}
 			<div css={headerCSS}>
 				<div css={productCSS}>
 					<div css={titleWrapperCSS}>
@@ -100,16 +96,16 @@ function product() {
 								/>
 							)} */}
 							<Button
-									text={"QR코드 생성"}
-									fontSize={"var(--teacher-h5)"}
-									width={"140px"}
-									theme={"vividPositive"}
-									onClick={() => {
-										generateTime()
-										// openComp()
-										modal.open()
-									}}
-								/>
+								text={"QR코드 생성"}
+								fontSize={"var(--teacher-h5)"}
+								width={"140px"}
+								theme={"vividPositive"}
+								onClick={() => {
+									generateTime()
+									// openComp()
+									modal.open()
+								}}
+							/>
 						</div>
 					</div>
 					{/* 이름 getnation으로 선생님이름 받아올까 생각중 */}
@@ -132,7 +128,7 @@ function product() {
 						</div>
 
 						<div css={priceCSS}>
-							{data?.amount?.toLocaleString('ko-KR')} {nation.currency}
+							{data?.amount?.toLocaleString("ko-KR")} {nation.currency}
 						</div>
 						<div
 							css={css`
