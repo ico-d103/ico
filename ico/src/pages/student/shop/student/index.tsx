@@ -27,7 +27,7 @@ function index() {
 		<div css={mainWrapperCSS}>
 			<PageHeader title={"상점"} addComp={<TabMenu menus={ShopTabMenus()} selected={1} />} />
 			
-			<Shop query={studentProductsQueries} uploadPageUrl={"/student/shop/create"}/>
+			{/* <Shop query={studentProductsQueries} uploadPageUrl={"/student/shop/create"}/> */}
 		</div>
 	)
 }
