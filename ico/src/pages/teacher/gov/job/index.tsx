@@ -13,12 +13,16 @@ import {
 	getJobListType,
 	jobLicenseListType,
 	getLicenseType,
+	getGovPaydayType,
 } from "@/types/teacher/apiReturnTypes"
 import GovJobItem from "@/components/teacher/Gov/Job/GovJobItem"
 import useGetNation from "@/hooks/useGetNation"
 import { getGovJobAuthAPI } from "@/api/teacher/gov/getGovJobAuthAPI"
 import { getGovPowerAPI } from "@/api/teacher/gov/getGovPowerAPI"
 import { getLicenseAPI } from "@/api/teacher/gov/getLicenseAPI"
+import { getGovPaydayAPI } from "@/api/teacher/gov/getGovPaydayAPI"
+import GovJobPayday from "@/components/teacher/Gov/Job/Payday/GovJobPayday"
+import CollapseMenu from "@/components/teacher/common/CollapseMenu/CollapseMenu"
 
 function index() {
 	const [openComp, closeComp, compState] = useCompHandler()
@@ -42,118 +46,15 @@ function index() {
 		// { staleTime: 200000 },
 	)
 
-	const dummyStatus: string[] = []
+	const paydayQuery = useQuery<getGovPaydayType>(
+		["teacher", "govPayday"],
+		getGovPaydayAPI,
+		// { staleTime: 200000 },
+	)
 
-	const dummyStatusList: {
-		id: number
-		name: string
-	}[] = []
 
-	const dummyCert: { id: number; subject: string; rating: number }[] = [
-		{
-			id: 840,
-			subject: "수학",
-			rating: -1,
-		},
-		{
-			id: 841,
-			subject: "과학",
-			rating: -1,
-		},
-		{
-			id: 842,
-			subject: "사회",
-			rating: -1,
-		},
-		{
-			id: 843,
-			subject: "독서",
-			rating: -1,
-		},
-		{
-			id: 844,
-			subject: "바른 글씨",
-			rating: -1,
-		},
-		{
-			id: 845,
-			subject: "정리 정돈",
-			rating: -1,
-		},
-		{
-			id: 846,
-			subject: "체력",
-			rating: -1,
-		},
-		{
-			id: 847,
-			subject: "디자인",
-			rating: -1,
-		},
-		{
-			id: 848,
-			subject: "저축",
-			rating: -1,
-		},
-		{
-			id: 849,
-			subject: "운전면허",
-			rating: -1,
-		},
-	]
 
-	const dummyCertList: { id: number; subject: string; rating: number }[] = [
-		{
-			id: 840,
-			subject: "수학",
-			rating: 2,
-		},
-		{
-			id: 841,
-			subject: "과학",
-			rating: 3,
-		},
-		{
-			id: 842,
-			subject: "사회",
-			rating: -1,
-		},
-		{
-			id: 843,
-			subject: "독서",
-			rating: -1,
-		},
-		{
-			id: 844,
-			subject: "바른 글씨",
-			rating: -1,
-		},
-		{
-			id: 845,
-			subject: "정리 정돈",
-			rating: -1,
-		},
-		{
-			id: 846,
-			subject: "체력",
-			rating: -1,
-		},
-		{
-			id: 847,
-			subject: "디자인",
-			rating: -1,
-		},
-		{
-			id: 848,
-			subject: "저축",
-			rating: -1,
-		},
-		{
-			id: 849,
-			subject: "운전면허",
-			rating: -1,
-		},
-	]
+
 
 	const renderJobList = useMemo(
 		() =>
@@ -191,6 +92,15 @@ function index() {
 	)
 
 	return (
+		<React.Fragment>
+			<CollapseMenu title={<span>월급 날짜 지정</span>} fontSize={"var(--teacher-h1)"} bracketSize={"18px"}>
+				<React.Fragment>
+					<div css={descCSS}>학생의 월급 수령일을 지정할 수 있습니다. (주의! 요일이 아닌 날짜 기준으로 지정됩니다.)</div>
+					<GovJobPayday query={paydayQuery}/>
+				</React.Fragment>
+				
+			</CollapseMenu>
+		
 		<div css={contentWrapperCSS}>
 			<div css={titleCSS}>
 				직업 관리
@@ -207,6 +117,8 @@ function index() {
 				)}
 			</div>
 			<div css={descCSS}>학급의 직업 목록을 관리할 수 있습니다.</div>
+			
+			
 			<AnimatedRenderer compState={compState} initHeight="0">
 				<div css={createWrapperCSS({ compState })}>
 					{powerQuery.data && licenseQuery.data && (
@@ -224,6 +136,7 @@ function index() {
 				{renderJobList}
 			</div>
 		</div>
+		</React.Fragment>
 	)
 }
 

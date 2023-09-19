@@ -12,7 +12,7 @@ import { getGovRuleAPI } from '@/api/teacher/gov/getGovRuleAPI'
 function news() {
   const navigate = useNavigate()
   const { data, isError, isLoading, isFetching, error, isSuccess, refetch } = useQuery<getGovRuleType[]>(
-		["student", "job", "rule"],
+		["studentJobNews"],
 		getGovRuleAPI,
 		// { staleTime: 200000 },
 	)
@@ -33,7 +33,7 @@ function news() {
 			></Button>
       </div>
       
-      {data && <RuleList rules={data}/>}
+      {isSuccess && <RuleList rules={data}/>}
     </div>
   )
 }

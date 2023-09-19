@@ -106,6 +106,8 @@ export type getTeacherProductsType = {
 	sold: number
 	date: string
 	isCoupon: boolean
+	seller: string
+	isSeller: boolean
 }
 
 export type getTeacherProductDetailType = {
@@ -307,3 +309,12 @@ export type savingListStudentType = {
 	amount: number
 	startDate: string
 }
+
+// --------------------------------------------
+// 월급 지정
+
+export type getGovPaydayType = {
+	paydays: number[]
+}
+
+// --------------------------------------------
