@@ -16,13 +16,9 @@ type CardProps = {
 	assigned: boolean | null
 }
 
-
-
 function Card({ baseUrl, id, title, amount, image, count, sold, name, date, assigned }: CardProps) {
 	const router = useRouter()
-
 	const [nation] = useGetNation()
-
 	const handleClickCard = () => {
 		// const currentPath = router.asPath
 		// if (currentPath.includes("/teacher/shop/my")) {

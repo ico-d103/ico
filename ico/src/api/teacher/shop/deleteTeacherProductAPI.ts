@@ -12,7 +12,7 @@ type responseType = {
 
 export const deleteTeacherProductAPI = async ({ pid }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.delete(`teacher-product/teacher/${pid}`)
+		const response: responseType = await tokenInstance.delete(`teacher-product/${pid}`)
 		return response.data
 	} catch (error) {
 		throw error

@@ -12,7 +12,7 @@ type responseType = {
 
 export const postTeacherProductsAPI = async ({ body }: paramsType) => {
 	try {
-		const response: responseType = await formDataTokenInstance.post("/teacher-product/teacher", body)
+		const response: responseType = await formDataTokenInstance.post("/teacher-product", body)
 		return response.data
 	} catch (error) {
 		throw error
