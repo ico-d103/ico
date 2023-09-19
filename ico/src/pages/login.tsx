@@ -228,7 +228,7 @@ function login() {
 			)}
 			{findPasswordModal(
 				<ModalContent
-					width={"400px"}
+					width={"500px"}
 					title={"비밀번호 찾기"}
 					titleSize={"var(--student-h2)"}
 					content={<AccountFindPwModalContent />}
