@@ -5,7 +5,7 @@ type ToggleButtonProps = {
 	rental: boolean
 	leftLabel: string
 	rightLabel: string
-	onClick: () => void;
+	onClick: () => void
 }
 
 const ShopCreateToggleButton = ({ rental, leftLabel, rightLabel, onClick }: ToggleButtonProps) => {
@@ -61,6 +61,8 @@ const switchFieldCSS = css`
 		width: 50%;
 		background-color: var(--common-back-color);
 		transition: all 0.25s ease-in-out;
+
+		background-color: rgb(230, 235, 240);
 
 		font-size: 1.1rem;
 

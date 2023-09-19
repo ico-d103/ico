@@ -17,7 +17,7 @@ import QueryAdapter from "@/components/common/Adapter/QueryAdapter"
 
 type ShopPropsType = {
   uploadPageUrl?: string
-  query: UseQueryResult<getTeacherProductsType[], unknown> | UseQueryResult<getStudentProductsType[], unknown>
+  query: UseQueryResult<getTeacherProductsType[], unknown>
 }
 function Shop({uploadPageUrl, query}: ShopPropsType) {
 
@@ -61,7 +61,7 @@ function Shop({uploadPageUrl, query}: ShopPropsType) {
 									image={card.images[0]}
 									count={card.count}
 									sold={card.sold}
-									name={'선생님'}
+									name={card.seller}
 									date={card.date}
 									assigned={true}
 								/>

@@ -10,7 +10,7 @@ function index() {
 	const { pid } = router.query
 
   const teacherProductDetailQuery = useQuery<getTeacherProductDetailType>(
-		["student", "job", "rule"],
+		["student", "job", "seller", "detail"],
 		() => getTeacherProductDetailAPI({pid: String(pid)}),
 		// { staleTime: 200000 },
 	)

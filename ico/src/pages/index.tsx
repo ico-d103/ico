@@ -12,40 +12,33 @@ export default function Home() {
 	const isMobile = useMediaQuery("(max-width: 768px")
 
 	const [steps, setStep, setCondition] = useContainer({
-    init: 1,
-    duration: 1000,
-  });
+		init: 1,
+		duration: 1000,
+	})
 
 	return (
 		<div
-		css={css`
-			width: 100vw;
-			height: 100vh;
-		`}
-	>
-		<Container steps={steps} setStep={setStep} duration={1000}>
-			<Container.Step>
-				<HomeContainer1
-					setCondition={setCondition}
-					currentStep={1}
-					setStep={setStep}
-				/>
-			</Container.Step>
-			<Container.Step>
+			css={css`
+				width: 100vw;
+				height: 100vh;
+			`}
+		>
+			<Container steps={steps} setStep={setStep} duration={1000}>
+				<Container.Step>
+					<HomeContainer1 setCondition={setCondition} currentStep={1} setStep={setStep} />
+				</Container.Step>
+				{/* <Container.Step>
 				Container2
-			</Container.Step>
-			{/* <Container.Step>
+			</Container.Step> */}
+				{/* <Container.Step>
 				<HomeContainer2 setCondition={setCondition} currentStep={2} />
 			</Container.Step> */}
-		</Container>
-	</div>
-
+			</Container>
+		</div>
 	)
-
 
 	// return (
 
-		
 	// 	<div css={guideWrapperCSS}>
 	// 		<div css={scene1CSS}>
 	// 			<div css={scene1InnerCSS}>
@@ -53,7 +46,7 @@ export default function Home() {
 	// 				<div css={subLabelCSS}>함께 성장하는 우리 교실의 작은 경제를 체험해 보세요!</div>
 	// 				<div css={lineCSS} />
 	// 				<div css={buttonWrapperCSS}>
-						
+
 	// 						<Button
 	// 							theme={"highlighted"}
 	// 							width={"240px"}
@@ -64,7 +57,7 @@ export default function Home() {
 	// 								router.push("/login")
 	// 							}}
 	// 						></Button>
-					
+
 	// 				</div>
 	// 				<img
 	// 					src={"/assets/guide/14.jpg"}
