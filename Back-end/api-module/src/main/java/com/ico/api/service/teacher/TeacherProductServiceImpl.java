@@ -106,16 +106,8 @@ public class TeacherProductServiceImpl implements TeacherProductService {
     public List<TeacherProductAllResDto> findAllProduct(HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
-        Role role = jwtTokenProvider.getRole(token);
-        Long studentId = jwtTokenProvider.getId(token);
 
-        boolean isSeller = false;
-        if (role.equals(Role.STUDENT)) {
-            // 조회하는 유저가 도매상인이라면
-            Student student = studentRepository.findById(studentId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-            isSeller = student.getEmpowered().contains(String.valueOf(PowerEnum.WAREHOUSEMAN.ordinal()));
-        }
+        boolean isSeller = checkSeller(token);
 
         if (nationRepository.findById(nationId).isEmpty()) {
             throw new CustomException(ErrorCode.NATION_NOT_FOUND);
@@ -249,16 +241,8 @@ public class TeacherProductServiceImpl implements TeacherProductService {
     public TeacherProductDetailResDto detailProduct(HttpServletRequest request, Long id) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
-        Role role = jwtTokenProvider.getRole(token);
-        Long studentId = jwtTokenProvider.getId(token);
 
-        boolean isSeller = false;
-        if (role.equals(Role.STUDENT)) {
-            // 조회하는 유저가 도매상인이라면
-            Student student = studentRepository.findById(studentId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-            isSeller = student.getEmpowered().contains(String.valueOf(PowerEnum.WAREHOUSEMAN.ordinal()));
-        }
+        boolean isSeller = checkSeller(token);
 
         TeacherProduct product = teacherProductRepository.findByIdAndNationId(id, nationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION));
@@ -385,6 +369,29 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         teacherProduct.setImages(teacherProduct.getImages() + s3UploadService.saveImageURLs(newImages));
         teacherProductRepository.save(teacherProduct);
         log.info("[updateProductImage] 이미지 수정 완료.");
+    }
+
+    /**
+     * 상품 조회 유저가 도매 상인인지 아닌지 체크하는 함수
+     * 도매 상인 : return true
+     * else : return false
+     *
+     * @param token
+     * @return 도매상인 여부
+     */
+    private boolean checkSeller(String token) {
+        Role role = jwtTokenProvider.getRole(token);
+        Long studentId = jwtTokenProvider.getId(token);
+
+        boolean isSeller = false;
+        if (role.equals(Role.STUDENT)) {
+            // 조회하는 유저가 도매상인이라면
+            Student student = studentRepository.findById(studentId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            isSeller = student.getEmpowered().contains(String.valueOf(PowerEnum.WAREHOUSEMAN.ordinal() + 1));
+            // TODO : Power 테이블 id값과 PowerEnum 인덱스 값이 다르며 다른 쓰임이 있음, 인덱스 쓰이는 곳 확인 필요함, 추후 하나의 통일된 값으로 맞추기 바람
+        }
+        return isSeller;
     }
 
     /**
