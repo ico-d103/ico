@@ -23,8 +23,6 @@ function saving() {
 		getSavingListAPI,
 	)
 
-	// console.log(data)
-
 	if (!data) {
 		return null
 	}
