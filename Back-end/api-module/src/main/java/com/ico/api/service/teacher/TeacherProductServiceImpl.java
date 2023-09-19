@@ -288,7 +288,7 @@ public class TeacherProductServiceImpl implements TeacherProductService {
         TeacherProduct teacherProduct = teacherProductRepository.findById(teacherProductId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
-        if (teacherProduct.getNation().getId().equals(nationId)) {
+        if (!teacherProduct.getNation().getId().equals(nationId)) {
             throw new CustomException(ErrorCode.NOT_AUTHORIZATION_NATION);
         }
         Arrays.stream(teacherProduct.getImages().split(","))
