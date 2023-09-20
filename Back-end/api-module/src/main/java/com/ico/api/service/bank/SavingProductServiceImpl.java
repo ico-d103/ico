@@ -134,6 +134,29 @@ public class SavingProductServiceImpl implements SavingProductService{
     }
 
     @Override
+    public SavingStudentResDto getSavingDetail(HttpServletRequest request, String savingId) {
+        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
+
+        Saving saving = savingMongoRepository.findByIdAndStudentId(savingId, studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_SAVING));
+
+        return SavingStudentResDto.builder()
+                .id(savingId)
+                .title(saving.getTitle())
+                .interest(saving.getInterest())
+                .startDate(saving.getStartDate().format(Formatter.date))
+                .creditRating(saving.getCreditRating())
+                .amount(saving.getAmount())
+                .count(saving.getCount())
+                .totalCount(saving.getTotalCount())
+                .interestAmount(saving.getInterest())
+                .day(getDayOfWeek(saving.getDay()))
+                .end(saving.isEnd())
+                .build();
+
+    }
+
+    @Override
     public void addSaving(HttpServletRequest request, SavingProductReqDto dto) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
         Nation nation = nationRepository.findById(nationId)

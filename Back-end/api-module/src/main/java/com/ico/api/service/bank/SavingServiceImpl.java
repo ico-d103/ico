@@ -69,6 +69,7 @@ public class SavingServiceImpl implements SavingService{
         Saving saving = Saving.builder()
                 .studentId(studentId)
                 .interest(interestRate)
+                .isEnd(false)
                 .totalCount(savingProduct.getCount())
                 .count((byte) 1)
                 .creditRating(student.getCreditRating())
@@ -100,7 +101,7 @@ public class SavingServiceImpl implements SavingService{
         String title;
 
         // 납입 횟수가 미달이면
-        if(saving.getCount() < saving.getTotalCount()){
+        if(saving.isEnd()){
             // todo :  단어 순화하기
             title = "적금 중도 해지";
         }

@@ -3,6 +3,7 @@ package com.ico.api.service.bank;
 import com.ico.api.dto.bank.SavingProductReqDto;
 import com.ico.api.dto.bank.SavingProductStudentResDto;
 import com.ico.api.dto.bank.SavingProductTeacherResDto;
+import com.ico.api.dto.bank.SavingStudentResDto;
 import com.ico.core.dto.SavingUpdateDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,14 @@ public interface SavingProductService {
      * @return
      */
     SavingProductStudentResDto findAllSavingStudent(HttpServletRequest request);
+
+    /**
+     * 학생의 적금 상품 디테일 조회
+     * @param request
+     * @param savingId
+     * @return
+     */
+    SavingStudentResDto getSavingDetail(HttpServletRequest request, String savingId);
 
     /**
      * 적금 상품 추가

@@ -27,6 +27,9 @@ public class Saving {
     // 이자율
     private byte interest;
 
+    // 적금 완납 여부
+    private boolean isEnd;
+
     // 적금 신청일
     @CreatedDate
     private LocalDateTime startDate;
@@ -59,10 +62,11 @@ public class Saving {
     private String name;
 
     @Builder
-    public Saving(String id, Long studentId, byte interest, LocalDateTime startDate, byte totalCount, byte count, byte creditRating, int amount, DayOfWeek day, String title, Long savingProductId, byte number, String name) {
+    public Saving(String id, Long studentId, byte interest, boolean isEnd, LocalDateTime startDate, byte totalCount, byte count, byte creditRating, int amount, DayOfWeek day, String title, Long savingProductId, byte number, String name) {
         this.id = id;
         this.studentId = studentId;
         this.interest = interest;
+        this.isEnd = isEnd;
         this.startDate = startDate;
         this.totalCount = totalCount;
         this.count = count;
