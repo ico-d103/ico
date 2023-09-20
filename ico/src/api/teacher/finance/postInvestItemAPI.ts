@@ -5,7 +5,7 @@ type paramsType = {
 	body: {
 		title: string
 		content: string
-		amount: string
+		amount: number
 		issue: string
 	}
 }

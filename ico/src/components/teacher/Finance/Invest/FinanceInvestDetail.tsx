@@ -59,7 +59,7 @@ const FinanceInvestDetail = ({ data, id }: FinanceInvestDetailprops) => {
 			})
 		} catch (error) {
 			noti({
-				content: <NotiTemplate type={"ok"} content={"수정 실패."} />,
+				content: <NotiTemplate type={"ok"} content={"빈 칸이 있어 수정이 불가능 합니다."} />,
 				duration: 5000,
 			})
 		}

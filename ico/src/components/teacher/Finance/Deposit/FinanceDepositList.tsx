@@ -145,10 +145,15 @@ function FinanceDepositList({ data }: FinanceDepositListProps) {
 				</div>
 				<div>
 					<div css={titleCSS}>예금 상품 기간</div>
-					<Input value={period} onChange={handlePeriodChange} theme={"default"} />
+					<Input
+						value={period === 0 ? "" : period}
+						onChange={handlePeriodChange}
+						theme={"default"}
+						rightContent={"일"}
+					/>
 				</div>
 			</div>
-			<div css={titleCSS}>이자율(%)</div>
+			<div css={titleCSS}>이자율</div>
 			<div>
 				<table style={{ tableLayout: "fixed", width: "100%" }}>
 					<thead style={{ borderBottom: "1px solid #d9d9d9" }}>
@@ -161,7 +166,7 @@ function FinanceDepositList({ data }: FinanceDepositListProps) {
 					</thead>
 					<tbody>
 						<tr>
-							<td style={{ borderRight: "1px solid #d9d9d9", textAlign: "center" }}>이자율</td>
+							<td style={{ borderRight: "1px solid #d9d9d9", textAlign: "center" }}>이자율(%)</td>
 							{interestRates.map((rate, index) => (
 								<td key={index}>
 									<div>

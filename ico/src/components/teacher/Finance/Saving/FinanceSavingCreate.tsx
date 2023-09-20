@@ -122,7 +122,7 @@ const FinanceSavingCreate = (props: InvestCreateProps) => {
 						/>
 					</div>
 					<div>
-						<div css={subTitleCSS}>납입 횟수</div>
+						<div css={subTitleCSS}>총 납입 횟수</div>
 						<Input
 							value={count === 0 ? "" : count}
 							onChange={handleCountChange}
@@ -154,7 +154,7 @@ const FinanceSavingCreate = (props: InvestCreateProps) => {
 						</thead>
 						<tbody>
 							<tr>
-								<td style={{ borderRight: "1px solid #d9d9d9", textAlign: "center" }}>이자율</td>
+								<td style={{ borderRight: "1px solid #d9d9d9", textAlign: "center" }}>이자율(%)</td>
 								{interestRates.map((rate, index) => (
 									<td key={index}>
 										<div>

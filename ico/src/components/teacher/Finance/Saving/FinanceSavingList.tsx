@@ -44,15 +44,37 @@ function FinanceSavingList({ data }: FinanceSavingListProps) {
 	const modal = useModal()
 
 	const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setTitle(event.target.value)
+		const newValue = event.target.value
+
+		if (newValue.length <= 10) {
+			setTitle(newValue)
+		}
 	}
 
 	const handleCountChange = (event: any) => {
-		setCount(event.target.value)
+		const inputValue = event.target.value
+		const numericValue = inputValue.replace(/[^0-9.]/g, "")
+
+		const numericPeriod = parseInt(numericValue, 10)
+
+		if (!isNaN(numericPeriod)) {
+			setCount(numericPeriod)
+		} else {
+			setCount(0)
+		}
 	}
 
 	const handleAmountChange = (event: any) => {
-		setAmount(event.target.value)
+		const inputValue = event.target.value
+		const numericValue = inputValue.replace(/[^0-9.]/g, "")
+
+		const numericPeriod = parseInt(numericValue, 10)
+
+		if (!isNaN(numericPeriod)) {
+			setAmount(numericPeriod)
+		} else {
+			setAmount(0)
+		}
 	}
 
 	const handleInterestRateChange = (index: number, value: number) => {
@@ -81,6 +103,11 @@ function FinanceSavingList({ data }: FinanceSavingListProps) {
 			}
 
 			await mutation.mutateAsync({ idx: data.id, body: updatedBody })
+
+			initSetTitle(title)
+			initSetCount(count)
+			initSetAmount(amount)
+			initSetInterestRates(interestRates)
 
 			noti({
 				content: <NotiTemplate type={"ok"} content={"적금 상품을 수정했습니다."} />,
@@ -125,15 +152,20 @@ function FinanceSavingList({ data }: FinanceSavingListProps) {
 			<div css={depositNamePeriodCSS}>
 				<div>
 					<div css={titleCSS}>적금 상품명</div>
-					<Input value={title} onChange={handleTitleChange} theme={"default"} />
+					<Input
+						value={title}
+						onChange={handleTitleChange}
+						theme={"default"}
+						placeholder={"10자 이내의 적금 상품명을 입력해주세요."}
+					/>
 				</div>
 				<div>
-					<div css={titleCSS}>적금 납입 횟수</div>
-					<Input value={count} onChange={handleCountChange} theme={"default"} />
+					<div css={titleCSS}>총 납입 횟수</div>
+					<Input value={count === 0 ? "" : count} onChange={handleCountChange} theme={"default"} />
 				</div>
 				<div>
-					<div css={titleCSS}>적금 납입액</div>
-					<Input value={amount} onChange={handleAmountChange} theme={"default"} />
+					<div css={titleCSS}>1회 납입액</div>
+					<Input value={amount === 0 ? "" : amount} onChange={handleAmountChange} theme={"default"} />
 				</div>
 			</div>
 			<div css={titleCSS}>이자율</div>
@@ -149,7 +181,7 @@ function FinanceSavingList({ data }: FinanceSavingListProps) {
 					</thead>
 					<tbody>
 						<tr>
-							<td style={{ borderRight: "1px solid #d9d9d9", textAlign: "center" }}>이자율</td>
+							<td style={{ borderRight: "1px solid #d9d9d9", textAlign: "center" }}>이자율(%)</td>
 							{interestRates.map((rate, index) => (
 								<td key={index}>
 									<div>
