@@ -25,7 +25,7 @@ function FinanceDepositCreate(props: DepositCreateProps) {
 	const [period, setPeriod] = useState(0)
 	const [interestRates, setInterestRates] = useState<number[]>(Array(10).fill(0))
 
-	const handleTitleChange = (event: any) => {
+	const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const newValue = event.target.value
 
 		if (newValue.length <= 10) {

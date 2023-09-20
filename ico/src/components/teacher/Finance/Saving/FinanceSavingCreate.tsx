@@ -8,6 +8,10 @@ import { useQueryClient, useMutation } from "@tanstack/react-query"
 
 import { postSavingItemAPI } from "@/api/teacher/finance/postSavingItemAPI"
 
+import useGetNation from "@/hooks/useGetNation"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+import useNotification from "@/hooks/useNotification"
+
 type InvestCreateProps = {
 	closeHandler: Function
 }
@@ -25,16 +29,42 @@ const FinanceSavingCreate = (props: InvestCreateProps) => {
 	const [amount, setAmount] = useState<number>(0)
 	const [interestRates, setInterestRates] = useState<number[]>(Array(10).fill(0))
 
+	const [nation] = useGetNation()
+
 	const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setTitle(event.target.value)
+		const newValue = event.target.value
+
+		if (newValue.length <= 10) {
+			setTitle(newValue)
+		}
 	}
 
 	const handleCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setCount(Number(event.target.value))
+		const inputValue = event.target.value
+		const numericValue = inputValue.replace(/[^0-9.]/g, "")
+
+		const numericPeriod = parseInt(numericValue, 10)
+
+		if (!isNaN(numericPeriod)) {
+			setCount(numericPeriod)
+		} else {
+			setCount(0)
+		}
 	}
 
+	const noti = useNotification()
+
 	const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setAmount(Number(event.target.value))
+		const inputValue = event.target.value
+		const numericValue = inputValue.replace(/[^0-9.]/g, "")
+
+		const numericPeriod = parseInt(numericValue, 10)
+
+		if (!isNaN(numericPeriod)) {
+			setAmount(numericPeriod)
+		} else {
+			setAmount(0)
+		}
 	}
 
 	const handleInterestChange = (index: number, value: number) => {
@@ -66,24 +96,49 @@ const FinanceSavingCreate = (props: InvestCreateProps) => {
 			interest: interestRates,
 		}
 		mutation.mutate(newData)
+
+		noti({
+			content: <NotiTemplate type={"ok"} content={"적금 상품을 등록했습니다."} />,
+			duration: 5000,
+		})
+
+		setTitle("")
+		setCount(0)
+		setAmount(0)
+		setInterestRates(Array(10).fill(0))
 	}
 
 	return (
 		<>
 			<div css={borderCSS}>
-				<div css={titleCSS}>투자 상품 생성</div>
+				<div css={titleCSS}>적금 상품 생성</div>
 				<div css={investTitlePeriodCSS}>
 					<div>
-						<div css={subTitleCSS}>투자 상품명</div>
-						<Input value={title} onChange={handleTitleChange} theme={"default"} />
+						<div css={subTitleCSS}>적금 상품명</div>
+						<Input
+							value={title}
+							onChange={handleTitleChange}
+							theme={"default"}
+							placeholder="10자 이내의 예금 상품명을 입력해주세요."
+						/>
 					</div>
 					<div>
-						<div css={subTitleCSS}>투자 횟수</div>
-						<Input value={count} onChange={handleCountChange} theme={"default"} />
+						<div css={subTitleCSS}>납입 횟수</div>
+						<Input
+							value={count === 0 ? "" : count}
+							onChange={handleCountChange}
+							theme={"default"}
+							rightContent={"회"}
+						/>
 					</div>
 					<div>
-						<div css={subTitleCSS}>납입액</div>
-						<Input value={amount} onChange={handleAmountChange} theme={"default"} />
+						<div css={subTitleCSS}>1회 납입액</div>
+						<Input
+							value={amount === 0 ? "" : amount}
+							onChange={handleAmountChange}
+							theme={"default"}
+							rightContent={nation.currency}
+						/>
 					</div>
 				</div>
 
