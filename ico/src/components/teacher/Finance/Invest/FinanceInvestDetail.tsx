@@ -83,7 +83,7 @@ const FinanceInvestDetail = ({ data, id }: FinanceInvestDetailprops) => {
 					width={"480px"}
 					content={[
 						"작성한 모든 이슈가 삭제됩니다.",
-						"학생들이 보유한 투자 상품은 최근의 이슈 가격으로 전량 매도됩니다.",
+						"학생들이 보유한 투자 상품은 최근 이슈의 가격으로 전량 매도됩니다.",
 					]}
 				/>,
 			)}
@@ -95,7 +95,6 @@ const FinanceInvestDetail = ({ data, id }: FinanceInvestDetailprops) => {
 				</div>
 
 				<div>
-					{/* <button tabIndex={-1}>버튼</button> */}
 					<Button
 						text={"정보 수정하기"}
 						fontSize={"var(--teacher-h5)"}
@@ -141,10 +140,4 @@ const titleCSS = css`
 		tab-index: -1;
 	}
 `
-
-// const contentCSS = css`
-// 	display: flex;
-// 	align-items: center;
-// `
-
 export default FinanceInvestDetail

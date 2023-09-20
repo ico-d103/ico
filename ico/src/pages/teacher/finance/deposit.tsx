@@ -49,14 +49,6 @@ function deposit() {
 				</AnimatedRenderer>
 			</div>
 
-			{/* {addDeposit ? (
-				<div>
-					<FinanceDepositCreate onCancelClick={handleCancelClick} />
-				</div>
-			) : (
-				<div></div>
-			)} */}
-
 			<div>
 				{data.map((item) => (
 					<FinanceDepositList key={item.id} data={item} />

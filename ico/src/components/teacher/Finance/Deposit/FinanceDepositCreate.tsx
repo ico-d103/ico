@@ -7,24 +7,45 @@ import Input from "@/components/common/Input/Input"
 import { useQueryClient } from "@tanstack/react-query"
 import { useMutation } from "@tanstack/react-query"
 import Button from "@/components/common/Button/Button"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+
+type DepositCreateProps = {
+	closeHandler: Function
+}
 
 type DepositData = {
 	title: string
-	period: string
+	period: number
 	interest: number[]
 }
 
-function FinanceDepositCreate({ onCancelClick }: any) {
+function FinanceDepositCreate(props: DepositCreateProps) {
 	const [title, setTitle] = useState("")
-	const [period, setPeriod] = useState("")
+	const [period, setPeriod] = useState(0)
 	const [interestRates, setInterestRates] = useState<number[]>(Array(10).fill(0))
 
 	const handleTitleChange = (event: any) => {
-		setTitle(event.target.value)
+		const newValue = event.target.value
+
+		if (newValue.length <= 10) {
+			setTitle(newValue)
+		}
 	}
 
-	const handlePeriodChange = (event: any) => {
-		setPeriod(event.target.value)
+	const handlePeriodChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const inputValue = event.target.value
+		const numericValue = inputValue.replace(/[^0-9.]/g, "") // 숫자와 "."만 추출
+
+		// numericValue가 숫자로 변환 가능한지 확인
+		const numericPeriod = parseInt(numericValue, 10) // 정수로 변환
+
+		// isNaN 함수를 사용하여 숫자로 변환 가능한지 확인
+		if (!isNaN(numericPeriod)) {
+			setPeriod(numericPeriod) // 숫자로 설정
+		} else {
+			setPeriod(0) // 숫자로 변환할 수 없는 경우 0으로 설정 또는 다른 기본값 설정
+		}
 	}
 
 	const handleInterestRateChange = (index: number, value: number) => {
@@ -41,6 +62,7 @@ function FinanceDepositCreate({ onCancelClick }: any) {
 	}
 
 	const queryClient = useQueryClient()
+	const noti = useNotification()
 
 	const mutation = useMutation((newData: DepositData) => postDepositItemAPI({ body: newData }), {
 		onSuccess: () => {
@@ -55,6 +77,15 @@ function FinanceDepositCreate({ onCancelClick }: any) {
 			interest: interestRates,
 		}
 		mutation.mutate(newData)
+
+		noti({
+			content: <NotiTemplate type={"ok"} content={"예금 상품을 등록했습니다."} />,
+			duration: 5000,
+		})
+
+		setTitle("")
+		setPeriod(0)
+		setInterestRates(Array(10).fill(0))
 	}
 
 	return (
@@ -64,11 +95,21 @@ function FinanceDepositCreate({ onCancelClick }: any) {
 				<div css={depositNamePeriodCSS}>
 					<div>
 						<div css={subTitleCSS}>예금 상품명</div>
-						<Input value={title} onChange={handleTitleChange} theme={"default"} />
+						<Input
+							value={title}
+							onChange={handleTitleChange}
+							theme={"default"}
+							placeholder="10자 이내의 예금 상품명을 입력해주세요."
+						/>
 					</div>
 					<div>
 						<div css={subTitleCSS}>예금 상품 기간</div>
-						<Input value={period} onChange={handlePeriodChange} theme={"default"} />
+						<Input
+							value={period === 0 ? "" : period}
+							onChange={handlePeriodChange}
+							theme={"default"}
+							rightContent={"일"}
+						/>
 					</div>
 				</div>
 
@@ -85,7 +126,7 @@ function FinanceDepositCreate({ onCancelClick }: any) {
 						</thead>
 						<tbody>
 							<tr>
-								<td style={{ borderRight: "1px solid #d9d9d9", textAlign: "center" }}>이자율</td>
+								<td style={{ borderRight: "1px solid #d9d9d9", textAlign: "center" }}>이자율(%)</td>
 								{interestRates.map((rate, index) => (
 									<td key={index}>
 										<div>
@@ -111,7 +152,7 @@ function FinanceDepositCreate({ onCancelClick }: any) {
 						theme={"normal"}
 						onClick={() => {
 							handleSubmit()
-							onCancelClick()
+							props.closeHandler && props.closeHandler()
 						}}
 					/>
 					<Button
@@ -119,7 +160,9 @@ function FinanceDepositCreate({ onCancelClick }: any) {
 						fontSize={"var(--teacher-h5)"}
 						width={"110px"}
 						theme={"warning"}
-						onClick={onCancelClick}
+						onClick={() => {
+							props.closeHandler && props.closeHandler()
+						}}
 					/>
 				</div>
 			</div>

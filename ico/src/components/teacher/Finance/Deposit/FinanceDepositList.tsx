@@ -9,6 +9,9 @@ import { putDepositItemAPI } from "@/api/teacher/finance/putDepositItemAPI"
 import { deleteDepositItemAPI } from "@/api/teacher/finance/deleteDepositItemAPI"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import useNotification from "@/hooks/useNotification"
+import useModal from "@/components/common/Modal/useModal"
+import ModalAlert from "@/components/common/Modal/ModalAlert"
+import Modal from "@/components/common/Modal/Modal"
 
 type FinanceDepositListProps = {
 	data: depositProductType
@@ -19,12 +22,40 @@ function FinanceDepositList({ data }: FinanceDepositListProps) {
 	const [period, setPeriod] = useState(data.period)
 	const [interestRates, setInterestRates] = useState([...data.interest])
 
-	const handleTitleChange = (event: any) => {
-		setTitle(event.target.value)
+	const [initTitle, initSetTitle] = useState(data.title)
+	const [initPeriod, initSetPeriod] = useState(data.period)
+	const [initInterestRates, initSetInterestRates] = useState([...data.interest])
+
+	const isArraySame = (array1: any, array2: any) => {
+		for (let i = 0; i < array1.length; i++) {
+			if (array1[i] !== array2[i]) {
+				return false
+			}
+		}
+		return true
 	}
 
-	const handlePeriodChange = (event: any) => {
-		setPeriod(event.target.value)
+	const modal = useModal()
+
+	const handleTitleChange = (event: any) => {
+		const newValue = event.target.value
+
+		if (newValue.length <= 10) {
+			setTitle(newValue)
+		}
+	}
+
+	const handlePeriodChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const inputValue = event.target.value
+		const numericValue = inputValue.replace(/[^0-9.]/g, "")
+
+		const numericPeriod = parseInt(numericValue, 10)
+
+		if (!isNaN(numericPeriod)) {
+			setPeriod(numericPeriod)
+		} else {
+			setPeriod(0)
+		}
 	}
 
 	const handleInterestRateChange = (index: number, value: number) => {
@@ -52,6 +83,10 @@ function FinanceDepositList({ data }: FinanceDepositListProps) {
 			}
 
 			await mutation.mutateAsync({ idx: data.id, body: updatedBody })
+
+			initSetTitle(title)
+			initSetPeriod(period)
+			initSetInterestRates(interestRates)
 
 			noti({
 				content: <NotiTemplate type={"ok"} content={"예금 상품을 수정했습니다."} />,
@@ -84,17 +119,32 @@ function FinanceDepositList({ data }: FinanceDepositListProps) {
 
 	return (
 		<div css={borderCSS}>
+			{modal(
+				<ModalAlert
+					title={"예금 상품을 삭제합니다."}
+					titleSize={"var(--teacher-h2)"}
+					proceed={() => handleDeleteItem(data.id)}
+					width={"480px"}
+					content={["학생들이 보유한 예금 상품은 전량 매도됩니다."]}
+				/>,
+			)}
+
 			<div css={depositNamePeriodCSS}>
 				<div>
 					<div css={titleCSS}>예금 상품명</div>
-					<Input value={title} onChange={handleTitleChange} theme={"default"} />
+					<Input
+						value={title}
+						onChange={handleTitleChange}
+						theme={"default"}
+						placeholder={"10자 이내의 예금 상품명을 입력해주세요."}
+					/>
 				</div>
 				<div>
 					<div css={titleCSS}>예금 상품 기간</div>
 					<Input value={period} onChange={handlePeriodChange} theme={"default"} />
 				</div>
 			</div>
-			<div css={titleCSS}>이자율</div>
+			<div css={titleCSS}>이자율(%)</div>
 			<div>
 				<table style={{ tableLayout: "fixed", width: "100%" }}>
 					<thead style={{ borderBottom: "1px solid #d9d9d9" }}>
@@ -132,13 +182,16 @@ function FinanceDepositList({ data }: FinanceDepositListProps) {
 					width={"110px"}
 					theme={"normal"}
 					onClick={updateDepositItem}
+					disabled={
+						title === initTitle && period === initPeriod && isArraySame(interestRates, initInterestRates) && true
+					}
 				/>
 				<Button
 					text={"삭제하기"}
 					fontSize={"var(--teacher-h5)"}
 					width={"110px"}
 					theme={"warning"}
-					onClick={() => handleDeleteItem(data.id)}
+					onClick={modal.open}
 				/>
 			</div>
 
