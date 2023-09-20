@@ -1,18 +1,21 @@
 import React, { useState } from "react"
-import { depositProductType } from "@/types/teacher/apiReturnTypes"
-// import FinanceDepositStudentList from "./FinanceDepositStudentList"
 import { css } from "@emotion/react"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+
+import useNotification from "@/hooks/useNotification"
+
+import { putSavingItemAPI } from "@/api/teacher/finance/putSavingItemAPI"
+import { deleteSavingItemAPI } from "@/api/teacher/finance/deleteSavingItemAPI"
+
+import { savingListType } from "@/types/teacher/apiReturnTypes"
+
 import Input from "@/components/common/Input/Input"
 import Button from "@/components/common/Button/Button"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { deleteDepositItemAPI } from "@/api/teacher/finanace/deleteDepositItemAPI"
+import useModal from "@/components/common/Modal/useModal"
+import ModalAlert from "@/components/common/Modal/ModalAlert"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
-import useNotification from "@/hooks/useNotification"
-import { putSavingItemAPI } from "@/api/teacher/finanace/putSavingItemAPI"
 
 import FinanceSavingStudentList from "./FinanceSavingStudentList"
-import { savingListType } from "@/types/teacher/apiReturnTypes"
-import { deleteSavingItemAPI } from "@/api/teacher/finanace/deleteSavingItemAPI"
 
 type FinanceSavingListProps = {
 	data: savingListType
@@ -24,18 +27,54 @@ function FinanceSavingList({ data }: FinanceSavingListProps) {
 	const [amount, setAmount] = useState(data.amount)
 	const [interestRates, setInterestRates] = useState([...data.interest])
 
-	console.log(data)
+	const [initTitle, initSetTitle] = useState(data.title)
+	const [initCount, initSetCount] = useState(data.count)
+	const [initAmount, initSetAmount] = useState(data.amount)
+	const [initInterestRates, initSetInterestRates] = useState([...data.interest])
 
-	const handleTitleChange = (event: any) => {
-		setTitle(event.target.value)
+	const isArraySame = (array1: any, array2: any) => {
+		for (let i = 0; i < array1.length; i++) {
+			if (array1[i] !== array2[i]) {
+				return false
+			}
+		}
+		return true
+	}
+
+	const modal = useModal()
+
+	const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const newValue = event.target.value
+
+		if (newValue.length <= 10) {
+			setTitle(newValue)
+		}
 	}
 
 	const handleCountChange = (event: any) => {
-		setCount(event.target.value)
+		const inputValue = event.target.value
+		const numericValue = inputValue.replace(/[^0-9.]/g, "")
+
+		const numericPeriod = parseInt(numericValue, 10)
+
+		if (!isNaN(numericPeriod)) {
+			setCount(numericPeriod)
+		} else {
+			setCount(0)
+		}
 	}
 
 	const handleAmountChange = (event: any) => {
-		setAmount(event.target.value)
+		const inputValue = event.target.value
+		const numericValue = inputValue.replace(/[^0-9.]/g, "")
+
+		const numericPeriod = parseInt(numericValue, 10)
+
+		if (!isNaN(numericPeriod)) {
+			setAmount(numericPeriod)
+		} else {
+			setAmount(0)
+		}
 	}
 
 	const handleInterestRateChange = (index: number, value: number) => {
@@ -64,6 +103,11 @@ function FinanceSavingList({ data }: FinanceSavingListProps) {
 			}
 
 			await mutation.mutateAsync({ idx: data.id, body: updatedBody })
+
+			initSetTitle(title)
+			initSetCount(count)
+			initSetAmount(amount)
+			initSetInterestRates(interestRates)
 
 			noti({
 				content: <NotiTemplate type={"ok"} content={"적금 상품을 수정했습니다."} />,
@@ -96,18 +140,32 @@ function FinanceSavingList({ data }: FinanceSavingListProps) {
 
 	return (
 		<div css={borderCSS}>
+			{modal(
+				<ModalAlert
+					title={"적금 상품을 삭제합니다."}
+					titleSize={"var(--teacher-h2)"}
+					proceed={() => handleDeleteItem(data.id)}
+					width={"480px"}
+					content={["학생들이 보유한 적금 상품은 전량 매도됩니다."]}
+				/>,
+			)}
 			<div css={depositNamePeriodCSS}>
 				<div>
 					<div css={titleCSS}>적금 상품명</div>
-					<Input value={title} onChange={handleTitleChange} theme={"default"} />
+					<Input
+						value={title}
+						onChange={handleTitleChange}
+						theme={"default"}
+						placeholder={"10자 이내의 적금 상품명을 입력해주세요."}
+					/>
 				</div>
 				<div>
-					<div css={titleCSS}>적금 납입 횟수</div>
-					<Input value={count} onChange={handleCountChange} theme={"default"} />
+					<div css={titleCSS}>총 납입 횟수</div>
+					<Input value={count === 0 ? "" : count} onChange={handleCountChange} theme={"default"} />
 				</div>
 				<div>
-					<div css={titleCSS}>적금 납입액</div>
-					<Input value={amount} onChange={handleAmountChange} theme={"default"} />
+					<div css={titleCSS}>1회 납입액</div>
+					<Input value={amount === 0 ? "" : amount} onChange={handleAmountChange} theme={"default"} />
 				</div>
 			</div>
 			<div css={titleCSS}>이자율</div>
@@ -123,7 +181,7 @@ function FinanceSavingList({ data }: FinanceSavingListProps) {
 					</thead>
 					<tbody>
 						<tr>
-							<td style={{ borderRight: "1px solid #d9d9d9", textAlign: "center" }}>이자율</td>
+							<td style={{ borderRight: "1px solid #d9d9d9", textAlign: "center" }}>이자율(%)</td>
 							{interestRates.map((rate, index) => (
 								<td key={index}>
 									<div>
@@ -148,13 +206,20 @@ function FinanceSavingList({ data }: FinanceSavingListProps) {
 					width={"110px"}
 					theme={"normal"}
 					onClick={updateDepositItem}
+					disabled={
+						title === initTitle &&
+						count === initCount &&
+						amount === initAmount &&
+						isArraySame(interestRates, initInterestRates) &&
+						true
+					}
 				/>
 				<Button
 					text={"삭제하기"}
 					fontSize={"var(--teacher-h5)"}
 					width={"110px"}
 					theme={"warning"}
-					onClick={() => handleDeleteItem(data.id)}
+					onClick={modal.open}
 				/>
 			</div>
 

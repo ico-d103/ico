@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react"
-import { useQuery } from "@tanstack/react-query"
-
+import React, { useState } from "react"
 import { css } from "@emotion/react"
+
+import { putInvestTimeAPI } from "@/api/teacher/finance/putInvestTimeAPI"
 
 import Input from "@/components/common/Input/Input"
 import Button from "@/components/common/Button/Button"
-
-import { putInvestTimeAPI } from "@/api/teacher/finanace/putInvestTimeAPI"
 
 function FinanceInvestTradingTime(data: any) {
 	const [tradingStart, setTradingStart] = useState(data.tradingStart)

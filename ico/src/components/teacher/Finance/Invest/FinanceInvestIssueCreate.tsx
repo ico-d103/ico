@@ -1,13 +1,12 @@
-import { css } from "@emotion/react"
-import FinanceInvestToggleButton from "../Legacy/FinanceInvestToggleButton"
 import React, { useEffect, useState } from "react"
-import Dropdown from "@/components/common/Dropdown/Dropdown"
-import useCompHandler from "@/hooks/useCompHandler"
-import { postInvestItemAPI } from "@/api/teacher/finanace/postInvestItemAPI"
-import { useQueryClient } from "@tanstack/react-query"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { css } from "@emotion/react"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
-import { putInvestIssueAPI } from "@/api/teacher/finanace/putInvestIssueAPI"
+import useCompHandler from "@/hooks/useCompHandler"
+
+import { putInvestIssueAPI } from "@/api/teacher/finance/putInvestIssueAPI"
+
+import Dropdown from "@/components/common/Dropdown/Dropdown"
 
 function FinanceInvestIssueCreate({
 	subInputChangeHandler,

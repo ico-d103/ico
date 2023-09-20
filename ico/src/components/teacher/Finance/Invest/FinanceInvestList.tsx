@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react"
-
-import { investListType } from "@/types/teacher/apiReturnTypes"
 import { css } from "@emotion/react"
-import { getInvestItemAPI } from "@/api/teacher/finanace/getInvestItemAPI"
-import Button from "@/components/common/Button/Button"
-import Input from "@/components/common/Input/Input"
-
 import { useQuery } from "@tanstack/react-query"
-import { investItemType } from "@/types/teacher/apiReturnTypes"
+import { LineSvgProps } from "@nivo/line"
 
-import FormCreator from "../../common/Form/FormCreator"
 import useCompHandler from "@/hooks/useCompHandler"
 
-import FinanceInvestDetail from "./FinanceInvestDetail"
-import FinanceInvestIssueDetail from "./FinanceInvestIssueDetail"
-import FinanceInvestIssueCreate from "./FinanceInvestIssueCreate"
-import FinanceInvestChart from "./FinanceInvestChart"
+import { getInvestItemAPI } from "@/api/teacher/finance/getInvestItemAPI"
 
-import { LineSvgProps } from "@nivo/line"
+import { investListType } from "@/types/teacher/apiReturnTypes"
+import { investItemType } from "@/types/teacher/apiReturnTypes"
+
+import Button from "@/components/common/Button/Button"
+import FormCreator from "@/components/teacher/common/Form/FormCreator"
+
+import FinanceInvestDetail from "./FinanceInvestDetail"
+import FinanceInvestChart from "./FinanceInvestChart"
+import FinanceInvestIssueCreate from "./FinanceInvestIssueCreate"
+import FinanceInvestIssueDetail from "./FinanceInvestIssueDetail"
 
 type FinanceInvestListProps = {
 	data: investListType
