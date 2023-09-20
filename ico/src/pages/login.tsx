@@ -16,6 +16,9 @@ import alertCircle from "react-useanimations/lib/alertCircle"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 import useGetTokenStatus from "@/hooks/useGetTokenStatus"
+import useModal from "@/components/common/Modal/useModal"
+import AccountFindIdModalContent from "@/components/teacher/Account/AccountFindIdModalContent"
+import AccountFindPwModalContent from "@/components/teacher/Account/AccountFindPwModalContent"
 
 const initialState = { id: "", password: "" }
 
@@ -39,6 +42,9 @@ function login() {
 	const router = useRouter()
 	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
 
+	const findIdModal = useModal()
+	const findPasswordModal = useModal()
+
 	const loginHandler = () => {
 		if (inputState.id === "" || inputState.password === "") {
 			setAlarm("빈 칸을 모두 입력해주세요.")
@@ -54,9 +60,8 @@ function login() {
 			.then((res) => {
 				setCookie("Authorization", res, { path: "/", maxAge: 30 * 24 * 60 * 60 })
 
-				setTokenStatus({showMessage: false}).then((res) => {
+				setTokenStatus({ showMessage: false }).then((res) => {
 					// if (res && res.role === "TEACHER") {
-
 					// 	// 교사인증 X -> 인증 대기 상태
 					// 	if (res.status === "require_approval") {
 					// 		// 인증 대기 모달 띄우기
@@ -71,8 +76,7 @@ function login() {
 					// 	}
 					// }
 				})
-				
-				
+
 				// getTokenStatusAPI().then((res) => {
 				// 	if (res.role === "TEACHER") {
 				// 		// 교사인증 O -> nation ID가 있을 때
@@ -97,8 +101,6 @@ function login() {
 				// 		}
 				// 	}
 				// })
-
-
 			})
 			.catch((error) => {
 				setAlarm(error.response.data.message)
@@ -125,11 +127,11 @@ function login() {
 
 	return (
 		<>
-			<div css={wrapperCSS} className={'wrapper'}>
+			<div css={wrapperCSS} className={"wrapper"}>
 				<div css={imageSectionCSS}>
 					<img src={"/assets/login/login_illust_2.jpg"} alt={"signup_illust"} css={imageWrapperCSS} />
 				</div>
-				<div css={loginSectionCSS} className={'login-section'}>
+				<div css={loginSectionCSS} className={"login-section"}>
 					<div css={loginHeaderCSS}>
 						<div css={headerLabelCSS}>아이코에 오신 것을</div>
 						<div css={headerLabelCSS}>환영합니다!</div>
@@ -158,6 +160,17 @@ function login() {
 							<span>계정이 없으신가요?&nbsp;</span>
 							<span css={signupCSS} onClick={navToSignup}>
 								회원가입
+							</span>
+						</div>
+
+						<div css={signupLabelCSS}>
+							<span>계정을 잊으셨나요?&nbsp;</span>
+							<span css={signupCSS} onClick={() => findIdModal.open()}>
+								아이디 찾기
+							</span>
+							&nbsp;/&nbsp;
+							<span css={signupCSS} onClick={() => findPasswordModal.open()}>
+								비밀번호 찾기
 							</span>
 						</div>
 
@@ -204,6 +217,24 @@ function login() {
 					/>
 				}
 			/> */}
+			{findIdModal(
+				<ModalContent
+					width={"400px"}
+					title={"아이디 찾기"}
+					titleSize={"var(--student-h2)"}
+					content={<AccountFindIdModalContent />}
+					forChild={true}
+				/>,
+			)}
+			{findPasswordModal(
+				<ModalContent
+					width={"500px"}
+					title={"비밀번호 찾기"}
+					titleSize={"var(--student-h2)"}
+					content={<AccountFindPwModalContent />}
+					forChild={true}
+				/>,
+			)}
 		</>
 	)
 }
@@ -231,7 +262,6 @@ const loginSectionCSS = css`
 		min-height: 100%;
 		width: 25vw;
 		/* background-color: red; */
-
 	}
 
 	min-width: 360px;
@@ -242,9 +272,7 @@ const loginSectionCSS = css`
 `
 
 const imageSectionCSS = css`
-
 	@media (max-width: 1024px) {
-		
 	}
 	@media (min-width: 1025px) {
 		width: 75vw;
@@ -264,8 +292,8 @@ const imageSectionCSS = css`
 
 const imageWrapperCSS = css`
 	height: 100%;
-  width: 100%;
-  object-fit: cover;
+	width: 100%;
+	object-fit: cover;
 `
 
 const loginFormCSS = css`
