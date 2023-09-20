@@ -1,21 +1,21 @@
 import React, { useState } from "react"
-import { depositProductType } from "@/types/teacher/apiReturnTypes"
 import { css } from "@emotion/react"
-import Input from "@/components/common/Input/Input"
-import Button from "@/components/common/Button/Button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { deleteDepositItemAPI } from "@/api/teacher/finance/deleteDepositItemAPI"
-import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
-import useNotification from "@/hooks/useNotification"
-import { putSavingItemAPI } from "@/api/teacher/finance/putSavingItemAPI"
 
-import FinanceSavingStudentList from "./FinanceSavingStudentList"
-import { savingListType } from "@/types/teacher/apiReturnTypes"
+import useNotification from "@/hooks/useNotification"
+
+import { putSavingItemAPI } from "@/api/teacher/finance/putSavingItemAPI"
 import { deleteSavingItemAPI } from "@/api/teacher/finance/deleteSavingItemAPI"
 
+import { savingListType } from "@/types/teacher/apiReturnTypes"
+
+import Input from "@/components/common/Input/Input"
+import Button from "@/components/common/Button/Button"
 import useModal from "@/components/common/Modal/useModal"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
-import Modal from "@/components/common/Modal/Modal"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+
+import FinanceSavingStudentList from "./FinanceSavingStudentList"
 
 type FinanceSavingListProps = {
 	data: savingListType
@@ -43,7 +43,7 @@ function FinanceSavingList({ data }: FinanceSavingListProps) {
 
 	const modal = useModal()
 
-	const handleTitleChange = (event: any) => {
+	const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setTitle(event.target.value)
 	}
 

@@ -1,17 +1,17 @@
 import { css } from "@emotion/react"
-import React, { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+
+import useCompHandler from "@/hooks/useCompHandler"
 
 import { getDepositListAPI } from "@/api/teacher/finance/getDepositListAPI"
+
 import { depositProductType } from "@/types/teacher/apiReturnTypes"
-import { useQuery } from "@tanstack/react-query"
+
+import Button from "@/components/common/Button/Button"
+import AnimatedRenderer from "@/components/common/AnimatedRenderer/AnimatedRenderer"
 
 import FinanceDepositList from "@/components/teacher/Finance/Deposit/FinanceDepositList"
 import FinanceDepositCreate from "@/components/teacher/Finance/Deposit/FinanceDepositCreate"
-
-import Button from "@/components/common/Button/Button"
-
-import AnimatedRenderer from "@/components/common/AnimatedRenderer/AnimatedRenderer"
-import useCompHandler from "@/hooks/useCompHandler"
 
 function deposit() {
 	const [openComp, closeComp, compState] = useCompHandler()

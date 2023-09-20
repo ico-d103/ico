@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react"
-import Input from "@/components/common/Input/Input"
-import { investItemType } from "@/types/teacher/apiReturnTypes"
 import { css } from "@emotion/react"
-import { deleteInvestAPI } from "@/api/teacher/finance/deleteInvestAPI"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import Button from "@/components/common/Button/Button"
-import { putInvestItemAPI } from "@/api/teacher/finance/putInvestItemAPI"
+
+import { deleteInvestAPI } from "@/api/teacher/finance/deleteInvestAPI"
+
 import useNotification from "@/hooks/useNotification"
-import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+
+import { investItemType } from "@/types/teacher/apiReturnTypes"
+
+import Button from "@/components/common/Button/Button"
+import Input from "@/components/common/Input/Input"
 import useModal from "@/components/common/Modal/useModal"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
-import Modal from "@/components/common/Modal/Modal"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+
+import { putInvestItemAPI } from "@/api/teacher/finance/putInvestItemAPI"
 
 type FinanceInvestDetailprops = {
 	data: investItemType
@@ -67,7 +71,7 @@ const FinanceInvestDetail = ({ data, id }: FinanceInvestDetailprops) => {
 		},
 	})
 
-	const handleDeleteItem = (itemId: any) => {
+	const handleDeleteItem = (itemId: number) => {
 		deleteMutation.mutate({ idx: itemId })
 	}
 

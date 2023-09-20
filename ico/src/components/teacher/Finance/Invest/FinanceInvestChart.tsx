@@ -1,7 +1,7 @@
-import { ResponsiveLine } from "@nivo/line"
-import { LineSvgProps } from "@nivo/line"
 import { css } from "@emotion/react"
-import React, { useEffect, useState } from "react"
+import { LineSvgProps } from "@nivo/line"
+import { ResponsiveLine } from "@nivo/line"
+
 import useGetNation from "@/hooks/useGetNation"
 
 const FinanceInvestChart = ({ data }: LineSvgProps) => {

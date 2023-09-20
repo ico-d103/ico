@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
+import { css } from "@emotion/react"
+import { useQueryClient, useMutation } from "@tanstack/react-query"
+
+import useNotification from "@/hooks/useNotification"
 
 import { postDepositItemAPI } from "@/api/teacher/finance/postDepositItemAPI"
-import { css } from "@emotion/react"
-import Input from "@/components/common/Input/Input"
 
-import { useQueryClient } from "@tanstack/react-query"
-import { useMutation } from "@tanstack/react-query"
+import Input from "@/components/common/Input/Input"
 import Button from "@/components/common/Button/Button"
-import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 type DepositCreateProps = {

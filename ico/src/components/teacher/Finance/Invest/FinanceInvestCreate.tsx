@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react"
-
+import React, { useState } from "react"
 import { css } from "@emotion/react"
-import Button from "@/components/common/Button/Button"
-import Input from "@/components/common/Input/Input"
-
 import { useQueryClient, useMutation } from "@tanstack/react-query"
 
 import { postInvestItemAPI } from "@/api/teacher/finance/postInvestItemAPI"
+
+import Button from "@/components/common/Button/Button"
+import Input from "@/components/common/Input/Input"
 
 type InvestCreateProps = {
 	closeHandler: Function

@@ -1,17 +1,21 @@
 import React, { useState } from "react"
-import { depositProductType } from "@/types/teacher/apiReturnTypes"
-import FinanceDepositStudentList from "./FinanceDepositStudentList"
 import { css } from "@emotion/react"
-import Input from "@/components/common/Input/Input"
-import Button from "@/components/common/Button/Button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+
+import useNotification from "@/hooks/useNotification"
+
 import { putDepositItemAPI } from "@/api/teacher/finance/putDepositItemAPI"
 import { deleteDepositItemAPI } from "@/api/teacher/finance/deleteDepositItemAPI"
-import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
-import useNotification from "@/hooks/useNotification"
+
+import { depositProductType } from "@/types/teacher/apiReturnTypes"
+
+import Input from "@/components/common/Input/Input"
+import Button from "@/components/common/Button/Button"
 import useModal from "@/components/common/Modal/useModal"
 import ModalAlert from "@/components/common/Modal/ModalAlert"
-import Modal from "@/components/common/Modal/Modal"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
+
+import FinanceDepositStudentList from "./FinanceDepositStudentList"
 
 type FinanceDepositListProps = {
 	data: depositProductType
