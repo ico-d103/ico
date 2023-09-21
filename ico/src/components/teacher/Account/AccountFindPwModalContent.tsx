@@ -57,7 +57,10 @@ function AccountFindPwModalContent({ closeComp }: AccountFindPwModalContentProps
 				/>
 				{resultText !== null &&
 					(resultText !== "" ? (
-						<div css={positiveCSS}>가입하신 번호로 새로운 비밀번호를 전송하였습니다.</div>
+						<div css={positiveCSS}>
+							<div>가입하신 번호로</div>
+							<div>새로운 비밀번호를 전송하였습니다.</div>
+						</div>
 					) : (
 						<div css={negativeCSS}>가입하신 계정이 없습니다.</div>
 					))}
@@ -95,6 +98,10 @@ const inputCSS = css`
 
 const positiveCSS = css`
 	color: #42a44a;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
 `
 
 const negativeCSS = css`

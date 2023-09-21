@@ -118,7 +118,7 @@ const wrapperCSS = css`
 	align-items: center;
 
 	> div {
-		width: 65%;
+		width: 80%;
 	}
 `
 
