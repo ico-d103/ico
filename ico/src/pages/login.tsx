@@ -222,7 +222,7 @@ function login() {
 					width={"400px"}
 					title={"아이디 찾기"}
 					titleSize={"var(--student-h2)"}
-					content={<AccountFindIdModalContent />}
+					content={<AccountFindIdModalContent closeComp={findIdModal.close} />}
 					forChild={true}
 				/>,
 			)}
@@ -231,7 +231,7 @@ function login() {
 					width={"500px"}
 					title={"비밀번호 찾기"}
 					titleSize={"var(--student-h2)"}
-					content={<AccountFindPwModalContent />}
+					content={<AccountFindPwModalContent closeComp={findPasswordModal.close} />}
 					forChild={true}
 				/>,
 			)}

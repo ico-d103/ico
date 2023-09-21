@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Input from "@/components/common/Input/Input"
 import { css } from "@emotion/react"
 import { ID_ICON } from "../Signup/SignupIcons/SignupIcons"
@@ -6,7 +6,11 @@ import Button from "@/components/common/Button/Button"
 import { NUM_ONLY } from "@/util/regex"
 import { postFindIdAPI } from "@/api/teacher/user/postFindIdAPI"
 
-function AccountFindIdModalContent() {
+type AccountFindIdModalContentProps = {
+	closeComp: () => void
+}
+
+function AccountFindIdModalContent({ closeComp }: AccountFindIdModalContentProps) {
 	const [phoneNum, setPhoneNum] = useState<string>("")
 	const [resultId, setResultId] = useState<null | string>(null)
 
@@ -20,6 +24,11 @@ function AccountFindIdModalContent() {
 		}
 
 		setPhoneNum(e.target.value)
+	}
+
+	const buttonResultHandler = () => {
+		if (resultId && resultId !== "") closeComp()
+		else fetchFindIdAPI()
 	}
 
 	const fetchFindIdAPI = () => {
@@ -42,6 +51,9 @@ function AccountFindIdModalContent() {
 					type="text"
 					placeholder="가입하신 휴대폰 번호를 입력해주세요."
 					onChange={changePhoneNumHandler}
+					onKeyDown={(e) => {
+						if (e.key === "Enter") buttonResultHandler()
+					}}
 				/>
 				{resultId !== null &&
 					(resultId !== "" ? (
@@ -55,9 +67,9 @@ function AccountFindIdModalContent() {
 					theme={"highlighted"}
 					width={"100px"}
 					height={"30px"}
-					text={"제출"}
+					text={resultId && resultId !== "" ? "확인" : "찾기"}
 					fontSize={"var(--teacher-h5)"}
-					onClick={fetchFindIdAPI}
+					onClick={buttonResultHandler}
 				></Button>
 			</div>
 		</div>

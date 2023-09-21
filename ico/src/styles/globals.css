@@ -217,7 +217,7 @@ button {
 	box-sizing: border-box;
 }
 
-/* ::-webkit-scrollbar {
+::-webkit-scrollbar {
 	width: 6px;
 	height: 6px;
 }
@@ -230,9 +230,10 @@ button {
 ::-webkit-scrollbar-track {
 	background-color: initial;
 	border-radius: 10px;
-} */
+}
 
-#__next, html, body {
+#__next,
+html,
+body {
 	height: 100%;
-	
 }

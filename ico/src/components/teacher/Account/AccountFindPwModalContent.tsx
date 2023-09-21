@@ -6,7 +6,11 @@ import { ID_ICON } from "../Signup/SignupIcons/SignupIcons"
 import { NUM_ONLY } from "@/util/regex"
 import { postResetPwAPI } from "@/api/teacher/user/postResetPwAPI"
 
-function AccountFindPwModalContent() {
+type AccountFindPwModalContentProps = {
+	closeComp: () => void
+}
+
+function AccountFindPwModalContent({ closeComp }: AccountFindPwModalContentProps) {
 	const [phoneNum, setPhoneNum] = useState<string>("")
 	const [resultText, setResultText] = useState<null | string>(null)
 
@@ -22,7 +26,12 @@ function AccountFindPwModalContent() {
 		setPhoneNum(e.target.value)
 	}
 
-	const fetchFindIdAPI = () => {
+	const buttonResultHandler = () => {
+		if (resultText && resultText !== "") closeComp()
+		else fetchFindPwAPI()
+	}
+
+	const fetchFindPwAPI = () => {
 		postResetPwAPI({ body: { phoneNum } })
 			.then((res) => {
 				setResultText(res)
@@ -42,6 +51,9 @@ function AccountFindPwModalContent() {
 					type="text"
 					placeholder="가입하신 휴대폰 번호를 입력해주세요."
 					onChange={changePhoneNumHandler}
+					onKeyDown={(e) => {
+						if (e.key === "Enter") buttonResultHandler()
+					}}
 				/>
 				{resultText !== null &&
 					(resultText !== "" ? (
@@ -53,9 +65,9 @@ function AccountFindPwModalContent() {
 					theme={"highlighted"}
 					width={"100px"}
 					height={"30px"}
-					text={"제출"}
+					text={resultText && resultText !== "" ? "확인" : "찾기"}
 					fontSize={"var(--teacher-h5)"}
-					onClick={fetchFindIdAPI}
+					onClick={buttonResultHandler}
 				></Button>
 			</div>
 		</div>
