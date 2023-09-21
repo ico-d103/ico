@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react"
-
+import React, { useState } from "react"
 import { css } from "@emotion/react"
-import Button from "@/components/common/Button/Button"
-import Input from "@/components/common/Input/Input"
-
 import { useQueryClient, useMutation } from "@tanstack/react-query"
 
-import { postInvestItemAPI } from "@/api/teacher/finanace/postInvestItemAPI"
+import useNotification from "@/hooks/useNotification"
+import useGetNation from "@/hooks/useGetNation"
+
+import { postInvestItemAPI } from "@/api/teacher/finance/postInvestItemAPI"
+
+import Button from "@/components/common/Button/Button"
+import Input from "@/components/common/Input/Input"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 type InvestCreateProps = {
 	closeHandler: Function
@@ -15,7 +18,7 @@ type InvestCreateProps = {
 type InvestCreateType = {
 	title: string
 	content: string
-	amount: string
+	amount: number
 	issue: string
 }
 
@@ -23,10 +26,16 @@ const FinanceInvestCreate = (props: InvestCreateProps) => {
 	const [title, setTitle] = useState("")
 	const [content, setContent] = useState("")
 	const [issue, setIssue] = useState("")
-	const [amount, setAmount] = useState("")
+	const [amount, setAmount] = useState(0)
+
+	const [nation] = useGetNation()
 
 	const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setTitle(event.target.value)
+		const newValue = event.target.value
+
+		if (newValue.length <= 10) {
+			setTitle(newValue)
+		}
 	}
 
 	const handleContentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,9 +47,21 @@ const FinanceInvestCreate = (props: InvestCreateProps) => {
 	}
 
 	const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setAmount(event.target.value)
+		const inputValue = event.target.value
+		const numericValue = inputValue.replace(/[^0-9.]/g, "") // 숫자와 "."만 추출
+
+		// numericValue가 숫자로 변환 가능한지 확인
+		const numericPeriod = parseInt(numericValue, 10) // 정수로 변환
+
+		// isNaN 함수를 사용하여 숫자로 변환 가능한지 확인
+		if (!isNaN(numericPeriod)) {
+			setAmount(numericPeriod) // 숫자로 설정
+		} else {
+			setAmount(0) // 숫자로 변환할 수 없는 경우 0으로 설정 또는 다른 기본값 설정
+		}
 	}
 
+	const noti = useNotification()
 	const queryClient = useQueryClient()
 
 	const mutation = useMutation((newData: InvestCreateType) => postInvestItemAPI({ body: newData }), {
@@ -57,6 +78,16 @@ const FinanceInvestCreate = (props: InvestCreateProps) => {
 			issue: issue,
 		}
 		mutation.mutate(newData)
+
+		noti({
+			content: <NotiTemplate type={"ok"} content={"예금 상품을 등록했습니다."} />,
+			duration: 5000,
+		})
+
+		setTitle("")
+		setContent("")
+		setAmount(0)
+		setIssue("")
 	}
 
 	return (
@@ -66,7 +97,12 @@ const FinanceInvestCreate = (props: InvestCreateProps) => {
 				<div css={investTitlePeriodCSS}>
 					<div>
 						<div css={subTitleCSS}>투자 상품명</div>
-						<Input value={title} onChange={handleTitleChange} theme={"default"} />
+						<Input
+							value={title}
+							onChange={handleTitleChange}
+							theme={"default"}
+							placeholder="10자 이내의 투자 상품명을 입력해주세요."
+						/>
 					</div>
 					<div>
 						<div css={subTitleCSS}>투자 상품 설명</div>
@@ -81,7 +117,12 @@ const FinanceInvestCreate = (props: InvestCreateProps) => {
 					</div>
 					<div>
 						<div css={subTitleCSS}>투자 시작가</div>
-						<Input value={amount} onChange={handleAmountChange} theme={"default"} />
+						<Input
+							value={amount === 0 ? "" : amount}
+							onChange={handleAmountChange}
+							theme={"default"}
+							rightContent={nation.currency}
+						/>
 					</div>
 				</div>
 

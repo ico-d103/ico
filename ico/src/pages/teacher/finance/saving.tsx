@@ -1,18 +1,17 @@
-import React, { useState } from "react"
-import Button from "@/components/common/Button/Button"
 import { css } from "@emotion/react"
-
 import { useQuery } from "@tanstack/react-query"
 
 import useCompHandler from "@/hooks/useCompHandler"
 
+import Button from "@/components/common/Button/Button"
+
+import { getSavingListAPI } from "@/api/teacher/finance/getSavingListAPI"
+
+import { savingListType } from "@/types/teacher/apiReturnTypes"
+
 import AnimatedRenderer from "@/components/common/AnimatedRenderer/AnimatedRenderer"
 
 import FinanceSavingCreate from "@/components/teacher/Finance/Saving/FinanceSavingCreate"
-
-import { getSavingListAPI } from "@/api/teacher/finanace/getSavingListAPI"
-
-import { savingListType } from "@/types/teacher/apiReturnTypes"
 import FinanceSavingList from "@/components/teacher/Finance/Saving/FinanceSavingList"
 
 function saving() {
@@ -22,8 +21,6 @@ function saving() {
 		["teacher", "financeSaving"],
 		getSavingListAPI,
 	)
-
-	// console.log(data)
 
 	if (!data) {
 		return null

@@ -5,7 +5,7 @@ import { successReturnType } from "@/types/common/apiReturnTypes"
 type paramsType = {
 	body: {
 		title: string
-		period: string
+		period: number
 		interest: number[]
 	}
 }

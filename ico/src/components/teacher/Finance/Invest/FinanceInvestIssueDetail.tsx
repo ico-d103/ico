@@ -1,6 +1,8 @@
-import CommonListElement from "../../common/CommonListElement/CommonListElement"
 import { css } from "@emotion/react"
+
 import useGetNation from "@/hooks/useGetNation"
+
+import CommonListElement from "@/components/teacher/common/CommonListElement/CommonListElement"
 
 type FinanceInvestIssueDetailProps = {
 	content: string
