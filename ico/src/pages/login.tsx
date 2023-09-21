@@ -220,7 +220,7 @@ function login() {
 			{findIdModal(
 				<ModalContent
 					width={"360px"}
-					title={"아이디 찾기"}
+					title={"교사 회원 아이디 찾기"}
 					titleSize={"var(--student-h2)"}
 					content={<AccountFindIdModalContent closeComp={findIdModal.close} />}
 					forChild={true}
@@ -229,7 +229,7 @@ function login() {
 			{findPasswordModal(
 				<ModalContent
 					width={"360px"}
-					title={"비밀번호 찾기"}
+					title={"교사 회원 비밀번호 찾기"}
 					titleSize={"var(--student-h2)"}
 					content={<AccountFindPwModalContent closeComp={findPasswordModal.close} />}
 					forChild={true}
