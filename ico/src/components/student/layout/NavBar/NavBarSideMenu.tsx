@@ -166,7 +166,7 @@ function NavBarSideMenu({ data }: { data: getHomeMyInfoType }) {
 
 			{creditModal(
 				<ModalContent
-					width={"500px"}
+					width={"360px"}
 					title={"신용 점수 조정"}
 					titleSize={"var(--teacher-h2)"}
 					content={<PowerCreditModalContent />}
@@ -175,7 +175,7 @@ function NavBarSideMenu({ data }: { data: getHomeMyInfoType }) {
 
 			{propertyModal(
 				<ModalContent
-					width={"500px"}
+					width={"360px"}
 					title={"국고 관리"}
 					titleSize={"var(--teacher-h2)"}
 					content={<PowerPropertyModalContent />}

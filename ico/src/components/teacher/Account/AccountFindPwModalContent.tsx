@@ -6,7 +6,11 @@ import { ID_ICON } from "../Signup/SignupIcons/SignupIcons"
 import { NUM_ONLY } from "@/util/regex"
 import { postResetPwAPI } from "@/api/teacher/user/postResetPwAPI"
 
-function AccountFindPwModalContent() {
+type AccountFindPwModalContentProps = {
+	closeComp: () => void
+}
+
+function AccountFindPwModalContent({ closeComp }: AccountFindPwModalContentProps) {
 	const [phoneNum, setPhoneNum] = useState<string>("")
 	const [resultText, setResultText] = useState<null | string>(null)
 
@@ -22,7 +26,12 @@ function AccountFindPwModalContent() {
 		setPhoneNum(e.target.value)
 	}
 
-	const fetchFindIdAPI = () => {
+	const buttonResultHandler = () => {
+		if (resultText && resultText !== "") closeComp()
+		else fetchFindPwAPI()
+	}
+
+	const fetchFindPwAPI = () => {
 		postResetPwAPI({ body: { phoneNum } })
 			.then((res) => {
 				setResultText(res)
@@ -42,10 +51,16 @@ function AccountFindPwModalContent() {
 					type="text"
 					placeholder="가입하신 휴대폰 번호를 입력해주세요."
 					onChange={changePhoneNumHandler}
+					onKeyDown={(e) => {
+						if (e.key === "Enter") buttonResultHandler()
+					}}
 				/>
 				{resultText !== null &&
 					(resultText !== "" ? (
-						<div css={positiveCSS}>가입하신 번호로 새로운 비밀번호를 전송하였습니다.</div>
+						<div css={positiveCSS}>
+							<div>가입하신 번호로</div>
+							<div>새로운 비밀번호를 전송하였습니다.</div>
+						</div>
 					) : (
 						<div css={negativeCSS}>가입하신 계정이 없습니다.</div>
 					))}
@@ -53,9 +68,9 @@ function AccountFindPwModalContent() {
 					theme={"highlighted"}
 					width={"100px"}
 					height={"30px"}
-					text={"제출"}
+					text={resultText && resultText !== "" ? "확인" : "찾기"}
 					fontSize={"var(--teacher-h5)"}
-					onClick={fetchFindIdAPI}
+					onClick={buttonResultHandler}
 				></Button>
 			</div>
 		</div>
@@ -83,6 +98,10 @@ const inputCSS = css`
 
 const positiveCSS = css`
 	color: #42a44a;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
 `
 
 const negativeCSS = css`

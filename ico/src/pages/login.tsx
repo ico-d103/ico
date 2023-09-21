@@ -219,19 +219,19 @@ function login() {
 			/> */}
 			{findIdModal(
 				<ModalContent
-					width={"400px"}
-					title={"아이디 찾기"}
+					width={"360px"}
+					title={"교사 회원 아이디 찾기"}
 					titleSize={"var(--student-h2)"}
-					content={<AccountFindIdModalContent />}
+					content={<AccountFindIdModalContent closeComp={findIdModal.close} />}
 					forChild={true}
 				/>,
 			)}
 			{findPasswordModal(
 				<ModalContent
-					width={"500px"}
-					title={"비밀번호 찾기"}
+					width={"360px"}
+					title={"교사 회원 비밀번호 찾기"}
 					titleSize={"var(--student-h2)"}
-					content={<AccountFindPwModalContent />}
+					content={<AccountFindPwModalContent closeComp={findPasswordModal.close} />}
 					forChild={true}
 				/>,
 			)}

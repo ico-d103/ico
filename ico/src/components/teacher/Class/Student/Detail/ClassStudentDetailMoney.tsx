@@ -62,6 +62,9 @@ function ClassStudentDetailMoney({ studentId, manageAll }: ClassStudentDetailMon
 								duration: 3000,
 						  })
 
+					dispatchInput({ type: "CHANGE_TITLE", value: "" })
+					dispatchInput({ type: "CHANGE_AMOUNT", value: "" })
+
 					queryClient.invalidateQueries(["studentList", "entered"])
 					queryClient.invalidateQueries(["enteredStudentDetail", studentId])
 				},
@@ -88,6 +91,9 @@ function ClassStudentDetailMoney({ studentId, manageAll }: ClassStudentDetailMon
 								content: <NotiTemplate type={"ok"} content={"성공적으로 지급되었습니다."} />,
 								duration: 3000,
 						  })
+
+					dispatchInput({ type: "CHANGE_TITLE", value: "" })
+					dispatchInput({ type: "CHANGE_AMOUNT", value: "" })
 
 					queryClient.invalidateQueries(["studentList", "entered"])
 					queryClient.invalidateQueries(["enteredStudentDetail", studentId])
@@ -123,6 +129,7 @@ function ClassStudentDetailMoney({ studentId, manageAll }: ClassStudentDetailMon
 				isTextarea={false}
 				onClick={(e) => e.stopPropagation()}
 				onChange={(e) => dispatchInput({ type: "CHANGE_TITLE", value: e.target.value })}
+				value={inputState.title}
 			/>
 			<Input
 				theme={"greenDefault"}
@@ -131,6 +138,7 @@ function ClassStudentDetailMoney({ studentId, manageAll }: ClassStudentDetailMon
 				isTextarea={false}
 				onClick={(e) => e.stopPropagation()}
 				onChange={changeAmountHandler}
+				value={inputState.amount}
 			/>
 			<Button
 				text={"지급"}
