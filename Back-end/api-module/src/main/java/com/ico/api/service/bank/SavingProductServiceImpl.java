@@ -113,7 +113,7 @@ public class SavingProductServiceImpl implements SavingProductService{
                     .title(saving.getTitle())
                     .interest(saving.getInterest())
                     .startDate(saving.getStartDate().format(Formatter.date))
-                    .interestAmount(saving.getAmount() * saving.getInterest() / 100)
+                    .interestAmount(getInterestAmount(saving.getAmount(), saving.getInterest(), saving.getTotalCount()))
                     .creditRating(saving.getCreditRating())
                     .amount(saving.getAmount())
                     .count(saving.getCount())
@@ -152,7 +152,7 @@ public class SavingProductServiceImpl implements SavingProductService{
                 .amount(saving.getAmount())
                 .count(saving.getCount())
                 .totalCount(saving.getTotalCount())
-                .interestAmount(saving.getInterest())
+                .interestAmount(getInterestAmount(saving.getAmount(), saving.getInterest(), saving.getTotalCount()))
                 .day(getDayOfWeek(saving.getDay()))
                 .end(saving.isEnd())
                 .build();
@@ -306,9 +306,16 @@ public class SavingProductServiceImpl implements SavingProductService{
         }
     }
 
-    public int getInterestAmount(int interest, byte totalCount){
-        //todo : 이자 금액 환산식 만들기
-        return 0;
+    public int getInterestAmount(int amount , int interest, byte totalCount){
+        //todo : 필요시 더 정확한 적금 이자비율 계산하기
+//        double interest_amount = 0;
+//
+//        for (int i = 1; i < totalCount; i++){
+//            interest_amount += amount * ((double) i /totalCount) ;
+//            log.info(String.valueOf(interest_amount));
+//        }
+        double interest_rate = (double) interest /100 * 0.55;
+        return (int) (amount * totalCount * interest_rate);
     }
 }
 
