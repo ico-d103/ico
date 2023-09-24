@@ -3,6 +3,7 @@ package com.ico.api.controller;
 import com.ico.api.dto.bank.SavingProductReqDto;
 import com.ico.api.dto.bank.SavingProductStudentResDto;
 import com.ico.api.dto.bank.SavingProductTeacherResDto;
+import com.ico.api.dto.bank.SavingStudentResDto;
 import com.ico.api.service.bank.SavingProductService;
 import com.ico.core.dto.SavingUpdateDto;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +57,16 @@ public class SavingProductController {
         return ResponseEntity.ok(savingProductService.findAllSavingStudent(request));
     }
 
+    /**
+     * 헉생의 적금 신청 관련 디테일 조회
+     * @param request
+     * @param savingId
+     * @return
+     */
+    @GetMapping("/student/{savingId}")
+    public ResponseEntity<SavingStudentResDto> getSavingDetail(HttpServletRequest request, @PathVariable String savingId){
+        return ResponseEntity.ok(savingProductService.getSavingDetail(request, savingId));
+    }
 
     /**
      * 적금 상품 등록

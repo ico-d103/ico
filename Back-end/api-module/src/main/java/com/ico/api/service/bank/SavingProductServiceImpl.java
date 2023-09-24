@@ -107,7 +107,6 @@ public class SavingProductServiceImpl implements SavingProductService{
         List<Saving> mySavingList = savingMongoRepository.findAllByStudentId(studentId);
         for(Saving saving : mySavingList){
             SavingStudentResDto mySaving = new SavingStudentResDto();
-            boolean isEnd = saving.getCount() >= saving.getTotalCount();
 
             mySaving = mySaving.builder()
                     .id(saving.getId())
@@ -120,7 +119,7 @@ public class SavingProductServiceImpl implements SavingProductService{
                     .count(saving.getCount())
                     .totalCount(saving.getTotalCount())
                     .day(getDayOfWeek(saving.getDay()))
-                    .end(isEnd)
+                    .end(saving.isEnd())
                     .build();
             mySavingListReturn.add(mySaving);
         }
@@ -131,6 +130,33 @@ public class SavingProductServiceImpl implements SavingProductService{
         dto.setMySaving(mySavingListReturn);
 
         return dto;
+    }
+
+    @Override
+    public SavingStudentResDto getSavingDetail(HttpServletRequest request, String savingId) {
+        Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
+
+        Saving saving = savingMongoRepository.findById(savingId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_SAVING));
+
+        if(!saving.getStudentId().equals(studentId)){
+            throw new CustomException(ErrorCode.NOT_SAVING_USER);
+        }
+
+        return SavingStudentResDto.builder()
+                .id(savingId)
+                .title(saving.getTitle())
+                .interest(saving.getInterest())
+                .startDate(saving.getStartDate().format(Formatter.date))
+                .creditRating(saving.getCreditRating())
+                .amount(saving.getAmount())
+                .count(saving.getCount())
+                .totalCount(saving.getTotalCount())
+                .interestAmount(saving.getInterest())
+                .day(getDayOfWeek(saving.getDay()))
+                .end(saving.isEnd())
+                .build();
+
     }
 
     @Override
@@ -278,6 +304,11 @@ public class SavingProductServiceImpl implements SavingProductService{
             default:
                 throw new CustomException(ErrorCode.BAD_DAY_OF_WEEK);
         }
+    }
+
+    public int getInterestAmount(int interest, byte totalCount){
+        //todo : 이자 금액 환산식 만들기
+        return 0;
     }
 }
 
