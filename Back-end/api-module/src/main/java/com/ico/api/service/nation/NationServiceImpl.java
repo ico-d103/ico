@@ -460,6 +460,11 @@ public class NationServiceImpl implements NationService {
         PaydayResDto dto = new PaydayResDto();
         dto.setPaydays(paydays);
 
+        // 현재 날짜와 일치하는 월급일을 가진 나라 찾기
+        List<Long> nations = paydayRepository.findNationIdsByDateEqualsOne((byte) 14);
+        for(Long id: nations){
+            log.info(String.valueOf(id));
+        }
         return dto;
     }
 

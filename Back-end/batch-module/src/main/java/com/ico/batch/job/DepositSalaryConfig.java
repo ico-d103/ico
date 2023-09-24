@@ -1,5 +1,6 @@
 package com.ico.batch.job;
 
+import com.ico.core.repository.NationRepository;
 import com.ico.core.service.DepositSalaryService;
 import com.ico.core.code.TaxType;
 import com.ico.core.entity.Student;
@@ -46,6 +47,7 @@ public class DepositSalaryConfig {
     // Repository
     public final StudentRepository studentRepository;
     public final TaxRepository taxRepository;
+    public final NationRepository nationRepository;
 
 
     @Bean
