@@ -136,8 +136,12 @@ public class SavingProductServiceImpl implements SavingProductService{
     public SavingStudentResDto getSavingDetail(HttpServletRequest request, String savingId) {
         Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
 
-        Saving saving = savingMongoRepository.findByIdAndStudentId(savingId, studentId)
+        Saving saving = savingMongoRepository.findById(savingId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_SAVING));
+
+        if(!saving.getStudentId().equals(studentId)){
+            throw new CustomException(ErrorCode.NOT_SAVING_USER);
+        }
 
         return SavingStudentResDto.builder()
                 .id(savingId)

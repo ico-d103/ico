@@ -217,6 +217,8 @@ public enum ErrorCode{
 
     NOT_FOUND_SAVING(HttpStatus.NOT_FOUND, "732", "적금 가입 내역이 없습니다."),
 
+    NOT_SAVING_USER(HttpStatus.BAD_REQUEST, "733", "적금을 가입한 유저와 일치하지 않습니다."),
+
     NOT_FOUND_SUBJECT(HttpStatus.NOT_FOUND, "800", "자격증명이 비었습니다."),
 
     NOT_FOUND_RATING(HttpStatus.NOT_FOUND, "801", "등급을 올릴지 내릴지 결정해주세요."),
