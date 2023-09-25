@@ -19,34 +19,42 @@ import { useAtom } from "jotai"
 import { isNavigating } from "@/store/store"
 import useModal from "@/components/common/Modal/useModal"
 import useShopHandler from "./useShopHandler"
+import ModalContent from "@/components/common/Modal/ModalContent"
+import AddItemModal from "./Modal/AddItemModal"
+import useNavigate from "@/hooks/useNavigate"
+import { SHOPPING_BASKET } from "./Shop"
 
 type ShopDetailPropsType = {
-	query: UseQueryResult<getTeacherProductDetailType, unknown> | UseQueryResult<getStudentProductDetailType, unknown>
+	query: UseQueryResult<getTeacherProductDetailType, unknown>
   isSeller: boolean
 	pid: number
 }
 
-function ShopDetail({pid, query}: ShopDetailPropsType) {
+function ShopDetail({pid, query, isSeller}: ShopDetailPropsType) {
 
 	const showQRModal = useModal()
 	const scanQRModal = useModal()
-	const [time, setTime] = useState<number>(0)
+	const addItemModal = useModal()
+	
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 	const [term, setTerm] = useState<0 | 1>(0)
 	const [nation] = useGetNation()
 	const galleryWrapperRef = useRef<HTMLDivElement>(null)
-	const shopHandler = useShopHandler()
+	const navigate = useNavigate()
+	
+	const {data, isSuccess} = query
 
 
 
 	// console.log(data)
 
 	// console.log(data)
+	const [time, setTime] = useState<number>(0)
 	const generateTime = () => {
 		setTime(() => new Date().getTime())
 	}
 
-	const imageElements = query.data?.images.map((img) => (
+	const imageElements = isSuccess && data.images.map((img) => (
 		<img
 			key={img}
 			alt="Image"
@@ -60,18 +68,21 @@ function ShopDetail({pid, query}: ShopDetailPropsType) {
 
 	return (
 		<div css={wrapperCSS}>
-			{query.data && (
+			{isSuccess && (
 				<React.Fragment>
-					{query.data && showQRModal(
-						<ShowQR type={"ico_purchase"} id={query.data.id} time={time} />
-					)}
-					{query.data && scanQRModal(
-						<QRScannerModal compState={scanQRModal.state} type={"ico_purchase"} id={query.data.id} />
+					{/* {isSuccess && showQRModal(
+						<ShowQR type={"ico_purchase"} id={data.id} time={time} />
+					)} */}
+					{/* {isSuccess && scanQRModal(
+						<QRScannerModal compState={scanQRModal.state} type={"ico_purchase"} id={data.id} />
+					)} */}
+					{isSuccess && addItemModal(
+						<ModalContent forChild={true} width={'360px'} content={<AddItemModal query={query} closeHandler={addItemModal.close} />} title={"장바구니 추가"} titleSize={'24px'} />
 					)}
 				</React.Fragment>
 			)}
 
-			<PageHeader title={"상점"} />
+			<PageHeader title={"상점"} rightButton={<div onClick={() => navigate('/student/shop/basket')}>{SHOPPING_BASKET}</div>} />
 			<div ref={galleryWrapperRef} css={parentCSS}>
 				{imageElements && <SwipeableGallery parentRef={galleryWrapperRef} content={[...imageElements]} />}
 			</div>
@@ -79,22 +90,22 @@ function ShopDetail({pid, query}: ShopDetailPropsType) {
 			<div css={shopWrapperCSS}>
 	
 					<div css={shopUpperCSS}>
-						{query.data?.title}
-						{query.data && (
+						{isSuccess && data.title}
+						{isSuccess && data && (
 							<div css={css`font-weight: 500;`}>
-								상품이&nbsp;<div style={{ fontWeight: "700" }}>{query.data?.count - query.data?.sold}개</div>&nbsp;남았어요!
+								상품이&nbsp;<div style={{ fontWeight: "700" }}>{data.count - data.sold}개</div>&nbsp;남았어요!
 							</div>
 						)}
 					</div>
 
 					<div css={priceTagCSS}>
-						{query.data?.amount}&nbsp;
+						{data?.amount}&nbsp;
 						{nation.currency}
 					</div>
 
 					<div css={css`width: 100%; height: 1px; border-bottom: 1px solid rgba(0, 0, 0, 0.1); margin: 8px 0px;`}/>
-					<div css={dateCSS}>{query.data?.date}</div>
-					<div css={detailCSS}>{query.data?.detail}</div>
+					<div css={dateCSS}>{data?.date}</div>
+					<div css={detailCSS}>{data?.detail}</div>
 		
 			</div>
 
@@ -117,19 +128,19 @@ function ShopDetail({pid, query}: ShopDetailPropsType) {
 
 			{/* 구매자라는 로직 추가 해야 함*/}
 			{/* 여기 주석 해제하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 */}
-			{/* {isNavigatingAtom === false && query.data.seller === false && (
+			{isNavigatingAtom === false && isSeller === false && isSuccess && (
 				<div css={navBarOverlayCSS}>
 					<Button
-						text={"이 상품 구매할래요!"}
+						text={"장바구니에 담기!"}
 						fontSize={`var(--student-h3)`}
 						width={"100%"}
 						theme={"mobileSoft"}
-						onClick={() => {shopHandler.addProducts({seller: query.data.seller})}}
+						onClick={addItemModal.open}
 					/>
 				</div>
 			)}
-
-			{isNavigatingAtom === false && query.data.seller === true && (
+{/* () => {shopHandler.addProducts({seller: data.seller, id: data.id, count: 1, title: data.title, amount: data.amount, image: data.images[0] })} */}
+			{/* {isNavigatingAtom === false && isSeller === true && (
 				<div css={navBarOverlayCSS}>
 					<Button
 						text={"내 상품을 팔거에요!"}

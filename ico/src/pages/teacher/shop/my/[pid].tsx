@@ -69,7 +69,7 @@ function product() {
 					content={<ShowQR type={"ico_rental"} id={data?.id} time={time} />}
 				/>
 			)} */}
-			{data && modal(<ShowQR type={"ico_rental"} id={data?.id} time={time} />)}
+			{data && modal(<ShowQR seller={'선생님'} time={time} />)}
 			<div css={headerCSS}>
 				<div css={productCSS}>
 					<div css={titleWrapperCSS}>

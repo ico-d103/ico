@@ -353,12 +353,17 @@ function signup() {
 		}
 	}
 
-	const checkValidPhoneHandler = (forSubmit = false) => {
+	const checkValidPhoneHandler = (forSubmit = false, duplicate = false) => {
 		// 입력값이 없을 때
 		if (inputState.phone === "") {
 			// 제출버튼을 눌렀다면
 			if (forSubmit) {
-				dispatchValidMessage({ type: "VALID_PHONE", value: "휴대폰 번호를 입력해 주세요." })
+				if (duplicate) {
+					dispatchValidMessage({ type: "VALID_PHONE", value: "이미 가입된 휴대폰 번호입니다." })
+				} else {
+					dispatchValidMessage({ type: "VALID_PHONE", value: "휴대폰 번호를 입력해 주세요." })
+				}
+				
 			}
 			dispatchValid({ type: "VALID_PHONE", value: false })
 			return
@@ -395,14 +400,14 @@ function signup() {
 		)
 
 		// 유효성 검사를 모두 완료하면 회원가입 요청
-		if (
-			validState.name &&
-			validState.id &&
-			validState.password &&
-			validState.password2 &&
-			validState.file &&
-			validState.phone
-		) {
+		// if (
+		// 	validState.name &&
+		// 	validState.id &&
+		// 	validState.password &&
+		// 	validState.password2 &&
+		// 	validState.file &&
+		// 	validState.phone
+		// ) {
 			postTeacherAPI({ body: formData })
 				.then(() => {
 					noti({content: <NotiTemplate type={'ok'} content={"회원가입을 완료하였습니다."}/>, duration: 5000})
@@ -411,9 +416,12 @@ function signup() {
 				.catch((error) => {
 					// 회원가입 관련해서 어떤 error 코드가 존재하는지 몰라서 일단
 					console.log(error)
-					noti({content: <NotiTemplate type={'alert'} content={error.response.data.message}/>, duration: 5000})
+					// noti({content: <NotiTemplate type={'alert'} content={error.response.data.message}/>, duration: 5000})
+					if (error.response.data.code === '120') {
+
+					}
 				})
-		}
+		// }
 	}
 
 	const messageGenerator = ({ message, isValid, visible }: { message: string; isValid: boolean; visible: boolean }) => {

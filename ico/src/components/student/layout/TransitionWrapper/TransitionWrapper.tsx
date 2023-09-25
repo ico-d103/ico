@@ -263,6 +263,7 @@ const contentInnerWrapperCSS = ({
 		display: grid;
 
 		user-select: none;
+
 	`
 }
 

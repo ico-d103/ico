@@ -9,15 +9,18 @@ import useNavigate from "@/hooks/useNavigate"
 import { postRentalTeacherProductsAPI } from "@/api/student/shop/postRentalTeacherProductsAPI"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
-import { postPurchaseStudentProductsAPI } from "@/api/student/shop/postPurchaseStudentProductsAPI"
+import { postPurchaseTeacherProductsAPI } from "@/api/student/shop/postPurchaseTeacherProductsAPI"
 import { useRouter } from "next/router"
 
 type QRScannerProps = {
 	closeComp: any
-	type: "ico_rental" | "ico_purchase"
-	id: number
+	seller: string
+	products: {
+		id: number;
+		count: number;
+	}[]
 }
-const QRScanner = ({ closeComp, type, id }: QRScannerProps) => {
+const QRScanner = ({ closeComp, seller, products }: QRScannerProps) => {
 	const videoRef = useRef<HTMLVideoElement>(null)
 	const [isLoading, setIsLoading] = useState<boolean>(true)
 	const [isError, setIsError] = useState<boolean>(false)
@@ -54,40 +57,13 @@ const QRScanner = ({ closeComp, type, id }: QRScannerProps) => {
 		const handleQrCodeScan = (result: Result | null, error?: any) => {
 			if (result) {
 				const bodyData = result.getText().split(",")
-				if (bodyData[0] !== type || Number(bodyData[1]) !== id) {
-					noti({ content: <NotiTemplate type={"alert"} content={"다른 상품의 QR코드예요!"} />, duration: 5000 })
+				if (bodyData[0] !== seller) {
+					noti({ content: <NotiTemplate type={"alert"} content={"다른 판매자의 QR코드예요!"} />, duration: 5000 })
 					closeComp && closeComp()
 					return
-				}
-				if (bodyData[0] === "ico_rental") {
-					postRentalTeacherProductsAPI({ body: { id: Number(bodyData[1]), unixTime: Number(bodyData[2]) } })
-						.then((res) => {
-							noti({ content: <NotiTemplate type={"ok"} content={"물건을 빌렸어요!"} />, duration: 5000 })
-							navigate(`/student/shop/teacher/rented/${Number(bodyData[1])}`, "bottomToTop")
-							closeComp && closeComp()
-						})
-						.catch((error) => {
-							if (error.response.data.code === "621") {
-								noti({
-									content: <NotiTemplate type={"alert"} content={"QR 코드의 유효기간이 지났어요!"} />,
-									duration: 5000,
-								})
-								closeComp && closeComp()
-							}
-							if (error.response.data.code === "616" || error.response.data.code === "11") {
-								noti({
-									content: <NotiTemplate type={"alert"} content={"남은 물건이 없어요!"} />,
-									duration: 5000,
-								})
-								closeComp && closeComp()
-							}
-							
-						})
-				}
-
-
-				if (bodyData[0] === "ico_purchase") {
-					postPurchaseStudentProductsAPI({ body: { id: Number(bodyData[1]), unixTime: Number(bodyData[2]) } })
+				} else {
+					if (seller === '선생님') {
+						postPurchaseTeacherProductsAPI({ body: { products, unixTime: Number(bodyData[2]) } })
 						.then((res) => {
 							noti({ content: <NotiTemplate type={"ok"} content={"물건을 구매했어요!"} />, duration: 5000 })
 							navigate(`/student/shop/student/purchased/${Number(bodyData[1])}`, "bottomToTop")
@@ -109,6 +85,8 @@ const QRScanner = ({ closeComp, type, id }: QRScannerProps) => {
 								closeComp && closeComp()
 							}
 						})
+					}
+					
 				}
 
 				// console.log("QR code detected:", result.getText())

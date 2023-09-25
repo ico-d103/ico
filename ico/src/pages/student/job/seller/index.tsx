@@ -18,7 +18,7 @@ function index() {
 	return (
 		<div css={mainWrapperCSS}>
       <PageHeader title={"도매 상점"}/>
-			<Shop query={teacherProductsQueries} uploadPageUrl={"/student/job/seller/create"}/>
+			<Shop query={teacherProductsQueries} uploadPageUrl={"/student/job/seller/create"} seller={"선생님"}/>
 		</div>
 	)
 }

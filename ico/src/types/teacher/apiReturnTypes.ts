@@ -120,6 +120,8 @@ export type getTeacherProductDetailType = {
 	sold: number
 	date: string
 	isCoupon: boolean
+	seller: string
+	isSeller: boolean
 }
 
 // 상점 끝

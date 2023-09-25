@@ -73,9 +73,9 @@ function product() {
 							// <QRScannerModal compState={compState} type={data.rental ? "ico_rental" : "ico_purchase"} id={data.id} />
 						}
 					/> */}
-					{showQRModal(
+					{/* {showQRModal(
 						<ShowQR type={"ico_purchase"} id={data.id} time={time} />
-					)}
+					)} */}
 
 					{/* <Modal
 						compState={scanQRState}
@@ -83,9 +83,9 @@ function product() {
 						transition={"scale"}
 						content={<QRScannerModal compState={scanQRState} type={"ico_purchase"} id={data.id} />}
 					/> */}
-					{scanQRModal(
+					{/* {scanQRModal(
 						<QRScannerModal compState={scanQRModal.state} type={"ico_purchase"} id={data.id} />
-					)}
+					)} */}
 				</React.Fragment>
 			)}
 			<PageHeader title={"상점"} />

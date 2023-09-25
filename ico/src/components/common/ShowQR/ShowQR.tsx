@@ -7,13 +7,12 @@ import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "../StackNotification/NotiTemplate"
 
 type ShowQRProps = {
-	type: "ico_rental" | "ico_purchase"
-	id: number
+	seller: string
 	time: number
 	closeComp?: Function
 }
 
-function ShowQR({ type, id, time, closeComp }: ShowQRProps) {
+function ShowQR({ seller, time, closeComp }: ShowQRProps) {
 	const isMobile = useMediaQuery("(max-width: 768px")
 	const noti = useNotification()
 
@@ -24,7 +23,7 @@ function ShowQR({ type, id, time, closeComp }: ShowQRProps) {
 
 	return (
 		<div css={modalWrapperCSS({ isMobile })}>
-			<QRCode value={`${type},${id},${time}`} />
+			<QRCode value={`${seller},${time}`} />
 			<Timer targetTime={Date.now() + 3 * 60 * 1000} funcHandler={expiredHandler} />
 		</div>
 	)
