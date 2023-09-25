@@ -2,16 +2,19 @@ import { tokenInstance } from "@/api/instance"
 import { successReturnType, errorReturnType } from "@/types/common/apiReturnTypes"
 
 type paramsType = {
-	pid: string
+	body: {
+        products: {id: number; count: number}[]
+        unixTime: number
+    }
 }
 type responseType = {
 	status: number
 	data: successReturnType | errorReturnType
 }
 
-export const postPurchaseTeacherProductsAPI = async ({ pid }: paramsType) => {
+export const postPurchaseTeacherProductsAPI = async ({ body }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.post(`/teacher-product/student/${pid}`)
+		const response: responseType = await tokenInstance.post("/teacher-product/student/product", body)
 		return response.data
 	} catch (error) {
 		throw error

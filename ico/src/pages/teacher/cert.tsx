@@ -40,6 +40,7 @@ function cert() {
 		file && formData.append("file", file)
 		postCertificationAPI({ body: formData }).then((res) => {
 			setTokenStatusAtom(() => {return {role: 'TEACHER', status: ['require_approval'], showMessage: false}})
+			setRePost(() => false)
 		})
 	}
 

@@ -28,7 +28,7 @@ function coupon() {
 		<React.Fragment>
 			<PageHeader title={"쿠폰함"} />
 			<div css={couponWrapperCSS}>
-				<ContentWrapper cssProps={css`flex: 1; display: flex; flex-direction: column; width: 100%; height: 100%;`}>
+				<ContentWrapper>
 					<QueryAdapter query={couponQuery} isEmpty={(couponQuery && couponQuery.data?.length === 0)} emptyLabel="쿠폰이 없어요!" fetchingLabel="쿠폰을 불러오는 중이에요!">
 						{couponQuery.data && <HomeCouponList couponList={couponQuery.data}/>}
 					</QueryAdapter>

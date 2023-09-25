@@ -3,7 +3,7 @@ import { successReturnType, errorReturnType } from "@/types/common/apiReturnType
 
 type paramsType = {
 	body: {
-        id: number
+        products: {id: number; count: number}[]
         unixTime: number
     }
 }
@@ -14,7 +14,7 @@ type responseType = {
 
 export const postPurchaseStudentProductsAPI = async ({ body }: paramsType) => {
 	try {
-		const response: responseType = await tokenInstance.post("/student-product/student/buy", body)
+		const response: responseType = await tokenInstance.post("/teacher-product/student/product", body)
 		return response.data
 	} catch (error) {
 		throw error

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react"
+import { cloneDeep } from "lodash"
 
-type shoppingBasketType = {
+export type shoppingBasketType = {
 	seller: string | null
-	basket: { id: number; count: number; title: string; amount: number; image: string }[]
+	basket: basketType
 }
+
+export type basketType = { id: number; count: number; title: string; amount: number; image: string }[]
 
 function useShopHandler() {
 	const [shoppingBasket, setShoppingBasket] = useState<shoppingBasketType>({
@@ -12,16 +15,33 @@ function useShopHandler() {
 	})
 
 	useEffect(() => {
-		const getSession = window.sessionStorage.getItem("shopping_basket")
-		if (getSession) {
-			const shoppingBasket = JSON.parse(getSession) as shoppingBasketType
-			setShoppingBasket(() => shoppingBasket)
+		const getLocal = window.localStorage.getItem("shopping_basket")
+		if (getLocal) {
+			const shoppingBasket = JSON.parse(getLocal) as shoppingBasketType
+			if (shoppingBasket.basket.length !== 0) {
+				setShoppingBasket(() => shoppingBasket)
+			}
 		}
 	}, [])
 
-  useEffect(() => {
-    window.sessionStorage.setItem("shopping_basket", JSON.stringify(shoppingBasket))
-  }, [shoppingBasket])
+	useEffect(() => {
+		if (shoppingBasket.basket.length !== 0) {
+			window.localStorage.setItem("shopping_basket", JSON.stringify(shoppingBasket))
+		}
+		console.log(shoppingBasket)
+	}, [shoppingBasket])
+
+	const delProduct = ({ id }: { id: number }) => {
+		setShoppingBasket((prev) => {
+			const newList = prev.basket.filter((el) => el.id !== id)
+			if (newList.length !== 0) {
+				return { ...prev, basket: [...newList] }
+			} else {
+				window.localStorage.setItem("shopping_basket", JSON.stringify({ seller: null, basket: [] }))
+				return { seller: null, basket: [] }
+			}
+		})
+	}
 
 	const addProducts = ({
 		seller,
@@ -40,16 +60,17 @@ function useShopHandler() {
 	}) => {
 		if (shoppingBasket.seller === null || shoppingBasket.seller === seller) {
 			setShoppingBasket((prev) => {
-				return { seller, basket: [...prev.basket, { id, count, title, amount, image }] }
+				const newList = prev.basket.filter((el) => el.id !== id)
+				return { seller, basket: [...newList, { id, count, title, amount, image }] }
 			})
 		} else {
-      setShoppingBasket(() => {
+			setShoppingBasket(() => {
 				return { seller, basket: [{ id, count, title, amount, image }] }
 			})
-    }
+		}
 	}
 
-  return {shoppingBasket, addProducts}
+	return { shoppingBasket, addProducts, delProduct }
 }
 
 export default useShopHandler

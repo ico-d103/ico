@@ -19,9 +19,10 @@ const backBtn = (
 type PageHeaderProps = {
 	title: string
 	addComp?: any
+	rightButton?: any
 }
 
-function PageHeader({ title, addComp }: PageHeaderProps) {
+function PageHeader({ title, addComp, rightButton }: PageHeaderProps) {
 	const [isScrolled, setIsScrolled] = useState<boolean>(false)
 	const headerRef = useRef<HTMLDivElement>(null)
 	const router = useRouter()
@@ -67,7 +68,7 @@ function PageHeader({ title, addComp }: PageHeaderProps) {
 					{renderBtn}
 					<div css={titleCSS({ isScrolled })}>{title}</div>
 
-					<div css={whiteSpaceCSS}>{renderBtn}</div>
+					<div css={whiteSpaceCSS}>{rightButton}</div>
 				</div>
 				<div ref={headerRef}>{addComp}</div>
 			</div>
@@ -137,7 +138,7 @@ const titleCSS = ({ isScrolled }: { isScrolled: boolean }) => {
 }
 
 const whiteSpaceCSS = css`
-	visibility: hidden;
+	/* visibility: hidden; */
 `
 
 export default PageHeader

@@ -2,9 +2,19 @@ import Button from "@/components/common/Button/Button"
 import React, { useState, useEffect } from "react"
 import QRScanner from "./QRScanner"
 import { css } from "@emotion/react"
+import { basketType } from "../useShopHandler";
 
-function QRScannerModal({ closeComp, compState, type, id }: { closeComp?: Function; compState: boolean; type: 'ico_rental' | 'ico_purchase'; id: number; }) {
+function QRScannerModal({ closeComp, compState, seller, products }: { closeComp?: Function; compState: boolean; seller: string; products: basketType }) {
 	const [unmount, setUnmount] = useState<boolean>(false)
+	const [productsBody, setProductsBody] = useState<{id: number, count: number}[]>()
+
+	useEffect(() => {
+		const productsBody = products.map((el) => {
+			return {id: el.id, count: el.count}
+		})
+
+		setProductsBody(() => productsBody)
+	}, [])
 
 	useEffect(() => {
 		if (compState === false) {
@@ -18,7 +28,7 @@ function QRScannerModal({ closeComp, compState, type, id }: { closeComp?: Functi
 
 	return (
 		<div css={wrapperCSS}>
-			{unmount === false && <QRScanner closeComp={closeComp} type={type} id={id} />}
+			{unmount === false && productsBody && <QRScanner closeComp={closeComp} seller={seller} products={productsBody} />}
 			<div css={buttonWrapperCSS}>
 				<Button
 					text={"취소"}

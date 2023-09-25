@@ -28,6 +28,7 @@ export const NAVBAR_ROUTES: { [prop: string]: number } = {
   "/student/shop/create": 3,
   "/student/shop/teacher/[pid]": 3,
   "/student/shop/student/[pid]": 3,
+  "/student/shop/basket": 3,
 }
 
 export const NAVBAR_ELEMENT: { [prop: number]: { url: string; name: string; label: string; content: any; function: Function } } =

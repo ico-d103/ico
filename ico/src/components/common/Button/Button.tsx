@@ -168,7 +168,7 @@ const buttonCSS = ({ theme }: { theme: string }) => {
 			border: 1px solid var(--student-main-color-5);
 			border-radius: 20px;
 			color: #c46200;
-			background-color: var(--student-main-color-2);
+			background-color: rgba(0, 0, 0, 0);
 		`,
 		mobileRadial: css`
 			border: none;
