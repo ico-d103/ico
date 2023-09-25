@@ -64,7 +64,7 @@ const QRScanner = ({ closeComp, seller, products }: QRScannerProps) => {
 					return
 				} else {
 					if (decodedSeller === '선생님') {
-						postPurchaseTeacherProductsAPI({ body: { products, unixTime: Number(bodyData[2]) } })
+						postPurchaseTeacherProductsAPI({ body: { products, unixTime: Number(bodyData[1]) } })
 						.then((res) => {
 							noti({ content: <NotiTemplate type={"ok"} content={"물건을 구매했어요!"} />, duration: 5000 })
 							navigate(`/student/shop/student/purchased/${Number(bodyData[1])}`, "bottomToTop")
