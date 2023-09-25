@@ -23,28 +23,30 @@ import ModalContent from "@/components/common/Modal/ModalContent"
 import AddItemModal from "./Modal/AddItemModal"
 import useNavigate from "@/hooks/useNavigate"
 import { SHOPPING_BASKET } from "./Shop"
+import ModalAlert from "@/components/common/Modal/ModalAlert"
 
 type ShopDetailPropsType = {
 	query: UseQueryResult<getTeacherProductDetailType, unknown>
-  isSeller: boolean
+	isSeller: boolean
+	editUrl?: string
+	deleteHandler?: () => void
 	pid: number
 }
 
-function ShopDetail({pid, query, isSeller}: ShopDetailPropsType) {
-
+function ShopDetail({ pid, query, isSeller, editUrl, deleteHandler }: ShopDetailPropsType) {
 	const showQRModal = useModal()
 	const scanQRModal = useModal()
+	const deleteModal = useModal()
 	const addItemModal = useModal()
-	
+	const [contentCount, setContentCount] = useState(0)
+
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 	const [term, setTerm] = useState<0 | 1>(0)
 	const [nation] = useGetNation()
 	const galleryWrapperRef = useRef<HTMLDivElement>(null)
 	const navigate = useNavigate()
-	
-	const {data, isSuccess} = query
 
-
+	const { data, isSuccess } = query
 
 	// console.log(data)
 
@@ -54,17 +56,22 @@ function ShopDetail({pid, query, isSeller}: ShopDetailPropsType) {
 		setTime(() => new Date().getTime())
 	}
 
-	const imageElements = isSuccess && data.images.map((img) => (
-		<img
-			key={img}
-			alt="Image"
-			src={img}
-			css={css`
-				width: 100%;
-				height: auto;
-			`}
-		/>
-	))
+	const imageElements =
+		isSuccess &&
+		data.images.map((img) => (
+			<div css={css`width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background-color: white;`}>
+				<img
+				key={img}
+				alt="Image"
+				src={img}
+				css={css`
+					width: auto;
+					height: 100%;
+				`}
+			/>
+			</div>
+			
+		))
 
 	return (
 		<div css={wrapperCSS}>
@@ -76,37 +83,68 @@ function ShopDetail({pid, query, isSeller}: ShopDetailPropsType) {
 					{/* {isSuccess && scanQRModal(
 						<QRScannerModal compState={scanQRModal.state} type={"ico_purchase"} id={data.id} />
 					)} */}
-					{isSuccess && addItemModal(
-						<ModalContent forChild={true} width={'360px'} content={<AddItemModal query={query} closeHandler={addItemModal.close} />} title={"장바구니 추가"} titleSize={'24px'} />
-					)}
+					{isSuccess &&
+						addItemModal(
+							<ModalContent
+								forChild={true}
+								width={"360px"}
+								content={<AddItemModal query={query} closeHandler={addItemModal.close} />}
+								title={"장바구니 추가"}
+								titleSize={"24px"}
+							/>,
+						)}
 				</React.Fragment>
 			)}
+			{deleteModal(
+        <ModalAlert content={['삭제하면 되돌릴 수 없어요!']} proceed={deleteHandler} closeComp={deleteModal.close} width={"360px"} title={"상품 삭제"} titleSize={"24px"}/>
+      )}
 
-			<PageHeader title={"상점"} rightButton={<div onClick={() => navigate('/student/shop/basket')}>{SHOPPING_BASKET}</div>} />
+			<PageHeader
+				title={"상점"}
+				rightButton={<div onClick={() => navigate("/student/shop/basket")}>{SHOPPING_BASKET}</div>}
+			/>
 			<div ref={galleryWrapperRef} css={parentCSS}>
-				{imageElements && <SwipeableGallery parentRef={galleryWrapperRef} content={[...imageElements]} />}
+				{/* <div css={css`width: 90%; height: 100px; background-color: red;`}>few</div> */}
+				{imageElements && <SwipeableGallery contentCount={contentCount} setContentCount={setContentCount} content={[...imageElements]} />}
 			</div>
 
 			<div css={shopWrapperCSS}>
-	
-					<div css={shopUpperCSS}>
-						{isSuccess && data.title}
-						{isSuccess && data && (
-							<div css={css`font-weight: 500;`}>
-								상품이&nbsp;<div style={{ fontWeight: "700" }}>{data.count - data.sold}개</div>&nbsp;남았어요!
-							</div>
-						)}
-					</div>
+				<div css={shopUpperCSS}>
+					{isSuccess && data.title}
+					{isSuccess && data && (
+						<div
+							css={css`
+								font-weight: 500;
+							`}
+						>
+							상품이&nbsp;<div style={{ fontWeight: "700" }}>{data.count - data.sold}개</div>&nbsp;남았어요!
+						</div>
+					)}
+				</div>
 
+				<div css={infoWrapperCSS}>
 					<div css={priceTagCSS}>
-						{data?.amount}&nbsp;
-						{nation.currency}
+					{data?.amount}&nbsp;
+					{nation.currency}
 					</div>
+					{editUrl && deleteHandler &&
+					<div css={buttonWrapperCSS}>
+						<Button text={"수정"} theme={"text"} onClick={() => navigate(editUrl)} width={"auto"} height={"14px"} fontSize={"14px"}/>
+						<Button text={"삭제"} theme={"text"} onClick={() => deleteModal.open()} width={"auto"} height={"14px"} fontSize={"14px"}/>
+					</div>}
+					
+				</div>
 
-					<div css={css`width: 100%; height: 1px; border-bottom: 1px solid rgba(0, 0, 0, 0.1); margin: 8px 0px;`}/>
-					<div css={dateCSS}>{data?.date}</div>
-					<div css={detailCSS}>{data?.detail}</div>
-		
+				<div
+					css={css`
+						width: 100%;
+						height: 1px;
+						border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+						margin: 8px 0px;
+					`}
+				/>
+				<div css={dateCSS}>{data?.date}</div>
+				<div css={detailCSS}>{data?.detail}</div>
 			</div>
 
 			{/* <button onClick={openComp}>qr 카메라</button> */}
@@ -139,7 +177,7 @@ function ShopDetail({pid, query, isSeller}: ShopDetailPropsType) {
 					/>
 				</div>
 			)}
-{/* () => {shopHandler.addProducts({seller: data.seller, id: data.id, count: 1, title: data.title, amount: data.amount, image: data.images[0] })} */}
+			{/* () => {shopHandler.addProducts({seller: data.seller, id: data.id, count: 1, title: data.title, amount: data.amount, image: data.images[0] })} */}
 			{/* {isNavigatingAtom === false && isSeller === true && (
 				<div css={navBarOverlayCSS}>
 					<Button
@@ -160,10 +198,10 @@ function ShopDetail({pid, query, isSeller}: ShopDetailPropsType) {
 
 const wrapperCSS = css`
 	/* margin-bottom: 60px; */
+
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-
 `
 
 const shopWrapperCSS = css`
@@ -181,12 +219,8 @@ const parentCSS = css`
 	grid-template-columns: 1; */
 	width: 100%;
 	height: 40vh;
-
-	::-webkit-scrollbar {
-		width: 0px;
-		height: 0px;
-		background-color: transparent;
-	}
+	display: grid;
+	overflow: hidden;
 `
 
 const shopUpperCSS = css`
@@ -205,7 +239,7 @@ const shopUpperCSS = css`
 `
 
 const priceTagCSS = css`
-	color: #CB1400;
+	color: #cb1400;
 
 	margin-top: 10px;
 	font-weight: 500;
@@ -248,5 +282,16 @@ const navBarOverlayCSS = css`
 			opacity: 100%;
 		}
 	}
+`
+
+const infoWrapperCSS = css`
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+`
+
+const buttonWrapperCSS = css`
+	display: flex;
+	gap: 8px;
 `
 export default ShopDetail

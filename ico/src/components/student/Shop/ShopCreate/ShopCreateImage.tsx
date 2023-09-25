@@ -5,13 +5,15 @@ import { ChangeEvent } from "react"
 import Carousel from "@/components/common/Carousel/Carousel"
 import SwipeableGallery from "@/components/common/SwipeableGallery/SwipeableGallery"
 interface ShopCreateImageProps {
-	sendImageList: (imageList: File[]) => void
+	imageList: File[]
+	existingImages: string[]
+	setImageList: React.Dispatch<React.SetStateAction<File[]>>
 }
 
-const ShopCreateImage = ({ sendImageList }: ShopCreateImageProps) => {
-	const [imageList, setImageList] = useState<File[]>([])
+const ShopCreateImage = ({ imageList, existingImages, setImageList }: ShopCreateImageProps) => {
+	// const [imageList, setImageList] = useState<File[]>([])
 	const galleryWrapperRef = useRef<HTMLDivElement>(null)
-
+	const [contentCount, setContentCount] = useState(0)
 	function onClickFileUpload() {
 		const fileInput = document.getElementById("file-input") as HTMLInputElement
 		fileInput.click()
@@ -29,24 +31,39 @@ const ShopCreateImage = ({ sendImageList }: ShopCreateImageProps) => {
 		return URL.createObjectURL(file)
 	}
 
-	useEffect(() => {
-		sendImageList(imageList)
-	}, [imageList])
-
 	const imageElements = imageList.map((file: File) => (
-		<img
+		<div css={css`width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background-color: white;`}>
+			<img
 			key={file.name}
 			src={getImageUrl(file)}
 			alt={file.name}
 			css={css`
-				width: 100%;
-				height: auto;
+				width: auto;
+				height: 100%;
 			`}
 		/>
+		</div>
+		
+	))
+
+	const existingImagesElements = existingImages.map((el) => (
+		<div css={css`width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background-color: white;`}>
+			<img
+			key={el}
+			src={el}
+			alt={el}
+			css={css`
+				width: auto;
+				height: 100%;
+			`}
+		/>
+		</div>
+		
 	))
 
 	const post = (
-		<div style={{ width: "100px", height: "100px" }}>
+		<div css={css`width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background-color: white;`}>
+			<div style={{ width: "100px", height: "100px" }}>
 			<label css={fileInputLabelCSS} htmlFor="file-input"></label>
 			<input css={fileInputCSS} type="file" id="file-input" accept=".jpg,.jpeg,.png" onChange={onChangeImage} />
 			<svg
@@ -66,13 +83,15 @@ const ShopCreateImage = ({ sendImageList }: ShopCreateImageProps) => {
 				/>
 			</svg>
 		</div>
+		</div>
+		
 	)
 
 	// console.log(imageList)
 
 	return (
 		<div>
-			{imageList.length == 0 && (
+			{/* {imageList.length == 0 && (
 				<div css={css`width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;`}>
 					{post}
 					</div>
@@ -97,11 +116,15 @@ const ShopCreateImage = ({ sendImageList }: ShopCreateImageProps) => {
 				// 		/>
 				// 	</svg>
 				// </div>
-			)}
+			)} */}
 
-			{imageList.length > 0 && (
+			{(imageList.length > 0 || existingImages.length > 0) && (
 				<div ref={galleryWrapperRef} css={parentCSS}>
-					<SwipeableGallery parentRef={galleryWrapperRef} content={[...imageElements, post]} />
+					<SwipeableGallery
+						contentCount={contentCount}
+						setContentCount={setContentCount}
+						content={[...imageElements, ...existingImagesElements, post]}
+					/>
 				</div>
 			)}
 		</div>

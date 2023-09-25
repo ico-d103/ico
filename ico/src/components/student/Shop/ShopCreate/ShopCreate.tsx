@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWrapper"
@@ -13,24 +13,60 @@ import { postStudentProductsAPI } from "@/api/student/shop/postStudentProductsAP
 import Input from "@/components/common/Input/Input"
 import Button from "@/components/common/Button/Button"
 import useGetNation from "@/hooks/useGetNation"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 // 도매 상인과 기업 상점 등, 레이아웃을 공유하기 위해 컴포넌트로 Migrate
 
 type ShopCreatePropsType = {
-  submitHandler: (body: FormData) => void
+	newSubmitHandler?: ({ body }: { body: FormData }) => Promise<any>
+	editSubmitHandler?: ({
+		body,
+	}: {
+		id: number
+		body: {
+			title: string
+			amount: number
+			detail: string
+			count: number
+			isCoupon: boolean
+		}
+	}) => Promise<any>
+	editImageSubmitHandler?: ({ id, body }: { id: number; body: FormData }) => Promise<any>
+	ifSuccess: (res: any) => void
+	edit?: {
+		id: number
+		title: string
+		amount: number
+		count: number
+		images: string[]
+		detail: string
+		isCoupon?: boolean
+		sold: number
+		date: string
+	}
+	allowCoupon?: boolean
 }
 
-function ShopCreate({submitHandler}: ShopCreatePropsType) {
+function ShopCreate({
+	newSubmitHandler,
+	editSubmitHandler,
+	editImageSubmitHandler,
+	ifSuccess,
+	edit,
+	allowCoupon,
+}: ShopCreatePropsType) {
 	const router = useRouter()
 
-	const formData = new FormData()
-
-	const [title, setTitle] = useState("")
-	const [amount, setAmount] = useState("")
-	const [count, setCount] = useState("")
-	const [imageList, setImageList] = useState([])
-	const [detail, setDetail] = useState("")
+	const [title, setTitle] = useState(edit?.title || "")
+	const [amount, setAmount] = useState(String(edit?.amount) || "")
+	const [count, setCount] = useState(String(edit?.count) || "")
+	const [imageList, setImageList] = useState<File[]>([])
+	const [existingImages, setExistingImages] = useState(edit?.images || [])
+	const [detail, setDetail] = useState(edit?.detail || "")
+	const [isCoupon, setIsCoupon] = useState(edit?.isCoupon || false)
 	const [nation] = useGetNation()
+	const noti = useNotification()
 
 	const handleTitleChange = (event: any) => {
 		setTitle(event.target.value)
@@ -48,30 +84,80 @@ function ShopCreate({submitHandler}: ShopCreatePropsType) {
 		setDetail(event.target.value)
 	}
 
-	imageList.forEach((image) => {
-		formData.append("files", image)
-	})
+	const submitProcessor = async () => {
+		if (newSubmitHandler) {
+			const formData = new FormData()
 
-	formData.append(
-		"proposal",
-		new Blob(
-			[
-				JSON.stringify({
-					title: title,
-					amount: amount,
-					count: count,
-					detail: detail,
-				}),
-			],
-			{ type: "application/json" },
-		),
-	)
+			imageList.forEach((image) => {
+				formData.append("files", image)
+			})
 
-	function receiveImageList(imageList: any) {
-		setImageList(imageList)
+			formData.append(
+				"product",
+				new Blob(
+					[
+						JSON.stringify({
+							title: title,
+							amount: amount,
+							count: count,
+							detail: detail,
+							isCoupon: false,
+						}),
+					],
+					{ type: "application/json" },
+				),
+			)
+			newSubmitHandler({ body: formData })
+				.then((res) => ifSuccess(res))
+				.catch((err) => {
+					noti({ content: <NotiTemplate type={"alert"} content={err.response.data.message} />, duration: 5000 })
+				})
+		}
+
+		if (editSubmitHandler && editImageSubmitHandler && edit) {
+			const editContent = async () => {
+				return await editSubmitHandler({
+					id: edit.id,
+					body: { title, amount: Number(amount), detail, count: Number(count), isCoupon },
+				})
+			}
+
+			const editImage = async () => {
+				const formData = new FormData()
+				imageList.forEach((image) => {
+					formData.append("newImages", image)
+				})
+				formData.append(
+					"dto",
+					new Blob(
+						[
+							JSON.stringify({
+								existingImages,
+							}),
+						],
+						{ type: "application/json" },
+					),
+				)
+				return await editImageSubmitHandler({ id: edit.id, body: formData })
+			}
+
+			if (imageList.length !== 0) {
+				await Promise.all([editContent(), editImage()])
+					.then((res) => ifSuccess(res))
+					.catch((err) => {
+						noti({ content: <NotiTemplate type={"alert"} content={err.response.data.message} />, duration: 5000 })
+					})
+			} else {
+				editContent()
+					.then((res) => {
+						ifSuccess(res)
+					})
+					.catch((err) => {
+						noti({ content: <NotiTemplate type={"alert"} content={err.response.data.message} />, duration: 5000 })
+					})
+			}
+		}
 	}
-
-	
 
 	// console.log(formData)
 
@@ -121,11 +207,16 @@ function ShopCreate({submitHandler}: ShopCreatePropsType) {
 					</div>
 
 					<div css={imageWrapperCSS}>
-						<ShopCreateImage sendImageList={receiveImageList} />
+						<ShopCreateImage
+							key={`gallery-${existingImages.length}-${imageList.length}`}
+							existingImages={existingImages}
+							imageList={imageList}
+							setImageList={setImageList}
+						/>
 					</div>
 
 					<div css={explainWrapperCSS}>
-					<Input
+						<Input
 							customCss={inputCSS}
 							theme={"mobileSoft"}
 							placeholder="상품에 대한 설명을 입력해 주세요."
@@ -146,8 +237,10 @@ function ShopCreate({submitHandler}: ShopCreatePropsType) {
 					fontSize={`var(--student-h3)`}
 					width={"48%"}
 					theme={"mobileSoft3"}
-					onClick={submitHandler}
-					cssProps={css`box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.1);`}
+					onClick={submitProcessor}
+					cssProps={css`
+						box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.1);
+					`}
 				/>
 				{/* <button onClick={proposalProduct}>gogo</button> */}
 			</div>
@@ -178,7 +271,6 @@ const contentWrapperCSS = css`
 	flex-direction: column;
 	align-items: center;
 	width: 95%;
-	
 `
 
 const inputCSS = css`

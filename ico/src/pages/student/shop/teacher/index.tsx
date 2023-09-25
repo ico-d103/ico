@@ -18,10 +18,11 @@ import useNavigate from "@/hooks/useNavigate"
 function index() {
 	const teacherProductsQueries = useQuery<getTeacherProductsType[]>(["teacherProducts"], getTeacherProductsAPI)
 	const navigate = useNavigate()
-
+//addComp={<TabMenu menus={ShopTabMenus()} selected={0}  />}
 	return (
 		<div css={mainWrapperCSS}>
-			<PageHeader title={"상점"} addComp={<TabMenu menus={ShopTabMenus()} selected={0}  />} rightButton={<div onClick={() => navigate('/student/shop/basket')}>{SHOPPING_BASKET}</div>} />
+			
+			<PageHeader title={"상점"}  rightButton={<div onClick={() => navigate('/student/shop/basket')}>{SHOPPING_BASKET}</div>} />
 			<Shop query={teacherProductsQueries}/>
 		</div>
 	)

@@ -13,7 +13,7 @@ import React, { useState, useRef } from "react"
 import ShowQR from "@/components/common/ShowQR/ShowQR"
 import useGetNation from "@/hooks/useGetNation"
 import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWrapper"
-import SwipeableGallery from "@/components/common/SwipeableGallery/SwipeableGallery"
+import SwipeableGallery from "@/components/common/SwipeableGalleryLegacy/SwipeableGallery"
 import Button from "@/components/common/Button/Button"
 import { useAtom } from "jotai"
 import { isNavigating } from "@/store/store"
@@ -95,25 +95,34 @@ function product() {
 			</div>
 
 			<div css={shopWrapperCSS}>
-	
-					<div css={shopUpperCSS}>
-						{data?.title}
-						{data && (
-							<div css={css`font-weight: 500;`}>
-								상품이&nbsp;<div style={{ fontWeight: "700" }}>{data?.count - data?.sold}개</div>&nbsp;남았어요!
-							</div>
-						)}
-					</div>
+				<div css={shopUpperCSS}>
+					{data?.title}
+					{data && (
+						<div
+							css={css`
+								font-weight: 500;
+							`}
+						>
+							상품이&nbsp;<div style={{ fontWeight: "700" }}>{data?.count - data?.sold}개</div>&nbsp;남았어요!
+						</div>
+					)}
+				</div>
 
-					<div css={priceTagCSS}>
-						{data?.amount}&nbsp;
-						{nation.currency}
-					</div>
+				<div css={priceTagCSS}>
+					{data?.amount}&nbsp;
+					{nation.currency}
+				</div>
 
-					<div css={css`width: 100%; height: 1px; border-bottom: 1px solid rgba(0, 0, 0, 0.1); margin: 8px 0px;`}/>
-					<div css={dateCSS}>{data?.date}</div>
-					<div css={detailCSS}>{data?.detail}</div>
-		
+				<div
+					css={css`
+						width: 100%;
+						height: 1px;
+						border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+						margin: 8px 0px;
+					`}
+				/>
+				<div css={dateCSS}>{data?.date}</div>
+				<div css={detailCSS}>{data?.detail}</div>
 			</div>
 
 			{/* <button onClick={openComp}>qr 카메라</button> */}
@@ -169,7 +178,6 @@ const wrapperCSS = css`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-
 `
 
 const shopWrapperCSS = css`
@@ -211,7 +219,7 @@ const shopUpperCSS = css`
 `
 
 const priceTagCSS = css`
-	color: #CB1400;
+	color: #cb1400;
 
 	margin-top: 10px;
 	font-weight: 500;

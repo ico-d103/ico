@@ -9,7 +9,7 @@ import Modal from "@/components/common/Modal/Modal"
 import QRScannerModal from "@/components/student/Shop/QRScanner/QRScannerModal"
 import { useQuery } from "@tanstack/react-query"
 import ContentWrapper from "@/components/student/common/ContentWrapper/ContentWrapper"
-import SwipeableGallery from "@/components/common/SwipeableGallery/SwipeableGallery"
+import SwipeableGallery from "@/components/common/SwipeableGalleryLegacy/SwipeableGallery"
 import useGetNation from "@/hooks/useGetNation"
 import Button from "@/components/common/Button/Button"
 import { useAtom } from "jotai"
@@ -56,7 +56,6 @@ function product() {
 		getTeacherProductDetailAPI({ pid: productId }),
 	)
 
-
 	const purchaseProduct = () => {
 		// postPurchaseTeacherProductsAPI({ pid: productId })
 		// 	.then((res) => {
@@ -100,16 +99,13 @@ function product() {
 		<React.Fragment>
 			{confirmModal(
 				<ModalContent
-						width={"300px"}
-						title={"상품 구매"}
-						titleSize={"var(--student-h1)"}
-						icon={APPLY_ICON}
-						content={<ConfirmModal closeComp={confirmModal.close} fetchFunction={purchaseProduct} />}
-						forChild={true}
-					/>
-		
-			
-				
+					width={"300px"}
+					title={"상품 구매"}
+					titleSize={"var(--student-h1)"}
+					icon={APPLY_ICON}
+					content={<ConfirmModal closeComp={confirmModal.close} fetchFunction={purchaseProduct} />}
+					forChild={true}
+				/>,
 			)}
 
 			<div css={wrapperCSS}>

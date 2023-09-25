@@ -8,6 +8,7 @@ import { isNavigating } from "@/store/store"
 import Button from "@/components/common/Button/Button"
 import QRScannerModal from "../QRScanner/QRScannerModal"
 import useModal from "@/components/common/Modal/useModal"
+import QueryAdapter from "@/components/common/Adapter/QueryAdapter"
 
 function ShopBasket() {
 	const shopHandler = useShopHandler()
@@ -24,11 +25,13 @@ function ShopBasket() {
 				<QRScannerModal compState={scanQRModal.state} seller={shopHandler.shoppingBasket.seller} products={shopHandler.shoppingBasket.basket}  />
 			)}
 			<ContentWrapper>
+        <QueryAdapter isSuccess={true} isFetching={false} isError={false} isEmpty={!shopHandler.shoppingBasket.basket.length}>
+        {shopHandler.shoppingBasket.seller &&
         <div css={headerCSS}>
           <span css={css`font-weight: 700;`}>{shopHandler.shoppingBasket.seller === '선생님' ? '선생님 / 도매상인' : shopHandler.shoppingBasket.seller}</span>을 찾아가 QR 코드를 찍어주세요!
-        </div>
-        {renderItem}
-        {/* {JSON.stringify(shopHandler.shoppingBasket)} */}
+        </div>}
+          {renderItem}
+        </QueryAdapter>
       </ContentWrapper>
 
       {isNavigatingAtom === false && (

@@ -21,13 +21,13 @@ function AddItemModal({query, closeHandler}: AddItemModalPropsType) {
   const countHandler = (reverse = false) => {
     if (!isSuccess) return
     if (reverse) {
-      if (count > 0) {
+      if (count > 1) {
         setCount((prev) => prev - 1)
       } else {
         noti({content: <NotiTemplate type={'alert'} content={"최소 한개 이상은 구매해야 해요!"}/>, duration: 5000, id: 'addItemAlertMinus'})
       }
     } else {
-      if (count < data.count) {
+      if (count < data.count - data.sold) {
         setCount((prev) => prev + 1)
       } else {
         noti({content: <NotiTemplate type={'alert'} content={"상품의 개수를 초과하였어요!"}/>, duration: 5000, id: 'addItemAlertPlus'})
