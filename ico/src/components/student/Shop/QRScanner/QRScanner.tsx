@@ -57,6 +57,7 @@ const QRScanner = ({ closeComp, seller, products }: QRScannerProps) => {
 		const handleQrCodeScan = (result: Result | null, error?: any) => {
 			if (result) {
 				const bodyData = result.getText().split(",")
+				alert(bodyData[0])
 				if (bodyData[0] !== seller) {
 					noti({ content: <NotiTemplate type={"alert"} content={"다른 판매자의 QR코드예요!"} />, duration: 5000 })
 					closeComp && closeComp()

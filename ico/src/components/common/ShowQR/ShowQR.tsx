@@ -23,6 +23,7 @@ function ShowQR({ seller, time, closeComp }: ShowQRProps) {
 
 	return (
 		<div css={modalWrapperCSS({ isMobile })}>
+
 			<QRCode value={`${seller},${time}`} />
 			<Timer targetTime={Date.now() + 3 * 60 * 1000} funcHandler={expiredHandler} />
 		</div>
