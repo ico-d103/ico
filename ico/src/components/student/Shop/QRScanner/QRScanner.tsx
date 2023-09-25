@@ -57,13 +57,13 @@ const QRScanner = ({ closeComp, seller, products }: QRScannerProps) => {
 		const handleQrCodeScan = (result: Result | null, error?: any) => {
 			if (result) {
 				const bodyData = result.getText().split(",")
-				alert(bodyData[0])
-				if (bodyData[0] !== seller) {
+				const decodedSeller = decodeURI(bodyData[0])
+				if (decodedSeller !== seller) {
 					noti({ content: <NotiTemplate type={"alert"} content={"다른 판매자의 QR코드예요!"} />, duration: 5000 })
 					closeComp && closeComp()
 					return
 				} else {
-					if (seller === '선생님') {
+					if (decodedSeller === '선생님') {
 						postPurchaseTeacherProductsAPI({ body: { products, unixTime: Number(bodyData[2]) } })
 						.then((res) => {
 							noti({ content: <NotiTemplate type={"ok"} content={"물건을 구매했어요!"} />, duration: 5000 })

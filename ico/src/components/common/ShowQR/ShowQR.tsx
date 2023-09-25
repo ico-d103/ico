@@ -1,10 +1,12 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useEffect, useState } from "react"
 import QRCode from "react-qr-code"
 import { css } from "@emotion/react"
 import useMediaQuery from "@/hooks/useMediaQuery"
 import Timer from "./Timer"
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "../StackNotification/NotiTemplate"
+
+
 
 type ShowQRProps = {
 	seller: string
@@ -21,10 +23,11 @@ function ShowQR({ seller, time, closeComp }: ShowQRProps) {
 		closeComp && closeComp()
 	}
 
+
+
 	return (
 		<div css={modalWrapperCSS({ isMobile })}>
-
-			<QRCode value={`${seller},${time}`} />
+			<QRCode value={`${encodeURI(seller)},${time}`} />
 			<Timer targetTime={Date.now() + 3 * 60 * 1000} funcHandler={expiredHandler} />
 		</div>
 	)
