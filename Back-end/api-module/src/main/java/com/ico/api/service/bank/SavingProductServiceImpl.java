@@ -307,15 +307,12 @@ public class SavingProductServiceImpl implements SavingProductService{
     }
 
     public int getInterestAmount(int amount , int interest, byte totalCount){
-        //todo : 필요시 더 정확한 적금 이자비율 계산하기
-//        double interest_amount = 0;
-//
-//        for (int i = 1; i < totalCount; i++){
-//            interest_amount += amount * ((double) i /totalCount) ;
-//            log.info(String.valueOf(interest_amount));
-//        }
-        double interest_rate = (double) interest /100 * 0.55;
-        return (int) (amount * totalCount * interest_rate);
+        double interest_amount = 0;
+
+        for (int i = 1; i <= totalCount; i++){
+            interest_amount += amount * ((double) interest /100) * ((double) i /totalCount) ;
+        }
+        return (int) interest_amount;
     }
 }
 
