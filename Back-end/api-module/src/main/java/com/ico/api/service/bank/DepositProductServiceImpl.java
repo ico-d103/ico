@@ -129,7 +129,7 @@ public class DepositProductServiceImpl implements DepositProductService{
         DepositProductStudentResDto dto = new DepositProductStudentResDto();
         dto.setAccount(student.getAccount());
         dto.setDepositProduct(depositList);
-        dto.setMyDeposit(myDepositListReturn);
+        dto.setMyInfo(myDepositListReturn);
         return dto;
     }
 

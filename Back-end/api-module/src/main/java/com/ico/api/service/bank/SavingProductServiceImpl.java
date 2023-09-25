@@ -127,7 +127,7 @@ public class SavingProductServiceImpl implements SavingProductService{
         SavingProductStudentResDto dto = new SavingProductStudentResDto();
         dto.setAccount(student.getAccount());
         dto.setSavingProduct(savingList);
-        dto.setMySaving(mySavingListReturn);
+        dto.setMyInfo(mySavingListReturn);
 
         return dto;
     }
