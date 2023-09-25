@@ -2,7 +2,7 @@ import React from "react"
 import { css } from "@emotion/react"
 import FinanceDepositListProduct from "./FinanceDepositListProduct"
 import FinanceDepositListMyProduct from "./FinanceDepositListMyProduct"
-import { getFinanceDepositType } from "@/types/student/apiReturnTypes"
+import { getFinanceDepositType, getFinanceSavingType } from "@/types/student/apiReturnTypes"
 import { useAtom } from "jotai"
 import { isNavigating } from "@/store/store"
 import Loading from "../../common/Loading/Loading"
@@ -13,8 +13,9 @@ import { UseQueryResult } from "@tanstack/react-query"
 
 type FinanceDepositListProps = {
 	query: UseQueryResult<getFinanceDepositType, unknown>
+	
 }
-function FinanceDepositList({ query}: FinanceDepositListProps) {
+function FinanceDepositList({query}: FinanceDepositListProps) {
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 
 	const renderProduct =

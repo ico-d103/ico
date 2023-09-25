@@ -4,7 +4,7 @@ import { getFinanceDepositDetailAPI } from "@/api/student/finance/getFinanceDepo
 import { myDepositType } from "@/types/student/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/router"
-import FinanceDepositDetail from "@/components/student/Finance/Deposit/FinanceDepositDetail"
+import FinanceDepositDetail from "@/components/student/Finance/Bank/FinanceDepositDetail"
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import QueryAdapter from "@/components/common/Adapter/QueryAdapter"
 

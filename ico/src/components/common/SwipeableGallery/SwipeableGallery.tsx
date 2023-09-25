@@ -1,280 +1,259 @@
 /** @jsxImportSource @emotion/react */
-import { jsx, css } from "@emotion/react"
-import React, { useState, useRef, useEffect, useCallback } from "react"
-import Swipe from "react-easy-swipe"
-import styles from "./SwipeableGallery.module.css"
+import { jsx, css } from "@emotion/react";
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import Swipe from "react-easy-swipe";
+import styles from "./SwipeableGallery.module.css";
 // import { useIsResponsive } from "@/components/Responsive/useIsResponsive";
 
-const SwipeableGallery = ({ parentRef, content }: any) => {
-	const movingDiv = useRef<HTMLInputElement>(null)
-	const [positionx, setPositionx] = useState<number>(0)
-	const [contentCount, setContentCount] = useState(1)
-	const [endSwipe, setEndSwipe] = useState(false)
-	const postData = content
-	// const [isDeskTop, isTablet, isMobile] = useIsResponsive();
+type SwipeableGalleryPropsType = {
+  content: any[];
+  contentCount: number;
+  setContentCount: React.Dispatch<React.SetStateAction<number>>;
+  noButton?: boolean
+};
+const SwipeableGallery = ({
+  content,
+  contentCount,
+  setContentCount,
+  noButton
+}: SwipeableGalleryPropsType) => {
+  const movingDiv = useRef<HTMLInputElement>(null);
+  const [positionx, setPositionx] = useState<number>(0);
+  const [endSwipe, setEndSwipe] = useState(true);
+  const postData = content;
 
-	const [width, setWidth] = useState(null)
-	const [height, setHeight] = useState(null)
+  const onSwipeMove = (position = { x: 0 }) => {
+    setEndSwipe(false);
+    if (content.length === 1) {
+      return;
+    }
 
-	useEffect(() => {
-		setWidth(() => parentRef.current.clientWidth)
-		setHeight(() => parentRef.current.clientHeight)
+    if (position.x !== null) {
+      const x = position.x;
+      setPositionx(() => x);
+    }
+  };
 
-		const resize = () => {
-			setWidth(() => parentRef.current.clientWidth)
-			setHeight(() => parentRef.current.clientHeight)
-			if (movingDiv.current !== null && parentRef.current.clientWidth) {
-				movingDiv.current.style.transitionDuration = "0s"
-				movingDiv.current.style.transform = `translateX(${-parentRef.current.clientWidth * (contentCount - 1)}px)`
-			}
-		}
-		window.addEventListener(`resize`, resize)
+  const onSwipeEnd = () => {
+    if (positionx < -50 && contentCount < content.length - 1) {
+      setContentCount((prev) => prev + 1);
+    }
+    if (positionx > 50 && contentCount > 0) {
+      setContentCount((prev) => prev - 1);
+    }
 
-		return () => {
-			window.removeEventListener(`resize`, resize)
-		}
-	}, [contentCount])
+    setPositionx(() => 0);
+    setEndSwipe(true);
+  };
 
-	const onSwipeMove = (position = { x: 0 }) => {
-		setEndSwipe(false)
-		if (content.length === 1) {
-			return
-		}
 
-		if (
-			(contentCount >= content.length && positionx < 0) ||
-			(contentCount === 1 && positionx > 0) ||
-			(width !== null && Math.abs(positionx) > width)
-		) {
-			return
-		}
 
-		if (movingDiv.current !== null && width !== null && position.x !== null) {
-			movingDiv.current.style.transitionDuration = "0s"
-			movingDiv.current.style.transform = `translateX(${positionx + -width * (contentCount - 1)}px)`
-			const x = position.x
-			setPositionx(() => x)
-		}
-	}
+  const onClickNextBtn = useCallback(() => {
+    if (contentCount < content.length - 1) {
+      setContentCount((prev) => prev + 1);
+    } else {
+      setContentCount(() => 0);
+    }
+  }, [contentCount]);
 
-	const onSwipeEnd = () => {
-		if (movingDiv.current !== null && width !== null) {
-			movingDiv.current.style.transitionDuration = "0.3s"
+  const onClickPrevBtn = useCallback(() => {
+    if (contentCount > 0) {
+      setContentCount((prev) => prev - 1);
+    } else {
+      setContentCount(() => content.length - 1);
+    }
+  }, [contentCount]);
 
-			if (positionx < -50 && contentCount < content.length) {
-				setContentCount((prev) => prev + 1)
-				movingDiv.current.style.transform = `translateX(${-width * contentCount}px)`
-			}
-			if (positionx > 50 && contentCount > -1) {
-				setContentCount((prev) => prev - 1)
-				movingDiv.current.style.transform = `translateX(${-width * (contentCount - 2)}px)`
-			}
-			if (Math.abs(positionx) <= 50) {
-				movingDiv.current.style.transform = `translateX(${-width * (contentCount - 1)}px)`
-			}
-		}
+  
 
-		setPositionx(() => 0)
-		setEndSwipe(true)
-	}
+  const indicator = content.map((el: any, idx: number) => {
+    return (
+      <div
+        key={`indicator-${idx}`}
+        css={indicatorCSS({ idx, contentCount })}
+      ></div>
+    );
+  });
 
-	const onClickNextBtn = useCallback(() => {
-		if (movingDiv.current !== null && width !== null) {
-			if (contentCount < content.length) {
-				movingDiv.current.style.transitionProperty = "transform"
-				movingDiv.current.style.transitionDuration = "0.5s"
-				setContentCount((prev) => prev + 1)
-				movingDiv.current.style.transform = `translateX(${-width * contentCount}px)`
-			} else {
-				movingDiv.current.style.transitionProperty = "transform"
-				movingDiv.current.style.transitionDuration = "0.5s"
-				setContentCount(() => 1)
-				movingDiv.current.style.transform = `translateX(0px)`
-			}
-		}
-	}, [contentCount, width])
+  const indicatorBtn = (
+    <>
+      <div css={prevBtnCSS({noButton})} onClick={onClickPrevBtn}>
+        ⇠
+      </div>
+      <div css={nextBtnCSS({noButton})} onClick={onClickNextBtn}>
+        ⇢
+      </div>
+    </>
+  );
 
-	const onClickPrevBtn = useCallback(() => {
-		if (movingDiv.current !== null && width !== null) {
-			if (contentCount > 1) {
-				movingDiv.current.style.transitionProperty = "transform"
-				movingDiv.current.style.transitionDuration = "0.5s"
-				setContentCount((prev) => prev - 1)
-				movingDiv.current.style.transform = `translateX(${-width * (contentCount - 2)}px)`
-			} else {
-				movingDiv.current.style.transitionProperty = "transform"
-				movingDiv.current.style.transitionDuration = "0.5s"
-				setContentCount(() => content.length)
-				movingDiv.current.style.transform = `translateX(${-width * (content.length - 1)}px)`
-			}
-		}
-	}, [contentCount, width])
+  return (
+    <div css={outerWrapperCSS}>
+      {/* {isMobile === false && indicatorBtn} */}
+      <div css={indicatorWrapperCSS()}>{indicator}</div>
+      {indicatorBtn}
 
-	useEffect(() => {
-		const autoSlide = setInterval(function () {
-			onClickNextBtn()
-		}, 10000)
+      <Swipe
+        onSwipeStart={(event: any) => {
+          event.stopPropagation();
+        }}
+        onSwipeEnd={onSwipeEnd}
+        onSwipeMove={onSwipeMove}
+        css={swipeWrapperCSS}
+      >
+        {useMemo(() => content.map((el: any, idx: number) => {
+          return (
+            <div
+              key={`banner-${idx}`}
+              css={contentCSS({ idx, contentCount, positionx, endSwipe })}
+            >
+              {el}
+            </div>
+          ); //, height: height + 'px'
+        }), [content])}
+      </Swipe>
+    </div>
+  );
+};
 
-		return () => {
-			clearInterval(autoSlide)
-		}
-	}, [width, contentCount])
-	//
-
-	const indicator = content.map((el: any, idx: number) => {
-		return <div key={`indicator-${idx}`} css={indicatorCSS({ idx, contentCount })}></div>
-	})
-
-	const indicatorBtn = (
-		<>
-			<div css={prevBtnCSS} onClick={onClickPrevBtn}>
-				〈
-			</div>
-			<div css={nextBtnCSS} onClick={onClickNextBtn}>
-				〉
-			</div>
-		</>
-	)
-
-	return (
-		<div css={outerWrapperCSS}>
-			{/* {isMobile === false && indicatorBtn} */}
-			<div css={indicatorWrapperCSS()}>{indicator}</div>
-			<Swipe
-				onSwipeStart={(event: any) => {
-					event.stopPropagation()
-				}}
-				onSwipeEnd={onSwipeEnd}
-				onSwipeMove={onSwipeMove}
-				css={css`width: 100%; height: 100%;`}
-			>
-				<div css={wrapperCSS}>
-					<div css={moveableCSS} ref={movingDiv}>
-						{content.map((el: any, idx: number) => {
-							return (
-								<div
-									key={`banner-${idx}`}
-									css={contentCSS}
-								>
-									{el}
-								</div>
-							) //, height: height + 'px'
-						})}
-					</div>
-				</div>
-			</Swipe>
-
-			{/* {positionx}
-      {contentCount}
-      {endSwipe.toString()} */}
-		</div>
-	)
-}
-
-export default SwipeableGallery
+export default SwipeableGallery;
 
 const outerWrapperCSS = css`
-	position: relative;
-	width: 100%;
-	height: 100%;
-`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+`;
 
 const wrapperCSS = css`
-
   /* width: 300px;
     height: 300px; */
   width: 100%;
   height: 100%;
   display: flex;
   overflow: hidden;
+`;
 
+const contentCSS = ({
+  idx,
+  contentCount,
+  positionx,
+  endSwipe,
+}: {
+  idx: number;
+  contentCount: number;
+  positionx: number;
+  endSwipe: boolean;
+}) => {
+  return css`
+    /* display: inline-block; */
+    /* justify-content: center;
+		align-items: center; */
+    content-visibility: auto;
+    position: absolute;
+    /* background-color: rgb(250, 250, 250); */
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+    transition: ${endSwipe && `transform 1s`};
+    transition-timing-function: cubic-bezier(0.5, 0.25, 0, 1);
+    transform: translateX(
+      calc(${-100 * (contentCount - idx)}% + ${positionx}px)
+    );
+  `;
+};
 
-`
-
-const contentCSS = css`
-	  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgb(250, 250, 250);
-  box-sizing: border-box;
-	width: 100%;
-	height: 100%;
-`
 const moveableCSS = css`
-	  display: flex;
+  display: flex;
   transition-property: transform;
-	width: 100%;
-	height: 100%;
-`
+  width: 100%;
+  height: 100%;
+`;
 
-const prevBtnCSS = css`
-	z-index: 9;
-	position: absolute;
-	left: 0;
-	height: 100%;
-	display: flex;
-	align-items: center;
-	font-size: 48px;
-	font-weight: 700;
-	padding-left: 8px;
-	padding-right: 8px;
-	color: white;
-	transition-property: font-size;
-	transition-duration: 0.2s;
-	cursor: pointer;
-	user-select: none;
+const swipeWrapperCSS = css`
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  position: relative;
+  
+  /* flex-wrap: wrap;
+	flex-direction: row; */
+`;
 
-	&:hover {
-		font-size: 54px;
-	}
-`
+const prevBtnCSS = ({noButton}: {noButton: boolean | undefined}) => css`
+  z-index: 9;
+  position: absolute;
+  left: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 48px;
+  font-weight: 100;
+  margin-left: 8px;
+  /* color: white; */
+  color: rgba(0, 0, 0, 0.5);
+  transition-property: color opacity;
+  transition-duration: 1s;
+  cursor: pointer;
+  user-select: none;
+  opacity: ${noButton ? '0%' : '100%'};
 
-const nextBtnCSS = css`
-	z-index: 9;
-	position: absolute;
-	right: 0;
-	height: 100%;
-	display: flex;
-	align-items: center;
-	font-size: 48px;
-	font-weight: 700;
-	padding-left: 8px;
-	padding-right: 8px;
-	color: white;
-	transition-property: font-size;
-	transition-duration: 0.2s;
-	cursor: pointer;
-	user-select: none;
 
-	&:hover {
-		font-size: 54px;
-	}
-`
+  &:hover {
+    color: rgba(0, 0, 0, 1);
+  }
+`;
+
+const nextBtnCSS = ({noButton}: {noButton: boolean | undefined}) => css`
+  z-index: 9;
+  position: absolute;
+  right: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 48px;
+  font-weight: 100;
+  margin-right: 8px;
+  /* color: white; */
+  color: rgba(0, 0, 0, 0.5);
+  transition-property: color opacity;
+  transition-duration: 1s;
+  cursor: pointer;
+  user-select: none;
+  opacity: ${noButton ? '0%' : '100%'};
+
+  &:hover {
+    color: rgba(0, 0, 0, 1);
+  }
+`;
 
 const indicatorWrapperCSS = () => {
-	return css`
-		z-index: 9;
-		position: absolute;
-		color: white;
-		width: 100%;
-		height: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: end;
-		pointer-events: none;
-		padding-bottom: 0.5vw;
-	`
-}
+  return css`
+    z-index: 9;
+    position: absolute;
+    color: white;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    pointer-events: none;
+    padding-bottom: 0.5vw;
+  `;
+};
 
 interface indicatorCSSProps {
-	idx: number
-	contentCount: number
+  idx: number;
+  contentCount: number;
 }
 const indicatorCSS = ({ idx, contentCount }: indicatorCSSProps) => {
-	return css`
-		width: 30px;
-		height: 2px;
-		background-color: ${contentCount - 1 === idx ? "white" : "gray"};
-		margin: 2px;
-	`
-}
+  return css`
+    width: 30px;
+    height: 2px;
+    transition: background-color 1s;
+    background-color: ${contentCount === idx ? "white" : "gray"};
+    margin: 2px;
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
+  `;
+};

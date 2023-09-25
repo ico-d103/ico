@@ -22,9 +22,7 @@ const contentWrapperCSS = css`
     background-color: var(--student-wrapper-color);
     margin-bottom: 16px;
 
-    flex: 1;
-    display: flex;
-    flex-direction: column; 
+
 `
 
 export default ContentWrapper

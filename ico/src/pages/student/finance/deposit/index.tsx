@@ -3,7 +3,7 @@ import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import { getFinanceDepositType } from "@/types/student/apiReturnTypes"
 import { useQuery } from "@tanstack/react-query"
 import { css } from "@emotion/react"
-import FinanceDepositList from "@/components/student/Finance/Deposit/FinanceDepositList"
+import FinanceDepositList from "@/components/student/Finance/Bank/FinanceDepositList"
 import TabMenu from "@/components/student/layout/TabMenu/TabMenu"
 import { financeTabMenu } from "../../../../components/student/Finance/financeTabMenu"
 

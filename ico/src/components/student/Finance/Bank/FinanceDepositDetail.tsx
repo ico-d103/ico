@@ -10,7 +10,7 @@ import Modal from "@/components/common/Modal/Modal"
 import ModalContent from "@/components/common/Modal/ModalContent"
 // import FinanceDepositDeleteModal from "../Modal/FinanceDepositDeleteModal"
 
-import FinanceDepositDeleteModal from "@/components/student/Finance/Deposit/Modal/FinanceDepositDeleteModal"
+import FinanceDepositDeleteModal from "@/components/student/Finance/Bank/Modal/FinanceDepositDeleteModal"
 import useCompHandler from "@/hooks/useCompHandler"
 import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"

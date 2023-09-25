@@ -6,7 +6,7 @@ function create() {
 	const router = useRouter()
 
 	const submitHandler = (body: FormData) => {
-		postStudentProductsAPI({ body })
+		return postStudentProductsAPI({ body })
 			.then((res) => {
 				router.push("/student/shop/student")
 				console.log(res)
@@ -18,7 +18,7 @@ function create() {
 
 	return (
 		<div>
-			<ShopCreate submitHandler={submitHandler} />
+			{/* <ShopCreate newSubmitHandler={submitHandler} /> */}
 		</div>
 	)
 }

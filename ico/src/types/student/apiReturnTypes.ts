@@ -140,6 +140,7 @@ export type mySavingType = {
 	count: number
 	totalCount: number
 	interestAmount: number
+	day: string
 	end: boolean
 }
 

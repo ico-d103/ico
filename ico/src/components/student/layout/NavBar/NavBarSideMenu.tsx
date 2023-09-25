@@ -25,64 +25,77 @@ function NavBarSideMenu({ data }: { data: getHomeMyInfoType }) {
 		// navigate("/teacher/login")
 	}
 
+	const powerMenu = [{
+		content: (
+			<img
+				src={"/assets/dock/dock_class.png"}
+				css={css`
+					height: 100%;
+					width: auto;
+				`}
+			/>
+		),
+		label: "국고 관리",
+		function: () => propertyModal.open(),
+		power: 2
+	},
+	{
+		content: (
+			<img
+				src={"/assets/dock/dock_class.png"}
+				css={css`
+					height: 100%;
+					width: auto;
+				`}
+			/>
+		),
+		label: "신용 점수 조정",
+		function: () => creditModal.open(),
+		power: 1
+	},
+	{
+		content: (
+			<img
+				src={"/assets/dock/dock_class.png"}
+				css={css`
+					height: 100%;
+					width: auto;
+				`}
+			/>
+		),
+		label: "도매 상점",
+		function: () => {
+			navigate("/student/job/seller", "bottomToTop")
+		},
+		power: 5
+	},
+	{
+		content: (
+			<img
+				src={"/assets/dock/dock_class.png"}
+				css={css`
+					height: 100%;
+					width: auto;
+				`}
+			/>
+		),
+		label: "학급 소식 관리",
+		function: () => {
+			navigate("/student/job/rule", "bottomToTop")
+		},
+		power: 6
+	}]
+
+	const filteredPowerMenu = powerMenu.map((el) => {
+		
+		if (getTokenStatus.status.includes(String(el.power))) {
+			return el
+		}
+	})
+
 	// 권한에 따라 보여줄지 말지에 대한 분기 처리 할것!
 	const menu = [
-		{
-			content: (
-				<img
-					src={"/assets/dock/dock_class.png"}
-					css={css`
-						height: 100%;
-						width: auto;
-					`}
-				/>
-			),
-			label: "국고 관리",
-			function: () => propertyModal.open(),
-		},
-		{
-			content: (
-				<img
-					src={"/assets/dock/dock_class.png"}
-					css={css`
-						height: 100%;
-						width: auto;
-					`}
-				/>
-			),
-			label: "신용 점수 조정",
-			function: () => creditModal.open(),
-		},
-		{
-			content: (
-				<img
-					src={"/assets/dock/dock_class.png"}
-					css={css`
-						height: 100%;
-						width: auto;
-					`}
-				/>
-			),
-			label: "도매 상점",
-			function: () => {
-				navigate("/student/job/seller", "bottomToTop")
-			},
-		},
-		{
-			content: (
-				<img
-					src={"/assets/dock/dock_class.png"}
-					css={css`
-						height: 100%;
-						width: auto;
-					`}
-				/>
-			),
-			label: "학급 소식 관리",
-			function: () => {
-				navigate("/student/job/rule", "bottomToTop")
-			},
-		},
+		...filteredPowerMenu,
 		{
 			content: (
 				<img
@@ -101,6 +114,7 @@ function NavBarSideMenu({ data }: { data: getHomeMyInfoType }) {
 	]
 
 	const renderMenu = menu.map((el, idx) => {
+		if (!el) return
 		return (
 			<div css={menuItemCSS} onClick={el.function} key={idx}>
 				{el.content}
