@@ -24,7 +24,12 @@ function ShopBasket() {
       {shopHandler.shoppingBasket.seller && scanQRModal(
 				<QRScannerModal compState={scanQRModal.state} seller={shopHandler.shoppingBasket.seller} products={shopHandler.shoppingBasket.basket}  />
 			)}
-			<ContentWrapper>
+			<ContentWrapper cssProps={css`
+						flex: 1;
+						display: flex;
+						flex-direction: column;
+						
+					`}>
         <QueryAdapter isSuccess={true} isFetching={false} isError={false} isEmpty={!shopHandler.shoppingBasket.basket.length}>
         {shopHandler.shoppingBasket.seller &&
         <div css={headerCSS}>
