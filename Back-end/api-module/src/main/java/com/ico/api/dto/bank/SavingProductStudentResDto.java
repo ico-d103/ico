@@ -1,5 +1,6 @@
 package com.ico.api.dto.bank;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,13 @@ import java.util.List;
 @NoArgsConstructor
 public class SavingProductStudentResDto {
     private int account;
-    private List<SavingStudentResDto> mySaving;
+    private List<SavingStudentResDto> myInfo;
     private List<SavingProductStudentColResDto> savingProduct;
+
+    @Builder
+    public SavingProductStudentResDto(int account, List<SavingStudentResDto> myInfo, List<SavingProductStudentColResDto> savingProduct) {
+        this.account = account;
+        this.myInfo = myInfo;
+        this.savingProduct = savingProduct;
+    }
 }

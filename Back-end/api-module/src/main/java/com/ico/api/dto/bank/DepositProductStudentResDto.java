@@ -17,13 +17,13 @@ import java.util.List;
 public class DepositProductStudentResDto
 {
     private int account;
-    private List<DepositStudentResDto> myDeposit;
+    private List<DepositStudentResDto> myInfo;
     private List<DepositProductStudentColResDto> depositProduct;
 
     @Builder
-    public DepositProductStudentResDto(int account, List<DepositStudentResDto> myDeposit, List<DepositProductStudentColResDto> depositProduct) {
+    public DepositProductStudentResDto(int account, List<DepositStudentResDto> myInfo, List<DepositProductStudentColResDto> depositProduct) {
         this.account = account;
-        this.myDeposit = myDeposit;
+        this.myInfo = myInfo;
         this.depositProduct = depositProduct;
     }
 }
