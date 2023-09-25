@@ -42,6 +42,9 @@ public class CoolSMSService {
     @Value("${coolsms.fromPhoneNum}")
     private String fromPhoneNum;
 
+    @Value("${coolsms.adminPhoneNum}")
+    private String adminPhoneNum;
+
     /**
      * 휴대폰 인증
      *
@@ -84,6 +87,15 @@ public class CoolSMSService {
         teacherRepository.save(teacher);
 
         return password;
+    }
+
+    /**
+     * 관리자에게 교사 인증서가 등록되었다는 것을 알려줌
+     */
+    public void informAdmin() {
+        Message message = createMessage(adminPhoneNum);
+        message.setText("[아이코]\n교사 인증서가 새로 등록되었습니다.\nhttps://www.iconomy.kr/");
+        sendMessage(message);
     }
 
     /**

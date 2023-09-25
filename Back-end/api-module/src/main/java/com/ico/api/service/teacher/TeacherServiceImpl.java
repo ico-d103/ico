@@ -95,6 +95,9 @@ public class TeacherServiceImpl implements TeacherService {
                 .build();
         certificationRepository.save(certification);
 
+        // 교사 인증서 저장 후 관리자에게 문자를 보내 빠르게 인증할 수 있도록 하기
+        smsService.informAdmin();
+
         return teacher.getId();
     }
 
