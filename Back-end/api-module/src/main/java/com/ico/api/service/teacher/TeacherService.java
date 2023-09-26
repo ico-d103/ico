@@ -1,5 +1,6 @@
 package com.ico.api.service.teacher;
 
+import com.ico.api.dto.coolsms.PhoneNumAndCodeReqDto;
 import com.ico.api.dto.coolsms.PhoneNumReqDto;
 import com.ico.api.dto.teacher.TeacherResDto;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
@@ -66,4 +67,10 @@ public interface TeacherService {
      * @return
      */
     String getTeacherId(String phoneNum);
+
+    /**
+     * 인증 코드 유효성 검사
+     * @param dto
+     */
+    boolean verificationCode(PhoneNumAndCodeReqDto dto);
 }
