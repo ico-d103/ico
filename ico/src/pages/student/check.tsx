@@ -5,7 +5,6 @@ import { removeCookie, setCookie } from "@/api/cookie"
 import { useRouter } from "next/router"
 import { getTokenStatusAPI } from "@/api/common/getTokenStatusAPI"
 import Button from "@/components/common/Button/Button"
-import LoadImage from "@/components/common/LoadImage/LoadImage"
 
 import useNotification from "@/hooks/useNotification"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"

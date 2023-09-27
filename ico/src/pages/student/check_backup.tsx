@@ -76,7 +76,7 @@ function enter() {
 			<div css={logoutWrapperCSS}>
 				<div onClick={signoutHandler}>로그아웃</div>
 			</div>
-			<LoadImage src={"/assets/check/check_image_1.png"} alt={"check_image"} wrapperCss={imageWrapper} dev={false} />
+			<LoadImage src={"/assets/check/check_image_1.png"} alt={"check_image"} customCSS={imageWrapper} dev={false} />
 
 			<div
 				css={css`

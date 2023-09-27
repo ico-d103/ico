@@ -4,7 +4,7 @@ import { postImmigrationAPI } from "@/api/student/user/postImmigrationAPI"
 import { useRouter } from "next/router"
 
 import Button from "@/components/common/Button/Button"
-import LoadImage from "@/components/common/LoadImage/LoadImage"
+
 import PageHeader from "@/components/student/layout/PageHeader/PageHeader"
 import { ENG_NUM_ONLY } from "@/util/regex"
 import { getTokenStatusAPI } from "@/api/common/getTokenStatusAPI"

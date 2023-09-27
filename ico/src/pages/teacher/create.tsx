@@ -283,7 +283,7 @@ function create() {
 					<LoadImage
 						src={"/assets/create/create_illust_11.png"}
 						alt={"signup_illust"}
-						wrapperCss={imageWrapperCSS1}
+						customCSS={imageWrapperCSS1}
 						dev={false}
 					/>
 					<div css={inputWrapperCSS}>
@@ -356,7 +356,7 @@ function create() {
 					<LoadImage
 						src={"/assets/create/create_illust_22.png"}
 						alt={"signup_illust"}
-						wrapperCss={imageWrapperCSS2}
+						customCSS={imageWrapperCSS2}
 						dev={false}
 					/>
 					<div css={inputWrapperCSS}>

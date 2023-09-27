@@ -2,6 +2,7 @@ import { css } from "@emotion/react"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import useGetNation from "@/hooks/useGetNation"
+import LoadImage from "../LoadImage/LoadImage"
 
 type CardProps = {
 	baseUrl: string
@@ -51,7 +52,7 @@ function Card({ baseUrl, id, title, amount, image, count, sold, name, date, assi
 				{/* {assigned == false && <div css={[testCSS, cardRequestTextCSS]}>승인 진행 중</div>} */}
 				{count - sold === 0 && <div css={[testCSS, cardSoldOutTextCSS]}>sold out</div>}
 				<div css={cardImageWrapperCSS}>
-					<Image src={image} alt={title} fill={true} />
+					<LoadImage src={image} alt={title} customCSS={css`width: 100%; height: 100%; & img {width: 100%; height: 100%; object-fit: cover;}`} />
 				</div>
 				<div css={cardFirstContentCSS}>
 					<div>{title}</div>

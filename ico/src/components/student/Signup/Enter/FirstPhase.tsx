@@ -1,4 +1,4 @@
-import LoadImage from "@/components/common/LoadImage/LoadImage"
+
 import React from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
@@ -83,7 +83,7 @@ function FirstPhase({ setPhase, number, setNumber }: FirstPhasePropsType) {
 						>
 							반 입장
 						</div>
-						<span>반에서의 번호를 입력해 주세요.</span>
+						<span>1. <span css={css`font-weight: 700;`}>반에서의 번호</span>를 입력해 주세요.</span>
 					</div>
 
 					<Input

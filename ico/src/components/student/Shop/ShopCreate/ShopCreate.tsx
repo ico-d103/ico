@@ -208,8 +208,9 @@ function ShopCreate({
 
 					<div css={imageWrapperCSS}>
 						<ShopCreateImage
-							key={`gallery-${existingImages.length}-${imageList.length}`}
+							// key={`gallery-${existingImages.length}-${imageList.length}`}
 							existingImages={existingImages}
+							setExistingImages={setExistingImages}
 							imageList={imageList}
 							setImageList={setImageList}
 						/>

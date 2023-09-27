@@ -5,8 +5,6 @@ import Input from "@/components/common/Input/Input"
 import Modal from "@/components/common/Modal/Modal"
 import ModalContent from "@/components/common/Modal/ModalContent"
 import GovJobItemCardCustomize from "./GovJobItemCardCustomize"
-import useCompHandler from "@/hooks/useCompHandler"
-import LoadImage from "@/components/common/LoadImage/LoadImage"
 import Button from "@/components/common/Button/Button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { postGovJobAPI } from "@/api/teacher/gov/postGovJobAPI"
@@ -20,6 +18,8 @@ import GovJobItemDetailCustomize from "./GovJobItemDetailCustomize"
 import useGovJobInput, { JOB_COLOR } from "./useGovJobInput"
 import useModal from "@/components/common/Modal/useModal"
 import { jobLicenseListType } from "@/types/teacher/apiReturnTypes"
+import { deleteGovJobAPI } from "@/api/teacher/gov/deleteGovJobAPI"
+import ModalAlert from "@/components/common/Modal/ModalAlert"
 
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -39,6 +39,7 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 
 	const cardCustomizeModal = useModal()
 	const detailCustomizeModal = useModal()
+	const deleteModal = useModal()
 
 	const noti = useNotification()
 
@@ -83,6 +84,28 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 		}
 	})
 
+	const queryClient = useQueryClient();
+
+	const deleteJobMutation = useMutation(
+    ({ id }: { id: number; }) =>
+		deleteGovJobAPI({ id })
+  );
+
+	const deleteHandler = () => {
+		if (props.idx) {
+			deleteJobMutation.mutate({id: props.idx}, {
+				onSuccess: (res) => {
+					noti({content: <NotiTemplate type={"ok"} content={"직업을 삭제하였습니다!"}/>, duration: 5000})
+					queryClient.invalidateQueries(["teacher", "govJob"])
+				},
+				onError: (err: any) => {
+					noti({content: <NotiTemplate type={"alert"} content={err.response.data.message}/>, duration: 5000})
+				}
+			})
+		}
+		
+	}
+
 	return (
 		<React.Fragment>
 			{cardCustomizeModal(
@@ -120,6 +143,10 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 					}
 				/>,
 			)}
+
+			{deleteModal(
+        <ModalAlert content={['삭제하면 되돌릴 수 없습니다.']} proceed={deleteHandler} closeComp={deleteModal.close} width={"360px"} title={"상품 삭제"} titleSize={"24px"}/>
+      )}
 
 			<div css={itemWrapperCSS}>
 				<div
@@ -211,7 +238,7 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 							</div>
 
 							<div css={ButtonWrapperCSS}>
-								{props.closeHandler && (
+								{props.closeHandler ? 
 									<Button
 										text={"취소"}
 										fontSize={`var(--teacher-h5)`}
@@ -226,8 +253,22 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 										onClick={() => {
 											props.closeHandler && props.closeHandler()
 										}}
-									/>
-								)}
+									/> : <Button
+									text={"삭제"}
+									fontSize={`var(--teacher-h5)`}
+									width={"84px"}
+									cssProps={css`
+										flex: 1;
+										margin-right: 8px;
+										margin-bottom: 8px;
+										height: 32px;
+									`}
+									theme={"cancelDark"}
+									onClick={() => {
+										deleteModal.open()
+									}}
+								/>
+								}
 								<Button
 									text={"저장"}
 									fontSize={`var(--teacher-h5)`}

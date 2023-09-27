@@ -21,10 +21,9 @@ function HomeJobCard({name, job, wage, credit, backgroundColor, imgUrl }: HomeJo
 				<div css={jobImgSpaceCSS} />
 				<div css={jobImgWrapperCSS}>
 					<LoadImage
-						wrapperCss={imgCSS}
+						customCSS={imgCSS}
 						src={imgUrl}
 						alt={"job_image"}
-            sizes={'250px'}
             // useSkeleton={true}
 						// priority={true}
 						// layout="fill"

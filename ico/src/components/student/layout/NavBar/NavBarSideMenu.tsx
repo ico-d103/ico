@@ -151,7 +151,7 @@ function NavBarSideMenu({ data }: { data: getHomeMyInfoType }) {
 					<LoadImage
 						src={"/assets/dock/dock_gov.png"}
 						alt={"deco"}
-						wrapperCss={css`
+						customCSS={css`
 							width: 64px;
 							height: 64px;
 						`}

@@ -24,7 +24,7 @@ function HomeButtonSection() {
                     쿠폰을 써보아요.
                 </div>
                 <div css={[imageWrapperCSS, css`margin-top: -12px; margin-left: 8px;`]}>
-                    <LoadImage src={'/assets/home/coupon.png'} alt={'coupon'} wrapperCss={css`width: 120px; height: 120px;`} />
+                    <LoadImage src={'/assets/home/coupon.png'} alt={'coupon'} customCSS={css`width: 120px; height: 120px;`} />
                 </div>
                 
 
@@ -41,7 +41,7 @@ function HomeButtonSection() {
                     남아있어요!
                 </div>
                 <div css={[imageWrapperCSS, css`margin-top: -24px;`]}>
-                    <LoadImage src={'/assets/home/exchequer.png'} alt={'exchequer'} wrapperCss={css`width: 120px; height: 80px;`}/>
+                    <LoadImage src={'/assets/home/exchequer.png'} alt={'exchequer'} customCSS={css`width: 120px; height: 80px;`}/>
                 </div>
             </HomeGradationButton>
         </div>
@@ -51,7 +51,7 @@ function HomeButtonSection() {
                     예금하러 가요!
                 </div>
                 <div css={[imageWrapperCSS, css`margin-top: 10px;`]}>
-                    <LoadImage src={'/assets/home/deposit.png'} alt={'exchequer'} wrapperCss={css`width: 120px; height: 80px;`} />
+                    <LoadImage src={'/assets/home/deposit.png'} alt={'exchequer'} customCSS={css`width: 120px; height: 80px;`} />
                 </div>
             </HomeGradationButton>
             <HomeGradationButton cssProps={css`width: 42%; height: 140px;`} backgroundColor={['#84fab0', '#8fd3f4']} onClick={() => {navigate('/student/finance/invest', 'bottomToTop')}}>
@@ -59,7 +59,7 @@ function HomeButtonSection() {
                     실전형 투자 체험
                 </div>
                 <div css={[imageWrapperCSS, css`margin-top: 15px;`]}>
-                    <LoadImage src={'/assets/home/stock.png'} alt={'exchequer'} wrapperCss={css`width: 120px; height: 77px;`} />
+                    <LoadImage src={'/assets/home/stock.png'} alt={'exchequer'} customCSS={css`width: 120px; height: 77px;`} />
                 </div>
             </HomeGradationButton>
         </div>
