@@ -31,7 +31,7 @@ function RuleCreate({ id, title, content }: RuleCreateProps) {
 		} else {
 			postGovRuleAPI({body: {title: titleState, detail: contentState}})
 			.then((res) => {
-				queryClient.invalidateQueries(["student", "job", "rule"])
+				queryClient.invalidateQueries(["studentJobNews"])
 				queryClient.invalidateQueries(["student", "gov", "rule"])
 				navigate("/student/job/rule", "bottomToTop")
 			})
