@@ -23,7 +23,7 @@ function RuleListItem({ rule, idx }: RuleItemProps) {
 
 	const deleteRuleHandler = () => {
 		deleteGovRuleAPI({ idx: rule.id }).then((res) => {
-			queryClient.invalidateQueries(["student", "job", "rule"])
+			queryClient.invalidateQueries(["studentJobNews"])
 			queryClient.invalidateQueries(["student", "gov", "rule"])
 		})
 	}

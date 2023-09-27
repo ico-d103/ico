@@ -49,6 +49,7 @@ const QRScanner = ({ closeComp, seller, products }: QRScannerProps) => {
 						.then((res) => handleQrCodeScan(res))
 						.catch(console.error)
 				} catch (error) {
+					console.log('qr 에러! : ', error)
 					setIsError(() => true)
 				}
 			}
