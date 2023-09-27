@@ -11,6 +11,8 @@ import { postCertificationAPI } from "@/api/teacher/user/postCertificationAPI"
 import { useSetAtom, useAtom } from "jotai"
 import { nationData, tokenStatus } from "@/store/store"
 import { removeCookie } from "@/api/cookie"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 function cert() {
 	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
@@ -19,6 +21,7 @@ function cert() {
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const [rePost, setRePost] = useState<boolean>(false)
     const [tokenStatusAtom, setTokenStatusAtom] = useAtom(tokenStatus)
+	const noti = useNotification()
 
 	const renderFileInputUrl = (
 		<div css={inputFileCSS({ fileUrl })}>
@@ -38,9 +41,16 @@ function cert() {
 	const submitHandler = () => {
 		const formData = new FormData()
 		file && formData.append("file", file)
+
+		if (!file) {
+			noti({content: <NotiTemplate type={"alert"} content={"파일을 업로드해 주세요."}/>, duration: 5000})
+		}
 		postCertificationAPI({ body: formData }).then((res) => {
 			setTokenStatusAtom(() => {return {role: 'TEACHER', status: ['require_approval'], showMessage: false}})
 			setRePost(() => false)
+		})
+		.catch((err) => {
+			noti({content: <NotiTemplate type={"alert"} content={"알 수 없는 오류가 발생했습니다. 다시 제출해 주세요."}/>, duration: 5000})
 		})
 	}
 
@@ -55,6 +65,7 @@ function cert() {
 	const renderInput = (
 		<div css={inputWrapperCSS}>
 			<Input
+				accept="image/*"
 				leftContent={renderFileInputUrl}
 				rightContent={
 					<Button

@@ -509,6 +509,7 @@ function signup() {
 							}}
 						></Button>
 					}
+					accept="image/*"
 					onChange={inputFileOnChangeHandler}
 					theme={"default"}
 					customCss={inputCSS}

@@ -204,7 +204,7 @@ function GovJobItem(props: GovRuleClassDetailProps) {
 									`}
 									value={inputState.wage}
 									onChange={handler.wageInputHandler}
-									leftContent={<div>월급</div>}
+									leftContent={<div>일급</div>}
 									rightContent={<div>{props.currency}</div>}
 								/>
 								<Input

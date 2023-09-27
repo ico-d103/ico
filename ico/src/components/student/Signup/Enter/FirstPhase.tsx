@@ -38,7 +38,16 @@ function FirstPhase({ setPhase, number, setNumber }: FirstPhasePropsType) {
 
 	const inputHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		if (!Object.is(Number(e.target.value), NaN) && e.target.value.length <= 2) {
-			setNumber(() => e.target.value)
+			if (!e.target.value.includes('-')) {
+				setNumber(() => e.target.value)
+			} else {
+				noti({
+					content: <NotiTemplate type={"alert"} content={"0 보다 작은 숫자는 입력할 수 없어요!"} />,
+					duration: 5000,
+					id: "enter-alert2",
+				})
+			}
+			
 		} else {
 			noti({
 				content: <NotiTemplate type={"alert"} content={"숫자 두 자리까지만 입력할 수 있어요!"} />,
