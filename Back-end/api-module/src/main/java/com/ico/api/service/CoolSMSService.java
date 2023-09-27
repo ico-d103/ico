@@ -32,6 +32,7 @@ public class CoolSMSService {
 
     private final TeacherRepository teacherRepository;
     private final PasswordEncoder passwordEncoder;
+    private final VerificationCodeService codeService;
 
     @Value("${coolsms.apiKey}")
     private String apiKey;
@@ -42,17 +43,24 @@ public class CoolSMSService {
     @Value("${coolsms.fromPhoneNum}")
     private String fromPhoneNum;
 
+    @Value("${coolsms.adminPhoneNum}")
+    private String adminPhoneNum;
+
     /**
      * 휴대폰 인증
      *
      * @param phoneNum
      * @return randomCode
      */
+    @Transactional
     public String certifiedPhoneNum(String phoneNum) {
         // 인증번호 생성 및 메시지에 포함
         String randomNum = String.format("%06d", new Random().nextInt(999999));
         Message message = createMessage(phoneNum);
         message.setText("[아이코 인증번호]\n입력하셔야할 인증번호는 [" + randomNum + "] 입니다.");
+
+        // Redis에 인증 코드와 휴대폰 번호 저장
+        codeService.saveVerificationCode(phoneNum, randomNum);
 
         // 메세지 전송
         sendMessage(message);
@@ -84,6 +92,15 @@ public class CoolSMSService {
         teacherRepository.save(teacher);
 
         return password;
+    }
+
+    /**
+     * 관리자에게 교사 인증서가 등록되었다는 것을 알려줌
+     */
+    public void informAdmin() {
+        Message message = createMessage(adminPhoneNum);
+        message.setText("[아이코]\n교사 인증서가 새로 등록되었습니다.\nhttps://www.iconomy.kr/");
+        sendMessage(message);
     }
 
     /**

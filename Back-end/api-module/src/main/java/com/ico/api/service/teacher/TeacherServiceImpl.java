@@ -1,10 +1,12 @@
 package com.ico.api.service.teacher;
 
+import com.ico.api.dto.coolsms.PhoneNumAndCodeReqDto;
 import com.ico.api.dto.coolsms.PhoneNumReqDto;
 import com.ico.api.dto.teacher.TeacherResDto;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
 import com.ico.api.service.CoolSMSService;
 import com.ico.api.service.S3UploadService;
+import com.ico.api.service.VerificationCodeService;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.code.Password;
 import com.ico.core.code.Role;
@@ -53,6 +55,7 @@ public class TeacherServiceImpl implements TeacherService {
     private final CertificationRepository certificationRepository;
     private final S3UploadService s3;
     private final CoolSMSService smsService;
+    private final VerificationCodeService codeService;
 
     @Override
     @Transactional
@@ -94,6 +97,9 @@ public class TeacherServiceImpl implements TeacherService {
                 .image(image)
                 .build();
         certificationRepository.save(certification);
+
+        // 교사 인증서 저장 후 관리자에게 문자를 보내 빠르게 인증할 수 있도록 하기
+        smsService.informAdmin();
 
         return teacher.getId();
     }
@@ -200,5 +206,11 @@ public class TeacherServiceImpl implements TeacherService {
         Teacher teacher = teacherRepository.findByPhoneNum(phoneNum)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         return teacher.getIdentity();
+    }
+
+    @Override
+    public boolean verificationCode(PhoneNumAndCodeReqDto dto) {
+        String savedCode = codeService.getVerificationCode(dto.getPhoneNum());
+        return savedCode != null && savedCode.equals(dto.getCode());
     }
 }

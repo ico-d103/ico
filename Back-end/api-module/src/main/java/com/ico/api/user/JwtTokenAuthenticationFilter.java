@@ -45,7 +45,8 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
             if (request.getRequestURI().equals("/api/login") || request.getRequestURI().equals("/api/student")
                     || request.getRequestURI().equals("/api/teacher") || request.getRequestURI().equals("/api/duplicated-id")
                     || request.getRequestURI().equals("/api/teacher/phone") || request.getRequestURI().equals("/api/teacher/reset-pw")
-                    || request.getRequestURI().equals("/api/power") || request.getRequestURI().equals("/api/teacher/find-id")) {
+                    || request.getRequestURI().equals("/api/power") || request.getRequestURI().equals("/api/teacher/id")
+                    || request.getRequestURI().equals("/api/teacher/verification")) {
                 log.info("[doFilterInternal] : 토큰이 없는 uri : {}", request.getRequestURI());
                 response.addHeader("Access-Control-Allow-Origin", "*");
                 filterChain.doFilter(request, response);

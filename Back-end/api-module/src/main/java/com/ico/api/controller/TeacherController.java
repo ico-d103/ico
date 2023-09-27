@@ -1,5 +1,6 @@
 package com.ico.api.controller;
 
+import com.ico.api.dto.coolsms.PhoneNumAndCodeReqDto;
 import com.ico.api.dto.coolsms.PhoneNumReqDto;
 import com.ico.api.dto.teacher.TeacherResDto;
 import com.ico.api.dto.user.TeacherSignUpRequestDto;
@@ -125,8 +126,18 @@ public class TeacherController {
      * @param dto
      * @return teacherId
      */
-    @PostMapping("/find-id")
+    @PostMapping("/id")
     public ResponseEntity<String> getTeacherId(@Valid @RequestBody PhoneNumReqDto dto) {
         return ResponseEntity.ok(teacherService.getTeacherId(dto.getPhoneNum()));
+    }
+
+    /**
+     * 인증 코드 유효성 검사
+     * @param dto
+     * @return
+     */
+    @PostMapping("/verification")
+    public ResponseEntity<Boolean> verificationCode(@Valid @RequestBody PhoneNumAndCodeReqDto dto) {
+        return ResponseEntity.ok(teacherService.verificationCode(dto));
     }
 }
