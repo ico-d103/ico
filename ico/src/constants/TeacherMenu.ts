@@ -64,12 +64,12 @@ export const SUB_ELEMENT: {
 		},
 		"/teacher/gov/job": { name: "set_job", label: "직업 관리", content: SUB_GOVERNMENT_JOB, menuIndex: 2 },
 		"/teacher/gov/license": { name: "set_job", label: "자격증 관리", content: SUB_GOVERNMENT_JOB, menuIndex: 3 },
-		"/teacher/gov/corporate": {
-			name: "set_corporate",
-			label: "기업 관리",
-			content: SUB_CORPORATE_MANAGEMENT,
-			menuIndex: 4,
-		},
+		// "/teacher/gov/corporate": {
+		// 	name: "set_corporate",
+		// 	label: "기업 관리",
+		// 	content: SUB_CORPORATE_MANAGEMENT,
+		// 	menuIndex: 4,
+		// },
 		// "/teacher/gov/economy": {
 		// 	name: "view_economy",
 		// 	label: "경제 현황",
