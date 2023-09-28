@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 교사의 예금 상품조회 Res
+ * 교사의 적금 상품조회 Res
  *
  * @author 변윤경
  */
@@ -26,10 +26,10 @@ public class DepositProductTeacherResDto {
 
     private List<Byte> interest;
 
-    private List<ProductJoinedStudentResDto> students;
+    private List<depositProductJoinedStudentResDto> students;
 
     @Builder
-    public DepositProductTeacherResDto(Long id, String title, Byte period, List<Byte> interest, List<ProductJoinedStudentResDto> students) {
+    public DepositProductTeacherResDto(Long id, String title, Byte period, List<Byte> interest, List<depositProductJoinedStudentResDto> students) {
         this.id = id;
         this.title = title;
         this.period = period;

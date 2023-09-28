@@ -28,10 +28,10 @@ public class SavingProductTeacherResDto {
 
     private List<Byte> interest;
 
-    private List<ProductJoinedStudentResDto> students;
+    private List<savingProductJoinedStudentResDto> students;
 
     @Builder
-    public SavingProductTeacherResDto(Long id, String title, Byte count, int amount, List<Byte> interest, List<ProductJoinedStudentResDto> students) {
+    public SavingProductTeacherResDto(Long id, String title, Byte count, int amount, List<Byte> interest, List<savingProductJoinedStudentResDto> students) {
         this.id = id;
         this.title = title;
         this.count = count;

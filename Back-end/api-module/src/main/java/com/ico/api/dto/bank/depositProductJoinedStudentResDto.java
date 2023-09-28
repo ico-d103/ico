@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class ProductJoinedStudentResDto {
+public class depositProductJoinedStudentResDto {
     private int number;
 
     private String name;
@@ -22,11 +22,14 @@ public class ProductJoinedStudentResDto {
 
     private String startDate;
 
+    private String endDate;
+
     @Builder
-    public ProductJoinedStudentResDto(int number, String name, int amount, String startDate) {
+    public depositProductJoinedStudentResDto(int number, String name, int amount, String startDate, String endDate) {
         this.number = number;
         this.name = name;
         this.amount = amount;
         this.startDate = startDate;
+        this.endDate = endDate;
     }
 }

@@ -1,11 +1,11 @@
 package com.ico.api.service.bank;
 
-import com.ico.api.dto.bank.ProductJoinedStudentResDto;
 import com.ico.api.dto.bank.SavingProductReqDto;
 import com.ico.api.dto.bank.SavingProductStudentColResDto;
 import com.ico.api.dto.bank.SavingProductStudentResDto;
 import com.ico.api.dto.bank.SavingProductTeacherResDto;
 import com.ico.api.dto.bank.SavingStudentResDto;
+import com.ico.api.dto.bank.savingProductJoinedStudentResDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.document.Saving;
@@ -55,15 +55,16 @@ public class SavingProductServiceImpl implements SavingProductService{
         List<SavingProductTeacherResDto> colSavingList = new ArrayList<>();
 
         for(SavingProduct savingProduct : savingProductList){
-            List<ProductJoinedStudentResDto> studentInfoList = new ArrayList<ProductJoinedStudentResDto>();
+            List<savingProductJoinedStudentResDto> studentInfoList = new ArrayList<savingProductJoinedStudentResDto>();
 
             List<Saving> savingList = savingMongoRepository.findAllBySavingProductId(savingProduct.getId());
             for(Saving saving: savingList){
-                ProductJoinedStudentResDto studentInfo = new ProductJoinedStudentResDto();
+                savingProductJoinedStudentResDto studentInfo = new savingProductJoinedStudentResDto();
                 studentInfo.setName(saving.getName());
                 studentInfo.setNumber(saving.getNumber());
                 studentInfo.setAmount(saving.getAmount());
                 studentInfo.setStartDate(saving.getStartDate().toLocalDate().toString());
+                studentInfo.setCount(saving.getCount());
                 studentInfoList.add(studentInfo);
             }
 
@@ -123,13 +124,11 @@ public class SavingProductServiceImpl implements SavingProductService{
                     .build();
             mySavingListReturn.add(mySaving);
         }
-
-        SavingProductStudentResDto dto = new SavingProductStudentResDto();
-        dto.setAccount(student.getAccount());
-        dto.setSavingProduct(savingList);
-        dto.setMyInfo(mySavingListReturn);
-
-        return dto;
+        return SavingProductStudentResDto.builder()
+                .account(student.getAccount())
+                .product(savingList)
+                .myInfo(mySavingListReturn)
+                .build();
     }
 
     @Override
