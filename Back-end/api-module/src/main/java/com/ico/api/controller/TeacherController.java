@@ -140,4 +140,5 @@ public class TeacherController {
     public ResponseEntity<Boolean> verificationCode(@Valid @RequestBody PhoneNumAndCodeReqDto dto) {
         return ResponseEntity.ok(teacherService.verificationCode(dto));
     }
+    
 }
