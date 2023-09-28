@@ -16,14 +16,16 @@ import java.util.List;
 @NoArgsConstructor
 public class DepositProductStudentResDto
 {
+    private String type;
     private int account;
     private List<DepositStudentResDto> myInfo;
-    private List<DepositProductStudentColResDto> depositProduct;
+    private List<DepositProductStudentColResDto> product;
 
     @Builder
-    public DepositProductStudentResDto(int account, List<DepositStudentResDto> myInfo, List<DepositProductStudentColResDto> depositProduct) {
+    public DepositProductStudentResDto(int account, List<DepositStudentResDto> myInfo, List<DepositProductStudentColResDto> product) {
+        this.type = "deposit";
         this.account = account;
         this.myInfo = myInfo;
-        this.depositProduct = depositProduct;
+        this.product = product;
     }
 }

@@ -124,13 +124,11 @@ public class SavingProductServiceImpl implements SavingProductService{
                     .build();
             mySavingListReturn.add(mySaving);
         }
-
-        SavingProductStudentResDto dto = new SavingProductStudentResDto();
-        dto.setAccount(student.getAccount());
-        dto.setSavingProduct(savingList);
-        dto.setMyInfo(mySavingListReturn);
-
-        return dto;
+        return SavingProductStudentResDto.builder()
+                .account(student.getAccount())
+                .product(savingList)
+                .myInfo(mySavingListReturn)
+                .build();
     }
 
     @Override

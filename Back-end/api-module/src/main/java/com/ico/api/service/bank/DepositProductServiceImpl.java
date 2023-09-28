@@ -127,11 +127,14 @@ public class DepositProductServiceImpl implements DepositProductService{
             myDepositListReturn.add(myDeposit);
         }
 
-        DepositProductStudentResDto dto = new DepositProductStudentResDto();
-        dto.setAccount(student.getAccount());
-        dto.setDepositProduct(depositList);
-        dto.setMyInfo(myDepositListReturn);
-        return dto;
+        return DepositProductStudentResDto.builder()
+                .account(student.getAccount())
+                .product(depositList)
+                .myInfo(myDepositListReturn)
+                .build();
+
+
+
     }
 
     @Override
