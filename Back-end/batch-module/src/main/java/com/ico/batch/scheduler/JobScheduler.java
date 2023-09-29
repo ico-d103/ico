@@ -46,8 +46,8 @@ public class JobScheduler {
         return postProcessor;
     }
 
-    // 01시에 일급 갱신
-    @Scheduled(cron = "0 0 1 * * *")
+    // 매일 저녁 6시에 일급 갱신
+    @Scheduled(cron = "0 0 18 * * *")
     public void updateSalaryJobScheduled()
             throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         JobParameters jobParameters = new JobParameters(
@@ -61,8 +61,8 @@ public class JobScheduler {
         }
     }
 
-    // 매월 15일에 월급 입금
-    @Scheduled(cron = "0 0 8 15 * *")
+    // 매일 8시에 월급일인 나라의 월급 지급
+    @Scheduled(cron = "0 0 8 * * *")
     public void depositSalaryJobScheduled()
             throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         JobParameters jobParameters = new JobParameters(

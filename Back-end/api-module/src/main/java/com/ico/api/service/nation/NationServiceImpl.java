@@ -14,6 +14,7 @@ import com.ico.core.data.Default_license;
 import com.ico.core.data.Default_rule;
 import com.ico.core.data.Default_tax;
 import com.ico.core.document.DefaultNation;
+import com.ico.core.document.TreasuryHistory;
 import com.ico.core.entity.DepositProduct;
 import com.ico.core.entity.Immigration;
 import com.ico.core.entity.Invest;
@@ -29,17 +30,16 @@ import com.ico.core.entity.StudentLicense;
 import com.ico.core.entity.Tax;
 import com.ico.core.entity.Teacher;
 import com.ico.core.entity.TeacherProduct;
-import com.ico.core.document.TreasuryHistory;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.DefaultNationRepository;
 import com.ico.core.repository.DepositProductRepository;
 import com.ico.core.repository.ImmigrationRepository;
 import com.ico.core.repository.InvestRepository;
+import com.ico.core.repository.IssueRepository;
 import com.ico.core.repository.NationLicenseRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.NewsRepository;
-import com.ico.core.repository.IssueRepository;
 import com.ico.core.repository.PaydayRepository;
 import com.ico.core.repository.StockRepository;
 import com.ico.core.repository.StudentJobRepository;
@@ -51,10 +51,13 @@ import com.ico.core.repository.TeacherRepository;
 import com.ico.core.repository.TreasuryHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -452,19 +455,13 @@ public class NationServiceImpl implements NationService {
         List<Payday> paydayList = paydayRepository.findAllByNationIdOrderByDate(nationId);
         List<Byte> paydays = new ArrayList<>();
 
-        for(Payday payday: paydayList){
+        for (Payday payday : paydayList) {
             paydays.add(payday.getDate());
-
         }
 
         PaydayResDto dto = new PaydayResDto();
         dto.setPaydays(paydays);
 
-        // 현재 날짜와 일치하는 월급일을 가진 나라 찾기
-        List<Long> nations = paydayRepository.findNationIdsByDateEqualsOne((byte) 14);
-        for(Long id: nations){
-            log.info(String.valueOf(id));
-        }
         return dto;
     }
 
