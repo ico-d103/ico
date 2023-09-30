@@ -1,4 +1,4 @@
-import LoadImage from "@/components/common/LoadImage/LoadImage"
+
 import React, { useEffect } from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
@@ -81,7 +81,7 @@ function SecondPhase({ setPhase, code, setCode, submitHandler }: FirstPhaseProps
 						>
 							반 입장
 						</div>
-						<span>국가 코드를 입력해 주세요.</span>
+						<span>2. 선생님이 알려주신 <span css={css`font-weight: 700;`}>국가 코드</span>를 입력해 주세요.</span>
 					</div>
 
 					<Input

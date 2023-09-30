@@ -13,7 +13,7 @@ function ClassJobSearchListItemFront({ job }: ClassJobSearchListItemFrontPropsTy
 	return (
 		<>
 			<div css={imageWrapperCSS(job.color)}>
-				<LoadImage wrapperCss={imgCSS} src={job.image} alt={"job_image"} />
+				<LoadImage customCSS={imgCSS} src={job.image} alt={"job_image"} />
 				<span>
 					{job.count}/{job.total}
 				</span>

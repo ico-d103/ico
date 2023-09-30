@@ -1,4 +1,4 @@
-import LoadImage from "@/components/common/LoadImage/LoadImage"
+
 import React, {useEffect} from "react"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
@@ -67,6 +67,8 @@ function Check({  }: FirstPhasePropsType) {
 
 
 
+
+
 	return (
 		<div
 			css={css`
@@ -107,6 +109,14 @@ function Check({  }: FirstPhasePropsType) {
 
 			
 					<div css={buttonWrapperCSS}>
+						<Button
+							text={"로그아웃"}
+							fontSize={`14px`}
+							width={"128px"}
+							height={"48px"}
+							theme={"mobileCancel"}
+							onClick={signoutHandler}
+						/>
 						<Button
 							text={"다시 입력"}
 							fontSize={`14px`}

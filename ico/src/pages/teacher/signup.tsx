@@ -431,7 +431,7 @@ function signup() {
 	return (
 		<div css={wrapperCSS}>
 			<div css={innerWrapperCSS}>
-				<LoadImage src={"/assets/signup/illust.png"} alt={"signup_illust"} wrapperCss={imageWrapperCSS} dev={false} />
+				<LoadImage src={"/assets/signup/illust.png"} alt={"signup_illust"} customCSS={imageWrapperCSS} dev={false} />
 
 				<div css={inputTitleCSS}>이름</div>
 				<Input
@@ -509,6 +509,7 @@ function signup() {
 							}}
 						></Button>
 					}
+					accept="image/*"
 					onChange={inputFileOnChangeHandler}
 					theme={"default"}
 					customCss={inputCSS}

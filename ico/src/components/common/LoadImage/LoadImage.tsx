@@ -5,22 +5,20 @@ import { css } from "@emotion/react"
 type LoadImageProps = {
 	src: string
 	alt: string
-    sizes?: string
-	wrapperCss?: any
-    imageCss?: any
-    skeletonCss?: any
+	customCSS?: any
+    skeletonCSS?: any
     useSkeleton?: boolean;
     dev?: boolean;
 }
 
-function LoadImage({ src, alt, sizes, wrapperCss, imageCss, useSkeleton, skeletonCss, dev }: LoadImageProps) {
+function LoadImage({ src, alt, customCSS, useSkeleton, skeletonCSS, dev }: LoadImageProps) {
     const [isLoading, setIsLoading] = useState<boolean>(true)
 	return (
-        <div className={'image-wrapper'} css={[wrapperCss, imageWrapperCSS({isLoading, dev})]}>
+        <div className={'image-wrapper'} css={[customCSS, imageWrapperCSS({isLoading, dev})]}>
                 {useSkeleton &&
-                    <div css={[skeletonCss, skeletonInitCSS({isLoading})]}/>
+                    <div css={[skeletonCSS, skeletonInitCSS({isLoading})]}/>
                 }
-                <Image
+                {/* <Image
                     css={[imageCss, imageCSS({isLoading, dev})]}
                     src={src}
                     alt={alt}
@@ -30,6 +28,12 @@ function LoadImage({ src, alt, sizes, wrapperCss, imageCss, useSkeleton, skeleto
                     // objectFit="contain"
                     // objectPosition="center"
                     
+                    onLoad={() => {setIsLoading(() => false)}}
+                /> */}
+                <img
+                    css={[imageCSS({isLoading, dev})]}
+                    src={src}
+                    alt={alt}     
                     onLoad={() => {setIsLoading(() => false)}}
                 />
    
@@ -65,7 +69,10 @@ const imageCSS = ({isLoading, dev}: {isLoading: boolean, dev?: boolean}) => {
         transition-duration: 0.2s;
         opacity: ${isLoading ? '0%' : '100%'};
         border: ${dev && '1px solid red'};
-        object-fit: contain;
+        /* object-fit: cover; */
+
+        width: 100%;
+        height: auto;
         
     `
 }

@@ -31,9 +31,12 @@ function GovJobPayday({query}: GovJobPaydayPropsType) {
 }
 
 const daysWrapperCSS = css`
-  display: grid;
-  grid-template-columns: repeat(7, 64px);
-  grid-template-rows: repeat(5, 64px);
+  /* display: grid;
+  grid-template-columns: repeat(20, 64px);
+  grid-template-rows: repeat(4, 64px); */
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px;
   place-items: center;
 `
 

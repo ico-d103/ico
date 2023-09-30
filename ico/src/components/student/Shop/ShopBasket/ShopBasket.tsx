@@ -9,18 +9,20 @@ import Button from "@/components/common/Button/Button"
 import QRScannerModal from "../QRScanner/QRScannerModal"
 import useModal from "@/components/common/Modal/useModal"
 import QueryAdapter from "@/components/common/Adapter/QueryAdapter"
+import useMediaQuery from "@/hooks/useMediaQuery"
 
 function ShopBasket() {
 	const shopHandler = useShopHandler()
   const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
   const scanQRModal = useModal()
+	const isMobile = useMediaQuery("(max-width: 768px")
 
   const renderItem = shopHandler.shoppingBasket.basket.map((item, idx) => {
     return <ShopBasketItem key={`${shopHandler.shoppingBasket.basket.length}-${item.title}-${item.id}-${idx}`} {...item} delProduct={shopHandler.delProduct} />
   })
 
 	return (
-		<div css={contentWrapperCSS}>
+		<div css={contentWrapperCSS({isMobile})}>
       {shopHandler.shoppingBasket.seller && scanQRModal(
 				<QRScannerModal compState={scanQRModal.state} seller={shopHandler.shoppingBasket.seller} products={shopHandler.shoppingBasket.basket}  />
 			)}
@@ -47,6 +49,7 @@ function ShopBasket() {
 						width={"100%"}
 						theme={"mobileSoft"}
 						onClick={scanQRModal.open}
+						disabled={shopHandler.shoppingBasket.basket.length === 0 ? true : false}
 					/>
 				</div>
 			)}
@@ -54,12 +57,12 @@ function ShopBasket() {
 	)
 }
 
-const contentWrapperCSS = css`
+const contentWrapperCSS = ({isMobile}: {isMobile: boolean | null}) => css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	flex: 1;
-  padding-bottom: 64px;;
+  padding-bottom: ${!isMobile && `64px`};
 `
 
 const headerCSS = css`

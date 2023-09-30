@@ -1,6 +1,4 @@
 import { css } from "@emotion/react"
-import LoadImage from "@/components/common/LoadImage/LoadImage"
-import Button from "@/components/common/Button/Button"
 import { useRouter } from "next/router"
 import useMediaQuery from "@/hooks/useMediaQuery"
 import QRScanner from "@/components/student/Shop/QRScanner/QRScanner"

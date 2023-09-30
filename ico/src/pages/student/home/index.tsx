@@ -43,12 +43,12 @@ function index() {
 						<LoadImage
 							src={"/assets/children_icon.png"}
 							alt={"icon"}
-							wrapperCss={css`
+							customCSS={css`
 								width: 36px;
 								height: 36px;
 								margin-right: 12px;
 							`}
-							sizes={"128px"}
+							
 						/>
 						ICO
 					</div>

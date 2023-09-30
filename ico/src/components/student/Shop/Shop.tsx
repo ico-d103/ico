@@ -10,7 +10,7 @@ import UseAnimations from "react-useanimations"
 import alertCircle from "react-useanimations/lib/alertCircle"
 import useMediaQuery from "@/hooks/useMediaQuery"
 import { useRouter } from "next/router"
-import React, {useState} from "react"
+import React, { useState } from "react"
 import Button from "@/components/common/Button/Button"
 import useNavigate from "@/hooks/useNavigate"
 import QueryAdapter from "@/components/common/Adapter/QueryAdapter"
@@ -29,11 +29,11 @@ const shoppingBasketWrapperCSS = css`
 
 export const SHOPPING_BASKET = (
 	<div css={shoppingBasketWrapperCSS}>
-		<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
 			<path
-				d="M5.00014 14H18.1359C19.1487 14 19.6551 14 20.0582 13.8112C20.4134 13.6448 20.7118 13.3777 20.9163 13.0432C21.1485 12.6633 21.2044 12.16 21.3163 11.1534L21.9013 5.88835C21.9355 5.58088 21.9525 5.42715 21.9031 5.30816C21.8597 5.20366 21.7821 5.11697 21.683 5.06228C21.5702 5 21.4155 5 21.1062 5H4.50014M2 2H3.24844C3.51306 2 3.64537 2 3.74889 2.05032C3.84002 2.09463 3.91554 2.16557 3.96544 2.25376C4.02212 2.35394 4.03037 2.48599 4.04688 2.7501L4.95312 17.2499C4.96963 17.514 4.97788 17.6461 5.03456 17.7462C5.08446 17.8344 5.15998 17.9054 5.25111 17.9497C5.35463 18 5.48694 18 5.75156 18H19M7.5 21.5H7.51M16.5 21.5H16.51M8 21.5C8 21.7761 7.77614 22 7.5 22C7.22386 22 7 21.7761 7 21.5C7 21.2239 7.22386 21 7.5 21C7.77614 21 8 21.2239 8 21.5ZM17 21.5C17 21.7761 16.7761 22 16.5 22C16.2239 22 16 21.7761 16 21.5C16 21.2239 16.2239 21 16.5 21C16.7761 21 17 21.2239 17 21.5Z"
+				d="M7.50021 21H27.2038C28.723 21 29.4826 21 30.0874 20.7168C30.6201 20.4672 31.0677 20.0666 31.3745 19.5647C31.7228 18.995 31.8067 18.24 31.9744 16.7301L32.8519 8.83252C32.9032 8.37132 32.9288 8.14073 32.8547 7.96224C32.7895 7.80548 32.6731 7.67546 32.5245 7.59341C32.3553 7.5 32.1233 7.5 31.6593 7.5H6.75021M3 3H4.87266C5.26959 3 5.46806 3 5.62333 3.07549C5.76003 3.14194 5.8733 3.24836 5.94816 3.38064C6.03318 3.5309 6.04556 3.72899 6.07032 4.12515L7.42968 25.8749C7.45444 26.271 7.46682 26.4691 7.55184 26.6194C7.6267 26.7516 7.73997 26.8581 7.87667 26.9245C8.03194 27 8.23041 27 8.62734 27H28.5M11.25 32.25H11.265M24.75 32.25H24.765M12 32.25C12 32.6642 11.6642 33 11.25 33C10.8358 33 10.5 32.6642 10.5 32.25C10.5 31.8358 10.8358 31.5 11.25 31.5C11.6642 31.5 12 31.8358 12 32.25ZM25.5 32.25C25.5 32.6642 25.1642 33 24.75 33C24.3358 33 24 32.6642 24 32.25C24 31.8358 24.3358 31.5 24.75 31.5C25.1642 31.5 25.5 31.8358 25.5 32.25Z"
 				stroke="black"
-				strokeWidth="2"
+				strokeWidth="3"
 				strokeLinecap="round"
 				strokeLinejoin="round"
 			/>
@@ -54,7 +54,7 @@ function Shop({ uploadPageUrl, query, seller }: ShopPropsType) {
 	const renderUpload = uploadPageUrl && seller && (
 		<div css={wrapperCSS}>
 			<div css={contentWrapperCSS}>
-			<Button
+				<Button
 					text={"QR 코드 생성"}
 					fontSize={`var(--teacher-h5)`}
 					width={"120px"}
@@ -82,9 +82,7 @@ function Shop({ uploadPageUrl, query, seller }: ShopPropsType) {
 	return (
 		<React.Fragment>
 			{renderUpload}
-			{seller && showQRModal(
-						<ShowQR seller={seller} time={time} />
-			)}
+			{seller && showQRModal(<ShowQR seller={seller} time={time} />)}
 			<QueryAdapter query={query} isEmpty={!!(query.data && query.data.length === 0)}>
 				<div css={cardWrapperCSS({ isMobile })}>
 					{query.data?.length !== 0 && (
@@ -172,7 +170,5 @@ const contentWrapperCSS = css`
 		font-size: 0.95rem;
 	}
 `
-
-
 
 export default Shop

@@ -65,9 +65,9 @@ function SideBarLeft({ element, logo, selectHandler, selected }: SideBarLeftProp
 					>
 						<div css={elementContentCSS}>{MAIN_SIGNOUT}</div>
 					</div>
-					<div css={elementWrapperCSS({ target: -1, selected })}>
+					{/* <div css={elementWrapperCSS({ target: -1, selected })}>
 						<div css={elementContentCSS}>{MAIN_SETTING}</div>
-					</div>
+					</div> */}
 					<div css={bottomLineCSS} />
 					<img css={userImgCSS} src={"/assets/account.png"} alt="교사회원 계정확인 아이콘" onClick={modal.open} />
 				</div>
