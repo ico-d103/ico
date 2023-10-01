@@ -164,12 +164,12 @@ function enter() {
 						<div onClick={signoutHandler}>로그아웃</div>
 					</div>
 					<div>
-						<LoadImage
+						{/* <LoadImage
 							src={"/assets/enter/enter_image.png"}
 							alt={"signup_illust"}
 							wrapperCss={imageWrapper}
 							dev={false}
-						/>
+						/> */}
 					</div>
 
 					<div css={WrapperCSS}>
