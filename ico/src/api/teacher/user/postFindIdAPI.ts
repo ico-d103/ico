@@ -13,7 +13,7 @@ type responseType = {
 
 export const postFindIdAPI = async ({ body }: paramsType) => {
 	try {
-		const response: responseType = await defaultInstance.post("/teacher/find-id", body)
+		const response: responseType = await defaultInstance.post("/teacher/id", body)
 
 		return response.data
 	} catch (error) {
