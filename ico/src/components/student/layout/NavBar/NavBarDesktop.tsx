@@ -85,7 +85,7 @@ function NavBarDesktop({ children, routes, navBarData }: NavBarProps) {
 							<LoadImage
 								src={"/assets/children_icon.png"}
 								alt={"icon"}
-								wrapperCss={css`
+								customCSS={css`
 									width: 36px;
 									height: 36px;
 									margin-right: 12px;
@@ -93,7 +93,6 @@ function NavBarDesktop({ children, routes, navBarData }: NavBarProps) {
 									/* filter: hue-rotate(300deg);
 										opacity: 0.7; */
 								`}
-								sizes={"128px"}
 							/>
 							ICO
 						</div>

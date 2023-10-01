@@ -96,7 +96,7 @@ function ShopDetail({ pid, query, isSeller, editUrl, deleteHandler }: ShopDetail
 				</React.Fragment>
 			)}
 			{deleteModal(
-        <ModalAlert content={['삭제하면 되돌릴 수 없어요!']} proceed={deleteHandler} closeComp={deleteModal.close} width={"360px"} title={"상품 삭제"} titleSize={"24px"}/>
+        <ModalAlert content={['삭제하면 되돌릴 수 없어요!']} proceed={deleteHandler} closeComp={deleteModal.close} width={"360px"} title={"상품 삭제"} titleSize={"24px"} forChild={true}/>
       )}
 
 			<PageHeader

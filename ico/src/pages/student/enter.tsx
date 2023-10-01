@@ -32,11 +32,18 @@ function enter() {
 			})
 			.catch((error) => {
 				console.log(error)
-				noti({
-					content: <NotiTemplate type={"ok"} content={error.response.data.message} />,
-					duration: 5000,
-					id: "enter-alert",
-				})
+				if (error.response.data.code === '20') {
+					noti({
+						content: <NotiTemplate type={"ok"} content={`코드를 제대로 입력해 주세요!`} />,
+						duration: 5000,
+					})
+				} else {
+					noti({
+						content: <NotiTemplate type={"ok"} content={error.response.data.message} />,
+						duration: 5000,
+					})
+				}
+				
 			})
 	}
 

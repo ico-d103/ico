@@ -53,7 +53,7 @@ function ClassJobSearchCard({ job, myGrade }: ClassJobSearchCardPropsType) {
 				onClick={() => checkValidApplyHandler(myGrade <= job.creditRating)}
 			>
 				<div css={imageWrapperCSS}>
-					<LoadImage wrapperCss={imgCSS} src={job.image} alt={"job_image"} />
+					<LoadImage customCSS={imgCSS} src={job.image} alt={"job_image"} />
 				</div>
 				<div css={contentWrapperCSS}>
 					<span css={nameCSS}>{job.title}</span>

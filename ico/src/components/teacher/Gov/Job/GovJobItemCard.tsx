@@ -19,7 +19,7 @@ function GovJobItemCard({ job, wage, backgroundColor, imgUrl }: GovJobItemCardPr
 				<div css={jobImgSpaceCSS} />
 				<div css={jobImgWrapperCSS}>
 					<LoadImage
-						wrapperCss={imgCSS}
+						customCSS={imgCSS}
 						src={imgUrl}
 						alt={"job_image"}
 						// useSkeleton={true}

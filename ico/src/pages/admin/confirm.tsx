@@ -56,6 +56,7 @@ function index() {
 					<div css={textWrapperCSS}>{el.name}</div>
 					<div>
 						<img css={imgCSS} src={el.image} />
+						
 					</div>
 					<div css={buttonWrapperCSS}>
 						<Button

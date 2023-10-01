@@ -4,7 +4,6 @@ import { removeCookie } from "@/api/cookie"
 import useNavigate from "@/hooks/useNavigate"
 import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 import { getHomeMyInfoType } from "@/types/student/apiReturnTypes"
-import LoadImage from "@/components/common/LoadImage/LoadImage"
 import NavBarDesktopRightMenu from "../../layout/NavBar/NavBarSideMenu"
 
 function SideMenu({ closeComp, data }: { closeComp?: Function; data: getHomeMyInfoType }) {

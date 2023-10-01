@@ -59,8 +59,8 @@ function ShopCreate({
 	const router = useRouter()
 
 	const [title, setTitle] = useState(edit?.title || "")
-	const [amount, setAmount] = useState(String(edit?.amount) || "")
-	const [count, setCount] = useState(String(edit?.count) || "")
+	const [amount, setAmount] = useState(edit?.amount ? String(edit?.amount) : '')
+	const [count, setCount] = useState(edit?.count ? String(edit?.count) : '')
 	const [imageList, setImageList] = useState<File[]>([])
 	const [existingImages, setExistingImages] = useState(edit?.images || [])
 	const [detail, setDetail] = useState(edit?.detail || "")
@@ -68,16 +68,69 @@ function ShopCreate({
 	const [nation] = useGetNation()
 	const noti = useNotification()
 
+	const handleError = (code: string) => {
+		switch(code) {
+			case '605':  
+				return '상품 이름을 입력해 주세요!'
+			case '607':  
+				return '가격을 입력해 주세요!'
+			case '609':  
+				return '상품 설명을 입력해 주세요!'
+			case '611':  
+				return '개수를 입력해 주세요!'
+			default:
+				return
+		}
+	}
+
 	const handleTitleChange = (event: any) => {
 		setTitle(event.target.value)
 	}
 
 	const handleAmountChange = (event: any) => {
-		setAmount(event.target.value)
+		if (!Object.is(Number(event.target.value), NaN)) {
+			if (!event.target.value.includes('-')) {
+				setAmount(event.target.value)
+			} else {
+				noti({
+					content: <NotiTemplate type={"alert"} content={"0 보다 작은 숫자는 입력할 수 없어요!"} />,
+					duration: 5000,
+					id: "enter-alert2",
+				})
+			}
+			
+		} else {
+			noti({
+				content: <NotiTemplate type={"alert"} content={"숫자만 입력할 수 있어요!"} />,
+				duration: 5000,
+				id: "enter-alert",
+			})
+		}
 	}
 
+
+
 	const handleCountChange = (event: any) => {
-		setCount(event.target.value)
+		
+		if (!Object.is(Number(event.target.value), NaN)) {
+			if (!event.target.value.includes('-')) {
+				setCount(event.target.value)
+			} else {
+				noti({
+					content: <NotiTemplate type={"alert"} content={"0 보다 작은 숫자는 입력할 수 없어요!"} />,
+					duration: 5000,
+					id: "enter-alert2",
+				})
+			}
+			
+		} else {
+			noti({
+				content: <NotiTemplate type={"alert"} content={"숫자만 입력할 수 있어요!"} />,
+				duration: 5000,
+				id: "enter-alert",
+			})
+		}
+		
 	}
 
 	const handleDetailChange = (event: any) => {
@@ -110,7 +163,13 @@ function ShopCreate({
 			newSubmitHandler({ body: formData })
 				.then((res) => ifSuccess(res))
 				.catch((err) => {
-					noti({ content: <NotiTemplate type={"alert"} content={err.response.data.message} />, duration: 5000 })
+					const errorMessage = handleError(err.response.data.code)
+					if (errorMessage) {
+						noti({ content: <NotiTemplate type={"alert"} content={errorMessage} />, duration: 5000 })
+					} else {
+						noti({ content: <NotiTemplate type={"alert"} content={err.response.data.message} />, duration: 5000 })
+					}
+					
 				})
 		}
 
@@ -145,7 +204,12 @@ function ShopCreate({
 				await Promise.all([editContent(), editImage()])
 					.then((res) => ifSuccess(res))
 					.catch((err) => {
-						noti({ content: <NotiTemplate type={"alert"} content={err.response.data.message} />, duration: 5000 })
+						const errorMessage = handleError(err.response.data.code)
+						if (errorMessage) {
+							noti({ content: <NotiTemplate type={"alert"} content={errorMessage} />, duration: 5000 })
+						} else {
+							noti({ content: <NotiTemplate type={"alert"} content={err.response.data.message} />, duration: 5000 })
+						}
 					})
 			} else {
 				editContent()
@@ -153,7 +217,12 @@ function ShopCreate({
 						ifSuccess(res)
 					})
 					.catch((err) => {
-						noti({ content: <NotiTemplate type={"alert"} content={err.response.data.message} />, duration: 5000 })
+						const errorMessage = handleError(err.response.data.code)
+						if (errorMessage) {
+							noti({ content: <NotiTemplate type={"alert"} content={errorMessage} />, duration: 5000 })
+						} else {
+							noti({ content: <NotiTemplate type={"alert"} content={err.response.data.message} />, duration: 5000 })
+						}
 					})
 			}
 		}
@@ -208,8 +277,9 @@ function ShopCreate({
 
 					<div css={imageWrapperCSS}>
 						<ShopCreateImage
-							key={`gallery-${existingImages.length}-${imageList.length}`}
+							// key={`gallery-${existingImages.length}-${imageList.length}`}
 							existingImages={existingImages}
+							setExistingImages={setExistingImages}
 							imageList={imageList}
 							setImageList={setImageList}
 						/>

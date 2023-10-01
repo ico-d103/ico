@@ -3,6 +3,7 @@ import { jsx, css } from "@emotion/react";
 import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import Swipe from "react-easy-swipe";
 import styles from "./SwipeableGallery.module.css";
+import { debounce } from "lodash";
 // import { useIsResponsive } from "@/components/Responsive/useIsResponsive";
 
 type SwipeableGalleryPropsType = {
@@ -10,17 +11,37 @@ type SwipeableGalleryPropsType = {
   contentCount: number;
   setContentCount: React.Dispatch<React.SetStateAction<number>>;
   noButton?: boolean
+  autoLast?: boolean
 };
 const SwipeableGallery = ({
   content,
   contentCount,
   setContentCount,
-  noButton
+  noButton,
+  autoLast
 }: SwipeableGalleryPropsType) => {
   const movingDiv = useRef<HTMLInputElement>(null);
   const [positionx, setPositionx] = useState<number>(0);
   const [endSwipe, setEndSwipe] = useState(true);
   const postData = content;
+
+  // useEffect(() => {
+  //   if (autoLast) {
+  //     setTimeout(() => setContentCount(() => content.length - 1), 1000)
+  //   }
+  // }, [content.length])
+
+    useEffect(() => {
+    const debouncedHandler = debounce(() => {
+      setContentCount(() => content.length - 1)
+    }, 1000);
+
+    debouncedHandler();
+
+    return () => {
+      debouncedHandler.cancel();
+    };
+  }, [content.length]);
 
   const onSwipeMove = (position = { x: 0 }) => {
     setEndSwipe(false);
@@ -54,6 +75,7 @@ const SwipeableGallery = ({
     } else {
       setContentCount(() => 0);
     }
+
   }, [contentCount]);
 
   const onClickPrevBtn = useCallback(() => {
@@ -62,6 +84,7 @@ const SwipeableGallery = ({
     } else {
       setContentCount(() => content.length - 1);
     }
+
   }, [contentCount]);
 
   
