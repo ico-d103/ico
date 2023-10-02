@@ -1,5 +1,5 @@
 import React from "react"
-import { depositProductType } from "@/types/student/apiReturnTypes"
+import { productTypeForDeposit, productTypeForSaving } from "@/types/student/apiReturnTypes"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 import Modal from "@/components/common/Modal/Modal"
@@ -8,6 +8,8 @@ import FinanceDepositApplyModal from "./Modal/FinanceDepositApplyModal"
 import useCompHandler from "@/hooks/useCompHandler"
 import useGetNation from "@/hooks/useGetNation"
 import useModal from "@/components/common/Modal/useModal"
+import FinanceSavingApplyModal from "./Modal/FinanceSavingApplyModal"
+import { appendEulReul } from "@/util/isEndWithConsonant"
 
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,12 +23,17 @@ const APPLY_ICON = (
 	</svg>
 )
 
-type FinanceDepositListProductProps = {
-	data: depositProductType
+type FinanceListProductProps = {
+	data: productTypeForDeposit
+	type: 'deposit'
+	account: number
+} | {
+	data: productTypeForSaving
+	type: 'saving'
 	account: number
 }
 
-function FinanceDepositListProduct({ data, account }: FinanceDepositListProductProps) {
+function FinanceListProduct({ data, account, type }: FinanceListProductProps) {
 	// const [openComp, closeComp, compState] = useCompHandler()
 	const modal = useModal()
 	const [nation] = useGetNation()
@@ -57,7 +64,7 @@ function FinanceDepositListProduct({ data, account }: FinanceDepositListProductP
 					transition={"scale"}
 				/>
 			)} */}
-			{data &&
+			{data && type === 'deposit' &&
 				modal(
 					<ModalContent
 						width={"300px"}
@@ -68,7 +75,26 @@ function FinanceDepositListProduct({ data, account }: FinanceDepositListProductP
 							<FinanceDepositApplyModal
 								closeComp={modal.close}
 								unit={` ${nation?.currency}`}
-								data={data}
+								data={data as productTypeForDeposit}
+								account={account}
+							/>
+						}
+						forChild={true}
+					/>,
+				)}
+
+			{data && type === 'saving' &&
+				modal(
+					<ModalContent
+						width={"300px"}
+						title={"예금 신청"}
+						titleSize={"var(--student-h1)"}
+						icon={APPLY_ICON}
+						content={
+							<FinanceSavingApplyModal
+								closeComp={modal.close}
+								unit={` ${nation?.currency}`}
+								data={data as productTypeForSaving}
 								account={account}
 							/>
 						}
@@ -80,9 +106,9 @@ function FinanceDepositListProduct({ data, account }: FinanceDepositListProductP
 				<div css={labelSectionCSS}>
 					<div css={titleSectionCSS}>
 						<div css={titleCSS}>{data.title}</div>
-						<div>
-							<span css={highlightFontCSS}>{data.period}일</span> 예금
-						</div>
+						
+							{type === 'deposit' && <div><span css={highlightFontCSS}>{data.period}일</span> 예금</div>}
+							{type === 'saving' && <div>{data.amount}{nation.currency} <span css={highlightFontCSS}>{data.count}주간</span> 적금</div>}
 					</div>
 
 					<div>
@@ -139,4 +165,4 @@ const titleSectionCSS = css`
 	gap: 8px;
 `
 
-export default FinanceDepositListProduct
+export default FinanceListProduct

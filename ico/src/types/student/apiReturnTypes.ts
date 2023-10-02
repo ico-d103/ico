@@ -98,8 +98,38 @@ export type getFinanceInvestTimeType = {
 // }
 
 // ----------------------------------------------
-// 예금
-export type myDepositType = {
+// 예금 & 적금
+
+
+// export type myInfoType = {
+// 	id: string
+// 	title: null | string
+// 	interest: number
+// 	startDate: string
+// 	endDate: string
+// 	creditRating: number
+// 	amount: number
+// 	interestAmount: number
+// 	end: boolean
+
+// 	count?: number
+// 	totalCount?: number
+// 	day?: string
+// }
+
+// export type productType = {
+// 	id: number
+// 	title: string
+// 	interest: number
+
+// 	period?: number
+
+// 	count?: number
+// 	amount?: number
+// }
+
+
+export type myInfoTypeForDeposit = {
 	id: string
 	title: null | string
 	interest: number
@@ -111,51 +141,79 @@ export type myDepositType = {
 	end: boolean
 }
 
-export type depositProductType = {
+export type productTypeForDeposit = {
 	id: number
 	title: string
-	period: number
 	interest: number
+	period: number
 }
 
-export type getFinanceDepositType = {
+export type myInfoTypeForSaving = {
+	id: string
+	title: null | string
+	interest: number
+	startDate: string
+	creditRating: number
+	amount: number
+	interestAmount: number
+	end: boolean
+	count: number
+	totalCount: number
+	day: string
+}
+
+export type productTypeForSaving = {
+	id: number
+	title: string
+	interest: number
+	count: number
+	amount: number
+}
+
+export type getFinanceType = {
+	type: 'deposit'
 	account: number
-	myDeposit: myDepositType[]
-	depositProduct: depositProductType[]
+	myInfo: myInfoTypeForDeposit[]
+	product: productTypeForDeposit[]
+} | {
+	type: 'saving'
+	account: number
+	myInfo: myInfoTypeForSaving[]
+	product: productTypeForSaving[]
 }
 
-// 예금 끝
+// 예금 & 적금 끝
 // ----------------------------------------------
 // ----------------------------------------------
 // 적금
 
-export type mySavingType = {
-	id: string
-	title: null | string
-	interest: number
-	startDate: string
-	endDate: string
-	creditRating: number
-	amount: number
-	count: number
-	totalCount: number
-	interestAmount: number
-	day: string
-	end: boolean
-}
+// export type mySavingType = {
+// 	id: string
+// 	title: null | string
+// 	interest: number
+// 	startDate: string
+// 	endDate: string
+// 	creditRating: number
+// 	amount: number
+// 	count: number
+// 	totalCount: number
+// 	interestAmount: number
+// 	day: string
+// 	end: boolean
+// }
 
-export type savingProductType = {
-	id: number
-	title: string
-	period: number
-	interest: number
-}
+// export type savingProductType = {
+// 	id: number
+// 	title: string
+// 	period: number
+// 	interest: number
+// }
 
-export type getFinanceSavingType = {
-	account: number
-	mySaving: mySavingType[]
-	savingProduct: savingProductType[]
-}
+// export type getFinanceSavingType = {
+// 	account: number
+// 	mySaving: mySavingType[]
+// 	savingProduct: savingProductType[]
+// }
 
 //적금 끝
 // ----------------------------------------------

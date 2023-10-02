@@ -3,14 +3,14 @@ import React from "react"
 import { css } from "@emotion/react"
 // import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
 import { getFinanceDepositDetailAPI } from "@/api/student/finance/getFinanceDepositDetailAPI"
-import { myDepositType } from "@/types/student/apiReturnTypes"
+import { myInfoTypeForDeposit, myInfoTypeForSaving } from "@/types/student/apiReturnTypes"
 import useGetNation from "@/hooks/useGetNation"
 import Button from "@/components/common/Button/Button"
 import Modal from "@/components/common/Modal/Modal"
 import ModalContent from "@/components/common/Modal/ModalContent"
 // import FinanceDepositDeleteModal from "../Modal/FinanceDepositDeleteModal"
 
-import FinanceDepositDeleteModal from "@/components/student/Finance/Bank/Modal/FinanceDepositDeleteModal"
+import FinanceDeleteModal from "@/components/student/Finance/Bank/Modal/FinanceDeleteModal"
 import useCompHandler from "@/hooks/useCompHandler"
 import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
@@ -20,6 +20,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/router"
 import { getDateDiff } from "@/util/getDateDiff"
 import useModal from "@/components/common/Modal/useModal"
+import { deleteFinanceSavingsAPI } from "@/api/student/finance/deleteFinanceSavingsAPI"
 
 const APPLY_ICON = (
 	<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -33,11 +34,19 @@ const APPLY_ICON = (
 	</svg>
 )
 
-type FinanceDepositDetailProps = {
-	data: myDepositType
+type FinanceDetailProps = {
+	type: 'deposit'
+	data: myInfoTypeForDeposit
+	startDate: string
+	endDate: string
+} | {
+	type: 'saving'
+	data: myInfoTypeForSaving
+	startDate: string
+	endDate: string
 }
 
-function FinanceDepositDetail({ data }: FinanceDepositDetailProps) {
+function FinanceDetail({ type, data, startDate, endDate }: FinanceDetailProps) {
 	const router = useRouter()
 	const { pid } = router.query
 
@@ -50,34 +59,45 @@ function FinanceDepositDetail({ data }: FinanceDepositDetailProps) {
 	const queryClient = useQueryClient()
 
 	const deleteFinanceDepositMutation = useMutation(({ id }: { id: string }) => deleteFinanceDepositAPI({ id }))
+	const deleteFinanceSavingMutation = useMutation(({ id }: { id: string }) => deleteFinanceSavingsAPI({ id }))
 
-	const rangeDate = getDateDiff(data.endDate, data.startDate)
-	const restDate = getDateDiff(data.endDate, null)
 
-	const submitHandler = () => {
+	const rangeDate = getDateDiff(endDate, startDate)
+	const restDate = getDateDiff(endDate, null)
+
+	const depositSubmitHandler = () => {
 		deleteFinanceDepositMutation.mutate(
 			{ id: data.id },
 			{
 				onSuccess: () => {
-					noti({
-						content: (
-							<NotiTemplate
-								type={"ok"}
-								content="예금 만기 수령을 했어요!"
-								buttons={[
-									{
-										label: "내역 보기",
-										function: () => {
-											navigate("/student/home/asset", "bottomToTop")
+					if (data.end) {
+						noti({
+							content: (
+								<NotiTemplate
+									type={"ok"}
+									content="예금 만기 수령을 했어요!"
+									buttons={[
+										{
+											label: "내역 보기",
+											function: () => {
+												navigate("/student/home/asset", "bottomToTop")
+											},
 										},
-									},
-								]}
-							/>
-						),
-						width: "300px",
-						height: "120px",
-						duration: 3000,
-					})
+									]}
+								/>
+							),
+							width: "300px",
+							height: "120px",
+							duration: 5000,
+						})
+					} else {
+						noti({
+							content: <NotiTemplate type={"ok"} content="예금 중도 해지를 했어요!" />,
+							width: "300px",
+							height: "120px",
+							duration: 5000,
+						})
+					}
 					queryClient.invalidateQueries(["student", "homeFinanceGetRate"])
 					navigate("/student/finance/deposit", "bottomToTop")
 					// closeComp()
@@ -85,43 +105,78 @@ function FinanceDepositDetail({ data }: FinanceDepositDetailProps) {
 				},
 				onError: () => {
 					noti({
-						content: <NotiTemplate type={"alert"} content="예금 만기 수령에 실패했어요!" />,
+						content: <NotiTemplate type={"alert"} content="처리에 실패했어요!" />,
 						width: "300px",
 						height: "120px",
-						duration: 3000,
+						duration: 5000,
 					})
 				},
 			},
 		)
 	}
 
-	const cancelHandler = () => {
-		deleteFinanceDepositMutation.mutate(
+	const savingSubmitHandler = () => {
+		deleteFinanceSavingMutation.mutate(
 			{ id: data.id },
 			{
 				onSuccess: () => {
-					noti({
-						content: <NotiTemplate type={"ok"} content="중도 해지를 했어요!" />,
-						width: "300px",
-						height: "120px",
-						duration: 3000,
-					})
-					queryClient.invalidateQueries(["student", "homeFinanceGetRate"])
-					navigate("/student/finance/deposit", "bottomToTop")
+					if (data.end) {
+						noti({
+							content: (
+								<NotiTemplate
+									type={"ok"}
+									content="적금 만기 수령을 했어요!"
+									buttons={[
+										{
+											label: "내역 보기",
+											function: () => {
+												navigate("/student/home/asset", "bottomToTop")
+											},
+										},
+									]}
+								/>
+							),
+							width: "300px",
+							height: "120px",
+							duration: 5000,
+						})
+					} else {
+						noti({
+							content: <NotiTemplate type={"ok"} content="적금 중도 해지를 했어요!" />,
+							width: "300px",
+							height: "120px",
+							duration: 5000,
+						})
+					}
+					
+					queryClient.invalidateQueries(["student", "homeFinanceGetSavings"])
+					navigate("/student/finance/savings", "bottomToTop")
 					// closeComp()
 					modal.close()
 				},
 				onError: () => {
 					noti({
-						content: <NotiTemplate type={"alert"} content="중도 해지에 실패했어요!" />,
+						content: <NotiTemplate type={"alert"} content="처리에 실패했어요!" />,
 						width: "300px",
 						height: "120px",
-						duration: 3000,
+						duration: 5000,
 					})
 				},
 			},
 		)
 	}
+	
+	const submitHandler = () => {
+		if (type === 'deposit') {
+			depositSubmitHandler()
+		} else {
+			savingSubmitHandler()
+		}
+	}
+
+
+
+
 
 	// const submitHandler = () => {
 	// 	deleteFinanceDepositAPI({}).then((res) => {
@@ -161,10 +216,10 @@ function FinanceDepositDetail({ data }: FinanceDepositDetailProps) {
 				modal(
 					<ModalContent
 						width={"300px"}
-						title={"예금 중도 해지"}
+						title={`${type === 'deposit' ? '예금' : '적금'} 중도 해지`}
 						titleSize={"var(--student-h1)"}
 						icon={APPLY_ICON}
-						content={<FinanceDepositDeleteModal cancelHandler={cancelHandler} closeComp={modal.close} />}
+						content={<FinanceDeleteModal cancelHandler={submitHandler} closeComp={modal.close} />}
 						forChild={true}
 					/>,
 				)}
@@ -192,7 +247,7 @@ function FinanceDepositDetail({ data }: FinanceDepositDetailProps) {
 							</span>{" "}
 							남았어요!
 						</div>
-						<div css={endDateCSS}>{data.endDate}</div>
+						<div css={endDateCSS}>{endDate}</div>
 					</div>
 					<div css={barWrapperCSS}>
 						<div css={barCSS({ rangeDate, restDate })} />
@@ -207,7 +262,7 @@ function FinanceDepositDetail({ data }: FinanceDepositDetailProps) {
 					<div css={adContentCSS}>{data.interest}%</div>
 				</ContentWrapper>
 
-				{restDate === 0 ? (
+				{data.end ? (
 					<Button
 						text={"만기 수령"}
 						fontSize={`var(--student-h3)`}
@@ -311,4 +366,4 @@ const barCSS = ({ rangeDate, restDate }: { rangeDate: number; restDate: number }
 	`
 }
 
-export default FinanceDepositDetail
+export default FinanceDetail

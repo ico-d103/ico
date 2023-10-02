@@ -2,14 +2,11 @@ import React, { useState } from "react"
 import Input from "@/components/common/Input/Input"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
-// import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
-import { productTypeForDeposit } from "@/types/student/apiReturnTypes"
-import { postFinanceDepositAPI } from "@/api/student/finance/postFinanceDepositAPI"
 import useNotification from "@/hooks/useNotification"
 import UseAnimations from "react-useanimations"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
-import useGetNation from "@/hooks/useGetNation"
+import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 const ALERT_ICON = (
@@ -36,91 +33,48 @@ const CHECK_ICON = (
 	</svg>
 )
 
-type FinanceDepositApplyModalProps = {
-	data: productTypeForDeposit
-	unit: string
+type FinanceDepositDeleteModalProps = {
 	closeComp: Function
-	account: number
+	cancelHandler: Function
 }
 
-function FinanceDepositApplyModal({ data, unit, closeComp, account }: FinanceDepositApplyModalProps) {
+function FinanceDeleteModal({closeComp, cancelHandler }: FinanceDepositDeleteModalProps) {
 	const noti = useNotification()
-	const [value, setValue] = useState<string>("")
-	const [nation] = useGetNation()
-	const queryClient = useQueryClient()
+	const [value, setValue] = useState<number>(0)
 
-	const postFinanceDepositMutation = useMutation((body: { id: number; amount: number }) =>
-		postFinanceDepositAPI({ body }),
-	)
+	// const queryClient = useQueryClient()
 
-	const submitHandler = () => {
-		postFinanceDepositMutation.mutate(
-			{ id: data.id, amount: Number(value) },
-			{
-				onSuccess: () => {
-					noti({
-						content: <NotiTemplate type={"ok"} content="예금 신청에 성공했어요!" />,
-						duration: 3000,
-					})
-
-					queryClient.invalidateQueries(["student", "homeFinanceGetRate"])
-					closeComp()
-				},
-				onError: () => {
-					noti({
-						content: <NotiTemplate type={"alert"} content="예금 신청에 실패했어요!" />,
-						duration: 3000,
-					})
-				},
-			},
-		)
-	}
-
-	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (Number(e.target.value) <= account) {
-			setValue(() => e.target.value)
-		}
-	}
+	// const postFinanceDepositMutation = useMutation((body: { id: number; amount: number }) =>
+	// 	deleteFinanceDepositAPI({ body }),
+	// )
 
 
+	
 	return (
 		<div css={wrapperCSS}>
-			<div css={grayLabelCSS}>원하는 액수를 입력해 주세요!</div>
-			<Input
-				value={value}
-				onChange={onChangeHandler}
-				theme={"mobileWhite"}
-				textAlign={"right"}
-				type={'number'}
-				autoFocus
-				rightContent={
-					<div css={balanceLabelCSS}>
-						/ {account.toLocaleString("ko-KR")} {unit}
-					</div>
-				}
-				customCss={inputCSS}
-			/>
+			
 			<div css={mentWrapperCSS}>
 				<div css={iconWrapperCSS}>{ALERT_ICON}</div>
 
-				<span css={mentCSS}>중도에 해지하면, 원금만 돌려받을 수 있어요!</span>
+				<span css={mentCSS}>중도에 해지하면 이자는 받을 수 없어요!</span>
 			</div>
-			<div css={mentWrapperCSS}>
-				<div css={iconWrapperCSS}>{CHECK_ICON}</div>
+			
+			
 
-				<span css={mentCSS}>
-					만기가 되면 원금의 {data.interest}퍼센트 만큼 추가로 더 돌려받을 수 있어요!
-				</span>
+			<div css={mentWrapperCSS}>
+				<div css={iconWrapperCSS}>{ALERT_ICON}</div>
+
+				<span css={mentCSS}>한번 해지하면 다시 상품을 가입할 때 처음부터 다시 진행해야 해요!</span>
 			</div>
 
 			<div css={buttonWrapperCSS}>
 				<Button
-					text={"정기 예금 신청"}
+					text={"매도"}
 					fontSize={"var(--student-h3)"}
 					width={"47%"}
-					theme={"mobileSoft2"}
+					theme={"mobileWarning"}
 					onClick={() => {
-						submitHandler()
+						cancelHandler()
 					}}
 				/>
 				<Button
@@ -149,12 +103,12 @@ const grayLabelCSS = css`
 
 const inputCSS = css`
 	width: 100%;
-	margin-bottom: 16px;
+	margin-bottom: 12px;
 `
 
 const mentWrapperCSS = css`
 	display: flex;
-	margin-bottom: 8px;
+	margin-bottom: 12px;
 `
 
 const iconWrapperCSS = css`
@@ -184,4 +138,4 @@ const balanceLabelCSS = css`
 	white-space: nowrap;
 `
 
-export default FinanceDepositApplyModal
+export default FinanceDeleteModal

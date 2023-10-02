@@ -10,6 +10,8 @@ import LoadImage from "@/components/common/LoadImage/LoadImage"
 import { postCreateNationAPI } from "@/api/teacher/user/postCreateNationAPI"
 import useGetTokenStatus from "@/hooks/useGetTokenStatus"
 import { removeCookie } from "@/api/cookie"
+import useNotification from "@/hooks/useNotification"
+import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
 
 const inputReducer = (
 	state: { school: string; grade: string; class: string; nation: string; currency: string },
@@ -75,6 +77,7 @@ function create() {
 	const [phase, setPhase] = useState<number>(0)
 	const router = useRouter()
 	const [getTokenStatus, setTokenStatus] = useGetTokenStatus()
+	const noti = useNotification()
 
 	useEffect(() => {
 		if (phase === 2) {
@@ -255,7 +258,7 @@ function create() {
 					setPhase(() => 2)
 				})
 				.catch((err) => {
-					console.log(err)
+					noti({content: <NotiTemplate type={'alert'} content={err.response.data.message}/>, duration: 5000})
 				})
 		} else {
 			checkValidNationHandler(true)
