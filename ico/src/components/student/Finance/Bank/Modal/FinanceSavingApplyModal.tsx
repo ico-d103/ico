@@ -2,12 +2,16 @@ import React, { useState } from "react"
 import Input from "@/components/common/Input/Input"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
+// import { getFinanceDepositRateType } from "@/types/student/apiReturnTypes"
+import { productTypeForSaving } from "@/types/student/apiReturnTypes"
+import { postFinanceDepositAPI } from "@/api/student/finance/postFinanceDepositAPI"
 import useNotification from "@/hooks/useNotification"
 import UseAnimations from "react-useanimations"
 import alertTriangle from "react-useanimations/lib/alertTriangle"
 import NotiTemplate from "@/components/common/StackNotification/NotiTemplate"
-import { deleteFinanceDepositAPI } from "@/api/student/finance/deleteFinanceDepositAPI"
+import useGetNation from "@/hooks/useGetNation"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { postFinanceSavingAPI } from "@/api/student/finance/postFinanceSavingAPI"
 
 const ALERT_ICON = (
 	<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -33,48 +37,81 @@ const CHECK_ICON = (
 	</svg>
 )
 
-type FinanceDepositDeleteModalProps = {
+type FinanceSavingApplyModalProps = {
+	data: productTypeForSaving
+	unit: string
 	closeComp: Function
-	cancelHandler: Function
+	account: number
 }
 
-function FinanceDepositDeleteModal({closeComp, cancelHandler }: FinanceDepositDeleteModalProps) {
+function FinanceSavingApplyModal({ data, unit, closeComp, account }: FinanceSavingApplyModalProps) {
 	const noti = useNotification()
-	const [value, setValue] = useState<number>(0)
+	const [value, setValue] = useState<string>("")
+	const [nation] = useGetNation()
+	const queryClient = useQueryClient()
 
-	// const queryClient = useQueryClient()
+	const postFinanceSavingMutation = useMutation(({id}: {id: number}) =>
+		postFinanceSavingAPI({ id }),
+	)
 
-	// const postFinanceDepositMutation = useMutation((body: { id: number; amount: number }) =>
-	// 	deleteFinanceDepositAPI({ body }),
-	// )
+	const submitHandler = () => {
+		postFinanceSavingMutation.mutate(
+			{ id: data.id },
+			{
+				onSuccess: () => {
+					noti({
+						content: <NotiTemplate type={"ok"} content="적금 신청에 성공했어요!" />,
+						duration: 3000,
+					})
+
+					queryClient.invalidateQueries(["student", "homeFinanceGetSavings"])
+					closeComp()
+				},
+				onError: () => {
+					noti({
+						content: <NotiTemplate type={"alert"} content="적금 신청에 실패했어요!" />,
+						duration: 3000,
+					})
+				},
+			},
+		)
+	}
+
+	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (Number(e.target.value) <= account) {
+			setValue(() => e.target.value)
+		}
+	}
 
 
-	
 	return (
 		<div css={wrapperCSS}>
-			
 			<div css={mentWrapperCSS}>
 				<div css={iconWrapperCSS}>{ALERT_ICON}</div>
 
-				<span css={mentCSS}>중도에 해지하면 이자는 받을 수 없어요!</span>
+				<span css={mentCSS}>통장에 돈이 부족하면 자동으로 중도에 해지되요!</span>
 			</div>
-			
-			
-
 			<div css={mentWrapperCSS}>
 				<div css={iconWrapperCSS}>{ALERT_ICON}</div>
 
-				<span css={mentCSS}>한번 해지하면 다시 예금을 시작할 때 처음부터 다시 진행해야 해요!</span>
+				<span css={mentCSS}>중도에 해지하면, 원금만 돌려받을 수 있어요!</span>
+			</div>
+			<div css={mentWrapperCSS}>
+				<div css={iconWrapperCSS}>{CHECK_ICON}</div>
+
+				<span css={mentCSS}>
+					만기가 되면 원금의 {data.interest}퍼센트 만큼 추가로 더 돌려받을 수 있어요!
+				</span>
 			</div>
 
 			<div css={buttonWrapperCSS}>
 				<Button
-					text={"매도"}
+					text={"정기 예금 신청"}
 					fontSize={"var(--student-h3)"}
 					width={"47%"}
-					theme={"mobileWarning"}
+					theme={"mobileSoft2"}
 					onClick={() => {
-						cancelHandler()
+						submitHandler()
 					}}
 				/>
 				<Button
@@ -103,12 +140,12 @@ const grayLabelCSS = css`
 
 const inputCSS = css`
 	width: 100%;
-	margin-bottom: 12px;
+	margin-bottom: 16px;
 `
 
 const mentWrapperCSS = css`
 	display: flex;
-	margin-bottom: 12px;
+	margin-bottom: 8px;
 `
 
 const iconWrapperCSS = css`
@@ -138,4 +175,4 @@ const balanceLabelCSS = css`
 	white-space: nowrap;
 `
 
-export default FinanceDepositDeleteModal
+export default FinanceSavingApplyModal

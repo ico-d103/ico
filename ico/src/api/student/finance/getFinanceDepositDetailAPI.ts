@@ -1,5 +1,5 @@
 import { defaultInstance, tokenInstance } from "@/api/instance"
-import { myDepositType } from "@/types/student/apiReturnTypes"
+import { myInfoTypeForDeposit } from "@/types/student/apiReturnTypes"
 
 type paramsType = {
     id: string
@@ -7,7 +7,7 @@ type paramsType = {
 
 type responseType = {
     status: number
-    data: myDepositType
+    data: myInfoTypeForDeposit
 }
 
 export const getFinanceDepositDetailAPI = async ({id}: paramsType) => {

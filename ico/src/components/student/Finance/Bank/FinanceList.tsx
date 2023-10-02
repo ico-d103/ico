@@ -1,8 +1,8 @@
 import React from "react"
 import { css } from "@emotion/react"
-import FinanceDepositListProduct from "./FinanceDepositListProduct"
-import FinanceDepositListMyProduct from "./FinanceDepositListMyProduct"
-import { getFinanceDepositType, getFinanceSavingType } from "@/types/student/apiReturnTypes"
+import FinanceDepositListProduct from "./FinanceListProduct"
+import FinanceListMyProduct from "./FinanceListMyProduct"
+import { getFinanceType, productTypeForDeposit, productTypeForSaving, myInfoTypeForDeposit, myInfoTypeForSaving } from "@/types/student/apiReturnTypes"
 import { useAtom } from "jotai"
 import { isNavigating } from "@/store/store"
 import Loading from "../../common/Loading/Loading"
@@ -12,22 +12,45 @@ import QueryAdapter from "@/components/common/Adapter/QueryAdapter"
 import { UseQueryResult } from "@tanstack/react-query"
 
 type FinanceDepositListProps = {
-	query: UseQueryResult<getFinanceDepositType, unknown>
+	query: UseQueryResult<getFinanceType, unknown>
 	
 }
-function FinanceDepositList({query}: FinanceDepositListProps) {
+function FinanceList({query}: FinanceDepositListProps) {
 	const [isNavigatingAtom, setIsNavigatingAtom] = useAtom(isNavigating)
 
 	const renderProduct =
-	query.data && query.data.depositProduct &&
-		query.data.depositProduct.map((item, idx) => {
-			return <FinanceDepositListProduct data={item} account={query.data.account} />
+	query.data && query.data.product &&
+		query.data.product.map((item, idx) => {
+			switch(query.data.type) {
+				case 'deposit':
+					return <FinanceDepositListProduct type={'deposit'} data={item as productTypeForDeposit} account={query.data.account} />
+				case 'saving':
+					return <FinanceDepositListProduct type={'saving'} data={item as productTypeForSaving} account={query.data.account} />
+				default:
+					break
+			}
+
 		})
 
 	const renderMyProduct =
-	query.data && query.data.myDeposit &&
-	query.data.myDeposit.map((item, idx) => {
-			return <FinanceDepositListMyProduct data={item} />
+	query.data && query.data.myInfo &&
+	query.data.myInfo.map((item, idx) => {
+			
+
+			switch(query.data.type) {
+				case 'deposit':
+					const getDepositItem = item as myInfoTypeForDeposit
+					return <FinanceListMyProduct endDate={getDepositItem.endDate} type={'deposit'} data={getDepositItem} />
+				case 'saving':
+					const getSavingItem = item as myInfoTypeForSaving
+					const startDate = new Date(getSavingItem.startDate)
+					const endDate = startDate
+					endDate.setDate(startDate.getDate() + ((getSavingItem.count + 2) * 7))
+					const endDateString = endDate.toDateString()
+					return <FinanceListMyProduct type={'saving'} data={getSavingItem} endDate={endDateString} />
+				default:
+					break
+			}
 		})
 
 	// const loading = (
@@ -63,21 +86,21 @@ function FinanceDepositList({query}: FinanceDepositListProps) {
 	return (
 		<div css={contentParentCSS}>
 			<div css={depositWrapperCSS}>
-				<div css={itemWrapperCSS({ display: query.data && query.data.myDeposit && query.data.myDeposit.length ? true : false, fill: false })}>
+				<div className="my-info" css={itemWrapperCSS({ display: query.data && query.data.myInfo && query.data.myInfo.length ? true : false, fill: false })}>
 					<div css={titleLabelCSS}>내가 신청한 예금</div>
-					<QueryAdapter query={query} isEmpty={!!(query.data && query.data.myDeposit && query.data.myDeposit.length === 0)}>
+					<QueryAdapter query={query} isEmpty={!!(query.data && query.data.myInfo && query.data.myInfo.length === 0)}>
 						{renderMyProduct}
 					</QueryAdapter>
 					{/* {isLoading && loading}
 					{data && data.myDeposit.length === 0 && empty} */}
 					
 				</div>
-				<div css={lineCSS({ display: query.data && query.data.myDeposit && query.data.myDeposit.length ? true : false })} />
+				<div className="product" css={lineCSS({ display: query.data && query.data.myInfo && query.data.myInfo.length ? true : false })} />
 				<div css={itemWrapperCSS({ display: true, fill: true })}>
 					<div css={titleLabelCSS}>예금 상품</div>
 					{/* {isLoading && loading}
 					{data && data.depositProduct.length === 0 && empty} */}
-					<QueryAdapter query={query} isEmpty={!!(query.data && query.data.depositProduct && query.data.depositProduct.length === 0)}>
+					<QueryAdapter query={query} isEmpty={!!(query.data && query.data.product && query.data.product.length === 0)}>
 					{renderProduct}
 					</QueryAdapter>
 					
@@ -132,7 +155,14 @@ const depositWrapperCSS = css`
 		min-width: 726px;
 		display: grid;
 		grid-template-columns: 50% 50%;
-		direction: rtl;
+		/* direction: rtl; */
+
+		.my-info {
+			order: 2;
+		}
+		.product {
+			order: 1;
+		}
 
 		flex: 1;
 		/* background-color: red;; */
@@ -207,4 +237,4 @@ const labelCSS = css`
 	direction: ltr;
 `
 
-export default FinanceDepositList
+export default FinanceList

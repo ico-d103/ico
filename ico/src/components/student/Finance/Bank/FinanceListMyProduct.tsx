@@ -1,5 +1,5 @@
 import React from "react"
-import { myDepositType } from "@/types/student/apiReturnTypes"
+import { myInfoTypeForDeposit, myInfoTypeForSaving } from "@/types/student/apiReturnTypes"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 import useGetNation from "@/hooks/useGetNation"
@@ -7,15 +7,29 @@ import { appendEulReul } from "@/util/isEndWithConsonant"
 import useNavigate from "@/hooks/useNavigate"
 import { getDateDiff } from "@/util/getDateDiff"
 
-type FinanceDepositListMyProductProps = {
-	data: myDepositType
-}
+type FinanceListMyProductProps = {
+	data: myInfoTypeForDeposit
+	type: 'deposit'
+	endDate: string
+} | {
+	data: myInfoTypeForSaving
+	type: 'saving'
+	endDate: string
+} 
 
-function FinanceDepositListMyProduct({ data }: FinanceDepositListMyProductProps) {
+function FinanceListMyProduct({ data, type, endDate }: FinanceListMyProductProps) {
 	const [nation] = useGetNation()
 	const navigate = useNavigate()
 
-	const restDate = getDateDiff(data.endDate, null)
+	const restDate = getDateDiff(endDate, null)
+
+	const navigateHandler = () => {
+		if (type === 'deposit') {
+			navigate(`/student/finance/deposit/${data.id}`, "bottomToTop")
+		} else {
+			navigate(`/student/finance/savings/${data.id}`, "bottomToTop")
+		}
+	}
 
 	const renderStillRemain = (
 		<div>
@@ -49,9 +63,7 @@ function FinanceDepositListMyProduct({ data }: FinanceDepositListMyProductProps)
 				fontSize={"var(--student-h3)"}
 				width={"72px"}
 				theme={"mobileNormal"}
-				onClick={() => {
-					navigate(`/student/finance/deposit/${data.id}`, "bottomToTop")
-				}}
+				onClick={navigateHandler}
 			/>
 		</div>
 	)
@@ -86,4 +98,4 @@ const highlightFontCSS = css`
 	color: var(--student-main-color-5);
 `
 
-export default FinanceDepositListMyProduct
+export default FinanceListMyProduct

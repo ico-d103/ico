@@ -1,12 +1,12 @@
 import { defaultInstance, tokenInstance } from "@/api/instance"
-import { getFinanceDepositType } from "@/types/student/apiReturnTypes"
+import { getFinanceType } from "@/types/student/apiReturnTypes"
 
 type paramsType = {
 }
 
 type responseType = {
     status: number
-    data: getFinanceDepositType
+    data: getFinanceType
 }
 
 export const getFinanceDepositAPI = async ({}: paramsType) => {
