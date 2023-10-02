@@ -1,5 +1,5 @@
 import React from "react"
-import { depositProductType, getFinanceInvestListStockItemType } from "@/types/student/apiReturnTypes"
+import { getFinanceInvestListStockItemType } from "@/types/student/apiReturnTypes"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 import Modal from "@/components/common/Modal/Modal"
