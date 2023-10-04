@@ -75,13 +75,12 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Page<Student> findByStudentJobIsNotNull(Pageable pageable);
 
     /**
-     * 15일에 월급을 지급받을 금액이 있는 학생들의 목록 조회
+     * 쌓은 월급이 0이상이고 오늘이 월급일인 국가의 학생 목록 조회
      *
      * @param salary
-     * @param pageable
      * @return
      */
-    Page<Student> findBySalaryGreaterThan(Integer salary, Pageable pageable);
+    Page<Student> findBySalaryGreaterThanAndNationIdIn(Integer salary, List<Long> nationIds, Pageable pageable);
 
     /**
      * 같은 나라의 같은 직업을 가진 학생들 조회

@@ -1,11 +1,13 @@
 package com.ico.batch.job;
 
-import com.ico.core.service.DepositSalaryService;
 import com.ico.core.code.TaxType;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.Tax;
+import com.ico.core.repository.NationRepository;
+import com.ico.core.repository.PaydayRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TaxRepository;
+import com.ico.core.service.DepositSalaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -23,6 +25,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +50,8 @@ public class DepositSalaryConfig {
     // Repository
     public final StudentRepository studentRepository;
     public final TaxRepository taxRepository;
+    public final NationRepository nationRepository;
+    public final PaydayRepository paydayRepository;
 
 
     @Bean
@@ -73,11 +79,46 @@ public class DepositSalaryConfig {
     @StepScope
     public RepositoryItemReader<Student> depositSalaryReader() {
         log.info(">>>>>> depositSalaryReader");
+        LocalDate now = LocalDate.now().plusDays(1);
+        byte day = (byte) now.getDayOfMonth();
+
+        // 이번 달의 마지막 날 구하기
+        LocalDate lastDayOfCurrentMonth = now.withDayOfMonth(now.lengthOfMonth());
+        List<Long> nations = new ArrayList<>();
+
+        if (day >= 28) {
+            if (now.equals(lastDayOfCurrentMonth)) {
+                log.info(">>>>>> 오늘이 달의 마지막날!");
+                //오늘이 현재 달의 마지막날인 경우
+
+                //오늘 날짜 ~ 31일까지 숫자 리스트
+                List<Byte> dates = new ArrayList<>();
+
+                for (; day <= 31; day++) {
+                    dates.add(day);
+                }
+                nations = paydayRepository.findNationIdsByDateIsIn(dates);
+            }
+            else {
+                log.info(">>>>>> 오늘은 달의 마지막날이 아님");
+                // 현재 달의 마지막 날이 아닌 경우
+                nations = paydayRepository.findNationIdsByDateEqualsOne(day);
+            }
+        }
+        else {
+            nations = paydayRepository.findNationIdsByDateEqualsOne(day);
+        }
+
+        for (Long id : nations) {
+            log.info(">>>>>> 오늘이 월급날인 나라 : " + String.valueOf(id));
+        }
+
+
         return new RepositoryItemReaderBuilder<Student>()
                 .name("depositSalaryReader")
                 .repository(studentRepository)
-                .methodName("findBySalaryGreaterThan")
-                .arguments(0)
+                .methodName("findBySalaryGreaterThanAndNationIdIn")
+                .arguments(0, nations)
                 .pageSize(10)
                 .sorts(Collections.singletonMap("nationId", Sort.Direction.ASC))
                 .build();
