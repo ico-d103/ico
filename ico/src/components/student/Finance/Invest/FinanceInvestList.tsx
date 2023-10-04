@@ -2,11 +2,7 @@ import React from "react"
 import { css } from "@emotion/react"
 import FinanceInvestListItem from "./FinanceInvestListItem"
 import FinanceInvestListMyItem from "./FinanceInvestListMyItem"
-import {
-	getFinanceDepositType,
-	getFinanceInvestListStockItemType,
-	getFinanceInvestListMyItemType,
-} from "@/types/student/apiReturnTypes"
+import { getFinanceInvestListStockItemType, getFinanceInvestListMyItemType } from "@/types/student/apiReturnTypes"
 import { useAtom } from "jotai"
 import { isNavigating } from "@/store/store"
 import Loading from "../../common/Loading/Loading"
@@ -58,7 +54,6 @@ function FinanceInvestList({ investProductQueries, investMyProductQueries }: Fin
 					>
 						{renderMyProduct}
 					</QueryAdapter>
-
 				</div>
 				<div
 					css={lineCSS({ display: investMyProductQueries.data && investMyProductQueries.data.length ? true : false })}
@@ -73,7 +68,6 @@ function FinanceInvestList({ investProductQueries, investMyProductQueries }: Fin
 					>
 						{renderProduct}
 					</QueryAdapter>
-					
 				</div>
 			</div>
 		</div>

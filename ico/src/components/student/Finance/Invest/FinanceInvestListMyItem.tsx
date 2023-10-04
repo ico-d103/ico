@@ -1,5 +1,5 @@
 import React from "react"
-import { getFinanceInvestListMyItemDetailType, getFinanceInvestListMyItemType, myDepositType } from "@/types/student/apiReturnTypes"
+import { getFinanceInvestListMyItemDetailType, getFinanceInvestListMyItemType } from "@/types/student/apiReturnTypes"
 import { css } from "@emotion/react"
 import Button from "@/components/common/Button/Button"
 import useGetNation from "@/hooks/useGetNation"
