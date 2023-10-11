@@ -2,12 +2,12 @@ package com.ico.api.service.bank;
 
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
-import com.ico.core.document.Saving;
+import com.ico.core.entity.Saving;
 import com.ico.core.entity.SavingProduct;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
-import com.ico.core.repository.SavingMongoRepository;
+import com.ico.core.repository.SavingRepository;
 import com.ico.core.repository.SavingProductRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class SavingServiceImpl implements SavingService{
     private final SavingProductRepository savingProductRepository;
     private final StudentRepository studentRepository;
     private final TransactionService transactionService;
-    private final SavingMongoRepository savingMongoRepository;
+    private final SavingRepository savingRepository;
     private final SavingProductServiceImpl savingProductService;
 
     @Transactional
@@ -80,20 +80,20 @@ public class SavingServiceImpl implements SavingService{
                 .number(student.getNumber())
                 .name(student.getName())
                 .build();
-        savingMongoRepository.insert(saving);
+        savingRepository.save(saving);
 
         transactionService.addTransactionWithdraw("은행", studentId, amount, savingProduct.getTitle() + "적금");
     }
 
     @Transactional
     @Override
-    public void deleteSaving(HttpServletRequest request, String savingId) {
+    public void deleteSaving(HttpServletRequest request, Long savingId) {
         Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        Saving saving = savingMongoRepository.findByIdAndStudentId(savingId, studentId)
+        Saving saving = savingRepository.findByIdAndStudentId(savingId, studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_SAVING));
 
         // 총 납입 금액
@@ -119,6 +119,6 @@ public class SavingServiceImpl implements SavingService{
             transactionService.addTransactionDeposit(studentId, "은행", inputAmount, title);
 
             // 적금 삭제
-            savingMongoRepository.delete(saving);
+            savingRepository.delete(saving);
     }
 }

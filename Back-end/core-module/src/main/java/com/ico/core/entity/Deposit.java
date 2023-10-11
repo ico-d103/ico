@@ -1,12 +1,12 @@
-package com.ico.core.document;
+package com.ico.core.entity;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 
@@ -15,12 +15,12 @@ import java.time.LocalDateTime;
  *
  * @author 변윤경
  */
-@Document(collection = "deposit")
+@Entity(name = "deposit")
 @Getter
 @NoArgsConstructor
 public class Deposit {
     @Id
-    private String id;
+    private Long id;
 
     private Long studentId;
 
@@ -44,7 +44,7 @@ public class Deposit {
     private String name;
 
     @Builder
-    public Deposit(String id, Long studentId, byte interest, LocalDateTime startDate, LocalDateTime endDate, byte creditRating, int amount, String title, Long depositProductId, byte number, String name) {
+    public Deposit(Long id, Long studentId, byte interest, LocalDateTime startDate, LocalDateTime endDate, byte creditRating, int amount, String title, Long depositProductId, byte number, String name) {
         this.id = id;
         this.studentId = studentId;
         this.interest = interest;

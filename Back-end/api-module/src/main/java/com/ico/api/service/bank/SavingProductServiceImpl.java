@@ -8,7 +8,7 @@ import com.ico.api.dto.bank.SavingStudentResDto;
 import com.ico.api.dto.bank.savingProductJoinedStudentResDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
-import com.ico.core.document.Saving;
+import com.ico.core.entity.Saving;
 import com.ico.core.dto.SavingUpdateDto;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.SavingProduct;
@@ -16,7 +16,7 @@ import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.NationRepository;
-import com.ico.core.repository.SavingMongoRepository;
+import com.ico.core.repository.SavingRepository;
 import com.ico.core.repository.SavingProductRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class SavingProductServiceImpl implements SavingProductService{
     private final NationRepository nationRepository;
     private final StudentRepository studentRepository;
     private final SavingProductRepository savingProductRepository;
-    private final SavingMongoRepository savingMongoRepository;
+    private final SavingRepository savingRepository;
 
 
     @Override
@@ -57,7 +57,7 @@ public class SavingProductServiceImpl implements SavingProductService{
         for(SavingProduct savingProduct : savingProductList){
             List<savingProductJoinedStudentResDto> studentInfoList = new ArrayList<savingProductJoinedStudentResDto>();
 
-            List<Saving> savingList = savingMongoRepository.findAllBySavingProductId(savingProduct.getId());
+            List<Saving> savingList = savingRepository.findAllBySavingProductId(savingProduct.getId());
             for(Saving saving: savingList){
                 savingProductJoinedStudentResDto studentInfo = new savingProductJoinedStudentResDto();
                 studentInfo.setName(saving.getName());
@@ -105,7 +105,7 @@ public class SavingProductServiceImpl implements SavingProductService{
         }
 
         List<SavingStudentResDto> mySavingListReturn = new ArrayList<>();
-        List<Saving> mySavingList = savingMongoRepository.findAllByStudentId(studentId);
+        List<Saving> mySavingList = savingRepository.findAllByStudentId(studentId);
         for(Saving saving : mySavingList){
             SavingStudentResDto mySaving = new SavingStudentResDto();
 
@@ -132,10 +132,10 @@ public class SavingProductServiceImpl implements SavingProductService{
     }
 
     @Override
-    public SavingStudentResDto getSavingDetail(HttpServletRequest request, String savingId) {
+    public SavingStudentResDto getSavingDetail(HttpServletRequest request, Long savingId) {
         Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
 
-        Saving saving = savingMongoRepository.findById(savingId)
+        Saving saving = savingRepository.findById(savingId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_SAVING));
 
         if(!saving.getStudentId().equals(studentId)){

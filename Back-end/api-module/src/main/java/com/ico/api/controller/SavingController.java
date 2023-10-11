@@ -40,7 +40,7 @@ public class SavingController {
      * @return
      */
     @DeleteMapping("/student/{savingId}")
-    public ResponseEntity<HttpStatus> deleteSaving(HttpServletRequest request, @PathVariable String savingId){
+    public ResponseEntity<HttpStatus> deleteSaving(HttpServletRequest request, @PathVariable Long savingId){
         savingService.deleteSaving(request, savingId);
         return ResponseEntity.ok(HttpStatus.OK);
     }

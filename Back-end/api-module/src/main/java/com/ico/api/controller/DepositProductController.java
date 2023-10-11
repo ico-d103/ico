@@ -62,7 +62,7 @@ public class DepositProductController {
      * @return
      */
     @GetMapping("/student/{depositId}")
-    public ResponseEntity<DepositStudentResDto> getDepositDetail(HttpServletRequest request, @PathVariable String depositId){
+    public ResponseEntity<DepositStudentResDto> getDepositDetail(HttpServletRequest request, @PathVariable Long depositId){
         return ResponseEntity.ok(depositProductService.getDepositDetail(request, depositId));
     }
 

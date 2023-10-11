@@ -1,6 +1,6 @@
 package com.ico.batch.job;
 
-import com.ico.core.document.ShopTransaction;
+import com.ico.core.entity.ShopTransaction;
 import com.ico.core.entity.Student;
 import com.ico.core.repository.ShopTransactionRepository;
 import com.ico.core.repository.StudentRepository;

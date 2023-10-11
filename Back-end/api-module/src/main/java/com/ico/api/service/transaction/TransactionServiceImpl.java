@@ -4,11 +4,11 @@ import com.ico.api.dto.transaction.TransactionResDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.entity.Student;
-import com.ico.core.document.Transaction;
+import com.ico.core.entity.Transaction;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.StudentRepository;
-import com.ico.core.repository.TransactionMongoRepository;
+import com.ico.core.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService{
 
-    private final TransactionMongoRepository transactionMongoRepository;
+    private final TransactionRepository transactionRepository;
 
     private final StudentRepository studentRepository;
 
@@ -50,14 +50,14 @@ public class TransactionServiceImpl implements TransactionService{
     @Override
     public void addTransaction(Long to, Long from, int amount, String title) {
         Transaction transaction = Transaction.builder()
-                .from(String.valueOf(from))
-                .to(String.valueOf(to))
+                .fromUser(String.valueOf(from))
+                .toUser(String.valueOf(to))
                 .amount(Math.abs(amount))
                 .date(LocalDateTime.now())
                 .title(title)
                 .build();
 
-        transactionMongoRepository.insert(transaction);
+        transactionRepository.save(transaction);
     }
 
     /**
@@ -71,14 +71,14 @@ public class TransactionServiceImpl implements TransactionService{
     @Override
     public void addTransactionWithdraw(String to, Long from, int amount, String title) {
         Transaction transaction = Transaction.builder()
-                .from(String.valueOf(from))
-                .to(to)
+                .fromUser(String.valueOf(from))
+                .toUser(to)
                 .amount(Math.abs(amount))
                 .date(LocalDateTime.now())
                 .title(title)
                 .build();
 
-        transactionMongoRepository.insert(transaction);
+        transactionRepository.save(transaction);
     }
 
     /**
@@ -92,14 +92,14 @@ public class TransactionServiceImpl implements TransactionService{
     @Override
     public void addTransactionDeposit(Long to, String from, int amount, String title) {
         Transaction transaction = Transaction.builder()
-                .from(from)
-                .to(String.valueOf(to))
+                .fromUser(from)
+                .toUser(String.valueOf(to))
                 .amount(Math.abs(amount))
                 .date(LocalDateTime.now())
                 .title(title)
                 .build();
 
-        transactionMongoRepository.insert(transaction);
+        transactionRepository.save(transaction);
     }
 
     @Transactional(readOnly = true)
@@ -112,17 +112,17 @@ public class TransactionServiceImpl implements TransactionService{
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
         // 최신순으로 조회
-        List<Transaction> transactions = transactionMongoRepository.findAllByFromOrToOrderByIdDesc(String.valueOf(studentId), String.valueOf(studentId));
+        List<Transaction> histories = transactionRepository.findAllByFromUserOrToUserOrderByIdDesc(String.valueOf(studentId), String.valueOf(studentId));
 
         // 순서가 있는 map 생성
         Map<String, List<TransactionResDto>> map = new LinkedHashMap<>();
 
         int curAccount = student.getAccount();
 
-        for (Transaction transaction : transactions) {
+        for (Transaction transaction : histories) {
             String[] dateTime = transaction.getDate().format(Formatter.dateTime).split("-");
 
-            int amount = transaction.getFrom().equals(String.valueOf(studentId)) ? -1 * transaction.getAmount() : transaction.getAmount();
+            int amount = transaction.getFromUser().equals(String.valueOf(studentId)) ? -1 * transaction.getAmount() : transaction.getAmount();
             String source = getSource(String.valueOf(studentId), transaction) + " · " + dateTime[1];
             int balance = curAccount;
             curAccount += -1 * amount;
@@ -147,7 +147,7 @@ public class TransactionServiceImpl implements TransactionService{
      * @return 거래 대상
      */
     private String getSource(String studentId, Transaction transaction) {
-        String source = transaction.getFrom().equals(String.valueOf(studentId)) ? transaction.getTo() : transaction.getFrom();
+        String source = transaction.getFromUser().equals(String.valueOf(studentId)) ? transaction.getToUser() : transaction.getFromUser();
         if (isNumeric(source)) {
             return "학생 상점";
         }

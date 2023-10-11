@@ -19,9 +19,9 @@ import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.code.Password;
 import com.ico.core.code.Role;
-import com.ico.core.document.Deposit;
-import com.ico.core.document.Resume;
-import com.ico.core.document.Transaction;
+import com.ico.core.entity.Deposit;
+import com.ico.core.entity.Resume;
+import com.ico.core.entity.Transaction;
 import com.ico.core.entity.Coupon;
 import com.ico.core.entity.Invest;
 import com.ico.core.entity.Nation;
@@ -31,15 +31,15 @@ import com.ico.core.entity.StudentLicense;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.CouponRepository;
-import com.ico.core.repository.DepositMongoRepository;
+import com.ico.core.repository.DepositRepository;
 import com.ico.core.repository.InvestRepository;
 import com.ico.core.repository.NationRepository;
-import com.ico.core.repository.ResumeMongoRepository;
+import com.ico.core.repository.ResumeRepository;
 import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.StudentLicenseRepository;
 import com.ico.core.repository.StudentRepository;
 import com.ico.core.repository.TeacherRepository;
-import com.ico.core.repository.TransactionMongoRepository;
+import com.ico.core.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -82,9 +82,9 @@ public class StudentServiceImpl implements StudentService {
 
     private final TransactionService transactionService;
 
-    private final TransactionMongoRepository transactionMongoRepository;
+    private final TransactionRepository transactionRepository;
 
-    private final DepositMongoRepository depositMongoRepository;
+    private final DepositRepository depositRepository;
 
     private final InvestRepository investRepository;
 
@@ -96,7 +96,7 @@ public class StudentServiceImpl implements StudentService {
     private final CouponRepository couponRepository;
     private final StudentLicenseRepository studentLicenseRepository;
     private final StudentJobRepository studentJobRepository;
-    private final ResumeMongoRepository resumeRepository;
+    private final ResumeRepository resumeRepository;
 
     @Override
     public Long signUp(StudentSignUpRequestDto requestDto) {
@@ -196,7 +196,7 @@ public class StudentServiceImpl implements StudentService {
 
         // 페이지 번호 갯수
         // page 변수는 인덱스 값으로 적용
-        int totalPageNumber = (int) (((transactionMongoRepository.countByFromOrTo(studentIdx, studentIdx) - 1) / size) + 1);
+        int totalPageNumber = (int) (((transactionRepository.countByFromUserOrToUser(studentIdx, studentIdx) - 1) / size) + 1);
         if (page < 0) {
             log.info("[findStudent] 1 미만의 페이지 번호를 넘겨받은 경우");
             page = 0;
@@ -221,7 +221,7 @@ public class StudentServiceImpl implements StudentService {
 
         // 최신순으로 조회
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
-        Page<Transaction> transactions = transactionMongoRepository.findAllByFromOrTo(studentIdx, studentIdx, pageRequest);
+        Page<Transaction> transactions = transactionRepository.findAllByFromUserOrToUser(studentIdx, studentIdx, pageRequest);
 
         // 최신순 날짜 별로 묶어서 순서가 있는 Map 생성
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
@@ -229,7 +229,7 @@ public class StudentServiceImpl implements StudentService {
 
         for (Transaction transaction : transactions) {
             String date = transaction.getDate().format(formatter);
-            int amount = transaction.getFrom().equals(String.valueOf(studentId)) ? -1 * transaction.getAmount() : transaction.getAmount();
+            int amount = transaction.getFromUser().equals(String.valueOf(studentId)) ? -1 * transaction.getAmount() : transaction.getAmount();
 
             map.putIfAbsent(date, new ArrayList<>());
             map.get(date).add(TransactionColDto.builder()
@@ -254,7 +254,7 @@ public class StudentServiceImpl implements StudentService {
         // 학생의 예금 총합 반환
         CompletableFuture<Integer> futureAmount = CompletableFuture.supplyAsync(() -> {
             int amount = 0;
-            List<Deposit> depositList = depositMongoRepository.findAllByStudentId(studentId);
+            List<Deposit> depositList = depositRepository.findAllByStudentId(studentId);
             for (Deposit deposit : depositList) {
                 amount += deposit.getAmount();
             }
@@ -462,9 +462,9 @@ public class StudentServiceImpl implements StudentService {
                 resumeRepository.deleteAll(resumes);
             }
             // deposit
-            List<Deposit> deposits = depositMongoRepository.findAllByStudentId(studentId);
+            List<Deposit> deposits = depositRepository.findAllByStudentId(studentId);
             if (!deposits.isEmpty()) {
-                depositMongoRepository.deleteAll(deposits);
+                depositRepository.deleteAll(deposits);
             }
             student.setStudentJob(null);
             studentRepository.save(student);

@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class SavingStudentResDto {
-    private String id;
+    private Long id;
 
     private String title;
 
@@ -37,7 +37,7 @@ public class SavingStudentResDto {
     private boolean end;
 
     @Builder
-    public SavingStudentResDto(String id, String title, byte interest, String startDate, byte creditRating, int amount, byte count, byte totalCount, int interestAmount, String day, boolean end) {
+    public SavingStudentResDto(Long id, String title, byte interest, String startDate, byte creditRating, int amount, byte count, byte totalCount, int interestAmount, String day, boolean end) {
         this.id = id;
         this.title = title;
         this.interest = interest;

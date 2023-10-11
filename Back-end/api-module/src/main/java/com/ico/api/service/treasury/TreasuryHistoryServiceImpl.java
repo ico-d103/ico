@@ -6,7 +6,7 @@ import com.ico.api.dto.treasuryHistory.TreasuryHistoryTeacherColDto;
 import com.ico.api.dto.treasuryHistory.TreasuryHistoryTeacherResDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
-import com.ico.core.document.TreasuryHistory;
+import com.ico.core.entity.TreasuryHistory;
 import com.ico.core.entity.Nation;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
@@ -91,7 +91,7 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
                 .source(dto.getSource())
                 .amount(dto.getAmount())
                 .build();
-        treasuryHistoryRepository.insert(treasuryHistory);
+        treasuryHistoryRepository.save(treasuryHistory);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class TreasuryHistoryServiceImpl implements TreasuryHistoryService{
 
     @Transactional
     @Override
-    public void deleteTreasuryHistory(String treasuryHistoryId, HttpServletRequest request) {
+    public void deleteTreasuryHistory(Long treasuryHistoryId, HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         TreasuryHistory treasuryHistory = treasuryHistoryRepository.findById(treasuryHistoryId)

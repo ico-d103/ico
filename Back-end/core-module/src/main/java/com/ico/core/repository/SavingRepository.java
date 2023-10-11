@@ -1,7 +1,7 @@
 package com.ico.core.repository;
 
-import com.ico.core.document.Saving;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import com.ico.core.entity.Saving;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,10 +11,10 @@ import java.util.Optional;
  *
  * @author 변윤경
  */
-public interface SavingMongoRepository extends MongoRepository<Saving, String> {
+public interface SavingRepository extends JpaRepository<Saving, Long> {
     List<Saving> findAllBySavingProductId(Long savingProductId);
 
-    Optional<Saving> findByIdAndStudentId(String id, Long studentId);
+    Optional<Saving> findByIdAndStudentId(Long id, Long studentId);
 
     List<Saving> findAllByStudentId(Long studentId);
 

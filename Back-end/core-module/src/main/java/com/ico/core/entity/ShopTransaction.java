@@ -1,28 +1,29 @@
-package com.ico.core.document;
+package com.ico.core.entity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 /**
- * 분기별 거래 현황 기록
+ * 상점 거래액 내역
  *
  * @author 서재건
  */
-@Document
+@Entity(name = "shop_transaction")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Inflation {
+public class ShopTransaction {
 
     @Id
-    private String id;
+    private Long id;
 
     @Column(name = "nation_id")
     private Long nationId;
@@ -30,16 +31,14 @@ public class Inflation {
     @CreatedDate
     private LocalDateTime date;
 
-    private long totalAccount;
-
-    private long totalAmount;
+    @ColumnDefault("0")
+    private int amount;
 
     @Builder
-    public Inflation(String id, Long nationId, LocalDateTime date, long totalAccount, long totalAmount) {
+    public ShopTransaction(Long id, Long nationId, LocalDateTime date, int amount) {
         this.id = id;
         this.nationId = nationId;
         this.date = date;
-        this.totalAccount = totalAccount;
-        this.totalAmount = totalAmount;
+        this.amount = amount;
     }
 }

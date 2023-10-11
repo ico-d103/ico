@@ -80,7 +80,7 @@ public class TreasuryHistoryController {
      * @return
      */
     @DeleteMapping("/teacher/delete/{treasuryHistoryId}")
-    public ResponseEntity<HttpStatus> deleteTreasuryHistory(@PathVariable String treasuryHistoryId, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> deleteTreasuryHistory(@PathVariable Long treasuryHistoryId, HttpServletRequest request) {
         treasuryHistoryService.deleteTreasuryHistory(treasuryHistoryId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }

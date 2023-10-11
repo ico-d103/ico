@@ -39,7 +39,7 @@ public interface SavingProductService {
      * @param savingId
      * @return
      */
-    SavingStudentResDto getSavingDetail(HttpServletRequest request, String savingId);
+    SavingStudentResDto getSavingDetail(HttpServletRequest request, Long savingId);
 
     /**
      * 적금 상품 추가

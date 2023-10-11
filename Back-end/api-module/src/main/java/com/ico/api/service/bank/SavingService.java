@@ -24,6 +24,6 @@ public interface SavingService {
      * @param request
      * @param savingId
      */
-    void deleteSaving(HttpServletRequest request, String savingId);
+    void deleteSaving(HttpServletRequest request, Long savingId);
 
 }

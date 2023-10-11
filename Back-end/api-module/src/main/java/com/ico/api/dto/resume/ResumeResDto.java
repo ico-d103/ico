@@ -14,14 +14,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResumeResDto {
 
-    private String resumeId;
+    private Long resumeId;
 
     private String name;
 
     private int number;
 
     @Builder
-    public ResumeResDto(String resumeId, String name, int number) {
+    public ResumeResDto(Long resumeId, String name, int number) {
         this.resumeId = resumeId;
         this.name = name;
         this.number = number;
@@ -33,7 +33,7 @@ public class ResumeResDto {
      * @param student
      * @return
      */
-    public ResumeResDto of(String resumeId, Student student) {
+    public ResumeResDto of(Long resumeId, Student student) {
         return ResumeResDto.builder()
                 .resumeId(resumeId)
                 .name(student.getName())

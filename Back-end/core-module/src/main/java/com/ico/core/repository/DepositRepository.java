@@ -1,7 +1,7 @@
 package com.ico.core.repository;
 
-import com.ico.core.document.Deposit;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import com.ico.core.entity.Deposit;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,9 +11,9 @@ import java.util.Optional;
  *
  * @author 변윤경
  */
-public interface DepositMongoRepository extends MongoRepository<Deposit, String> {
+public interface DepositRepository extends JpaRepository<Deposit, Long> {
 
-    Optional<Deposit> findByIdAndStudentId(String id, Long studentId);
+    Optional<Deposit> findByIdAndStudentId(Long id, Long studentId);
 
     List<Deposit> findAllByStudentId(Long studentId);
 

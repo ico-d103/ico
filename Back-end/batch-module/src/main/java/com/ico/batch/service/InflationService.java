@@ -1,6 +1,6 @@
 package com.ico.batch.service;
 
-import com.ico.core.document.Inflation;
+import com.ico.core.entity.Inflation;
 import com.ico.core.repository.InflationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class InflationService {
                     .totalAmount(total[0])
                     .totalAccount(total[1])
                     .build();
-            inflationRepository.insert(inflation);
+            inflationRepository.save(inflation);
         }
     }
 

@@ -22,7 +22,7 @@ import com.ico.core.repository.JobLicenseRepository;
 import com.ico.core.repository.NationLicenseRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.PowerRepository;
-import com.ico.core.repository.ResumeMongoRepository;
+import com.ico.core.repository.ResumeRepository;
 import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +55,7 @@ public class JobServiceImpl implements JobService{
 
     private final StudentRepository studentRepository;
 
-    private final ResumeMongoRepository resumeMongoRepository;
+    private final ResumeRepository resumeRepository;
 
     private final S3UploadService s3UploadService;
 
@@ -255,7 +255,7 @@ public class JobServiceImpl implements JobService{
         }
 
         // 직업신청내역에서도 전부 삭제
-        resumeMongoRepository.deleteAllByStudentIdIn(studentIds);
+        resumeRepository.deleteAllByStudentIdIn(studentIds);
     }
 
     @Transactional
@@ -283,7 +283,7 @@ public class JobServiceImpl implements JobService{
         studentRepository.save(student);
 
         // 학생의 직업 신청 내역 전부 삭제
-        resumeMongoRepository.deleteAllByStudentId(studentId);
+        resumeRepository.deleteAllByStudentId(studentId);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.ico.api.dto.inflation;
 
-import com.ico.core.document.Inflation;
+import com.ico.core.entity.Inflation;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -19,5 +19,5 @@ public interface DepositService {
     /**
      * 예금 중도 해지, 수령
      */
-    void deleteDeposit(HttpServletRequest request, String depositId);
+    void deleteDeposit(HttpServletRequest request, Long depositId);
 }

@@ -1,6 +1,6 @@
 package com.ico.api.dto.coupon;
 
-import com.ico.core.document.CouponRequest;
+import com.ico.core.entity.CouponRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CouponRequestResDto {
 
-    private String id;
+    private Long id;
 
     private int number;
 
@@ -25,7 +25,7 @@ public class CouponRequestResDto {
     private String date;
 
     @Builder
-    public CouponRequestResDto(String id, int number, String name, String title, String date) {
+    public CouponRequestResDto(Long id, int number, String name, String title, String date) {
         this.id = id;
         this.number = number;
         this.name = name;

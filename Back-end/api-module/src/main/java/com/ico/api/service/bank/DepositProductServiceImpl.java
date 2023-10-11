@@ -9,14 +9,14 @@ import com.ico.api.dto.bank.DepositStudentResDto;
 import com.ico.api.dto.bank.depositProductJoinedStudentResDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
-import com.ico.core.document.Deposit;
+import com.ico.core.entity.Deposit;
 import com.ico.core.dto.DepositUpdatetDto;
 import com.ico.core.entity.DepositProduct;
 import com.ico.core.entity.Nation;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
-import com.ico.core.repository.DepositMongoRepository;
+import com.ico.core.repository.DepositRepository;
 import com.ico.core.repository.DepositProductRepository;
 import com.ico.core.repository.NationRepository;
 import com.ico.core.repository.StudentRepository;
@@ -41,7 +41,7 @@ public class DepositProductServiceImpl implements DepositProductService{
     private final NationRepository nationRepository;
     private final StudentRepository studentRepository;
     private final DepositProductRepository depositProductRepository;
-    private final DepositMongoRepository depositMongoRepository;
+    private final DepositRepository depositRepository;
 
     @Override
     public List<DepositProductTeacherResDto> findAllDepositTeacher(HttpServletRequest request) {
@@ -60,7 +60,7 @@ public class DepositProductServiceImpl implements DepositProductService{
             List<depositProductJoinedStudentResDto> studentInfoList = new ArrayList<depositProductJoinedStudentResDto>();
 
             // 해당 예금 상품에 가입한 학생 목록
-            List<Deposit> depositList = depositMongoRepository.findAllByDepositProductId(depositProduct.getId());
+            List<Deposit> depositList = depositRepository.findAllByDepositProductId(depositProduct.getId());
             for(Deposit deposit: depositList){
                 depositProductJoinedStudentResDto studentInfo = new depositProductJoinedStudentResDto();
                 studentInfo.setName(deposit.getName());
@@ -110,7 +110,7 @@ public class DepositProductServiceImpl implements DepositProductService{
         }
 
         List<DepositStudentResDto> myDepositListReturn = new ArrayList<>();
-        List<Deposit> myDepositList = depositMongoRepository.findAllByStudentId(studentId);
+        List<Deposit> myDepositList = depositRepository.findAllByStudentId(studentId);
         for(Deposit deposit : myDepositList){
             boolean isEnd = !LocalDate.now().isBefore(deposit.getEndDate().toLocalDate());
             DepositStudentResDto myDeposit = DepositStudentResDto.builder()
@@ -138,14 +138,14 @@ public class DepositProductServiceImpl implements DepositProductService{
     }
 
     @Override
-    public DepositStudentResDto getDepositDetail(HttpServletRequest request, String depositId) {
+    public DepositStudentResDto getDepositDetail(HttpServletRequest request, Long depositId) {
         Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
 
-        Deposit deposit = depositMongoRepository.findByIdAndStudentId(depositId, studentId)
+        Deposit deposit = depositRepository.findByIdAndStudentId(depositId, studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DEPOSIT));
 
         boolean isEnd = !LocalDate.now().isBefore(deposit.getEndDate().toLocalDate());

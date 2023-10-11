@@ -1,15 +1,15 @@
-package com.ico.core.document;
+package com.ico.core.entity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 /**
@@ -17,13 +17,13 @@ import java.time.LocalDateTime;
  *
  * @author 서재건
  */
-@Document(collection = "treasury_history")
+@Entity(name = "treasury_history")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TreasuryHistory {
 
     @Id
-    private String id;
+    private Long id;
 
     @Column(name = "nation_id")
     private Long nationId;
@@ -39,7 +39,7 @@ public class TreasuryHistory {
     private LocalDateTime date;
 
     @Builder
-    public TreasuryHistory(String id, Long nationId, String title, String source, int amount, LocalDateTime date) {
+    public TreasuryHistory(Long id, Long nationId, String title, String source, int amount, LocalDateTime date) {
         this.id = id;
         this.nationId = nationId;
         this.title = title;

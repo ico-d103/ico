@@ -3,7 +3,7 @@ package com.ico.api.service.inflation;
 import com.ico.api.dto.inflation.InflationResDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
-import com.ico.core.document.Inflation;
+import com.ico.core.entity.Inflation;
 import com.ico.core.repository.InflationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

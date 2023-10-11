@@ -3,12 +3,12 @@ package com.ico.api.service.bank;
 import com.ico.api.dto.bank.DepositReqDto;
 import com.ico.api.service.transaction.TransactionService;
 import com.ico.api.user.JwtTokenProvider;
-import com.ico.core.document.Deposit;
+import com.ico.core.entity.Deposit;
 import com.ico.core.entity.DepositProduct;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
-import com.ico.core.repository.DepositMongoRepository;
+import com.ico.core.repository.DepositRepository;
 import com.ico.core.repository.DepositProductRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class DepositServiceImpl implements DepositService{
-    private final DepositMongoRepository depositMongoRepository;
+    private final DepositRepository depositRepository;
     private final StudentRepository studentRepository;
     private final TransactionService transactionService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -90,7 +90,7 @@ public class DepositServiceImpl implements DepositService{
                 .number(student.getNumber())
                 .name(student.getName())
                 .build();
-        depositMongoRepository.insert(deposit);
+        depositRepository.save(deposit);
 
 
         // 거래 내역 기록
@@ -104,14 +104,14 @@ public class DepositServiceImpl implements DepositService{
      */
     @Transactional
     @Override
-    public void deleteDeposit(HttpServletRequest request, String depositId) {
+    public void deleteDeposit(HttpServletRequest request, Long depositId) {
         Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 예금 신청 내역 확인 (학생 본인 확인 포함)
-        Deposit deposit = depositMongoRepository.findByIdAndStudentId(depositId, studentId)
+        Deposit deposit = depositRepository.findByIdAndStudentId(depositId, studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DEPOSIT));
 
         // 오늘 날짜
@@ -142,6 +142,6 @@ public class DepositServiceImpl implements DepositService{
         transactionService.addTransactionDeposit(studentId, "은행", inputAmount, title);
 
         // 예금 신청 내역 삭제
-        depositMongoRepository.delete(deposit);
+        depositRepository.delete(deposit);
     }
 }

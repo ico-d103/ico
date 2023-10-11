@@ -1,12 +1,12 @@
 package com.ico.core.service;
 
-import com.ico.core.document.Transaction;
-import com.ico.core.document.TreasuryHistory;
+import com.ico.core.entity.Transaction;
+import com.ico.core.entity.TreasuryHistory;
 import com.ico.core.entity.Nation;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.NationRepository;
-import com.ico.core.repository.TransactionMongoRepository;
+import com.ico.core.repository.TransactionRepository;
 import com.ico.core.repository.TreasuryHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class DepositSalaryService {
-    private final TransactionMongoRepository transactionMongoRepository;
+    private final TransactionRepository transactionRepository;
     private final NationRepository nationRepository;
     private final TreasuryHistoryRepository treasuryHistoryRepository;
 
@@ -58,27 +58,27 @@ public class DepositSalaryService {
     // 거래내역에 월급 입금 기록
     public void addTransactionDeposit(Long to, int amount) {
         Transaction transaction = Transaction.builder()
-                .from("은행")
-                .to(String.valueOf(to))
+                .fromUser("은행")
+                .toUser(String.valueOf(to))
                 .amount(Math.abs(amount))
                 .date(LocalDateTime.now())
                 .title("월급")
                 .build();
 
-        transactionMongoRepository.insert(transaction);
+        transactionRepository.save(transaction);
     }
 
     // 거래내역에 세금 출금 기록
     public void addTransactionWithdraw(Long from, int amount, String title) {
         Transaction transaction = Transaction.builder()
-                .from(String.valueOf(from))
-                .to("정부")
+                .fromUser(String.valueOf(from))
+                .toUser("정부")
                 .amount(amount)
                 .date(LocalDateTime.now())
                 .title(title)
                 .build();
 
-        transactionMongoRepository.insert(transaction);
+        transactionRepository.save(transaction);
     }
 
     // 국고 내역에 세금 입금 기록
@@ -97,7 +97,7 @@ public class DepositSalaryService {
                 .source("세금")
                 .amount(amount)
                 .build();
-        treasuryHistoryRepository.insert(treasuryHistory);
+        treasuryHistoryRepository.save(treasuryHistory);
     }
 
 }

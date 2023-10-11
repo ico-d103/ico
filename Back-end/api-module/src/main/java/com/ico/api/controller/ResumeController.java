@@ -60,7 +60,7 @@ public class ResumeController {
      * @return OK
      */
     @PostMapping("/teacher/{resumeId}")
-    public ResponseEntity<HttpStatus> assignResume(@PathVariable String resumeId, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> assignResume(@PathVariable Long resumeId, HttpServletRequest request) {
         resumeService.assignResume(resumeId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -72,7 +72,7 @@ public class ResumeController {
      * @return OK
      */
     @DeleteMapping("/teacher/{resumeId}")
-    public ResponseEntity<HttpStatus> rejectResume(@PathVariable String resumeId, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> rejectResume(@PathVariable Long resumeId, HttpServletRequest request) {
         resumeService.rejectResume(resumeId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -84,7 +84,7 @@ public class ResumeController {
      * @return
      */
     @GetMapping("/student/check/{jobId}")
-    public ResponseEntity<String> checkRequestJob(@PathVariable Long jobId, HttpServletRequest request) {
+    public ResponseEntity<Long> checkRequestJob(@PathVariable Long jobId, HttpServletRequest request) {
         return ResponseEntity.ok(resumeService.checkRequestJob(jobId, request));
     }
 
@@ -97,7 +97,7 @@ public class ResumeController {
      * @return ok
      */
     @DeleteMapping("/student/{jobId}/{resumeId}")
-    public ResponseEntity<HttpStatus> cancelResume(@PathVariable Long jobId, @PathVariable String resumeId, HttpServletRequest request) {
+    public ResponseEntity<HttpStatus> cancelResume(@PathVariable Long jobId, @PathVariable Long resumeId, HttpServletRequest request) {
         resumeService.cancelResume(jobId, resumeId, request);
         return ResponseEntity.ok(HttpStatus.OK);
     }

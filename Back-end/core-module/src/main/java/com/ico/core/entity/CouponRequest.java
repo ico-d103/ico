@@ -1,13 +1,13 @@
-package com.ico.core.document;
+package com.ico.core.entity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 
@@ -16,13 +16,13 @@ import java.time.LocalDateTime;
  *
  * @author 서재건
  */
-@Document(collection = "coupon_request")
+@Entity(name = "coupon_request")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CouponRequest {
 
     @Id
-    private String id;
+    private Long id;
 
     private Long nationId;
 
@@ -38,7 +38,7 @@ public class CouponRequest {
     private LocalDateTime date;
 
     @Builder
-    public CouponRequest(String id, Long nationId, Long couponId, String title, String name, byte number, LocalDateTime date) {
+    public CouponRequest(Long id, Long nationId, Long couponId, String title, String name, byte number, LocalDateTime date) {
         this.id = id;
         this.nationId = nationId;
         this.couponId = couponId;

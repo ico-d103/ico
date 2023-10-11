@@ -24,12 +24,12 @@ public interface CouponRequestService {
      *
      * @param couponRequestId
      */
-    void assignCouponRequest(String couponRequestId);
+    void assignCouponRequest(Long couponRequestId);
 
     /**
      * 쿠폰 신청 반려
      *
      * @param couponRequestId
      */
-    void deleteCouponRequest(String couponRequestId);
+    void deleteCouponRequest(Long couponRequestId);
 }

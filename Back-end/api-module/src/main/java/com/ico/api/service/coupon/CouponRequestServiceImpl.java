@@ -4,11 +4,11 @@ import com.ico.api.dto.coupon.CouponRequestResDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.api.util.Formatter;
 import com.ico.core.entity.Coupon;
-import com.ico.core.document.CouponRequest;
+import com.ico.core.entity.CouponRequest;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.CouponRepository;
-import com.ico.core.repository.CouponRequestMongoRepository;
+import com.ico.core.repository.CouponRequestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CouponRequestServiceImpl implements CouponRequestService{
 
-    private final CouponRequestMongoRepository couponRequestMongoRepository;
+    private final CouponRequestRepository couponRequestRepository;
 
     private final CouponRepository couponRepository;
 
@@ -38,7 +38,7 @@ public class CouponRequestServiceImpl implements CouponRequestService{
     public List<CouponRequestResDto> findAllCouponRequest(HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
-        List<CouponRequest> couponRequestList = couponRequestMongoRepository.findAllByNationId(nationId);
+        List<CouponRequest> couponRequestList = couponRequestRepository.findAllByNationId(nationId);
         List<CouponRequestResDto> dtoList = new ArrayList<>();
 
         for (CouponRequest couponRequest : couponRequestList) {
@@ -50,8 +50,8 @@ public class CouponRequestServiceImpl implements CouponRequestService{
 
     @Transactional
     @Override
-    public void assignCouponRequest(String couponRequestId) {
-        CouponRequest couponRequest = couponRequestMongoRepository.findById(couponRequestId)
+    public void assignCouponRequest(Long couponRequestId) {
+        CouponRequest couponRequest = couponRequestRepository.findById(couponRequestId)
                 .orElseThrow(() -> new CustomException(ErrorCode.REQUEST_NOT_FOUND));
 
         Long couponId = couponRequest.getCouponId();
@@ -81,13 +81,13 @@ public class CouponRequestServiceImpl implements CouponRequestService{
             couponRepository.save(coupon);
         }
 
-        couponRequestMongoRepository.delete(couponRequest);
+        couponRequestRepository.delete(couponRequest);
 
     }
 
     @Override
-    public void deleteCouponRequest(String couponRequestId) {
-        CouponRequest couponRequest = couponRequestMongoRepository.findById(couponRequestId)
+    public void deleteCouponRequest(Long couponRequestId) {
+        CouponRequest couponRequest = couponRequestRepository.findById(couponRequestId)
                 .orElseThrow(() -> new CustomException(ErrorCode.REQUEST_NOT_FOUND));
         Coupon coupon = couponRepository.findById(couponRequest.getCouponId())
                         .orElseThrow(() -> new CustomException(ErrorCode.COUPON_NOT_FOUND));
@@ -95,6 +95,6 @@ public class CouponRequestServiceImpl implements CouponRequestService{
         coupon.setAssigned(false);
         couponRepository.save(coupon);
 
-        couponRequestMongoRepository.delete(couponRequest);
+        couponRequestRepository.delete(couponRequest);
     }
 }

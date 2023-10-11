@@ -44,5 +44,5 @@ public interface TreasuryHistoryService {
      * @param treasuryHistoryId
      * @param request
      */
-    void deleteTreasuryHistory(String treasuryHistoryId, HttpServletRequest request);
+    void deleteTreasuryHistory(Long treasuryHistoryId, HttpServletRequest request);
 }

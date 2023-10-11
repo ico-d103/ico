@@ -1,12 +1,11 @@
-package com.ico.core.document;
+package com.ico.core.entity;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
@@ -15,12 +14,12 @@ import java.time.LocalDateTime;
  *
  * @author 변윤경
  */
-@Document(collection = "saving")
+@Entity(name = "saving")
 @Getter
 @NoArgsConstructor
 public class Saving {
     @Id
-    private String id;
+    private Long id;
 
     private Long studentId;
 
@@ -62,7 +61,7 @@ public class Saving {
     private String name;
 
     @Builder
-    public Saving(String id, Long studentId, byte interest, boolean isEnd, LocalDateTime startDate, byte totalCount, byte count, byte creditRating, int amount, DayOfWeek day, String title, Long savingProductId, byte number, String name) {
+    public Saving(Long id, Long studentId, byte interest, boolean isEnd, LocalDateTime startDate, byte totalCount, byte count, byte creditRating, int amount, DayOfWeek day, String title, Long savingProductId, byte number, String name) {
         this.id = id;
         this.studentId = studentId;
         this.interest = interest;

@@ -5,7 +5,7 @@ import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.JobLicense;
 import com.ico.core.entity.StudentJob;
 import com.ico.core.entity.Nation;
-import com.ico.core.document.Resume;
+import com.ico.core.entity.Resume;
 import com.ico.core.entity.Student;
 import com.ico.core.entity.StudentLicense;
 import com.ico.core.exception.CustomException;
@@ -13,7 +13,7 @@ import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.JobLicenseRepository;
 import com.ico.core.repository.StudentJobRepository;
 import com.ico.core.repository.NationRepository;
-import com.ico.core.repository.ResumeMongoRepository;
+import com.ico.core.repository.ResumeRepository;
 import com.ico.core.repository.StudentLicenseRepository;
 import com.ico.core.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ import java.util.Objects;
 public class ResumeServiceImpl implements ResumeService {
     private final NationRepository nationRepository;
 
-    private final ResumeMongoRepository resumeMongoRepository;
+    private final ResumeRepository resumeRepository;
 
     private final StudentJobRepository studentJobRepository;
 
@@ -82,7 +82,7 @@ public class ResumeServiceImpl implements ResumeService {
                 .jobId(jobId)
                 .nationId(nationId)
                 .build();
-        resumeMongoRepository.insert(resume);
+        resumeRepository.save(resume);
     }
 
     @Transactional(readOnly = true)
@@ -92,7 +92,7 @@ public class ResumeServiceImpl implements ResumeService {
 
         studentJobRepository.findById(jobId)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_NOT_FOUND));
-        List<Resume> resumeList = resumeMongoRepository.findAllByJobIdAndNationId(jobId, nationId);
+        List<Resume> resumeList = resumeRepository.findAllByJobIdAndNationId(jobId, nationId);
         List<ResumeResDto> dtoList = new ArrayList<>();
         //학생 이름, 학생 반 번호
         for (Resume resume : resumeList) {
@@ -105,7 +105,7 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Transactional
     @Override
-    public void assignResume(String resumeId, HttpServletRequest request) {
+    public void assignResume(Long resumeId, HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         Resume resume = findAndValidateResume(resumeId, nationId);
@@ -130,7 +130,7 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Transactional
     @Override
-    public void rejectResume(String resumeId, HttpServletRequest request) {
+    public void rejectResume(Long resumeId, HttpServletRequest request) {
         Long nationId = jwtTokenProvider.getNation(jwtTokenProvider.parseJwt(request));
 
         Resume resume = findAndValidateResume(resumeId, nationId);
@@ -142,19 +142,19 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public String checkRequestJob(Long jobId, HttpServletRequest request) {
+    public Long checkRequestJob(Long jobId, HttpServletRequest request) {
         Long studentId = jwtTokenProvider.getId(jwtTokenProvider.parseJwt(request));
-        Optional<Resume> resume = resumeMongoRepository.findByStudentIdAndJobId(studentId, jobId);
+        Optional<Resume> resume = resumeRepository.findByStudentIdAndJobId(studentId, jobId);
         return resume.map(Resume::getId).orElse(null);
     }
 
     @Override
-    public void cancelResume(Long jobId, String resumeId, HttpServletRequest request) {
+    public void cancelResume(Long jobId, Long resumeId, HttpServletRequest request) {
         String token = jwtTokenProvider.parseJwt(request);
         Long nationId = jwtTokenProvider.getNation(token);
         Long studentId = jwtTokenProvider.getId(token);
 
-        Resume resume = resumeMongoRepository.findById(resumeId)
+        Resume resume = resumeRepository.findById(resumeId)
                 .orElseThrow(() -> {
                     log.info("[cancelResume] 직업 신청 내역이 존재 하지 않는 경우");
                     return new CustomException(ErrorCode.REQUEST_NOT_FOUND);
@@ -162,7 +162,7 @@ public class ResumeServiceImpl implements ResumeService {
 
         validateCancelResume(nationId, studentId, jobId, resume);
 
-        resumeMongoRepository.delete(resume);
+        resumeRepository.delete(resume);
     }
 
     /**
@@ -193,8 +193,8 @@ public class ResumeServiceImpl implements ResumeService {
      * @param nationId
      * @return resume
      */
-    private Resume findAndValidateResume(String resumeId, Long nationId) {
-        Resume resume = resumeMongoRepository.findById(resumeId)
+    private Resume findAndValidateResume(Long resumeId, Long nationId) {
+        Resume resume = resumeRepository.findById(resumeId)
                 .orElseThrow(() -> {
                     log.info("[assignResume] 직업 신청 내역이 존재 하지 않는 경우");
                     return new CustomException(ErrorCode.REQUEST_NOT_FOUND);
@@ -251,7 +251,7 @@ public class ResumeServiceImpl implements ResumeService {
      * @param resume
      */
     private void deleteResume(Resume resume) {
-        resumeMongoRepository.delete(resume);
+        resumeRepository.delete(resume);
         log.info("[assignResume] 직업 신청 내역에서 삭제");
     }
 
@@ -261,7 +261,7 @@ public class ResumeServiceImpl implements ResumeService {
      * @param studentId
      */
     private void deleteAllResumesByStudentId(Long studentId) {
-        resumeMongoRepository.deleteAllByStudentId(studentId);
+        resumeRepository.deleteAllByStudentId(studentId);
         log.info("[assignResume] 해당 학생의 직업 승인 완료로 신청 내역 전부 삭제");
     }
 

@@ -1,8 +1,8 @@
 package com.ico.core.repository;
 
-import com.ico.core.document.ShopTransaction;
+import com.ico.core.entity.ShopTransaction;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -15,7 +15,7 @@ import java.util.List;
  * @author 서재건
  */
 @Repository
-public interface ShopTransactionRepository extends MongoRepository<ShopTransaction, String> {
+public interface ShopTransactionRepository extends JpaRepository<ShopTransaction, Long> {
 
     @NotNull
     List<ShopTransaction> findAll();

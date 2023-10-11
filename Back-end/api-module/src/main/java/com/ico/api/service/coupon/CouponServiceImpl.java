@@ -3,12 +3,12 @@ package com.ico.api.service.coupon;
 import com.ico.api.dto.coupon.CouponResDto;
 import com.ico.api.user.JwtTokenProvider;
 import com.ico.core.entity.Coupon;
-import com.ico.core.document.CouponRequest;
+import com.ico.core.entity.CouponRequest;
 import com.ico.core.entity.Student;
 import com.ico.core.exception.CustomException;
 import com.ico.core.exception.ErrorCode;
 import com.ico.core.repository.CouponRepository;
-import com.ico.core.repository.CouponRequestMongoRepository;
+import com.ico.core.repository.CouponRequestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class CouponServiceImpl implements CouponService {
 
     private final CouponRepository couponRepository;
 
-    private final CouponRequestMongoRepository couponRequestMongoRepository;
+    private final CouponRequestRepository couponRequestRepository;
 
     @Override
     public List<CouponResDto> findAllCoupon(HttpServletRequest request) {
@@ -80,6 +80,6 @@ public class CouponServiceImpl implements CouponService {
                 .number(student.getNumber())
         .build();
 
-        couponRequestMongoRepository.insert(couponRequest);
+        couponRequestRepository.save(couponRequest);
     }
 }

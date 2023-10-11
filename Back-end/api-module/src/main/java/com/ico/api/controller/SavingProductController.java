@@ -64,7 +64,7 @@ public class SavingProductController {
      * @return
      */
     @GetMapping("/student/{savingId}")
-    public ResponseEntity<SavingStudentResDto> getSavingDetail(HttpServletRequest request, @PathVariable String savingId){
+    public ResponseEntity<SavingStudentResDto> getSavingDetail(HttpServletRequest request, @PathVariable Long savingId){
         return ResponseEntity.ok(savingProductService.getSavingDetail(request, savingId));
     }
 
@@ -84,7 +84,6 @@ public class SavingProductController {
      * 적금 상품 수정
      *
      * @param request
-     * @param saving
      * @param savingProductId
      * @return
      */

@@ -1,6 +1,6 @@
 package com.ico.api.service.inflation;
 
-import com.ico.core.document.ShopTransaction;
+import com.ico.core.entity.ShopTransaction;
 import com.ico.core.repository.ShopTransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class ShopTransactionServiceImpl implements ShopTransactionService {
                 .nationId(nationId)
                 .amount(amount)
                 .build();
-        shopTransactionRepository.insert(shopTransaction);
+        shopTransactionRepository.save(shopTransaction);
     }
 
 }

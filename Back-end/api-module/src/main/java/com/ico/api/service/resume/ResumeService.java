@@ -33,14 +33,14 @@ public interface ResumeService {
      *
      * @param resumeId
      */
-    void assignResume(String resumeId, HttpServletRequest request);
+    void assignResume(Long resumeId, HttpServletRequest request);
 
     /**
      * 교사가 직업 신청 반려
      *
      * @param resumeId
      */
-    void rejectResume(String resumeId, HttpServletRequest request);
+    void rejectResume(Long resumeId, HttpServletRequest request);
 
     /**
      * 학생의 직업 신청 여부 확인
@@ -48,7 +48,7 @@ public interface ResumeService {
      * @param request
      * @return
      */
-    String checkRequestJob(Long jobId, HttpServletRequest request);
+    Long checkRequestJob(Long jobId, HttpServletRequest request);
 
     /**
      * 학생이 직업 신청을 취소
@@ -57,5 +57,5 @@ public interface ResumeService {
      * @param resumeId
      * @param request
      */
-    void cancelResume(Long jobId, String resumeId, HttpServletRequest request);
+    void cancelResume(Long jobId, Long resumeId, HttpServletRequest request);
 }

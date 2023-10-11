@@ -48,7 +48,7 @@ public class CouponRequestController {
      * @return
      */
     @PostMapping("/teacher/{couponRequestId}")
-    public ResponseEntity<HttpStatus> assignCouponRequest(@PathVariable String couponRequestId) {
+    public ResponseEntity<HttpStatus> assignCouponRequest(@PathVariable Long couponRequestId) {
         couponRequestService.assignCouponRequest(couponRequestId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -60,7 +60,7 @@ public class CouponRequestController {
      * @return
      */
     @DeleteMapping("/teacher/{couponRequestId}")
-    public ResponseEntity<HttpStatus> deleteCouponRequest(@PathVariable String couponRequestId) {
+    public ResponseEntity<HttpStatus> deleteCouponRequest(@PathVariable Long couponRequestId) {
         couponRequestService.deleteCouponRequest(couponRequestId);
         return ResponseEntity.ok(HttpStatus.OK);
     }

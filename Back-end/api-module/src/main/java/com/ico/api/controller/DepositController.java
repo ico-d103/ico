@@ -44,7 +44,7 @@ public class DepositController {
      * @return Httpstatus
      */
     @DeleteMapping("/student/{depositId}")
-    public ResponseEntity<HttpStatus> deleteDeposit(HttpServletRequest request, @PathVariable String depositId){
+    public ResponseEntity<HttpStatus> deleteDeposit(HttpServletRequest request, @PathVariable Long depositId){
         depositService.deleteDeposit(request, depositId);
         return ResponseEntity.ok(HttpStatus.OK);
     }

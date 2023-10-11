@@ -1,6 +1,6 @@
 package com.ico.api.dto.treasuryHistory;
 
-import com.ico.core.document.TreasuryHistory;
+import com.ico.core.entity.TreasuryHistory;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TreasuryHistoryTeacherColDto {
 
-    private String id;
+    private Long id;
 
     private String date;
 
@@ -25,7 +25,7 @@ public class TreasuryHistoryTeacherColDto {
     private String amount;
 
     @Builder
-    public TreasuryHistoryTeacherColDto(String id, String date, String title, String source, String amount) {
+    public TreasuryHistoryTeacherColDto(Long id, String date, String title, String source, String amount) {
         this.id = id;
         this.date = date;
         this.title = title;

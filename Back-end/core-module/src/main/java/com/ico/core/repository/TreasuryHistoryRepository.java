@@ -1,9 +1,9 @@
 package com.ico.core.repository;
 
-import com.ico.core.document.TreasuryHistory;
+import com.ico.core.entity.TreasuryHistory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @author 서재건
  * @author 강교철
  */
-public interface TreasuryHistoryRepository extends MongoRepository<TreasuryHistory, String> {
+public interface TreasuryHistoryRepository extends JpaRepository<TreasuryHistory, Long> {
 
     /**
      * 나라의 국고 사용 내역 조회

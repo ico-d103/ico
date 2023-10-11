@@ -1,12 +1,13 @@
-package com.ico.core.document;
+package com.ico.core.entity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 /**
@@ -14,16 +15,18 @@ import java.time.LocalDateTime;
  *
  * @author 변윤경
  */
-@Document(collection = "transaction")
+@Entity(name = "transaction")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Transaction {
     @Id
-    private String id;
+    private Long id;
 
-    private String from;
+    @Column(name = "from_user")
+    private String fromUser;
 
-    private String to;
+    @Column(name = "to_user")
+    private String toUser;
 
     private int amount;
 
@@ -32,10 +35,10 @@ public class Transaction {
     private String title;
 
     @Builder
-    public Transaction(String id, String from, String to, int amount, LocalDateTime date, String title) {
+    public Transaction(Long id, String fromUser, String toUser, int amount, LocalDateTime date, String title) {
         this.id = id;
-        this.from = from;
-        this.to = to;
+        this.fromUser = fromUser;
+        this.toUser = toUser;
         this.amount = amount;
         this.date = date;
         this.title = title;
