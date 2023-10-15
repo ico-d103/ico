@@ -23,7 +23,7 @@ function GovJobPayday({query}: GovJobPaydayPropsType) {
         {renderDays}
       </div>
 
-      
+      <div css={css`margin-top: 16px; font-size: 14px;`}>❕28~31일의 경우, 당월에 해당 날짜가 없으면 당월 마지막 날에 월급이 지급됩니다.</div>
 
       
     </div>
@@ -35,7 +35,7 @@ const daysWrapperCSS = css`
   grid-template-columns: repeat(20, 64px);
   grid-template-rows: repeat(4, 64px); */
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 16px;
   place-items: center;
 `
