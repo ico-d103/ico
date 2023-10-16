@@ -5,6 +5,7 @@ import { postGovPaydayAPI } from '@/api/teacher/gov/postGovPaydayAPI'
 import useNotification from '@/hooks/useNotification'
 import NotiTemplate from '@/components/common/StackNotification/NotiTemplate'
 import { deleteGovPaydayAPI } from '@/api/teacher/gov/deleteGovPaydayAPI'
+import useModal from '@/components/common/Modal/useModal'
 
 type GovJobPaydayItemPropsType = {
   day: number
@@ -15,6 +16,7 @@ type GovJobPaydayItemPropsType = {
 function GovJobPaydayItem({day, canOverTheMonth, isSelected}: GovJobPaydayItemPropsType) {
   const noti = useNotification()
   const queryClient = useQueryClient()
+    const modal = useModal()
 
 	const postMutation = useMutation((date: number) => {
 		return postGovPaydayAPI({
@@ -62,8 +64,9 @@ function GovJobPaydayItem({day, canOverTheMonth, isSelected}: GovJobPaydayItemPr
     <div css={itemWrapperCSS({canOverTheMonth, isSelected})} onClick={submitHandler}>
       {day}
       {canOverTheMonth && <div className={"day-message"} css={messageWrapperCSS}>
-        <div css={messageBodyCSS}>당월에 해당 날짜가 없으면 당월 마지막 날에 월급이 지급됩니다.</div>
-        <div css={arrowCSS}/>
+
+        {/*<div css={messageBodyCSS}>당월에 해당 날짜가 없으면 당월 마지막 날에 월급이 지급됩니다.</div>*/}
+        {/*<div css={arrowCSS}/>*/}
       </div>}
     </div>
   )
@@ -104,7 +107,7 @@ const messageWrapperCSS = css`
   pointer-events: none;
   opacity: 0;
   color: black;
-  left: -40px;
+  //left: 40px;
 `
 
 const arrowCSS = css`
