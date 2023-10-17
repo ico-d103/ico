@@ -38,7 +38,7 @@ public class TeacherController {
      * @return id
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<HttpStatus> teacherSignUp(@Valid @RequestPart("dto")  TeacherSignUpRequestDto requestDto,
+    public ResponseEntity<HttpStatus> teacherSignUp(@Valid @RequestPart("dto") TeacherSignUpRequestDto requestDto,
                                                     @RequestPart("file") MultipartFile file) throws IOException {
         teacherService.signUp(requestDto, file);
         return ResponseEntity.ok(HttpStatus.OK);
@@ -140,5 +140,4 @@ public class TeacherController {
     public ResponseEntity<Boolean> verificationCode(@Valid @RequestBody PhoneNumAndCodeReqDto dto) {
         return ResponseEntity.ok(teacherService.verificationCode(dto));
     }
-    
 }
